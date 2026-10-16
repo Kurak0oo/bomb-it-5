@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+*.tmp
+.artifacts/
+.scratch/
+**/__pycache__/
+
+# Godot 4
+.godot/
+*.translation
+.import/
+export.cfg
+export_presets.cfg
