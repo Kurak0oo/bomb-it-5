@@ -1,0 +1,174 @@
+> Imported Dots supplemental record; assertions are retained as delivered. Read the [integration assessment](../../edition-5-play-observations.md) for confidence, corrections and remaining limits. Source-relative paths in code spans refer to the [unaltered original](../../../../.scratch/edition-5-research/observations/swf-v1.6.1-followup/INDEX.md).
+
+# INDEX
+
+Directory, file count, bytes. Keyframes are listed by name.
+
+- `common/`: 0 files, 0 bytes
+- `common/logs/`: 9 files, 52,078 bytes
+  - sessionA_notes.md
+  - sessionA_probe_out.log
+  - sessionB0_probe2_out.log
+  - sessionC_notes.md
+  - sessionC_probe2_err.log
+  - sessionC_probe2_out.log
+  - sessionD_notes.md
+  - sessionD_probe2_err.log
+  - sessionD_probe2_out.log
+- `common/tools/`: 5 files, 13,212 bytes
+  - git-status-now.txt
+  - probe2.rs
+  - probe2.sha256
+  - select.py
+  - selection.tsv
+- `common/tools/helpers/`: 9 files, 5,692 bytes
+  - c.sh
+  - dead.py
+  - grid.py
+  - mv.sh
+  - run.sh
+  - st.sh
+  - status.py
+  - view.py
+  - zoom.py
+- `task1_gloves/`: 1 files, 4,859 bytes
+  - README.md
+- `task1_gloves/frames_BR_boxing_glove/`: 0 files, 0 bytes
+- `task1_gloves/frames_BR_boxing_glove/D10/`: 52 files, 13,045,892 bytes
+- `task1_gloves/frames_BR_boxing_glove/D11/`: 61 files, 15,371,429 bytes
+- `task1_gloves/frames_BR_boxing_glove/D12/`: 31 files, 7,736,779 bytes
+- `task1_gloves/frames_BR_boxing_glove/D13/`: 43 files, 10,775,735 bytes
+- `task1_gloves/frames_BR_boxing_glove/D2/`: 1 files, 251,934 bytes
+- `task1_gloves/frames_BR_boxing_glove/D3/`: 44 files, 11,175,031 bytes
+- `task1_gloves/frames_BR_boxing_glove/D4/`: 6 files, 1,525,729 bytes
+- `task1_gloves/frames_BR_boxing_glove/D5/`: 47 files, 11,993,564 bytes
+- `task1_gloves/frames_BR_boxing_glove/D6/`: 8 files, 2,032,921 bytes
+- `task1_gloves/frames_BR_boxing_glove/D7/`: 9 files, 2,298,090 bytes
+- `task1_gloves/frames_BR_boxing_glove/D8/`: 36 files, 9,125,172 bytes
+- `task1_gloves/frames_BR_boxing_glove/D9/`: 7 files, 1,772,191 bytes
+- `task1_gloves/frames_arcade_push_the_bomb/`: 0 files, 0 bytes
+- `task1_gloves/frames_arcade_push_the_bomb/kick_r1/`: 126 files, 29,370,850 bytes
+- `task1_gloves/frames_arcade_push_the_bomb/pk_r1b_potion_pickup/`: 43 files, 10,069,748 bytes
+- `task1_gloves/frames_arcade_push_the_bomb/pk_r1c_hand_pickup/`: 22 files, 5,014,492 bytes
+- `task1_gloves/keyframes/`: 22 files, 5,406,772 bytes
+  - ARC_f001909_PUSH_THE_BOMB_pickup.png
+  - ARC_f001910_PUSH_THE_BOMB_pickup.png
+  - ARC_f001934_bomb_placed.png
+  - ARC_f001946_walk_into_bomb_kick_starts.png
+  - ARC_f001952_bomb_sliding.png
+  - ARC_f001965_bomb_stopped_at_wall.png
+  - ARC_f002025_kicked_bomb_blast.png
+  - BR_f001038_hammer_breaks_box_FROG_revealed.png
+  - BR_f001050_P1_mounted_FROG.png
+  - BR_f001078_black_AI_holds_glove_count2.png
+  - BR_f001240_hammer_before_box.png
+  - BR_f001262_BOXING_GLOVE_item_revealed.png
+  - BR_f001274_P1_stepping_onto_glove.png
+  - BR_f001276_P1_has_BOXING_GLOVE_count2.png
+  - BR_f001282_P1_punch_right_count1.png
+  - BR_f001290_punch_fist_travelling.png
+  - BR_f001350_P1_glove1_black_glove2.png
+  - BR_f001376_black_used_glove_count1_P1_off_frog.png
+  - BR_f001386_P1_punch_down_count0.png
+  - BR_f001394_black_skateboard_flash_after_hit.png
+  - BR_f001398_black_glove_count0.png
+  - BR_f001424_both_back_to_hammer.png
+- `task2_mapping/`: 1 files, 5,360 bytes
+  - README.md
+- `task2_mapping/evidence/`: 4 files, 1,070,143 bytes
+  - arcade_board_items_on_floor_f004269.png
+  - help_POWERUPS_WEAPONS_VEHICLES_f601.png
+  - prop_sprite_frames_1-50_sheet_DERIVED_FROM_SWF.png
+  - prop_sprite_unclaimed_frames_zoom_DERIVED_FROM_SWF.png
+- `task3_victory/`: 1 files, 4,672 bytes
+  - README.md
+- `task3_victory/frames/`: 0 files, 0 bytes
+- `task3_victory/frames/C2_g_context_every30/`: 3 files, 751,815 bytes
+- `task3_victory/frames/C2_next_click_to_level2/`: 125 files, 28,998,225 bytes
+- `task3_victory/frames/C2_ok_dressup_ok_click/`: 45 files, 5,501,957 bytes
+- `task3_victory/frames/C2_start_round_begin/`: 33 files, 8,014,519 bytes
+- `task3_victory/frames/context_every30/`: 0 files, 0 bytes
+- `task3_victory/frames/context_every30/C2_a/`: 2 files, 562,398 bytes
+- `task3_victory/frames/context_every30/C2_b/`: 4 files, 1,137,394 bytes
+- `task3_victory/frames/context_every30/C2_c/`: 5 files, 1,388,722 bytes
+- `task3_victory/frames/context_every30/C2_d/`: 5 files, 1,323,824 bytes
+- `task3_victory/frames/context_every30/C2_e/`: 4 files, 1,040,039 bytes
+- `task3_victory/frames/context_every30/C2_f1/`: 5 files, 1,306,493 bytes
+- `task3_victory/frames/context_every30/C2_f2/`: 5 files, 1,287,824 bytes
+- `task3_victory/frames/context_every30/C2_f3/`: 5 files, 1,261,080 bytes
+- `task3_victory/frames/death1_pumpkin/`: 27 files, 7,632,463 bytes
+- `task3_victory/frames/death2_witch/`: 36 files, 9,525,886 bytes
+- `task3_victory/frames/death3_green_youwin_results/`: 129 files, 23,124,940 bytes
+- `task3_victory/keyframes/`: 18 files, 4,298,571 bytes
+  - f000596_settings_ARCADE_1P_3enemies_NORMAL.png
+  - f000636_character_select_first_char.png
+  - f001419_round_start_BirthdayParty_retry_board_hearts2.png
+  - f002016_pumpkin_next_to_bomb.png
+  - f002022_blast_column.png
+  - f002034_pumpkin_silhouette_dead.png
+  - f002565_witch_before_blast.png
+  - f002568_witch_silhouette_in_col1_flame.png
+  - f002622_witch_portrait_greyed.png
+  - f004836_green_last_AI_alive_next_to_bomb.png
+  - f004842_flame_down_its_column.png
+  - f004854_green_silhouette_dead.png
+  - f004908_YOU_WIN_banner_TIME59.png
+  - f005010_LEVEL_1_5_COMPLETE_results_with_DRESSUP_popup.png
+  - f005576_before_OK_click.png
+  - f005616_results_screen_ENEMIES0_TIME590_NORMAL2000_TOTAL2590.png
+  - f005621_before_NEXT_click.png
+  - f005741_LEVEL_2_5_board_after_NEXT.png
+- `task4_repeats/`: 2 files, 9,941 bytes
+  - README.md
+  - input_log_f843-1700.txt
+- `task4_repeats/frames/`: 0 files, 0 bytes
+- `task4_repeats/frames/fl_r1_held/`: 0 files, 0 bytes
+- `task4_repeats/frames/fl_r1_held/blast_to_flame_end/`: 22 files, 5,603,349 bytes
+- `task4_repeats/frames/fl_r1_held/kd_to_bomb/`: 7 files, 1,757,173 bytes
+- `task4_repeats/frames/fl_r2_held/`: 0 files, 0 bytes
+- `task4_repeats/frames/fl_r2_held/blast_to_flame_end/`: 22 files, 5,646,445 bytes
+- `task4_repeats/frames/fl_r2_held/kd_to_bomb/`: 8 files, 2,026,888 bytes
+- `task4_repeats/frames/fl_r3_held/`: 0 files, 0 bytes
+- `task4_repeats/frames/fl_r3_held/blast_to_flame_end/`: 22 files, 5,597,673 bytes
+- `task4_repeats/frames/fl_r3_held/kd_to_bomb/`: 8 files, 2,023,184 bytes
+- `task4_repeats/frames/sp_r1_repeated/`: 0 files, 0 bytes
+- `task4_repeats/frames/sp_r1_repeated/blast_to_flame_end/`: 22 files, 5,534,204 bytes
+- `task4_repeats/frames/sp_r1_repeated/kd_to_bomb/`: 8 files, 2,031,227 bytes
+- `task4_repeats/frames/sp_r2_repeated/`: 0 files, 0 bytes
+- `task4_repeats/frames/sp_r2_repeated/blast_to_flame_end/`: 22 files, 5,445,829 bytes
+- `task4_repeats/frames/sp_r2_repeated/kd_to_bomb/`: 8 files, 1,994,916 bytes
+- `task4_repeats/frames/sp_r3_repeated/`: 0 files, 0 bytes
+- `task4_repeats/frames/sp_r3_repeated/blast_to_flame_end/`: 22 files, 5,309,990 bytes
+- `task4_repeats/frames/sp_r3_repeated/kd_to_bomb/`: 8 files, 1,909,365 bytes
+- `task4_repeats/keyframes/`: 31 files, 7,681,492 bytes
+  - fl_r1_held_f000845.png
+  - fl_r1_held_f000917.png
+  - fl_r1_held_f000933.png
+  - fl_r1_held_f000934.png
+  - fl_r2_held_f000980.png
+  - fl_r2_held_f001052.png
+  - fl_r2_held_f001068.png
+  - fl_r2_held_f001069.png
+  - fl_r3_held_f001115.png
+  - fl_r3_held_f001187.png
+  - fl_r3_held_f001203.png
+  - fl_r3_held_f001204.png
+  - pickup1_ARC_f001881_before.png
+  - pickup1_ARC_f001882_POWER_potion_picked_HUD_power2.png
+  - pickup2_ARC_f001909_before.png
+  - pickup2_ARC_f001910_PUSH_THE_BOMB_picked.png
+  - pickup3_BR_f001274_before.png
+  - pickup3_BR_f001276_BOXING_GLOVE_picked.png
+  - pickup4_BR_f001050_FROG_mounted.png
+  - sp_r1_repeated_f001250.png
+  - sp_r1_repeated_f001321.png
+  - sp_r1_repeated_f001337.png
+  - sp_r1_repeated_f001338.png
+  - sp_r2_repeated_f001406.png
+  - sp_r2_repeated_f001478.png
+  - sp_r2_repeated_f001494.png
+  - sp_r2_repeated_f001495.png
+  - sp_r3_repeated_f001562.png
+  - sp_r3_repeated_f001633.png
+  - sp_r3_repeated_f001649.png
+  - sp_r3_repeated_f001650.png

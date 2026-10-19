@@ -1,0 +1,46 @@
+[
+  {
+    "clip": "010-stationary-bomb.mp4",
+    "source_count": 20,
+    "first_capture_utc": "2026-10-16T20:40:55.353Z",
+    "last_capture_utc": "2026-10-16T20:41:02.701Z",
+    "capture_span_seconds": 7.348,
+    "mean_sample_rate_hz": 2.586,
+    "min_gap_seconds": 0.333,
+    "max_gap_seconds": 0.431,
+    "observed_content": "Explosion, player death, YOU LOSE and level-failed results."
+  },
+  {
+    "clip": "025-focus-bomb.mp4",
+    "source_count": 14,
+    "first_capture_utc": "2026-10-16T20:43:23.823Z",
+    "last_capture_utc": "2026-10-16T20:43:25.689Z",
+    "capture_span_seconds": 1.866,
+    "mean_sample_rate_hz": 6.967,
+    "min_gap_seconds": 0.112,
+    "max_gap_seconds": 0.182,
+    "observed_content": "Visible placed bombs followed by flames/explosion; no death in this group."
+  },
+  {
+    "clip": "029-second-bomb.mp4",
+    "source_count": 35,
+    "first_capture_utc": "2026-10-16T20:43:57.402Z",
+    "last_capture_utc": "2026-10-16T20:44:01.327Z",
+    "capture_span_seconds": 3.925,
+    "mean_sample_rate_hz": 8.662,
+    "min_gap_seconds": 0.075,
+    "max_gap_seconds": 0.171,
+    "observed_content": "Bomb sequence, flames/explosion, death sprite and YOU LOSE overlay."
+  },
+  {
+    "clip": "043-fuse-tap.mp4",
+    "source_count": 25,
+    "first_capture_utc": "2026-10-16T20:47:40.545Z",
+    "last_capture_utc": "2026-10-16T20:47:49.800Z",
+    "capture_span_seconds": 9.255,
+    "mean_sample_rate_hz": 2.593,
+    "min_gap_seconds": 0.342,
+    "max_gap_seconds": 0.43,
+    "observed_content": "Top-left bomb explosion first seen in sample006; later enemy bomb explosion. Request-to-observed-explosion bracket only, not a verified fuse duration."
+  }
+]

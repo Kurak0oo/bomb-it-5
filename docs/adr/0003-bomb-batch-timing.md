@@ -1,0 +1,7 @@
+# Make bomb batches consistent across controllers
+
+Accepted on 2026-10-18 through Q9–Q13. The original handles human bomb input immediately, while AI actions can occur in later frame phases; it has no all-actor batch or shared event chronology. The new game places bombs before movement, begins every newborn countdown on the following accepted tick, and resolves actors' bomb input in fixed roster order. [DESIGN.md](../../DESIGN.md) owns the exact contract; [the phase evidence](../evidence/edition-5-gameplay-phases.md) retains the original behavior separately.
+
+The uniform newborn rule preserves the recovered 72-callback countdown while avoiding different fuse eligibility for human, AI and later remote controllers. It deliberately trades phase-dependent original timing for one predictable batch rule. Fixed roster priority keeps outcomes independent of submitted array order, at the cost of a consistent roster advantage in placement conflicts; there is no cross-actor timestamp stream from which to reconstruct original chronology.
+
+Q13 fixes bomb input before existing countdowns and explosions, following the ordinary human path rather than granting placement the capacity freed later in the same tick. This means a down event can fail on an old bomb's expiry tick; accepted input is consumed even when placement fails, so there is no implicit delayed retry. Movement, when added, follows those bomb phases.

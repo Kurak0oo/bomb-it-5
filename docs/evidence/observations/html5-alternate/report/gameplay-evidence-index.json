@@ -1,0 +1,1133 @@
+{
+  "title": "Bomb It 5 revised gameplay evidence index",
+  "date_utc": "2026-10-16",
+  "scope": "Selected delivered evidence files and authored reports only. This index omits itself and the outer packaging README. The full capture-time chronology contains additional non-delivered captures. Extract all archives into the same folder to restore the listed paths.",
+  "evidence_boundaries": {
+    "html5": "Direct interaction with the Y8/GameDistribution alternate. Exact runtime revision/hash and SWF parity unverified.",
+    "swf_static": {
+      "url": "https://www8.agame.com/games/flash/b/bomb_it_5/bomb-it-5-zh-fix.swf",
+      "sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+      "bundled": false,
+      "runtime_gameplay_reached": false
+    },
+    "board": "First observed frame TIME173 and separate apparently intact restart TIME179 are visual transcriptions, not certified tick-zero or collision maps.",
+    "recording": "Four timestamp-paced screenshot sequences show actual gameplay. They are not continuous recordings and do not measure achieved game FPS.",
+    "timing": "The timed tap bracket is request-to-captured-transition only, not a confirmed bomb fuse."
+  },
+  "summary": {
+    "files": 164,
+    "supporting_frames": 94,
+    "core_files": 70
+  },
+  "artifacts": [
+    {
+      "path": "inputs/DESIGN.md",
+      "bundle_role": "core",
+      "bytes": 4992,
+      "sha256": "e9d358b1ec88ce8fecca5ef800820ea8a797e2419ca07e35c3159bd22ec9d4d8"
+    },
+    {
+      "path": "inputs/edition-5-input-and-timing.md",
+      "bundle_role": "core",
+      "bytes": 12825,
+      "sha256": "47f283dec155a0f0a6398e51a2c298485cf8c2e2beebfa3a4ccd1f5f4629412e"
+    },
+    {
+      "path": "runtime/html5-alternate/001-character-before-match.jpg",
+      "bundle_role": "core",
+      "bytes": 114338,
+      "sha256": "3df3c5cbeea061ee486ea1f53a0b646a631d1cdd0adcfa1d1655bcd1c05e6f6e",
+      "capture_request_utc": "2026-10-16T20:39:40.582Z"
+    },
+    {
+      "path": "runtime/html5-alternate/003-first-board-or-state.jpg",
+      "bundle_role": "core",
+      "bytes": 167096,
+      "sha256": "bdf2dd220c310c83e408afa25687885939503869cb8d3cc8225fe4ceba1e8dc7",
+      "capture_request_utc": "2026-10-16T20:39:49.960Z"
+    },
+    {
+      "path": "runtime/html5-alternate/004-pause-overlay.jpg",
+      "bundle_role": "core",
+      "bytes": 103696,
+      "sha256": "d44ac5f7d75252f6462f9cc035fdd800af5beb2a8528963a12144389c9dee5ad",
+      "capture_request_utc": "2026-10-16T20:40:02.854Z"
+    },
+    {
+      "path": "runtime/html5-alternate/005-move-bomb-retreat.jpg",
+      "bundle_role": "core",
+      "bytes": 164479,
+      "sha256": "cb25d30c0283b815f048747fbbce8ff13677d1cf92739dff349e2438504b4c8f",
+      "capture_request_utc": "2026-10-16T20:40:14.721Z"
+    },
+    {
+      "path": "runtime/html5-alternate/008-space-held.jpg",
+      "bundle_role": "core",
+      "bytes": 162932,
+      "sha256": "47c43a7adaa48a33f82ca3e0648d8d1a23a8e7a9e4f73fdbe6cb099181967b44",
+      "capture_request_utc": "2026-10-16T20:40:42.425Z"
+    },
+    {
+      "path": "runtime/html5-alternate/009-down-held.jpg",
+      "bundle_role": "core",
+      "bytes": 162750,
+      "sha256": "c8f7d24f7a2da98161d86f8ec7a46d2b41b911625741c84829bcde2046218ede",
+      "capture_request_utc": "2026-10-16T20:40:44.301Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-000.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 162392,
+      "sha256": "b9ad68aa2dc314c442c04252b6c5be428a4cd4a03aa8de7e277d2a3278478b8c",
+      "capture_request_utc": "2026-10-16T20:40:55.353Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-001.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 162524,
+      "sha256": "32e74df888e995165165ddd66b7fce0b656e8281f4df0590a7298c889210710d",
+      "capture_request_utc": "2026-10-16T20:40:55.784Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-002.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 162320,
+      "sha256": "01a4381b2944bf4436684942686052da6cebc7946cb050d5c67f1725300b951a",
+      "capture_request_utc": "2026-10-16T20:40:56.176Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-003.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 162170,
+      "sha256": "0bc21b0102afc2c677ec69598318f8864522c95fc900e8ecb565b79d33b9bd7d",
+      "capture_request_utc": "2026-10-16T20:40:56.545Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-004.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 162200,
+      "sha256": "40e03f409c59afa9e6e196d23ce1905bd1c89325adde8f7457445ffa293cd385",
+      "capture_request_utc": "2026-10-16T20:40:56.908Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-005.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 161277,
+      "sha256": "5d21cd7287390e9072c5099b2871d9d44c7fd89b6d96801c1ea115a6613a36fe",
+      "capture_request_utc": "2026-10-16T20:40:57.315Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-006.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 161222,
+      "sha256": "028210c68262390f7fe8eb65d674ed9e106e610f89559d3f4c096d1a5a55dc6f",
+      "capture_request_utc": "2026-10-16T20:40:57.719Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-007.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 160726,
+      "sha256": "0a4e91e0660937969d7cae014f496dd5946c2fb7ccb4f6abecbf800ac522673f",
+      "capture_request_utc": "2026-10-16T20:40:58.115Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-008.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 105589,
+      "sha256": "f9eadb640f275be1c19cc78fa9cc15b7e331a570e3ed1db3c953f4294d517011",
+      "capture_request_utc": "2026-10-16T20:40:58.495Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-009.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 110268,
+      "sha256": "a09e34fb70a0c8ccc24711db4b4b43acf480c0ea7d3b29a5a0a24e960f6b2c3b",
+      "capture_request_utc": "2026-10-16T20:40:58.873Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-010.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 109561,
+      "sha256": "3e27373fe5db674adcc386661b00b9406ff8f3bf338841ecb4e5360af2f93680",
+      "capture_request_utc": "2026-10-16T20:40:59.206Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-011.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 109567,
+      "sha256": "95e59281a00f9e6096bc706f4341685cb8bc20119ee97500497c5bb9e9f51983",
+      "capture_request_utc": "2026-10-16T20:40:59.561Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-012.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 109596,
+      "sha256": "f6e834bdc82355ef829343c0e4eac8f6fe8765416a8d85e578acf79b0e417bd6",
+      "capture_request_utc": "2026-10-16T20:40:59.940Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-013.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 109572,
+      "sha256": "ec50195e23ab031775047c5cb4ad2e8e2d9676459fe2302bca3b07948394c8ac",
+      "capture_request_utc": "2026-10-16T20:41:00.346Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-014.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 103643,
+      "sha256": "e90390c276b49205604e8d929ddfbed3b31bd2c7ecc05386189ad1cfaa460145",
+      "capture_request_utc": "2026-10-16T20:41:00.736Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-015.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 103678,
+      "sha256": "1f689a9eab2987a5e8dfd09e6a96bdd2aabde45ae2598edec63e037ae272dc0d",
+      "capture_request_utc": "2026-10-16T20:41:01.129Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-016.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 103714,
+      "sha256": "547ccfaae6ec79bba478d7066ae0b332d955cd081e477a3a126add3811db08bf",
+      "capture_request_utc": "2026-10-16T20:41:01.511Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-017.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 103279,
+      "sha256": "a1a1f805db9083a13eede98e684efb9b5a2db93cef12efcbb7886045448168eb",
+      "capture_request_utc": "2026-10-16T20:41:01.907Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-018.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 103283,
+      "sha256": "7f79e1b7c4c9c980edfd85d858440d1e66a3f9316675bae345dff4321ff48afd",
+      "capture_request_utc": "2026-10-16T20:41:02.317Z"
+    },
+    {
+      "path": "runtime/html5-alternate/010-stationary-bomb-019.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 103612,
+      "sha256": "9757851875a78b4aa466bd46eb99fd1395b50c9dd589f7721c62ec555eca543c",
+      "capture_request_utc": "2026-10-16T20:41:02.701Z"
+    },
+    {
+      "path": "runtime/html5-alternate/011-after-stationary-bomb.jpg",
+      "bundle_role": "core",
+      "bytes": 103623,
+      "sha256": "7b652ec8190f6a1f676617e5a88e16277fd4c82e6835a902768f6fdb0b05d6ee",
+      "capture_request_utc": "2026-10-16T20:41:03.775Z"
+    },
+    {
+      "path": "runtime/html5-alternate/016-title-html5.jpg",
+      "bundle_role": "core",
+      "bytes": 123488,
+      "sha256": "da544ec528a134feeb9d88e9fa5c30ddf0060d2b2770eb61f5dedeac4681d946",
+      "capture_request_utc": "2026-10-16T20:41:58.152Z"
+    },
+    {
+      "path": "runtime/html5-alternate/017-settings-html5.jpg",
+      "bundle_role": "core",
+      "bytes": 122736,
+      "sha256": "5d7f8baa5b3d3d5e88ed12c7a4ccd6b5e02796f2a1686091d88e457181f150e3",
+      "capture_request_utc": "2026-10-16T20:41:59.099Z"
+    },
+    {
+      "path": "runtime/html5-alternate/018-confirmed-settings.jpg",
+      "bundle_role": "core",
+      "bytes": 124044,
+      "sha256": "c0bf1b0a4cec8917f791ab5b623fcdcf30358266efe196c3d1f4c689d283f9f8",
+      "capture_request_utc": "2026-10-16T20:42:10.563Z"
+    },
+    {
+      "path": "runtime/html5-alternate/019-fresh-board-006.jpg",
+      "bundle_role": "core",
+      "bytes": 161092,
+      "sha256": "ef5835b2bc77c4d3d94794d154aa5cf490832a7b8eb50bb824c9b881ca26487e",
+      "capture_request_utc": "2026-10-16T20:42:13.956Z"
+    },
+    {
+      "path": "runtime/html5-alternate/024-move-and-place.jpg",
+      "bundle_role": "core",
+      "bytes": 157280,
+      "sha256": "803c0ca60fbcf9fd75486faca871034d39f10d4012ca4316e791bbe4ec4e7c69",
+      "capture_request_utc": "2026-10-16T20:43:23.692Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-000.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157347,
+      "sha256": "8ca72076234985e4943b6ad6ba0de8cb6480e3075fcf47f39d6044067a9f547a",
+      "capture_request_utc": "2026-10-16T20:43:23.823Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-001.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157507,
+      "sha256": "0ffa4ab7f059fc74efbbd3eeed078c3a59b6f9fb56a1636ca871dae4588ae686",
+      "capture_request_utc": "2026-10-16T20:43:23.947Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-002.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157759,
+      "sha256": "5f817efbebd1dc231f4dc01a9d848af0ee9b802877e1184a337d239bfef39ae2",
+      "capture_request_utc": "2026-10-16T20:43:24.124Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-003.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157123,
+      "sha256": "b5750c124ea454e9609ea53934098ebd77b5c8d4bbea48b0c1fa48a950677cda",
+      "capture_request_utc": "2026-10-16T20:43:24.260Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-004.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156643,
+      "sha256": "66fb54a3193fc0486802afb76a52624172c413aa7749f4425033885adf82b958",
+      "capture_request_utc": "2026-10-16T20:43:24.388Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-005.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156432,
+      "sha256": "351167cd3c6fd5eb48f410efbec2f981771bb46a897117b8a10016a6e64e7d67",
+      "capture_request_utc": "2026-10-16T20:43:24.500Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-006.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156449,
+      "sha256": "4a59ae9991a484a70129350e7d044359b653e39aeb1aa25c60a1c0a353c6e743",
+      "capture_request_utc": "2026-10-16T20:43:24.647Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-007.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156597,
+      "sha256": "cc48009797afde93d65ebc207ce312148fda0b08e7d8fb8496c558ef16b164ec",
+      "capture_request_utc": "2026-10-16T20:43:24.778Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-008.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157144,
+      "sha256": "af4e5714c448e79a058922d2797db67c229ee3be97370e69ece31de7fa5208d6",
+      "capture_request_utc": "2026-10-16T20:43:24.917Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-009.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157317,
+      "sha256": "f831f1667f80d5d7ed0339ad933a74479998dabb925aad0c4b74fd752cafc3c2",
+      "capture_request_utc": "2026-10-16T20:43:25.075Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-010.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156810,
+      "sha256": "583e2e86b53060593b2afba22ca7f8f69a2f97cc762efcafc9916cf7ca42e44a",
+      "capture_request_utc": "2026-10-16T20:43:25.200Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-011.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156892,
+      "sha256": "73829ee8b6c1b0056239bf576dcf400e992825bb2b987b0180b0ff1128cb0020",
+      "capture_request_utc": "2026-10-16T20:43:25.382Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-012.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157242,
+      "sha256": "511f93f9549ee4da5580d3daef57371e5b15c003c79354e9d662fa54b09a64a8",
+      "capture_request_utc": "2026-10-16T20:43:25.510Z"
+    },
+    {
+      "path": "runtime/html5-alternate/025-focus-bomb-013.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157472,
+      "sha256": "7c8815d81d4907d18facf8b50a781379cf51350e47acdfcbae54cf6a3e540c1f",
+      "capture_request_utc": "2026-10-16T20:43:25.689Z"
+    },
+    {
+      "path": "runtime/html5-alternate/026-outcome.jpg",
+      "bundle_role": "core",
+      "bytes": 157605,
+      "sha256": "340debc563d58e7532204f61c21ec644758525e878dc0477ee8c8d89a3afb5d3",
+      "capture_request_utc": "2026-10-16T20:43:25.827Z"
+    },
+    {
+      "path": "runtime/html5-alternate/027-post-explosion-state.jpg",
+      "bundle_role": "core",
+      "bytes": 156841,
+      "sha256": "5558c3821c33c79a9923701081b0d501691f36443076905ea1e9fa6eb1387708",
+      "capture_request_utc": "2026-10-16T20:43:33.727Z"
+    },
+    {
+      "path": "runtime/html5-alternate/028-down-second-bomb.jpg",
+      "bundle_role": "core",
+      "bytes": 157053,
+      "sha256": "54d4a9c8403a48095feb5ecd2704c3f78569b6dddd43fbec3d3569905191e49e",
+      "capture_request_utc": "2026-10-16T20:43:57.281Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-000.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157061,
+      "sha256": "8eca9ea671a093cc83a8edabd7e602ec3f625df3e945cbc465bf3215cd81956a",
+      "capture_request_utc": "2026-10-16T20:43:57.402Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-001.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157041,
+      "sha256": "2fe071cdf869cbf63cad61e9113ab6bd9c9712959d42b131021677e4bbbaf6ff",
+      "capture_request_utc": "2026-10-16T20:43:57.514Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-002.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157106,
+      "sha256": "638d252c55b2fc50c94add6da4a98ffb96d8b16b460c5e08c29f4f9da35c1173",
+      "capture_request_utc": "2026-10-16T20:43:57.594Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-003.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157205,
+      "sha256": "0de2240154e10ef8c5598c4194a0fb6bd1d011c8908f12e44b137582714099ce",
+      "capture_request_utc": "2026-10-16T20:43:57.721Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-004.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157152,
+      "sha256": "99086a5fc996ce8cb4020e646706b70e44b9e3b8413eb82bc2a1f6fb876aba91",
+      "capture_request_utc": "2026-10-16T20:43:57.815Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-005.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157118,
+      "sha256": "023368bafa0846efeae18fa193ba98375f5fc8eca3b462ff77843d5b683b67b6",
+      "capture_request_utc": "2026-10-16T20:43:57.912Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-006.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157250,
+      "sha256": "f43a5ba157cad361cb006351996baff7750862ce2a2d86b01822e893d4a464ac",
+      "capture_request_utc": "2026-10-16T20:43:58.027Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-007.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157234,
+      "sha256": "c6acae97e3531e267bbe5ffa05f072c937186ce99bd41d5ac11750eddce4db2b",
+      "capture_request_utc": "2026-10-16T20:43:58.142Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-008.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157442,
+      "sha256": "9e63e7bd8854853d6f6d422afb8b10b77621e4b542eb0d959a5017d5ec742bc2",
+      "capture_request_utc": "2026-10-16T20:43:58.236Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-009.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157229,
+      "sha256": "402d46f527dbfb0b2926cf067832567faf09ea725c8fc9fdb4382dd4b47dbfe5",
+      "capture_request_utc": "2026-10-16T20:43:58.345Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-010.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 157120,
+      "sha256": "67f4622f62cc1fb9f5337f411a6098ccd1f4d1452af68ecd9099e0cb0e4b9fd1",
+      "capture_request_utc": "2026-10-16T20:43:58.454Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-011.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156184,
+      "sha256": "6ab4720a27d0e3b81cb52afa5494c83fc0b8708e773835e546121b234db13896",
+      "capture_request_utc": "2026-10-16T20:43:58.544Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-012.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156415,
+      "sha256": "b2e81ff5df8b05df8a91b915528e5aedaf3b83109fff750d30e0b5c8636c9f87",
+      "capture_request_utc": "2026-10-16T20:43:58.619Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-013.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156427,
+      "sha256": "d1d80a24788c8bd293458e8f61e06d8677553eb5a8c754814ee92c8aeb959586",
+      "capture_request_utc": "2026-10-16T20:43:58.706Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-014.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156383,
+      "sha256": "257d267fb3cd8a6ca94bfebeb042794e91020b96816a5ae5d1186443f6e55a23",
+      "capture_request_utc": "2026-10-16T20:43:58.828Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-015.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156323,
+      "sha256": "c0fa2d48090f62ec8dee80e23e3eaa8188a66e14246fd6d1bdc64b335b8d65f8",
+      "capture_request_utc": "2026-10-16T20:43:58.965Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-016.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156367,
+      "sha256": "1ac76d7097d917d7bdf656daa2e26a8e084cd58f26bbdc69fb6e3d3b1be5d49a",
+      "capture_request_utc": "2026-10-16T20:43:59.128Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-017.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156412,
+      "sha256": "5e57c11794b888b7e8e2797a9fd461e5f340022c8a2c2465fccb6d670618fb77",
+      "capture_request_utc": "2026-10-16T20:43:59.268Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-018.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156495,
+      "sha256": "0246756290865b331b91a125bd4cde9f1c2a5e9f364ab4134a04e6d33b19ffc6",
+      "capture_request_utc": "2026-10-16T20:43:59.377Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-019.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156579,
+      "sha256": "543e88e0f5618c791135f0bb9443c5caa52b23754b47389c38f5eb19dd86062c",
+      "capture_request_utc": "2026-10-16T20:43:59.495Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-020.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156496,
+      "sha256": "ac3914cd0fbfe42ce432dead2a4d1f7803387a23909012805dfdea1b9b52afb6",
+      "capture_request_utc": "2026-10-16T20:43:59.612Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-021.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 156242,
+      "sha256": "4c31e352591f435a2feb2cf3c4328f6b429c9a032b978d6d3944086dcce8bf5e",
+      "capture_request_utc": "2026-10-16T20:43:59.711Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-022.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 103165,
+      "sha256": "d8083a0ca289caf6586e2d3470bb49b0e8da60f9606d702985d29f53ceedba7b",
+      "capture_request_utc": "2026-10-16T20:43:59.824Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-023.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 102901,
+      "sha256": "668c16388a9bc6f677413836791f70a3be0415a4209ca707eb679dba020c4ee8",
+      "capture_request_utc": "2026-10-16T20:43:59.951Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-024.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106684,
+      "sha256": "8523f0395487c4473ff36a212ed3da7d3be1c09700739a9dc5e7f4eb05b4da86",
+      "capture_request_utc": "2026-10-16T20:44:00.102Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-025.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 107583,
+      "sha256": "c8d6564d62315c43ee879cd7685ca353c64b1db6b3a562d178855d543318b853",
+      "capture_request_utc": "2026-10-16T20:44:00.211Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-026.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 107424,
+      "sha256": "312cd6b7807e94938541db1b508598f8596aa1165996c1fc4ce1839da0204abf",
+      "capture_request_utc": "2026-10-16T20:44:00.347Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-027.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:00.463Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-028.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:00.569Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-029.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:00.707Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-030.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:00.808Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-031.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:00.936Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-032.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:01.058Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-033.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:01.156Z"
+    },
+    {
+      "path": "runtime/html5-alternate/029-second-bomb-034.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:01.327Z"
+    },
+    {
+      "path": "runtime/html5-alternate/030-second-bomb-result.jpg",
+      "bundle_role": "core",
+      "bytes": 106970,
+      "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+      "capture_request_utc": "2026-10-16T20:44:01.478Z"
+    },
+    {
+      "path": "runtime/html5-alternate/031-level-failed-results.jpg",
+      "bundle_role": "core",
+      "bytes": 103622,
+      "sha256": "20e9f7ec3755166a333bbfc86a77f513f962ca6119f59b0f1f12a5ee8fee76db",
+      "capture_request_utc": "2026-10-16T20:44:10.938Z"
+    },
+    {
+      "path": "runtime/html5-alternate/036-html5-controls.jpg",
+      "bundle_role": "core",
+      "bytes": 124004,
+      "sha256": "1bcbb1ee79bbf16b047d4d2fdcf4470dc048861401487bdbd0e574b3cf4a532e",
+      "capture_request_utc": "2026-10-16T20:46:37.838Z"
+    },
+    {
+      "path": "runtime/html5-alternate/037-html5-powerups.jpg",
+      "bundle_role": "core",
+      "bytes": 141614,
+      "sha256": "c176abb74f8b09df5c2e5b13f33cfb0a974233790096973c00904e6a1ee44c12",
+      "capture_request_utc": "2026-10-16T20:46:46.552Z"
+    },
+    {
+      "path": "runtime/html5-alternate/038-one-enemy-setup.jpg",
+      "bundle_role": "core",
+      "bytes": 149604,
+      "sha256": "7fba1f56615f1390d398dfe1ba89b10458971d80434e152a4c173cb9525a96dc",
+      "capture_request_utc": "2026-10-16T20:46:58.764Z"
+    },
+    {
+      "path": "runtime/html5-alternate/039-one-enemy-board.jpg",
+      "bundle_role": "core",
+      "bytes": 180396,
+      "sha256": "9cf94139a8044145e358bc8599c4d3ce927838b791348a56564f59997865ceb3",
+      "capture_request_utc": "2026-10-16T20:47:11.968Z"
+    },
+    {
+      "path": "runtime/html5-alternate/040-right100.jpg",
+      "bundle_role": "core",
+      "bytes": 180420,
+      "sha256": "4dccc2d014b63eb394c010c147a80e3c032b6810a0c6d60ffb01a5916ba7e7c7",
+      "capture_request_utc": "2026-10-16T20:47:24.142Z"
+    },
+    {
+      "path": "runtime/html5-alternate/041-right900.jpg",
+      "bundle_role": "core",
+      "bytes": 180589,
+      "sha256": "2513de02098427ac1f4372e871db071fab1955c33a7695f499592824114857f7",
+      "capture_request_utc": "2026-10-16T20:47:25.518Z"
+    },
+    {
+      "path": "runtime/html5-alternate/042-opposed-horizontal.jpg",
+      "bundle_role": "core",
+      "bytes": 180559,
+      "sha256": "59b02c60ede361460dd4c8c9c0d961cb1b73175ee0c7deac2e0889a4d499dc69",
+      "capture_request_utc": "2026-10-16T20:47:26.573Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-000.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179510,
+      "sha256": "06b48079254060a918c5db0f0f9df71fed7eaf0856d40125e74e2bd8bf2af4a6",
+      "capture_request_utc": "2026-10-16T20:47:40.545Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-001.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179638,
+      "sha256": "562eb1ddc173cfc45f1a93df008c3c0a9171d2746b1284f972a205c34a92250d",
+      "capture_request_utc": "2026-10-16T20:47:40.944Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-002.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179598,
+      "sha256": "756aba897ddbb096ccc9c9ebcbfdbf93c9bb326301b8b04a896708d43b243a88",
+      "capture_request_utc": "2026-10-16T20:47:41.344Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-003.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179615,
+      "sha256": "cb7a4233cbbbdc6da595e3834657e7e1be045a5e88ad0c1a6befa7518f031150",
+      "capture_request_utc": "2026-10-16T20:47:41.774Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-004.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179624,
+      "sha256": "4a2bc4a581e5309b6c4d98f5f5fb22ac1c37cf5ed8b1f030dedd4bff575b8799",
+      "capture_request_utc": "2026-10-16T20:47:42.145Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-005.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179623,
+      "sha256": "3e3d2b087eae008314208895a94231d0bce509e6ba977ca22c298a983d39b75c",
+      "capture_request_utc": "2026-10-16T20:47:42.487Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-006.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179388,
+      "sha256": "8f278640c9bfb6eb5d275e522ba60ddd94983318df8924fc34f9936e007fa9c7",
+      "capture_request_utc": "2026-10-16T20:47:42.873Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-007.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179861,
+      "sha256": "ad172c2a1b17d295a7317646be72c5a8f822e18f8d5fb06fb33de21b97209635",
+      "capture_request_utc": "2026-10-16T20:47:43.303Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-008.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179874,
+      "sha256": "ddb5268d4fdd81876b5e744b67f04180b942e83cbceaf602e3e07f4fe8e1695b",
+      "capture_request_utc": "2026-10-16T20:47:43.679Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-009.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 180067,
+      "sha256": "060f76a837ef2c85f37f5f21a9ebabc86a053d2d1f1980d61d9c933c448a25e0",
+      "capture_request_utc": "2026-10-16T20:47:44.106Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-010.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179797,
+      "sha256": "245cb8ad68b518276c88cd401336ea0942969eddd6dfa9f18a641df54fdccff0",
+      "capture_request_utc": "2026-10-16T20:47:44.506Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-011.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179982,
+      "sha256": "d929841a06beadbb1bc8e0c8a9731357ae06605fcf9c319f0c90eee3c440f4df",
+      "capture_request_utc": "2026-10-16T20:47:44.876Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-012.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 180048,
+      "sha256": "22de47e0b33e1d64fa933c34701d755b5a1298d1a126b90a1ac745cd9aaa9c7c",
+      "capture_request_utc": "2026-10-16T20:47:45.251Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-013.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179827,
+      "sha256": "97c4b8535f6f20721226cb0fecf7f9a680310d821851c5a23b9a8bc8ad7ba6e2",
+      "capture_request_utc": "2026-10-16T20:47:45.616Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-014.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 180161,
+      "sha256": "ac1ef66958e2cdf3d8aafd36808d64d73c180d7b3529f4c118a408f969f03568",
+      "capture_request_utc": "2026-10-16T20:47:45.982Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-015.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179707,
+      "sha256": "2677a0bde157fe38f3d1045a87a873971091128d6bfd4739f60d961fc45cec68",
+      "capture_request_utc": "2026-10-16T20:47:46.393Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-016.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179692,
+      "sha256": "d6bdde20cbe48bbdd741305d6d0d8c0e94ebb973f1632106e12aece14bd49934",
+      "capture_request_utc": "2026-10-16T20:47:46.759Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-017.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179796,
+      "sha256": "237374c1d960500a5da6d2c6f147b0212037a5e46fb6ff36e19e60a7a19e8143",
+      "capture_request_utc": "2026-10-16T20:47:47.148Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-018.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179711,
+      "sha256": "4166783440ebdf529713b33a04df5f36f3dcc83571a597a1af707ff1772b2d84",
+      "capture_request_utc": "2026-10-16T20:47:47.512Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-019.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179750,
+      "sha256": "c855bda89ee58185036d4999e0dcc91310dac6f090275d4751349b3c12d3dca5",
+      "capture_request_utc": "2026-10-16T20:47:47.902Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-020.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179779,
+      "sha256": "6ff295b7d0bc98154c6c2d4da1556d2d98646863ff087e3ce0df1e1caf68c90f",
+      "capture_request_utc": "2026-10-16T20:47:48.247Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-021.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179657,
+      "sha256": "8ab9b62199c73acd8de93dbbf808d1dd759a6639cba68b1802289fe5cfbef6ea",
+      "capture_request_utc": "2026-10-16T20:47:48.640Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-022.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 178935,
+      "sha256": "6d75bf9b41a69ecbafe75e58188c62b0a7d094bacd5d5e60b606bed4d197c324",
+      "capture_request_utc": "2026-10-16T20:47:49.040Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-023.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179135,
+      "sha256": "0857e9bda3afa4010cd41fbd4d501a36c3877482f2ec2ba2ae5edd839c5af49a",
+      "capture_request_utc": "2026-10-16T20:47:49.444Z"
+    },
+    {
+      "path": "runtime/html5-alternate/043-fuse-tap-024.jpg",
+      "bundle_role": "supporting_frames",
+      "bytes": 179354,
+      "sha256": "0fcd087a55b09883a88a09cbe506af79ffb3b99230bb96122c41767630a28353",
+      "capture_request_utc": "2026-10-16T20:47:49.800Z"
+    },
+    {
+      "path": "runtime/html5-alternate/044-fuse-outcome.jpg",
+      "bundle_role": "core",
+      "bytes": 180268,
+      "sha256": "cacb54f04d08a7d3532beb7f404544e5a5c732d622d133dbf1ac562e54a1b80b",
+      "capture_request_utc": "2026-10-16T20:47:51.017Z"
+    },
+    {
+      "path": "runtime/html5-alternate/045-one-enemy-victory-results.jpg",
+      "bundle_role": "core",
+      "bytes": 130941,
+      "sha256": "7c36f3a693a5daf1ec3b4acec59921a464a3b0f59fd37f9145a7fe33bf66d61b",
+      "capture_request_utc": "2026-10-16T20:48:05.365Z"
+    },
+    {
+      "path": "runtime/html5-alternate/046-victory-results-repeat.jpg",
+      "bundle_role": "core",
+      "bytes": 130985,
+      "sha256": "f222af1ea83dbfbd7defe6fab750d703234284452ea4be7cb0a9ea8e9f4f2ce7",
+      "capture_request_utc": "2026-10-16T20:48:07.721Z"
+    },
+    {
+      "path": "runtime/html5-alternate/048-level2-state.jpg",
+      "bundle_role": "core",
+      "bytes": 186992,
+      "sha256": "f060d4587586b2632ca46dfa22af3578cefb32aec6e33c1562d39a58f9c3f2aa",
+      "capture_request_utc": "2026-10-16T20:49:09.745Z"
+    },
+    {
+      "path": "runtime/html5-alternate/049-before-long-space.jpg",
+      "bundle_role": "core",
+      "bytes": 186355,
+      "sha256": "66ff37c2e2140f14f758397e2b558c45bcc3ae40a9bacc76212ca6bb5b33424b",
+      "capture_request_utc": "2026-10-16T20:49:23.673Z"
+    },
+    {
+      "path": "runtime/html5-alternate/050-after-long-space-release.jpg",
+      "bundle_role": "core",
+      "bytes": 185868,
+      "sha256": "7babc6d64d49248d6945d539e83325b8dbfb27109c8fb66aaf212453f4fe84c0",
+      "capture_request_utc": "2026-10-16T20:49:28.658Z"
+    },
+    {
+      "path": "runtime/html5-alternate/052-after-hold-end.jpg",
+      "bundle_role": "core",
+      "bytes": 186310,
+      "sha256": "f6c8fbba3fbfb15bbe96119c300171340eaef751591e00d99dac9aec5654b401",
+      "capture_request_utc": "2026-10-16T20:49:37.660Z"
+    },
+    {
+      "path": "runtime/html5-alternate/OBSERVATIONS.md",
+      "bundle_role": "core",
+      "bytes": 9276,
+      "sha256": "ab5e25f92b26364cae914ee16ec9a9be49076fe33cde7b36bb1e045829674baf"
+    },
+    {
+      "path": "runtime/html5-alternate/SELECTED-SCREENSHOTS.md",
+      "bundle_role": "core",
+      "bytes": 2843,
+      "sha256": "28fb10f178ecab691fb3aff87667e3f11ebbad3f826f7e7d815e81a16e36a07e"
+    },
+    {
+      "path": "runtime/html5-alternate/board-grid-first-observed.json",
+      "bundle_role": "core",
+      "bytes": 3925,
+      "sha256": "b49276cf8602b89360b622226b6310a9a69ed70498cf9bedfa8fa9c78e29eaf5"
+    },
+    {
+      "path": "runtime/html5-alternate/board-grid-near-opening.json",
+      "bundle_role": "core",
+      "bytes": 3916,
+      "sha256": "9d6d52051f16ef21aaa19d59c6740c2eec801dd7cbba8bca6509899ca92e94a8"
+    },
+    {
+      "path": "runtime/html5-alternate/board-transcription.md",
+      "bundle_role": "core",
+      "bytes": 3391,
+      "sha256": "457c6d3559b80ec923507edea7bddce01b4dbb4f7e3a77ae509ee9edec400fd1"
+    },
+    {
+      "path": "runtime/html5-alternate/capture-times.json",
+      "bundle_role": "core",
+      "bytes": 23031,
+      "sha256": "47518eb5ad0a2240aa4864aee0be21128bbd6288e794c0b8c2c2149980e380a2"
+    },
+    {
+      "path": "runtime/html5-alternate/fuse-tap-action.json",
+      "bundle_role": "core",
+      "bytes": 48,
+      "sha256": "4e13046a7bae0a75b9e0aff2bef0b3643a816d9e08f7d5a99e1454f284cf26c6"
+    },
+    {
+      "path": "runtime/html5-alternate/hold-action.json",
+      "bundle_role": "core",
+      "bytes": 107,
+      "sha256": "c23fd5da94f7ef2d522de6554f26534ad0b54cb19040f01c0d4bf31e7e8f3c83"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/010-stationary-bomb-timestamps.csv",
+      "bundle_role": "core",
+      "bytes": 1377,
+      "sha256": "758b80eb840f88aec73d064b2fb4b1db0a0ca005a9ff457e4c210b9ba0aaf286"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/010-stationary-bomb.mp4",
+      "bundle_role": "core",
+      "bytes": 477167,
+      "sha256": "0dda487a10d3e9d5c83047fddfde91d90a7e44e2b7eef378d4bd5282703e6bfa"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/025-focus-bomb-timestamps.csv",
+      "bundle_role": "core",
+      "bytes": 915,
+      "sha256": "068140b150490999c748cff83b290a72cd427d756805f838b8658f2d5b7aeb9f"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/025-focus-bomb.mp4",
+      "bundle_role": "core",
+      "bytes": 261831,
+      "sha256": "c3191c961fad44bde1527af86d8d93570164b9b3263d7576b848c9e815d5c970"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/029-second-bomb-timestamps.csv",
+      "bundle_role": "core",
+      "bytes": 2223,
+      "sha256": "1ae6909aa67102a44f654dea4cf370f1306e2945e9cab6c9bde541000b417e9f"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/029-second-bomb.mp4",
+      "bundle_role": "core",
+      "bytes": 398380,
+      "sha256": "f327bf6cdf609db9e095b238d5a48e53ab0306a1091a45d1976de527eddc1468"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/043-fuse-tap-timestamps.csv",
+      "bundle_role": "core",
+      "bytes": 1524,
+      "sha256": "18e9869c7b370809c5a9d7a39e7e6bedda069a8c3918edc6a4c4cd3f6180a912"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/043-fuse-tap.mp4",
+      "bundle_role": "core",
+      "bytes": 381527,
+      "sha256": "ff2d308da340b4a76c71168be4373da1e55ce681a3f59ba44f7462a3c0fbdeb0"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/README.md",
+      "bundle_role": "core",
+      "bytes": 3686,
+      "sha256": "88aa2486f18675df29a417c55ea6844dab0665c26e937ff49921f466a2e06f25"
+    },
+    {
+      "path": "runtime/html5-alternate/recordings/clip-manifest.json",
+      "bundle_role": "core",
+      "bytes": 1668,
+      "sha256": "071518f50fa6d9f441b32ad9e45a830fd275b7a14b6a5128f7138e8331110ecd"
+    },
+    {
+      "path": "runtime/runtime-ledger.md",
+      "bundle_role": "core",
+      "bytes": 11026,
+      "sha256": "8be326ffcb26d4dbd229cb65d67258ee6ca062b9d5ffcd1a61ffcd04aa76973f"
+    },
+    {
+      "path": "runtime/screenshots/002-title-menu.jpg",
+      "bundle_role": "core",
+      "bytes": 159264,
+      "sha256": "79f35c7876fd7bb520b3c15a742bb021120f3ac242b4efe8fd2e860eae834b07"
+    },
+    {
+      "path": "runtime/screenshots/003-mode-selection.jpg",
+      "bundle_role": "core",
+      "bytes": 136531,
+      "sha256": "6c0311db35e957c7444c3c5f213bf76b5155db1c4ebf51441d002705004fcdc7"
+    },
+    {
+      "path": "runtime/screenshots/004-arena-menu.jpg",
+      "bundle_role": "core",
+      "bytes": 127028,
+      "sha256": "1638e4414011aa3078ad53335f7892958463ad759f2f74b0202239486a806a4b"
+    },
+    {
+      "path": "runtime/screenshots/005-first-match-settings.jpg",
+      "bundle_role": "core",
+      "bytes": 134068,
+      "sha256": "9d3940ee7d851c2c2b79bced0a388c1d12e8e0f48f0441c76a095299407dc4c7"
+    },
+    {
+      "path": "runtime/screenshots/006-character-selection.jpg",
+      "bundle_role": "core",
+      "bytes": 124629,
+      "sha256": "8f654611dad93f7f6954bc2c033c2a248995b791411c3b5cc2fb7b4221b3b72e"
+    },
+    {
+      "path": "runtime/screenshots/008-ruffle-info.jpg",
+      "bundle_role": "core",
+      "bytes": 110844,
+      "sha256": "21a2acee21df37ffe69ff6c3bb567298e546f0082e5dbd75910f1fdf0b32aabd"
+    },
+    {
+      "path": "runtime/screenshots/010-first-round-loading-failure.jpg",
+      "bundle_role": "core",
+      "bytes": 114241,
+      "sha256": "e9d4742c98422f3ac79466266f4c951295adf22e3656420a162747f95be4a781"
+    },
+    {
+      "path": "runtime/screenshots/012-instructions-controls.jpg",
+      "bundle_role": "core",
+      "bytes": 106183,
+      "sha256": "b9c243664b8b77f9ad094fee4bdef997dd4330d070fa121058f3f412a0c00547"
+    },
+    {
+      "path": "runtime/screenshots/013-instructions-powerups.jpg",
+      "bundle_role": "core",
+      "bytes": 136307,
+      "sha256": "c3af0f0d5cf287a9da1c7714bb3e50e7a4c55aac11a96c65fc64b8f736255bae"
+    },
+    {
+      "path": "source/method-locators.json",
+      "bundle_role": "core",
+      "bytes": 342062,
+      "sha256": "2f4a313c8e407a7084fe06a5a292e92c9edb72b5cf520b1525d0e6233fcec82b"
+    },
+    {
+      "path": "source/static-findings.md",
+      "bundle_role": "core",
+      "bytes": 12641,
+      "sha256": "a06a6d3bf92771ed42e7fa2f4ccd3dffec26f18be2a11475cd3bdce6ad8ba64d"
+    },
+    {
+      "path": "source/swf-header-manifest.json",
+      "bundle_role": "core",
+      "bytes": 641868,
+      "sha256": "f99528eec19c2d7f82d6cec3dc48da56948fbb35ab34e117f5d9f8a2a8b3640e"
+    },
+    {
+      "path": "source/tool-and-swf-sha256.txt",
+      "bundle_role": "core",
+      "bytes": 198,
+      "sha256": "5f17665fc353b2be8ee137d6d4da609dba83512b5417da239115e22588b86c17"
+    },
+    {
+      "path": "source/ui-text-en-zh.csv",
+      "bundle_role": "core",
+      "bytes": 8382,
+      "sha256": "fc3e919f16dd2f95ea4d83ad38cd4b36b7a4950bd4ac95c68b472617008649bc"
+    },
+    {
+      "path": "report/bomb-it-5-gameplay-evidence-report.md",
+      "bundle_role": "core",
+      "bytes": 16748,
+      "sha256": "75be1bace9ca553b8e926a83de99f23b16bdb11a9530be4be0b2bf66ad535662"
+    },
+    {
+      "path": "report/bomb-it-5-gameplay-evidence-report.docx",
+      "bundle_role": "core",
+      "bytes": 444952,
+      "sha256": "1820d671e1498a0a40c51d653738cfd6f20bcecf403a5e0d164d569a3e3a858a"
+    },
+    {
+      "path": "report/bomb-it-5-gameplay-evidence-report.pdf",
+      "bundle_role": "core",
+      "bytes": 616143,
+      "sha256": "a3836943c95881bd36d1b732dfd85fa2b9ea3f373a678bfe98a6cc2fc5514203"
+    },
+    {
+      "path": "report/first-board-transcription-update.md",
+      "bundle_role": "core",
+      "bytes": 2066,
+      "sha256": "e46f4d23b0bc4fa60fb2228f9eac6e048d0a0fddcf0ac17fb37ea57ee56d5609"
+    }
+  ]
+}

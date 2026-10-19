@@ -1,25 +1,11 @@
 # Agent notes
 
-Read [DESIGN.md](DESIGN.md) before editing. The settled list there is the spec. The open list is not.
+Read [DESIGN.md](DESIGN.md) before editing for the accepted specification, then [docs/development.md](docs/development.md) for the current work boundary and prerequisites. The two initial interview questions are settled; do not ask them again.
 
-## Now
+- When interviewing, work the decision frontier in development.md: ask independent, ready decisions together, recommend an answer, and wait before resolving dependent choices. Look up facts rather than asking the user to supply facts available in the repo.
+- When a decision is accepted, update DESIGN.md and its frontier entry together. Keep unanswered recommendations out of the accepted specification. Record consequential rationale in `docs/adr/`; update the current spec when an ADR is superseded.
+- When defining domain language, read and update [GLOSSARY.md](GLOSSARY.md). It contains definitions, not implementation rules.
+- Before implementing recovered behavior or parity checks, read [docs/evidence/README.md](docs/evidence/README.md) and the relevant records. Link behavior to its source; an accepted design choice is not SWF evidence.
+- Before export work, read [docs/douyin.md](docs/douyin.md) and verify its inherited platform claims against current official documentation.
 
-Ask the user the two open questions in DESIGN.md. Do not start a match, a board, a HUD, a timer, a score, or an AI until those answers exist.
-
-The Godot 4.5 project already opens on `scenes/main.tscn`. Leave that scene empty of gameplay. Do not bump `config/features` off 4.5. Do not set `physics/common/physics_ticks_per_second`. The original tick rate is not known, and 35 belongs to bomb-it-1.
-
-## When the open questions are settled
-
-If commands are accepted, add a tick that reads one command per actor and does not draw. Keep the four item names as empty slots: glove, bouncer, carpet, heavy bomb. Do not invent their behavior.
-
-Do not add a map, a generator, or a 15×13 stand-in. The first board is transcribed from edition 5.
-
-Do not copy files from `C:\Users\Eiji\Github\bomb-it-1`.
-
-## Douyin
-
-Not this session. Export is Godot 4.5, landscape, Compatibility. Main package budget is about 4MB, and a normal package is about 20MB. Recovered original art does not go in that package.
-
-## Checks
-
-There is no test runner yet. When the tick exists, add a headless check that one bomb blast and one broken soft block match the behavior written down from the SWF. Do not lock a behavior that has not been read.
+Leave `scenes/main.tscn` empty of gameplay during command-boundary work. Do not copy files from `C:\Users\Eiji\Github\bomb-it-1`.

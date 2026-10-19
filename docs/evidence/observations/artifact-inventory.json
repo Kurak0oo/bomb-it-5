@@ -1,0 +1,2864 @@
+[
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage1.csv",
+    "bytes": 5259,
+    "sha256": "1d016b944ffdf58438d0d68d6fe4b0a80edc49d4afbf63d2c18a900fcb14fbcc",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage1.csv",
+    "document_sha256": "1d016b944ffdf58438d0d68d6fe4b0a80edc49d4afbf63d2c18a900fcb14fbcc"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage1.txt",
+    "bytes": 912,
+    "sha256": "c7cf847292b61ae1156442591b740aee4a839396669d118fef95058147a88f4b",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage1.txt",
+    "document_sha256": "c7cf847292b61ae1156442591b740aee4a839396669d118fef95058147a88f4b"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage2.csv",
+    "bytes": 5334,
+    "sha256": "0841d61e3a0c324f1e25be1c3e20d9f94565244b865062bf3f8f02cf6799221c",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage2.csv",
+    "document_sha256": "0841d61e3a0c324f1e25be1c3e20d9f94565244b865062bf3f8f02cf6799221c"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage2.txt",
+    "bytes": 912,
+    "sha256": "473e4a8e0a1d1c8c7ff76f9b128946d065a97870fbe25e21066d2be863525fde",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage2.txt",
+    "document_sha256": "473e4a8e0a1d1c8c7ff76f9b128946d065a97870fbe25e21066d2be863525fde"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage3.csv",
+    "bytes": 5345,
+    "sha256": "5ae0989f591e811c49b0a141c2539d9daadb0b4f0c30734e1057b5dac78b0927",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage3.csv",
+    "document_sha256": "5ae0989f591e811c49b0a141c2539d9daadb0b4f0c30734e1057b5dac78b0927"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage3.txt",
+    "bytes": 912,
+    "sha256": "8bcf038e6e3def560e9e7e595a38d443a75ca5c8a64efa38845fdac1785c5bff",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage3.txt",
+    "document_sha256": "8bcf038e6e3def560e9e7e595a38d443a75ca5c8a64efa38845fdac1785c5bff"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage4.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage4.csv",
+    "bytes": 5045,
+    "sha256": "4befc2bd0788d1d6794fb71ee3c35324bf4843cdc264950767cab2b310b29643",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage4.csv",
+    "document_sha256": "4befc2bd0788d1d6794fb71ee3c35324bf4843cdc264950767cab2b310b29643"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage4.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage4.txt",
+    "bytes": 912,
+    "sha256": "fbfbcfe2d3e9379e1ed66f57c9eba30e8d1f2afaede8b74e553416a669d0a5a2",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage4.txt",
+    "document_sha256": "fbfbcfe2d3e9379e1ed66f57c9eba30e8d1f2afaede8b74e553416a669d0a5a2"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage5.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage5.csv",
+    "bytes": 5164,
+    "sha256": "f93de0575780968dbd05b2f99ec7227e5e2f526d627ea9c30df47a7941d816e8",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage5.csv",
+    "document_sha256": "f93de0575780968dbd05b2f99ec7227e5e2f526d627ea9c30df47a7941d816e8"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage5.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage5.txt",
+    "bytes": 912,
+    "sha256": "f32de4f7a097d0e760f323d4426d64b3c3a9c1631ea6db7c41ffa6e3d3700616",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage5.txt",
+    "document_sha256": "f32de4f7a097d0e760f323d4426d64b3c3a9c1631ea6db7c41ffa6e3d3700616"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage6.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage6.csv",
+    "bytes": 5339,
+    "sha256": "c7e7b0aad290273ca57c75a384b623bac473a15c74e2a41fb0b77f09fa513194",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage6.csv",
+    "document_sha256": "c7e7b0aad290273ca57c75a384b623bac473a15c74e2a41fb0b77f09fa513194"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage6.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage6.txt",
+    "bytes": 912,
+    "sha256": "2047b3a1e37c9e3a264f769cc581a479fb34b3f049bdcb7b7e5f99f2626df5cd",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage6.txt",
+    "document_sha256": "2047b3a1e37c9e3a264f769cc581a479fb34b3f049bdcb7b7e5f99f2626df5cd"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage7.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage7.csv",
+    "bytes": 5345,
+    "sha256": "5ae0989f591e811c49b0a141c2539d9daadb0b4f0c30734e1057b5dac78b0927",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage7.csv",
+    "document_sha256": "5ae0989f591e811c49b0a141c2539d9daadb0b4f0c30734e1057b5dac78b0927"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BasketballStage7.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BasketballStage7.txt",
+    "bytes": 912,
+    "sha256": "f97da4fec6b742ec7a5ed6b0a96358b978b92335a5dac414c953691f6ec993b0",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BasketballStage7.txt",
+    "document_sha256": "f97da4fec6b742ec7a5ed6b0a96358b978b92335a5dac414c953691f6ec993b0"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage1.csv",
+    "bytes": 5657,
+    "sha256": "7553ad8af624362f257eac12ca6ccafec0b522ecfc68209c3c41708c599f29ae",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage1.csv",
+    "document_sha256": "7553ad8af624362f257eac12ca6ccafec0b522ecfc68209c3c41708c599f29ae"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage1.txt",
+    "bytes": 903,
+    "sha256": "7a801c3c387a1a3728073027d8c20bbb0ca9c6bd297939021f4d55f107d41a8f",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage1.txt",
+    "document_sha256": "7a801c3c387a1a3728073027d8c20bbb0ca9c6bd297939021f4d55f107d41a8f"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage2.csv",
+    "bytes": 5649,
+    "sha256": "25af4d630427123ddd5f98ba4f5bc6c0149515c459cce7c077a54c8eca05bf44",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage2.csv",
+    "document_sha256": "25af4d630427123ddd5f98ba4f5bc6c0149515c459cce7c077a54c8eca05bf44"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage2.txt",
+    "bytes": 903,
+    "sha256": "5612a9f0131356b62553e4421ad4c9081a12a0cee34dccc714daea79c0476c92",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage2.txt",
+    "document_sha256": "5612a9f0131356b62553e4421ad4c9081a12a0cee34dccc714daea79c0476c92"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage3.csv",
+    "bytes": 3430,
+    "sha256": "59db568d5e309be4c9b06dcad8fbe2eac9765f497ba2dbb277beed8810311f48",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage3.csv",
+    "document_sha256": "59db568d5e309be4c9b06dcad8fbe2eac9765f497ba2dbb277beed8810311f48"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage3.txt",
+    "bytes": 903,
+    "sha256": "2a6adc44d1c1d6d3e774e1605f7d02138b19071be8e0e491e2d0b15f67f7ddb5",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage3.txt",
+    "document_sha256": "2a6adc44d1c1d6d3e774e1605f7d02138b19071be8e0e491e2d0b15f67f7ddb5"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage4.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage4.csv",
+    "bytes": 3430,
+    "sha256": "59db568d5e309be4c9b06dcad8fbe2eac9765f497ba2dbb277beed8810311f48",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage4.csv",
+    "document_sha256": "59db568d5e309be4c9b06dcad8fbe2eac9765f497ba2dbb277beed8810311f48"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage4.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage4.txt",
+    "bytes": 915,
+    "sha256": "cfb9fc8fb06f7a5e05479e009509dc17b546584be15f4a0ad94653b1279eb926",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage4.txt",
+    "document_sha256": "cfb9fc8fb06f7a5e05479e009509dc17b546584be15f4a0ad94653b1279eb926"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage_PacMan_1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_1.csv",
+    "bytes": 5662,
+    "sha256": "4fcc526996ec309c354c28a72bf527308d3beee1652240738cef47cd34afb78e",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_1.csv",
+    "document_sha256": "4fcc526996ec309c354c28a72bf527308d3beee1652240738cef47cd34afb78e"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage_PacMan_1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_1.txt",
+    "bytes": 923,
+    "sha256": "1c939e72f63c3c1951be9afe1117b688f4babf05a9d273cd621c14f3ec56e010",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_1.txt",
+    "document_sha256": "1c939e72f63c3c1951be9afe1117b688f4babf05a9d273cd621c14f3ec56e010"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage_PacMan_2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_2.csv",
+    "bytes": 5662,
+    "sha256": "38cdedbff4d82ea77e4f70b35daf2c1e24997095f87544c6b2dd7a160388e398",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_2.csv",
+    "document_sha256": "38cdedbff4d82ea77e4f70b35daf2c1e24997095f87544c6b2dd7a160388e398"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage_PacMan_2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_2.txt",
+    "bytes": 923,
+    "sha256": "00257e60ee0ff432a055c091d88cf5cd6b8262d19dbbb0d5fd6e97ed7b3cb299",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_2.txt",
+    "document_sha256": "00257e60ee0ff432a055c091d88cf5cd6b8262d19dbbb0d5fd6e97ed7b3cb299"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage_PacMan_3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_3.csv",
+    "bytes": 5650,
+    "sha256": "aa4a48cfadb5ca07824ad7672cff8bcb74fdafddd88eaf1bd027aa7dda02337a",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_3.csv",
+    "document_sha256": "aa4a48cfadb5ca07824ad7672cff8bcb74fdafddd88eaf1bd027aa7dda02337a"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/BirthdayPartyStage_PacMan_3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_3.txt",
+    "bytes": 923,
+    "sha256": "ae6e705a1dd32925f1c1f983b46462f6aba34280ad60668335a297869f26802b",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/BirthdayPartyStage_PacMan_3.txt",
+    "document_sha256": "ae6e705a1dd32925f1c1f983b46462f6aba34280ad60668335a297869f26802b"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage1.csv",
+    "bytes": 5434,
+    "sha256": "a7a2470b1a6b3fa1de6ad73782a3e2a55c8ba1c5f46c5164fac19eaaa6441b5e",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage1.csv",
+    "document_sha256": "a7a2470b1a6b3fa1de6ad73782a3e2a55c8ba1c5f46c5164fac19eaaa6441b5e"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage1.txt",
+    "bytes": 902,
+    "sha256": "9c72d46f31180cf496d12b83c3dc745f1a9252cd4534bab757a8717e7c268a73",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage1.txt",
+    "document_sha256": "9c72d46f31180cf496d12b83c3dc745f1a9252cd4534bab757a8717e7c268a73"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage2.csv",
+    "bytes": 5418,
+    "sha256": "f8eef47ca6cf4653bac1f94298a8612fbbe380e54e7127193db8996c6e22f5f6",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage2.csv",
+    "document_sha256": "f8eef47ca6cf4653bac1f94298a8612fbbe380e54e7127193db8996c6e22f5f6"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage2.txt",
+    "bytes": 902,
+    "sha256": "146282b0040e2268258d5893ae580805dc11a72b5f905797479b561d20de7fbf",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage2.txt",
+    "document_sha256": "146282b0040e2268258d5893ae580805dc11a72b5f905797479b561d20de7fbf"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage3.csv",
+    "bytes": 5426,
+    "sha256": "e26341ed514d3fd866aad5c1e30403cd522822598f6f492508a095717b37e3f4",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage3.csv",
+    "document_sha256": "e26341ed514d3fd866aad5c1e30403cd522822598f6f492508a095717b37e3f4"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage3.txt",
+    "bytes": 902,
+    "sha256": "ca4850e4ad747b54a7b7967635347c4ab15fb5f64b727c43de7fd09941d6eb5c",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage3.txt",
+    "document_sha256": "ca4850e4ad747b54a7b7967635347c4ab15fb5f64b727c43de7fd09941d6eb5c"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage_PacMan_1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_1.csv",
+    "bytes": 5654,
+    "sha256": "2bb8edb07305809f184d931af2da79bd7bc42f7ecd64e996b10728cbf9c51c3d",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_1.csv",
+    "document_sha256": "2bb8edb07305809f184d931af2da79bd7bc42f7ecd64e996b10728cbf9c51c3d"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage_PacMan_1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_1.txt",
+    "bytes": 922,
+    "sha256": "a2504751ceae51bb33baf615e3cbb88f42bc73e240668ca4682d0ca1285d0b23",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_1.txt",
+    "document_sha256": "a2504751ceae51bb33baf615e3cbb88f42bc73e240668ca4682d0ca1285d0b23"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage_PacMan_2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_2.csv",
+    "bytes": 5654,
+    "sha256": "46eb146c4a6025a05cef84b5bffb85aa3b908bc63829ba63ac5f3756bfaa9b1a",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_2.csv",
+    "document_sha256": "46eb146c4a6025a05cef84b5bffb85aa3b908bc63829ba63ac5f3756bfaa9b1a"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage_PacMan_2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_2.txt",
+    "bytes": 922,
+    "sha256": "71c174d657c18627056c0dbd897c4ca8c892ee4a8ff8330cc91783cf0c3b0bc2",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_2.txt",
+    "document_sha256": "71c174d657c18627056c0dbd897c4ca8c892ee4a8ff8330cc91783cf0c3b0bc2"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage_PacMan_3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_3.csv",
+    "bytes": 5666,
+    "sha256": "265eff87642a85d3abdcd14d740adbb03e6f1ad360b4cb352244ea11660d71fd",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_3.csv",
+    "document_sha256": "265eff87642a85d3abdcd14d740adbb03e6f1ad360b4cb352244ea11660d71fd"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CandyFactoryStage_PacMan_3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_3.txt",
+    "bytes": 922,
+    "sha256": "8280c3b25bbe8a0674dea5c74d59d9a9051467ea8a3486a73d8ab98f3fcc8486",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CandyFactoryStage_PacMan_3.txt",
+    "document_sha256": "8280c3b25bbe8a0674dea5c74d59d9a9051467ea8a3486a73d8ab98f3fcc8486"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage1.csv",
+    "bytes": 5590,
+    "sha256": "8b9cd2836feb1b03635ab2e60b8d5d59c2377b736a0cc2ac4bba2c80e5e555c1",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage1.csv",
+    "document_sha256": "8b9cd2836feb1b03635ab2e60b8d5d59c2377b736a0cc2ac4bba2c80e5e555c1"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage1.txt",
+    "bytes": 896,
+    "sha256": "62d575e6f99364c153a50902c0f582913683bfb0711a64508fccf1db1d3dcebe",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage1.txt",
+    "document_sha256": "62d575e6f99364c153a50902c0f582913683bfb0711a64508fccf1db1d3dcebe"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage2.csv",
+    "bytes": 5586,
+    "sha256": "ac207ba75cd70776298a37cb4320cfdbc435f29e0bf849494f5ef78ab93d6f96",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage2.csv",
+    "document_sha256": "ac207ba75cd70776298a37cb4320cfdbc435f29e0bf849494f5ef78ab93d6f96"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage2.txt",
+    "bytes": 896,
+    "sha256": "c0d176be55f152cc9d763a381d5dcd2eee33ad7c84db72bb1feea095f88cfe15",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage2.txt",
+    "document_sha256": "c0d176be55f152cc9d763a381d5dcd2eee33ad7c84db72bb1feea095f88cfe15"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage3.csv",
+    "bytes": 5578,
+    "sha256": "b42568fcb7e8ae5ae00119cf98d83bbf69046ffa7f42b388976e41909065bda8",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage3.csv",
+    "document_sha256": "b42568fcb7e8ae5ae00119cf98d83bbf69046ffa7f42b388976e41909065bda8"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage3.txt",
+    "bytes": 896,
+    "sha256": "feacf404ce3b1f4f5f50640b040a683425a24b84b7aafaa063ae04eacba7ccef",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage3.txt",
+    "document_sha256": "feacf404ce3b1f4f5f50640b040a683425a24b84b7aafaa063ae04eacba7ccef"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage_PacMan_1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage_PacMan_1.csv",
+    "bytes": 5646,
+    "sha256": "c017402e2656bc1e06d27735e26455a58e560688844eee18ab884a875a4df121",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage_PacMan_1.csv",
+    "document_sha256": "c017402e2656bc1e06d27735e26455a58e560688844eee18ab884a875a4df121"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage_PacMan_1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage_PacMan_1.txt",
+    "bytes": 916,
+    "sha256": "99e12fa72f7369ba96cc09a1f836620bb3b389a3b7f39b9888f1f5f2d1c030ce",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage_PacMan_1.txt",
+    "document_sha256": "99e12fa72f7369ba96cc09a1f836620bb3b389a3b7f39b9888f1f5f2d1c030ce"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage_PacMan_2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage_PacMan_2.csv",
+    "bytes": 5654,
+    "sha256": "26aecd7f9b1e54827d1cff8966543a4675ca11f613cc774aebc791aff148a688",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage_PacMan_2.csv",
+    "document_sha256": "26aecd7f9b1e54827d1cff8966543a4675ca11f613cc774aebc791aff148a688"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage_PacMan_2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage_PacMan_2.txt",
+    "bytes": 916,
+    "sha256": "3d8b198c9b613345247e018cdbe316a1b1c7ff05cd542cdc094907e263473691",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage_PacMan_2.txt",
+    "document_sha256": "3d8b198c9b613345247e018cdbe316a1b1c7ff05cd542cdc094907e263473691"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage_PacMan_3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage_PacMan_3.csv",
+    "bytes": 5642,
+    "sha256": "65b95747e7e7a9fa9a40d3e094bcd2621c1466334e66d0060516391c364ec254",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage_PacMan_3.csv",
+    "document_sha256": "65b95747e7e7a9fa9a40d3e094bcd2621c1466334e66d0060516391c364ec254"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/CinemaStage_PacMan_3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/CinemaStage_PacMan_3.txt",
+    "bytes": 916,
+    "sha256": "021f0b5c36eb9065e4aa1a9f5b10a89a2acb65223d8292fc7f78efab4d1a23df",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/CinemaStage_PacMan_3.txt",
+    "document_sha256": "021f0b5c36eb9065e4aa1a9f5b10a89a2acb65223d8292fc7f78efab4d1a23df"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/INDEX.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/INDEX.md",
+    "bytes": 2742,
+    "sha256": "58c39ef7e687182e9ce35728bdee5d41ed40e4b6bb173f4b4d3dfd759116fff0",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/INDEX.md",
+    "document_sha256": "598aa65882949f52bebf4607181b21a392754d453269580932cc818dffbc2668"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage1.csv",
+    "bytes": 5638,
+    "sha256": "8e0b8115ce3ca96db98cd0568fc45f5d2a63f00a75a53ec2f567d1bbf466165b",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage1.csv",
+    "document_sha256": "8e0b8115ce3ca96db98cd0568fc45f5d2a63f00a75a53ec2f567d1bbf466165b"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage1.txt",
+    "bytes": 902,
+    "sha256": "47532dd3f42e7a3f35a7a1205d94b194a78a64fa7ccf282ed9dbfb4fde479247",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage1.txt",
+    "document_sha256": "47532dd3f42e7a3f35a7a1205d94b194a78a64fa7ccf282ed9dbfb4fde479247"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage2.csv",
+    "bytes": 5642,
+    "sha256": "553b1f71ff8c23c00619b28d669a8521391d2e5325e76a490a7835dbbfcedb46",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage2.csv",
+    "document_sha256": "553b1f71ff8c23c00619b28d669a8521391d2e5325e76a490a7835dbbfcedb46"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage2.txt",
+    "bytes": 902,
+    "sha256": "ae1db824c89952b90e4e449eb3c27571486678035a7f1d7f210c7d011ccb32c2",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage2.txt",
+    "document_sha256": "ae1db824c89952b90e4e449eb3c27571486678035a7f1d7f210c7d011ccb32c2"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage3.csv",
+    "bytes": 5638,
+    "sha256": "49dc6d4e3fc2a31608c9b9c1305ec3054aa2375d05836446b91499ed7ea3969f",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage3.csv",
+    "document_sha256": "49dc6d4e3fc2a31608c9b9c1305ec3054aa2375d05836446b91499ed7ea3969f"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage3.txt",
+    "bytes": 902,
+    "sha256": "338ae7f3305bc917a7fc041fb57388fd6172a0847488b792c9daa264a9f86a7c",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage3.txt",
+    "document_sha256": "338ae7f3305bc917a7fc041fb57388fd6172a0847488b792c9daa264a9f86a7c"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage_PacMan_1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_1.csv",
+    "bytes": 5646,
+    "sha256": "33c515a46a4404e82e508da2e6e0754acee87801831096e0938dcfac50fc1481",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_1.csv",
+    "document_sha256": "33c515a46a4404e82e508da2e6e0754acee87801831096e0938dcfac50fc1481"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage_PacMan_1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_1.txt",
+    "bytes": 922,
+    "sha256": "c332208cf23ee2326dc14a4ae3e1f64a625ca5d7d23e91ce7d947b6b72f58628",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_1.txt",
+    "document_sha256": "c332208cf23ee2326dc14a4ae3e1f64a625ca5d7d23e91ce7d947b6b72f58628"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage_PacMan_2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_2.csv",
+    "bytes": 5650,
+    "sha256": "9edb3735af60a42de49f9078bae11941f5d482ac67c884559ac5f86c6f3bd7d3",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_2.csv",
+    "document_sha256": "9edb3735af60a42de49f9078bae11941f5d482ac67c884559ac5f86c6f3bd7d3"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage_PacMan_2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_2.txt",
+    "bytes": 922,
+    "sha256": "3067952ea42866b40d3ef769d42782d7c8906b44ff0115c2d06d1daeffca6ca4",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_2.txt",
+    "document_sha256": "3067952ea42866b40d3ef769d42782d7c8906b44ff0115c2d06d1daeffca6ca4"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage_PacMan_3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_3.csv",
+    "bytes": 5642,
+    "sha256": "3f8cfd9712944feff8c4d5055831ecbff2e133195f38cfafad31b21802e86b30",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_3.csv",
+    "document_sha256": "3f8cfd9712944feff8c4d5055831ecbff2e133195f38cfafad31b21802e86b30"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/LuxuryStoresStage_PacMan_3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_3.txt",
+    "bytes": 922,
+    "sha256": "4d57c8d031d2cd2ca8c44c77ec0fa4a21c82046773cb527952a405115ad2eb66",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/LuxuryStoresStage_PacMan_3.txt",
+    "document_sha256": "4d57c8d031d2cd2ca8c44c77ec0fa4a21c82046773cb527952a405115ad2eb66"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage1.csv",
+    "bytes": 5638,
+    "sha256": "69763e064a66da51ea655ad8bbb34db7b0ac0ef41842e7f66c23997814c40e46",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage1.csv",
+    "document_sha256": "69763e064a66da51ea655ad8bbb34db7b0ac0ef41842e7f66c23997814c40e46"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage1.txt",
+    "bytes": 902,
+    "sha256": "d41b95efa65834a34427e188041667033cf5eb4342c5d9a89f58e191308ab282",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage1.txt",
+    "document_sha256": "d41b95efa65834a34427e188041667033cf5eb4342c5d9a89f58e191308ab282"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage2.csv",
+    "bytes": 5642,
+    "sha256": "c172c62ecf095aae50956c733f176ae833ff9996897279533393c48cd86c2d5d",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage2.csv",
+    "document_sha256": "c172c62ecf095aae50956c733f176ae833ff9996897279533393c48cd86c2d5d"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage2.txt",
+    "bytes": 902,
+    "sha256": "9e8a6516f57d8112e1a689106939b9783215748ebe4b10e0f62247c1bca92183",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage2.txt",
+    "document_sha256": "9e8a6516f57d8112e1a689106939b9783215748ebe4b10e0f62247c1bca92183"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage3.csv",
+    "bytes": 5638,
+    "sha256": "72cda0ec74724f70eae88ac8f610d7d70ba67087917b724ede1334e052bf9612",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage3.csv",
+    "document_sha256": "72cda0ec74724f70eae88ac8f610d7d70ba67087917b724ede1334e052bf9612"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage3.txt",
+    "bytes": 902,
+    "sha256": "79b78d3a406d91f7f8e9fdb7b1815f89b707cd43652513de5fa0022c4dc9c120",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage3.txt",
+    "document_sha256": "79b78d3a406d91f7f8e9fdb7b1815f89b707cd43652513de5fa0022c4dc9c120"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage_PacMan_1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_1.csv",
+    "bytes": 5662,
+    "sha256": "564792f88355512cd7769a780811732b6e5485dc06704c97c183b8d88b632e62",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_1.csv",
+    "document_sha256": "564792f88355512cd7769a780811732b6e5485dc06704c97c183b8d88b632e62"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage_PacMan_1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_1.txt",
+    "bytes": 922,
+    "sha256": "02bc04728433bec62cb95282bcdcb6d15f22254e141a66fd8464e28d255af39a",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_1.txt",
+    "document_sha256": "02bc04728433bec62cb95282bcdcb6d15f22254e141a66fd8464e28d255af39a"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage_PacMan_2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_2.csv",
+    "bytes": 5642,
+    "sha256": "c30ec786cae8434253db31ebab0050a05103c2061d8e35dc589270171b70517c",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_2.csv",
+    "document_sha256": "c30ec786cae8434253db31ebab0050a05103c2061d8e35dc589270171b70517c"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage_PacMan_2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_2.txt",
+    "bytes": 922,
+    "sha256": "f410bd731e89c96af09894e1cb97d28456e4c34cb160e18404c256cae32e29ae",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_2.txt",
+    "document_sha256": "f410bd731e89c96af09894e1cb97d28456e4c34cb160e18404c256cae32e29ae"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage_PacMan_3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_3.csv",
+    "bytes": 5658,
+    "sha256": "3eb754ab6443508992e9eb9bdd70d9c28e01ea458477a15c206cee4e9b3ba43c",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_3.csv",
+    "document_sha256": "3eb754ab6443508992e9eb9bdd70d9c28e01ea458477a15c206cee4e9b3ba43c"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/MagicLibraryStage_PacMan_3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_3.txt",
+    "bytes": 922,
+    "sha256": "6c49f1b2b3011e6c61342f7ceb9ef69f488f34d95c5b685c1bddbfaf2cc688c2",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/MagicLibraryStage_PacMan_3.txt",
+    "document_sha256": "6c49f1b2b3011e6c61342f7ceb9ef69f488f34d95c5b685c1bddbfaf2cc688c2"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage1.csv",
+    "bytes": 5630,
+    "sha256": "cd5c181cbafedf6340684737ddd5c70e6f5bfc2f81c583837572bb011702f501",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage1.csv",
+    "document_sha256": "cd5c181cbafedf6340684737ddd5c70e6f5bfc2f81c583837572bb011702f501"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage1.txt",
+    "bytes": 893,
+    "sha256": "e9dab2dad08a2c72eb5401ea599b51db642724b3fa7ef4a8ee36f5d8e206ead5",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage1.txt",
+    "document_sha256": "e9dab2dad08a2c72eb5401ea599b51db642724b3fa7ef4a8ee36f5d8e206ead5"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage2.csv",
+    "bytes": 5638,
+    "sha256": "90b24af9672cb2f363b2e9256412fdbc2036b9f9aca4f7bf8623d3aa1636beb1",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage2.csv",
+    "document_sha256": "90b24af9672cb2f363b2e9256412fdbc2036b9f9aca4f7bf8623d3aa1636beb1"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage2.txt",
+    "bytes": 893,
+    "sha256": "eedfed68d2f75b7972b3627d437773a20b6e6408ce09bb044d845cc4909d745b",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage2.txt",
+    "document_sha256": "eedfed68d2f75b7972b3627d437773a20b6e6408ce09bb044d845cc4909d745b"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage3.csv",
+    "bytes": 5634,
+    "sha256": "5c04a9a503d484ed041fe8527655fe15cc2a478145a27e513179b4e4c3ac1316",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage3.csv",
+    "document_sha256": "5c04a9a503d484ed041fe8527655fe15cc2a478145a27e513179b4e4c3ac1316"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage3.txt",
+    "bytes": 893,
+    "sha256": "14787887e099dacd20ae1d35ea9be8b89aa7c73554f2874f7e06f79a95c278fa",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage3.txt",
+    "document_sha256": "14787887e099dacd20ae1d35ea9be8b89aa7c73554f2874f7e06f79a95c278fa"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage_PacMan_1.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage_PacMan_1.csv",
+    "bytes": 5662,
+    "sha256": "de1c042337b88875c8195889ba2e878ad9c44f8f767c68cab4968366629fd34d",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage_PacMan_1.csv",
+    "document_sha256": "de1c042337b88875c8195889ba2e878ad9c44f8f767c68cab4968366629fd34d"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage_PacMan_1.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage_PacMan_1.txt",
+    "bytes": 913,
+    "sha256": "4482bf9d490d775bee4d7ca89f54732e80471bd88981ddbfc348fa10aa883a1c",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage_PacMan_1.txt",
+    "document_sha256": "4482bf9d490d775bee4d7ca89f54732e80471bd88981ddbfc348fa10aa883a1c"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage_PacMan_2.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage_PacMan_2.csv",
+    "bytes": 5654,
+    "sha256": "b28f653d8d0e0dee0f3504ec40482697e84c43b8d7250291d9a366aff6a69517",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage_PacMan_2.csv",
+    "document_sha256": "b28f653d8d0e0dee0f3504ec40482697e84c43b8d7250291d9a366aff6a69517"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage_PacMan_2.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage_PacMan_2.txt",
+    "bytes": 913,
+    "sha256": "49b6f55426e0d16dec0baeef2a5448bf08256e2c650423c7e45a3434d9aecc63",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage_PacMan_2.txt",
+    "document_sha256": "49b6f55426e0d16dec0baeef2a5448bf08256e2c650423c7e45a3434d9aecc63"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage_PacMan_3.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage_PacMan_3.csv",
+    "bytes": 5654,
+    "sha256": "6337ecce90f28f7c9d6108ae738c6975af84bba9caaf3f44cd16cfa6530f4d99",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage_PacMan_3.csv",
+    "document_sha256": "6337ecce90f28f7c9d6108ae738c6975af84bba9caaf3f44cd16cfa6530f4d99"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "maps/ZooStage_PacMan_3.txt",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/maps/ZooStage_PacMan_3.txt",
+    "bytes": 913,
+    "sha256": "65255d9ebc63fdcdb27aa8647c7fbe79e95a5fa8140bf581a745cf726e591b47",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/maps/ZooStage_PacMan_3.txt",
+    "document_sha256": "65255d9ebc63fdcdb27aa8647c7fbe79e95a5fa8140bf581a745cf726e591b47"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p01_hold_left_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p01_hold_left_run1.gif",
+    "bytes": 108042,
+    "sha256": "8f55c27656cbeb440015b7b54db496ca88aa75b4db4ad95e46cbdfaa9eec0f6e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p01_hold_left_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p01_hold_left_run1.mp4",
+    "bytes": 16275,
+    "sha256": "68f93b918781954e26c623edab48be394f32ada8e5055c162347860abcd36581",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p02_left_then_up_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p02_left_then_up_run1.gif",
+    "bytes": 185823,
+    "sha256": "1292d3713e0ad45ae235434c50e0265eeef2f93ed4e0b91e417b699f06fab94a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p02_left_then_up_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p02_left_then_up_run1.mp4",
+    "bytes": 22632,
+    "sha256": "2e75f51bf1cf575f01ee2f9ec0de71ceac72f5cab9610f93b0362f02b2ee006b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p03_down_then_right_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p03_down_then_right_run1.gif",
+    "bytes": 84588,
+    "sha256": "2ffb3a3079964a8ea1a15f4c1b41364966b1ee1ecb84fcfa01d9f41e4d00725b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p03_down_then_right_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p03_down_then_right_run1.mp4",
+    "bytes": 20472,
+    "sha256": "4b5e91543908634ff3684257dda92a3f9ed3419ee1a7cb64e38bbf1aac834a44",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p03_right_then_down_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p03_right_then_down_run1.gif",
+    "bytes": 89606,
+    "sha256": "81293f165d166c74b7b4e3c88f694aa58bdc189c6924cf8a95d4e91762a04abc",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p03_right_then_down_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p03_right_then_down_run1.mp4",
+    "bytes": 20293,
+    "sha256": "8e9ed3d9a4086f763e27d7d24c2a4f1f6090242188420e47bb5343425d280aed",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p04_space_held_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p04_space_held_run1.gif",
+    "bytes": 522770,
+    "sha256": "ee8955d094753e305541e79eba9f2d3d93d6424558b88fe0b842608a4636dc60",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p04_space_held_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p04_space_held_run1.mp4",
+    "bytes": 64349,
+    "sha256": "deb3281b436e279e630882e2cdc4ff0461cb7d325f4851cb3971b0605d8bb383",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p04_space_repeated_run2.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p04_space_repeated_run2.gif",
+    "bytes": 397869,
+    "sha256": "ea11d482a300fcdd5343cb1b8a524e55b41542d1139cc10e6e9c250342f8e51b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p04_space_repeated_run2.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p04_space_repeated_run2.mp4",
+    "bytes": 66797,
+    "sha256": "4cbd099df2c27f0f708bbc2ed3dbc7135141ec4d0c86f8f5de05fc94f5cc0d95",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p05_fuse_flame_softblock_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p05_fuse_flame_softblock_run1.gif",
+    "bytes": 933121,
+    "sha256": "7ee53c9712c945e2673ab7042e1458a648e2f33c63dc0cca6113ae1a6f89f190",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p05_fuse_flame_softblock_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p05_fuse_flame_softblock_run1.mp4",
+    "bytes": 59417,
+    "sha256": "4938e446e22b3b83ff620da98118483b030159175e77e19b8c3bcaf7df0d700d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p08_chain_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p08_chain_run1.gif",
+    "bytes": 659115,
+    "sha256": "7c0b598b7e2a3dec61659419b830dd3ceee27304f7224b98dba0f87491090bc5",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p08_chain_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p08_chain_run1.mp4",
+    "bytes": 84892,
+    "sha256": "93a2bbb90352723aa97ff65bd7bcc7c64a38fab18f45c079ec2f3e0187391ef3",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p09_pickup_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p09_pickup_run1.gif",
+    "bytes": 295355,
+    "sha256": "c185d5b8b65b3cd3793281880bd906cc49573d2b5619ec1406c92d890cdc556e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p09_pickup_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p09_pickup_run1.mp4",
+    "bytes": 32773,
+    "sha256": "b66f6a18443cb0b475753b0daaef0c1e4895362bee86dbd15aaa9e04666bbbb6",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p10_death_selfbomb_to_results_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p10_death_selfbomb_to_results_run1.gif",
+    "bytes": 4162062,
+    "sha256": "251d08d4a9f1b4cb0c7dfda1bb305965054fcd469724af539fd625679fa9d252",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p10_death_selfbomb_to_results_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p10_death_selfbomb_to_results_run1.mp4",
+    "bytes": 316069,
+    "sha256": "f9573dee611e51a0ed2f9e9719a7e349738d17e0338a9218f8baeefa3eaf072c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p11_pause_P_run1.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p11_pause_P_run1.gif",
+    "bytes": 574026,
+    "sha256": "cd8ca072f33d786b5c8d6f05f9d561f9587ac829cd1969c22749a5b83617ba0d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p11_pause_P_run1.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p11_pause_P_run1.mp4",
+    "bytes": 138023,
+    "sha256": "987521886d0f8271d69067f6e509af1cf4002c06cb787a1da7b6265f10e14f2d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p12_timeout_timesup_to_complete.gif",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p12_timeout_timesup_to_complete.gif",
+    "bytes": 2541325,
+    "sha256": "38ec6fc31114e7138169a3f8a398d1e5dbc868cbbe244235a65d8bb3b5b9ef93",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/clips/p12_timeout_timesup_to_complete.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p12_timeout_timesup_to_complete.mp4",
+    "bytes": 266429,
+    "sha256": "e44044657450a29c4766960b23776d259ed71b279f0082d7b1a677b0e835099d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/first-board.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/first-board.md",
+    "bytes": 3967,
+    "sha256": "dac151323ea60370ca466d1a72e42055317e9c0202767986354ddfe8afc212cc",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/play/first-board.md",
+    "document_sha256": "6d6cf05c20222dbf5f5c60f0ae58c56b8adc76b09e2fd00b516d0cac52f1dd4d"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/harness-timeline.csv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/harness-timeline.csv",
+    "bytes": 26176,
+    "sha256": "f772f3c7c37597a96e93da04ba832c7db4f06b307c6360b183c6530d510b963e",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/play/harness-timeline.csv",
+    "document_sha256": "f772f3c7c37597a96e93da04ba832c7db4f06b307c6360b183c6530d510b963e"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/log.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/log.md",
+    "bytes": 7837,
+    "sha256": "1f085e3f7eab28178538e2d8db2a30500e0940a7fb11aeae74b617fa448aa48f",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/play/log.md",
+    "document_sha256": "fcc00c869c4d3ca42a0e938d7d973376831912b1c12682ba223cf9c33061bbdd"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/01_title.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/01_title.png",
+    "bytes": 137941,
+    "sha256": "55b2b310601a2add06d9cc7c925b3441adbf36ad1e96c5a92fae73f8e1358e77",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/02_title_menu.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/02_title_menu.png",
+    "bytes": 318076,
+    "sha256": "d19f3876b9ef464badc30ed13bf71f5a60c90dc083da2853a9ef6ed9f30b2732",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/03_how_to_play.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/03_how_to_play.png",
+    "bytes": 130579,
+    "sha256": "1224246744bef36880153cb644e996d4edbe7acc192bf1442d5caf88f194d22f",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/04_powerups_help.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/04_powerups_help.png",
+    "bytes": 150101,
+    "sha256": "1d8cdccad4aeca5d29a08fe94ab703e8b61c238f288050dcc47affbe0dca8506",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/05_game_settings_default.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/05_game_settings_default.png",
+    "bytes": 225286,
+    "sha256": "2184c54c473a12844159d52698c26123ccc847b4802f9679bb5ac583d1fc9da7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/06_game_settings_normal.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/06_game_settings_normal.png",
+    "bytes": 223827,
+    "sha256": "a171066159f1e0aa48ad2258b3cd11669a18abaa8a0abc9e53a792d56bb72e97",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/07_character_select.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/07_character_select.png",
+    "bytes": 178053,
+    "sha256": "2887f2842ba84b424d0c7144aa22bc4027ecb2380f94e01227d4bf7ab3a5ba37",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/08_start_board.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/08_start_board.png",
+    "bytes": 226821,
+    "sha256": "172eef84fd6e7c7927c515f1a49c94a64cc7500b4e6ece44a670505483baadd9",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/08a_start_t0.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/08a_start_t0.png",
+    "bytes": 226821,
+    "sha256": "172eef84fd6e7c7927c515f1a49c94a64cc7500b4e6ece44a670505483baadd9",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/08b_start_t1.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/08b_start_t1.png",
+    "bytes": 231459,
+    "sha256": "5eb7dc3f0a1d46bd44cefe88d9848b3d50203de3b8f85405509ab879023ef28a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/08c_start_t2.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/08c_start_t2.png",
+    "bytes": 235523,
+    "sha256": "71894b9878a1579955f9aef7d0a55758b47303d0dce54c16ef8f6d554943e33d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/08d_start_t3.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/08d_start_t3.png",
+    "bytes": 226672,
+    "sha256": "077b788d5326f2f9a211ae0d7e60324885344ada117fdc808dd16c1cd85ca2fd",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/10_defeat_game_over.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/10_defeat_game_over.png",
+    "bytes": 148438,
+    "sha256": "922b1d040fbb04bc1eab9015fc04dcb29b85e4865065f41d50a74e93fbc02534",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/11_start_board_run2.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/11_start_board_run2.png",
+    "bytes": 232691,
+    "sha256": "18f513ec544e1319139a89c409c0bd09322683e5a665ba578a4a2c59cd86cf98",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/12_move_test.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/12_move_test.png",
+    "bytes": 234561,
+    "sha256": "977d97d9514780b0daff9809204bcb90c97036c97116f5597474b219de0e2a1a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/13_move_test2.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/13_move_test2.png",
+    "bytes": 233018,
+    "sha256": "1d6cdad2b13dfbbed207196141d09f61c689ce11cbf3ebe72764761598224289",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/14_move_test3.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/14_move_test3.png",
+    "bytes": 228636,
+    "sha256": "c546cb04fbca6bc0e33d9932e3498b922cb53222ef2a9d65280c88a5fecc9b69",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/15_bomb_placed_fled.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/15_bomb_placed_fled.png",
+    "bytes": 223939,
+    "sha256": "2b449e9509e0eff9f8f705fad6167e6ecd85e6e4ec78369c096f3b3e21199824",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/16_bomb_next.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/16_bomb_next.png",
+    "bytes": 220205,
+    "sha256": "8e8e9ab0db9c7d8ffcef000315f05c8a7b4992f74095e6c3e21a3b7eed24db24",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/18a_bomb_placed_under_player.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/18a_bomb_placed_under_player.png",
+    "bytes": 209526,
+    "sha256": "810ae50ab0cf6414cbb181225990bbe18e867b8c2f6d533adb7ad62b0f7e728c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/18b_bomb_before_blast.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/18b_bomb_before_blast.png",
+    "bytes": 208421,
+    "sha256": "f712b9d9f78b43b038af105134134e1f8549666962b88ba42812714cdd769f99",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/18c_explosion_player_hit.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/18c_explosion_player_hit.png",
+    "bytes": 207854,
+    "sha256": "fb0d94c225eb770d2aebccf35574a54436f193113760e03afc884a6b4c883b47",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/18d_player_death_silhouette.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/18d_player_death_silhouette.png",
+    "bytes": 207576,
+    "sha256": "e988fdfaa17099aa0257c8777f2bca060fa878657f0988e83abb00cbd6ea4e86",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/19_results_level_failed.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/19_results_level_failed.png",
+    "bytes": 138332,
+    "sha256": "e6bbe916afab8366f7520151e8c3e6b9e9780ec5dbbaa447324ceb738d1cc83a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/20_after_try_again.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/20_after_try_again.png",
+    "bytes": 232551,
+    "sha256": "6eb24fff1931bb9005353fe3b18aa47ff082e3347f597ade00f76605973c68db",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/21_after_P_key_in_match.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/21_after_P_key_in_match.png",
+    "bytes": 177023,
+    "sha256": "d40487769e8def87f867de883db7bf1bc13e495a5314b6ae109021a34280870c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/22_resumed_t0.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/22_resumed_t0.png",
+    "bytes": 176230,
+    "sha256": "9d33898437a6d232aae595626a9ccf356e34871d4839c5bed36908334b0b0a4e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "play/screens/23_hud_after_resume.png",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/screens/23_hud_after_resume.png",
+    "bytes": 241143,
+    "sha256": "9778feec250d0d5c920cb28e28bb198918a5eb94d22e0de94b935cd8a5098c09",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "REPORT.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/REPORT.md",
+    "bytes": 13275,
+    "sha256": "d6ea1a35b192deb84d4bcf822dd31510760faf8c9dd0742015963c710307e133",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/REPORT.md",
+    "document_sha256": "59ed0e01515a56c663e1dd96b23d494da7d8a7dc2b623300cb04aa059814eaad"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "SCREENSHOT_INDEX.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/SCREENSHOT_INDEX.md",
+    "bytes": 3980,
+    "sha256": "80dd2637c29c494428f33a8faaa4a03e37709a88dd937c16e4f0a318fab55476",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/SCREENSHOT_INDEX.md",
+    "document_sha256": "1a4a845129c79b1fd1d26ffe7af329b8d60755fb51ed105ae7fb20e8c15c6aed"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "setup/players.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/setup/players.md",
+    "bytes": 3773,
+    "sha256": "de775d92edd5e14435dd6f752d5a5b3731116beda4db9c5f7626f814bd678d43",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/setup/players.md",
+    "document_sha256": "ff568855332406eff380c6cdf58f6b69222eab8ffb101dabdc363f3d0e507951"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "source-findings.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/source-findings.md",
+    "bytes": 17379,
+    "sha256": "5ec80c44942735c5e37cdee14969c400a63d149e4b8db78420a964886db6f569",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/source-findings.md",
+    "document_sha256": "cc3fbbc06fb099fa6500c65f8032fa021def2d8bd2f74eb74bb79404c9be4439"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "strings/localizationpack-zh-en.tsv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/strings/localizationpack-zh-en.tsv",
+    "bytes": 3480,
+    "sha256": "73e0b5314d23e0db5f052a85b11a5a9c3b5ef9196bd5f6e7b67040a290681d55",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/strings/localizationpack-zh-en.tsv",
+    "document_sha256": "73e0b5314d23e0db5f052a85b11a5a9c3b5ef9196bd5f6e7b67040a290681d55"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "strings/static-texts.tsv",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/strings/static-texts.tsv",
+    "bytes": 10316,
+    "sha256": "27323719f13aa6ea3e8805ce82fa6debcfaa1b61e4a5dac0c99d6e77a64e4eba",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/strings/static-texts.tsv",
+    "document_sha256": "27323719f13aa6ea3e8805ce82fa6debcfaa1b61e4a5dac0c99d6e77a64e4eba"
+  },
+  {
+    "bundle": "swf-v1.6.1",
+    "original_path": "UNRESOLVED.md",
+    "raw_path": ".scratch/edition-5-research/observations/swf-v1.6.1/UNRESOLVED.md",
+    "bytes": 2641,
+    "sha256": "1ec33e848fcf5ab8ff441661a1808998f56df3d57d9b9937ee64345632093279",
+    "document_path": "docs/evidence/observations/swf-v1.6.1/UNRESOLVED.md",
+    "document_sha256": "c59faa1d18e428cf0b372adedaecbe25439ea7d155cd393bfd70f57b539d8048"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "inputs/DESIGN.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/inputs/DESIGN.md",
+    "bytes": 4992,
+    "sha256": "e9d358b1ec88ce8fecca5ef800820ea8a797e2419ca07e35c3159bd22ec9d4d8",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "inputs/edition-5-input-and-timing.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/inputs/edition-5-input-and-timing.md",
+    "bytes": 12825,
+    "sha256": "47f283dec155a0f0a6398e51a2c298485cf8c2e2beebfa3a4ccd1f5f4629412e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "README.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/README.md",
+    "bytes": 1774,
+    "sha256": "10fb62f3ec115e549715a637979f435485107fa89e2911ba8ce97319e3069384",
+    "document_path": "docs/evidence/observations/html5-alternate/README.md",
+    "document_sha256": "abd051daef6f3dcb263aff782b03053ae8878da4c494f07713943d87c8859b6d"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "report/bomb-it-5-gameplay-evidence-report.docx",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/report/bomb-it-5-gameplay-evidence-report.docx",
+    "bytes": 444952,
+    "sha256": "1820d671e1498a0a40c51d653738cfd6f20bcecf403a5e0d164d569a3e3a858a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "report/bomb-it-5-gameplay-evidence-report.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/report/bomb-it-5-gameplay-evidence-report.md",
+    "bytes": 16748,
+    "sha256": "75be1bace9ca553b8e926a83de99f23b16bdb11a9530be4be0b2bf66ad535662",
+    "document_path": "docs/evidence/observations/html5-alternate/report/bomb-it-5-gameplay-evidence-report.md",
+    "document_sha256": "9bc3dbebba7e0098412ea686f11968d9c903c0ba899e8fa5ea452797995ac32c"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "report/bomb-it-5-gameplay-evidence-report.pdf",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/report/bomb-it-5-gameplay-evidence-report.pdf",
+    "bytes": 616143,
+    "sha256": "a3836943c95881bd36d1b732dfd85fa2b9ea3f373a678bfe98a6cc2fc5514203",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "report/first-board-transcription-update.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/report/first-board-transcription-update.md",
+    "bytes": 2066,
+    "sha256": "e46f4d23b0bc4fa60fb2228f9eac6e048d0a0fddcf0ac17fb37ea57ee56d5609",
+    "document_path": "docs/evidence/observations/html5-alternate/report/first-board-transcription-update.md",
+    "document_sha256": "1eaa17096ad04dc9aa01d231bcd345b1cee134b5131a84f1bd07ce77ec7165a3"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "report/gameplay-evidence-index.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/report/gameplay-evidence-index.json",
+    "bytes": 44464,
+    "sha256": "fd8bebfdacd3a3fa2798b4bfe573af4fbdf57f11685b1d13a2ad15aa3de1e713",
+    "document_path": "docs/evidence/observations/html5-alternate/report/gameplay-evidence-index.json",
+    "document_sha256": "fd8bebfdacd3a3fa2798b4bfe573af4fbdf57f11685b1d13a2ad15aa3de1e713"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/001-character-before-match.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/001-character-before-match.jpg",
+    "bytes": 114338,
+    "sha256": "3df3c5cbeea061ee486ea1f53a0b646a631d1cdd0adcfa1d1655bcd1c05e6f6e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/003-first-board-or-state.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/003-first-board-or-state.jpg",
+    "bytes": 167096,
+    "sha256": "bdf2dd220c310c83e408afa25687885939503869cb8d3cc8225fe4ceba1e8dc7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/004-pause-overlay.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/004-pause-overlay.jpg",
+    "bytes": 103696,
+    "sha256": "d44ac5f7d75252f6462f9cc035fdd800af5beb2a8528963a12144389c9dee5ad",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/005-move-bomb-retreat.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/005-move-bomb-retreat.jpg",
+    "bytes": 164479,
+    "sha256": "cb25d30c0283b815f048747fbbce8ff13677d1cf92739dff349e2438504b4c8f",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/008-space-held.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/008-space-held.jpg",
+    "bytes": 162932,
+    "sha256": "47c43a7adaa48a33f82ca3e0648d8d1a23a8e7a9e4f73fdbe6cb099181967b44",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/009-down-held.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/009-down-held.jpg",
+    "bytes": 162750,
+    "sha256": "c8f7d24f7a2da98161d86f8ec7a46d2b41b911625741c84829bcde2046218ede",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-000.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-000.jpg",
+    "bytes": 162392,
+    "sha256": "b9ad68aa2dc314c442c04252b6c5be428a4cd4a03aa8de7e277d2a3278478b8c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-001.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-001.jpg",
+    "bytes": 162524,
+    "sha256": "32e74df888e995165165ddd66b7fce0b656e8281f4df0590a7298c889210710d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-002.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-002.jpg",
+    "bytes": 162320,
+    "sha256": "01a4381b2944bf4436684942686052da6cebc7946cb050d5c67f1725300b951a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-003.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-003.jpg",
+    "bytes": 162170,
+    "sha256": "0bc21b0102afc2c677ec69598318f8864522c95fc900e8ecb565b79d33b9bd7d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-004.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-004.jpg",
+    "bytes": 162200,
+    "sha256": "40e03f409c59afa9e6e196d23ce1905bd1c89325adde8f7457445ffa293cd385",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-005.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-005.jpg",
+    "bytes": 161277,
+    "sha256": "5d21cd7287390e9072c5099b2871d9d44c7fd89b6d96801c1ea115a6613a36fe",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-006.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-006.jpg",
+    "bytes": 161222,
+    "sha256": "028210c68262390f7fe8eb65d674ed9e106e610f89559d3f4c096d1a5a55dc6f",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-007.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-007.jpg",
+    "bytes": 160726,
+    "sha256": "0a4e91e0660937969d7cae014f496dd5946c2fb7ccb4f6abecbf800ac522673f",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-008.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-008.jpg",
+    "bytes": 105589,
+    "sha256": "f9eadb640f275be1c19cc78fa9cc15b7e331a570e3ed1db3c953f4294d517011",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-009.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-009.jpg",
+    "bytes": 110268,
+    "sha256": "a09e34fb70a0c8ccc24711db4b4b43acf480c0ea7d3b29a5a0a24e960f6b2c3b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-010.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-010.jpg",
+    "bytes": 109561,
+    "sha256": "3e27373fe5db674adcc386661b00b9406ff8f3bf338841ecb4e5360af2f93680",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-011.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-011.jpg",
+    "bytes": 109567,
+    "sha256": "95e59281a00f9e6096bc706f4341685cb8bc20119ee97500497c5bb9e9f51983",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-012.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-012.jpg",
+    "bytes": 109596,
+    "sha256": "f6e834bdc82355ef829343c0e4eac8f6fe8765416a8d85e578acf79b0e417bd6",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-013.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-013.jpg",
+    "bytes": 109572,
+    "sha256": "ec50195e23ab031775047c5cb4ad2e8e2d9676459fe2302bca3b07948394c8ac",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-014.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-014.jpg",
+    "bytes": 103643,
+    "sha256": "e90390c276b49205604e8d929ddfbed3b31bd2c7ecc05386189ad1cfaa460145",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-015.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-015.jpg",
+    "bytes": 103678,
+    "sha256": "1f689a9eab2987a5e8dfd09e6a96bdd2aabde45ae2598edec63e037ae272dc0d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-016.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-016.jpg",
+    "bytes": 103714,
+    "sha256": "547ccfaae6ec79bba478d7066ae0b332d955cd081e477a3a126add3811db08bf",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-017.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-017.jpg",
+    "bytes": 103279,
+    "sha256": "a1a1f805db9083a13eede98e684efb9b5a2db93cef12efcbb7886045448168eb",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-018.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-018.jpg",
+    "bytes": 103283,
+    "sha256": "7f79e1b7c4c9c980edfd85d858440d1e66a3f9316675bae345dff4321ff48afd",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/010-stationary-bomb-019.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/010-stationary-bomb-019.jpg",
+    "bytes": 103612,
+    "sha256": "9757851875a78b4aa466bd46eb99fd1395b50c9dd589f7721c62ec555eca543c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/011-after-stationary-bomb.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/011-after-stationary-bomb.jpg",
+    "bytes": 103623,
+    "sha256": "7b652ec8190f6a1f676617e5a88e16277fd4c82e6835a902768f6fdb0b05d6ee",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/016-title-html5.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/016-title-html5.jpg",
+    "bytes": 123488,
+    "sha256": "da544ec528a134feeb9d88e9fa5c30ddf0060d2b2770eb61f5dedeac4681d946",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/017-settings-html5.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/017-settings-html5.jpg",
+    "bytes": 122736,
+    "sha256": "5d7f8baa5b3d3d5e88ed12c7a4ccd6b5e02796f2a1686091d88e457181f150e3",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/018-confirmed-settings.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/018-confirmed-settings.jpg",
+    "bytes": 124044,
+    "sha256": "c0bf1b0a4cec8917f791ab5b623fcdcf30358266efe196c3d1f4c689d283f9f8",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/019-fresh-board-006.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/019-fresh-board-006.jpg",
+    "bytes": 161092,
+    "sha256": "ef5835b2bc77c4d3d94794d154aa5cf490832a7b8eb50bb824c9b881ca26487e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/024-move-and-place.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/024-move-and-place.jpg",
+    "bytes": 157280,
+    "sha256": "803c0ca60fbcf9fd75486faca871034d39f10d4012ca4316e791bbe4ec4e7c69",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-000.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-000.jpg",
+    "bytes": 157347,
+    "sha256": "8ca72076234985e4943b6ad6ba0de8cb6480e3075fcf47f39d6044067a9f547a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-001.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-001.jpg",
+    "bytes": 157507,
+    "sha256": "0ffa4ab7f059fc74efbbd3eeed078c3a59b6f9fb56a1636ca871dae4588ae686",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-002.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-002.jpg",
+    "bytes": 157759,
+    "sha256": "5f817efbebd1dc231f4dc01a9d848af0ee9b802877e1184a337d239bfef39ae2",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-003.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-003.jpg",
+    "bytes": 157123,
+    "sha256": "b5750c124ea454e9609ea53934098ebd77b5c8d4bbea48b0c1fa48a950677cda",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-004.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-004.jpg",
+    "bytes": 156643,
+    "sha256": "66fb54a3193fc0486802afb76a52624172c413aa7749f4425033885adf82b958",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-005.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-005.jpg",
+    "bytes": 156432,
+    "sha256": "351167cd3c6fd5eb48f410efbec2f981771bb46a897117b8a10016a6e64e7d67",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-006.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-006.jpg",
+    "bytes": 156449,
+    "sha256": "4a59ae9991a484a70129350e7d044359b653e39aeb1aa25c60a1c0a353c6e743",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-007.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-007.jpg",
+    "bytes": 156597,
+    "sha256": "cc48009797afde93d65ebc207ce312148fda0b08e7d8fb8496c558ef16b164ec",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-008.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-008.jpg",
+    "bytes": 157144,
+    "sha256": "af4e5714c448e79a058922d2797db67c229ee3be97370e69ece31de7fa5208d6",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-009.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-009.jpg",
+    "bytes": 157317,
+    "sha256": "f831f1667f80d5d7ed0339ad933a74479998dabb925aad0c4b74fd752cafc3c2",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-010.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-010.jpg",
+    "bytes": 156810,
+    "sha256": "583e2e86b53060593b2afba22ca7f8f69a2f97cc762efcafc9916cf7ca42e44a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-011.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-011.jpg",
+    "bytes": 156892,
+    "sha256": "73829ee8b6c1b0056239bf576dcf400e992825bb2b987b0180b0ff1128cb0020",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-012.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-012.jpg",
+    "bytes": 157242,
+    "sha256": "511f93f9549ee4da5580d3daef57371e5b15c003c79354e9d662fa54b09a64a8",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/025-focus-bomb-013.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/025-focus-bomb-013.jpg",
+    "bytes": 157472,
+    "sha256": "7c8815d81d4907d18facf8b50a781379cf51350e47acdfcbae54cf6a3e540c1f",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/026-outcome.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/026-outcome.jpg",
+    "bytes": 157605,
+    "sha256": "340debc563d58e7532204f61c21ec644758525e878dc0477ee8c8d89a3afb5d3",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/027-post-explosion-state.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/027-post-explosion-state.jpg",
+    "bytes": 156841,
+    "sha256": "5558c3821c33c79a9923701081b0d501691f36443076905ea1e9fa6eb1387708",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/028-down-second-bomb.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/028-down-second-bomb.jpg",
+    "bytes": 157053,
+    "sha256": "54d4a9c8403a48095feb5ecd2704c3f78569b6dddd43fbec3d3569905191e49e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-000.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-000.jpg",
+    "bytes": 157061,
+    "sha256": "8eca9ea671a093cc83a8edabd7e602ec3f625df3e945cbc465bf3215cd81956a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-001.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-001.jpg",
+    "bytes": 157041,
+    "sha256": "2fe071cdf869cbf63cad61e9113ab6bd9c9712959d42b131021677e4bbbaf6ff",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-002.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-002.jpg",
+    "bytes": 157106,
+    "sha256": "638d252c55b2fc50c94add6da4a98ffb96d8b16b460c5e08c29f4f9da35c1173",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-003.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-003.jpg",
+    "bytes": 157205,
+    "sha256": "0de2240154e10ef8c5598c4194a0fb6bd1d011c8908f12e44b137582714099ce",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-004.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-004.jpg",
+    "bytes": 157152,
+    "sha256": "99086a5fc996ce8cb4020e646706b70e44b9e3b8413eb82bc2a1f6fb876aba91",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-005.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-005.jpg",
+    "bytes": 157118,
+    "sha256": "023368bafa0846efeae18fa193ba98375f5fc8eca3b462ff77843d5b683b67b6",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-006.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-006.jpg",
+    "bytes": 157250,
+    "sha256": "f43a5ba157cad361cb006351996baff7750862ce2a2d86b01822e893d4a464ac",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-007.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-007.jpg",
+    "bytes": 157234,
+    "sha256": "c6acae97e3531e267bbe5ffa05f072c937186ce99bd41d5ac11750eddce4db2b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-008.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-008.jpg",
+    "bytes": 157442,
+    "sha256": "9e63e7bd8854853d6f6d422afb8b10b77621e4b542eb0d959a5017d5ec742bc2",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-009.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-009.jpg",
+    "bytes": 157229,
+    "sha256": "402d46f527dbfb0b2926cf067832567faf09ea725c8fc9fdb4382dd4b47dbfe5",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-010.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-010.jpg",
+    "bytes": 157120,
+    "sha256": "67f4622f62cc1fb9f5337f411a6098ccd1f4d1452af68ecd9099e0cb0e4b9fd1",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-011.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-011.jpg",
+    "bytes": 156184,
+    "sha256": "6ab4720a27d0e3b81cb52afa5494c83fc0b8708e773835e546121b234db13896",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-012.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-012.jpg",
+    "bytes": 156415,
+    "sha256": "b2e81ff5df8b05df8a91b915528e5aedaf3b83109fff750d30e0b5c8636c9f87",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-013.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-013.jpg",
+    "bytes": 156427,
+    "sha256": "d1d80a24788c8bd293458e8f61e06d8677553eb5a8c754814ee92c8aeb959586",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-014.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-014.jpg",
+    "bytes": 156383,
+    "sha256": "257d267fb3cd8a6ca94bfebeb042794e91020b96816a5ae5d1186443f6e55a23",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-015.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-015.jpg",
+    "bytes": 156323,
+    "sha256": "c0fa2d48090f62ec8dee80e23e3eaa8188a66e14246fd6d1bdc64b335b8d65f8",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-016.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-016.jpg",
+    "bytes": 156367,
+    "sha256": "1ac76d7097d917d7bdf656daa2e26a8e084cd58f26bbdc69fb6e3d3b1be5d49a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-017.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-017.jpg",
+    "bytes": 156412,
+    "sha256": "5e57c11794b888b7e8e2797a9fd461e5f340022c8a2c2465fccb6d670618fb77",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-018.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-018.jpg",
+    "bytes": 156495,
+    "sha256": "0246756290865b331b91a125bd4cde9f1c2a5e9f364ab4134a04e6d33b19ffc6",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-019.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-019.jpg",
+    "bytes": 156579,
+    "sha256": "543e88e0f5618c791135f0bb9443c5caa52b23754b47389c38f5eb19dd86062c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-020.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-020.jpg",
+    "bytes": 156496,
+    "sha256": "ac3914cd0fbfe42ce432dead2a4d1f7803387a23909012805dfdea1b9b52afb6",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-021.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-021.jpg",
+    "bytes": 156242,
+    "sha256": "4c31e352591f435a2feb2cf3c4328f6b429c9a032b978d6d3944086dcce8bf5e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-022.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-022.jpg",
+    "bytes": 103165,
+    "sha256": "d8083a0ca289caf6586e2d3470bb49b0e8da60f9606d702985d29f53ceedba7b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-023.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-023.jpg",
+    "bytes": 102901,
+    "sha256": "668c16388a9bc6f677413836791f70a3be0415a4209ca707eb679dba020c4ee8",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-024.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-024.jpg",
+    "bytes": 106684,
+    "sha256": "8523f0395487c4473ff36a212ed3da7d3be1c09700739a9dc5e7f4eb05b4da86",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-025.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-025.jpg",
+    "bytes": 107583,
+    "sha256": "c8d6564d62315c43ee879cd7685ca353c64b1db6b3a562d178855d543318b853",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-026.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-026.jpg",
+    "bytes": 107424,
+    "sha256": "312cd6b7807e94938541db1b508598f8596aa1165996c1fc4ce1839da0204abf",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-027.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-027.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-028.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-028.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-029.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-029.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-030.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-030.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-031.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-031.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-032.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-032.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-033.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-033.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/029-second-bomb-034.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/029-second-bomb-034.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/030-second-bomb-result.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/030-second-bomb-result.jpg",
+    "bytes": 106970,
+    "sha256": "b3929dcab29be21424107a7f8b5336b98b7d4bf7aa34c47d8caae4380d0f5f54",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/031-level-failed-results.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/031-level-failed-results.jpg",
+    "bytes": 103622,
+    "sha256": "20e9f7ec3755166a333bbfc86a77f513f962ca6119f59b0f1f12a5ee8fee76db",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/036-html5-controls.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/036-html5-controls.jpg",
+    "bytes": 124004,
+    "sha256": "1bcbb1ee79bbf16b047d4d2fdcf4470dc048861401487bdbd0e574b3cf4a532e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/037-html5-powerups.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/037-html5-powerups.jpg",
+    "bytes": 141614,
+    "sha256": "c176abb74f8b09df5c2e5b13f33cfb0a974233790096973c00904e6a1ee44c12",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/038-one-enemy-setup.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/038-one-enemy-setup.jpg",
+    "bytes": 149604,
+    "sha256": "7fba1f56615f1390d398dfe1ba89b10458971d80434e152a4c173cb9525a96dc",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/039-one-enemy-board.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/039-one-enemy-board.jpg",
+    "bytes": 180396,
+    "sha256": "9cf94139a8044145e358bc8599c4d3ce927838b791348a56564f59997865ceb3",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/040-right100.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/040-right100.jpg",
+    "bytes": 180420,
+    "sha256": "4dccc2d014b63eb394c010c147a80e3c032b6810a0c6d60ffb01a5916ba7e7c7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/041-right900.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/041-right900.jpg",
+    "bytes": 180589,
+    "sha256": "2513de02098427ac1f4372e871db071fab1955c33a7695f499592824114857f7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/042-opposed-horizontal.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/042-opposed-horizontal.jpg",
+    "bytes": 180559,
+    "sha256": "59b02c60ede361460dd4c8c9c0d961cb1b73175ee0c7deac2e0889a4d499dc69",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-000.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-000.jpg",
+    "bytes": 179510,
+    "sha256": "06b48079254060a918c5db0f0f9df71fed7eaf0856d40125e74e2bd8bf2af4a6",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-001.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-001.jpg",
+    "bytes": 179638,
+    "sha256": "562eb1ddc173cfc45f1a93df008c3c0a9171d2746b1284f972a205c34a92250d",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-002.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-002.jpg",
+    "bytes": 179598,
+    "sha256": "756aba897ddbb096ccc9c9ebcbfdbf93c9bb326301b8b04a896708d43b243a88",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-003.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-003.jpg",
+    "bytes": 179615,
+    "sha256": "cb7a4233cbbbdc6da595e3834657e7e1be045a5e88ad0c1a6befa7518f031150",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-004.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-004.jpg",
+    "bytes": 179624,
+    "sha256": "4a2bc4a581e5309b6c4d98f5f5fb22ac1c37cf5ed8b1f030dedd4bff575b8799",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-005.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-005.jpg",
+    "bytes": 179623,
+    "sha256": "3e3d2b087eae008314208895a94231d0bce509e6ba977ca22c298a983d39b75c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-006.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-006.jpg",
+    "bytes": 179388,
+    "sha256": "8f278640c9bfb6eb5d275e522ba60ddd94983318df8924fc34f9936e007fa9c7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-007.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-007.jpg",
+    "bytes": 179861,
+    "sha256": "ad172c2a1b17d295a7317646be72c5a8f822e18f8d5fb06fb33de21b97209635",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-008.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-008.jpg",
+    "bytes": 179874,
+    "sha256": "ddb5268d4fdd81876b5e744b67f04180b942e83cbceaf602e3e07f4fe8e1695b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-009.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-009.jpg",
+    "bytes": 180067,
+    "sha256": "060f76a837ef2c85f37f5f21a9ebabc86a053d2d1f1980d61d9c933c448a25e0",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-010.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-010.jpg",
+    "bytes": 179797,
+    "sha256": "245cb8ad68b518276c88cd401336ea0942969eddd6dfa9f18a641df54fdccff0",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-011.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-011.jpg",
+    "bytes": 179982,
+    "sha256": "d929841a06beadbb1bc8e0c8a9731357ae06605fcf9c319f0c90eee3c440f4df",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-012.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-012.jpg",
+    "bytes": 180048,
+    "sha256": "22de47e0b33e1d64fa933c34701d755b5a1298d1a126b90a1ac745cd9aaa9c7c",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-013.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-013.jpg",
+    "bytes": 179827,
+    "sha256": "97c4b8535f6f20721226cb0fecf7f9a680310d821851c5a23b9a8bc8ad7ba6e2",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-014.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-014.jpg",
+    "bytes": 180161,
+    "sha256": "ac1ef66958e2cdf3d8aafd36808d64d73c180d7b3529f4c118a408f969f03568",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-015.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-015.jpg",
+    "bytes": 179707,
+    "sha256": "2677a0bde157fe38f3d1045a87a873971091128d6bfd4739f60d961fc45cec68",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-016.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-016.jpg",
+    "bytes": 179692,
+    "sha256": "d6bdde20cbe48bbdd741305d6d0d8c0e94ebb973f1632106e12aece14bd49934",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-017.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-017.jpg",
+    "bytes": 179796,
+    "sha256": "237374c1d960500a5da6d2c6f147b0212037a5e46fb6ff36e19e60a7a19e8143",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-018.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-018.jpg",
+    "bytes": 179711,
+    "sha256": "4166783440ebdf529713b33a04df5f36f3dcc83571a597a1af707ff1772b2d84",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-019.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-019.jpg",
+    "bytes": 179750,
+    "sha256": "c855bda89ee58185036d4999e0dcc91310dac6f090275d4751349b3c12d3dca5",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-020.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-020.jpg",
+    "bytes": 179779,
+    "sha256": "6ff295b7d0bc98154c6c2d4da1556d2d98646863ff087e3ce0df1e1caf68c90f",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-021.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-021.jpg",
+    "bytes": 179657,
+    "sha256": "8ab9b62199c73acd8de93dbbf808d1dd759a6639cba68b1802289fe5cfbef6ea",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-022.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-022.jpg",
+    "bytes": 178935,
+    "sha256": "6d75bf9b41a69ecbafe75e58188c62b0a7d094bacd5d5e60b606bed4d197c324",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-023.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-023.jpg",
+    "bytes": 179135,
+    "sha256": "0857e9bda3afa4010cd41fbd4d501a36c3877482f2ec2ba2ae5edd839c5af49a",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/043-fuse-tap-024.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/043-fuse-tap-024.jpg",
+    "bytes": 179354,
+    "sha256": "0fcd087a55b09883a88a09cbe506af79ffb3b99230bb96122c41767630a28353",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/044-fuse-outcome.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/044-fuse-outcome.jpg",
+    "bytes": 180268,
+    "sha256": "cacb54f04d08a7d3532beb7f404544e5a5c732d622d133dbf1ac562e54a1b80b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/045-one-enemy-victory-results.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/045-one-enemy-victory-results.jpg",
+    "bytes": 130941,
+    "sha256": "7c36f3a693a5daf1ec3b4acec59921a464a3b0f59fd37f9145a7fe33bf66d61b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/046-victory-results-repeat.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/046-victory-results-repeat.jpg",
+    "bytes": 130985,
+    "sha256": "f222af1ea83dbfbd7defe6fab750d703234284452ea4be7cb0a9ea8e9f4f2ce7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/048-level2-state.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/048-level2-state.jpg",
+    "bytes": 186992,
+    "sha256": "f060d4587586b2632ca46dfa22af3578cefb32aec6e33c1562d39a58f9c3f2aa",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/049-before-long-space.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/049-before-long-space.jpg",
+    "bytes": 186355,
+    "sha256": "66ff37c2e2140f14f758397e2b558c45bcc3ae40a9bacc76212ca6bb5b33424b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/050-after-long-space-release.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/050-after-long-space-release.jpg",
+    "bytes": 185868,
+    "sha256": "7babc6d64d49248d6945d539e83325b8dbfb27109c8fb66aaf212453f4fe84c0",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/052-after-hold-end.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/052-after-hold-end.jpg",
+    "bytes": 186310,
+    "sha256": "f6c8fbba3fbfb15bbe96119c300171340eaef751591e00d99dac9aec5654b401",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/board-grid-first-observed.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/board-grid-first-observed.json",
+    "bytes": 3925,
+    "sha256": "b49276cf8602b89360b622226b6310a9a69ed70498cf9bedfa8fa9c78e29eaf5",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/board-grid-first-observed.json",
+    "document_sha256": "b49276cf8602b89360b622226b6310a9a69ed70498cf9bedfa8fa9c78e29eaf5"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/board-grid-near-opening.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/board-grid-near-opening.json",
+    "bytes": 3916,
+    "sha256": "9d6d52051f16ef21aaa19d59c6740c2eec801dd7cbba8bca6509899ca92e94a8",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/board-grid-near-opening.json",
+    "document_sha256": "9d6d52051f16ef21aaa19d59c6740c2eec801dd7cbba8bca6509899ca92e94a8"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/board-transcription.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/board-transcription.md",
+    "bytes": 3391,
+    "sha256": "457c6d3559b80ec923507edea7bddce01b4dbb4f7e3a77ae509ee9edec400fd1",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/board-transcription.md",
+    "document_sha256": "71c7d06f01d04b1886f366ddb35e9832cfe63ef5a738c3b0b6f92c7160317c2b"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/capture-times.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/capture-times.json",
+    "bytes": 23031,
+    "sha256": "47518eb5ad0a2240aa4864aee0be21128bbd6288e794c0b8c2c2149980e380a2",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/capture-times.json",
+    "document_sha256": "47518eb5ad0a2240aa4864aee0be21128bbd6288e794c0b8c2c2149980e380a2"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/fuse-tap-action.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/fuse-tap-action.json",
+    "bytes": 48,
+    "sha256": "4e13046a7bae0a75b9e0aff2bef0b3643a816d9e08f7d5a99e1454f284cf26c6",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/fuse-tap-action.json",
+    "document_sha256": "4e13046a7bae0a75b9e0aff2bef0b3643a816d9e08f7d5a99e1454f284cf26c6"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/hold-action.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/hold-action.json",
+    "bytes": 107,
+    "sha256": "c23fd5da94f7ef2d522de6554f26534ad0b54cb19040f01c0d4bf31e7e8f3c83",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/hold-action.json",
+    "document_sha256": "c23fd5da94f7ef2d522de6554f26534ad0b54cb19040f01c0d4bf31e7e8f3c83"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/OBSERVATIONS.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/OBSERVATIONS.md",
+    "bytes": 9276,
+    "sha256": "ab5e25f92b26364cae914ee16ec9a9be49076fe33cde7b36bb1e045829674baf",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/OBSERVATIONS.md",
+    "document_sha256": "37ceb5e0f3c0d25083c6f76f6d6eda71be08be1faa730c66443014026c1a0b55"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/010-stationary-bomb-timestamps.csv",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/010-stationary-bomb-timestamps.csv",
+    "bytes": 1377,
+    "sha256": "758b80eb840f88aec73d064b2fb4b1db0a0ca005a9ff457e4c210b9ba0aaf286",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/recordings/010-stationary-bomb-timestamps.csv",
+    "document_sha256": "758b80eb840f88aec73d064b2fb4b1db0a0ca005a9ff457e4c210b9ba0aaf286"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/010-stationary-bomb.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/010-stationary-bomb.mp4",
+    "bytes": 477167,
+    "sha256": "0dda487a10d3e9d5c83047fddfde91d90a7e44e2b7eef378d4bd5282703e6bfa",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/025-focus-bomb-timestamps.csv",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/025-focus-bomb-timestamps.csv",
+    "bytes": 915,
+    "sha256": "068140b150490999c748cff83b290a72cd427d756805f838b8658f2d5b7aeb9f",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/recordings/025-focus-bomb-timestamps.csv",
+    "document_sha256": "068140b150490999c748cff83b290a72cd427d756805f838b8658f2d5b7aeb9f"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/025-focus-bomb.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/025-focus-bomb.mp4",
+    "bytes": 261831,
+    "sha256": "c3191c961fad44bde1527af86d8d93570164b9b3263d7576b848c9e815d5c970",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/029-second-bomb-timestamps.csv",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/029-second-bomb-timestamps.csv",
+    "bytes": 2223,
+    "sha256": "1ae6909aa67102a44f654dea4cf370f1306e2945e9cab6c9bde541000b417e9f",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/recordings/029-second-bomb-timestamps.csv",
+    "document_sha256": "1ae6909aa67102a44f654dea4cf370f1306e2945e9cab6c9bde541000b417e9f"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/029-second-bomb.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/029-second-bomb.mp4",
+    "bytes": 398380,
+    "sha256": "f327bf6cdf609db9e095b238d5a48e53ab0306a1091a45d1976de527eddc1468",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/043-fuse-tap-timestamps.csv",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/043-fuse-tap-timestamps.csv",
+    "bytes": 1524,
+    "sha256": "18e9869c7b370809c5a9d7a39e7e6bedda069a8c3918edc6a4c4cd3f6180a912",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/recordings/043-fuse-tap-timestamps.csv",
+    "document_sha256": "18e9869c7b370809c5a9d7a39e7e6bedda069a8c3918edc6a4c4cd3f6180a912"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/043-fuse-tap.mp4",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/043-fuse-tap.mp4",
+    "bytes": 381527,
+    "sha256": "ff2d308da340b4a76c71168be4373da1e55ce681a3f59ba44f7462a3c0fbdeb0",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/clip-manifest.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/clip-manifest.json",
+    "bytes": 1668,
+    "sha256": "071518f50fa6d9f441b32ad9e45a830fd275b7a14b6a5128f7138e8331110ecd",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/recordings/clip-manifest.json",
+    "document_sha256": "071518f50fa6d9f441b32ad9e45a830fd275b7a14b6a5128f7138e8331110ecd"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/recordings/README.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/README.md",
+    "bytes": 3686,
+    "sha256": "88aa2486f18675df29a417c55ea6844dab0665c26e937ff49921f466a2e06f25",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/recordings/README.md",
+    "document_sha256": "0eeeea917ef5f003e1df5fa25bc650077ad0688558482f86f2464d225a86467b"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/html5-alternate/SELECTED-SCREENSHOTS.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/SELECTED-SCREENSHOTS.md",
+    "bytes": 2843,
+    "sha256": "28fb10f178ecab691fb3aff87667e3f11ebbad3f826f7e7d815e81a16e36a07e",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/html5-alternate/SELECTED-SCREENSHOTS.md",
+    "document_sha256": "c25d7841bc14a033d52b9177160da09407964fd54e42161576789d1b93e6b3bc"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/runtime-ledger.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/runtime-ledger.md",
+    "bytes": 11026,
+    "sha256": "8be326ffcb26d4dbd229cb65d67258ee6ca062b9d5ffcd1a61ffcd04aa76973f",
+    "document_path": "docs/evidence/observations/html5-alternate/runtime/runtime-ledger.md",
+    "document_sha256": "d091829a9e7f236ec752e08d0096f08f5c1f1bf1420f2f7a7ad7b1e3eecfc13c"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/002-title-menu.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/002-title-menu.jpg",
+    "bytes": 159264,
+    "sha256": "79f35c7876fd7bb520b3c15a742bb021120f3ac242b4efe8fd2e860eae834b07",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/003-mode-selection.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/003-mode-selection.jpg",
+    "bytes": 136531,
+    "sha256": "6c0311db35e957c7444c3c5f213bf76b5155db1c4ebf51441d002705004fcdc7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/004-arena-menu.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/004-arena-menu.jpg",
+    "bytes": 127028,
+    "sha256": "1638e4414011aa3078ad53335f7892958463ad759f2f74b0202239486a806a4b",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/005-first-match-settings.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/005-first-match-settings.jpg",
+    "bytes": 134068,
+    "sha256": "9d3940ee7d851c2c2b79bced0a388c1d12e8e0f48f0441c76a095299407dc4c7",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/006-character-selection.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/006-character-selection.jpg",
+    "bytes": 124629,
+    "sha256": "8f654611dad93f7f6954bc2c033c2a248995b791411c3b5cc2fb7b4221b3b72e",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/008-ruffle-info.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/008-ruffle-info.jpg",
+    "bytes": 110844,
+    "sha256": "21a2acee21df37ffe69ff6c3bb567298e546f0082e5dbd75910f1fdf0b32aabd",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/010-first-round-loading-failure.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/010-first-round-loading-failure.jpg",
+    "bytes": 114241,
+    "sha256": "e9d4742c98422f3ac79466266f4c951295adf22e3656420a162747f95be4a781",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/012-instructions-controls.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/012-instructions-controls.jpg",
+    "bytes": 106183,
+    "sha256": "b9c243664b8b77f9ad094fee4bdef997dd4330d070fa121058f3f412a0c00547",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "runtime/screenshots/013-instructions-powerups.jpg",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/runtime/screenshots/013-instructions-powerups.jpg",
+    "bytes": 136307,
+    "sha256": "c3af0f0d5cf287a9da1c7714bb3e50e7a4c55aac11a96c65fc64b8f736255bae",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "SHA256SUMS.txt",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/SHA256SUMS.txt",
+    "bytes": 18783,
+    "sha256": "c431c4e2a55f152e1ef9d5749c40a38e36d0c01482cd6f10376e12bf938e8150",
+    "document_path": null,
+    "document_sha256": null
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "source/method-locators.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/source/method-locators.json",
+    "bytes": 342062,
+    "sha256": "2f4a313c8e407a7084fe06a5a292e92c9edb72b5cf520b1525d0e6233fcec82b",
+    "document_path": "docs/evidence/observations/html5-alternate/source/method-locators.json",
+    "document_sha256": "2f4a313c8e407a7084fe06a5a292e92c9edb72b5cf520b1525d0e6233fcec82b"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "source/static-findings.md",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/source/static-findings.md",
+    "bytes": 12641,
+    "sha256": "a06a6d3bf92771ed42e7fa2f4ccd3dffec26f18be2a11475cd3bdce6ad8ba64d",
+    "document_path": "docs/evidence/observations/html5-alternate/source/static-findings.md",
+    "document_sha256": "d854018bca79faf445afde229738c9b3091cfd14a43e43a87c70be2b220a656e"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "source/swf-header-manifest.json",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/source/swf-header-manifest.json",
+    "bytes": 641868,
+    "sha256": "f99528eec19c2d7f82d6cec3dc48da56948fbb35ab34e117f5d9f8a2a8b3640e",
+    "document_path": "docs/evidence/observations/html5-alternate/source/swf-header-manifest.json",
+    "document_sha256": "f99528eec19c2d7f82d6cec3dc48da56948fbb35ab34e117f5d9f8a2a8b3640e"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "source/tool-and-swf-sha256.txt",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/source/tool-and-swf-sha256.txt",
+    "bytes": 198,
+    "sha256": "5f17665fc353b2be8ee137d6d4da609dba83512b5417da239115e22588b86c17",
+    "document_path": "docs/evidence/observations/html5-alternate/source/tool-and-swf-sha256.txt",
+    "document_sha256": "5f17665fc353b2be8ee137d6d4da609dba83512b5417da239115e22588b86c17"
+  },
+  {
+    "bundle": "html5-alternate",
+    "original_path": "source/ui-text-en-zh.csv",
+    "raw_path": ".scratch/edition-5-research/observations/html5-alternate/source/ui-text-en-zh.csv",
+    "bytes": 8382,
+    "sha256": "fc3e919f16dd2f95ea4d83ad38cd4b36b7a4950bd4ac95c68b472617008649bc",
+    "document_path": "docs/evidence/observations/html5-alternate/source/ui-text-en-zh.csv",
+    "document_sha256": "fc3e919f16dd2f95ea4d83ad38cd4b36b7a4950bd4ac95c68b472617008649bc"
+  }
+]

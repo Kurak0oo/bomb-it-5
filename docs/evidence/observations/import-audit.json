@@ -1,0 +1,557 @@
+{
+  "date": "2026-10-17",
+  "raw_files": 318,
+  "document_files": 123,
+  "bundles": {
+    "swf-v1.6.1": 151,
+    "html5-alternate": 167
+  },
+  "html5_delivered_checksums": {
+    "checked": 166,
+    "missing": [],
+    "mismatch": []
+  },
+  "maps": [
+    {
+      "map": "BasketballStage1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BasketballStage2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BasketballStage3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BasketballStage4",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BasketballStage5",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BasketballStage6",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BasketballStage7",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BirthdayPartyStage1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BirthdayPartyStage2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BirthdayPartyStage3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BirthdayPartyStage4",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BirthdayPartyStage_PacMan_1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BirthdayPartyStage_PacMan_2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "BirthdayPartyStage_PacMan_3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CandyFactoryStage1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CandyFactoryStage2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CandyFactoryStage3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CandyFactoryStage_PacMan_1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CandyFactoryStage_PacMan_2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CandyFactoryStage_PacMan_3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CinemaStage1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CinemaStage2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CinemaStage3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CinemaStage_PacMan_1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CinemaStage_PacMan_2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "CinemaStage_PacMan_3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "LuxuryStoresStage1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "LuxuryStoresStage2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "LuxuryStoresStage3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "LuxuryStoresStage_PacMan_1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "LuxuryStoresStage_PacMan_2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "LuxuryStoresStage_PacMan_3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "MagicLibraryStage1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "MagicLibraryStage2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "MagicLibraryStage3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "MagicLibraryStage_PacMan_1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "MagicLibraryStage_PacMan_2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "MagicLibraryStage_PacMan_3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "ZooStage1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "ZooStage2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "ZooStage3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "ZooStage_PacMan_1",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "ZooStage_PacMan_2",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    },
+    {
+      "map": "ZooStage_PacMan_3",
+      "cells": 255,
+      "valid_17x15_coordinates": true
+    }
+  ],
+  "videos": [
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p01_hold_left_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 320,
+          "height": 160,
+          "r_frame_rate": "35/1",
+          "nb_frames": "17"
+        }
+      ],
+      "format": {
+        "duration": "0.485714"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p02_left_then_up_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 320,
+          "height": 160,
+          "r_frame_rate": "35/1",
+          "nb_frames": "33"
+        }
+      ],
+      "format": {
+        "duration": "0.942857"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p03_down_then_right_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 240,
+          "height": 200,
+          "r_frame_rate": "35/1",
+          "nb_frames": "17"
+        }
+      ],
+      "format": {
+        "duration": "0.485714"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p03_right_then_down_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 240,
+          "height": 200,
+          "r_frame_rate": "35/1",
+          "nb_frames": "17"
+        }
+      ],
+      "format": {
+        "duration": "0.485714"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p04_space_held_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 320,
+          "height": 240,
+          "r_frame_rate": "35/1",
+          "nb_frames": "132"
+        }
+      ],
+      "format": {
+        "duration": "3.771429"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p04_space_repeated_run2.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 320,
+          "height": 240,
+          "r_frame_rate": "35/1",
+          "nb_frames": "128"
+        }
+      ],
+      "format": {
+        "duration": "3.657143"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p05_fuse_flame_softblock_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 320,
+          "height": 240,
+          "r_frame_rate": "35/1",
+          "nb_frames": "111"
+        }
+      ],
+      "format": {
+        "duration": "3.171429"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p08_chain_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 360,
+          "height": 260,
+          "r_frame_rate": "35/1",
+          "nb_frames": "101"
+        }
+      ],
+      "format": {
+        "duration": "2.885714"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p09_pickup_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 360,
+          "height": 200,
+          "r_frame_rate": "35/1",
+          "nb_frames": "44"
+        }
+      ],
+      "format": {
+        "duration": "1.257143"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p10_death_selfbomb_to_results_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 700,
+          "height": 510,
+          "r_frame_rate": "35/1",
+          "nb_frames": "141"
+        }
+      ],
+      "format": {
+        "duration": "4.028571"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p11_pause_P_run1.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 700,
+          "height": 510,
+          "r_frame_rate": "35/1",
+          "nb_frames": "21"
+        }
+      ],
+      "format": {
+        "duration": "0.600000"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/swf-v1.6.1/play/clips/p12_timeout_timesup_to_complete.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 700,
+          "height": 510,
+          "r_frame_rate": "35/1",
+          "nb_frames": "116"
+        }
+      ],
+      "format": {
+        "duration": "3.314286"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/010-stationary-bomb.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1166,
+          "height": 748,
+          "r_frame_rate": "31/12",
+          "nb_frames": "20"
+        }
+      ],
+      "format": {
+        "duration": "7.349000"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/025-focus-bomb.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1166,
+          "height": 748,
+          "r_frame_rate": "1000/1",
+          "nb_frames": "14"
+        }
+      ],
+      "format": {
+        "duration": "1.867000"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/029-second-bomb.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1166,
+          "height": 748,
+          "r_frame_rate": "1000/1",
+          "nb_frames": "35"
+        }
+      ],
+      "format": {
+        "duration": "3.926000"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    },
+    {
+      "path": ".scratch/edition-5-research/observations/html5-alternate/runtime/html5-alternate/recordings/043-fuse-tap.mp4",
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "width": 1166,
+          "height": 748,
+          "r_frame_rate": "31/12",
+          "nb_frames": "25"
+        }
+      ],
+      "format": {
+        "duration": "9.256000"
+      },
+      "decode_passed": true,
+      "decode_errors": ""
+    }
+  ],
+  "missing_swf_indexed_stills": [
+    "play/screens_harness/h01_title_PLAY_f301.png",
+    "play/screens_harness/h02_A10_splash_f421.png",
+    "play/screens_harness/h03_main_menu_f541.png",
+    "play/screens_harness/h04_game_settings_default_easy_f571.png",
+    "play/screens_harness/h05_game_settings_arcade_1p_3enemies_normal_f596.png",
+    "play/screens_harness/h06_character_select_first_char_f636.png",
+    "play/screens_harness/h07_loading_R_ARCADE_f660.png",
+    "play/screens_harness/h08_first_gameplay_frame_CinemaStage1_f697.png",
+    "play/screens_harness/h09_bomb_under_P1_calibration_f890.png",
+    "play/screens_harness/h10_blast_hits_P1_silhouette_f959.png",
+    "play/screens_harness/h11_YOU_LOSE_f1031.png",
+    "play/screens_harness/h12_LEVEL_1_5_FAILED_normal_bonus_f1085.png",
+    "play/screens_harness/h13_retry_board_CinemaStage3_hearts2_f1210.png",
+    "play/screens_harness/h14_after_bomb_plus1_pickup_score110_f1504.png",
+    "play/screens_harness/h15_P_PAUSE_screen_f1877.png",
+    "play/screens_harness/h16_resumed_with_space_timer139_f1930.png",
+    "play/screens_harness/h17_retry2_board_CinemaStage2_hearts1_f2195.png",
+    "play/screens_harness/h18_hiding_in_corner_timer76_f2607.png",
+    "play/screens_harness/h19_TIMES_UP_f2914.png",
+    "play/screens_harness/h20_LEVEL_1_5_COMPLETE_timeout_win_0_kills_f2995.png",
+    "play/screens_harness/h21_level2_LuxuryStores_f3153.png",
+    "play/screens_harness/h22_chain_both_bombs_same_frame_f3571.png",
+    "play/screens_harness/h23_GAME_OVER_total2000_f4524.png"
+  ],
+  "missing_swf_directories": [
+    "play/frames",
+    "play/screens_harness",
+    "tools/ruffle-probe"
+  ],
+  "note": "Media metadata verifies deliverables and encoding only; it is not achieved game timing."
+}

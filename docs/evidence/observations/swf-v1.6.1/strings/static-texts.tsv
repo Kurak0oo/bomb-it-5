@@ -1,0 +1,493 @@
+text_id	script	text
+329	latin	LOADING…
+360	latin	PLAY
+457	latin	SET AS AVATAR
+497	latin	Stay at the green zone for enough time to occupy it!
+499	latin	START
+501	latin	Score [x] points to unlock this outfit
+503	latin	TRY AGAIN
+505	latin	Yay! Upload successful!
+550	latin	Oops! Upload failed. Please try again later.
+552	latin	HOW TO PLAY
+577	latin	COINS COLLECTED
+579	latin	2_ENEMIES KILLED
+685	latin	R_BATTLE ROYALE
+688	latin	KILL 10 ENEMIES.
+699	latin	HARD
+708	latin	0
+714	latin	0
+716	latin	0
+718	latin	NORMAL
+721	latin	2
+722	latin	2
+723	latin	2
+725	latin	EASY
+728	latin	1
+729	latin	1
+730	latin	1
+732	latin	2
+734	latin	3
+735	latin	3
+736	latin	3
+739	latin	20
+740	latin	20
+742	latin	15
+743	latin	15
+745	latin	10
+746	latin	10
+748	latin	5
+749	latin	5
+754	latin	ARCADE
+757	latin	KILL ALL ENEMIES.
+764	latin	PAC-MAN
+767	latin	COLLECT ALL COINS
+783	latin	GREEN ZONE
+786	latin	OCCUPY THE GREEN ZONE
+790	latin	PLAYERS
+792	latin	ENEMIES
+794	latin	LEVELS
+796	latin	ARENA
+798	latin	DIFFICULTY
+801	latin	RANDOM
+803	latin	CINEMA
+805	latin	MAGIC LIBRARY
+807	latin	LUXURY SHOP
+809	latin	ZOO
+811	latin	CANDY FACTORY
+813	latin	BIRTHDAY PARTY
+820	latin	BACK
+823	latin	NEXT
+826	latin	GAME SETTINGS
+924	latin	GAME OVER
+934	latin	GAME COMPLETE!
+999	latin	R_PAC-MAN
+1001	latin	OK
+1061	latin	OCCUPY ZONES
+1064	latin	R_BATTLE ROYALE
+1066	latin	SET AS AVATAR
+1070	latin	Login to play.
+1073	latin	SAVE
+1075	latin	Register or log in to set as your avatar.
+1077	latin	GREEN ZONE
+1091	latin	10
+1265	latin	DRESS UP
+1267	latin	U_TOTAL SCORE:
+1269	latin	1234567890
+1270	latin	New outfit unlocked!
+1405	latin	10
+1582	latin	HARD BONUS
+1586	latin	CANCEL
+1588	latin	Avoid the enemies and collect all of the coins!
+1596	latin	COINS BONUS
+1598	latin	Dress up your characters here!
+1603	latin	LEVEL [X]/[X] COMPLETE!
+1637	latin	R_ARCADE
+1639	latin	LEVEL [X]/[X] FAILED…
+1674	latin	TIME'S UP!
+1827	CJK	随
+1834	CJK	占
+1838	latin	0
+1839	latin	1
+1840	latin	16
+1841	latin	15
+1842	latin	14
+1843	latin	13
+1844	latin	12
+1845	latin	11
+1846	latin	10
+1847	latin	9
+1848	latin	8
+1849	latin	7
+1850	latin	6
+1851	latin	5
+1852	latin	4
+1853	latin	3
+1854	latin	2
+1855	latin	4
+1878	CJK	不可推毁建筑物
+1879	CJK	可推毁建筑物
+1880	CJK	中央建筑物
+1881	CJK	占位格（用于大面积建筑）
+1883	latin	MORE GAMES
+1918	latin	EASY BONUS
+1923	latin	NORMAL BONUS
+1943	latin	C_P1
+1945	latin	C_P2
+1947	latin	MOVE
+1949	latin	BOMB
+1968	latin	W
+1969	latin	W
+1970	latin	W
+1971	latin	W
+1972	latin	W
+1973	latin	W
+1974	latin	W
+1975	latin	space
+1977	latin	space
+1978	latin	enter
+1981	latin	C_RESET
+1987	latin	C_SAVE
+1992	latin	C_POWER-UPS
+1995	latin	CONTROLS
+1998	latin	Click a control button to change it.
+2000	latin	Select a key with your keyboard
+2002	latin	This key is not possible.Please choose a different key.
+2004	latin	Custom controls saved.
+2352	CJK	随
+2376	CJK	占
+2398	latin	0
+2399	latin	1
+2400	latin	16
+2401	latin	15
+2402	latin	14
+2403	latin	13
+2404	latin	12
+2405	latin	11
+2406	latin	10
+2407	latin	9
+2408	latin	8
+2409	latin	7
+2410	latin	6
+2411	latin	5
+2412	latin	4
+2413	latin	3
+2414	latin	2
+2415	latin	4
+2450	CJK	不可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+2451	CJK	可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+2452	CJK	中央建筑
+2454	CJK	占位格 / --- RECORDSEPARATOR --- / ( / --- RECORDSEPARATOR --- / 大的建筑物 / --- RECORDSEPARATOR --- / )
+2455	CJK	传 / --- RECORDSEPARATOR --- / 送 / --- RECORDSEPARATOR --- / 带 / --- RECORDSEPARATOR --- / ，后面 / --- RECORDSEPARATOR --- / 数字表序号， / --- RECORDSEPARATOR --- / 可延伸
+2485	latin	99
+2486	latin	/
+2488	latin	LEVEL
+2490	latin	TIME
+2531	latin	99
+2532	latin	789
+2533	latin	012
+2534	latin	99
+2535	latin	123/456
+2543	latin	P1
+2544	latin	P2
+2621	latin	180
+2737	latin	PAUSE
+2840	latin	P_CONTROLS
+2867	CJK	随
+2874	CJK	占
+2877	latin	0
+2878	latin	1
+2879	latin	16
+2880	latin	15
+2881	latin	14
+2882	latin	13
+2883	latin	12
+2884	latin	11
+2885	latin	10
+2886	latin	9
+2887	latin	8
+2888	latin	7
+2889	latin	6
+2890	latin	5
+2891	latin	4
+2892	latin	3
+2893	latin	2
+2894	latin	4
+2918	CJK	不可推毁的建筑物
+2919	CJK	可推毁的建筑物
+2920	CJK	中央建筑物
+2921	CJK	占位格（用于大面积建 筑）
+2940	CJK	随
+2947	CJK	占
+2951	latin	0
+2952	latin	1
+2953	latin	16
+2954	latin	15
+2955	latin	14
+2956	latin	13
+2957	latin	12
+2958	latin	11
+2959	latin	10
+2960	latin	9
+2961	latin	8
+2962	latin	7
+2963	latin	6
+2964	latin	5
+2965	latin	4
+2966	latin	3
+2967	latin	2
+2968	latin	4
+3008	CJK	不可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+3009	CJK	可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+3010	CJK	中央建筑
+3012	CJK	占位格 / --- RECORDSEPARATOR --- / ( / --- RECORDSEPARATOR --- / 大的建筑物 / --- RECORDSEPARATOR --- / )
+3013	CJK	传 / --- RECORDSEPARATOR --- / 送 / --- RECORDSEPARATOR --- / 带 / --- RECORDSEPARATOR --- / ，后面 / --- RECORDSEPARATOR --- / 数字表序号， / --- RECORDSEPARATOR --- / 可延伸
+3018	latin	YOU WIN!
+3080	latin	TIME BONUS
+3092	latin	1_ENEMIES KILLED
+3094	latin	TILES COLORED
+3097	latin	LEVEL SCORE
+3100	latin	L_TOTAL SCORE
+3103	latin	400
+3341	latin	START
+3344	latin	Don&apos;t give up! Give it another bomb…
+3396	latin	Be the 1st to kill 10 enemies!
+3398	latin	Place your bombs tactically to kill all enemies!
+3666	latin	G_TOTAL SCORE
+3668	latin	UPLOADING…
+3738	latin	1000
+3779	latin	FIREBALL LAUNCHER
+3781	latin	LIGHTNING GUN
+3808	latin	MAIN MENU
+3811	latin	RESUME
+3814	latin	P_PAUSE
+3856	latin	4
+3858	latin	4
+3862	latin	3
+3864	latin	3
+3868	latin	2
+3870	latin	2
+3874	latin	1
+3876	latin	1
+3898	latin	MORE GAMES
+3904	latin	Add to your site
+3907	latin	© SPIL GAMES
+3955	latin	MACHINE GUN
+3992	CJK	随
+3999	CJK	占
+4018	latin	0
+4019	latin	1
+4020	latin	16
+4021	latin	15
+4022	latin	14
+4023	latin	13
+4024	latin	12
+4025	latin	11
+4026	latin	10
+4027	latin	9
+4028	latin	8
+4029	latin	7
+4030	latin	6
+4031	latin	5
+4032	latin	4
+4033	latin	3
+4034	latin	2
+4035	latin	4
+4058	CJK	不可推毁的建筑物
+4059	CJK	占位格（用于大建筑物）
+4060	CJK	中央建筑
+4061	CJK	可推毁的建筑物
+4062	CJK	机关（鳄鱼）
+4064	latin	LANDMINE
+4071	latin	SKATEBOARD
+4076	latin	MAMMOTH
+4082	latin	SPORT CAR
+4084	latin	VEHICLES
+4086	latin	FROG
+4089	latin	FLAMETHROWER
+4091	latin	HAMMER
+4094	latin	BOXING GLOVE
+4099	CJK	随
+4106	CJK	占
+4109	latin	0
+4110	latin	1
+4111	latin	16
+4112	latin	15
+4113	latin	14
+4114	latin	13
+4115	latin	12
+4116	latin	11
+4117	latin	10
+4118	latin	9
+4119	latin	8
+4120	latin	7
+4121	latin	6
+4122	latin	5
+4123	latin	4
+4124	latin	3
+4125	latin	2
+4126	latin	4
+4148	latin	WEAPONS
+4160	latin	INVINCIBILITY
+4189	latin	LIFE +1
+4191	latin	SPEED +10%
+4193	latin	PUSH THE BOMB
+4200	latin	SHIELD
+4203	latin	P_POWER-UPS
+4223	latin	S_POWER-UPS
+4225	latin	BOMB +1
+4227	latin	POWER BLAST +1
+4707	CJK	随
+4722	CJK	占
+4728	latin	0
+4729	latin	1
+4730	latin	16
+4731	latin	15
+4732	latin	14
+4733	latin	13
+4734	latin	12
+4735	latin	11
+4736	latin	10
+4737	latin	9
+4738	latin	8
+4739	latin	7
+4740	latin	6
+4741	latin	5
+4742	latin	4
+4743	latin	3
+4744	latin	2
+4745	latin	4
+4763	CJK	不可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+4764	CJK	可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+4765	CJK	中央建筑物
+4766	CJK	占位格（用于大建筑物）
+4767	CJK	 / --- RECORDSEPARATOR --- / 传 / --- RECORDSEPARATOR --- / 送机 / --- RECORDSEPARATOR --- / 关
+4905	CJK	随
+4912	CJK	占
+4915	latin	0
+4916	latin	1
+4917	latin	16
+4918	latin	15
+4919	latin	14
+4920	latin	13
+4921	latin	12
+4922	latin	11
+4923	latin	10
+4924	latin	9
+4925	latin	8
+4926	latin	7
+4927	latin	6
+4928	latin	5
+4929	latin	4
+4930	latin	3
+4931	latin	2
+4932	latin	4
+4961	CJK	占位格（用于大面积物体)
+4972	CJK	随机不可推毁的物品
+4973	CJK	随机可推毁的物品
+4974	CJK	中央建筑
+4976	CJK	机 / --- RECORDSEPARATOR --- / 关
+5070	latin	2
+5120	CJK	随
+5127	CJK	占
+5131	latin	0
+5132	latin	1
+5133	latin	16
+5134	latin	15
+5135	latin	14
+5136	latin	13
+5137	latin	12
+5138	latin	11
+5139	latin	10
+5140	latin	9
+5141	latin	8
+5142	latin	7
+5143	latin	6
+5144	latin	5
+5145	latin	4
+5146	latin	3
+5147	latin	2
+5148	latin	4
+5164	CJK	不可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+5165	CJK	可推 / --- RECORDSEPARATOR --- / 毁 / --- RECORDSEPARATOR --- / 的建筑物
+5166	CJK	中央建筑物
+5167	CJK	占位格（用于大建筑物）
+5168	CJK	 / --- RECORDSEPARATOR --- / 传 / --- RECORDSEPARATOR --- / 送机 / --- RECORDSEPARATOR --- / 关
+5587	CJK	随
+5595	CJK	占
+5598	latin	0
+5599	latin	1
+5600	latin	16
+5601	latin	15
+5602	latin	14
+5603	latin	13
+5604	latin	12
+5605	latin	11
+5606	latin	10
+5607	latin	9
+5608	latin	8
+5609	latin	7
+5610	latin	6
+5611	latin	5
+5612	latin	4
+5613	latin	3
+5614	latin	2
+5615	latin	4
+5627	latin	YOU LOSE!
+6269	CJK	随
+6276	CJK	占
+6283	latin	0
+6284	latin	1
+6285	latin	16
+6286	latin	15
+6287	latin	14
+6288	latin	13
+6289	latin	12
+6290	latin	11
+6291	latin	10
+6292	latin	9
+6293	latin	8
+6294	latin	7
+6295	latin	6
+6296	latin	5
+6297	latin	4
+6298	latin	3
+6299	latin	2
+6300	latin	4
+6564	CJK	随
+6572	CJK	占
+6578	latin	0
+6579	latin	1
+6580	latin	16
+6581	latin	15
+6582	latin	14
+6583	latin	13
+6584	latin	12
+6585	latin	11
+6586	latin	10
+6587	latin	9
+6588	latin	8
+6589	latin	7
+6590	latin	6
+6591	latin	5
+6592	latin	4
+6593	latin	3
+6594	latin	2
+6595	latin	4
+6627	CJK	占位格（用于大面积物体)
+6628	CJK	随机不可推毁的物品
+6629	CJK	随机可推毁的物品
+6630	CJK	中央建筑
+6631	CJK	机关
+6662	CJK	随
+6675	CJK	占
+6685	latin	0
+6686	latin	1
+6687	latin	16
+6688	latin	15
+6689	latin	14
+6690	latin	13
+6691	latin	12
+6692	latin	11
+6693	latin	10
+6694	latin	9
+6695	latin	8
+6696	latin	7
+6697	latin	6
+6698	latin	5
+6699	latin	4
+6700	latin	3
+6701	latin	2
+6702	latin	4
+6711	CJK	不可摧毁物品
+6712	CJK	中心建筑
+6713	CJK	占位格 / --- RECORDSEPARATOR --- / ( / --- RECORDSEPARATOR --- / 用于大面积物体 / --- RECORDSEPARATOR --- / )
+6714	CJK	随机的可 / --- RECORDSEPARATOR --- / 摧毁物品（ / --- RECORDSEPARATOR --- / 40% / --- RECORDSEPARATOR --- / 几率为空地）
+6715	CJK	随机的不可 / --- RECORDSEPARATOR --- / 摧毁物品
+6716	CJK	滑动条
+6743	CJK	手掌
+6749	CJK	鳄鱼
+6755	CJK	魔法书
+6759	CJK	魔法书
+6761	CJK	开始翻动
+6763	CJK	正在翻动
+6765	CJK	翻动结束

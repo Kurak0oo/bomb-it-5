@@ -1,0 +1,157 @@
+{
+  "supplement": {
+    "files": 2354,
+    "bytes": 196677024,
+    "checksum_entries": 2352,
+    "checksum_failures": [],
+    "images": 2309,
+    "image_errors": [],
+    "image_modes": {
+      "P": 2156,
+      "RGBA": 125,
+      "RGB": 28
+    },
+    "dimensions": {
+      "(320, 160)": 2,
+      "(240, 200)": 2,
+      "(320, 240)": 3,
+      "(360, 260)": 1,
+      "(360, 200)": 1,
+      "(560, 408)": 3,
+      "(700, 510)": 2266,
+      "(1050, 510)": 2,
+      "(1400, 510)": 1,
+      "(1920, 1200)": 28
+    },
+    "extensions": {
+      ".md": 7,
+      ".txt": 6,
+      ".gif": 12,
+      ".mp4": 12,
+      ".png": 2297,
+      ".log": 4,
+      ".csv": 1,
+      ".lock": 1,
+      ".patch": 2,
+      ".sha256": 1,
+      ".sh": 3,
+      ".toml": 1,
+      ".py": 6,
+      ".rs": 1
+    }
+  },
+  "followup": {
+    "files": 1255,
+    "bytes": 288018578,
+    "checksum_entries": 1253,
+    "checksum_failures": [],
+    "images": 1223,
+    "image_errors": [],
+    "image_modes": {
+      "RGBA": 1221,
+      "RGB": 2
+    },
+    "dimensions": {
+      "(700, 510)": 1221,
+      "(700, 420)": 1,
+      "(1200, 664)": 1
+    },
+    "extensions": {
+      ".md": 10,
+      ".txt": 3,
+      ".log": 6,
+      ".rs": 1,
+      ".sha256": 1,
+      ".py": 6,
+      ".tsv": 1,
+      ".sh": 4,
+      ".png": 1223
+    }
+  },
+  "archive_parts": 28,
+  "zip_crc_failures": [],
+  "unsafe_paths": [],
+  "conflicting_duplicates": [],
+  "imported_documents": 19,
+  "video_decode": [
+    {
+      "path": "clips/p01_hold_left_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p02_left_then_up_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p03_down_then_right_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p03_right_then_down_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p04_space_held_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p04_space_repeated_run2.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p05_fuse_flame_softblock_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p08_chain_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p09_pickup_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p10_death_selfbomb_to_results_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p11_pause_P_run1.mp4",
+      "exit_code": 0,
+      "errors": ""
+    },
+    {
+      "path": "clips/p12_timeout_timesup_to_complete.mp4",
+      "exit_code": 0,
+      "errors": ""
+    }
+  ],
+  "review": {
+    "harness": "static source inspection only; not built or replayed",
+    "representative_visuals": [
+      "first_board/f000697",
+      "glove acquisition and punch",
+      "passive bomb kick",
+      "help page",
+      "YOU WIN TIME59",
+      "results with zero credited kills",
+      "NEXT level2"
+    ],
+    "limitations": [
+      "2146 probe frames are mostly palette-quantized; p08 and p12 intentionally sampled",
+      "3 boot keyframes are composite-width images",
+      "clip crop/source manifest reconstructed",
+      "first-board uncertain occupancy not certified",
+      "three named item slots remain unidentified"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+BasketballStage2  symbol id 6720  editorGridMc id 6719  17x15 cells, 30 px/cell
+Status: NOT referenced by any decompiled class
+Legend: # hard (fixedProp, indestructible Box isExist=false)  s soft box spawned w.p. 0.8 (unfixedProp_r)  u unfixedProp w/o _r (no setter called -> empty, inferred)
+        C centerProp (map-specific: hard box / Spellbook in MagicLibrary / ConveyorBelt in CandyFactory)  H holdProp (invisible hard box)  K crocodile  L lavaOrgan  T toyHand  O portal  B belt  > slidePlat  . empty  ! empty sprite  X missing cell  P spawn overlay (cell code in CSV)
+   01234567890123456
+ 0 #################
+ 1 #P.ss#sssss#ss.P#
+ 2 #.#s##s###s##s#.#
+ 3 #s#.ssss#ssss.#s#
+ 4 #s..##s###s##..s#
+ 5 #s#>s#s...s#s>#s#
+ 6 #s##ss.CHH.ss##s#
+ 7 #ssss#.HHH.#ssss#
+ 8 #s##ss.HHH.ss##s#
+ 9 #s#>s#s...s#s>#s#
+10 #s..##s###s##..s#
+11 #s#.ssss#ssss.#s#
+12 #.#s##s###s##s#.#
+13 #P.ss#sssss#ss.P#
+14 #################

@@ -1,0 +1,20 @@
+ZooStage2  symbol id 5621  editorGridMc id 5620  17x15 cells, 30 px/cell
+Status: USED by code (normal maps)
+Legend: # hard (fixedProp, indestructible Box isExist=false)  s soft box spawned w.p. 0.8 (unfixedProp_r)  u unfixedProp w/o _r (no setter called -> empty, inferred)
+        C centerProp (map-specific: hard box / Spellbook in MagicLibrary / ConveyorBelt in CandyFactory)  H holdProp (invisible hard box)  K crocodile  L lavaOrgan  T toyHand  O portal  B belt  > slidePlat  . empty  ! empty sprite  X missing cell  P spawn overlay (cell code in CSV)
+   01234567890123456
+ 0 #################
+ 1 #P.sss##s##sss.P#
+ 2 #.#s#sssssss#s#.#
+ 3 #s#s##s#K#s##s#s#
+ 4 #ssssss#s#ssssss#
+ 5 #s##s#sssss#s##s#
+ 6 #ssss#sCHHs#ssss#
+ 7 #s##KssHHHsKs##s#
+ 8 #ssss#sHHHs#ssss#
+ 9 #s##s#sssss#s##s#
+10 #ssssss#s#ssssss#
+11 #s#s##s#K#s##s#s#
+12 #.#s#sssssss#s#.#
+13 #P.sss##s##sss.P#
+14 #################

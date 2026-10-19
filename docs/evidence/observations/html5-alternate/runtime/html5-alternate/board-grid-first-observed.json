@@ -1,0 +1,144 @@
+{
+  "coordinate_convention": "Zero-based rows top-to-bottom; columns left-to-right. Visual grid, not extracted game data. Raised overlapping sprites complicate cell attribution.",
+  "dimensions": {
+    "columns": 17,
+    "rows": 15,
+    "confidence": "Moderate: inferred independently from repeated screenshot object spacing; not imported from SWF."
+  },
+  "screenshot_lattice": {
+    "column_centers_approx_px": [
+      245,
+      275,
+      305,
+      335,
+      365,
+      395,
+      425,
+      455,
+      485,
+      515,
+      545,
+      575,
+      605,
+      635,
+      665,
+      695,
+      725
+    ],
+    "row_anchor_y_approx_px": [
+      79,
+      109,
+      139,
+      169,
+      199,
+      229,
+      259,
+      289,
+      319,
+      349,
+      379,
+      409,
+      439,
+      469,
+      499
+    ],
+    "visible_board_bounds_approx_px": {
+      "left": 238,
+      "top": 79,
+      "right": 738,
+      "bottom": 505
+    },
+    "note": "30px is approximate rendered spacing, not proof of source tile size. Anchor is an artwork alignment guide, not a sprite center or collision rectangle. Top/bottom artwork is clipped and sprites overlap."
+  },
+  "legend": {
+    "#": {
+      "visual": "Red cylindrical can (019) or red topped cup (003), including perimeter",
+      "collision": "Likely solid obstacle; not established by this still"
+    },
+    "P": {
+      "visual": "Purple gift box with yellow bow",
+      "collision": "Likely breakable obstacle; unverified"
+    },
+    "R": {
+      "visual": "Pale/yellow gift box with red bow",
+      "collision": "Likely breakable obstacle; unverified"
+    },
+    "J": {
+      "visual": "Orange drink glass with fruit/straw",
+      "collision": "Obstacle candidate; breakability unverified"
+    },
+    "S": {
+      "visual": "White-topped open-mouth pedestal",
+      "collision": "Special object; behavior and collision unverified"
+    },
+    "C": {
+      "visual": "Multicolored round/balloon cluster (003)",
+      "collision": "Obstacle candidate; unverified"
+    },
+    ".": {
+      "visual": "Visible floor/no discrete object assigned",
+      "collision": "No guarantee of traversability"
+    },
+    "?": {
+      "visual": "Occluded or ambiguous cell; deliberately not reconstructed",
+      "collision": "Unknown"
+    },
+    "b": {
+      "visual": "Visible dark bomb",
+      "collision": "Transient object; underlying cell not reconstructed"
+    },
+    "!": {
+      "visual": "Bright activity/impact effect",
+      "collision": "Underlying cell unknown"
+    }
+  },
+  "caveats": [
+    "Different unverified Y8 HTML5 build; not exact publisher SWF.",
+    "Static visual attribution only; obstacle classes and collision roles are hypotheses, not measured mechanics.",
+    "Central cake overlaps approximately columns7\u20139 rows5\u20138. Hidden substrate is unknown; no symmetric fill or inferred walls.",
+    "Treat non-occluded cell attribution as approximate where raised sprites overlap. No fully untouched opening board was captured."
+  ],
+  "source_file": "003-first-board-or-state.jpg",
+  "captured_utc": "2026-10-16T20:39:49.960Z",
+  "selection": "first-observed",
+  "timer": 173,
+  "grid": [
+    "#################",
+    "#?..P#CCP.PJ#..?#",
+    "#.J.#JP#CJC#J.#.#",
+    "#..P.PPPPCC..CP.#",
+    "#.JP#JPJ##PJJ.JC#",
+    "#P.S.P.???...S.P#",
+    "#.J.##P???PJ#.J.#",
+    "##C.P.C???..CCP##",
+    "#P#.JJ.???P#J.#!#",
+    "#C.S.CPPPP.P.S..#",
+    "#PJ.J#CJ##P##.J.#",
+    "#P.PCC..CCP.PPC?#",
+    "#.#bJJ.JP#P##CJ.#",
+    "#?..C#CPPCP#.b..#",
+    "#################"
+  ],
+  "characters": [
+    {
+      "appearance": "blue P1",
+      "approx_col": 1,
+      "approx_row": 1
+    },
+    {
+      "appearance": "pink/yellow AI",
+      "approx_col": 15,
+      "approx_row": 1
+    },
+    {
+      "appearance": "black AI",
+      "approx_col": 15,
+      "approx_row": 11
+    },
+    {
+      "appearance": "orange AI",
+      "approx_col": 2,
+      "approx_row": 12.5
+    }
+  ]
+}

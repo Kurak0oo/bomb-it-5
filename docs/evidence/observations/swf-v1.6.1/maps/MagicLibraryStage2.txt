@@ -1,0 +1,20 @@
+MagicLibraryStage2  symbol id 1882  editorGridMc id 1856  17x15 cells, 30 px/cell
+Status: USED by code (normal maps)
+Legend: # hard (fixedProp, indestructible Box isExist=false)  s soft box spawned w.p. 0.8 (unfixedProp_r)  u unfixedProp w/o _r (no setter called -> empty, inferred)
+        C centerProp (map-specific: hard box / Spellbook in MagicLibrary / ConveyorBelt in CandyFactory)  H holdProp (invisible hard box)  K crocodile  L lavaOrgan  T toyHand  O portal  B belt  > slidePlat  . empty  ! empty sprite  X missing cell  P spawn overlay (cell code in CSV)
+   01234567890123456
+ 0 #################
+ 1 #P.sssssssssss.P#
+ 2 #.###s#####s###.#
+ 3 #sssssss#sssssss#
+ 4 ###s###s#s###s###
+ 5 #sssssssssssssss#
+ 6 #s####sCHHs####s#
+ 7 #ssssssHHHssssss#
+ 8 #s####sHHHs####s#
+ 9 #sssssssssssssss#
+10 ###s###s#s###s###
+11 #sssssss#sssssss#
+12 #.###s#####s###.#
+13 #P.sssssssssss.P#
+14 #################
