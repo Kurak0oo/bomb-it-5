@@ -1,0 +1,3 @@
+# Preserve the audited board's byte identity across Windows checkouts.
+assets/maps/cinema-stage1.csv -text
+docs/evidence/cinema-stage1-recorded-board.csv -text

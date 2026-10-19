@@ -9,3 +9,17 @@ Read [DESIGN.md](DESIGN.md) before editing for the accepted specification, then 
 - Before export work, read [docs/douyin.md](docs/douyin.md) and verify its inherited platform claims against current official documentation.
 
 Leave `scenes/main.tscn` empty of gameplay during command-boundary work. Do not copy files from `C:\Users\Eiji\Github\bomb-it-1`.
+
+## Agent skills
+
+### Issue tracker
+
+For specs and tickets, use GitHub Issues in `Kurak0oo/bomb-it-5`. Read [tracker conventions](docs/agents/issue-tracker.md) before tracker operations.
+
+### Triage labels
+
+For triage roles and issue labels, use the [label mapping](docs/agents/triage-labels.md).
+
+### Domain docs
+
+This is a single-context project. Before domain exploration, read the [domain documentation rules](docs/agents/domain.md).

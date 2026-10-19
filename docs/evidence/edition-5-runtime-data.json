@@ -1,0 +1,111 @@
+{
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "embedded_xml_id": 6787,
+  "embedded_xml_sha256": "6bd8fe14a186e49dbb77ea3412d93549bd212bd56e0265f632f3d9de6ea6cf22",
+  "normal_ai_control": {
+    "aiAnswerTime": "20",
+    "findRange": "6"
+  },
+  "normal_ai_actions": [
+    {
+      "id": "0102",
+      "name": "StateAttack",
+      "hasWeapon": "-bricker|-throw",
+      "target": "player1|phip",
+      "precentage": "0.6",
+      "weaponAttackDelay": "150",
+      "advanceAttack": "0.6",
+      "advanceDodge": "0.8"
+    },
+    {
+      "id": "0202",
+      "name": "StateEvade",
+      "isDanger": "true",
+      "hasInvisiblity": "false",
+      "precentage": "0.8",
+      "weaponAttackDelay": "150",
+      "advanceAttack": "0.6",
+      "advanceDodge": "0.8"
+    },
+    {
+      "id": "0302",
+      "name": "StateGetItem",
+      "hasItem": "true",
+      "precentage": "0.8",
+      "weaponAttackDelay": "150",
+      "advanceAttack": "0.6",
+      "advanceDodge": "0.8"
+    },
+    {
+      "id": "0602",
+      "name": "StateBox",
+      "hasItem": "false",
+      "hasWeapon": "false",
+      "precentage": "0.7",
+      "weaponAttackDelay": "150",
+      "advanceAttack": "0.6",
+      "advanceDodge": "0.8"
+    },
+    {
+      "id": "0802",
+      "name": "StateFree",
+      "precentage": "0.8",
+      "weaponAttackDelay": "150",
+      "advanceAttack": "0.6",
+      "advanceDodge": "0.8"
+    },
+    {
+      "id": "1201",
+      "name": "StateEscape",
+      "precentage": "1",
+      "weaponAttackDelay": "100"
+    }
+  ],
+  "arcade_integer_drop_weights": {
+    "NumProp": 28,
+    "PowProp": 24,
+    "SpeedProp": 22,
+    "LifeProp": 1,
+    "ShieldProp": 1,
+    "BombShoesProp": 10,
+    "InvincibilityProp": 1,
+    "BoxingProp": 1,
+    "LandmineProp": 1,
+    "FlamerProp": 1,
+    "LaserGunProp": 1,
+    "HammerProp": 1,
+    "TripleShootGunProp": 1,
+    "ShotGunProp": 1,
+    "Vehicle": 3
+  },
+  "animations": {
+    "sinker_Right_Play": {
+      "symbol": 1934,
+      "frames": 25
+    },
+    "lasergun_Play": {
+      "symbol": 1917,
+      "frames": 12
+    },
+    "fireball_Right_Play": {
+      "symbol": 6647,
+      "frames": 14
+    },
+    "thrower_Right_Play": {
+      "symbol": 3202,
+      "frames": 1
+    },
+    "invincibityPlay": {
+      "symbol": 4504,
+      "frames": 30
+    },
+    "brickExp": {
+      "symbol": 4172,
+      "frames": 11
+    }
+  },
+  "flamer_inner_animation": {
+    "symbol": 2212,
+    "frames": 24
+  }
+}

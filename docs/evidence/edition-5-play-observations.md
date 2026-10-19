@@ -1,6 +1,8 @@
 # Dots delivery assessment and play observations
 
-Updated 2026-10-17 after importing the 11-part supplement and 17-part follow-up. **The three previously highlighted gaps are now closed or narrowed:** all 23 indexed harness screenshots are present; the playback harness, lockfile, patches and input logs are supplied; both glove candidates have captured controls, and normal Arcade elimination victory is captured. The first-board occupancy transcription and three unidentified item slots still limit a complete reconstruction.
+Updated 2026-10-17 after importing the 11-part supplement and 17-part follow-up. **The three previously highlighted gaps are now closed or narrowed:** all 23 indexed harness screenshots are present; the playback harness, lockfile, patches and input logs are supplied; both glove candidates have captured controls, and normal Arcade elimination victory is captured.
+
+**2026-10-19 occupancy update:** a [repeated two-frame pixel audit](cinema-stage1-recorded-board.md) resolves the previously uncertain rendered first-board occupancy and corrects cell (14,10) to soft. It yields a canonical 255-cell reconstruction with 68 soft blocks; it is not a runtime-state extraction. The sections below retain the import-time assessment for context; current occupancy status comes from that newer record. Three item identities remain unresolved.
 
 ## Locations and preservation
 

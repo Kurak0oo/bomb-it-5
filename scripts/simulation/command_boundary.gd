@@ -20,7 +20,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 		if not (command.actor_id is StringName and command.direction is Vector2
 				and command.bomb_events is Array):
 			return {"accepted": false, "tick": _tick, "commands": _commands.duplicate(true)}
-		if not _actor_ids.has(command.actor_id) or seen.has(command.actor_id):
+		if not command.direction.is_finite() or not _actor_ids.has(command.actor_id) or seen.has(command.actor_id):
 			return {"accepted": false, "tick": _tick, "commands": _commands.duplicate(true)}
 		for event in command.bomb_events:
 			if not (event is StringName) or event not in [&"down", &"up"]:

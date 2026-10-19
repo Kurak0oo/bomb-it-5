@@ -1,0 +1,3 @@
+# Integrate gameplay through the admitted round
+
+During the authorized complete-game implementation on 2026-10-19, the existing bomb tick target was deepened into the round instead of introducing separate rendering, hazard and AI clocks. The scene manually drives one scheduler and consumes copied results; one AI decision rotates per tick while all actors receive commands. This keeps pause, rejection and bounded catch-up authoritative across the whole game, at the cost of translating original callback/tween phases into explicit logical phases rather than claiming universal SWF frame parity. [The current design](../../DESIGN.md) records the phase policy and [runtime evidence](../evidence/edition-5-runtime-systems.md) separates recovered facts from conversions.

@@ -13,6 +13,10 @@ $suites = @(
     @{ Script = 'res://tests/command_boundary_check.gd'; Success = '^PASS: \d+ command boundary checks$' }
     @{ Script = 'res://tests/scheduler_check.gd'; Success = '^PASS: \d+ scheduler checks$' }
     @{ Script = 'res://tests/bomb_simulation_check.gd'; Success = '^PASS: \d+ bomb simulation checks$' }
+    @{ Script = 'res://tests/round_play_check.gd'; Success = '^PASS: \d+ round play checks$' }
+    @{ Script = 'res://tests/round_regression_check.gd'; Success = '^PASS: \d+ round regression checks$' }
+    @{ Script = 'res://tests/game_scene_check.gd'; Success = '^PASS: \d+ game scene checks$' }
+    @{ Script = 'res://tools/playthrough_check.gd'; Success = '^PASS: 3 full-board playthrough checks ' }
 )
 foreach ($suite in $suites) {
     $output = & $Godot --headless --path $projectRoot --script $suite.Script 2>&1

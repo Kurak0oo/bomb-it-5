@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-19",
+  "scope": "Rendered-image reconstruction; no runtime-state extraction",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "images": [
+    {
+      "frame": 697,
+      "sha256": "5c24048e1fbbfd9a4e2f0b8133047bdfd1834345a3dd7f96591db57d17ab8ad6"
+    },
+    {
+      "frame": 698,
+      "sha256": "aabb621d5d115bdbda51e62ab638c14010cb94983fd49d35c73c014a7f7f6cb1"
+    }
+  ],
+  "candidate_cells": 110,
+  "present_soft": 68,
+  "empty_candidates": 42,
+  "unclassified_candidates": 0,
+  "exact_full_patch_soft": 65,
+  "exact_full_patch_floor": 38,
+  "portal_glow_affected": {
+    "soft": 3,
+    "floor": 4
+  },
+  "transcription_corrections": [
+    {
+      "x": 14,
+      "y": 10,
+      "from": "floor",
+      "to": "soft",
+      "full_patch_matches_reference_in_both_frames": true
+    }
+  ],
+  "board_class_counts": {
+    "solid": 125,
+    "floor": 58,
+    "soft": 68,
+    "portal": 4
+  },
+  "csv_sha256": "6a884c170d39937c9be0381325d1d480966b78778a25813e9968f1d094d925d1",
+  "measurement": {
+    "cell_pitch_pixels": 32,
+    "origin_x": 163.2,
+    "origin_y": 12.66666667,
+    "patch": "rows top+1:top+15, columns left+2:left+30",
+    "glasses_reference": [
+      3,
+      1
+    ],
+    "clapper_reference": [
+      5,
+      1
+    ],
+    "floor_reference": [
+      6,
+      1
+    ],
+    "glasses_diagnostic_pixels": 7,
+    "clapper_diagnostic_pixels": 86
+  },
+  "limitations": [
+    "Two screenshots of the same instance, not independent playthroughs.",
+    "Rendered art classification, not a dump of map.getBox.",
+    "Does not certify another randomized layout realization."
+  ]
+}

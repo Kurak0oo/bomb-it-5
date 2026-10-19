@@ -15,6 +15,8 @@ var _directions: Dictionary = {}
 var _bomb_queues: Dictionary = {}
 var _paused: bool = false
 var _focused: bool = true
+var _controllers: Dictionary = {}
+var _pending_controllers: Dictionary = {}
 
 
 func _init(actor_ids: Array[StringName], tick_target: RefCounted = null) -> void:
@@ -36,6 +38,13 @@ func enqueue_bomb_event(actor_id: StringName, event: StringName) -> bool:
 	if _paused or not _bomb_queues.has(actor_id):
 		return false
 	return _bomb_queues[actor_id].enqueue(event)
+
+
+func set_controller(actor_id: StringName, producer: Callable) -> bool:
+	if not _directions.has(actor_id) or not producer.is_valid():
+		return false
+	_controllers[actor_id] = producer
+	return true
 
 
 func pause() -> void:
@@ -62,12 +71,21 @@ func advance_time(elapsed_seconds: float) -> Dictionary:
 		var batch: Array[Dictionary] = []
 		var captures: Dictionary = {}
 		for actor_id in _actor_ids:
+			if _controllers.has(actor_id):
+				if not _pending_controllers.has(actor_id):
+					var produced: Dictionary = _controllers[actor_id].call()
+					_pending_controllers[actor_id] = produced.duplicate(true)
+					for event in produced.bomb_events:
+						_bomb_queues[actor_id].enqueue(event)
+				_directions[actor_id] = _pending_controllers[actor_id].direction
 			var capture: Dictionary = _bomb_queues[actor_id].capture()
 			captures[actor_id] = capture
 			batch.append({"actor_id": actor_id, "direction": _directions[actor_id], "bomb_events": capture.events})
 		var result: Dictionary = _commands.call(&"advance", batch)
 		for actor_id in _actor_ids:
 			_bomb_queues[actor_id].acknowledge(captures[actor_id].token, result.accepted)
+		if result.accepted:
+			_pending_controllers.clear()
 		ticks.append(result)
 		_tick_credit = maxf(0.0, _tick_credit - 1.0)
 	return {"paused": false, "ticks": ticks}
@@ -87,6 +105,7 @@ func _notification(what: int) -> void:
 
 func _clear_input_and_time() -> void:
 	_tick_credit = 0.0
+	_pending_controllers.clear()
 	for actor_id in _actor_ids:
 		_directions[actor_id] = Vector2.ZERO
 		_bomb_queues[actor_id] = BombEventQueue.new()

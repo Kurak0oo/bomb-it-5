@@ -67,10 +67,47 @@ The user accepted Q9–Q13 in the gameplay interview:
 
 For example, with capacity one, a bomb placed on tick 1 detonates on tick 73. Another down event on tick 73 fails while that bomb still occupies capacity, then the explosion frees capacity. Placement requires another delivered down event on a later tick and must still pass the normal cell/capacity checks.
 
+## First visible practice preview (2026-10-19)
+
+The user accepted Q14, Q15, Q16 and Q18, and replaced Q17's recommendation:
+
+- **Practice scope:** open directly onto a clearly labelled practice board with one controllable actor, Pause/Resume and Reset. Movement, visible bombs and breaking blocks are an intermediate milestone toward the complete runnable Godot 4.5 game. Practice alone is not the final deliverable. AI, damage and match endings remain subsequent implementation work; the accepted first full match still means one human plus three AI.
+- **Temporary presentation:** use original geometric shapes and colours that distinguish floor, solids, soft blocks, actor, bombs and blasts. Preserve recovered layout relationships and the accepted phone-control placement. Finished redrawn artwork follows later; copied SWF artwork is not the preview's production art.
+- **Desktop development input:** also support Arrow keys and Space through the same command path as touch. Preserve the recovered keyboard direction priority.
+- **Eight-direction phone control:** the stick supports up, down, left, right and the four diagonals. The proposed four-direction dominant-axis mapping is rejected. This is an intentional adaptation from the original controller, with acknowledged difficulty implications. No one-cell-per-input movement rule is accepted.
+- **Equal directional speed (Q19):** diagonal travel has the same top speed as straight travel. Normalize diagonal direction rather than combining two full-speed axes. Acceleration and stick-deflection response remain separate tuning decisions.
+- **Diagonal collision (Q20):** respect the actor's full collision footprint. Slide along an unblocked axis when another is blocked; do not pass through solids, soft blocks, bombs or the gap between touching blocked corners. Q25 below defines departure from an already overlapping bomb.
+- **Shared movement capability (Q21):** later AI and humans use the same eight-direction physical movement capability and collision rules. AI route selection and behavior remain later work, outside the one-actor practice preview.
+- **Touch bomb events:** finger-down delivers one down event and release delivers one up event, without synthesized repeat while held. Another attempt requires another press. Delivered desktop key-repeat events remain preserved under the ordered-command contract.
+- **Development/testing sequence (replacement Q22):** do not build an early phone-control prototype or require physical phone tests during initial development. First make the main Godot game ready for publication; phone/iOS testing follows at that stage. Desktop and automated verification still proceed during Godot development. This staging decision does not replace the existing Douyin scope with an already-designed iOS release.
+- **Visible fixed stick (Q23):** keep the joystick base fixed and visible, with a generous touch area. Its demonstration and animation must respond clearly to input. Use mature mobile games such as PUBG Mobile and Honor of Kings as presentation references; [the reference record](docs/evidence/mobile-control-references.md) distinguishes verified observations from this project's own feedback choices.
+- **Stick deflection (Q24):** outside the central deadzone, request normal movement speed; pushing farther does not add a speed boost. Acceleration remains separate from the input request. Visual feedback still responds to the thumb's input.
+- **Bomb-overlap departure (Q25):** an actor already overlapping a bomb may leave that bomb. Once fully clear, the bomb blocks re-entry. Apply the rule to all actors regardless of ownership. This explicitly adapts the original geometric bypass to the new movement model.
+- **Runnable Godot delivery (Q26 clarification):** the main deliverable is the whole runnable game implemented in Godot 4.5 within the accepted first-build scope. The practice board is an integration milestone on that path. Main Godot development precedes physical phone/iOS testing at publication readiness. This answer clarifies delivery scope; it does not approve the earlier proposed exact acceleration/heading-response profile.
+- **Corridor assistance (Q27):** gently align an actor with an open corridor using part of its normal movement distance. Respect the complete collision footprint throughout, with no teleporting or blocked-corner shortcuts.
+- **Recorded practice layout (Q28):** use the [reconstructed CinemaStage1 instance](docs/evidence/cinema-stage1-recorded-board.md) with its paired portals working. Reset restores that fixed layout. It is a source-derived recorded instance, not a generated replacement map.
+
+The [source movement record](docs/evidence/edition-5-movement-and-board.md) establishes continuous original movement, acceleration and lane assistance. Q19–Q21, Q23–Q25 and Q27–Q28 were accepted on 2026-10-19; Q22 and Q26 clarify full Godot delivery before phone/iOS evaluation. The recovered movement is the baseline for implementation; exact acceleration tuning is not an independently accepted new rule. Physical phone evaluation is deferred to the accepted later stage and is not a prerequisite for initial implementation.
+
+## Complete game specification and testing boundary (2026-10-19)
+
+The [complete runnable Godot game specification](docs/specs/runnable-godot-game.md) consolidates the accepted scope through Q28, completion criteria and remaining source-recovery prerequisites. It does not replace evidence records or resolve unaccepted gameplay choices. The user confirmed testing through the existing scheduler and real round simulation, observing public state/results, with a small set of scene tests for controls, display and playable flow. Prefer that shared boundary over separate test interfaces for internal gameplay modules.
+
 ## Decision history
+
+Implementation policy recorded during the user's 2026-10-19 instruction to implement the complete ticket graph without permission stops:
+
+- The playable first build uses Normal Arcade settings and the recorded Cinema board. Retry/play-again reuses that board within the selected single-map scope; it does not add a campaign or a generator. Session hearts and result totals carry across permitted retries/play-again; a new session starts fresh.
+- Admitted directions must be finite vectors. After admission, expire old hazards, apply bomb/action input, resolve existing bombs/chains, advance weapon callbacks and portal transfers, move actors, evaluate ongoing fire contact, process delayed drops/collections and invincibility contact, then evaluate the ending. Human defeat has priority over simultaneous enemy elimination; elimination has priority over timeout when no enemies remain.
+- Human and AI movement remains eight-direction capable. Recovered cardinal weapon effects aim on the dominant facing axis, with vertical ties. New vector animation durations and tick conversions are documented with their source; original pixel-level attack bounds and exact AI-state-machine parity are not asserted.
+- Keep both unresolved glove candidates disabled under the existing named-slot deferral. A reserved candidate draw produces no item rather than changing the remaining drop weights. This explicit first-build omission does not mean those items are absent from edition 5.
+
+[Runtime evidence](docs/evidence/edition-5-runtime-systems.md) and [round integration rationale](docs/adr/0005-integrate-gameplay-through-the-round.md) distinguish recovered rules from these implementation policies. Physical phone/iOS evaluation and export remain deferred.
 
 [Edition 5 as the rules authority](docs/adr/0001-edition-5-authority.md) records the rationale for the source boundary. Current rules remain here; ADRs explain consequential choices.
 
 [Adapt original input and timing for the new game](docs/adr/0002-input-and-timing-adaptations.md) records the consequential trade-offs behind the 2026-10-17 and 2026-10-18 amendments.
 
 [Make bomb batches consistent across controllers](docs/adr/0003-bomb-batch-timing.md) records the rationale for uniform newborn countdowns and fixed roster priority.
+
+[Permit eight-direction phone movement](docs/adr/0004-eight-direction-phone-movement.md) records the deliberate change from the original cardinal controller.
