@@ -99,6 +99,8 @@ The user deferred further joystick polish to the physical phone-testing stage. R
 
 Following desktop play, the user prioritizes reproducing original edition 5 gameplay feel and logic before replacing presentation with final original artwork. Audit animation-driven attack timing, movement interruption/recovery and damage geometry against the actual edition 5 SWF; replacing pictures alone is not fidelity. Use original source, animations and reference playback to establish the behavior. The edition 1 project is a workflow comparison, not a source for importing code or assets. Existing accepted timing/input/diagonal adaptations and the production asset boundary remain in effect.
 
+The user subsequently requests reverse engineering first. Reconstruct and verify the original selected-scope ownership, execution order, command/AI lifecycles and animation-dependent behavior before further fidelity porting or final redraw. Static decompilation, bytecode corroboration, runtime observation and matched replay are different levels of evidence; do not call a source inventory or new-game test suite complete original-game parity. Keep the current playable build available while this recovery proceeds.
+
 ## Decision history
 
 Implementation policy recorded during the user's 2026-10-19 instruction to implement the complete ticket graph without permission stops:
