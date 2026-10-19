@@ -1,0 +1,828 @@
+{
+  "schema": "bombit5-actor-pickup-observations-v1",
+  "manifest_sha256": "5aa969190522a22a9a3e11e41f3995cbd087d3610d0b199f3a81c3ff2c2ef35f",
+  "case_sha256": "045aab68aa3d3ef145bb066baa1a4895f7a0890d124fd4faabcb612ed8f90f01",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "observation_mode": "focus",
+  "samples": [
+    {
+      "file": "actor-0-capacity-collected.json",
+      "sha256": "2e1a7c8ca9f184228ba3304a60995c25352eb3bddd7a8ddbb7be53cb88e3b34f",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 900
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-car-collected.json",
+      "sha256": "b3b15b84d2b4c2532055dbe90050c9faa84e2e2f2d442d185940bdc760c912d2",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 700
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 2.5600000000000005,
+        "state": "normal",
+        "vehicle": "_Car",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-fireball-collected.json",
+      "sha256": "cdf95f767358d58579291e4c31d77c9b75b0f1e85e4bd64f81ea50e823697e9d",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 600
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-flamer-collected.json",
+      "sha256": "70f30cc87cc290bd7edba1cb343ad03e4bf6ec60cc99089aeda13b3b004fcbd4",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 300
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "thrower"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-hammer-collected.json",
+      "sha256": "5fc0a7d99fbf062aa690ef091a51fef3f436f3e791184ea3e43598ba14274380",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 200
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "sinker"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-invincibility-collected.json",
+      "sha256": "b089288a37e8d07618ae7d09daf262e6391769e9f3be2c6fb49b6a414a046fb4",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 4,
+        "_itemPoint": 1300
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "Invincible",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-landmine-collected.json",
+      "sha256": "d875c143e29889345bd2e05c897d842e4582deb27fae60e42f67c26c52c7a7df",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 100
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "mine"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-laser-collected.json",
+      "sha256": "fa5b6678fbeb1cd5d53364d8f80124787a30542c6774bcb3b0820f50358f5059",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 400
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "lasergun"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-life-collected.json",
+      "sha256": "e36b8e33fb70904790021be915f72e210d65e5e875645789343298a3e67c0a9f",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 4,
+        "_itemPoint": 1200
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-moto-collected.json",
+      "sha256": "a88b59d510ae34c7c3cb10a6bff2b0c90b18b39d1a2197d465a645ac388d83b6",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 800
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-power-collected.json",
+      "sha256": "419c5673d52ce4dc9612104046cc697b578e22245a152cd8cd090f0abcb48863",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 1000
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.6,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-shield-collected.json",
+      "sha256": "b6868fb3a65b1343d5178438ab980b76dcddf094cb2f8635f722eb967c086a8b",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 4,
+        "_itemPoint": 1300
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-speed-collected.json",
+      "sha256": "9d8320ca9b30674e9baa1452ec7e1e776847add83e1d4a9c73efa7be2545964b",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 1100
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-0-triple-collected.json",
+      "sha256": "e97857b7c3a701cd5860f792f0a807b0a318ccdddf1748cd7b9cd7a9da0abe82",
+      "actor": 0,
+      "robot_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "player": {
+        "_life": 3,
+        "_itemPoint": 500
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "shotgun"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-capacity-collected.json",
+      "sha256": "d6b09d034ed1a675e037d13e1a84608699a6454184ee6555ea79f50ad802e7a6",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 900
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-car-collected.json",
+      "sha256": "54f5e8b76a80c6f392965c467ab7eda2c30ec9ebac40871b41a0afc842576bc3",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 700
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 2.5600000000000005,
+        "state": "normal",
+        "vehicle": "_Car",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-fireball-collected.json",
+      "sha256": "f8734308779bec706daa21a72ccb7549f7d7a493e1fea1b320c66a8ab4102b0e",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 600
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-flamer-collected.json",
+      "sha256": "d1691b0d194c42789c161fb60ced55909ad1a4d3a7147d35d81959ecc8f542b8",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 300
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "thrower"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-hammer-collected.json",
+      "sha256": "98fdd16f6e4e98cd21faf8df3303997019e8b6d31f2aa690e83044ee35a46502",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 200
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "sinker"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-invincibility-collected.json",
+      "sha256": "7255eea3fddb9d00160108069ab3db233251e7d2467ab85a4839c005c33204dd",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 1300
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "Invincible",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-landmine-collected.json",
+      "sha256": "4d6bc1a6f013b6d9793703023729a9f88715b89c46bb2e560d7073aa9fe10bda",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 100
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "mine"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-laser-collected.json",
+      "sha256": "ffda09643a489e702c2a4e2161a5aecdb3dd8041f85d90881ae3ae422e74bd7d",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 400
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "lasergun"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-life-collected.json",
+      "sha256": "bcaa6c2132b40ac7484209e782ec38a68c6639cff02805ab35c51e668e2b95df",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 1200
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-moto-collected.json",
+      "sha256": "866bf596d32c2fdb24e62f0cfabfe29a405a9ab1d21e5c822d55e11c794f65ca",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 800
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-power-collected.json",
+      "sha256": "f9cd4858106cf36c2147f128779a4717929ca799245d6e82524a1abedbae63b6",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 1000
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.6,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-shield-collected.json",
+      "sha256": "14cd26f661eac6b53ccbc1b21f2e5e905c2ae65c088b3b452ecfadf149222307",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 1300
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-speed-collected.json",
+      "sha256": "c956228f7830fd779653f5f9d8198b6ac67d5625d0b8d7ed9431da76dda3fc33",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 1100
+      },
+      "model": {
+        "allowBomb": 2,
+        "bombPow": 2,
+        "robotVelocity": 1.7000000000000002,
+        "velocity": 2.08,
+        "state": "normal",
+        "vehicle": "_Skateboard",
+        "weapon": "fireball"
+      },
+      "pickup_remaining": null
+    },
+    {
+      "file": "actor-1-triple-collected.json",
+      "sha256": "d4bceb14ba647f3e40a34843182389794d8edd2e9ff0ce4dae4d8ecd94a53a7a",
+      "actor": 1,
+      "robot_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "player": {
+        "_life": 1,
+        "_itemPoint": 500
+      },
+      "model": {
+        "allowBomb": 1,
+        "bombPow": 1,
+        "robotVelocity": 1.6,
+        "velocity": 1.6,
+        "state": "normal",
+        "vehicle": "",
+        "weapon": "shotgun"
+      },
+      "pickup_remaining": null
+    }
+  ],
+  "eligibility_returns": [
+    {
+      "event_file": "f000722.json",
+      "event_sha256": "e3de71d34dd257811a42512de90cb76417917eed95553d7e08eba685661181be",
+      "frame": 722,
+      "call": 22,
+      "item_class": "zlong.bombit5.items.weapons::LandmineProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000723.json",
+      "event_sha256": "c03cb470a8040e3de1c01218ff8a6fcc4269a2d8b9d039cee92a9b3c3eff60e0",
+      "frame": 723,
+      "call": 84,
+      "item_class": "zlong.bombit5.items.weapons::LandmineProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000724.json",
+      "event_sha256": "e251d488b929688b30f6d73cc6f4cea32bc26432621d8e3378fd6572317d645c",
+      "frame": 724,
+      "call": 141,
+      "item_class": "zlong.bombit5.items.weapons::HammerProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000725.json",
+      "event_sha256": "ccff935b031a9e042a2554ef4a0bad7ea4e36acc43a1af39af6ee4d4ee652f78",
+      "frame": 725,
+      "call": 217,
+      "item_class": "zlong.bombit5.items.weapons::HammerProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000726.json",
+      "event_sha256": "b0da4ed1653cda70bfc6f7fc85c93c2d332c292ed5ef70bc725e8d3349f134e2",
+      "frame": 726,
+      "call": 293,
+      "item_class": "zlong.bombit5.items.weapons::FlamerProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000727.json",
+      "event_sha256": "11028732e47117d6fdec4d81dc58dc664c6a3526bec12cf53bf1d5f59be19f16",
+      "frame": 727,
+      "call": 369,
+      "item_class": "zlong.bombit5.items.weapons::FlamerProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000728.json",
+      "event_sha256": "2d5def56fbdd197abc20d5b3e56eb9e022bb3b02cac9aa112ac12990baada6a2",
+      "frame": 728,
+      "call": 443,
+      "item_class": "zlong.bombit5.items.weapons::LaserGunProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000729.json",
+      "event_sha256": "f30fd7272d33665719148bcea2d7ee82575d0e693580dc51d951a9e59f04cd43",
+      "frame": 729,
+      "call": 521,
+      "item_class": "zlong.bombit5.items.weapons::LaserGunProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000730.json",
+      "event_sha256": "4d6018941460800763c855da53a4b3895bc72893712a3155ac0ee7423fbbe99e",
+      "frame": 730,
+      "call": 597,
+      "item_class": "zlong.bombit5.items.weapons::TripleShootGunProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000731.json",
+      "event_sha256": "d7582c3b92edf2366b1a8ffaa73b3ebc4c03aedbcc27abdbd73f732e52aed08d",
+      "frame": 731,
+      "call": 675,
+      "item_class": "zlong.bombit5.items.weapons::TripleShootGunProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000732.json",
+      "event_sha256": "b932533f42635b8ef829e44046557ab8680ab42b44f93d27dc8d48ca0340cbf8",
+      "frame": 732,
+      "call": 751,
+      "item_class": "zlong.bombit5.items.weapons::ShotGunProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000733.json",
+      "event_sha256": "2a4dde98958db5b842f5699a8fc6b20edbf4a088bc68f3638ba6539d16e982c8",
+      "frame": 733,
+      "call": 827,
+      "item_class": "zlong.bombit5.items.weapons::ShotGunProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000734.json",
+      "event_sha256": "f7d208e863832bb8c15f1946e16634f9e6f525921174f8de41bfe7456f3807ed",
+      "frame": 734,
+      "call": 898,
+      "item_class": "zlong.bombit5.items.rides::CarProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000735.json",
+      "event_sha256": "a754480245560510bde164bafe61389b73046d6eb2b51053c0f68f2483b15aa2",
+      "frame": 735,
+      "call": 959,
+      "item_class": "zlong.bombit5.items.rides::CarProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000736.json",
+      "event_sha256": "c19c2fa4e2903f09f7df743eb12a8eb33edc302d13083677065d86b4c1296894",
+      "frame": 736,
+      "call": 1013,
+      "item_class": "zlong.bombit5.items.rides::MotoCycleProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000737.json",
+      "event_sha256": "c22ea4bbba3abd64269fbc0c3b4d62306ca51ca19c5c7ecf3a8dc955cc51c723",
+      "frame": 737,
+      "call": 1075,
+      "item_class": "zlong.bombit5.items.rides::MotoCycleProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000738.json",
+      "event_sha256": "c104c483af65435eba30b9d597b50942b9f82a297db3808f34e6488ad181e2af",
+      "frame": 738,
+      "call": 1127,
+      "item_class": "zlong.bombit5.items.tools::NumProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000739.json",
+      "event_sha256": "8a3e107961ba338ad8b9418a8c0b88fbf80a0813a7ba8e3c9ed961c682ee5725",
+      "frame": 739,
+      "call": 1182,
+      "item_class": "zlong.bombit5.items.tools::NumProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000740.json",
+      "event_sha256": "adaa7396fb5107864d11be9b68734f6043ee1aa13c182daf13aef425c943e0ef",
+      "frame": 740,
+      "call": 1230,
+      "item_class": "zlong.bombit5.items.tools::PowProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000741.json",
+      "event_sha256": "5497a609fe652c5925795ebafbc15e8559dc67e688f596f4771f18625b3ae949",
+      "frame": 741,
+      "call": 1285,
+      "item_class": "zlong.bombit5.items.tools::PowProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000742.json",
+      "event_sha256": "5e059a9b291f851db12aeca914381057ebc8dc51e8fd887739c2180d6cdcc61a",
+      "frame": 742,
+      "call": 1333,
+      "item_class": "zlong.bombit5.items.tools::SpeedProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000743.json",
+      "event_sha256": "0c61fe896568ff48b742cb74217f1d0374f01f7fa9d9d6f86cde143b844639a1",
+      "frame": 743,
+      "call": 1387,
+      "item_class": "zlong.bombit5.items.tools::SpeedProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000744.json",
+      "event_sha256": "05e647d747a587be0a74e42b217202c598153b050e9ee1b1b3a3ce5e99ecec4b",
+      "frame": 744,
+      "call": 1434,
+      "item_class": "zlong.bombit5.items.tools::LifeProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000745.json",
+      "event_sha256": "24f755bee579da5697120fe491ae4122f72c152398bf30c92a3242a0448a5647",
+      "frame": 745,
+      "call": 1491,
+      "item_class": "zlong.bombit5.items.tools::LifeProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000746.json",
+      "event_sha256": "8509a3c9d213862c39a35408ad6026b91776e6c056dac3aa54ce0ba1d57a75c1",
+      "frame": 746,
+      "call": 1537,
+      "item_class": "zlong.bombit5.items.tools::ShieldProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000747.json",
+      "event_sha256": "7bc9c746ffd662b9f5806a65870180b73a4a0b649f6b7672d261eede1bbe3646",
+      "frame": 747,
+      "call": 1593,
+      "item_class": "zlong.bombit5.items.tools::ShieldProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000748.json",
+      "event_sha256": "6272e5b37e1116dea9c59babe34308a28716f8a9023841311739b54441a7ab2e",
+      "frame": 748,
+      "call": 1643,
+      "item_class": "zlong.bombit5.items.tools::InvincibilityProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::PersonRobot",
+      "result": true
+    },
+    {
+      "event_file": "f000749.json",
+      "event_sha256": "8720f8f435060f23909f42eac00aa189fe18fb8a5a51428cd0c22e7c09aec363",
+      "frame": 749,
+      "call": 1694,
+      "item_class": "zlong.bombit5.items.tools::InvincibilityProp",
+      "actor_class": "zlong.bombit5.gameengine.robot::AIRobot",
+      "result": true
+    }
+  ],
+  "event_integrity": {
+    "overflow": false,
+    "dropped": 0,
+    "stack_overflow": 0
+  }
+}

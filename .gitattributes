@@ -1,3 +1,11 @@
 # Preserve the audited board's byte identity across Windows checkouts.
 assets/maps/cinema-stage1.csv -text
 docs/evidence/cinema-stage1-recorded-board.csv -text
+
+# Reference manifests hash these bytes; checkout must not rewrite line endings.
+docs/evidence/reference-2026-10-19/** -text
+tools/reference_player/cases/** -text
+tools/reference_player/*.patch -text
+tools/reference_player/Cargo.lock -text
+tools/reference_player/Cargo.toml -text
+tools/reference_player/src/main.rs -text

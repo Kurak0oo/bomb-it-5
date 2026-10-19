@@ -1,0 +1,93 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\results-hearts-42-02",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "case_sha256": "6f0067979fd6600d321cd405cde28eb9a60f34654acb1f5f3736e02f876db64f",
+  "trace_frames": 0,
+  "events": {
+    "events": 132678,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "loss-life-1.png",
+      "sha256": "9b41c13a276c6a983d663cd1f0658a5c48a8a3bc14711e7d0de902237cf87ff8",
+      "bytes": 176280
+    },
+    {
+      "name": "loss-life-0.png",
+      "sha256": "0c0ef580a14c8c646b91333feb2e2abe9a3a2de57253d9065c9bf3d7bb018548",
+      "bytes": 192041
+    },
+    {
+      "name": "game-over-try-again-settings.png",
+      "sha256": "edadf22e72853636036483739ca526b79772795b462e5712df88be83d1dcbcc9",
+      "bytes": 267187
+    },
+    {
+      "name": "fresh-session-opening.png",
+      "sha256": "4c38a1f74c1533d9d6148adf09f62067747e9ab4317463a96c2498d705ab28df",
+      "bytes": 564078
+    }
+  ],
+  "settlements": [
+    {
+      "call": 7816,
+      "enter_frame": 945,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x14584af95a0",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        false
+      ],
+      "exit_frame": 945,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    },
+    {
+      "call": 29770,
+      "enter_frame": 1319,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x14584af95a0",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        false
+      ],
+      "exit_frame": 1319,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    },
+    {
+      "call": 53851,
+      "enter_frame": 1726,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x14584af95a0",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        false
+      ],
+      "exit_frame": 1726,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    }
+  ],
+  "limits": [
+    "Controlled original-method setup; no raw health/score/outcome writes.",
+    "Date/Tween wall time and explicit logical steps are distinct.",
+    "Encrypted score getters/setters are observed original calls; stale private slots are not their oracle."
+  ]
+}

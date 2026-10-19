@@ -1,0 +1,197 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "ordinary-enemy-bomb",
+  "case_sha256": "91320730f724b9a001dc2b3ea580445bef1b85b1f0b460ae996b675d6f796fbd",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "afa8d45ad2131066d24fa5eacc44caf75a86ca27c24b866e8dcf89ffc73cedb3"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "2658996ff26287531ad4d7fc636f1bcaef22db5a8ff076c6a329f0f9e9be4d84"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "c6f271117d9a608acaa77a29c62537b00ddfb6ae752f908ae16b488edcf016cd"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "19591bf7654a93227084582f07027e16811efec8ffb2f4d9d5cab5ce784021f3"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "18b1cbe974b79845d4eba0b40978c9db002ef91e3f4de852c8db2102b069b454"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "9e3725b7c1aaf1df725c51f38e4352bbf280af6a834975ca0175eb92b6e6bbdd"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 821,
+      "sha256": "822499481d28fd3b4e57064bc084ae608c8abb0213e2bfc312cd3ff492706978"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 841,
+      "sha256": "cdc27dcac802ef8f237e33d30232b63d0524602a1caa0daa1b6e7b99a24c2a91"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 842,
+      "sha256": "97cfd33553677e13769b4781b8d2624d2203d432861e392f721649f5971e2258"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-944qcpmp\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 934,
+  "captures": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "e1163b7542384987b0c26b805bad38d4144000055ec21238e4536c2861f28d2e",
+      "bytes": 543398
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "1c8378bd6881087a4ed7364f861fc3e59392d0521a2ecc423908ce43e2aa91f9",
+      "bytes": 544611
+    },
+    {
+      "name": "enemy-before",
+      "frame": 841,
+      "sha256": "242866bb589c4c85f6c97eac55c292c6fe8c67f75d5916d825e3f20e5fa9128a",
+      "bytes": 545354
+    },
+    {
+      "name": "bomb-born",
+      "frame": 842,
+      "sha256": "8c5fdd6690de54a1395c90edd78a26f565d85a5ba9e326c1a2f2d319bed92e43",
+      "bytes": 545646
+    },
+    {
+      "name": "human-escaped",
+      "frame": 842,
+      "sha256": "117aaa3110a7df642ac7bd71805c7e93e3b7fd00ac567f10be3e40af1815453b",
+      "bytes": 546166
+    },
+    {
+      "name": "enemy-before-detonation",
+      "frame": 912,
+      "sha256": "aa5cd101c9bd138a19863fa2514d11aa4149bc2402fd0621383178661ae29b44",
+      "bytes": 546562
+    },
+    {
+      "name": "enemy-hit",
+      "frame": 913,
+      "sha256": "ba53001cde4844fd4434306aa9f3279cfadf3238fe8d5f38ba32b0c21918e16f",
+      "bytes": 545604
+    },
+    {
+      "name": "after-fire",
+      "frame": 933,
+      "sha256": "bb82676fa675f5f22139f048f042127c5d242d4393436a3dcec3cbad145fa4bc",
+      "bytes": 545014
+    },
+    {
+      "name": "capacity-reused",
+      "frame": 934,
+      "sha256": "f0fe3338c5f88f39b89030ee4bf89b275dad920b834e4faf3f250f5183480fd9",
+      "bytes": 545242
+    }
+  ],
+  "states": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "15133bcaa97211db93384d7eb72445ef15c623dc0eebaa5fe3b07750cfa02025",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "b5a1e34f308eeb5cb3f6c47bf0aaca58867471379d2cac026ec48defa92c4331",
+      "objects": 392,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "enemy-before",
+      "frame": 841,
+      "sha256": "619067ebddd95e2c3edbcbca88cd4ff9e150cc66cf681eb17f9bfe80bbbc5fa7",
+      "objects": 392,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "bomb-born",
+      "frame": 842,
+      "sha256": "266e348224d1a75971ea71b36820583f02b1ca8cd035ae6ff47d1a3f09a2c85d",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "human-escaped",
+      "frame": 842,
+      "sha256": "a34807acad5ac6732524ab0765ee6222677caf0775473c4472aa05adafbecbbe",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "enemy-before-detonation",
+      "frame": 912,
+      "sha256": "e8f120e5cb257e990dd43a2f205293360a88fc4b167ac2e0cdffb1c41dcdfc6d",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "enemy-hit",
+      "frame": 913,
+      "sha256": "1c7124b7e312d4fc379680bc75d0dfa1a97dc2c8b4850c0d9664b052d5a91f4e",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-fire",
+      "frame": 933,
+      "sha256": "030bfcd55b6d8acf5b7ed57924387dbe9bd6d1c164f98b6d8974e1c85759785f",
+      "objects": 392,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "capacity-reused",
+      "frame": 934,
+      "sha256": "b867119be371335880bf8cf0742bf8fb4a90923c667af11540662aed55be214d",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "046518188f54886ca7b94e0139fad6196081f17239a2a84ac8d034bba7088cbc",
+  "stderr_sha256": "65f812591f93e78ea14ac9eeef316aee8aab359900de8ceeea5d768e6e5cda54"
+}

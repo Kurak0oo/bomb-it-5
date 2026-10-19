@@ -1,0 +1,252 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-block-pickup-kill-hud-and-win-formula",
+  "case_sha256": "d75725fd6c1f24af09a7038505368d572b1c7d1329fb220544e1f93489fdc360",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "8f71d1ad205da52f9d159d876bc6837bf58b0dab87f5b12fa115c49bcb9c81db"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "2b26bb83ee55c205544b802fa55531bd0ab3b97118e12cfbb02106bc35b44e8b"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "d664feb041df9868854018a367cff0d90d53797ef95a156a0d40914d76f06548"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 862,
+      "sha256": "d477a92185f1dc08d6ed70dbf36f0a4b161d0fafdc06c922f384cd681da7f11b"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 862,
+      "sha256": "55932180bc0ba8386c6cd73a4064ed931ba0b30afbd697d16764ee8e587905d4"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 863,
+      "sha256": "50b9cf29e8c11dc020424ca9b5c1d06dcdcfdd05fbf4f44b4f071d1e504be39c"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-wv8t42wn\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 1134,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "human-block-bomb",
+      "frame": 732,
+      "sha256": "147b553db4d336e579ff94d0a8a577a4e29ebc827e314489b949a35bd588f480",
+      "bytes": 550285
+    },
+    {
+      "name": "block-hud-award",
+      "frame": 862,
+      "sha256": "9185ef3d7571b0d74decc78fd643ae1d1bfc2cbeeec96ba092fc77955f38bd32",
+      "bytes": 543371
+    },
+    {
+      "name": "hammer-picked",
+      "frame": 863,
+      "sha256": "fece68e4d1312e740336161c380bba8584f4af8ee648e8201a7121ce318bec6a",
+      "bytes": 543978
+    },
+    {
+      "name": "last-enemy-target",
+      "frame": 863,
+      "sha256": "07b608c36e3b5ab454e63d2f54a80e2f3aa7db3ae011cddd9caf5e5522b145e4",
+      "bytes": 543666
+    },
+    {
+      "name": "last-enemy-killed",
+      "frame": 954,
+      "sha256": "3b523195f2c0c986a75b2e8738950cbc34f11d7d231b6c8c4ffa41e7ade3da06",
+      "bytes": 492644
+    },
+    {
+      "name": "credited-win-results",
+      "frame": 1134,
+      "sha256": "9bad9d17b2532f9350eeddce9e1f3467b57f255e117da054e90f41ef900b24ca",
+      "bytes": 214301
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6e17fbf40cca34057f3fd2abfee1722abdef4f95873863bb6cf70335c87911e4",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "human-block-bomb",
+      "frame": 732,
+      "sha256": "ccd05ec9069dddb12ded29fb8997cda677987f3977353ecef21e6bee28904e08",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "block-hud-award",
+      "frame": 862,
+      "sha256": "c815645832df98ebbd85a914b086797f33d1455149b1f6599bc026fa4caf260f",
+      "objects": 316,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "hammer-picked",
+      "frame": 863,
+      "sha256": "0b0e93d536a0c8a2d0285bf99ab2b75e85906689a294a1099006b36b4d56f3d1",
+      "objects": 317,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "last-enemy-target",
+      "frame": 863,
+      "sha256": "822b0ba4a9b4af1578f72d04c8c1cc95263aaf8872552101d85f089b539ad3a2",
+      "objects": 317,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "last-enemy-killed",
+      "frame": 954,
+      "sha256": "5205f0619f29f05ad34c017cc8d3c8b6fae68a38f58c877ccdaa541728077755",
+      "objects": 279,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "credited-win-results",
+      "frame": 1134,
+      "sha256": "51b0daf9b3abe2e821f023544c39861cdea2929753475fc76549c29d9de9fade",
+      "objects": 262,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "2e3d3d652fc3d7e017c73a21d1bafc4e78e21779a080def1bfb0213cd79d53f2",
+  "stderr_sha256": "93fa127663098155101b23e61a12ea3c4791cebf576e70f98072c6de12e4bed8"
+}

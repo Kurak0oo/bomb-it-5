@@ -9,6 +9,23 @@ The evidence starts with the hashed publisher build and separates static finding
 - [Edition 5 runtime systems](edition-5-runtime-systems.md): source-traced portals/hazards, protection, drops, scoring, reachable weapon/vehicle effects, AI reconstruction and explicit conversion/parity limits; includes independently extracted rule/animation data.
 - [Edition 5 structure reconstruction](edition-5-structure-reconstruction.md): primary-source startup/ownership/phase/actor/command/weapon/AI/death reconstruction, including newly corroborated bytecode findings.
 - [Reverse-engineering audit and verification gaps](edition-5-reverse-engineering-audit.md): reproducible source/timeline inventory, independent XML comparisons, supplied playback-harness audit and the remaining runtime-reference gate.
+- [Independent original reference session](edition-5-reference-session.md): pinned Windows player build, repeated original Normal Arcade/Cinema entry, legal movement/bomb/explosion, synchronized logs and emulator limits.
+- [Reference trace design](edition-5-reference-trace-design.md): separate read-only player observation and explicit original-method fixtures, source locators and instrumentation limits.
+- [Recovery tooling and build provenance](edition-5-recovery-tooling.md): canonical fourteen-patch player, historical exact patch archives, runtime validation, fixture boundaries and instrumentation corrections.
+- [Reference execution/RNG events](edition-5-reference-events.md): actual calls/draws, bounded buffers, callback skips and failed whole-session observer-equivalence checks.
+- [Ordinary bomb/contact probes](edition-5-bomb-contact-probes.md): legal placement, last lethal/first safe entry, capacity and soft-block changes.
+- [Chain/overlap probes](edition-5-chain-overlap-probes.md): both owner orders, shared Boolean fire cleanup, late laser phase and command replacement.
+- [Movement/portal runtime probes](edition-5-movement-runtime-probes.md): all cardinal directions, four transfers, hazardous arrival, ordinary portal bomb blocking, stationary immunity expiry and paused transit.
+- [Pickup/drop probes](edition-5-pickup-probes.md): actual randomness, upgrade caps, quota/vehicle exhaustion, partial shared-list mutation and timed-spawn bypasses.
+- [Protection/vehicle probes](edition-5-protection-vehicle-probes.md): shield, Invincibility, Car/Moto, contact, expiry, pause and original enemy bomb scoring.
+- [Landmine lifecycle](edition-5-landmine-probes.md): one-use placement, owner departure/contact, protection, external chains, capacity underflow and teardown.
+- [Weapon action recovery](edition-5-weapon-action-recovery.md): directional timelines, actual hits/emissions, control recovery, replacement and host-clock pause behavior.
+- [Weapon interaction/geometry probes](edition-5-weapon-interaction-probes.md): 35 target cases, two-use exhaustion, 88 measured flamer endpoints, hand/gunpoint and source morph/timeline metadata.
+- [Laser portal rays](edition-5-laser-portal-probes.md): empty, occupied and shielded portal traversal, first blocker, single damage pass, beam removal and restored movement.
+- [AI trace plan](edition-5-ai-trace-plan.md) and [AI runtime probes](edition-5-ai-runtime-probes.md): profile/parser quirks, perception/search/ranking, state/route decisions, original controls and all selected weapons.
+- [Death/results runtime probes](edition-5-results-runtime-probes.md): zero-kill victory, simultaneous defeat, retry hearts, HUD versus result totals and game over.
+- [Recovery-to-porting handoff](edition-5-porting-handoff.md): source-to-Godot classifications, accepted adaptations and the ordered fidelity implementation boundary.
+- [Recovery acceptance and verification](edition-5-recovery-verification.md): ticket-by-ticket evidence, independent Standards/Spec findings and fixes, integrity checks and the unchanged 244-check Godot baseline.
 - [First-bomb test excerpt](first-bomb-test-excerpt.md): source-verified CinemaStage1 cells, controlled actor setup and worked blast expectations for the headless slice; not a certified complete map.
 - [Edition 5 movement and visible-board facts](edition-5-movement-and-board.md): continuous original motion, acceleration, collision/lane assistance, bomb walk-off, exact board geometry, portals and remaining occupancy uncertainty. Eight-direction phone rules are a separate adaptation.
 - [CinemaStage1 recorded-board reconstruction](cinema-stage1-recorded-board.md): independently repeated two-frame image audit, corrected cell (14,10), canonical 255-cell CSV and confidence limits. Supersedes the earlier rendered-occupancy uncertainty.

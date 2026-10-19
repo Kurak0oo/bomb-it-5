@@ -1,0 +1,250 @@
+{
+  "name": "original-three-losses-retry-game-over",
+  "origin": "Seed42; original AI stop methods, legal stationary human self-bombs and Space retries, no health/outcome/score writes. Game Over Try Again follows original menu backHandle/GameModel.init, then ordinary default Easy/Random new-session menus.",
+  "actions": [
+    {
+      "command": "seed 42"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "observe_command": "events result-events 20000 zlong.bombit5.gameengine zlong.bombit5.ui zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "bomb-life-3"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "step 285",
+      "capture": "loss-life-2"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 100",
+      "capture": "retry-2-opening"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "bomb-life-2"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "step 285",
+      "capture": "loss-life-1"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 100",
+      "capture": "retry-1-opening"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "bomb-life-1"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "step 285",
+      "capture": "loss-life-0"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "command": "click 530 447"
+    },
+    {
+      "command": "step 30",
+      "capture": "game-over-try-again-settings"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "fresh-character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "fresh-session-opening"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

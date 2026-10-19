@@ -1,0 +1,842 @@
+{
+  "source_swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "seed": 42,
+  "portal_pairs": [
+    {
+      "x": 13,
+      "y": 2,
+      "color": 2,
+      "destination": [
+        3,
+        12
+      ]
+    },
+    {
+      "x": 13,
+      "y": 12,
+      "color": 1,
+      "destination": [
+        3,
+        2
+      ]
+    },
+    {
+      "x": 3,
+      "y": 12,
+      "color": 2,
+      "destination": [
+        13,
+        2
+      ]
+    },
+    {
+      "x": 3,
+      "y": 2,
+      "color": 1,
+      "destination": [
+        13,
+        12
+      ]
+    }
+  ],
+  "transfers": [
+    {
+      "command_id": "0x2857a06a0e0",
+      "source_cell": [
+        3,
+        2
+      ],
+      "target": [
+        13,
+        12
+      ],
+      "first_frame": 729,
+      "first_count": 1,
+      "last_projected_frame": 757,
+      "last_projected_count": 29,
+      "physical_arrival_frame": 758,
+      "arrival_xy": [
+        390.0,
+        360.0
+      ],
+      "transit_positions": [
+        [
+          90.0,
+          67.7
+        ]
+      ],
+      "eligible_during_projected_transit": [
+        false
+      ],
+      "occupancy_at_arrival": [
+        [
+          3,
+          2
+        ]
+      ],
+      "occupancy_next_frame": [
+        [
+          13,
+          12
+        ]
+      ],
+      "eligibility_at_arrival": true,
+      "blink_at_arrival": {
+        "id": "0x2857a069140",
+        "_nvincibilityTimeCount": 30,
+        "_totalFrames": 45
+      },
+      "blink_removed_frame": 775
+    },
+    {
+      "command_id": "0x2857c435fd0",
+      "source_cell": [
+        13,
+        12
+      ],
+      "target": [
+        3,
+        2
+      ],
+      "first_frame": 797,
+      "first_count": 1,
+      "last_projected_frame": 825,
+      "last_projected_count": 29,
+      "physical_arrival_frame": 826,
+      "arrival_xy": [
+        90.0,
+        60.0
+      ],
+      "transit_positions": [
+        [
+          390.0,
+          350.05
+        ]
+      ],
+      "eligible_during_projected_transit": [
+        false
+      ],
+      "occupancy_at_arrival": [
+        [
+          13,
+          12
+        ]
+      ],
+      "occupancy_next_frame": [
+        [
+          3,
+          2
+        ]
+      ],
+      "eligibility_at_arrival": true,
+      "blink_at_arrival": {
+        "id": "0x2857c435670",
+        "_nvincibilityTimeCount": 30,
+        "_totalFrames": 45
+      },
+      "blink_removed_frame": 843
+    },
+    {
+      "command_id": "0x2857c45add0",
+      "source_cell": [
+        13,
+        2
+      ],
+      "target": [
+        3,
+        12
+      ],
+      "first_frame": 857,
+      "first_count": 1,
+      "last_projected_frame": 885,
+      "last_projected_count": 29,
+      "physical_arrival_frame": 886,
+      "arrival_xy": [
+        90.0,
+        360.0
+      ],
+      "transit_positions": [
+        [
+          390.0,
+          69.55
+        ]
+      ],
+      "eligible_during_projected_transit": [
+        false
+      ],
+      "occupancy_at_arrival": [
+        [
+          13,
+          2
+        ]
+      ],
+      "occupancy_next_frame": [
+        [
+          3,
+          12
+        ]
+      ],
+      "eligibility_at_arrival": true,
+      "blink_at_arrival": {
+        "id": "0x2857c45b910",
+        "_nvincibilityTimeCount": 30,
+        "_totalFrames": 45
+      },
+      "blink_removed_frame": 903
+    },
+    {
+      "command_id": "0x2857c446b50",
+      "source_cell": [
+        3,
+        12
+      ],
+      "target": [
+        13,
+        2
+      ],
+      "first_frame": 925,
+      "first_count": 1,
+      "last_projected_frame": 953,
+      "last_projected_count": 29,
+      "physical_arrival_frame": 954,
+      "arrival_xy": [
+        390.0,
+        60.0
+      ],
+      "transit_positions": [
+        [
+          90.0,
+          349.65
+        ]
+      ],
+      "eligible_during_projected_transit": [
+        false
+      ],
+      "occupancy_at_arrival": [
+        [
+          3,
+          12
+        ]
+      ],
+      "occupancy_next_frame": [
+        [
+          13,
+          2
+        ]
+      ],
+      "eligibility_at_arrival": true,
+      "blink_at_arrival": {
+        "id": "0x2857c446bf0",
+        "_nvincibilityTimeCount": 30,
+        "_totalFrames": 45
+      },
+      "blink_removed_frame": null
+    }
+  ],
+  "events": {
+    "movement": {
+      "event_records": 13852,
+      "dropped": 0,
+      "overflow": 0,
+      "template_calls": {},
+      "human_fire_checks": [
+        728,
+        739,
+        759,
+        771,
+        793
+      ],
+      "portal_alpha": []
+    },
+    "portal": {
+      "event_records": 16726,
+      "dropped": 0,
+      "overflow": 0,
+      "template_calls": {},
+      "human_fire_checks": [
+        728,
+        759,
+        785,
+        796,
+        827,
+        845,
+        848,
+        856,
+        887,
+        912,
+        924,
+        955
+      ],
+      "portal_alpha": [
+        {
+          "frame": 729,
+          "value": 0.9714285714285714
+        },
+        {
+          "frame": 730,
+          "value": 0.9428571428571428
+        },
+        {
+          "frame": 731,
+          "value": 0.9142857142857143
+        },
+        {
+          "frame": 732,
+          "value": 0.8857142857142857
+        },
+        {
+          "frame": 733,
+          "value": 0.8571428571428572
+        },
+        {
+          "frame": 734,
+          "value": 0.8285714285714285
+        },
+        {
+          "frame": 735,
+          "value": 0.8
+        },
+        {
+          "frame": 736,
+          "value": 0.7714285714285715
+        },
+        {
+          "frame": 737,
+          "value": 0.7428571428571429
+        },
+        {
+          "frame": 738,
+          "value": 0.7142857142857143
+        },
+        {
+          "frame": 739,
+          "value": 0.6857142857142857
+        },
+        {
+          "frame": 740,
+          "value": 0.6571428571428571
+        },
+        {
+          "frame": 741,
+          "value": 0.6285714285714286
+        },
+        {
+          "frame": 742,
+          "value": 0.6
+        },
+        {
+          "frame": 743,
+          "value": 0.5714285714285714
+        },
+        {
+          "frame": 744,
+          "value": 0.5428571428571429
+        },
+        {
+          "frame": 745,
+          "value": 0.5142857142857142
+        },
+        {
+          "frame": 746,
+          "value": 0.48571428571428577
+        },
+        {
+          "frame": 747,
+          "value": 0.4571428571428572
+        },
+        {
+          "frame": 748,
+          "value": 0.4285714285714286
+        },
+        {
+          "frame": 749,
+          "value": 0.4
+        },
+        {
+          "frame": 750,
+          "value": 0.37142857142857144
+        },
+        {
+          "frame": 751,
+          "value": 0.34285714285714286
+        },
+        {
+          "frame": 752,
+          "value": 0.3142857142857143
+        },
+        {
+          "frame": 753,
+          "value": 0.2857142857142857
+        },
+        {
+          "frame": 754,
+          "value": 0.2571428571428571
+        },
+        {
+          "frame": 755,
+          "value": 0.22857142857142854
+        },
+        {
+          "frame": 756,
+          "value": 0.19999999999999996
+        },
+        {
+          "frame": 757,
+          "value": 0.17142857142857137
+        },
+        {
+          "frame": 758,
+          "value": 0.1428571428571429
+        },
+        {
+          "frame": 797,
+          "value": 0.9714285714285714
+        },
+        {
+          "frame": 798,
+          "value": 0.9428571428571428
+        },
+        {
+          "frame": 799,
+          "value": 0.9142857142857143
+        },
+        {
+          "frame": 800,
+          "value": 0.8857142857142857
+        },
+        {
+          "frame": 801,
+          "value": 0.8571428571428572
+        },
+        {
+          "frame": 802,
+          "value": 0.8285714285714285
+        },
+        {
+          "frame": 803,
+          "value": 0.8
+        },
+        {
+          "frame": 804,
+          "value": 0.7714285714285715
+        },
+        {
+          "frame": 805,
+          "value": 0.7428571428571429
+        },
+        {
+          "frame": 806,
+          "value": 0.7142857142857143
+        },
+        {
+          "frame": 807,
+          "value": 0.6857142857142857
+        },
+        {
+          "frame": 808,
+          "value": 0.6571428571428571
+        },
+        {
+          "frame": 809,
+          "value": 0.6285714285714286
+        },
+        {
+          "frame": 810,
+          "value": 0.6
+        },
+        {
+          "frame": 811,
+          "value": 0.5714285714285714
+        },
+        {
+          "frame": 812,
+          "value": 0.5428571428571429
+        },
+        {
+          "frame": 813,
+          "value": 0.5142857142857142
+        },
+        {
+          "frame": 814,
+          "value": 0.48571428571428577
+        },
+        {
+          "frame": 815,
+          "value": 0.4571428571428572
+        },
+        {
+          "frame": 816,
+          "value": 0.4285714285714286
+        },
+        {
+          "frame": 817,
+          "value": 0.4
+        },
+        {
+          "frame": 818,
+          "value": 0.37142857142857144
+        },
+        {
+          "frame": 819,
+          "value": 0.34285714285714286
+        },
+        {
+          "frame": 820,
+          "value": 0.3142857142857143
+        },
+        {
+          "frame": 821,
+          "value": 0.2857142857142857
+        },
+        {
+          "frame": 822,
+          "value": 0.2571428571428571
+        },
+        {
+          "frame": 823,
+          "value": 0.22857142857142854
+        },
+        {
+          "frame": 824,
+          "value": 0.19999999999999996
+        },
+        {
+          "frame": 825,
+          "value": 0.17142857142857137
+        },
+        {
+          "frame": 826,
+          "value": 0.1428571428571429
+        },
+        {
+          "frame": 857,
+          "value": 0.9714285714285714
+        },
+        {
+          "frame": 858,
+          "value": 0.9428571428571428
+        },
+        {
+          "frame": 859,
+          "value": 0.9142857142857143
+        },
+        {
+          "frame": 860,
+          "value": 0.8857142857142857
+        },
+        {
+          "frame": 861,
+          "value": 0.8571428571428572
+        },
+        {
+          "frame": 862,
+          "value": 0.8285714285714285
+        },
+        {
+          "frame": 863,
+          "value": 0.8
+        },
+        {
+          "frame": 864,
+          "value": 0.7714285714285715
+        },
+        {
+          "frame": 865,
+          "value": 0.7428571428571429
+        },
+        {
+          "frame": 866,
+          "value": 0.7142857142857143
+        },
+        {
+          "frame": 867,
+          "value": 0.6857142857142857
+        },
+        {
+          "frame": 868,
+          "value": 0.6571428571428571
+        },
+        {
+          "frame": 869,
+          "value": 0.6285714285714286
+        },
+        {
+          "frame": 870,
+          "value": 0.6
+        },
+        {
+          "frame": 871,
+          "value": 0.5714285714285714
+        },
+        {
+          "frame": 872,
+          "value": 0.5428571428571429
+        },
+        {
+          "frame": 873,
+          "value": 0.5142857142857142
+        },
+        {
+          "frame": 874,
+          "value": 0.48571428571428577
+        },
+        {
+          "frame": 875,
+          "value": 0.4571428571428572
+        },
+        {
+          "frame": 876,
+          "value": 0.4285714285714286
+        },
+        {
+          "frame": 877,
+          "value": 0.4
+        },
+        {
+          "frame": 878,
+          "value": 0.37142857142857144
+        },
+        {
+          "frame": 879,
+          "value": 0.34285714285714286
+        },
+        {
+          "frame": 880,
+          "value": 0.3142857142857143
+        },
+        {
+          "frame": 881,
+          "value": 0.2857142857142857
+        },
+        {
+          "frame": 882,
+          "value": 0.2571428571428571
+        },
+        {
+          "frame": 883,
+          "value": 0.22857142857142854
+        },
+        {
+          "frame": 884,
+          "value": 0.19999999999999996
+        },
+        {
+          "frame": 885,
+          "value": 0.17142857142857137
+        },
+        {
+          "frame": 886,
+          "value": 0.1428571428571429
+        },
+        {
+          "frame": 925,
+          "value": 0.9714285714285714
+        },
+        {
+          "frame": 926,
+          "value": 0.9428571428571428
+        },
+        {
+          "frame": 927,
+          "value": 0.9142857142857143
+        },
+        {
+          "frame": 928,
+          "value": 0.8857142857142857
+        },
+        {
+          "frame": 929,
+          "value": 0.8571428571428572
+        },
+        {
+          "frame": 930,
+          "value": 0.8285714285714285
+        },
+        {
+          "frame": 931,
+          "value": 0.8
+        },
+        {
+          "frame": 932,
+          "value": 0.7714285714285715
+        },
+        {
+          "frame": 933,
+          "value": 0.7428571428571429
+        },
+        {
+          "frame": 934,
+          "value": 0.7142857142857143
+        },
+        {
+          "frame": 935,
+          "value": 0.6857142857142857
+        },
+        {
+          "frame": 936,
+          "value": 0.6571428571428571
+        },
+        {
+          "frame": 937,
+          "value": 0.6285714285714286
+        },
+        {
+          "frame": 938,
+          "value": 0.6
+        },
+        {
+          "frame": 939,
+          "value": 0.5714285714285714
+        },
+        {
+          "frame": 940,
+          "value": 0.5428571428571429
+        },
+        {
+          "frame": 941,
+          "value": 0.5142857142857142
+        },
+        {
+          "frame": 942,
+          "value": 0.48571428571428577
+        },
+        {
+          "frame": 943,
+          "value": 0.4571428571428572
+        },
+        {
+          "frame": 944,
+          "value": 0.4285714285714286
+        },
+        {
+          "frame": 945,
+          "value": 0.4
+        },
+        {
+          "frame": 946,
+          "value": 0.37142857142857144
+        },
+        {
+          "frame": 947,
+          "value": 0.34285714285714286
+        },
+        {
+          "frame": 948,
+          "value": 0.3142857142857143
+        },
+        {
+          "frame": 949,
+          "value": 0.2857142857142857
+        },
+        {
+          "frame": 950,
+          "value": 0.2571428571428571
+        },
+        {
+          "frame": 951,
+          "value": 0.22857142857142854
+        },
+        {
+          "frame": 952,
+          "value": 0.19999999999999996
+        },
+        {
+          "frame": 953,
+          "value": 0.17142857142857137
+        },
+        {
+          "frame": 954,
+          "value": 0.1428571428571429
+        }
+      ]
+    },
+    "template": {
+      "event_records": 451,
+      "dropped": 0,
+      "overflow": 0,
+      "template_calls": {
+        "zlong.bombit5.maps.mapData::CinemaMapData/init()": 1,
+        "zlong.bombit5.maps.mapData::CinemaMapData/normalThree()": 1,
+        "zlong.bombit5.maps.mapData::CinemaMapData/setData()": 1
+      },
+      "human_fire_checks": [],
+      "portal_alpha": []
+    }
+  },
+  "screenshots": [
+    {
+      "file": "motion-opening-board.png",
+      "bytes": 551097,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5"
+    },
+    {
+      "file": "motion-corridor-aligned.png",
+      "bytes": 551413,
+      "sha256": "3caedc1b81e9857203fe058bb2924489ab2593e97f22758ade1f90f65d7374e8"
+    },
+    {
+      "file": "motion-bomb-departed.png",
+      "bytes": 548482,
+      "sha256": "5add59ba31876892778897e36b56a7e08a53dcb23bda96a6723aba5dfebc3c2b"
+    },
+    {
+      "file": "motion-bomb-reentry-blocked.png",
+      "bytes": 548430,
+      "sha256": "f8181e1f33b8724b8c4c5789b916959273bff18283bbcfefa4388a28337fd122"
+    },
+    {
+      "file": "portals-pair1-neighbor.png",
+      "bytes": 550791,
+      "sha256": "cc0bd0676e075d616a958c23f31bfa4f42789c9e301e778afaeb9aaea3275ba0"
+    },
+    {
+      "file": "portals-pair1-transit-frame1.png",
+      "bytes": 549666,
+      "sha256": "17454fa7176d42e5560eba13ec095e9a99db32821859a6c81b277ceafdfbd627"
+    },
+    {
+      "file": "portals-pair1-controls-blocked.png",
+      "bytes": 549337,
+      "sha256": "277d293b8bc6b9066518e1d0c6823001f7fb9b595f844b3ff2ebf49509332d4f"
+    },
+    {
+      "file": "portals-pair1-physical-arrival.png",
+      "bytes": 551064,
+      "sha256": "6bf44501caf435461b7e8dabd7dc4059bb2adfdd07d846435d887029cc60efb5"
+    },
+    {
+      "file": "portals-pair1-latch-idle.png",
+      "bytes": 550324,
+      "sha256": "b204bbb8fea1fa3235ea549c1a5e5135dabcaf670198ec6920c5dc9e9ac80f6e"
+    },
+    {
+      "file": "portals-pair1-exited.png",
+      "bytes": 548600,
+      "sha256": "824694a17919668935d56b484f6c4e2205c4d5ea87a36d80294ca508f42712b1"
+    },
+    {
+      "file": "portals-pair2-neighbor.png",
+      "bytes": 542547,
+      "sha256": "3629350384ee1bf1ce48349711d2e57350fbbe3cbc7e81e7411e37aac76faf06"
+    },
+    {
+      "file": "portals-pair2-physical-arrival.png",
+      "bytes": 540495,
+      "sha256": "cf4b90c0a46b5a7c48f8ae70520e29e1a24cb38181c82ab0a78b87b4dc35c2ce"
+    },
+    {
+      "file": "portals-pair2-return-arrived.png",
+      "bytes": 540745,
+      "sha256": "a6bf44865ed9be821e912080e3ecfbc98f936d671d31e55556ba3746981f31be"
+    }
+  ],
+  "motion_frames": 90,
+  "portal_frames": 244,
+  "limits": [
+    "Original Ruffle observations; native Flash comparison not established.",
+    "Seed, AI stop and relocation are explicit research fixtures.",
+    "No injected portal fire or damaging weapon contact in transit.",
+    "Raw graphs remain in ignored run directories."
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "name": "portal-command-replacement",
+  "actions": [
+    {
+      "command": "seed 12345"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 5,
+        "y": 4
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 9,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 13,
+        "y": 4
+      }
+    },
+    {
+      "command": "step 100",
+      "capture": "spawn-protection-finished"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "shield"
+      }
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "trace-focus frames"
+    },
+    {
+      "command": "events events 50000 zlong.bombit5.gameengine::GameEngine zlong.bombit5.bombs zlong.bombit5.maps zlong.bombit5.commands ShootLaserCommand LaserEndCommand"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 71",
+      "capture": "shield-immunity"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 3,
+        "y": 1
+      }
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku down",
+      "capture": "portal-replacement"
+    },
+    {
+      "command": "step 35",
+      "capture": "portal-arrival"
+    },
+    {
+      "command": "step 15",
+      "capture": "commands-finished"
+    },
+    {
+      "command": "events off"
+    },
+    {
+      "command": "trace-focus off"
+    }
+  ]
+}

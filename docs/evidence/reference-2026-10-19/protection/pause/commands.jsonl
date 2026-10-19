@@ -1,0 +1,67 @@
+{"command": "seed 12345", "frame": 0, "player_wall_ms": 0, "fps_setting": 30.0, "host_before_ns": 240960937000000, "host_after_ns": 240961531000000}
+{"command": "step 301", "frame": 301, "player_wall_ms": 310, "fps_setting": 35.0, "host_before_ns": 240961531000000, "host_after_ns": 240961843000000}
+{"command": "click 349 440", "frame": 301, "player_wall_ms": 312, "fps_setting": 35.0, "host_before_ns": 240961843000000, "host_after_ns": 240961843000000}
+{"command": "step 240", "frame": 541, "player_wall_ms": 438, "fps_setting": 35.0, "host_before_ns": 240961843000000, "host_after_ns": 240961968000000}
+{"command": "click 569 203", "frame": 541, "player_wall_ms": 450, "fps_setting": 35.0, "host_before_ns": 240961968000000, "host_after_ns": 240961984000000}
+{"command": "step 30", "frame": 571, "player_wall_ms": 460, "fps_setting": 35.0, "host_before_ns": 240961984000000, "host_after_ns": 240962000000000}
+{"command": "click 140 180", "frame": 571, "player_wall_ms": 461, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962000000000}
+{"command": "step 5", "frame": 576, "player_wall_ms": 463, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962000000000}
+{"command": "click 255 275", "frame": 576, "player_wall_ms": 464, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962000000000}
+{"command": "step 5", "frame": 581, "player_wall_ms": 466, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962000000000}
+{"command": "click 255 312", "frame": 581, "player_wall_ms": 467, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962000000000}
+{"command": "step 5", "frame": 586, "player_wall_ms": 469, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962000000000}
+{"command": "click 415 428", "frame": 586, "player_wall_ms": 470, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962000000000}
+{"command": "step 10", "frame": 596, "player_wall_ms": 476, "fps_setting": 35.0, "host_before_ns": 240962000000000, "host_after_ns": 240962015000000}
+{"command": "click 470 389", "frame": 596, "player_wall_ms": 476, "fps_setting": 35.0, "host_before_ns": 240962015000000, "host_after_ns": 240962015000000}
+{"command": "step 2", "frame": 598, "player_wall_ms": 477, "fps_setting": 35.0, "host_before_ns": 240962015000000, "host_after_ns": 240962015000000}
+{"command": "click 335 355", "frame": 598, "player_wall_ms": 479, "fps_setting": 35.0, "host_before_ns": 240962015000000, "host_after_ns": 240962015000000}
+{"command": "step 2", "frame": 600, "player_wall_ms": 480, "fps_setting": 35.0, "host_before_ns": 240962015000000, "host_after_ns": 240962015000000}
+{"command": "click 533 477", "frame": 600, "player_wall_ms": 492, "fps_setting": 35.0, "host_before_ns": 240962015000000, "host_after_ns": 240962031000000}
+{"command": "step 40", "frame": 640, "player_wall_ms": 529, "fps_setting": 35.0, "host_before_ns": 240962031000000, "host_after_ns": 240962062000000}
+{"command": "click 528 475", "frame": 640, "player_wall_ms": 572, "fps_setting": 35.0, "host_before_ns": 240962062000000, "host_after_ns": 240962109000000}
+{"command": "step 81", "frame": 721, "player_wall_ms": 1008, "fps_setting": 35.0, "host_before_ns": 240962109000000, "host_after_ns": 240962546000000}
+{"command": "shot opening-board.png", "frame": 721, "player_wall_ms": 1096, "fps_setting": 35.0, "host_before_ns": 240962546000000, "host_after_ns": 240962625000000}
+{"command": "focus opening-board.json", "frame": 721, "player_wall_ms": 1481, "fps_setting": 35.0, "host_before_ns": 240962640000000, "host_after_ns": 240963015000000}
+{"command": "fixture fixture-0000.json", "frame": 721, "player_wall_ms": 1496, "fps_setting": 35.0, "host_before_ns": 240963031000000, "host_after_ns": 240963031000000}
+{"command": "fixture fixture-0001.json", "frame": 721, "player_wall_ms": 1506, "fps_setting": 35.0, "host_before_ns": 240963031000000, "host_after_ns": 240963046000000}
+{"command": "fixture fixture-0002.json", "frame": 721, "player_wall_ms": 1516, "fps_setting": 35.0, "host_before_ns": 240963046000000, "host_after_ns": 240963046000000}
+{"command": "fixture fixture-0003.json", "frame": 721, "player_wall_ms": 1527, "fps_setting": 35.0, "host_before_ns": 240963062000000, "host_after_ns": 240963062000000}
+{"command": "fixture fixture-0004.json", "frame": 721, "player_wall_ms": 1538, "fps_setting": 35.0, "host_before_ns": 240963062000000, "host_after_ns": 240963078000000}
+{"command": "fixture fixture-0005.json", "frame": 721, "player_wall_ms": 1547, "fps_setting": 35.0, "host_before_ns": 240963078000000, "host_after_ns": 240963078000000}
+{"command": "step 100", "frame": 821, "player_wall_ms": 1789, "fps_setting": 35.0, "host_before_ns": 240963093000000, "host_after_ns": 240963328000000}
+{"command": "shot spawn-protection-finished.png", "frame": 821, "player_wall_ms": 1820, "fps_setting": 35.0, "host_before_ns": 240963328000000, "host_after_ns": 240963359000000}
+{"command": "focus spawn-protection-finished.json", "frame": 821, "player_wall_ms": 1854, "fps_setting": 35.0, "host_before_ns": 240963359000000, "host_after_ns": 240963390000000}
+{"command": "fixture fixture-0006.json", "frame": 821, "player_wall_ms": 1876, "fps_setting": 35.0, "host_before_ns": 240963406000000, "host_after_ns": 240963406000000}
+{"command": "step 35", "frame": 856, "player_wall_ms": 1948, "fps_setting": 35.0, "host_before_ns": 240963421000000, "host_after_ns": 240963484000000}
+{"command": "shot before-pause.png", "frame": 856, "player_wall_ms": 1977, "fps_setting": 35.0, "host_before_ns": 240963484000000, "host_after_ns": 240963515000000}
+{"command": "focus before-pause.json", "frame": 856, "player_wall_ms": 2008, "fps_setting": 35.0, "host_before_ns": 240963515000000, "host_after_ns": 240963546000000}
+{"command": "trace-focus pause", "frame": 856, "player_wall_ms": 2020, "fps_setting": 35.0, "host_before_ns": 240963546000000, "host_after_ns": 240963546000000}
+{"command": "kd p", "frame": 856, "player_wall_ms": 2021, "fps_setting": 35.0, "host_before_ns": 240963546000000, "host_after_ns": 240963546000000}
+{"command": "step 1", "frame": 857, "player_wall_ms": 2046, "fps_setting": 35.0, "host_before_ns": 240963546000000, "host_after_ns": 240963578000000}
+{"command": "ku p", "frame": 857, "player_wall_ms": 2047, "fps_setting": 35.0, "host_before_ns": 240963578000000, "host_after_ns": 240963578000000}
+{"command": "step 9", "frame": 866, "player_wall_ms": 2285, "fps_setting": 35.0, "host_before_ns": 240963578000000, "host_after_ns": 240963812000000}
+{"command": "shot paused-start.png", "frame": 866, "player_wall_ms": 2329, "fps_setting": 35.0, "host_before_ns": 240963812000000, "host_after_ns": 240963859000000}
+{"command": "focus paused-start.json", "frame": 866, "player_wall_ms": 2359, "fps_setting": 35.0, "host_before_ns": 240963875000000, "host_after_ns": 240963890000000}
+{"command": "step 30", "frame": 896, "player_wall_ms": 3171, "fps_setting": 35.0, "host_before_ns": 240963906000000, "host_after_ns": 240964703000000}
+{"command": "shot paused-later.png", "frame": 896, "player_wall_ms": 3188, "fps_setting": 35.0, "host_before_ns": 240964703000000, "host_after_ns": 240964718000000}
+{"command": "focus paused-later.json", "frame": 896, "player_wall_ms": 3216, "fps_setting": 35.0, "host_before_ns": 240964734000000, "host_after_ns": 240964750000000}
+{"command": "kd space", "frame": 896, "player_wall_ms": 3229, "fps_setting": 35.0, "host_before_ns": 240964765000000, "host_after_ns": 240964765000000}
+{"command": "step 1", "frame": 897, "player_wall_ms": 3255, "fps_setting": 35.0, "host_before_ns": 240964765000000, "host_after_ns": 240964781000000}
+{"command": "ku space", "frame": 897, "player_wall_ms": 3255, "fps_setting": 35.0, "host_before_ns": 240964781000000, "host_after_ns": 240964781000000}
+{"command": "step 4", "frame": 901, "player_wall_ms": 3359, "fps_setting": 35.0, "host_before_ns": 240964781000000, "host_after_ns": 240964890000000}
+{"command": "shot resumed.png", "frame": 901, "player_wall_ms": 3381, "fps_setting": 35.0, "host_before_ns": 240964890000000, "host_after_ns": 240964921000000}
+{"command": "focus resumed.json", "frame": 901, "player_wall_ms": 3411, "fps_setting": 35.0, "host_before_ns": 240964921000000, "host_after_ns": 240964937000000}
+{"command": "kd p", "frame": 901, "player_wall_ms": 3422, "fps_setting": 35.0, "host_before_ns": 240964953000000, "host_after_ns": 240964953000000}
+{"command": "step 1", "frame": 902, "player_wall_ms": 3447, "fps_setting": 35.0, "host_before_ns": 240964953000000, "host_after_ns": 240964984000000}
+{"command": "ku p", "frame": 902, "player_wall_ms": 3448, "fps_setting": 35.0, "host_before_ns": 240964984000000, "host_after_ns": 240964984000000}
+{"command": "step 9", "frame": 911, "player_wall_ms": 3700, "fps_setting": 35.0, "host_before_ns": 240964984000000, "host_after_ns": 240965234000000}
+{"command": "shot paused-for-menu.png", "frame": 911, "player_wall_ms": 3737, "fps_setting": 35.0, "host_before_ns": 240965234000000, "host_after_ns": 240965265000000}
+{"command": "focus paused-for-menu.json", "frame": 911, "player_wall_ms": 3767, "fps_setting": 35.0, "host_before_ns": 240965281000000, "host_after_ns": 240965296000000}
+{"command": "trace-focus off", "frame": 911, "player_wall_ms": 3779, "fps_setting": 35.0, "host_before_ns": 240965312000000, "host_after_ns": 240965312000000}
+{"command": "click 234 414", "frame": 911, "player_wall_ms": 3793, "fps_setting": 35.0, "host_before_ns": 240965312000000, "host_after_ns": 240965328000000}
+{"command": "step 20", "frame": 931, "player_wall_ms": 3825, "fps_setting": 35.0, "host_before_ns": 240965328000000, "host_after_ns": 240965359000000}
+{"command": "shot main-menu.png", "frame": 931, "player_wall_ms": 3880, "fps_setting": 35.0, "host_before_ns": 240965359000000, "host_after_ns": 240965421000000}
+{"command": "focus main-menu.json", "frame": 931, "player_wall_ms": 3920, "fps_setting": 35.0, "host_before_ns": 240965421000000, "host_after_ns": 240965453000000}
+{"command": "step 100", "frame": 1031, "player_wall_ms": 4034, "fps_setting": 35.0, "host_before_ns": 240965453000000, "host_after_ns": 240965562000000}
+{"command": "shot after-menu-idle.png", "frame": 1031, "player_wall_ms": 4057, "fps_setting": 35.0, "host_before_ns": 240965562000000, "host_after_ns": 240965593000000}
+{"command": "focus after-menu-idle.json", "frame": 1031, "player_wall_ms": 4065, "fps_setting": 35.0, "host_before_ns": 240965593000000, "host_after_ns": 240965593000000}

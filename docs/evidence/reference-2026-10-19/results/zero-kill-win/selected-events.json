@@ -1,0 +1,6574 @@
+[
+  {
+    "call": 344,
+    "enter_frame": 723,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21516050ab0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Down",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 723,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 430,
+    "enter_frame": 724,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21516050ab0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Down",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 724,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 642,
+    "enter_frame": 724,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21516056a50",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Up",
+        "utf16_length": 3,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 724,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 748,
+    "enter_frame": 725,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21516056a50",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Up",
+        "utf16_length": 3,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 725,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 1662,
+    "enter_frame": 735,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21516050ab0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Down",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 735,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 1782,
+    "enter_frame": 736,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21516056a50",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Up",
+        "utf16_length": 3,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 736,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5621,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/execute()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5622,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine::AIPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5623,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5624,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/kill()",
+    "receiver": {
+      "$ref": "0x2151604def0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5625,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x2151604def0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5633,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x2151604def0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5662,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get boxPoint()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 5663,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set boxPoint()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5664,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 5665,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5733,
+    "enter_frame": 785,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 785,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5796,
+    "enter_frame": 786,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 786,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5814,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/execute()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5815,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine::AIPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5816,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5817,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/kill()",
+    "receiver": {
+      "$ref": "0x215160542f0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5818,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x215160542f0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5826,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x215160542f0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5854,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get boxPoint()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 5855,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set boxPoint()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5856,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 5857,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5907,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5909,
+    "enter_frame": 787,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 787,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5952,
+    "enter_frame": 788,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 788,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5954,
+    "enter_frame": 788,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 788,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5996,
+    "enter_frame": 789,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 789,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 5998,
+    "enter_frame": 789,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 789,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6041,
+    "enter_frame": 790,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 790,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6043,
+    "enter_frame": 790,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 790,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6085,
+    "enter_frame": 791,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 791,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6087,
+    "enter_frame": 791,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 791,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6129,
+    "enter_frame": 792,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 792,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6131,
+    "enter_frame": 792,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 792,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6175,
+    "enter_frame": 793,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 793,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6177,
+    "enter_frame": 793,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 793,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6195,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/execute()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6196,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.gameengine::AIPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6197,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6198,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/kill()",
+    "receiver": {
+      "$ref": "0x21516059610",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6199,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x21516059610",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6207,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x21516059610",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6264,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6266,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6268,
+    "enter_frame": 794,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 794,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6303,
+    "enter_frame": 795,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 795,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6305,
+    "enter_frame": 795,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 795,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6307,
+    "enter_frame": 795,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 795,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6336,
+    "enter_frame": 796,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 796,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6338,
+    "enter_frame": 796,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 796,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6340,
+    "enter_frame": 796,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 796,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6368,
+    "enter_frame": 797,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 797,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6370,
+    "enter_frame": 797,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 797,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6372,
+    "enter_frame": 797,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 797,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6396,
+    "enter_frame": 798,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 798,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6398,
+    "enter_frame": 798,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 798,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6400,
+    "enter_frame": 798,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 798,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6423,
+    "enter_frame": 799,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 799,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6425,
+    "enter_frame": 799,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 799,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6427,
+    "enter_frame": 799,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 799,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6450,
+    "enter_frame": 800,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 800,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6452,
+    "enter_frame": 800,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 800,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6454,
+    "enter_frame": 800,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 800,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6480,
+    "enter_frame": 801,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 801,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6482,
+    "enter_frame": 801,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 801,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6484,
+    "enter_frame": 801,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 801,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6510,
+    "enter_frame": 802,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 802,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6512,
+    "enter_frame": 802,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 802,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6514,
+    "enter_frame": 802,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 802,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6537,
+    "enter_frame": 803,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 803,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6539,
+    "enter_frame": 803,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 803,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6541,
+    "enter_frame": 803,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 803,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6569,
+    "enter_frame": 804,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 804,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6571,
+    "enter_frame": 804,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 804,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6573,
+    "enter_frame": 804,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 804,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6596,
+    "enter_frame": 805,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 805,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6598,
+    "enter_frame": 805,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 805,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6600,
+    "enter_frame": 805,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 805,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6624,
+    "enter_frame": 806,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 806,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6626,
+    "enter_frame": 806,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 806,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6628,
+    "enter_frame": 806,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 806,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6651,
+    "enter_frame": 807,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 807,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6653,
+    "enter_frame": 807,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 807,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6655,
+    "enter_frame": 807,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 807,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6679,
+    "enter_frame": 808,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 808,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6681,
+    "enter_frame": 808,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 808,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6683,
+    "enter_frame": 808,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 808,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6706,
+    "enter_frame": 809,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 809,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6708,
+    "enter_frame": 809,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 809,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6710,
+    "enter_frame": 809,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 809,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6734,
+    "enter_frame": 810,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 810,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6736,
+    "enter_frame": 810,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 810,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6738,
+    "enter_frame": 810,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 810,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6764,
+    "enter_frame": 811,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 811,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6766,
+    "enter_frame": 811,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 811,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6768,
+    "enter_frame": 811,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 811,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6791,
+    "enter_frame": 812,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 812,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6793,
+    "enter_frame": 812,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 812,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6795,
+    "enter_frame": 812,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 812,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6818,
+    "enter_frame": 813,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 813,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6820,
+    "enter_frame": 813,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 813,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6822,
+    "enter_frame": 813,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 813,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6846,
+    "enter_frame": 814,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 814,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6848,
+    "enter_frame": 814,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 814,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6850,
+    "enter_frame": 814,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 814,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6873,
+    "enter_frame": 815,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 815,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6875,
+    "enter_frame": 815,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 815,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6877,
+    "enter_frame": 815,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 815,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6900,
+    "enter_frame": 816,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 816,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6902,
+    "enter_frame": 816,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 816,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6904,
+    "enter_frame": 816,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 816,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6927,
+    "enter_frame": 817,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 817,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6929,
+    "enter_frame": 817,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 817,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6931,
+    "enter_frame": 817,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 817,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6957,
+    "enter_frame": 818,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 818,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6959,
+    "enter_frame": 818,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 818,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6961,
+    "enter_frame": 818,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 818,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6984,
+    "enter_frame": 819,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 819,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6986,
+    "enter_frame": 819,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 819,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 6988,
+    "enter_frame": 819,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 819,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7011,
+    "enter_frame": 820,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 820,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7013,
+    "enter_frame": 820,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 820,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7015,
+    "enter_frame": 820,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 820,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7038,
+    "enter_frame": 821,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 821,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7040,
+    "enter_frame": 821,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 821,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7042,
+    "enter_frame": 821,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 821,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7066,
+    "enter_frame": 822,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 822,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7068,
+    "enter_frame": 822,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 822,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7070,
+    "enter_frame": 822,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 822,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7093,
+    "enter_frame": 823,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 823,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7095,
+    "enter_frame": 823,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 823,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7097,
+    "enter_frame": 823,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 823,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7120,
+    "enter_frame": 824,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 824,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7122,
+    "enter_frame": 824,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 824,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7124,
+    "enter_frame": 824,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 824,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7147,
+    "enter_frame": 825,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 825,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7149,
+    "enter_frame": 825,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 825,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7151,
+    "enter_frame": 825,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 825,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7175,
+    "enter_frame": 826,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 826,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7177,
+    "enter_frame": 826,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 826,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7179,
+    "enter_frame": 826,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 826,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7202,
+    "enter_frame": 827,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 827,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7204,
+    "enter_frame": 827,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 827,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7206,
+    "enter_frame": 827,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 827,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7229,
+    "enter_frame": 828,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 828,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7231,
+    "enter_frame": 828,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 828,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7233,
+    "enter_frame": 828,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 828,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7256,
+    "enter_frame": 829,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 829,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7258,
+    "enter_frame": 829,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 829,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7260,
+    "enter_frame": 829,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 829,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7284,
+    "enter_frame": 830,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 830,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7286,
+    "enter_frame": 830,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 830,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7288,
+    "enter_frame": 830,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 830,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7311,
+    "enter_frame": 831,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 831,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7313,
+    "enter_frame": 831,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 831,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7315,
+    "enter_frame": 831,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 831,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7338,
+    "enter_frame": 832,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 832,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7340,
+    "enter_frame": 832,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 832,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7342,
+    "enter_frame": 832,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 832,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7365,
+    "enter_frame": 833,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 833,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7367,
+    "enter_frame": 833,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 833,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7369,
+    "enter_frame": 833,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 833,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7393,
+    "enter_frame": 834,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 834,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7395,
+    "enter_frame": 834,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 834,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7397,
+    "enter_frame": 834,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 834,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7420,
+    "enter_frame": 835,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 835,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7422,
+    "enter_frame": 835,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 835,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7424,
+    "enter_frame": 835,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 835,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7447,
+    "enter_frame": 836,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 836,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7449,
+    "enter_frame": 836,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 836,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7451,
+    "enter_frame": 836,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 836,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7474,
+    "enter_frame": 837,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 837,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7476,
+    "enter_frame": 837,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 837,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7478,
+    "enter_frame": 837,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 837,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7502,
+    "enter_frame": 838,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 838,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7504,
+    "enter_frame": 838,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 838,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7506,
+    "enter_frame": 838,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 838,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7529,
+    "enter_frame": 839,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 839,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7531,
+    "enter_frame": 839,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 839,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7533,
+    "enter_frame": 839,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516058210",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 839,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7556,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f00940",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7558,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21516f14440",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7562,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.gameengine::Game/deleRobot()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [
+      {
+        "$ref": "0x215160542f0",
+        "class": "zlong.bombit5.gameengine.robot::AIRobot"
+      }
+    ],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7563,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/end()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7601,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x215160542f0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7614,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.gameengine.gamemode::AbstractGameMode/win()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7615,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.gameengine::Game/stopPause()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7623,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.ui::GameInterFace/disablePauseButton()",
+    "receiver": {
+      "$ref": "0x215128411e0",
+      "class": "zlong.bombit5.ui::GameInterFace"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7643,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.gameengine::Game/afterStopPause()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7645,
+    "enter_frame": 840,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x2151604a6b0",
+      "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+    },
+    "arguments": [],
+    "exit_frame": 840,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7665,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.ui::GameEndCartoon/animationComplete()",
+    "receiver": {
+      "$ref": "0x21515b844c0",
+      "class": "zlong.bombit5.ui::GameEndCartoon"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7666,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine.gamemode::AbstractGameMode/winHandler()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7667,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [
+      true
+    ],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7668,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get killNum()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 7669,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set modePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7670,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set timePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      1740
+    ],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7671,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set diffiPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      2000
+    ],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7672,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get modePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 7673,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get diffiPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 2000
+  },
+  {
+    "call": 7674,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get timePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 1740
+  },
+  {
+    "call": 7675,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set levelPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      3740
+    ],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7676,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 7677,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get levelPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 7678,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      3740
+    ],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7679,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.ui::UIManager/onePScore()",
+    "receiver": {
+      "$ref": "0x21510496830",
+      "class": "zlong.bombit5.ui::UIManager"
+    },
+    "arguments": [
+      1
+    ],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7703,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get modePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 7704,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get timePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 1740
+  },
+  {
+    "call": 7705,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get diffiPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 2000
+  },
+  {
+    "call": 7706,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get levelPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 7707,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 7708,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 7716,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 7765,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 7766,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine::Game/overInit()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7784,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x2151604a6b0",
+      "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7832,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x2151604def0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7883,
+    "enter_frame": 939,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x21516059610",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 939,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7926,
+    "enter_frame": 951,
+    "method": "zlong.bombit5.ui::SoundManger/creatMusicClass()",
+    "receiver": {
+      "$ref": "0x2151188b870",
+      "class": "zlong.bombit5.ui::SoundManger"
+    },
+    "arguments": [
+      {
+        "$string": "unlockclothes",
+        "utf16_length": 13,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 951,
+    "kind": "error",
+    "result": {
+      "$ref": "0x215148f6f20",
+      "class": "ReferenceError"
+    }
+  },
+  {
+    "call": 7930,
+    "enter_frame": 1021,
+    "method": "zlong.bombit5.ui::PlayerScoreUI/nextLevelFunc()",
+    "receiver": {
+      "$ref": "0x215177096d0",
+      "class": "zlong.bombit5.ui::OnePScoreUI"
+    },
+    "arguments": [],
+    "exit_frame": 1021,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7931,
+    "enter_frame": 1021,
+    "method": "zlong.bombit5.ui::UIManager/gameReStart()",
+    "receiver": {
+      "$ref": "0x21510496830",
+      "class": "zlong.bombit5.ui::UIManager"
+    },
+    "arguments": [
+      false
+    ],
+    "exit_frame": 1021,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 7951,
+    "enter_frame": 1021,
+    "method": "zlong.bombit5.gameengine::Game/gameReInit()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [],
+    "exit_frame": 1021,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 9530,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": 3
+  },
+  {
+    "call": 9531,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set lifeData()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      3
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 9534,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 9639,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": 1
+  },
+  {
+    "call": 9640,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set lifeData()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      1
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 9643,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 9985,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": 1
+  },
+  {
+    "call": 9986,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set lifeData()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      1
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 9989,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 10331,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": 1
+  },
+  {
+    "call": 10332,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set lifeData()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      1
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 10335,
+    "enter_frame": 1078,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1078,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 11647,
+    "enter_frame": 1086,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      null
+    ],
+    "exit_frame": 1086,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 11725,
+    "enter_frame": 1086,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      null
+    ],
+    "exit_frame": 1086,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 13299,
+    "enter_frame": 1087,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      null
+    ],
+    "exit_frame": 1087,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 13409,
+    "enter_frame": 1087,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      null
+    ],
+    "exit_frame": 1087,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 14488,
+    "enter_frame": 1088,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      null
+    ],
+    "exit_frame": 1088,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 14623,
+    "enter_frame": 1088,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      null
+    ],
+    "exit_frame": 1088,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 15815,
+    "enter_frame": 1094,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Down",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1094,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 15835,
+    "enter_frame": 1094,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Down",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1094,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 16128,
+    "enter_frame": 1095,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Right",
+        "utf16_length": 6,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1095,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 16399,
+    "enter_frame": 1096,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1096,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 16419,
+    "enter_frame": 1096,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1096,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 17697,
+    "enter_frame": 1103,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Right",
+        "utf16_length": 6,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1103,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 17717,
+    "enter_frame": 1103,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Right",
+        "utf16_length": 6,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1103,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 18113,
+    "enter_frame": 1104,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Down",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1104,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 18303,
+    "enter_frame": 1105,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Down",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1105,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 18711,
+    "enter_frame": 1106,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1106,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 18923,
+    "enter_frame": 1107,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1107,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 19887,
+    "enter_frame": 1112,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Up",
+        "utf16_length": 3,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1112,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 20340,
+    "enter_frame": 1113,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Right",
+        "utf16_length": 6,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1113,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 20551,
+    "enter_frame": 1114,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Right",
+        "utf16_length": 6,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1114,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 20631,
+    "enter_frame": 1114,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Right",
+        "utf16_length": 6,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1114,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22037,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22057,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22179,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x21513b5bcf0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22196,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x21516054750",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22226,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151188f5b0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Left",
+        "utf16_length": 5,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22244,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x21516f0d3c0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22274,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.ai::Action/robotStop()",
+    "receiver": {
+      "$ref": "0x2151a5abfb0",
+      "class": "zlong.bombit5.gameengine.ai::Action"
+    },
+    "arguments": [
+      {
+        "$string": "_Up",
+        "utf16_length": 3,
+        "truncated": false
+      }
+    ],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22292,
+    "enter_frame": 1121,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x21510b34640",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1121,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22341,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get itemPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 22342,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set itemPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      100
+    ],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22343,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 22344,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      100
+    ],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22348,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": 3
+  },
+  {
+    "call": 22349,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      4
+    ],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 22350,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": 4
+  },
+  {
+    "call": 22351,
+    "enter_frame": 1122,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set lifeData()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      4
+    ],
+    "exit_frame": 1122,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 25861,
+    "enter_frame": 1166,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get boxPoint()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1166,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 25862,
+    "enter_frame": 1166,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set boxPoint()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 1166,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 25863,
+    "enter_frame": 1166,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1166,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 25864,
+    "enter_frame": 1166,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x2151604fa70",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 1166,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26128,
+    "enter_frame": 1169,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get boxPoint()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1169,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 26129,
+    "enter_frame": 1169,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set boxPoint()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 1169,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26130,
+    "enter_frame": 1169,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1169,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 26131,
+    "enter_frame": 1169,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x21516059b10",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 1169,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26711,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get boxPoint()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 26712,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set boxPoint()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26713,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 26714,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [
+      10
+    ],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26726,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/execute()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26727,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine::AIPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26728,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x21516054250",
+      "class": "zlong.bombit5.gameengine::AIPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26729,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/kill()",
+    "receiver": {
+      "$ref": "0x21516f0d3c0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26730,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x21516f0d3c0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26738,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x21516f0d3c0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26828,
+    "enter_frame": 1176,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1176,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26892,
+    "enter_frame": 1177,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1177,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 26957,
+    "enter_frame": 1178,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1178,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27021,
+    "enter_frame": 1179,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1179,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27087,
+    "enter_frame": 1180,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1180,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27148,
+    "enter_frame": 1181,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1181,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27212,
+    "enter_frame": 1182,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1182,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27274,
+    "enter_frame": 1183,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1183,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27337,
+    "enter_frame": 1184,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1184,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27402,
+    "enter_frame": 1185,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1185,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27469,
+    "enter_frame": 1186,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1186,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27531,
+    "enter_frame": 1187,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1187,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27592,
+    "enter_frame": 1188,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1188,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27653,
+    "enter_frame": 1189,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1189,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27714,
+    "enter_frame": 1190,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1190,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27776,
+    "enter_frame": 1191,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1191,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27837,
+    "enter_frame": 1192,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1192,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27901,
+    "enter_frame": 1193,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1193,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27962,
+    "enter_frame": 1194,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1194,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27980,
+    "enter_frame": 1195,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/execute()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1195,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27981,
+    "enter_frame": 1195,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/robotDead()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1195,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27982,
+    "enter_frame": 1195,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/kill()",
+    "receiver": {
+      "$ref": "0x2151606b630",
+      "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1195,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27983,
+    "enter_frame": 1195,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x2151606b630",
+      "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1195,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 27988,
+    "enter_frame": 1195,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x2151606b630",
+      "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1195,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28058,
+    "enter_frame": 1195,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1195,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28060,
+    "enter_frame": 1195,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1195,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28104,
+    "enter_frame": 1196,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1196,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28106,
+    "enter_frame": 1196,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1196,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28149,
+    "enter_frame": 1197,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1197,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28151,
+    "enter_frame": 1197,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1197,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28194,
+    "enter_frame": 1198,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1198,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28196,
+    "enter_frame": 1198,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1198,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28240,
+    "enter_frame": 1199,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1199,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28242,
+    "enter_frame": 1199,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1199,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28285,
+    "enter_frame": 1200,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1200,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28287,
+    "enter_frame": 1200,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1200,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28330,
+    "enter_frame": 1201,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1201,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28332,
+    "enter_frame": 1201,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1201,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28375,
+    "enter_frame": 1202,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1202,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28377,
+    "enter_frame": 1202,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1202,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28423,
+    "enter_frame": 1203,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1203,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28425,
+    "enter_frame": 1203,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1203,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28470,
+    "enter_frame": 1204,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1204,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28472,
+    "enter_frame": 1204,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1204,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28515,
+    "enter_frame": 1205,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1205,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28517,
+    "enter_frame": 1205,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1205,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28560,
+    "enter_frame": 1206,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1206,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28562,
+    "enter_frame": 1206,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1206,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28606,
+    "enter_frame": 1207,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1207,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28608,
+    "enter_frame": 1207,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1207,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28651,
+    "enter_frame": 1208,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1208,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28653,
+    "enter_frame": 1208,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1208,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28696,
+    "enter_frame": 1209,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1209,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28698,
+    "enter_frame": 1209,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1209,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28741,
+    "enter_frame": 1210,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1210,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28743,
+    "enter_frame": 1210,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1210,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28792,
+    "enter_frame": 1211,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1211,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28794,
+    "enter_frame": 1211,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1211,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28837,
+    "enter_frame": 1212,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1212,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28839,
+    "enter_frame": 1212,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1212,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28882,
+    "enter_frame": 1213,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1213,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28884,
+    "enter_frame": 1213,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1213,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28927,
+    "enter_frame": 1214,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1214,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28929,
+    "enter_frame": 1214,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1214,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28973,
+    "enter_frame": 1215,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1215,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 28975,
+    "enter_frame": 1215,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1215,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29018,
+    "enter_frame": 1216,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1216,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29020,
+    "enter_frame": 1216,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1216,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29063,
+    "enter_frame": 1217,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1217,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29065,
+    "enter_frame": 1217,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1217,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29108,
+    "enter_frame": 1218,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1218,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29110,
+    "enter_frame": 1218,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1218,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29154,
+    "enter_frame": 1219,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1219,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29156,
+    "enter_frame": 1219,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1219,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29199,
+    "enter_frame": 1220,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1220,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29201,
+    "enter_frame": 1220,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1220,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29244,
+    "enter_frame": 1221,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1221,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29246,
+    "enter_frame": 1221,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1221,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29289,
+    "enter_frame": 1222,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1222,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29291,
+    "enter_frame": 1222,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1222,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29335,
+    "enter_frame": 1223,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1223,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29337,
+    "enter_frame": 1223,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1223,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29380,
+    "enter_frame": 1224,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1224,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29382,
+    "enter_frame": 1224,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1224,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29425,
+    "enter_frame": 1225,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1225,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29427,
+    "enter_frame": 1225,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1225,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29470,
+    "enter_frame": 1226,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1226,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29472,
+    "enter_frame": 1226,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1226,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29516,
+    "enter_frame": 1227,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1227,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29518,
+    "enter_frame": 1227,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1227,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29562,
+    "enter_frame": 1228,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1228,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29564,
+    "enter_frame": 1228,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7a290",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1228,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29607,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.commands.robot::RobotDeadCommand/countDead()",
+    "receiver": {
+      "$ref": "0x21513b7b050",
+      "class": "zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29611,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine::Game/deleRobot()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [
+      {
+        "$ref": "0x21516f0d3c0",
+        "class": "zlong.bombit5.gameengine.robot::AIRobot"
+      }
+    ],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29612,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/end()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29650,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x21516f0d3c0",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29663,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine.gamemode::AbstractGameMode/lose()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29664,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine::Game/stopPause()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29672,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.ui::GameInterFace/disablePauseButton()",
+    "receiver": {
+      "$ref": "0x2151818fe30",
+      "class": "zlong.bombit5.ui::GameInterFace"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29691,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine::Game/afterStopPause()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29693,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x21516054750",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29702,
+    "enter_frame": 1229,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/robotStop()",
+    "receiver": {
+      "$ref": "0x21510b34640",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1229,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29727,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.ui::GameEndCartoon/animationComplete()",
+    "receiver": {
+      "$ref": "0x2151680b980",
+      "class": "zlong.bombit5.ui::GameEndCartoon"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29728,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine.gamemode::AbstractGameMode/loseHandler()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29729,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+    "receiver": {
+      "$ref": "0x21513b71870",
+      "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+    },
+    "arguments": [
+      false
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29730,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set timePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29731,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get killNum()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29732,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set modePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29733,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set diffiPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29734,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get modePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29735,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get diffiPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29736,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get timePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29737,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set levelPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      0
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29738,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 29739,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get levelPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29740,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      3740
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29741,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 4
+  },
+  {
+    "call": 29742,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      3
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29743,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 3
+  },
+  {
+    "call": 29744,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/set lifeData()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [
+      3
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29747,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get life()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 3
+  },
+  {
+    "call": 29748,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.ui::UIManager/onePScore()",
+    "receiver": {
+      "$ref": "0x21510496830",
+      "class": "zlong.bombit5.ui::UIManager"
+    },
+    "arguments": [
+      3
+    ],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29771,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get modePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29772,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get timePoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29773,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get diffiPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29774,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get levelPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 0
+  },
+  {
+    "call": 29775,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 29776,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 29779,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::AbstractPlayer/get totalPoint()",
+    "receiver": {
+      "$ref": "0x21516049990",
+      "class": "zlong.bombit5.gameengine::PersonPlayer"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": 3740
+  },
+  {
+    "call": 29780,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine::Game/overInit()",
+    "receiver": {
+      "$ref": "0x21513b6df90",
+      "class": "zlong.bombit5.gameengine::Game"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29798,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x2151606b630",
+      "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29846,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x21516054750",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  },
+  {
+    "call": 29897,
+    "enter_frame": 1333,
+    "method": "zlong.bombit5.gameengine.robot::AbstractRobot/unRegistRobot()",
+    "receiver": {
+      "$ref": "0x21510b34640",
+      "class": "zlong.bombit5.gameengine.robot::AIRobot"
+    },
+    "arguments": [],
+    "exit_frame": 1333,
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    }
+  }
+]

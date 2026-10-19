@@ -1,0 +1,137 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-ai-two-bomb-scan-blocked-first",
+  "case_sha256": "8d708fa37dd75714ea40841ea1ceda421ca7c5132608fa542bedfec549f82598",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "49d5c0f31765cbb0a71b4951e5e07cb3f4e6da07538c6626aa0543fe3df8d84c"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "d749ede91d69e9fed7d6871e55dbb6fec74eb34c968aebff8bc3106bd88d12c0"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "f2e64d02560a49167f34d7e3549055b2fd0301bdaf1369a222483301a8dbd41b"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "6299830a5d41f4d92f24b5e0e94e4e941c2560e1e4ba0132baddb8c9748ef786"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "2c950dac59176498f7e7a51164d44a5e9ac8a180ee92c7c6903dfe8ab86d9af7"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "a947b3e4e941f0fd37b29ab538d5b22edad7491824faac71838d941da276890d"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 821,
+      "sha256": "91aaa740798c3edb57f86bc329bd489df0b2c54129290f47847403cbe6102a08"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 822,
+      "sha256": "8ac5bffd63a7b0a0c84c92084f912a56b8e09563b13d0d7a6d25f55d78052e72"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 822,
+      "sha256": "8b4f761ee4fdeb4011db0467961c1f11899cc27b6a547b8976b1f3c2ecf7c3e0"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 822,
+      "sha256": "b06e2adbf54624905a86e1df72bac98a008d62ac9aa239b6a6d272126104a2ec"
+    },
+    {
+      "name": "fixture-0010",
+      "frame": 867,
+      "sha256": "196b3a1edd530f0a0a30057ea26a8e17db4514cd53a3614f2c7adcae18497a3e"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "ad5a666f20db340b3d21a29c000ba59d8d90f666e21ff5e24ce503fdf4b31ae9",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-bizwaqc9\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 870,
+  "captures": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "57324702ce8d301e19180b8b548337ed3b4d1fd419f722b77df129832d36cd0c",
+      "bytes": 267041
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "df0fe1b87037a560704aac56e0b6768ff80d38cff74cf56817ed13ccc3ba5b84",
+      "bytes": 534165
+    },
+    {
+      "name": "two-imminent-bombs",
+      "frame": 867,
+      "sha256": "912ce810bc5c694071ed0a899831143920639d26640d34920bbdad1e4fbdcbdd",
+      "bytes": 536695
+    },
+    {
+      "name": "after-perception",
+      "frame": 870,
+      "sha256": "0bdb0d9d34f00f2836373d2fd4a51b589a606316863d189834c7f70775b0ba6f",
+      "bytes": 535629
+    }
+  ],
+  "states": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "995c71bba8e19e3f85475fc2b1789ef1c7894cb0cd1f7a36500ee619c88714e1",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "two-imminent-bombs",
+      "frame": 867,
+      "sha256": "3fe3df4c9fe22464e720ae81c31bed44e75458b582906a4fa269a81b4f20c148",
+      "objects": 396,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-perception",
+      "frame": 870,
+      "sha256": "a96163343e1274d787a20c0c6eae460dd4d747c43ad666011523022f82a77957",
+      "objects": 396,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "a775c2039f5b41e0068076eabd54c2da29cd0ec4121f51b2f68f9b9ef48026be",
+  "stderr_sha256": "2ec56c74defddbaafb06e9eddb3d4076ac632709ede4c67c382f16319c37fd4e"
+}

@@ -1,0 +1,169 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "mine-on-existing-bomb",
+  "case_sha256": "0daead13084c4db4154a4fe7a61f82b317903000f2028aa49acaa7e0f9bf76e6",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "c6317a36d4e07c2205e61191227891079b9fa5aa02eeb349848fd87164befca0"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "674aa830f67014cd44ca33ecc8ce09ea5d6f85bdf5de2eb44e9c58b88010d2f9"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "ea8e895eece5b2926774792b4b301b848495a2b8e5319d7ee8163426e26c53c7"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "32e5c8b4db971f643c268b6b40a3c9c931c39ac17eff1b4ffbfe6c66f91a9b90"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "e4e8ae8cd1c8b835f069a2d91e5652b2c2be9f63c0b71b6e17fa8ef8645d331f"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "65eed27aa7e6bd23e99fe56c794b804ab02124d6a2216dcd5a1d88b1f0dcefd7"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 821,
+      "sha256": "94d017b74bd34fcc267e8058c8484422aeb0fd08cfe8f72b3d099bc36df5b9aa"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 822,
+      "sha256": "f7ab85b05d9e0874e51761289d0ec395eacfe8891d758a377f6fa15ea1bccedc"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 823,
+      "sha256": "a26121e5d904aa7342f1716c572a32c2c29329fb4bfee370447f04f309ea1bfb"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-oaikh18e\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 914,
+  "captures": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "e1163b7542384987b0c26b805bad38d4144000055ec21238e4536c2861f28d2e",
+      "bytes": 543398
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "7fbde2f34b82fc89bc7826b06cbb6c35b467c7f8dc60e97ce6cae9412180b4f6",
+      "bytes": 544467
+    },
+    {
+      "name": "equipped",
+      "frame": 823,
+      "sha256": "f0db8306868cbc723c0edda2b4819d610eac778743588f96d5ed1a73af9d0638",
+      "bytes": 545305
+    },
+    {
+      "name": "input",
+      "frame": 823,
+      "sha256": "27ded8caf1e7b75b84cc274868e2e616651a505dde378a1711ff18eea35c73fd",
+      "bytes": 545574
+    },
+    {
+      "name": "mine-on-ordinary-bomb",
+      "frame": 824,
+      "sha256": "cb6c9cb6f80d5b60449da83989fc940a0fa8153d78660a7e7ecce1a25dabe62f",
+      "bytes": 545674
+    },
+    {
+      "name": "released",
+      "frame": 824,
+      "sha256": "cb6c9cb6f80d5b60449da83989fc940a0fa8153d78660a7e7ecce1a25dabe62f",
+      "bytes": 545674
+    },
+    {
+      "name": "after-chain",
+      "frame": 914,
+      "sha256": "775aad8cc138c775c4ab4c4c03f6db8ea15715a52273b49b9fe34b992b72ce0b",
+      "bytes": 546014
+    }
+  ],
+  "states": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "4868413d6b9ff2e8989af95e46b0e16309b14607df217005d1dfa163655f8cec",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "65539a4feff0a8a4b090f38106a563fd14181f58cd2a77f835d4ac346e65bed8",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "equipped",
+      "frame": 823,
+      "sha256": "14e717cde0f61b0feec076e32f49e60414de8af660610e15c7f871efc4126bdf",
+      "objects": 397,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "input",
+      "frame": 823,
+      "sha256": "173b47a64ded38ae37c1417f81ddd67bea181cd33aa7143d003ff729f32d0126",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "mine-on-ordinary-bomb",
+      "frame": 824,
+      "sha256": "3c7a1872fc2bd8cdcc7a5ab2496bd0d784a5648b2c23ed13834538e15a0abcbc",
+      "objects": 398,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "released",
+      "frame": 824,
+      "sha256": "3c7a1872fc2bd8cdcc7a5ab2496bd0d784a5648b2c23ed13834538e15a0abcbc",
+      "objects": 398,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-chain",
+      "frame": 914,
+      "sha256": "8cb63b107ae04c15a4959c45fff53a2e0c040159b5b5064f9b39eba45fdaeab5",
+      "objects": 397,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "23d6e68ba4e02e2096e6af5055ba6be26136e1eea5f4703580e679f3630c06b9",
+  "stderr_sha256": "70d74319c2789f4f5278f25c1eca6395f550fdd6c1dd43f4e5446880d3c469c6"
+}

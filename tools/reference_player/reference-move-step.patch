@@ -1,0 +1,37 @@
+--- a/core/src/avm2/reference_fixtures.rs
++++ b/core/src/avm2/reference_fixtures.rs
+@@ -9,6 +9,7 @@
+     Pickup { class: &'static str },
+     Reposition { x: i32, y: i32 },
+     Bomb,
++    MoveStep { method: &'static str },
+     AiControl { start: bool },
+     BuildSoft { x: i32, y: i32 },
+     BreakSoft { x: i32, y: i32 },
+@@ -64,6 +65,14 @@
+             Operation::TimePassed{seconds}
+         },
+         "bomb" if map.len()==1+actor_fields => Operation::Bomb,
++        "move-step" if map.len()==2+actor_fields => {
++            let method=match map.get("direction").and_then(Json::as_str) {
++                Some("left")=>"moveLeft",Some("right")=>"moveRight",
++                Some("up")=>"moveUp",Some("down")=>"moveDown",
++                _=>return Err("move-step direction must be left, right, up or down".into()),
++            };
++            Operation::MoveStep{method}
++        },
+         "ai-control" if map.len()==3 && actor.is_some() => {
+             let start=match map.get("mode").and_then(Json::as_str) {
+                 Some("stop")=>false,Some("start")=>true,
+@@ -268,6 +277,11 @@
+                     else {vec!["AIControl.stop","Action.stop","AbstractRobot.robotStop"]},
+                 "side_effects":"Brain update and current route/listeners are controlled; actor remains in map, movement/damage/engine registries. Delayed state/Tween callbacks are NOT cancelled and may alter route metadata or callback registries. Start is not a rewind or restoration of an earlier route. Existing motion may decelerate under original rules; no velocity, health or isExist writes."});
+         },
++        Operation::MoveStep {method} => {
++            call(controller.into(),method,&[],&mut activation)?;
++            effects=json!({"original_method":format!("RobotController.{method}"),
++                "side_effects":"One original movement callback is invoked directly, bypassing input/listener scheduling. Original model acceleration, HitMove collision and position/occupancy commands run; no speed/position fields are written by this fixture. A normal engine frame is not advanced by this command."});
++        },
+         Operation::Bomb => {
+             let before_count=slot(object_slot(robot,"model")?,"bombNum").ok_or("Missing bombNum")?;
+             call(controller.into(),"addBomb",&[],&mut activation)?;

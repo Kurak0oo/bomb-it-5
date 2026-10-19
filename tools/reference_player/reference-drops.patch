@@ -1,0 +1,105 @@
+--- a/core/src/avm2/reference_fixtures.rs
++++ b/core/src/avm2/reference_fixtures.rs
+@@ -10,6 +10,13 @@
+     Reposition { x: i32, y: i32 },
+     Bomb,
+     AiControl { start: bool },
++    BuildSoft { x: i32, y: i32 },
++    BreakSoft { x: i32, y: i32 },
++    TimePassed { seconds: i32 },
++}
++fn coordinate(map: &serde_json::Map<String, Json>, key: &str) -> Result<i32, String> {
++    map.get(key).and_then(Json::as_i64).and_then(|n| i32::try_from(n).ok())
++        .ok_or_else(|| format!("{key} must be an i32 cell coordinate"))
+ }
+ fn parse(input: &str) -> Result<(Operation, Option<usize>, Json), String> {
+     let json: Json = serde_json::from_str(input).map_err(|e|e.to_string())?;
+@@ -44,9 +51,17 @@
+         },
+         "reposition" => {
+             if map.len()!=3+actor_fields { return Err("reposition requires op, x, y and optional actor".into()); }
+-            let coordinate = |key| map.get(key).and_then(Json::as_i64)
+-                .and_then(|n| i32::try_from(n).ok()).ok_or_else(||format!("{key} must be an i32 cell coordinate"));
+-            Operation::Reposition { x:coordinate("x")?, y:coordinate("y")? }
++            Operation::Reposition { x:coordinate(map,"x")?, y:coordinate(map,"y")? }
++        },
++        "build-soft" | "break-soft" if map.len()==3 && actor.is_none() => {
++            let x=coordinate(map,"x")?; let y=coordinate(map,"y")?;
++            if !(0..17).contains(&x) || !(0..15).contains(&y) { return Err("Cell must be inside the original 17 by 15 board".into()); }
++            if op=="build-soft" {Operation::BuildSoft{x,y}} else {Operation::BreakSoft{x,y}}
++        },
++        "time-passed" if map.len()==2 && actor.is_none() => {
++            let seconds=coordinate(map,"seconds")?;
++            if !(0..=180).contains(&seconds) {return Err("seconds must be an integer from 0 through 180".into());}
++            Operation::TimePassed{seconds}
+         },
+         "bomb" if map.len()==1 => Operation::Bomb,
+         "ai-control" if map.len()==3 && actor.is_some() => {
+@@ -98,6 +113,12 @@
+         "weapon":match slot(model,"weapon") {Some(Value::String(v))=>Some(v.to_utf8_lossy().into_owned()),_=>None},
+         "is_exist":slot(robot,"isExist").map(|v|v.coerce_to_boolean()),
+         "model_state":match slot(model,"state") {Some(Value::String(v))=>Some(v.to_utf8_lossy().into_owned()),_=>None}}))
++}
++fn budgets(game:Object<'_>) -> Result<Json,String> {
++    let master=object_slot(game,"mapMaster")?;
++    let field=|name|slot(master,name).ok_or_else(||format!("Missing MapMaster slot {name}")).and_then(number);
++    Ok(json!({"prop_current":field("_propCurrent")?,"prop_total":field("_propTotal")?,
++        "prop_probability":field("_propProb")?,"vehicle_remaining":field("_vehicleNum")?}))
+ }
+ 
+ pub(crate) fn run(context: &mut UpdateContext<'_>, input: &str) -> Result<Json,String> {
+@@ -144,10 +165,46 @@
+     let domain=context.avm2.stage_domain();
+     let mut activation=Activation::from_domain(context,domain);
+     let before=state(robot,&mut activation)?;
++    let budgets_before=budgets(game)?;
+     let x=number(get(view.into(),"xN",&mut activation)?)? as i32;
+     let y=number(get(view.into(),"yN",&mut activation)?)? as i32;
+     let effects;
+     match operation {
++        Operation::BuildSoft {x,y} => {
++            let cell=[Value::Integer(x),Value::Integer(y)];
++            if !call(map.into(),"isEmpty",&cell,&mut activation)?.coerce_to_boolean()
++                || !matches!(call(map.into(),"getProp",&cell,&mut activation)?,Value::Null|Value::Undefined) {
++                return Err("Soft-block fixture needs empty original floor without a pickup".into());
++            }
++            let occupants=call(map.into(),"getRobot",&cell,&mut activation)?.as_object()
++                .and_then(|o|o.as_array_object()).ok_or("Original getRobot did not return Array")?;
++            if occupants.storage().length()!=0 {return Err("Soft-block fixture cannot bury an actor".into());}
++            let master=object_slot(game,"mapMaster")?;
++            call(master.into(),"buildRanUnFixBox",&cell,&mut activation)?;
++            effects=json!({"original_method":"MapMaster.buildRanUnFixBox","cell":[x,y],
++                "side_effects":"Original appearance RNG and breakable Box constructor run; this replenishes a controlled block and is not a naturally generated board."});
++        },
++        Operation::BreakSoft {x,y} => {
++            let cell=[Value::Integer(x),Value::Integer(y)];
++            let block=call(map.into(),"getBox",&cell,&mut activation)?.as_object().ok_or("No original Box at target")?;
++            if block.instance_class().name().local_name().to_utf8_lossy()!="Box"
++                || !matches!(slot(block,"isExist"),Some(Value::Bool(true))) {
++                return Err("Only an existing breakable original Box can be targeted".into());
++            }
++            call(block.into(),"deleteBox",&[],&mut activation)?;
++            call(map.into(),"deleBox",&cell,&mut activation)?;
++            effects=json!({"original_calls":["Box.deleteBox","Map.deleBox"],"cell":[x,y],
++                "side_effects":"Original brick animation/drop callback continues normally. Fixture bypasses weapon targeting, actor damage and attack score credit; it is not a legal attack replay."});
++        },
++        Operation::TimePassed {seconds} => {
++            let mode=object_slot(game,"modeController")?;
++            if mode.instance_class().name().local_name().to_utf8_lossy()!="ArcadeMode" {
++                return Err("time-passed fixture requires original ArcadeMode".into());
++            }
++            call(mode.into(),"timePassed",&[Value::Integer(seconds)],&mut activation)?;
++            effects=json!({"original_method":"ArcadeMode.timePassed","seconds_argument":seconds,
++                "side_effects":"Original spawn callback invoked directly. Game.pastTime, Date and timeout/score state are not advanced; this verifies callback gating, not elapsed-time scheduling."});
++        },
+         Operation::Pickup { class } => {
+             let cell=[Value::Integer(x),Value::Integer(y)];
+             if !call(map.into(),"isEmpty",&cell,&mut activation)?.coerce_to_boolean() {
+@@ -220,6 +277,7 @@
+         },
+     }
+     Ok(json!({"schema":"bombit5-reference-fixture-v1","command":command,"before":before,"after":state(robot,&mut activation)?,"effects":effects,
++        "map_master_before":budgets_before,"map_master_after":budgets(game)?,
+         "actor":{"requested_index":actor_index,"selected_player_index":selected_index,
+             "robot_ref":format!("{:p}",robot.as_ptr()),"robot_class":robot.instance_class().name().to_qualified_name_no_mc().to_utf8_lossy(),
+             "registered_before":true,"registered_after":registered(),"is_exist_meaning":"damage eligibility, not liveness"},

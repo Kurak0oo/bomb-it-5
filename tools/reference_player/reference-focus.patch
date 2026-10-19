@@ -1,0 +1,238 @@
+--- a/core/src/avm2.rs
++++ b/core/src/avm2.rs
+@@ -71,6 +71,7 @@
+ mod qname;
+ mod regexp;
+ pub(crate) mod reference_trace;
++pub(crate) mod reference_focus;
+ pub(crate) mod reference_events;
+ pub(crate) mod reference_fixtures;
+ mod scope;
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2292,6 +2292,11 @@
+         }
+     }
+ 
++    /// Investigation-only bounded logical projection; no ActionScript is executed.
++    pub fn reference_focus_state(&mut self) -> serde_json::Value {
++        self.mutate_with_update_context(crate::avm2::reference_focus::snapshot)
++    }
++
+     /// Investigation-only logical graph; native painting/display trees are omitted.
+     pub fn reference_compact_state(&mut self, max_depth: usize, max_objects: usize) -> serde_json::Value {
+         self.mutate_with_update_context(|context| {
+--- /dev/null
++++ b/core/src/avm2/reference_focus.rs
+@@ -0,0 +1,211 @@
++//! Bounded purpose-built raw-state projection. No AS getters or methods are called.
++use super::property::Property;
++use super::{Object, TObject, Value};
++use crate::context::UpdateContext;
++use crate::display_object::TDisplayObject;
++use serde_json::{json, Map, Value as Json};
++use std::collections::{BTreeMap, HashSet};
++
++const ARRAY_LIMIT: usize = 512;
++const ARRAY_DEPTH: usize = 6;
++const RECORD_LIMIT: usize = 1024;
++
++fn slot<'gc>(object: Object<'gc>, name: &str) -> Option<Value<'gc>> {
++    let mut candidates = object.vtable().resolved_traits().iter().filter_map(|(local,_,p)| {
++        if local.to_utf8_lossy()!=name { return None; }
++        match *p {Property::Slot{slot_id}|Property::ConstSlot{slot_id}=>Some(slot_id),_=>None}
++    }).collect::<Vec<_>>();
++    candidates.sort_unstable(); candidates.dedup();
++    if candidates.len()==1 { Some(object.get_slot(candidates[0])) } else { None }
++}
++fn child<'gc>(object: Object<'gc>, name: &str) -> Option<Object<'gc>> {
++    slot(object,name).and_then(|v|v.as_object())
++}
++fn elements(value: Option<Value<'_>>) -> Vec<Value<'_>> {
++    value.and_then(|v|v.as_object()).and_then(|o|o.as_array_object())
++        .map(|a|a.storage().iter().take(ARRAY_LIMIT).flatten().collect()).unwrap_or_default()
++}
++fn oid(object: Object<'_>) -> String { format!("{:p}",object.as_ptr()) }
++
++struct Focus<'a,'gc> {
++    context: &'a mut UpdateContext<'gc>,
++    layouts: BTreeMap<String,Json>,
++    slot_layouts: BTreeMap<String,Vec<(usize,Vec<String>)>>,
++    records: usize,
++    truncated: bool,
++    discovered_bombs: BTreeMap<String,Object<'gc>>,
++}
++impl<'a,'gc> Focus<'a,'gc> {
++    fn class(&self, object: Object<'gc>) -> String { object.instance_of_class_name(self.context.gc()).to_utf8_lossy().into_owned() }
++    fn reference(&self, object: Object<'gc>) -> Json { json!({"$ref":oid(object),"class":self.class(object)}) }
++    fn value(&mut self, value: Value<'gc>, depth: usize) -> Json {
++        match value {
++            Value::Undefined=>json!({"$undefined":true}),Value::Null=>Json::Null,
++            Value::Bool(v)=>json!(v),Value::Integer(v)=>json!(v),Value::String(v)=>json!(v.to_utf8_lossy()),
++            Value::Number(v)=>serde_json::Number::from_f64(v).map(Json::Number).unwrap_or_else(||json!({"$number":format!("{v}")})),
++            Value::Object(object)=>{
++                let class=self.class(object);
++                if class.starts_with("zlong.bombit5.bombs::") { self.discovered_bombs.insert(oid(object),object); }
++                let mut out=self.reference(object);
++                if let Some(array)=object.as_array_object() {
++                    let data=array.storage(); out["length"]=json!(data.length());
++                    if depth>=ARRAY_DEPTH { self.truncated=true;out["$truncated"]=json!(true); }
++                    else {
++                        out["elements"]=Json::Array(data.iter().take(ARRAY_LIMIT).map(|v|v.map(|v|self.value(v,depth+1)).unwrap_or_else(||json!({"$hole":true}))).collect());
++                        if data.length()>ARRAY_LIMIT {self.truncated=true;out["$truncated"]=json!(true);}
++                    }
++                } else if let Some(function)=object.as_function_object() {
++                    out["function"]=json!(function.executable().debug_full_name().to_utf8_lossy());
++                    if let Some(receiver)=function.executable().reference_bound_receiver() {
++                        if let Some(receiver)=receiver.as_object() {
++                            if self.class(receiver).starts_with("zlong.bombit5.bombs::") {self.discovered_bombs.insert(oid(receiver),receiver);}
++                            out["receiver"]=self.reference(receiver);
++                        }
++                    }
++                } else if let Some(display)=object.as_display_object() {
++                    out["display"]=json!({"x":display.x().to_pixels(),"y":display.y().to_pixels()});
++                    if let Some(movie)=display.as_movie_clip() {out["display"]["current_frame"]=json!(movie.current_frame());}
++                } else if class=="flash.geom::Point" {
++                    out["point"]=json!({"x":slot(object,"x").map(|v|self.value(v,depth+1)),"y":slot(object,"y").map(|v|self.value(v,depth+1))});
++                }
++                out
++            }
++        }
++    }
++    fn record(&mut self, object: Object<'gc>, omitted: &[&str]) -> Json {
++        if self.records>=RECORD_LIMIT {self.truncated=true;return json!({"$ref":oid(object),"$truncated":true});}
++        self.records+=1;
++        let class=self.class(object);
++        // Resolve and format a class's slot/namespace layout once per snapshot,
++        // rather than rebuilding it for all 255 instances of Grid.
++        if !self.layouts.contains_key(&class) {
++            let mut groups:BTreeMap<usize,Vec<(String,String)>>=BTreeMap::new();
++            for (name,namespace,p) in object.vtable().resolved_traits().iter() {
++                if let Property::Slot{slot_id}|Property::ConstSlot{slot_id}=*p {
++                    groups.entry(slot_id).or_default().push((name.to_utf8_lossy().into_owned(),format!("{namespace:?}")));
++                }
++            }
++            let mut names:BTreeMap<String,HashSet<usize>>=BTreeMap::new();
++            let layout=groups.iter().map(|(id,aliases)| {
++                for (name,_) in aliases {names.entry(name.clone()).or_default().insert(*id);}
++                json!({"slot":id,"aliases":aliases})
++            }).collect::<Vec<_>>();
++            let ambiguous:BTreeMap<_,_>=names.into_iter().filter(|(_,ids)|ids.len()>1)
++                .map(|(name,ids)| {let mut ids=ids.into_iter().collect::<Vec<_>>();ids.sort_unstable();(name,ids)}).collect();
++            self.slot_layouts.insert(class.clone(),groups.iter().map(|(id,aliases)|(*id,aliases.iter().map(|(name,_)|name.clone()).collect())).collect());
++            self.layouts.insert(class.clone(),json!({"slots":layout,"ambiguous_names":ambiguous}));
++        }
++        let fields=self.slot_layouts[&class].iter().map(|(id,names)|(*id,names.iter().any(|name|omitted.contains(&name.as_str())))).collect::<Vec<_>>();
++        let mut values=Map::new();let mut omitted_slots=Vec::new();
++        // Each physical slot is read once despite inherited protected aliases.
++        for (slot_id,omit) in fields {
++            if omit {omitted_slots.push(slot_id);continue;}
++            values.insert(slot_id.to_string(),self.value(object.get_slot(slot_id),0));
++        }
++        json!({"id":oid(object),"class":class,"values":values,"omitted_slots":omitted_slots})
++    }
++    fn named_child(&mut self,object:Object<'gc>,name:&str,omitted:&[&str])->Json {
++        child(object,name).map(|o|self.record(o,omitted)).unwrap_or(Json::Null)
++    }
++    fn commands(&mut self,chain:Object<'gc>,depth:usize)->Json {
++        let mut entries=Vec::new();
++        if depth<4 {
++            if let Some(dictionary)=child(chain,"commands") {
++                for (key,property) in dictionary.base().values().iter().take(ARRAY_LIMIT) {
++                    let key=match key {super::dynamic_map::DynamicKey::String(v)=>json!(v.to_utf8_lossy()),super::dynamic_map::DynamicKey::Uint(v)=>json!(v),super::dynamic_map::DynamicKey::Object(v)=>self.reference(*v)};
++                    let value=if let Some(command)=property.value.as_object() {
++                        if child(command,"commands").is_some() {self.commands(command,depth+1)} else {self.record(command,&[])}
++                    } else {self.value(property.value,0)};
++                    entries.push(json!({"key":key,"command":value}));
++                }
++                if dictionary.base().values().len()>ARRAY_LIMIT {self.truncated=true;}
++            }
++        } else {self.truncated=true;}
++        json!({"chain":self.record(chain,&[]),"entries":entries})
++    }
++    fn robot(&mut self,robot:Object<'gc>)->Json {
++        let mut chains=Map::new();
++        for name in ["_inEngineArr","_engineArr","_mainEngineArr","_positionChangeEngine"] {
++            if let Some(chain)=child(robot,name) {chains.insert(name.into(),self.commands(chain,0));}
++        }
++        let mut weapons=BTreeMap::new();
++        for name in ["currentWeapon","_baseWeapon","_baseCarProp"] {
++            if let Some(weapon)=child(robot,name) {weapons.insert(oid(weapon),self.record(weapon,&[]));}
++        }
++        if let Some(view)=child(robot,"view") {
++            if let Some(weapon)=child(view,"_weaponObj") {weapons.insert(oid(weapon),self.record(weapon,&[]));}
++        }
++        json!({"robot":self.record(robot,&[]),"model":self.named_child(robot,"model",&[]),
++            "view":self.named_child(robot,"view",&[]),"controller":self.named_child(robot,"controller",&[]),
++            "chains":chains,"equipment":weapons})
++    }
++    fn ai(&mut self,control:Object<'gc>)->Json {
++        let mut states=BTreeMap::new();
++        let machine=child(control,"machine");
++        if let Some(machine)=machine {
++            let mut candidates=elements(slot(machine,"states"));
++            for name in ["_currentState","_goldState","_defaultState","nextState"] {if let Some(value)=slot(machine,name) {candidates.push(value);}}
++            for state in candidates.into_iter().filter_map(|v|v.as_object()) {
++                states.insert(oid(state),json!({"state":self.record(state,&[]),"settings":self.named_child(state,"_settings",&[])}));
++            }
++        }
++        let mut search_nodes=BTreeMap::new();
++        if let Some(search)=child(control,"pathFinder") {
++            for name in ["_curNode","_tempNode","_tempNode2"] {if let Some(node)=child(search,name) {search_nodes.insert(oid(node),self.record(node,&[]));}}
++        }
++        json!({"control":self.record(control,&[]),"machine":machine.map(|m|self.record(m,&[])),
++            "action":self.named_child(control,"action",&[]),"states":states,
++            "search":self.named_child(control,"pathFinder",&["_NodeArr"]),"search_working_nodes":search_nodes})
++    }
++}
++
++pub(crate) fn snapshot(context:&mut UpdateContext<'_>)->Json {
++    // The preceding full/compact observation establishes only a weak session reference.
++    let game=context.avm2.reference_games.iter().rev().filter_map(|w|w.upgrade(context.gc()))
++        .find(|game|child(*game,"map").is_some());
++    let Some(game)=game else {return json!({"schema":"bombit5-reference-focus-v1","available":false,"reason":"Capture full or compact state after starting the original session first","truncated":false});};
++    let mut focus=Focus{context,layouts:BTreeMap::new(),slot_layouts:BTreeMap::new(),records:0,truncated:false,discovered_bombs:BTreeMap::new()};
++    let mut players=Vec::new();let mut robots=BTreeMap::new();let mut ais=Vec::new();
++    for player in elements(slot(game,"players")).into_iter().filter_map(|v|v.as_object()) {
++        if let Some(robot)=child(player,"_robot") {robots.insert(oid(robot),robot);}
++        if let Some(control)=child(player,"fsmAIController") {ais.push(focus.ai(control));}
++        players.push(focus.record(player,&[]));
++    }
++    for robot in elements(slot(game,"robots")).into_iter().filter_map(|v|v.as_object()) {robots.insert(oid(robot),robot);}
++    let robots=robots.values().map(|r|focus.robot(*r)).collect::<Vec<_>>();
++    let engine=focus.named_child(game,"gameEngine",&[]);
++    let mut cells=Vec::new();let mut nodes=Vec::new();
++    if let Some(map)=child(game,"map") {
++        for (x,column) in elements(slot(map,"mapArr")).into_iter().enumerate() {
++            for (y,cell) in elements(Some(column)).into_iter().enumerate() {
++                if let Some(cell)=cell.as_object() {
++                    if cells.len()>=ARRAY_LIMIT*2 {focus.truncated=true;break;}
++                    cells.push(json!({"x":x,"y":y,"grid":focus.record(cell,&[])}));
++                }
++            }
++        }
++        // Only cell block/cost coordinates are projected, never the shared parent graph.
++        for column in elements(slot(map,"nodes")) {
++            for node in elements(Some(column)).into_iter().filter_map(|v|v.as_object()) {
++                if nodes.len()>=ARRAY_LIMIT*2 {focus.truncated=true;break;}
++                nodes.push(json!({"id":oid(node),"x":slot(node,"xGrid").map(|v|focus.value(v,0)),
++                    "y":slot(node,"yGrid").map(|v|focus.value(v,0)),"blocked":slot(node,"isBlock").map(|v|focus.value(v,0)),
++                    "cost":slot(node,"costMultiplier").map(|v|focus.value(v,0))}));
++            }
++        }
++    }
++    let game_record=focus.record(game,&[]);let mode=focus.named_child(game,"modeController",&[]);
++    let mut bombs=BTreeMap::new();let mut rounds=0;
++    loop {
++        let pending=focus.discovered_bombs.iter().filter(|(id,_)|!bombs.contains_key(*id)).map(|(id,o)|(id.clone(),*o)).collect::<Vec<_>>();
++        if pending.is_empty(){break;} rounds+=1;
++        if rounds>8 {focus.truncated=true;break;}
++        for (id,bomb) in pending {bombs.insert(id,focus.record(bomb,&["_hitMove"]));}
++    }
++    json!({"schema":"bombit5-reference-focus-v1","available":true,"game":game_record,"mode":mode,
++        "players":players,"robots":robots,"engine":engine,"cells":cells,"nodes":nodes,"bombs":bombs,"ai":ais,
++        "layouts":focus.layouts,"record_count":focus.records,"truncated":focus.truncated,
++        "limits":{"array_elements":ARRAY_LIMIT,"array_depth":ARRAY_DEPTH,"records":RECORD_LIMIT},
++        "omissions":["No arbitrary object graph traversal","No native display children or painted bounds","No Box/HitMove internals","RoadSearch._NodeArr omitted; only cell cost/block flags and selected working nodes","No timer/tween pending-queue inspection","Arrays deeper/larger than limits explicitly truncate"],
++        "observation":"Stored slots/native display state only; no getters, AS methods, RNG calls or enumeration cursor mutation"})
++}

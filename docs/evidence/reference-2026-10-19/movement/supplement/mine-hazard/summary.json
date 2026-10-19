@@ -1,0 +1,35 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\movement-mine-hazard-42-01",
+  "case_sha256": "b113964afb6cc9c4d676e5310172c0f01c3222459d31ca3443a7995328667d31",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "trace_frames": 99,
+  "events": {
+    "events": 26358,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "mine-on-portal.png",
+      "sha256": "92cfa2da3bfcb237b2b2c8945e36222c5564ccc08b219c6c809da12109a38597",
+      "bytes": 550847
+    },
+    {
+      "name": "mine-armed.png",
+      "sha256": "b41202a3f86c88b9d201dc2d5a316fafc163664074f8e8c65013054c215da22d",
+      "bytes": 551578
+    },
+    {
+      "name": "hazardous-destination-after.png",
+      "sha256": "c290920528e6bf07dd93d85997171bf3b388ac4d04c445902ad5722a34e75748",
+      "bytes": 547325
+    }
+  ],
+  "limits": [
+    "Selected native/raw source observations; no complete Flash equivalence claim.",
+    "Fixtures invoke original methods and do not implement new gameplay.",
+    "Position/state and original callback timing must be interpreted separately."
+  ]
+}

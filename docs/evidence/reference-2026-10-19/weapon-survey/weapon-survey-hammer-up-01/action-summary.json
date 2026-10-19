@@ -1,0 +1,972 @@
+{
+  "case": "hammer-up-original-action",
+  "input_counter": 723,
+  "first_observed_uninterrupted_frame": 747,
+  "interruption_frame_intervals": 24,
+  "rows": [
+    {
+      "frame": 723,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 1
+          }
+        }
+      }
+    },
+    {
+      "frame": 724,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 1
+          }
+        }
+      }
+    },
+    {
+      "frame": 725,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 2
+          }
+        }
+      }
+    },
+    {
+      "frame": 726,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 3
+          }
+        }
+      }
+    },
+    {
+      "frame": 727,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 4
+          }
+        }
+      }
+    },
+    {
+      "frame": 728,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 5
+          }
+        }
+      }
+    },
+    {
+      "frame": 729,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 6
+          }
+        }
+      }
+    },
+    {
+      "frame": 730,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 7
+          }
+        }
+      }
+    },
+    {
+      "frame": 731,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 8
+          }
+        }
+      }
+    },
+    {
+      "frame": 732,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 9
+          }
+        }
+      }
+    },
+    {
+      "frame": 733,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 10
+          }
+        }
+      }
+    },
+    {
+      "frame": 734,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 11
+          }
+        }
+      }
+    },
+    {
+      "frame": 735,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 12
+          }
+        }
+      }
+    },
+    {
+      "frame": 736,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 13
+          }
+        }
+      }
+    },
+    {
+      "frame": 737,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 14
+          }
+        }
+      }
+    },
+    {
+      "frame": 738,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 15
+          }
+        }
+      }
+    },
+    {
+      "frame": 739,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 16
+          }
+        }
+      }
+    },
+    {
+      "frame": 740,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 17
+          }
+        }
+      }
+    },
+    {
+      "frame": 741,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 18
+          }
+        }
+      }
+    },
+    {
+      "frame": 742,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 19
+          }
+        }
+      }
+    },
+    {
+      "frame": 743,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 20
+          }
+        }
+      }
+    },
+    {
+      "frame": 744,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 21
+          }
+        }
+      }
+    },
+    {
+      "frame": 745,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 22
+          }
+        }
+      }
+    },
+    {
+      "frame": 746,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": true,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": {
+          "$ref": "0x275b6c8bee0",
+          "class": "sinker_Up_Play",
+          "display": {
+            "x": 15.0,
+            "y": -15.0,
+            "current_frame": 23
+          }
+        }
+      }
+    },
+    {
+      "frame": 747,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 748,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 749,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 750,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 751,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 752,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 753,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 754,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 755,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 756,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 757,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 758,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 759,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 760,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 761,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 762,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 763,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 764,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 765,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 766,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 767,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 768,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 769,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 770,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 771,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 772,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    },
+    {
+      "frame": 773,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "actor_state": "normal",
+      "facing": "_Up",
+      "movement_interrupted": false,
+      "weapon": {
+        "currentUseNum": 1,
+        "totalUseNum": 2,
+        "weaponPlay": null
+      }
+    }
+  ],
+  "events": 16901,
+  "errors": [],
+  "limits": [
+    "Post-step interruption state, not every intermediate callback phase.",
+    "Missing equipment can mean replacement/disposal; inspect source and event history.",
+    "Nominal frame intervals are not measured real-time duration."
+  ]
+}

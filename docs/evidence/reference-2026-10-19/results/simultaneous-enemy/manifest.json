@@ -1,0 +1,243 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-simultaneous-human-last-enemy-enemy-bomb",
+  "case_sha256": "5a5104f02fee0f4aeff52bd076db2d8997d5769977795a5a1075aca5deb1fee9",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "7419df40835a520b534c9db3013f708d01c16e0c5822f043eec2e0838ee6baa2"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "71a083e246f9be139b623ebfd9fc61e1c7ba9af6a263b536bf03e762c764cb4c"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "f189c177c6a3ea0151c3490bd734df2a1452596bb9bcd30ccd4deb071c4d9cf6"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "41d2d5c6d116656b69032d64e6edc5194f178546dba61ce24be8500018196ef8"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "60cc18a42df8f32b994b76c8cce802d37c3edd4474a30f5cd648c2879f3b7df5"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 841,
+      "sha256": "9865a225be26da19de27f61ad4a14020c4784b3ebe968ba8118735a98d2f09be"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 841,
+      "sha256": "3805e42aa3f2b0494b7753c6e74a1161594d45189be7332264c158031e819a79"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-3me2v0x4\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 1147,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "two-enemies-removed",
+      "frame": 841,
+      "sha256": "c379d35a46ff453feabe870d441521006678629ed0e6e8698674daff16ee5a93",
+      "bytes": 546472
+    },
+    {
+      "name": "last-enemy-adjacent",
+      "frame": 841,
+      "sha256": "4f08e92bee577252aa6c24db27b631609c5ceeb2d493c61ceb275158980927fd",
+      "bytes": 546228
+    },
+    {
+      "name": "lethal-bomb-placed",
+      "frame": 842,
+      "sha256": "3e41b2f48665d26af028af9504e5f94dcdf9a45e6e3893c612bfc0b7eb22961c",
+      "bytes": 546257
+    },
+    {
+      "name": "simultaneous-ending",
+      "frame": 967,
+      "sha256": "53c0c74c68a29d3e1f926ec38162a6312a95867b6f96099e5a689e3f396bb1f1",
+      "bytes": 539491
+    },
+    {
+      "name": "simultaneous-results",
+      "frame": 1147,
+      "sha256": "2ee2a45ba970b375e8e688d3992737bb3abf4122602af121d95adcb207be6047",
+      "bytes": 175935
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "31595507a5a068e41863f48bd8bfc8e36f08889c8d51a764e75d68973ff835e4",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "two-enemies-removed",
+      "frame": 841,
+      "sha256": "a38ad8be89d75c6bc41dfbdeea7c9696fb02a73c57c376892d6916738557ad32",
+      "objects": 355,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "last-enemy-adjacent",
+      "frame": 841,
+      "sha256": "80a294535aef30982a8b776ede440bc8523c03aa9d561c4a34cc5c32ed2741c5",
+      "objects": 355,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "lethal-bomb-placed",
+      "frame": 842,
+      "sha256": "291bf87760bf13a8d50204b2dd16704c43bb63c422d9279e37b5e508bb0f0e4f",
+      "objects": 356,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "simultaneous-ending",
+      "frame": 967,
+      "sha256": "af72989ffaa2916993789165842c594ee7964ccde7b28909116da9bce71f5635",
+      "objects": 316,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "simultaneous-results",
+      "frame": 1147,
+      "sha256": "3a1c504146e38dc1bb10d1fd26728b6a5c51c0fc783cac1cd3e4944aaa852ecd",
+      "objects": 262,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "7920663ad667d49a14a3c1327bc879adb54ad4d3eccf55685c9fd53b8291f580",
+  "stderr_sha256": "d0bb60a467df3a185ab21da7af7cb98b741d48255fd42ab66deec05cfebda67f"
+}

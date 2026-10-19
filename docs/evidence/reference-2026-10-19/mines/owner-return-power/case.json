@@ -1,0 +1,216 @@
+{
+  "name": "owner-return-power",
+  "classification": "Controlled original-method fixtures, normal collection and legal human input; no raw health, damage, weapon or outcome writes.",
+  "actions": [
+    {
+      "command": "seed 12345"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 5,
+        "y": 4
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 9,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 13,
+        "y": 4
+      }
+    },
+    {
+      "command": "step 100",
+      "capture": "spawn-protection-finished"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 3,
+        "y": 1,
+        "actor": 1
+      }
+    },
+    {
+      "command": "step 20"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 3,
+        "y": 1,
+        "actor": 1
+      }
+    },
+    {
+      "command": "trace-focus frames"
+    },
+    {
+      "command": "events events 50000 zlong.bombit5.bombs zlong.bombit5.commands zlong.bombit5.items.weapons zlong.bombit5.gameengine.robot zlong.bombit5.gameengine::GameEngine"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "shield"
+      }
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "landmine"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "equipped"
+    },
+    {
+      "command": "kd space",
+      "capture": "input"
+    },
+    {
+      "command": "step 1",
+      "capture": "placed"
+    },
+    {
+      "command": "step 80",
+      "capture": "owner-still-present"
+    },
+    {
+      "command": "ku space",
+      "capture": "released"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 15"
+    },
+    {
+      "command": "ku right",
+      "capture": "owner-left"
+    },
+    {
+      "command": "step 100",
+      "capture": "armed-idle"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 20"
+    },
+    {
+      "command": "ku left",
+      "capture": "owner-returned"
+    },
+    {
+      "command": "step 20",
+      "capture": "after-cleanup"
+    },
+    {
+      "command": "events off"
+    },
+    {
+      "command": "trace-focus off"
+    }
+  ]
+}

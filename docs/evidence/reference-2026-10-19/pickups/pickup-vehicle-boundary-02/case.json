@@ -1,0 +1,3673 @@
+{
+  "name": "original-soft-drop-vehicle-boundary-seed1050",
+  "origin": "Initial seed1050 preselected offline for an enriched vehicle stream, then actual runtime consumption verified; no reseed or forced class.; original AI stop/reposition keeps session alive. Original MapMaster.buildRanUnFixBox and Box.deleteBox+Map.deleBox fixtures replenish/break target2,1; original brick callbacks/RNG/budgets reveal drops; legal walking collects. Direct breaks bypass attack targeting/damage/credit. No budget/time/RNG state writes. Original timePassed calls are direct callback fixtures, not elapsed-clock playback.",
+  "actions": [
+    {
+      "command": "seed 1050"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 3,
+        "y": 3
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 5,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 7,
+        "y": 9
+      }
+    },
+    {
+      "command": "step 100",
+      "capture": "before-budget-cycles"
+    },
+    {
+      "command": "events events 20000 zlong.bombit5.maps::Box zlong.bombit5.maps::MapMaster zlong.bombit5.items zlong.bombit5.gameengine.gamemode::ArcadeMode/timePassed zlong.bombit5.maps::Map/createRamdonProp"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-010"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-020"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-030"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-040"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-050"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-060"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-070"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-080"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-090"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "fixture": {
+        "op": "build-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "break-soft",
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 12"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "ku left",
+      "state": "cycle-100"
+    },
+    {
+      "capture": "after-budget-cycles"
+    },
+    {
+      "fixture": {
+        "op": "time-passed",
+        "seconds": 45
+      },
+      "state": "time-passed-45"
+    },
+    {
+      "fixture": {
+        "op": "time-passed",
+        "seconds": 59
+      },
+      "state": "time-passed-59"
+    },
+    {
+      "fixture": {
+        "op": "time-passed",
+        "seconds": 60
+      },
+      "state": "time-passed-60"
+    },
+    {
+      "fixture": {
+        "op": "time-passed",
+        "seconds": 75
+      },
+      "state": "time-passed-75"
+    },
+    {
+      "capture": "after-time-callbacks"
+    },
+    {
+      "command": "events off"
+    }
+  ]
+}

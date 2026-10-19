@@ -1,0 +1,486 @@
+[
+  {
+    "name": "title",
+    "frame": 301,
+    "available": false
+  },
+  {
+    "name": "menu",
+    "frame": 541,
+    "available": false
+  },
+  {
+    "name": "settings-default",
+    "frame": 571,
+    "available": false
+  },
+  {
+    "name": "settings-normal",
+    "frame": 596,
+    "available": false
+  },
+  {
+    "name": "arena-dropdown",
+    "frame": 598,
+    "available": false
+  },
+  {
+    "name": "settings-cinema",
+    "frame": 600,
+    "available": false
+  },
+  {
+    "name": "character",
+    "frame": 640,
+    "available": false
+  },
+  {
+    "name": "opening-board",
+    "frame": 721,
+    "available": true,
+    "game": "0x1df59f9fb00",
+    "level": 1,
+    "game_over": false,
+    "past_time": 1,
+    "game_time": 180,
+    "hearts": 3,
+    "registered": [
+      "0x1df5c56c410",
+      "0x1df5c56db30",
+      "0x1df5c577090",
+      "0x1df5c578c10"
+    ],
+    "actors": [
+      {
+        "player": "0x1df5c56b790",
+        "class": "zlong.bombit5.gameengine::PersonPlayer",
+        "life": 3,
+        "robot": "0x1df5c56c410",
+        "state": "normal",
+        "is_exist": false,
+        "registered": true,
+        "position": {
+          "x": 213.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5cd2b5d0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      },
+      {
+        "player": "0x1df5c56d9f0",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c56db30",
+        "state": "normal",
+        "is_exist": false,
+        "registered": true,
+        "position": {
+          "x": 633.0,
+          "y": 95.9
+        },
+        "movie": {
+          "id": "0x1df5cd2c7b0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 9
+        }
+      },
+      {
+        "player": "0x1df5c576910",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c577090",
+        "state": "normal",
+        "is_exist": false,
+        "registered": true,
+        "position": {
+          "x": 213.0,
+          "y": 403.75
+        },
+        "movie": {
+          "id": "0x1df5ce37ba0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 8
+        }
+      },
+      {
+        "player": "0x1df5c577b30",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c578c10",
+        "state": "normal",
+        "is_exist": false,
+        "registered": true,
+        "position": {
+          "x": 633.0,
+          "y": 430.0
+        },
+        "movie": {
+          "id": "0x1df5ce302a0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      }
+    ],
+    "ending": null,
+    "engine_present": true
+  },
+  {
+    "name": "two-enemies-removed",
+    "frame": 841,
+    "available": true,
+    "game": "0x1df59f9fb00",
+    "level": 1,
+    "game_over": false,
+    "past_time": 2,
+    "game_time": 180,
+    "hearts": 3,
+    "registered": [
+      "0x1df5c56c410",
+      "0x1df5c578c10"
+    ],
+    "actors": [
+      {
+        "player": "0x1df5c56b790",
+        "class": "zlong.bombit5.gameengine::PersonPlayer",
+        "life": 3,
+        "robot": "0x1df5c56c410",
+        "state": "normal",
+        "is_exist": true,
+        "registered": true,
+        "position": {
+          "x": 213.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5cd2b5d0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      },
+      {
+        "player": "0x1df5c56d9f0",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c56db30",
+        "state": "dead",
+        "is_exist": true,
+        "registered": false,
+        "position": {
+          "x": 633.0,
+          "y": 95.9
+        },
+        "movie": {
+          "id": "0x1df53e02af0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 58
+        }
+      },
+      {
+        "player": "0x1df5c576910",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c577b30",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c578c10",
+        "state": "normal",
+        "is_exist": true,
+        "registered": true,
+        "position": {
+          "x": 633.0,
+          "y": 430.0
+        },
+        "movie": {
+          "id": "0x1df5ce302a0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      }
+    ],
+    "ending": null,
+    "engine_present": true
+  },
+  {
+    "name": "last-enemy-adjacent",
+    "frame": 841,
+    "available": true,
+    "game": "0x1df59f9fb00",
+    "level": 1,
+    "game_over": false,
+    "past_time": 2,
+    "game_time": 180,
+    "hearts": 3,
+    "registered": [
+      "0x1df5c56c410",
+      "0x1df5c578c10"
+    ],
+    "actors": [
+      {
+        "player": "0x1df5c56b790",
+        "class": "zlong.bombit5.gameengine::PersonPlayer",
+        "life": 3,
+        "robot": "0x1df5c56c410",
+        "state": "normal",
+        "is_exist": true,
+        "registered": true,
+        "position": {
+          "x": 213.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5cd2b5d0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      },
+      {
+        "player": "0x1df5c56d9f0",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c56db30",
+        "state": "dead",
+        "is_exist": true,
+        "registered": false,
+        "position": {
+          "x": 633.0,
+          "y": 95.9
+        },
+        "movie": {
+          "id": "0x1df53e02af0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 58
+        }
+      },
+      {
+        "player": "0x1df5c576910",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c577b30",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c578c10",
+        "state": "normal",
+        "is_exist": true,
+        "registered": true,
+        "position": {
+          "x": 243.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5ce302a0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      }
+    ],
+    "ending": null,
+    "engine_present": true
+  },
+  {
+    "name": "lethal-bomb-placed",
+    "frame": 842,
+    "available": true,
+    "game": "0x1df59f9fb00",
+    "level": 1,
+    "game_over": false,
+    "past_time": 2,
+    "game_time": 180,
+    "hearts": 3,
+    "registered": [
+      "0x1df5c56c410",
+      "0x1df5c578c10"
+    ],
+    "actors": [
+      {
+        "player": "0x1df5c56b790",
+        "class": "zlong.bombit5.gameengine::PersonPlayer",
+        "life": 3,
+        "robot": "0x1df5c56c410",
+        "state": "normal",
+        "is_exist": true,
+        "registered": true,
+        "position": {
+          "x": 213.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5cd2b5d0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      },
+      {
+        "player": "0x1df5c56d9f0",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c56db30",
+        "state": "dead",
+        "is_exist": true,
+        "registered": false,
+        "position": {
+          "x": 633.0,
+          "y": 95.9
+        },
+        "movie": {
+          "id": "0x1df53e02af0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 59
+        }
+      },
+      {
+        "player": "0x1df5c576910",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c577b30",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c578c10",
+        "state": "normal",
+        "is_exist": true,
+        "registered": true,
+        "position": {
+          "x": 243.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5ce302a0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 1
+        }
+      }
+    ],
+    "ending": null,
+    "engine_present": true
+  },
+  {
+    "name": "simultaneous-ending",
+    "frame": 967,
+    "available": true,
+    "game": "0x1df59f9fb00",
+    "level": 1,
+    "game_over": false,
+    "past_time": 6,
+    "game_time": 180,
+    "hearts": 3,
+    "registered": [],
+    "actors": [
+      {
+        "player": "0x1df5c56b790",
+        "class": "zlong.bombit5.gameengine::PersonPlayer",
+        "life": 3,
+        "robot": "0x1df5c56c410",
+        "state": "dead",
+        "is_exist": true,
+        "registered": false,
+        "position": {
+          "x": 213.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5f488ca0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 56
+        }
+      },
+      {
+        "player": "0x1df5c56d9f0",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c576910",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c577b30",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": "0x1df5c578c10",
+        "state": "dead",
+        "is_exist": true,
+        "registered": false,
+        "position": {
+          "x": 243.0,
+          "y": 70.0
+        },
+        "movie": {
+          "id": "0x1df5f47d3b0",
+          "x": 0.0,
+          "y": 0.0,
+          "current_frame": 56
+        }
+      }
+    ],
+    "ending": null,
+    "engine_present": true
+  },
+  {
+    "name": "simultaneous-results",
+    "frame": 1147,
+    "available": true,
+    "game": "0x1df59f9fb00",
+    "level": 1,
+    "game_over": true,
+    "past_time": 6,
+    "game_time": 180,
+    "hearts": 2,
+    "registered": [],
+    "actors": [
+      {
+        "player": "0x1df5c56b790",
+        "class": "zlong.bombit5.gameengine::PersonPlayer",
+        "life": 2,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c56d9f0",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c576910",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      },
+      {
+        "player": "0x1df5c577b30",
+        "class": "zlong.bombit5.gameengine::AIPlayer",
+        "life": 1,
+        "robot": null
+      }
+    ],
+    "ending": null,
+    "engine_present": false
+  }
+]

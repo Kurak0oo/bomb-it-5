@@ -1,0 +1,126 @@
+{
+  "name": "ordinary-bomb-self-contact",
+  "origin": "Original publisher SWF through legal keyboard input only. Human remains on own ordinary bomb to observe original damage, capacity release and soft-block occupancy; no fixture mutation. Narrow per-frame observation window798-823. RNG uncontrolled.",
+  "actions": [
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku right",
+      "capture": "placed-cell"
+    },
+    {
+      "command": "kd space",
+      "state": "placed-before-frame"
+    },
+    {
+      "command": "step 1",
+      "capture": "bomb"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 66",
+      "capture": "pre-window"
+    },
+    {
+      "observe_command": "trace trace"
+    },
+    {
+      "command": "cap contact-frames"
+    },
+    {
+      "command": "step 6",
+      "capture": "detonation"
+    },
+    {
+      "command": "step 19",
+      "capture": "post-window"
+    },
+    {
+      "command": "cap off"
+    },
+    {
+      "observe_command": "trace off"
+    },
+    {
+      "command": "step 55",
+      "capture": "after-death-animation"
+    }
+  ]
+}

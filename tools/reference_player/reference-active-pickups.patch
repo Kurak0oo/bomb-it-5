@@ -1,0 +1,12 @@
+--- a/core/src/avm2/reference_fixtures.rs
++++ b/core/src/avm2/reference_fixtures.rs
+@@ -166,7 +166,8 @@
+     // Registered + non-dead is the liveness check. isExist is damage eligibility,
+     // and may legitimately be false during spawn, vehicles or other protection.
+     let controller=object_slot(robot,"controller")?;
+-    if slot(controller,"_stageFunc").is_some_and(|v|!matches!(v,Value::Null|Value::Undefined)) {
++    if !matches!(&operation, Operation::Pickup {..})
++        && slot(controller,"_stageFunc").is_some_and(|v|!matches!(v,Value::Null|Value::Undefined)) {
+         return Err("Selected actor movement/action is currently interrupted; wait for normal recovery".into());
+     }
+     let view=object_slot(robot,"view")?;

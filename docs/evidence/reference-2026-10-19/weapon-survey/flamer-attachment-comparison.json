@@ -1,0 +1,98 @@
+{
+  "rows": [
+    {
+      "direction": "Up",
+      "body_frame": 2,
+      "held_frame": 1,
+      "static_hand": [
+        24.4,
+        14.8
+      ],
+      "static_gunpoint": [
+        -9.6,
+        -4.7
+      ],
+      "calculated": [
+        14.799999999999999,
+        10.100000000000001
+      ],
+      "original_firePos": [
+        14.799999999999999,
+        10.100000000000001
+      ]
+    },
+    {
+      "direction": "Down",
+      "body_frame": 3,
+      "held_frame": 1,
+      "static_hand": [
+        6.95,
+        15.0
+      ],
+      "static_gunpoint": [
+        -0.2,
+        -3.5
+      ],
+      "calculated": [
+        6.75,
+        11.5
+      ],
+      "original_firePos": [
+        6.75,
+        11.5
+      ]
+    },
+    {
+      "direction": "Left",
+      "body_frame": 2,
+      "held_frame": 1,
+      "static_hand": [
+        15.4,
+        16.7
+      ],
+      "static_gunpoint": [
+        -5.75,
+        -3.5
+      ],
+      "calculated": [
+        9.65,
+        13.2
+      ],
+      "original_firePos": [
+        9.65,
+        13.2
+      ]
+    },
+    {
+      "direction": "Right",
+      "body_frame": 2,
+      "held_frame": 1,
+      "static_hand": [
+        15.0,
+        17.0
+      ],
+      "static_gunpoint": [
+        9.65,
+        -6.8
+      ],
+      "calculated": [
+        24.65,
+        10.2
+      ],
+      "original_firePos": [
+        24.65,
+        10.2
+      ]
+    }
+  ],
+  "verified": 4,
+  "xml_comparison": {
+    "sprite_timelines": 45,
+    "placement_records": 1334,
+    "shape_and_morph_definitions": 93,
+    "xml_sha256": "d789b6e3a8cd7f88a38aa2f8a207f884a8bb80a62d96fbd6728880b9710c0b88"
+  },
+  "limits": [
+    "Four selected human directional attachment samples, not every skin/vehicle animation."
+  ]
+}

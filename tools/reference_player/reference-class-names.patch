@@ -1,0 +1,18 @@
+--- a/core/src/avm2/reference_focus.rs
++++ b/core/src/avm2/reference_focus.rs
+@@ -74,7 +74,14 @@
+ }
+ impl<'a,'gc> Focus<'a,'gc> {
+     fn class(&self, object: Object<'gc>) -> String { object.instance_of_class_name(self.context.gc()).to_utf8_lossy().into_owned() }
+-    fn reference(&self, object: Object<'gc>) -> Json { json!({"$ref":oid(object),"class":self.class(object)}) }
++    fn reference(&self, object: Object<'gc>) -> Json {
++        let mut out=json!({"$ref":oid(object),"class":self.class(object)});
++        if let Some(class)=object.as_class_object() {
++            // Native class definition, not the constructor object's instance class or an AS getter.
++            out["defined_class"]=json!(class.name().to_qualified_name_no_mc().to_utf8_lossy());
++        }
++        out
++    }
+     fn value(&mut self, value: Value<'gc>, depth: usize) -> Json {
+         match value {
+             Value::Undefined=>json!({"$undefined":true}),Value::Null=>Json::Null,

@@ -1,0 +1,18 @@
+{
+  "schema": "bombit5-protection-extract-v1",
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\protection-moto-02",
+  "raw_manifest_sha256": "9d14c7ccba5686533b379d8ac1f156404e94b2cc7ddaf241c91e560308791ab7",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "case_sha256": "4f3dc0cb78063587b713cacb74b6455a03f2a31e4193d1e3f486ce4d591a2e10",
+  "checkpoints": 17,
+  "timeline_frames": {
+    "lifecycle": 359
+  },
+  "limits": [
+    "Focus omissions remain in force; absent records are not zero state.",
+    "Per-frame timeline retains players 0/1 only; checkpoints retain all projected actors.",
+    "No pending timer/Tween queue or native display children were observed.",
+    "Frame counters and host wall time are different clocks."
+  ]
+}

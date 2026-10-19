@@ -1,0 +1,164 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "fireball-solid-interaction",
+  "case_sha256": "4b56957a7a1ff380dc65eb6fbd37424b05e6ee237d2abaf8178711c69269924c",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "e6d3908bf7139c7fb630d88ec98d00c778966fe8835a4ac9ef1f1bfb5a5a3d8f"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "7d76a9b9bffdad445d48c097fa63569729c17cdb7b5ae33ec168f54aa8283003"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "5a09e4eb87e4ee3010b6b6b804e0d05c935edba661d295b190bea798f5e3f715"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "949de84f7c3a656c34b2cad01535b95a3c7aad3cfee0791c89b3e6ce14cb78b3"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "10d612ae7aa27097ad3d402d351b3c48fc2047e6c9708e57ed8c0b7c43c6f2d9"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "66e28377f460e08a63568995f9036447b3cc8edd71525169a6fff2c255c7a9ec"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 822,
+      "sha256": "44a89d48c26ce757c74ad2419f2f108ffbafbd7e7cb2a3b406c858b1b2610a3a"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 822,
+      "sha256": "7b9a01fc20bbf3c8fe747d8a953756eb72a277db21c03c963cf9033647c068bf"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-k_os1xru\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 983,
+  "captures": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "e1163b7542384987b0c26b805bad38d4144000055ec21238e4536c2861f28d2e",
+      "bytes": 543398
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "1c8378bd6881087a4ed7364f861fc3e59392d0521a2ecc423908ce43e2aa91f9",
+      "bytes": 544611
+    },
+    {
+      "name": "equipped",
+      "frame": 823,
+      "sha256": "e47824c80ec0e5b05708f74bbf1fd7c9a85a8f9de0156ee5bd2248f6369f1246",
+      "bytes": 544679
+    },
+    {
+      "name": "input",
+      "frame": 823,
+      "sha256": "c039295a989c47648cf21fda9c08346371af4d97a70c28e0fa3f837251c1b5cb",
+      "bytes": 544614
+    },
+    {
+      "name": "first-recovered",
+      "frame": 903,
+      "sha256": "706dee43244f9d64cd4b7077cec82d27f4b837b0b23eb95c9d7f6bf32893b3a7",
+      "bytes": 545306
+    },
+    {
+      "name": "second-input",
+      "frame": 903,
+      "sha256": "7c29b29ecd78ed6a69dea46383d0cceb7f0c707e88e9473fc8de0dc136ecd867",
+      "bytes": 545375
+    },
+    {
+      "name": "second-recovered",
+      "frame": 983,
+      "sha256": "6ee03c81f7ccf8713850201fc88a0fed5f85e2df5acd4f6f7ed81ec00bacc8e2",
+      "bytes": 544020
+    }
+  ],
+  "states": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "a4f9801a6622c38794b661e31cb176d9c60690850a3921cedf37725ecac4e627",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "e957515773c741bb29a3d606cf3e1ed0ecd2383036d5f5f2a6cffe2848204efa",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "equipped",
+      "frame": 823,
+      "sha256": "51a8ce0b1135147a5ea42197fc406fead4310af5ecd92372029bf93e96f505ec",
+      "objects": 395,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "input",
+      "frame": 823,
+      "sha256": "80a3fbdf039968c740756fba6b10f054219e8be6441539b8898d4b841f60c854",
+      "objects": 396,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "first-recovered",
+      "frame": 903,
+      "sha256": "a716ccb8c5d67fd14eaa8cea2a2eb390939cd6497d661d44064e417f651d1017",
+      "objects": 396,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "second-input",
+      "frame": 903,
+      "sha256": "aa25c59cd96daef5e6bc3d292f7ca229094910d65b08ccf4438f522cedcaed7e",
+      "objects": 397,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "second-recovered",
+      "frame": 983,
+      "sha256": "5abede9e3f601078fb5abf09853a43c2046865f8769c4baf858b6ec28be07b36",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "9da6cccece54fb28a8f226506a603e9da7572d36f3f382e22ab8c75b35e85823",
+  "stderr_sha256": "885e20ff4c5ebf69e9c4c13add615a24b5ac172938d48c667a5ab577598c672d"
+}

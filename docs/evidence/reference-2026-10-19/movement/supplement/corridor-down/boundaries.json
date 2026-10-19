@@ -1,0 +1,1508 @@
+[
+  {
+    "name": "opening-board",
+    "frame": 721,
+    "actors": [
+      {
+        "ui": 0,
+        "robot": "0x286db0ac580",
+        "x": 30.0,
+        "y": 30.0,
+        "cell": [
+          1,
+          1
+        ],
+        "velocity": [
+          0.0,
+          0.0
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 0,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0ae2e0",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0aca80",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0acbc0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0adde0",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0ae1a0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0aed80",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 1,
+        "robot": "0x286db0ad2a0",
+        "x": 450.0,
+        "y": 55.900000000000006,
+        "cell": [
+          15,
+          2
+        ],
+        "velocity": [
+          0.0,
+          0.03963371762221055
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 1,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0b07c0",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0b0f40",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0b0680",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0af500",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0af5a0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b09a0",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 2,
+        "robot": "0x286db0b6120",
+        "x": 30.0,
+        "y": 363.75,
+        "cell": [
+          1,
+          12
+        ],
+        "velocity": [
+          0.0,
+          -0.0660561960370176
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 1,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0b6440",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0b4a00",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0b59a0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0b4e60",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0b5ea0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b43c0",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 3,
+        "robot": "0x286db0b6f80",
+        "x": 450.0,
+        "y": 390.0,
+        "cell": [
+          15,
+          13
+        ],
+        "velocity": [
+          0.0,
+          0.0
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 0,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0baf40",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0bb3a0",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0ba0e0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0bb260",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0baae0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b9d20",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      }
+    ],
+    "cells": [
+      {
+        "x": 1,
+        "y": 1,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b00ba0",
+          "class": "Array",
+          "length": 1,
+          "elements": [
+            {
+              "$ref": "0x286db0ac580",
+              "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+            }
+          ]
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b01490",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b01e50",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b00c70",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b059a0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b06840",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "fire": false,
+        "box": null,
+        "platForm": {
+          "$ref": "0x286d682d1b0",
+          "class": "zlong.bombit5.maps.platform::Portal"
+        },
+        "_robot": {
+          "$ref": "0x286d5b08e70",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b07200",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b08310",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b09280",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 10,
+        "fire": false,
+        "box": {
+          "$ref": "0x286db09c680",
+          "class": "zlong.bombit5.maps::Box"
+        },
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1ccf0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1c810",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 11,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1c260",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1b700",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 12,
+        "fire": false,
+        "box": null,
+        "platForm": {
+          "$ref": "0x286d682ae10",
+          "class": "zlong.bombit5.maps.platform::Portal"
+        },
+        "_robot": {
+          "$ref": "0x286d5b1c400",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1cb50",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 13,
+        "fire": false,
+        "box": {
+          "$ref": "0x286db0a6680",
+          "class": "zlong.bombit5.maps::Box"
+        },
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1a5f0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1a450",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 14,
+        "y": 13,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1a790",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1a860",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 15,
+        "y": 12,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286da230560",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286da230630",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 15,
+        "y": 13,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286da22f520",
+          "class": "Array",
+          "length": 1,
+          "elements": [
+            {
+              "$ref": "0x286db0b6f80",
+              "class": "zlong.bombit5.gameengine.robot::AIRobot"
+            }
+          ]
+        },
+        "_bombArr": {
+          "$ref": "0x286da22ffb0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      }
+    ],
+    "bombs": [
+      {
+        "id": "0x286db0c3500",
+        "class": "zlong.bombit5.bombs::Bomb",
+        "_time": 8,
+        "_isBlast": false,
+        "_continueTime": 0,
+        "_bombPow": 1,
+        "_bombAdder": {
+          "$ref": "0x286db0ad2a0",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_blastArr": {
+          "$ref": "0x286db34ea80",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_xN": 15,
+        "_yN": 2
+      },
+      {
+        "id": "0x286db0c74c0",
+        "class": "zlong.bombit5.bombs::Bomb",
+        "_time": 7,
+        "_isBlast": false,
+        "_continueTime": 0,
+        "_bombPow": 1,
+        "_bombAdder": {
+          "$ref": "0x286db0b6120",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_blastArr": {
+          "$ref": "0x286db3559d0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_xN": 1,
+        "_yN": 12
+      }
+    ],
+    "game_paused": false,
+    "game_over": false
+  },
+  {
+    "name": "offset-before-turn",
+    "frame": 724,
+    "actors": [
+      {
+        "ui": 0,
+        "robot": "0x286db0ac580",
+        "x": 37.25,
+        "y": 30.0,
+        "cell": [
+          1,
+          1
+        ],
+        "velocity": [
+          3.1360000000000006,
+          0
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 0,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0ae2e0",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 23,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0aca80",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0acbc0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0adde0",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0ae1a0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0aed80",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 1,
+        "robot": "0x286db0ad2a0",
+        "x": 450.0,
+        "y": 55.900000000000006,
+        "cell": [
+          15,
+          2
+        ],
+        "velocity": [
+          0.0,
+          0.008560883006397478
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 1,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0b07c0",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 23,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0b0f40",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0b0680",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0af500",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0af5a0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b09a0",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 2,
+        "robot": "0x286db0b6120",
+        "x": 30.0,
+        "y": 363.75,
+        "cell": [
+          1,
+          12
+        ],
+        "velocity": [
+          0.0,
+          -0.014268138343995797
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 1,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0b6440",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 23,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0b4a00",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0b59a0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0b4e60",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0b5ea0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b43c0",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 3,
+        "robot": "0x286db0b6f80",
+        "x": 450.0,
+        "y": 390.0,
+        "cell": [
+          15,
+          13
+        ],
+        "velocity": [
+          0.0,
+          0.0
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 0,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0baf40",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 23,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0bb3a0",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0ba0e0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0bb260",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0baae0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b9d20",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      }
+    ],
+    "cells": [
+      {
+        "x": 1,
+        "y": 1,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b00ba0",
+          "class": "Array",
+          "length": 1,
+          "elements": [
+            {
+              "$ref": "0x286db0ac580",
+              "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+            }
+          ]
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b01490",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b01e50",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b00c70",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b059a0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b06840",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "fire": false,
+        "box": null,
+        "platForm": {
+          "$ref": "0x286d682d1b0",
+          "class": "zlong.bombit5.maps.platform::Portal"
+        },
+        "_robot": {
+          "$ref": "0x286d5b08e70",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b07200",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b08310",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b09280",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 10,
+        "fire": false,
+        "box": {
+          "$ref": "0x286db09c680",
+          "class": "zlong.bombit5.maps::Box"
+        },
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1ccf0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1c810",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 11,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1c260",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1b700",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 12,
+        "fire": false,
+        "box": null,
+        "platForm": {
+          "$ref": "0x286d682ae10",
+          "class": "zlong.bombit5.maps.platform::Portal"
+        },
+        "_robot": {
+          "$ref": "0x286d5b1c400",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1cb50",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 13,
+        "fire": false,
+        "box": {
+          "$ref": "0x286db0a6680",
+          "class": "zlong.bombit5.maps::Box"
+        },
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1a5f0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1a450",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 14,
+        "y": 13,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1a790",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1a860",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 15,
+        "y": 12,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286da230560",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286da230630",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 15,
+        "y": 13,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286da22f520",
+          "class": "Array",
+          "length": 1,
+          "elements": [
+            {
+              "$ref": "0x286db0b6f80",
+              "class": "zlong.bombit5.gameengine.robot::AIRobot"
+            }
+          ]
+        },
+        "_bombArr": {
+          "$ref": "0x286da22ffb0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      }
+    ],
+    "bombs": [
+      {
+        "id": "0x286db0c3500",
+        "class": "zlong.bombit5.bombs::Bomb",
+        "_time": 11,
+        "_isBlast": false,
+        "_continueTime": 0,
+        "_bombPow": 1,
+        "_bombAdder": {
+          "$ref": "0x286db0ad2a0",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_blastArr": {
+          "$ref": "0x286db34ea80",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_xN": 15,
+        "_yN": 2
+      },
+      {
+        "id": "0x286db0c74c0",
+        "class": "zlong.bombit5.bombs::Bomb",
+        "_time": 10,
+        "_isBlast": false,
+        "_continueTime": 0,
+        "_bombPow": 1,
+        "_bombAdder": {
+          "$ref": "0x286db0b6120",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_blastArr": {
+          "$ref": "0x286db3559d0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_xN": 1,
+        "_yN": 12
+      }
+    ],
+    "game_paused": false,
+    "game_over": false
+  },
+  {
+    "name": "corridor-after-turn",
+    "frame": 738,
+    "actors": [
+      {
+        "ui": 0,
+        "robot": "0x286db0ac580",
+        "x": 30.0,
+        "y": 72.35,
+        "cell": [
+          1,
+          2
+        ],
+        "velocity": [
+          0,
+          3.9968654334361604
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 0,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0ae2e0",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 37,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0aca80",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0acbc0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0adde0",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0ae1a0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0aed80",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 1,
+        "robot": "0x286db0ad2a0",
+        "x": 450.0,
+        "y": 55.900000000000006,
+        "cell": [
+          15,
+          2
+        ],
+        "velocity": [
+          0.0,
+          6.708664407199897e-06
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 1,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0b07c0",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 37,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0b0f40",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0b0680",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0af500",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0af5a0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b09a0",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 2,
+        "robot": "0x286db0b6120",
+        "x": 30.0,
+        "y": 363.75,
+        "cell": [
+          1,
+          12
+        ],
+        "velocity": [
+          0.0,
+          -1.1181107345333162e-05
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 1,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0b6440",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 37,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0b4a00",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0b59a0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0b4e60",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0b5ea0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b43c0",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      },
+      {
+        "ui": 3,
+        "robot": "0x286db0b6f80",
+        "x": 450.0,
+        "y": 390.0,
+        "cell": [
+          15,
+          13
+        ],
+        "velocity": [
+          0.0,
+          0.0
+        ],
+        "state": "normal",
+        "damage_eligible": false,
+        "vehicle": "",
+        "shield": null,
+        "bomb_num": 0,
+        "power": 1,
+        "cur_organ": null,
+        "busy": null,
+        "commands": [
+          {
+            "id": "0x286db0baf40",
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "_nvincibilityTimeCount": 37,
+            "_totalFrames": 80
+          },
+          {
+            "id": "0x286db0bb3a0",
+            "class": "zlong.bombit5.commands.map::SlideTableCommand"
+          },
+          {
+            "id": "0x286db0ba0e0",
+            "class": "zlong.bombit5.commands.map::PushRobotCommand"
+          },
+          {
+            "id": "0x286db0bb260",
+            "class": "zlong.bombit5.commands.robot::GetItemCommand"
+          },
+          {
+            "id": "0x286db0baae0",
+            "class": "zlong.bombit5.commands.map::SpeedBannerCommand"
+          },
+          {
+            "id": "0x286db0b9d20",
+            "class": "zlong.bombit5.commands.robot::GetFireCommand"
+          }
+        ]
+      }
+    ],
+    "cells": [
+      {
+        "x": 1,
+        "y": 1,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b00ba0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b01490",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b01e50",
+          "class": "Array",
+          "length": 1,
+          "elements": [
+            {
+              "$ref": "0x286db0ac580",
+              "class": "zlong.bombit5.gameengine.robot::PersonRobot"
+            }
+          ]
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b00c70",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b059a0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b06840",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 3,
+        "y": 2,
+        "fire": false,
+        "box": null,
+        "platForm": {
+          "$ref": "0x286d682d1b0",
+          "class": "zlong.bombit5.maps.platform::Portal"
+        },
+        "_robot": {
+          "$ref": "0x286d5b08e70",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b07200",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 3,
+        "y": 3,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b08310",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b09280",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 10,
+        "fire": false,
+        "box": {
+          "$ref": "0x286db09c680",
+          "class": "zlong.bombit5.maps::Box"
+        },
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1ccf0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1c810",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 11,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1c260",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1b700",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 12,
+        "fire": false,
+        "box": null,
+        "platForm": {
+          "$ref": "0x286d682ae10",
+          "class": "zlong.bombit5.maps.platform::Portal"
+        },
+        "_robot": {
+          "$ref": "0x286d5b1c400",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1cb50",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 13,
+        "y": 13,
+        "fire": false,
+        "box": {
+          "$ref": "0x286db0a6680",
+          "class": "zlong.bombit5.maps::Box"
+        },
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1a5f0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1a450",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 14,
+        "y": 13,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286d5b1a790",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286d5b1a860",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 15,
+        "y": 12,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286da230560",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_bombArr": {
+          "$ref": "0x286da230630",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      },
+      {
+        "x": 15,
+        "y": 13,
+        "fire": false,
+        "box": null,
+        "platForm": null,
+        "_robot": {
+          "$ref": "0x286da22f520",
+          "class": "Array",
+          "length": 1,
+          "elements": [
+            {
+              "$ref": "0x286db0b6f80",
+              "class": "zlong.bombit5.gameengine.robot::AIRobot"
+            }
+          ]
+        },
+        "_bombArr": {
+          "$ref": "0x286da22ffb0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        }
+      }
+    ],
+    "bombs": [
+      {
+        "id": "0x286db0c3500",
+        "class": "zlong.bombit5.bombs::Bomb",
+        "_time": 25,
+        "_isBlast": false,
+        "_continueTime": 0,
+        "_bombPow": 1,
+        "_bombAdder": {
+          "$ref": "0x286db0ad2a0",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_blastArr": {
+          "$ref": "0x286db34ea80",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_xN": 15,
+        "_yN": 2
+      },
+      {
+        "id": "0x286db0c74c0",
+        "class": "zlong.bombit5.bombs::Bomb",
+        "_time": 24,
+        "_isBlast": false,
+        "_continueTime": 0,
+        "_bombPow": 1,
+        "_bombAdder": {
+          "$ref": "0x286db0b6120",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_blastArr": {
+          "$ref": "0x286db3559d0",
+          "class": "Array",
+          "length": 0,
+          "elements": []
+        },
+        "_xN": 1,
+        "_yN": 12
+      }
+    ],
+    "game_paused": false,
+    "game_over": false
+  }
+]

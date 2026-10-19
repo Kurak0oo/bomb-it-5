@@ -1,0 +1,337 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-three-losses-retry-game-over",
+  "case_sha256": "6f0067979fd6600d321cd405cde28eb9a60f34654acb1f5f3736e02f876db64f",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "03176603f43d5b4b33a6a8ec69f5a93d9d5c27eae9e88cf5300ebb6f6d1adeab"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "f1d091bd6ae4611009ee507d18b8b4be4ba0152e34b4698c158b6e587eca1fa1"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "b4fff2bda7ba4c92351c688294227cfcc7ab243217e98d039583057219779405"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 1107,
+      "sha256": "9a247331d0258f4e135a9319c6c2196200eba33a0694cc007d1fdb7a0eea0358"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 1107,
+      "sha256": "f6df85ebe908a561639d42d1fa9b09076c4c7aa706762870537929d0ea73fccf"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 1107,
+      "sha256": "6c937afe1bc071a3f2e9c0e317f77a72516bbbed94db98545421d44498686cb2"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 1493,
+      "sha256": "942ab381ab827d4e367cd21aec319425a0bfbc7141bc2c711c187c61b41192a1"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 1493,
+      "sha256": "5b2dbd63a5a6e7b038c48eca91637c01018eff4d43b4c73d56603508f09fdb5f"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 1493,
+      "sha256": "d119ac91a4a6b6c0cab6d1143f83d949dcf94f3294486cb85fe1d1364df32933"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-0mndgkmb\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 1930,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "bomb-life-3",
+      "frame": 722,
+      "sha256": "c8d3959657d4c0e7311beba60a9444a906742e99b2d72f770302164d6cd5fb7d",
+      "bytes": 551271
+    },
+    {
+      "name": "loss-life-2",
+      "frame": 1007,
+      "sha256": "4794e93c4c5974fb8eaf02fb10c2413df3f3074947c95bd83411619b5a60aa7d",
+      "bytes": 176482
+    },
+    {
+      "name": "retry-2-opening",
+      "frame": 1107,
+      "sha256": "21888588e5ca9cc3f1cad86177ff90d1df4f1d5bcbf31d733df924b7f1e194a9",
+      "bytes": 537005
+    },
+    {
+      "name": "bomb-life-2",
+      "frame": 1108,
+      "sha256": "29838f1175999875f4d93bc319318a33c6e28db19b11525758c6c65b26d74490",
+      "bytes": 537520
+    },
+    {
+      "name": "loss-life-1",
+      "frame": 1393,
+      "sha256": "9b41c13a276c6a983d663cd1f0658a5c48a8a3bc14711e7d0de902237cf87ff8",
+      "bytes": 176280
+    },
+    {
+      "name": "retry-1-opening",
+      "frame": 1493,
+      "sha256": "e546c729344dd4e7963c95b9864aa812f73caec1757c32b60c40f8a3ab5dd72f",
+      "bytes": 605969
+    },
+    {
+      "name": "bomb-life-1",
+      "frame": 1494,
+      "sha256": "e5570446d11043d780d8cc672be3102c6b8850f7223ff6f9fa0997d07eb21ae2",
+      "bytes": 606935
+    },
+    {
+      "name": "loss-life-0",
+      "frame": 1779,
+      "sha256": "0c0ef580a14c8c646b91333feb2e2abe9a3a2de57253d9065c9bf3d7bb018548",
+      "bytes": 192041
+    },
+    {
+      "name": "game-over-try-again-settings",
+      "frame": 1809,
+      "sha256": "edadf22e72853636036483739ca526b79772795b462e5712df88be83d1dcbcc9",
+      "bytes": 267187
+    },
+    {
+      "name": "fresh-character",
+      "frame": 1849,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "fresh-session-opening",
+      "frame": 1930,
+      "sha256": "4c38a1f74c1533d9d6148adf09f62067747e9ab4317463a96c2498d705ab28df",
+      "bytes": 564078
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "93205f094ce708014186f81b9d9a415b1d2e496ba0297fa9c9ebb1d7e0c60840",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "bomb-life-3",
+      "frame": 722,
+      "sha256": "1a7ffad037acc2bff5026429e28bc9f7dfecf5a6e270440ef0e8e01c94811969",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "loss-life-2",
+      "frame": 1007,
+      "sha256": "38e80086abda8215d687c4020a840d249c8bde38716426ec0ed4dadcd15abd49",
+      "objects": 262,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "retry-2-opening",
+      "frame": 1107,
+      "sha256": "da435eedbaf67aab2972011ff3d2652d492a8618d6980db0b3b553c773b362dc",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "bomb-life-2",
+      "frame": 1108,
+      "sha256": "b55b5cb7e33d59d8a4eacac35400e5929ba24190eaaf56847fd7153da850bac9",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "loss-life-1",
+      "frame": 1393,
+      "sha256": "742c786e0532990641d28d381bc366cedb316b4563ed6737dc77d5bb8aea8c7a",
+      "objects": 262,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "retry-1-opening",
+      "frame": 1493,
+      "sha256": "b6116be79f5f87d4ad4ff4c0b7a26e3d1bb382528778e0c7edc155e1f98474d2",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "bomb-life-1",
+      "frame": 1494,
+      "sha256": "2250130bd962088fac93daa5744fc6cbc9bc295ada9a337406ac559b5ebf2b31",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "loss-life-0",
+      "frame": 1779,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "game-over-try-again-settings",
+      "frame": 1809,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "fresh-character",
+      "frame": 1849,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "fresh-session-opening",
+      "frame": 1930,
+      "sha256": "4e211b2efd30201053cc08657d7a6c8f36b2ca768bdf598c3141de1bf21554cd",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "96fbf47edfa5526cdd1497d61b2b108473d149ceb927c8fe2c85f330b4827102",
+  "stderr_sha256": "dc52c0a0a0a49ba3686e02cc1bd0278df65e12a525a4745b3574b73f258a3bbd"
+}

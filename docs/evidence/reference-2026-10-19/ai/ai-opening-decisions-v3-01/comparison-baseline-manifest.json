@@ -1,0 +1,67 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-normal-ai-opening-decisions",
+  "case_sha256": "03bf0efa56349bf2e8f2cbb35f71df485853e54aec98bc5c9e9ad588e8ee1e5a",
+  "fixtures": false,
+  "fixture_results": [],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "e9c9f65d03c3af960d84934e0becee5d65de3d23d70f9ea2e725418aabf63292",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-f0x86xdn\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 751,
+  "captures": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "57324702ce8d301e19180b8b548337ed3b4d1fd419f722b77df129832d36cd0c",
+      "bytes": 267041
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "7c998ee5b581390c99eaa7a8fc4018562b3d94e66aeb387e7cd878f3bdbc9a8f",
+      "bytes": 534223
+    },
+    {
+      "name": "after-opening-ai",
+      "frame": 751,
+      "sha256": "94cc56053079ae0d051b6954d846bd584dbfb5504573e1c05e944ce0d381dd30",
+      "bytes": 535692
+    }
+  ],
+  "states": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "b60d41a7e5ed7ecd4ebf36abe00dd05daad437614f94a7195c239812cb14b984",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-opening-ai",
+      "frame": 751,
+      "sha256": "cd893a6d3fab434b5001a172ff0b537f6d6f53adb77123956114bafda7ed7401",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "7afe5e5b5c63c5913e5db1063844b45d3ed20088d8d755faf447908c9022eb21",
+  "stderr_sha256": "b5d088d3540820bd5cd3ff35f4e0f5eb325b614590bb9d5ebbdb4d48c69b4b05"
+}

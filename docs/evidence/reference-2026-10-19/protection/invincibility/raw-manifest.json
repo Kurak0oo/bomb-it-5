@@ -1,0 +1,183 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "invincibility-contact-expiry",
+  "case_sha256": "c73451e886995ad50ea4e85fd656c79437d70f0af228bafbecca81a3549215be",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "b203b7d1c646f192a311be05915db31b00b9ac9a0882fd81c8dbcf6cca48b7e3"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "8c28be49cd03f25fb55d8bec9d473e2778c2bab25ddc5fae567e2f1ed42372ef"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "fec49da73332b29decd19ae794493d92e0f6484aa0c8efe50b35046eb6a7323f"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "3c5e3d21b7e45ec642c32592902dee881d1aa25b1d4b6add01000bcaad220732"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "90744ac7eff9198187bfa97e179fd8d79cf90238d0497a863b394a6bdec0b5f4"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "20eb16f055ea6e414a31cc6991bd03b33ffddb3ec2e741795d6711eb19de7e89"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 821,
+      "sha256": "62bce78f5b371ef874f3d4f9ccf16606da8f600c9497da90e8eaba356e1900be"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 821,
+      "sha256": "b522cd9e636bc0f80e1b416a66247ead195069047af20ba6da2e9a14e7661e08"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 822,
+      "sha256": "1e35f3a2317a3ebf12e64a1e0cf79d63a30c92934900dcea6027c77f72f04fc3"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-xd6xfn3z\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 1239,
+  "captures": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "e1163b7542384987b0c26b805bad38d4144000055ec21238e4536c2861f28d2e",
+      "bytes": 543398
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "6f72225c55efc27f4123f14fb6b2503e7dc174aae9d2df30863f7b617a64c511",
+      "bytes": 544553
+    },
+    {
+      "name": "target-shield",
+      "frame": 822,
+      "sha256": "79ae8fc0088ca3f7bd8c3b30ddf7748408656165c4f4b2b3fad856b804725955",
+      "bytes": 545564
+    },
+    {
+      "name": "invincibility-introduction",
+      "frame": 823,
+      "sha256": "aec19b8a119fa5b0bdeab7f16f81eee1ca009e9d687b5ed1d17f415171584801",
+      "bytes": 545702
+    },
+    {
+      "name": "invincibility-active",
+      "frame": 857,
+      "sha256": "d47b380e8d2bacdd4e310657e555e685f2c9a9da3d0b968f561f900b2635a6bb",
+      "bytes": 545992
+    },
+    {
+      "name": "contact-shield",
+      "frame": 869,
+      "sha256": "5ae12c307b772be8deed5480033300d01957183cbbf920de53af645aac874c24",
+      "bytes": 544902
+    },
+    {
+      "name": "contact-after-immunity",
+      "frame": 969,
+      "sha256": "f57a5eb8398d4501c28e5ec07e183fa569ef781393a18ee25be3996e1d36630c",
+      "bytes": 543844
+    },
+    {
+      "name": "invincibility-expired",
+      "frame": 1239,
+      "sha256": "6e3ca66a463e2b26bd1db99b374003e70ff21bec55856d6ee1e9f77d0252fba3",
+      "bytes": 541130
+    }
+  ],
+  "states": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "69f0e384ada10e094fa86f50b534b7e69adaddf64ec0944293202ff19b5f5f40",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "c677c780698d971a1d1beb685697b5e19698828d39835b0a7a805d64a38f766a",
+      "objects": 392,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "target-shield",
+      "frame": 822,
+      "sha256": "9824a2aaab02918bc569d4fd9fc6850aea1e383a4fdcfcb41a0a12dc87de9a04",
+      "objects": 392,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "invincibility-introduction",
+      "frame": 823,
+      "sha256": "0a7149b80231313ac2e7c71d16402cef2a862ee481b45e928e7ff76d43bc6a90",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "invincibility-active",
+      "frame": 857,
+      "sha256": "ddcbaae6d63818926a5d6c579cac9a36df11ca66cbde8de49a1cb1890d5b06b2",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "contact-shield",
+      "frame": 869,
+      "sha256": "6890a891a052efba2ea78acac0728511d2aac8042b290e78527ba4b71285d570",
+      "objects": 395,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "contact-after-immunity",
+      "frame": 969,
+      "sha256": "511a8ea37b6695bd965db3e3b3705a8c653cc5b595794a676e9c3037795381fe",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "invincibility-expired",
+      "frame": 1239,
+      "sha256": "72a4cf3ba747acdae14b92b6485f920b2b26bb1fdc108640d3c49c208eaa7a11",
+      "objects": 354,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "2dd85622e7c2f92164aa1992fbe96d612c47a8dbb5c176649d4f3daa0c6fb232",
+  "stderr_sha256": "2ada5df629b57be8020a0248f59fe09b72c3ba6f23ad33aa9e3607c3aad857cd"
+}

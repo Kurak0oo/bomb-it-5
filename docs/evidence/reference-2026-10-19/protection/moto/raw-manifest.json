@@ -1,0 +1,344 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "moto-shield-weapon-lifecycle",
+  "case_sha256": "4f3dc0cb78063587b713cacb74b6455a03f2a31e4193d1e3f486ce4d591a2e10",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "c2e68fe74b43624556e2c27e49eabbd2437228e9e344e4e331e11a33abadad0e"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "81b942a8836de5065af7218eb8024217bf7e56a72553e5c74fb12efec2d15529"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "b21b442ef587d220180fa1439860a11cd81842da975b09dcc71a0fd619781b2c"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "798763d56be2d62f194f19daf6518711abf60c52da341015121c093461dc3b64"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "c5238258f3b3d7087c1c0cbe33b36d0eaa6b5b453ea8d7ed1f183fb262beb6ab"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "065f26d15a1f830f7da9ba1a8bc39c1669bd2421de15a148253973320f682343"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 821,
+      "sha256": "a54aab28dda624b13df7940eefa727f51ce0c1be941637144a8f5fc23610dd8a"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 822,
+      "sha256": "9353442f9d8d66839020d33a8b6a136b5eed3e620942d3c606ae27a6df4d08f8"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 823,
+      "sha256": "9353442f9d8d66839020d33a8b6a136b5eed3e620942d3c606ae27a6df4d08f8"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 824,
+      "sha256": "d4232af5f7354be487bc096dbc205b1e17567851983257a8894bbdeaa0a9d856"
+    },
+    {
+      "name": "fixture-0010",
+      "frame": 851,
+      "sha256": "6e22059309c4ab98a29c599c0d25d38b87c6557b00e6455ae0f10ce552c799d9"
+    },
+    {
+      "name": "fixture-0011",
+      "frame": 851,
+      "sha256": "f6b67d5cf819cbd8a81cd0b55cc984fe8a074aa7e39153c73dee892823f8412e"
+    },
+    {
+      "name": "fixture-0012",
+      "frame": 1053,
+      "sha256": "494921f71ccdc602c8234c3f9e302f5a476cc567f9ba3ebe7cc10188c62cfb1c"
+    },
+    {
+      "name": "fixture-0013",
+      "frame": 1053,
+      "sha256": "f6b67d5cf819cbd8a81cd0b55cc984fe8a074aa7e39153c73dee892823f8412e"
+    },
+    {
+      "name": "fixture-0014",
+      "frame": 1210,
+      "sha256": "5b9fafc3daba04203469dcf86408a32b66fb9712a147a6979daf96fdf9b5c649"
+    },
+    {
+      "name": "fixture-0015",
+      "frame": 1211,
+      "sha256": "efaac18cc900bd847c5216c860b4ed612642bf16815ef795109230effab1f99b"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-r4inn5g8\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 1212,
+  "captures": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "e1163b7542384987b0c26b805bad38d4144000055ec21238e4536c2861f28d2e",
+      "bytes": 543398
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "1c8378bd6881087a4ed7364f861fc3e59392d0521a2ecc423908ce43e2aa91f9",
+      "bytes": 544611
+    },
+    {
+      "name": "weapon",
+      "frame": 822,
+      "sha256": "ee8271c9ead0126988ca792bb514a08ad0b426a92168ecc1c506335a25bf686f",
+      "bytes": 545527
+    },
+    {
+      "name": "shield-first",
+      "frame": 823,
+      "sha256": "81788492d4a69d70f5079e39fc9634ae323b52be915254807c482a4821163da9",
+      "bytes": 546002
+    },
+    {
+      "name": "shield-replaced",
+      "frame": 824,
+      "sha256": "a03cec090fcb012ce17609ed7a4ce41c5db88f92641084b8699808d60c2ab68b",
+      "bytes": 546223
+    },
+    {
+      "name": "ride-collected",
+      "frame": 825,
+      "sha256": "b9d685c8096dca21c2c56eb5fe204ba17738b560fa5bb943cf574344fa0c153b",
+      "bytes": 546029
+    },
+    {
+      "name": "ride-moving",
+      "frame": 831,
+      "sha256": "98c5b2d2fa88174e0499637cc7a88e10bcc0b633e94732ccb2c81ac44dc55709",
+      "bytes": 545699
+    },
+    {
+      "name": "before-self-bomb",
+      "frame": 851,
+      "sha256": "9a2450309f391903584ce7a8cbeacb1df7ea97ee21630e929316a19b65e67118",
+      "bytes": 545992
+    },
+    {
+      "name": "vehicle-hit",
+      "frame": 923,
+      "sha256": "2b0560158cd6a1104a2e554d37e1b85971a963436e7b2ec7a50670a0a446b185",
+      "bytes": 546664
+    },
+    {
+      "name": "vehicle-mid-recovery",
+      "frame": 943,
+      "sha256": "9de32622d92f50d42c71513f1c5864218d5a01440c90b72eb5edd83e05a3ca6d",
+      "bytes": 546483
+    },
+    {
+      "name": "vehicle-recovered",
+      "frame": 963,
+      "sha256": "618cd3cf2574f4201e0aa04d467f3ae7ff971cc2d98e7ce5764bd588eeeb077d",
+      "bytes": 544669
+    },
+    {
+      "name": "recovered-fresh-input",
+      "frame": 967,
+      "sha256": "a413922a03dbcbd5af4f9c1b58303effb1fa230454192f3fba135db7e7f2e041",
+      "bytes": 544439
+    },
+    {
+      "name": "vehicle-immunity-finished",
+      "frame": 1053,
+      "sha256": "3439c21941e1071b1a1477b61f05edf5dcebe3e14d6acaf1466902b5913090e2",
+      "bytes": 544638
+    },
+    {
+      "name": "shield-consumed",
+      "frame": 1125,
+      "sha256": "2319d70da16816369e84c706647a6c3a7f6f882d6b6dafeccab7ae35d81ac15c",
+      "bytes": 545344
+    },
+    {
+      "name": "shield-immunity-finished",
+      "frame": 1210,
+      "sha256": "8991f0b98ad6db26d4063eeafa974fba5704f37e66cb4d3af987ce74f5b8a9ab",
+      "bytes": 544795
+    },
+    {
+      "name": "ai-weapon",
+      "frame": 1211,
+      "sha256": "6f4fd85ca9cafda167ea248a71b2bc14bf4c8416af95c3a6bdabd63129b4d934",
+      "bytes": 545660
+    },
+    {
+      "name": "ai-ride",
+      "frame": 1212,
+      "sha256": "3aebef1a818542ce1db8332ab228f3a530adeeed0bdff0b3460ae0bcdb367a92",
+      "bytes": 545465
+    }
+  ],
+  "states": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "51609d4b66385358a62c869af532efd6c8d4db4448d2ef83f83909f7f0cded47",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "9bf9bad7a4f376200529190ed7cf5cea893c1889e9c2189486243a8292d9db2b",
+      "objects": 392,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "weapon",
+      "frame": 822,
+      "sha256": "c1211f49695c75ffe2dec8537d504798f70c6b4b0483748bc4639791b059ecac",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "shield-first",
+      "frame": 823,
+      "sha256": "26290eb6fda74039f68abbf0c756eb270477a2e3ae587096c7326217ed2d598c",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "shield-replaced",
+      "frame": 824,
+      "sha256": "d8d00762e07cc871866ac818813883a6179e4487e4016753fc98069d6c786e7e",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "ride-collected",
+      "frame": 825,
+      "sha256": "da9cd61fa18b0b801ea50454bee247896a38616723041788f37a45f9baf4da37",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "ride-moving",
+      "frame": 831,
+      "sha256": "282962b58c10d8012679a59456eca2ded3a195ac87e154e3f2844d8130f005aa",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "before-self-bomb",
+      "frame": 851,
+      "sha256": "e906f3fa98ddec56f946c48b16ededc18fbba360845d922febeed6aef4815f43",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "vehicle-hit",
+      "frame": 923,
+      "sha256": "2e49de46b4c6a6e3da85b77adbf48be947072bbc61107b5c6ec43535065a323e",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "vehicle-mid-recovery",
+      "frame": 943,
+      "sha256": "b1d2deb6b6f60d16630c44a8e229e61147afa1728f77b55a69a9ef7f365e4b78",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "vehicle-recovered",
+      "frame": 963,
+      "sha256": "428db0614fdba4b5bb312ec8205f2789fbff1865ca987c169465c6236e917837",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "recovered-fresh-input",
+      "frame": 967,
+      "sha256": "6f827fa376e94b12ae526d2a9e0ff8bbf03da22f04f0bd0057e774c6008b301e",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "vehicle-immunity-finished",
+      "frame": 1053,
+      "sha256": "91d640c66fb2c40b7b5071e3301fddbf46ba619a2c15f5af92965c06239101a5",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "shield-consumed",
+      "frame": 1125,
+      "sha256": "1a8ce4204f52617c64d8f881fae68e4be6a172700cf24515e3a91fa6c11ee09e",
+      "objects": 395,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "shield-immunity-finished",
+      "frame": 1210,
+      "sha256": "a54d64361e9b44c4709a62e8509c3563ca6615c2dbbb9768b37e0e653015801e",
+      "objects": 393,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "ai-weapon",
+      "frame": 1211,
+      "sha256": "aefaf82eae42c165c3cf30e988406075e539b5a00c35174cef1495afa7f805b8",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "ai-ride",
+      "frame": 1212,
+      "sha256": "123d11622a410973368f07769f7bec77225baf11cacbfd72d256ca605de4e1f3",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "1acb5af110c0fe030dc4c4d78ed7a40496f023960c27754e6b8475fd95acd5a6",
+  "stderr_sha256": "ccf3b42873991f906fd9b361d029930c6216eac5a47c886b554032e281ff64f6"
+}

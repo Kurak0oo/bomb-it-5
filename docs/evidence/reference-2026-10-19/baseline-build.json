@@ -1,0 +1,14 @@
+{
+  "revision": "45366370ed7d1a59c89aa3cf7b765c7a274407cd",
+  "rustc": "rustc 1.97.0 (2d8144b78 2026-07-07)\nbinary: rustc\ncommit-hash: 2d8144b7880597b6e6d3dfd63a9a9efae3f533d3\ncommit-date: 2026-07-07\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.0\nLLVM version: 22.1.6",
+  "cargo": "cargo 1.97.0 (c980f4866 2026-06-30)",
+  "platform": "Microsoft Windows NT 10.0.26200.0",
+  "profile": "ci",
+  "player_sha256": "848250e92912794cd7b1d32b0b3567a22ec96f4afc4b59e8bd23e1b9c328a07f",
+  "core_changes": false,
+  "renderer_changes": false,
+  "workspace_change": "Add probe to workspace; supplied probe source/manifest and lock copied unchanged.",
+  "source_sha256": "e55ee58e35fdd0d114f1b5ea337479fbc8e8b14b7a0c8382a6c510740249a68a",
+  "lock_sha256": "bdd4a7383111f552db8370f3fbfba908d6c4f178746bcf7beb1fe8fe57ef8c16",
+  "manifest_sha256": "94bbc0d3ce59550340dfb0b74a495d4ee9334b2cc41847788378e2ea17c866a3"
+}

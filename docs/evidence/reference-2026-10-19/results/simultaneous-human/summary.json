@@ -1,0 +1,49 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\results-simultaneous-human-42-01",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "case_sha256": "6dc1aa5140f0ade2027167bd8b8a49b48b0996c0fb8bf18e57fd813e506ba68b",
+  "trace_frames": 125,
+  "events": {
+    "events": 24251,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "lethal-bomb-placed.png",
+      "sha256": "ad3418f05d4dce0d1fab5fbf7ed9493d7a9d6ad6854953208c329f57cb3d97f5",
+      "bytes": 546257
+    },
+    {
+      "name": "simultaneous-results.png",
+      "sha256": "c0bed697a3fe3af0813dfe1c6d7b8b13b0bde809b3a5681e47f1b39a1873fceb",
+      "bytes": 177923
+    }
+  ],
+  "settlements": [
+    {
+      "call": 11975,
+      "enter_frame": 1076,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x1c03f9d8cd0",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        false
+      ],
+      "exit_frame": 1076,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    }
+  ],
+  "limits": [
+    "Controlled original-method setup; no raw health/score/outcome writes.",
+    "Date/Tween wall time and explicit logical steps are distinct.",
+    "Encrypted score getters/setters are observed original calls; stale private slots are not their oracle."
+  ]
+}

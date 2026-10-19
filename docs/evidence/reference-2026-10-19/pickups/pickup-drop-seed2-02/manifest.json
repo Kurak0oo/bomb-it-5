@@ -1,0 +1,97 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "conditional-drop-seed-2",
+  "case_sha256": "44dac611007eb0dde11aa5d7a5e9dd531b5c4936377d7a429a99858544efb727",
+  "fixtures": false,
+  "fixture_results": [],
+  "observation_mode": "compact",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "b558d22562613586ae4ba74858ee7048ff5c91e544cda3a2daea23b30cf42609",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-1utn_pnp\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 822,
+  "captures": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "57324702ce8d301e19180b8b548337ed3b4d1fd419f722b77df129832d36cd0c",
+      "bytes": 267041
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "df0fe1b87037a560704aac56e0b6768ff80d38cff74cf56817ed13ccc3ba5b84",
+      "bytes": 534165
+    },
+    {
+      "name": "bomb-cell",
+      "frame": 731,
+      "sha256": "1cead7d2f3cda250f9140005005edb14b8782b179cb75c5eff1bd917e5acce5a",
+      "bytes": 533052
+    },
+    {
+      "name": "before-drop-window",
+      "frame": 797,
+      "sha256": "50bf16c8dd33ea555c22ebc450fa2e765b7941893387c01f3abf41b39e84efbf",
+      "bytes": 532525
+    },
+    {
+      "name": "after-drop-window",
+      "frame": 822,
+      "sha256": "dedb4af338e71ee99587a6d25e6f77f37d4c5b3def428e7b29d9a01d67f29dd9",
+      "bytes": 532424
+    }
+  ],
+  "states": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "e1e4bd75fe5cc086d06d0fae1a0bdf2e846273b08aaf81e622f31fd351e64a10",
+      "objects": 0,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "551a11dcb5a1a02ed334938ac31872e4e807f192e2ea466bd51bd2cacbd5af68",
+      "objects": 4251,
+      "truncated": false
+    },
+    {
+      "name": "bomb-cell",
+      "frame": 731,
+      "sha256": "90f565fdcca7fbdc1c6f9ea610be6d206074a07377f955b4fe743e88fb376e62",
+      "objects": 4271,
+      "truncated": false
+    },
+    {
+      "name": "placed",
+      "frame": 731,
+      "sha256": "a907b791fd3f73534f6f775fb51592fa84919baf977f88d19b596a1c3b189288",
+      "objects": 4291,
+      "truncated": false
+    },
+    {
+      "name": "before-drop-window",
+      "frame": 797,
+      "sha256": "4519f74132554ae1abc3aa72b5b5435882414dd9a007e41ee32899079b572d5b",
+      "objects": 4304,
+      "truncated": false
+    },
+    {
+      "name": "after-drop-window",
+      "frame": 822,
+      "sha256": "b3296333a6e22cae493f93de001e7abe8c10416c72f48548fb8acf94d56c2473",
+      "objects": 4261,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "bb8e56b5e5cc4229bcfd3042882b0c65a890b43845e96447496d76a0ad604568",
+  "stderr_sha256": "798ced669a5218d09b8e470699011a3c4f2e017d445dc1cbcc7a4c55df8765ee"
+}

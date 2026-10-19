@@ -1,0 +1,156 @@
+{
+  "name": "triple-pause-lifecycle",
+  "origin": "Controlled original pickup setup followed by legal action; replacement pickup is created before interruption and collected naturally by original GetItemCommand during action. Pause uses original P/Space flow; no health/outcome/state writes.",
+  "actions": [
+    {
+      "command": "seed 12345"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku right",
+      "capture": "facing"
+    },
+    {
+      "command": "events events 20000 zlong.bombit5.items.weapons zlong.bombit5.commands.weapon zlong.bombit5.bombs zlong.bombit5.gameengine.robot"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "triple"
+      },
+      "capture": "created"
+    },
+    {
+      "command": "step 1",
+      "capture": "equipped"
+    },
+    {
+      "observe_command": "trace-focus trace"
+    },
+    {
+      "command": "cap frames"
+    },
+    {
+      "command": "kd space",
+      "capture": "input"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "kd p"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku p"
+    },
+    {
+      "command": "step 30",
+      "capture": "paused"
+    },
+    {
+      "command": "step 30",
+      "capture": "still-paused"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 40",
+      "capture": "recovered"
+    },
+    {
+      "command": "cap off"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "command": "events off"
+    }
+  ]
+}

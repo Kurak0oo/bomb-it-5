@@ -1,0 +1,503 @@
+{
+  "dropped": 0,
+  "source_files": [
+    {
+      "file": "f000842.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000843.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000844.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000845.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000846.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000847.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000848.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000849.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000850.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000851.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000852.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000853.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000854.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000855.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000856.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000857.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000858.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000859.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000860.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000861.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000862.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000863.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000864.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000865.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000866.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000867.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000868.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000869.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000870.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000871.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000872.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000873.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000874.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000875.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000876.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000877.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000878.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000879.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000880.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000881.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000882.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000883.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000884.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000885.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000886.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000887.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000888.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000889.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000890.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000891.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000892.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000893.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000894.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000895.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000896.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000897.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000898.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000899.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000900.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000901.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000902.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000903.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000904.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000905.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000906.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000907.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000908.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000909.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000910.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000911.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000912.json",
+      "sha256": "fb12facaed999a16953fd9c299e0120c3ba80b024c2068859d95673cd6008e11"
+    },
+    {
+      "file": "f000913.json",
+      "sha256": "664ece2f00829626e83aaa86a2cd63409a00a3a7ad6f81566cc676d3c99bcb93"
+    },
+    {
+      "file": "f000914.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000915.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000916.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000917.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000918.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000919.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000920.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000921.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000922.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000923.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000924.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000925.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000926.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000927.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000928.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000929.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000930.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000931.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000932.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000933.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "f000934.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    },
+    {
+      "file": "tail-000934.json",
+      "sha256": "2d21a7f18b4512248425009e949e4680b4a12d0b678333a15019809a161c8a07"
+    }
+  ],
+  "events": [
+    {
+      "kind": "enter",
+      "call": 3,
+      "selected_depth": 1,
+      "parent": 2,
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+      "abc_method_index": 4204,
+      "receiver": {
+        "$ref": "0x2266aff77b0",
+        "class": "zlong.bombit5.gameengine::PersonPlayer"
+      },
+      "argument_count": 0,
+      "arguments": [],
+      "arguments_truncated": false,
+      "sequence": 4,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    },
+    {
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/get scoreData()",
+      "kind": "return",
+      "call": 3,
+      "selected_depth": 1,
+      "result": 0,
+      "sequence": 5,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    },
+    {
+      "kind": "enter",
+      "call": 4,
+      "selected_depth": 1,
+      "parent": 2,
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+      "abc_method_index": 4203,
+      "receiver": {
+        "$ref": "0x2266aff77b0",
+        "class": "zlong.bombit5.gameengine::PersonPlayer"
+      },
+      "argument_count": 1,
+      "arguments": [
+        100
+      ],
+      "arguments_truncated": false,
+      "sequence": 6,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    },
+    {
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/set scoreData()",
+      "kind": "return",
+      "call": 4,
+      "selected_depth": 1,
+      "result": {
+        "$undefined": true
+      },
+      "sequence": 7,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    },
+    {
+      "kind": "enter",
+      "call": 5,
+      "selected_depth": 0,
+      "parent": null,
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/get killNum()",
+      "abc_method_index": 4224,
+      "receiver": {
+        "$ref": "0x2266aff77b0",
+        "class": "zlong.bombit5.gameengine::PersonPlayer"
+      },
+      "argument_count": 0,
+      "arguments": [],
+      "arguments_truncated": false,
+      "sequence": 9,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    },
+    {
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/get killNum()",
+      "kind": "return",
+      "call": 5,
+      "selected_depth": 0,
+      "result": 0,
+      "sequence": 10,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    },
+    {
+      "kind": "enter",
+      "call": 6,
+      "selected_depth": 0,
+      "parent": null,
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/set killNum()",
+      "abc_method_index": 4222,
+      "receiver": {
+        "$ref": "0x2266aff77b0",
+        "class": "zlong.bombit5.gameengine::PersonPlayer"
+      },
+      "argument_count": 1,
+      "arguments": [
+        1
+      ],
+      "arguments_truncated": false,
+      "sequence": 11,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    },
+    {
+      "method": "zlong.bombit5.gameengine::AbstractPlayer/set killNum()",
+      "kind": "return",
+      "call": 6,
+      "selected_depth": 0,
+      "result": {
+        "$undefined": true
+      },
+      "sequence": 12,
+      "frame_label": 913,
+      "command_label": "run_frame"
+    }
+  ]
+}

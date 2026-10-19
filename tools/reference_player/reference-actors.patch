@@ -1,0 +1,146 @@
+--- a/core/src/avm2/reference_fixtures.rs
++++ b/core/src/avm2/reference_fixtures.rs
+@@ -9,14 +9,20 @@
+     Pickup { class: &'static str },
+     Reposition { x: i32, y: i32 },
+     Bomb,
+-}
+-fn parse(input: &str) -> Result<(Operation, Json), String> {
++    AiControl { start: bool },
++}
++fn parse(input: &str) -> Result<(Operation, Option<usize>, Json), String> {
+     let json: Json = serde_json::from_str(input).map_err(|e|e.to_string())?;
+     let map = json.as_object().ok_or("Fixture must be a JSON object")?;
+     let op = map.get("op").and_then(Json::as_str).ok_or("Missing string op")?;
++    let actor = map.get("actor").map(|value| {
++        value.as_u64().filter(|index|*index<=3).map(|index|index as usize)
++            .ok_or("actor must be an integer Game.players index from 0 through 3")
++    }).transpose()?;
++    let actor_fields=usize::from(actor.is_some());
+     let operation = match op {
+         "pickup" => {
+-            if map.len()!=2 { return Err("pickup requires only op and kind".into()); }
++            if map.len()!=2+actor_fields { return Err("pickup requires op, kind and optional actor".into()); }
+             let class = match map.get("kind").and_then(Json::as_str) {
+                 Some("hammer") => "zlong.bombit5.items.weapons.HammerProp",
+                 Some("flamer") => "zlong.bombit5.items.weapons.FlamerProp",
+@@ -37,15 +43,22 @@
+             Operation::Pickup { class }
+         },
+         "reposition" => {
+-            if map.len()!=3 { return Err("reposition requires only op, x and y".into()); }
++            if map.len()!=3+actor_fields { return Err("reposition requires op, x, y and optional actor".into()); }
+             let coordinate = |key| map.get(key).and_then(Json::as_i64)
+                 .and_then(|n| i32::try_from(n).ok()).ok_or_else(||format!("{key} must be an i32 cell coordinate"));
+             Operation::Reposition { x:coordinate("x")?, y:coordinate("y")? }
+         },
+         "bomb" if map.len()==1 => Operation::Bomb,
++        "ai-control" if map.len()==3 && actor.is_some() => {
++            let start=match map.get("mode").and_then(Json::as_str) {
++                Some("stop")=>false,Some("start")=>true,
++                _=>return Err("ai-control mode must be stop or start".into()),
++            };
++            Operation::AiControl {start}
++        },
+         _ => return Err("Unsupported fixture operation/fields".into()),
+     };
+-    Ok((operation,json))
++    Ok((operation,actor,json))
+ }
+ fn slot<'gc>(object: Object<'gc>, name: &str) -> Option<Value<'gc>> {
+     object.vtable().resolved_traits().iter().find_map(|(local, _, property)| {
+@@ -83,29 +96,48 @@
+         "cell_y":number(get(view.into(),"yN",activation)?)?,
+         "bomb_num":slot(model,"bombNum").map(|v|number(v)).transpose()?,
+         "weapon":match slot(model,"weapon") {Some(Value::String(v))=>Some(v.to_utf8_lossy().into_owned()),_=>None},
+-        "is_exist":slot(robot,"isExist").map(|v|v.coerce_to_boolean())}))
++        "is_exist":slot(robot,"isExist").map(|v|v.coerce_to_boolean()),
++        "model_state":match slot(model,"state") {Some(Value::String(v))=>Some(v.to_utf8_lossy().into_owned()),_=>None}}))
+ }
+ 
+ pub(crate) fn run(context: &mut UpdateContext<'_>, input: &str) -> Result<Json,String> {
+-    let (operation,command)=parse(input)?; // Validate everything syntactic before any AVM2 call.
++    let (operation,actor_index,command)=parse(input)?; // Validate everything syntactic before any AVM2 call.
+     let game=context.avm2.reference_games.iter().rev().filter_map(|weak|weak.upgrade(context.gc()))
+         .find(|game|matches!(slot(*game,"gameStarted"),Some(Value::Bool(true)))
+             && !matches!(slot(*game,"gameOver"),Some(Value::Bool(true)))
+             && object_slot(*game,"gameEngine").is_ok())
+         .ok_or("No observed active original Game; capture state after starting a match first")?;
+     let robots=object_slot(game,"robots")?.as_array_object().ok_or("Game.robots is not Array")?;
+-    let robot=robots.storage().iter().flatten().filter_map(|v|v.as_object())
+-        .find(|robot|robot.instance_class().name().local_name().to_utf8_lossy()=="PersonRobot")
+-        .ok_or("No live original PersonRobot")?;
++    let players=object_slot(game,"players")?.as_array_object().ok_or("Game.players is not Array")?;
++    let (robot,player,selected_index)=if let Some(index)=actor_index {
++        let player=players.storage().get(index).and_then(|v|v.as_object())
++            .ok_or("Selected Game.players entry is missing or not an object")?;
++        (object_slot(player,"_robot")?,player,index)
++    } else {
++        // Preserve the existing default-human behavior; an actor selector is opt-in.
++        let robot=robots.storage().iter().flatten().filter_map(|v|v.as_object())
++            .find(|robot|robot.instance_class().name().local_name().to_utf8_lossy()=="PersonRobot")
++            .ok_or("No registered original PersonRobot")?;
++        let selected=players.storage().iter().enumerate().take(4).find_map(|(index,value)| {
++            let player=value.and_then(|v|v.as_object())?;
++            let owned=slot(player,"_robot").and_then(|v|v.as_object())?;
++            std::ptr::eq(owned.as_ptr(),robot.as_ptr()).then_some((player,index))
++        }).ok_or("Default human is not owned by an indexed original player")?;
++        (robot,selected.0,selected.1)
++    };
++    let registered=||robots.storage().iter().flatten().filter_map(|v|v.as_object())
++        .any(|candidate|std::ptr::eq(candidate.as_ptr(),robot.as_ptr()));
++    if !registered() {return Err("Selected player's robot is not registered in Game.robots".into());}
+     let model=object_slot(robot,"model")?;
+-    if matches!(slot(model,"state"),Some(Value::String(state)) if state.to_utf8_lossy()=="dead") {
+-        return Err("Human robot is dead".into());
++    match slot(model,"state") {
++        Some(Value::String(state)) if state.to_utf8_lossy()!="dead"=>(),
++        _=>return Err("Selected robot is dead or has no valid original model.state".into()),
+     }
+-    // Membership in Game.robots above establishes registration; isExist is damage eligibility,
+-    // and may legitimately be false during spawn or other protection.
++    // Registered + non-dead is the liveness check. isExist is damage eligibility,
++    // and may legitimately be false during spawn, vehicles or other protection.
+     let controller=object_slot(robot,"controller")?;
+     if slot(controller,"_stageFunc").is_some_and(|v|!matches!(v,Value::Null|Value::Undefined)) {
+-        return Err("Human movement/action is currently interrupted; wait for normal recovery".into());
++        return Err("Selected actor movement/action is currently interrupted; wait for normal recovery".into());
+     }
+     let view=object_slot(robot,"view")?;
+     let map=object_slot(game,"map")?;
+@@ -159,6 +191,26 @@
+             effects=json!({"target_cell":[target_x,target_y],"target_had_fire":fire,
+                 "side_effects":"original occupancy and position-change commands executed; hazards may damage/kill actor; held input and velocity unchanged"});
+         },
++        Operation::AiControl {start} => {
++            if robot.instance_class().name().local_name().to_utf8_lossy()!="AIRobot" {
++                return Err("ai-control requires an original registered AIRobot".into());
++            }
++            let brain=object_slot(player,"fsmAIController")?;
++            let action=object_slot(brain,"action")?;
++            if start {
++                call(robot.into(),"robotStart",&[],&mut activation)?;
++                call(brain.into(),"start",&[],&mut activation)?;
++            } else {
++                // Deliver the route KEY_UP before robotStop removes its listeners.
++                call(brain.into(),"stop",&[],&mut activation)?;
++                call(action.into(),"stop",&[],&mut activation)?;
++                call(robot.into(),"robotStop",&[],&mut activation)?;
++            }
++            effects=json!({"mode":if start {"start"} else {"stop"},
++                "original_calls":if start {vec!["AbstractRobot.robotStart","AIControl.start"]}
++                    else {vec!["AIControl.stop","Action.stop","AbstractRobot.robotStop"]},
++                "side_effects":"Brain update and current route/listeners are controlled; actor remains in map, movement/damage/engine registries. Delayed state/Tween callbacks are NOT cancelled and may alter route metadata or callback registries. Start is not a rewind or restoration of an earlier route. Existing motion may decelerate under original rules; no velocity, health or isExist writes."});
++        },
+         Operation::Bomb => {
+             let before_count=slot(object_slot(robot,"model")?,"bombNum").ok_or("Missing bombNum")?;
+             call(controller.into(),"addBomb",&[],&mut activation)?;
+@@ -168,5 +220,8 @@
+         },
+     }
+     Ok(json!({"schema":"bombit5-reference-fixture-v1","command":command,"before":before,"after":state(robot,&mut activation)?,"effects":effects,
++        "actor":{"requested_index":actor_index,"selected_player_index":selected_index,
++            "robot_ref":format!("{:p}",robot.as_ptr()),"robot_class":robot.instance_class().name().to_qualified_name_no_mc().to_utf8_lossy(),
++            "registered_before":true,"registered_after":registered(),"is_exist_meaning":"damage eligibility, not liveness"},
+         "classification":"controlled original-method fixture, not naturally achieved input-only play"}))
+ }

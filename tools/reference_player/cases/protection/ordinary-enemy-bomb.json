@@ -1,0 +1,193 @@
+{
+  "name": "ordinary-enemy-bomb",
+  "actions": [
+    {
+      "command": "seed 12345"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 5,
+        "y": 4
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 9,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 13,
+        "y": 4
+      }
+    },
+    {
+      "command": "step 100",
+      "capture": "spawn-protection-finished"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 20"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 2,
+        "y": 1
+      },
+      "capture": "enemy-before"
+    },
+    {
+      "command": "trace-focus damage"
+    },
+    {
+      "command": "events score-events 10000 zlong.bombit5.gameengine::AbstractPlayer"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku space",
+      "capture": "bomb-born"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 1,
+        "y": 3
+      },
+      "capture": "human-escaped"
+    },
+    {
+      "command": "step 70",
+      "capture": "enemy-before-detonation"
+    },
+    {
+      "command": "step 1",
+      "capture": "enemy-hit"
+    },
+    {
+      "command": "step 20",
+      "capture": "after-fire"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku space",
+      "capture": "capacity-reused"
+    },
+    {
+      "command": "events off"
+    },
+    {
+      "command": "trace-focus off"
+    }
+  ]
+}

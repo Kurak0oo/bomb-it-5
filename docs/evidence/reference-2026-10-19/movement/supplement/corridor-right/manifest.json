@@ -1,0 +1,181 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-corridor-alignment-right",
+  "case_sha256": "762f2e473c624b22ed12a8d222c446f2d843a4aa803f7ddb90d6d669e4ee24b6",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "e094ac42b1cab112942c959236f38867c640965a4b1ef5b97bc428b46f4311c2"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "530341739a910632f759e6a3bdd22fe398545dedff55c90edaf658ea3a4bd637"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "4623708aba509ca79dc7ab9343e65f154c252adffed3e3c087004456a3e70be0"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-12l7_yyn\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 738,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "offset-before-turn",
+      "frame": 724,
+      "sha256": "5efeec5e43da2ff90a42263056ad80a69bc29516d056972f66093ffbef47c66a",
+      "bytes": 551210
+    },
+    {
+      "name": "corridor-after-turn",
+      "frame": 738,
+      "sha256": "9085a3de452828662114e4477f2a805f441e17363176130738bc61da222348a6",
+      "bytes": 550333
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "fa80cb3eee3856afc6353bcc93a3ff6ac8206e8e2dfdbadc0862b2b5df5cf482",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "offset-before-turn",
+      "frame": 724,
+      "sha256": "d7526b77b9d0ea953e49df3350a5dfd4f6114fac2bd54b15c174134151abc418",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "corridor-after-turn",
+      "frame": 738,
+      "sha256": "987b9dfc41b4c705ab83daa355dd447d197d2a96ecb0ad9d5a1796ee50c9eff4",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "443ca8e4793c8c6a82bb1e7fcbfaeeb83a552b6291d82a82577beb4e8f0c7819",
+  "stderr_sha256": "31679a65d84fcd71abbde634a9ffc68456152969953844971dbb3d881a1bfcbf"
+}

@@ -1,0 +1,273 @@
+{
+  "name": "moto-shield-weapon-lifecycle",
+  "actions": [
+    {
+      "command": "seed 12345"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 5,
+        "y": 4
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 9,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 13,
+        "y": 4
+      }
+    },
+    {
+      "command": "step 100",
+      "capture": "spawn-protection-finished"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "hammer"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "weapon"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "shield"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "shield-first"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "shield"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "shield-replaced"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "moto"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "ride-collected"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 6",
+      "capture": "ride-moving"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "step 20"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 1,
+        "y": 1
+      },
+      "capture": "before-self-bomb"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "trace-focus lifecycle"
+    },
+    {
+      "fixture": {
+        "op": "bomb"
+      }
+    },
+    {
+      "command": "step 72",
+      "capture": "vehicle-hit"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 20",
+      "capture": "vehicle-mid-recovery"
+    },
+    {
+      "command": "step 20",
+      "capture": "vehicle-recovered"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 4",
+      "capture": "recovered-fresh-input"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "step 86",
+      "capture": "vehicle-immunity-finished"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 1,
+        "y": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "bomb"
+      }
+    },
+    {
+      "command": "step 72",
+      "capture": "shield-consumed"
+    },
+    {
+      "command": "step 85",
+      "capture": "shield-immunity-finished"
+    },
+    {
+      "command": "trace-focus off"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "hammer",
+        "actor": 1
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "ai-weapon"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "moto",
+        "actor": 1
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "ai-ride"
+    }
+  ]
+}

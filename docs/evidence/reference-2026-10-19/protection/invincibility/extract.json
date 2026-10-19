@@ -1,0 +1,18 @@
+{
+  "schema": "bombit5-protection-extract-v1",
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\protection-invincibility-01",
+  "raw_manifest_sha256": "f4822a22174aaf8ebb27c346d72726fe824c512176e2e17df4660b5c2b896df3",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "case_sha256": "c73451e886995ad50ea4e85fd656c79437d70f0af228bafbecca81a3549215be",
+  "checkpoints": 8,
+  "timeline_frames": {
+    "invincibility": 417
+  },
+  "limits": [
+    "Focus omissions remain in force; absent records are not zero state.",
+    "Per-frame timeline retains players 0/1 only; checkpoints retain all projected actors.",
+    "No pending timer/Tween queue or native display children were observed.",
+    "Frame counters and host wall time are different clocks."
+  ]
+}

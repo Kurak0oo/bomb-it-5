@@ -1,0 +1,166 @@
+{
+  "name": "original-simultaneous-human-last-enemy-human-bomb",
+  "origin": "Seed42; original AI stop, first two enemy-owned self-bombs, last AI relocated to neighboring empty floor. Original bomb kills human and last AI in same callback; no health/outcome/score writes.",
+  "actions": [
+    {
+      "command": "seed 42"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "observe_command": "events result-events 20000 zlong.bombit5.gameengine zlong.bombit5.ui zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    {
+      "fixture": {
+        "op": "bomb",
+        "actor": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "bomb",
+        "actor": 2
+      }
+    },
+    {
+      "command": "step 120",
+      "capture": "two-enemies-removed"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "capture": "last-enemy-adjacent"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "capture": "lethal-bomb-placed"
+    },
+    {
+      "observe_command": "trace-focus simultaneous-trace"
+    },
+    {
+      "command": "step 125",
+      "capture": "simultaneous-ending"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "step 180",
+      "capture": "simultaneous-results"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

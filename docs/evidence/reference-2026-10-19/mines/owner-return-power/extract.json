@@ -1,0 +1,1932 @@
+{
+  "schema": "bombit5-mine-extract-v1",
+  "run": ".scratch\\edition-5-research\\reference-runs\\mine-owner-return-power-01",
+  "manifest_sha256": "3bdf7cdd364ebbc66e617d8aa24ac528deddfbe0c093cbdfc6952b94cb1cbc86",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "case_sha256": "7e5a8a0ef70f26747ad571134ad22f5ff3f79271e3275f276959ab183fa8936f",
+  "frames": 238,
+  "event_files": [
+    {
+      "name": "f000842.json",
+      "sha256": "8d618ee46e93d3a495f2043c2aeb06179dc9c66c1e993468045fe73c69f58c33",
+      "events": 270,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000843.json",
+      "sha256": "a697bafd84d0ec36cc4e191f0960f5ce5a2059d9eeb51c0453067c3d1b1c03c3",
+      "events": 356,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000844.json",
+      "sha256": "8da2edb6e2ca15001e9fbc9560e674efa5254d868576bdb2996889cce5bb62d6",
+      "events": 452,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000845.json",
+      "sha256": "eef42ed134a3be7e59538d7973dc5a9944936ab6ddfa2f51720faefb90e35c2d",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000846.json",
+      "sha256": "60e07788d79b55a8103fe28a7f18499bb21682c0d76519dfccf510f13f930410",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000847.json",
+      "sha256": "3376ecaef613a017574c1675e38d4e4de111abd634d0691edf8ea7778edd1987",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000848.json",
+      "sha256": "32948897e9e45f08ab3a9f54371b6351fa2ec3b6ad42b84da92cf46a0b5cadbe",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000849.json",
+      "sha256": "65fcafd52688f36bfa09fce045b9f0816bcb2afb7914b3f11d4a28f41b249054",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000850.json",
+      "sha256": "9e00e97a436170e674648d30be195eb56d86f85330b3e0521fdd9d2af1e2a796",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000851.json",
+      "sha256": "be45c2fbb6f31fe471be7749a85adf7dc2da836db0aa26181de2e5d6a9854d24",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000852.json",
+      "sha256": "3df2174890e40b41d0e46750e7a5c7d782de7bc12b1c80909da392971535d21b",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000853.json",
+      "sha256": "5df40980d758bc863d456c040d563f95ec83488c798afbc637edfa385f78dbc3",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000854.json",
+      "sha256": "9ac4e28cd12e088e3c8efc09a51d5c8df2d6193fe10ca9bb6dcf7f89d9919b16",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000855.json",
+      "sha256": "9bc97b66d177b1ee24457da0a92cb6a5996627fca7a4d677a62e3e9521d99208",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000856.json",
+      "sha256": "8f327f81aa795b88ed43447951105124f277898a093b8f03a5055e691f8aa24d",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000857.json",
+      "sha256": "76f3179df432b99fd38197429dd20763b891cb22513db92ecf9fbc10cc7fd803",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000858.json",
+      "sha256": "b78b76d265a68cb50e600488295aea0ce52606c235c32e10b1007be1c8fa2f46",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000859.json",
+      "sha256": "f9d60447870b6176d6dc51422f691a121696045c30a5848a3a0717943c7635ec",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000860.json",
+      "sha256": "5bbd3252bb76110589b136c891f7aaccfd0f7263c1d40b609406a30c9d09b523",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000861.json",
+      "sha256": "ac15436cc3bca3023b52bf03e6412284421d1c4be62f6577b6efe6c9c5530768",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000862.json",
+      "sha256": "5a809af33a80f3dfe607ab0271d055e5ac1fe2997dce67eba773f9209a54d562",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000863.json",
+      "sha256": "1b89b66ec087da62716c18431c5d71d70ac32999e4f5f239cbf0b5a2029322ca",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000864.json",
+      "sha256": "61cc6298880996d464e0881e7e307ae717b1449464c2194d29c54f5089d6840a",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000865.json",
+      "sha256": "675639b9ae7fdeee7c5fe4d19dac7bfa9f9934a02139fc86a0edd0520e463878",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000866.json",
+      "sha256": "8e7af39890ea26ba82698126abe671d4a481ffecc65d68456be7c7070845bb37",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000867.json",
+      "sha256": "5ba5c471b5b982bfd4cf7f864449b0379690a9832bf66180559c2af8f1337ca1",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000868.json",
+      "sha256": "3c7e59c010e2ee51875caf9773835afc44829bb8432ecd0c0110828b0aa6425f",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000869.json",
+      "sha256": "3743f2c7e1c8b81cf820dc527c0b7af69bf51c34bc7bcef5aba05cebb42eed54",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000870.json",
+      "sha256": "2ff373e3a8b1d8ad189c9b9ca49bcb9217c0e200df662ddd087b217f3eb068fb",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000871.json",
+      "sha256": "33f25db3713861c3053293856f1050f7e0408cd569221d50ff4867d155e956ef",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000872.json",
+      "sha256": "5bc5f904245eb40cda9ee88b729b7b2c9d539a3bbd1bfed1e1e4dbd5b6298026",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000873.json",
+      "sha256": "473bd3275f481b7074989df74ff7cc65e64bef014ea945be7cb6631aa1eff6f4",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000874.json",
+      "sha256": "6114dc95cbf5e8c82bb583340950dea7928ac329174060e46e904f2568fd2c74",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000875.json",
+      "sha256": "5ea826460027d1bb038ca87505c7373cc1feb7e2c3f9d11842bd343d4955864f",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000876.json",
+      "sha256": "2ee1786bf294ad02aedb22e5b2c339cbe0940d7a3b3991f16d709fea8cd1aa65",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000877.json",
+      "sha256": "616d7407d73fd2d8d6ef391255e47c1e3b5a720860ffe0ffb5dd99b944f2f995",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000878.json",
+      "sha256": "bcdce1bea309c1882c067ac93f8da5d1da77dd04bb33b2dd8fa1259b5fc68d54",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000879.json",
+      "sha256": "5f0b582cded5b27cee87b208d761bdb721f030f7c064a723fdd16a23c17d0f67",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000880.json",
+      "sha256": "bb6b8875faf6bc91655c0722ba8fbbf49458e6935557a9af8fb605fcf7d977b9",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000881.json",
+      "sha256": "de9a0bc461a910d1911202161425e7aea2b0e5ea2b6797d757b8974202b4160b",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000882.json",
+      "sha256": "c68f31cfb7486bbfcedc28f8dade87f1af1e7f2f0e75b5914e74d084e25d4337",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000883.json",
+      "sha256": "957b3cd8bddf50ea17506f8424f7cd6ed5d18e72eb639a79b13f06e201b2b3f7",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000884.json",
+      "sha256": "b5a0bd19885c9be594b371d9f426ff7ffb98b8615e8ea1fcc9c298857ac34288",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000885.json",
+      "sha256": "e58316c509e3ee119a9e71693bf3f8e19a3f70f3098df294f9616679ad3f58a2",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000886.json",
+      "sha256": "111fb9a3c938e5d2ae1270201c68f06eb1bd8cf6deac0320dd0132ec11dc538c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000887.json",
+      "sha256": "9f567db43d6c05e2d335d94c1df2bf5c8f5c7cd1dd8377a5b3a3763e5286da33",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000888.json",
+      "sha256": "9df08b16a7b85db12a57314701fd939d877f740d5ebfa862ee01ffe1ec791046",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000889.json",
+      "sha256": "c18cb0010bfeac0bbd7a00f7cfa658ef852c8c8098b10c4729ab0d5e563663f0",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000890.json",
+      "sha256": "c4bb3b084ea1c0a92e3b5a2ed3aa1eb09d2548a91888492941ac9d1dc28addca",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000891.json",
+      "sha256": "f7b2819a4cf01c57531484998567b05a073306936afe54bea3e3c98f891923ed",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000892.json",
+      "sha256": "ba1c2d0cc8039d31223bb07d3180d81f2a4fbaf847665edeeb065a2329d5e8ab",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000893.json",
+      "sha256": "be22339159e9384ac1d74ca6371077ca9c3e76a9158798c7efbefeaf59b9d6bc",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000894.json",
+      "sha256": "5ba48e050f1d0c876c4ef79a59dd72d92b7dfaaca17e4aa705db5c081dfb1119",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000895.json",
+      "sha256": "6c598e0a7d1ba5c1b66a910253dddb767ea000b3381b42c9a1d139b278f9edb6",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000896.json",
+      "sha256": "725488cee7b9ffafc97663f57de111e15ebc738a2e69ff299e0c32cd92f9e141",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000897.json",
+      "sha256": "b52e20976c574822f6482d9d73bc5c48d70b0f28c231bff833c5858ff5b8e56e",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000898.json",
+      "sha256": "c1404bfc0a8da022a7f6bdd89d320dbe0437c4d88807bdd7b78c92a5fc5e84be",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000899.json",
+      "sha256": "09aa3f30ff870685e8bbf47f9ff0c0f9ba4663f558fd331f6ff9f781b5e56d19",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000900.json",
+      "sha256": "39a9cf64ba9cb59a3736617d2ebfb330ec929b6737552e7f9e7e0467106723b8",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000901.json",
+      "sha256": "a3737a8b4d6ba1883a7b625ce738e91a1e5218bf977a4c223ea4f647d5959087",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000902.json",
+      "sha256": "30af19108c19e5f68c59b21008de07ab7ba6e20f9b3a118474cd8924d15e62c5",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000903.json",
+      "sha256": "a4dbfec693f1ace9f33c12590f94464c9d7181002ee59d80cecf9bc56ed54a19",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000904.json",
+      "sha256": "b460eca4e207e6dc154534f574472a580e24a6d5b73a85d76287e32d5e2b6392",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000905.json",
+      "sha256": "563845c87b9ade379fbc918592cfe9ae34a65f7ac69b337f70abd09bb900a983",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000906.json",
+      "sha256": "b1d5b0a5c2ec48ca9285f64dcd64dbb9ca2a3d4e6c0833759bb02514047f8668",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000907.json",
+      "sha256": "015acf347e427cb2c1561bd0dba4959bd322db60263a00badcc47f2288fdd926",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000908.json",
+      "sha256": "c61f12ef8f98a4009d2e8872696e6679cb7f86224a86e77d4f3d182fb0736236",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000909.json",
+      "sha256": "83e4e232aaab59a181118eda1aa4a9faa24347b0f32dfaecebd0353bcb2b9385",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000910.json",
+      "sha256": "ae489123c050a29174aad23d81c79406c4ee5151797db57e747090d3bf886276",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000911.json",
+      "sha256": "f1d1add284d7238e0cbffc04f8e240dec09882ed0c79074d610644a0d4ea87d9",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000912.json",
+      "sha256": "1e20e82556be6b46599969ff45bb63be7ecc6a065a9dc92ba9ebdb87ce96785d",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000913.json",
+      "sha256": "6caad33fe9c9fdeb9a9c4666fe5ecac7e0d7bc196cd3a7386205356d6577e01e",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000914.json",
+      "sha256": "d48f38c78a1592cf845cd4515ee3b50baaabea8ea6693b5950cec7cbdab23767",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000915.json",
+      "sha256": "1d6119c729cecca3d30836a1e4d56a214ba27fb135857098cdb2557422093d51",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000916.json",
+      "sha256": "b87304b45954fd96e04f4341ed04ce310458490afbd702b0f0096416639ddfe3",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000917.json",
+      "sha256": "03225506b49e27552c7b8683993189b9b9064f2a9f9234a9bf573e5462e0ec27",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000918.json",
+      "sha256": "1877a5cad0cac91700e1d426e6d3d9067854c1f244b450f292517e7e6426fdcf",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000919.json",
+      "sha256": "2fbef8577598cfdb1078b08ae69d79d4a239106b608c419fdc79fb02f4143aa8",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000920.json",
+      "sha256": "9af0e36af2cc499fda3a17b39f82b0973d9c3e7623b947e4445764c6bdb292e2",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000921.json",
+      "sha256": "464bffe976535040cf30409bbe2d571e74e56bac836b6cfc0a7390e34b01f3af",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000922.json",
+      "sha256": "0c4308e8c4c969f22fad2907df3a1b96633559d1ca55ee779a3dd40fbb6f9dbc",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000923.json",
+      "sha256": "7135885775da89d0a9e720919f304dd41f103c91cfcf575d83afc3ed9c411ad2",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000924.json",
+      "sha256": "fd02b80fc327bb5fa72767f7d524d6bd4cd3f91fcf0b65efa21aa296b1555877",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000925.json",
+      "sha256": "21ea58b90e9db75f043b7cc779cf86153ad3b7076ae4526e59ce6a81b0d88669",
+      "events": 292,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000926.json",
+      "sha256": "757abb775e30cfe3c5bfbbbc94221a16e709fa4fdb9f80fcd2d437c6ff6b1740",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000927.json",
+      "sha256": "efe4c21f61f5cfadc7e85656ae77561207e91cfd6e2a07b7a775e77fabd23d3e",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000928.json",
+      "sha256": "d08efaecd920ce907653eb84ea50fa8e33c061553ff51797f1862cfb194fb3b4",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000929.json",
+      "sha256": "af4173ce849fc09ee8f3ddbd7fbfead70a316071b47af018891a2d5717b04f25",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000930.json",
+      "sha256": "ec1c82253282ddac29449f270481d00091bcaf61a0cc0688115596732fa62604",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000931.json",
+      "sha256": "05f8fdd0030451da1d77545ce5c94dcbee1c68624c9c839ec0cccbbf9dc3ec71",
+      "events": 270,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000932.json",
+      "sha256": "3e5ecc990cb8b281e5bdfead48a8c6f33462d78525866d72985870f7da553b60",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000933.json",
+      "sha256": "bc64c2c7020475cef98e31e8f9ea575048c95464f700b31abc8b12e7d3b02bf5",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000934.json",
+      "sha256": "3b1b1300a230a978d17738cc3b833afb71f84c713665adbe35d3fcfb384a0524",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000935.json",
+      "sha256": "ee94455d45853fd137cb086abe0fd6f548823182d87ad8464429987b6cc188a5",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000936.json",
+      "sha256": "5f745812c0435e69cdfd402fabc336b8e99a8e649eba99435814404035028485",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000937.json",
+      "sha256": "590f414ba18e4c9b97e9f39f2b48f5c9976dda5f3f2e90f5652ad3eb847bc0b6",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000938.json",
+      "sha256": "bda11fdd178dba3066e6318805a37e29c37d99b23d5dd961f0e07d767abf03c9",
+      "events": 270,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000939.json",
+      "sha256": "a871ad4ec041bf53ba9ca22b614b3f3b0be7f1c35403dc8cddde96e20dc87c6a",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000940.json",
+      "sha256": "473421779242e648d75f96fedac2e11a52fbe2cb194704c18f6705d40a16f330",
+      "events": 248,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000941.json",
+      "sha256": "dc15510ea8e1ffb6a597a2fb553bd49bf3bef8dc84b68d11e7f7fe2d62c2e293",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000942.json",
+      "sha256": "d8b9215345ddab16f1d36fda3e1922acd355d1405ab86b885110b70d22108e71",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000943.json",
+      "sha256": "d58458856e5e101bd7d5c928d945831db3fcc0c9436eb106c6cebeeef1d7b3b4",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000944.json",
+      "sha256": "26130e1b6438a3f50f6e1b75d99510869b974b2f20f2914f873640b22b989f0b",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000945.json",
+      "sha256": "a6edc602bc975e7fb76e4837ead1ae35bf36dc27609c39e85d046784f6a5783e",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000946.json",
+      "sha256": "7388e4f3ced5ad13cb1da9e4f2b8d3cefbe1bb4ecaf7dce91aa552bfb95a33ea",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000947.json",
+      "sha256": "badccb12f28d42ea417245f9466764d49f351f471448a51a1957b36eb4d2ec24",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000948.json",
+      "sha256": "852f0085754262d814fd131e33d83281ec263abcf784786981ddbd4c6722f1d3",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000949.json",
+      "sha256": "3a9dd4fafd14a9d01400dd1c3dfe47341831367358a6399d598bd59060f65787",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000950.json",
+      "sha256": "829a6e04bb51b299d90d638aed8b397da74e262851613b8e7a8c9b0fdd23eb3c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000951.json",
+      "sha256": "38c08f95351327bf53c8e09cedde9f568b000216d6aaf4a91304dce12d16f767",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000952.json",
+      "sha256": "9ac45a3346d79adb643ff45d957076ac257b5e57f543eb65904ff64b5ff1e7b8",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000953.json",
+      "sha256": "96f04208fe3f800bdc64e191a9148da174a998a57ae1c2345dcce43277de3497",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000954.json",
+      "sha256": "e336875ebc0c649585bc85a2f4c0d9c39dab611f7eaee8078f3965a875ce27b9",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000955.json",
+      "sha256": "1ad82c9cdf37f6c7a9bf08968a31c42320768867d4e445c2e98cb4bc6f376f7c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000956.json",
+      "sha256": "dec014f31824f8a061effd15d1b70fce3ea9ca95ce956dce697222e3b16cc829",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000957.json",
+      "sha256": "55ee93c374565f0f409988ca09c8cc0fff082dbcff32214859eda46ffdcc9e27",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000958.json",
+      "sha256": "5940d48ea548eb8f76ebf1e3a634bd0be4b35444c035bbe8c4ce3fc045a6aa77",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000959.json",
+      "sha256": "fb42f8a4d743d8d19bdc546ee4e0ed8a4863dbc34b63fc13b07331412e03ce2e",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000960.json",
+      "sha256": "f0aede55dd6d15326de815b9cdae419cfdca1b883cf678d6f8cf4eae1fb2038b",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000961.json",
+      "sha256": "248fad3b4deedd9ece86e29166bb2e9f8bdb6c9f6a99ffd8d4b978aace2a01ea",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000962.json",
+      "sha256": "c128f264c9fe01558cb8c8be07c78dc7fec019ca332135209c74ae3b22d3cc70",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000963.json",
+      "sha256": "17d52f4621944b40d474b151c495d019513eaa38e974ac1334bf533d6266cbb4",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000964.json",
+      "sha256": "5d4113c4f99fc87dee00f49512bb3b8078a9f2dbe7a393be8e05846c118f5ef0",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000965.json",
+      "sha256": "d87627795105c19ee8825081eb3b2158ffbb57bfcaf6169eaf6c44407d2ad62e",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000966.json",
+      "sha256": "e26251e45d8521a1de257c25f2bc87aeabef472b07c98bd8caca58e9a1aff33d",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000967.json",
+      "sha256": "d188375d732f5015b08e79779b79f1f94081134d9a8df172930ff8186141ca0c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000968.json",
+      "sha256": "2190252e65c77814637f3fd7bbfc39a72ba022e9a3936d0b3cfcf977d52eb952",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000969.json",
+      "sha256": "4cb6e97b6ca46703a4989a7bdf9b573e48cf3b872351178a79dc027b95478a09",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000970.json",
+      "sha256": "bd1ee2cb3b11486350b7cae8bfc63a6f93a764b4a53aff9fceb5049cad0a0aae",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000971.json",
+      "sha256": "3cb8307d0fe29a6492b6f7685cf2472c1feae5c67daee873baf75f0a58851230",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000972.json",
+      "sha256": "b26c1b53451fd4c5fc09c9350a560ff758cdc9baebd90edf9038ab6877312af9",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000973.json",
+      "sha256": "b1388c06393e8ed83a643974d1e5beaf09636120d1ecf6ff4c31c3f0f408968c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000974.json",
+      "sha256": "bbe054c83b378496456ce83013f017b8d060bb5a452a8d8f90230d07c1b0e713",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000975.json",
+      "sha256": "9cadbc6d3aa1939b5217d43c60fcd6e9ff39ab531529d0ffbe4e05f292d1dca0",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000976.json",
+      "sha256": "161c30d4b528e0af216bbff3802b75dc8f679c572036f8e0a252b2294c6975de",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000977.json",
+      "sha256": "afe29d84bad34ad662b1aaac7bf41b77794bd8b5ad88b8852c26701e1cc2c897",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000978.json",
+      "sha256": "faac418ceec02af1eebedeadd0c7c473ac009dc4929df9f88a75cf8a07f7633f",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000979.json",
+      "sha256": "7335d5b3cb87b2e5d995e80e3c96b904a1f1cc4ed504496228bcd2eccb2ac41d",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000980.json",
+      "sha256": "c2280f3c12eff7c594add1e2bbf73bcd23c66a819d108da98c2a39fdd15a9291",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000981.json",
+      "sha256": "6b7d3f3a2678407e674bd59b7f6f7759afd191463b8c0997486191186080974d",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000982.json",
+      "sha256": "6888d8d4bdac17cbbec77e6ff5a9f74c8ad8662b07c72558455fd8727e45ea5d",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000983.json",
+      "sha256": "ee78addc62cf83c84a7220e22d1990d7af22a0f019276895b6d991b8d49f1e78",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000984.json",
+      "sha256": "b90d1e9b5fc78028b8d6f25684406127ca51ed73faeb69c9f394e08b519a9288",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000985.json",
+      "sha256": "0c29cacfbfc8c46a089f0dc5d26a2f3742d29deb38fb3c3424f438b018c2d0a8",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000986.json",
+      "sha256": "e0c4031886f51d60347879de12a78e914b40c7e9e55121a2b6f857e407985dbb",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000987.json",
+      "sha256": "9d5da093cab3e0161ac74f19f0ddaaa9eed7563dc96ec65b1814eb41e4f2b625",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000988.json",
+      "sha256": "bb6202f147d204dfd7d7de669e460246c2f8e1c372460e277a29201745127e1b",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000989.json",
+      "sha256": "ff8ccff44eac2cebb7d5f041319af640f197dbc0fbb50e0a23be5df92a6b5f00",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000990.json",
+      "sha256": "c8aceabb1cb854c07879e7565045855d421e1053ce726c2b4e28cacb62fe45f5",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000991.json",
+      "sha256": "587051ef0bee845fea77a8dfda46285036daa09ba4af7698d75aa4ca2f161cd9",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000992.json",
+      "sha256": "2fe1ef5b6b6ecad3a7b688960a59359562a81a151aa089a7f9e2de69c7856b86",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000993.json",
+      "sha256": "06ad4c32f869db1bc926dac89ef5376b0346e3fee5adb2b73b4dfbe05a7e34b0",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000994.json",
+      "sha256": "5b4cf3dc08b96e84636db7a301013a75a26eef38e719a8b7cb96fbdc631aab6c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000995.json",
+      "sha256": "bd912a4eec67db505a92b7cbbe66621b987a03bea04cb82734d286feb5261707",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000996.json",
+      "sha256": "1766de57ccd7a460ad22843bfa8c7518f7ef8c2411831213f941a63c98847aab",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000997.json",
+      "sha256": "36092104474320f8421fb5500ea525ae28b6b934644553328ad3fac7d5e24237",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000998.json",
+      "sha256": "d23d609644500524de19f5d902ba26b28216d971d2a79bcb45e9b271c11ff9a9",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f000999.json",
+      "sha256": "17e20b9b8287fdfa505ebbeaffe8d849d89b4692bc053c10724b8b997e390061",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001000.json",
+      "sha256": "ec938c146c73448f5264266b8f2cfd2932af0ff5589dfb575446a4c26634dd1b",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001001.json",
+      "sha256": "48620133d9d42e969ef4c580b7c8a394600472566fd4ad24ab5228baa26445b8",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001002.json",
+      "sha256": "ade03bbae5f21bc6db43b58d4b6acd2dc2043ddf9de634503d8006881fa060ed",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001003.json",
+      "sha256": "21f688b378dc129f7219292dcfc2838314b188023393503759d8b6215a4a188b",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001004.json",
+      "sha256": "a0610df10e2cbf1d0e745b5aa61d82049893f476c65889c4b1b2bc635da54537",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001005.json",
+      "sha256": "5011966d148ed40c2f278cb200919c2b0b29e9aea5cea400567d029e460ce9ef",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001006.json",
+      "sha256": "560d1b659771b2b5d83378f9c5a3d48753a59c41c90fc43bcff22c92bb6e77f2",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001007.json",
+      "sha256": "96f22c628c2ce5e8def4499fea4790877c12ab0fdedccff0279f143f8ebb7dbf",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001008.json",
+      "sha256": "1f290992617984a7f1dabc6c12af18198fc5205ba5a47de71101c83301275863",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001009.json",
+      "sha256": "447e32ec32605afc00b98489f54998272e21eec367212f11789852917f44e9e1",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001010.json",
+      "sha256": "6d1387001a768709c838d698cf6208a96b874488de81cb0a360f85a00293a7ba",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001011.json",
+      "sha256": "1388afba64731134224f4459628b83582e741a014eb3438c2cf0d0cf94475c75",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001012.json",
+      "sha256": "415d140b8c6d8e0bb0ce3860b1cb9e3835a48afd3170f492c0099ba8c888f857",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001013.json",
+      "sha256": "a1f6fc4d5d1b5f17a0c676da301d98699ab7ba3b1d62ebccbca0eea9c45cf3c5",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001014.json",
+      "sha256": "44574a85356280e1a082e2f16b175d7d29abb057eabd408f45432e9eed459363",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001015.json",
+      "sha256": "4abcbfbdf149974118911fabb5f8863737641067ef72efbcce1123257143be78",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001016.json",
+      "sha256": "332af58d64da709b8845c76b557c7165a14dcc4f76afa4f96ab8c736a1506d5c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001017.json",
+      "sha256": "fc7c1271eb2d53c00228582a596916480695f78fcbae2daad74e289a03137ee9",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001018.json",
+      "sha256": "eda906d852b7556d13470b4c530e1da2f0cd6fc9de7d43661e0a70d8a75fb6a8",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001019.json",
+      "sha256": "669ad40bc536da3636f9ba9b638bb7e1454319527d3172f2cddaf0781f2a9453",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001020.json",
+      "sha256": "98e2cc065acc5d48490d49ad5a8b93f4f1f682f9160d738ea8f8b46f8c5d773e",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001021.json",
+      "sha256": "8880a3720f664a9ba6d69f43d285101c87b97573ef550a3e3b41a8ca30c095dc",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001022.json",
+      "sha256": "324c7867a07244fe3f8815ab4e3d206bd544d26c9a14992bd2f1137004280fb1",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001023.json",
+      "sha256": "39a5786c4f618250c2971646b1a25d50e86a06a1e77060e047a76edd82a9f81c",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001024.json",
+      "sha256": "2391636d98bb1aac54dc00544288ec4589e5bab48830a2770dcdff4eb082492e",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001025.json",
+      "sha256": "56cf0e2b94e7baa29c2b235988c609bacca50008e7d5bc6a5c86b526bc8fbd2a",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001026.json",
+      "sha256": "b930c543129dd72015c39b9f5ce89afe2c2c893834c5389a016b162315580a56",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001027.json",
+      "sha256": "996c0604044f8533cb5b012f7801d7076d31514048c9ee81f3811f7c8d84a2b4",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001028.json",
+      "sha256": "26ad8e2fbd323fa68b7d73025f094b2570743f861fa32f39cc3604da3a143044",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001029.json",
+      "sha256": "5c1b104a1e9a0a1fd0612f8163fdcfddf109e3e9bc3b03839c7dc3ad8cf41aa4",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001030.json",
+      "sha256": "ed76eea87ebd2dd4e35376cf0e0094fe6aeadffbd60b50b32fa9e6d6cfc34e09",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001031.json",
+      "sha256": "f480e6c2ed2312afc161198733c8bd06be385af07f64922d62bab566e8cedc47",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001032.json",
+      "sha256": "3115ebb66c3d9c577e1bd6f373cc05b3f1e61c57af1504704f60ae153ee85bf3",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001033.json",
+      "sha256": "864c72d79dfb0350623beea6ddf8891f1044d1a128db830907827c30d168ed76",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001034.json",
+      "sha256": "4baae9d7bfdb616d95fedf091c46e8f59b709b1bb4d504454771834cc76c9525",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001035.json",
+      "sha256": "9bc0f9700490f07be6130a9724b975ee0bab71331e2439e3b69a3bd26e88fcdf",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001036.json",
+      "sha256": "170e00f901588357beeac9cd581852fa233984a1d09183c62ec41480b11cb3fc",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001037.json",
+      "sha256": "4effde1d781da3b4bccedc027275a34e87a2fa4fde3c7ce00e454286fe5c4f47",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001038.json",
+      "sha256": "02229f9048b716e821355e2f668bd7c4893bc1ff82e781e28845667045f32e33",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001039.json",
+      "sha256": "20bf87a728164c833776c7d6ae3317a6287f319e63641ea3ae0e6591f4cc0bf0",
+      "events": 234,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001040.json",
+      "sha256": "3bc1bce8ee010ed1b38f7339d30afb752a96ff36036b16d4aec19110b0af002e",
+      "events": 274,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001041.json",
+      "sha256": "29e27590db8d14832bd7bac0b1c5b52b995e707b27a124a86a49ebe3a05408b0",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001042.json",
+      "sha256": "7f7cde4dcc604ac16990d927eb1a98a6a6f03ad0a023fcfaced27adff4897112",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001043.json",
+      "sha256": "14854e15e706eccf88ceb68d978227bdf3e2b0704840b53a72dcb7261c25bc82",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001044.json",
+      "sha256": "538ceb8a17fce87b11c224ba632a75564f118cc608c032d154848428295ca9d3",
+      "events": 270,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001045.json",
+      "sha256": "dbb003537f06fd92054cfde3569d0dc202d2d450aeb8ab74c644a0cca2e4ca86",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001046.json",
+      "sha256": "5065e358f5a74ae237d8410ea70a44f953cd8c09f56e85991a56f86e5dba7680",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001047.json",
+      "sha256": "fcf0eca83ff7bd6f94033d3128aef0bad6c32b91a04cde310c3bbd1e2f14b327",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001048.json",
+      "sha256": "e495c26679d1185389559892b32901038fd397f6772f897532ad3e254c239175",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001049.json",
+      "sha256": "08252de8fbee61fb369c61c6ad9161e50945083ebd9c79d3c37732908e7fb3d2",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001050.json",
+      "sha256": "4ef47c4c7c6626be5c5712c17747a0b837e0d5c36c81714dd23b402c89712f52",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001051.json",
+      "sha256": "2c858b1ac618f98ccefd68723513321667198d2f9597542b35139cfaccd5f30e",
+      "events": 244,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001052.json",
+      "sha256": "dead19f6ecec9631cd05d588a4b27f12464fc25b76abd6535fda53c195b16351",
+      "events": 270,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001053.json",
+      "sha256": "33721beb73884fb529af5aabb899a7291c187e94f3ba0db40705953d1a20e16f",
+      "events": 778,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001054.json",
+      "sha256": "bbd2fe889ce19e9ddcb712837de1e9a2a4bbf6e7efb458b3f93e62d1774d8384",
+      "events": 200,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001055.json",
+      "sha256": "b40e26a24d85a23ea43aa17a9964c9ef419b598faea786ecf3b3139939dff0b6",
+      "events": 192,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001056.json",
+      "sha256": "e7fdcd42dddca3aa1f2f7bee0e76d1a20f2f0eff04a97de6ab1d612f2c06ef43",
+      "events": 192,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001057.json",
+      "sha256": "0fff80af4dd8bade2a540c2fc5e4d7205a346af19d143b6fac8570dd16a7e4f1",
+      "events": 192,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001058.json",
+      "sha256": "186b4e8e6b0041213b10701b831ba2562ee88095056d19d6f1f3253fbaf96bc7",
+      "events": 192,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001059.json",
+      "sha256": "d9f2204293f744e94ee12c17714090c20fdff90882f134e930841850dac5d50d",
+      "events": 192,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001060.json",
+      "sha256": "99883aa463f0a97f1acdb17293a487c952604035c1254554e2e5c8f62509c61a",
+      "events": 196,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001061.json",
+      "sha256": "b123be73e6b24cf6bc58af2b02a01de8ae91fd012e596f6b5252d3f37218589f",
+      "events": 184,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001062.json",
+      "sha256": "f80bbdffadf5c9200e5259ccd6ca7b74231313d8d262964ac03e93435c2e334d",
+      "events": 184,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001063.json",
+      "sha256": "1723c2afd3e9947b398a461b40daae54a2eaae5374fce5e49937541ed83d6e88",
+      "events": 182,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001064.json",
+      "sha256": "2a87cf79cf6f8d0b03eff5ab928c1746e29a8cab91ece1aad68404fea1c3a2e5",
+      "events": 182,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001065.json",
+      "sha256": "6cf5c3e8b6be2edd97b5d99e7f477ffc8743a2f2512e9687a5006367e78b35aa",
+      "events": 182,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001066.json",
+      "sha256": "4c291de6122105084b13f0849366a05027647f1c0eac0911471f93145a687da6",
+      "events": 182,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001067.json",
+      "sha256": "6b0223b4c45c4204f851ec93de9c09163bf5149f27cc0c9c26d387ca45ef21f9",
+      "events": 182,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001068.json",
+      "sha256": "c09342112246bea50ec7398ea5eb5241233322bc0ffa51193275b415a837ae6c",
+      "events": 182,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001069.json",
+      "sha256": "e2805be3fee333910830bdc9765925ad3d3045c4b441ddea7a11f9e7467b252e",
+      "events": 194,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001070.json",
+      "sha256": "dceb488b4029429badf8ae70441aa0f41ed3051e84b7a3f0f7b3c7b2966addec",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001071.json",
+      "sha256": "dc264226b98d3e14d1fe558d5f9ab5060b725e5f27edb2244202bd3f1ac50c0f",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001072.json",
+      "sha256": "32b4aac3660884cdcd7edb4d0ceaf184012675180f85128a4968267f00c23741",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001073.json",
+      "sha256": "ffbe12fb227a2d66c5b19924418986ea34e557b3f8f8ddcc977d88da4917d321",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001074.json",
+      "sha256": "c5c762aa79c142062b0021d6e1b58e6c5e2f7df5754e5b82ad18db63d2e0af2e",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001075.json",
+      "sha256": "6fe8db8476e23c6b5d4ac6a5c696032a44aa389d4733b35faf9a82a9a347c1ea",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001076.json",
+      "sha256": "ad25c55e2231a5beec1591c40cf1d76370c78f63d1b86e9563ebfa4be48cf721",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001077.json",
+      "sha256": "38c76f8e409ab9f828cc76488cc72c5c916f5bb5839e4ed87587f5dc759e6ca3",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001078.json",
+      "sha256": "1a49f21bee71c55b7fcaa2b449444fff49b76fe3a24f93e8bffcfbc030f9f7b1",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "f001079.json",
+      "sha256": "78a333032e0215294a15eec58018a491cd5eb6947a1281ec663e9e59173a0597",
+      "events": 180,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    },
+    {
+      "name": "tail-001079.json",
+      "sha256": "696732307c386babc42b2f66e987556001a9bec9e6e37050020703a68ecf3a8c",
+      "events": 0,
+      "dropped": 0,
+      "overflow": false,
+      "selected_stack_overflows_total": 0
+    }
+  ],
+  "balanced_original_event_pairs": true,
+  "mutation_event_records": 692,
+  "limits": [
+    "Only stored slots are read; Focus omissions apply.",
+    "Mutation excerpt preserves original sequence/call/depth; omitted ancestors may be referenced.",
+    "Process-local addresses are correlation identifiers, not stable cross-run IDs.",
+    "Host and frame clocks differ. No global deterministic replay claim.",
+    "Only projected equipment slots are extracted; exhausted detached weapons need event evidence."
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "authority_sha256_unchanged": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "checks": [
+    "static metadata rejects wrong authority hash",
+    "replay rejects wrong authority before process/output"
+  ]
+}

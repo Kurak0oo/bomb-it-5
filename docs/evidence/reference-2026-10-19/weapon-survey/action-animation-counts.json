@@ -1,0 +1,78 @@
+{
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "symbols": {
+    "fireball_Down_Play": {
+      "symbol": 5518,
+      "frames": 14
+    },
+    "fireball_Left_Play": {
+      "symbol": 6774,
+      "frames": 14
+    },
+    "fireball_Right_Play": {
+      "symbol": 6647,
+      "frames": 14
+    },
+    "fireball_Up_Play": {
+      "symbol": 3155,
+      "frames": 14
+    },
+    "lasergun_Play": {
+      "symbol": 1917,
+      "frames": 12
+    },
+    "shotgun_Down_Play": {
+      "symbol": 914,
+      "frames": 8
+    },
+    "shotgun_Left_Play": {
+      "symbol": 1542,
+      "frames": 8
+    },
+    "shotgun_Right_Play": {
+      "symbol": 3123,
+      "frames": 8
+    },
+    "shotgun_Up_Play": {
+      "symbol": 3663,
+      "frames": 8
+    },
+    "sinker_Down_Play": {
+      "symbol": 5015,
+      "frames": 25
+    },
+    "sinker_Left_Play": {
+      "symbol": 3201,
+      "frames": 25
+    },
+    "sinker_Right_Play": {
+      "symbol": 1934,
+      "frames": 25
+    },
+    "sinker_Up_Play": {
+      "symbol": 2319,
+      "frames": 25
+    },
+    "thrower_Down_Play": {
+      "symbol": 4093,
+      "frames": 1
+    },
+    "thrower_Left_Play": {
+      "symbol": 5567,
+      "frames": 1
+    },
+    "thrower_Right_Play": {
+      "symbol": 3202,
+      "frames": 1
+    },
+    "thrower_Up_Play": {
+      "symbol": 2213,
+      "frames": 1
+    }
+  },
+  "flamer_inner": {
+    "symbol": 2212,
+    "frames": 24
+  },
+  "note": "DefineSprite frame counts read directly from hashed original SWF; existence does not imply runtime use (TripleShoot overrides its play clip)."
+}

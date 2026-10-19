@@ -1,0 +1,25 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\movement-corridor-right-42-01",
+  "case_sha256": "762f2e473c624b22ed12a8d222c446f2d843a4aa803f7ddb90d6d669e4ee24b6",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "trace_frames": 17,
+  "events": {
+    "events": 3362,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "corridor-after-turn.png",
+      "sha256": "9085a3de452828662114e4477f2a805f441e17363176130738bc61da222348a6",
+      "bytes": 550333
+    }
+  ],
+  "limits": [
+    "Selected native/raw source observations; no complete Flash equivalence claim.",
+    "Fixtures invoke original methods and do not implement new gameplay.",
+    "Position/state and original callback timing must be interpreted separately."
+  ]
+}

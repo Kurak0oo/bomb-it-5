@@ -1,0 +1,605 @@
+{
+  "case": "flamer-up-original-action",
+  "rows": [
+    {
+      "frame": 724,
+      "fire_frame": 1,
+      "width": 3.6,
+      "height": 7.4,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 725,
+      "fire_frame": 2,
+      "width": 7.3,
+      "height": 17.65,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 726,
+      "fire_frame": 3,
+      "width": 19.05,
+      "height": 26.75,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 727,
+      "fire_frame": 4,
+      "width": 20.2,
+      "height": 29.9,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 728,
+      "fire_frame": 5,
+      "width": 21.4,
+      "height": 33.35,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 729,
+      "fire_frame": 6,
+      "width": 23.3,
+      "height": 42.8,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 730,
+      "fire_frame": 7,
+      "width": 21.9,
+      "height": 46.6,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 731,
+      "fire_frame": 8,
+      "width": 21.8,
+      "height": 50.15,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 732,
+      "fire_frame": 9,
+      "width": 19.35,
+      "height": 52.85,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 733,
+      "fire_frame": 10,
+      "width": 20.75,
+      "height": 54.75,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 734,
+      "fire_frame": 11,
+      "width": 21.6,
+      "height": 56.45,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 735,
+      "fire_frame": 12,
+      "width": 22.1,
+      "height": 58.35,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 736,
+      "fire_frame": 13,
+      "width": 25.3,
+      "height": 60.2,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 737,
+      "fire_frame": 14,
+      "width": 24.85,
+      "height": 67.2,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 738,
+      "fire_frame": 15,
+      "width": 25.7,
+      "height": 67.55,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 739,
+      "fire_frame": 16,
+      "width": 25.2,
+      "height": 73.45,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 740,
+      "fire_frame": 17,
+      "width": 24.95,
+      "height": 79.35,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 741,
+      "fire_frame": 18,
+      "width": 24.6,
+      "height": 85.2,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 742,
+      "fire_frame": 19,
+      "width": 24.85,
+      "height": 86.5,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 743,
+      "fire_frame": 20,
+      "width": 25.35,
+      "height": 87.8,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 744,
+      "fire_frame": 21,
+      "width": 25.15,
+      "height": 89.5,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    },
+    {
+      "frame": 745,
+      "fire_frame": 22,
+      "width": 26.6,
+      "height": 91.85,
+      "matrix": {
+        "a": 1.0,
+        "b": 0.0,
+        "c": -0.0,
+        "d": 0.11222222447395325,
+        "tx_pixels": 14.8,
+        "ty_pixels": 10.1
+      },
+      "actor_cell": [
+        1,
+        1
+      ],
+      "calculated": [
+        1,
+        0
+      ],
+      "actual": {
+        "xN": 1,
+        "yN": 0
+      },
+      "matches": true
+    }
+  ],
+  "matched": 22,
+  "limits": [
+    "Last actual endpoint getter in each frame is compared with post-step bounds.",
+    "Native Script bounds are Ruffle results, not native Flash rendering certification.",
+    "This verifies the sampled scenario; it does not certify arbitrary obstructions."
+  ]
+}

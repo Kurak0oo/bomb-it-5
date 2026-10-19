@@ -1,0 +1,176 @@
+{
+  "name": "original-cardinal-down-release-reversal-bomb-contact",
+  "origin": "Seed42, original AI stop/guarded floor reposition setup, legal human cardinal input and bomb. No field writes.",
+  "actions": [
+    {
+      "command": "seed 42"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "capture": "cardinal-start"
+    },
+    {
+      "observe_command": "events movement-events 20000 zlong.bombit5.gameengine.robot zlong.bombit5.gameengine::HitMove zlong.bombit5.commands.robot::GetFireCommand"
+    },
+    {
+      "observe_command": "trace-focus motion-trace"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 15",
+      "capture": "held-direction"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "command": "step 4",
+      "capture": "released"
+    },
+    {
+      "command": "kd up"
+    },
+    {
+      "command": "step 20",
+      "capture": "reverse-wall"
+    },
+    {
+      "command": "ku up"
+    },
+    {
+      "command": "step 4"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "bomb-placed"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 16",
+      "capture": "departed"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "kd up"
+    },
+    {
+      "command": "step 16",
+      "capture": "reentry-blocked"
+    },
+    {
+      "command": "ku up"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

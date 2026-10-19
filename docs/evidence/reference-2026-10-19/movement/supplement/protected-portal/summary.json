@@ -1,0 +1,25 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\movement-protected-portal-42-01",
+  "case_sha256": "5ba1a55df73d724a94556e400ae173c7b6c21172d308d9724a97486f69be5f68",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "trace_frames": 45,
+  "events": {
+    "events": 12340,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "protected-arrival.png",
+      "sha256": "9fe8cfdbf6e2ab74adf38ffb198bafefae1ae6f9245a4b1ef5a40853affd9e5e",
+      "bytes": 551032
+    }
+  ],
+  "limits": [
+    "Selected native/raw source observations; no complete Flash equivalence claim.",
+    "Fixtures invoke original methods and do not implement new gameplay.",
+    "Position/state and original callback timing must be interpreted separately."
+  ]
+}

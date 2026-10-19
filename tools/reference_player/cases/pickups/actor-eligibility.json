@@ -1,0 +1,550 @@
+{
+  "name": "normal-human-ai-pickup-eligibility",
+  "origin": "Seed2;all original selected-scope pickup constructors compared at human0/AI1 currentcells; normal GetItemCommand executescanEated/changeStage/eatProp. Original AI stop controls isolate collectors but do not rewrite permissions/stats.",
+  "actions": [
+    {
+      "command": "seed 2"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 15,
+        "y": 1
+      },
+      "capture": "ai-collector-floor"
+    },
+    {
+      "command": "events events 20000 zlong.bombit5.items zlong.bombit5.commands.robot::GetItemCommand zlong.bombit5.gameengine.robot::PersonRobot zlong.bombit5.gameengine.robot::AIRobot zlong.bombit5.gameengine::AbstractPlayer"
+    },
+    {
+      "state": "before-pickups"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "landmine"
+      },
+      "state": "actor-0-landmine-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-landmine-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "landmine"
+      },
+      "state": "actor-1-landmine-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-landmine-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "hammer"
+      },
+      "state": "actor-0-hammer-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-hammer-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "hammer"
+      },
+      "state": "actor-1-hammer-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-hammer-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "flamer"
+      },
+      "state": "actor-0-flamer-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-flamer-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "flamer"
+      },
+      "state": "actor-1-flamer-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-flamer-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "laser"
+      },
+      "state": "actor-0-laser-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-laser-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "laser"
+      },
+      "state": "actor-1-laser-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-laser-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "triple"
+      },
+      "state": "actor-0-triple-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-triple-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "triple"
+      },
+      "state": "actor-1-triple-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-triple-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "fireball"
+      },
+      "state": "actor-0-fireball-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-fireball-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "fireball"
+      },
+      "state": "actor-1-fireball-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-fireball-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "car"
+      },
+      "state": "actor-0-car-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-car-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "car"
+      },
+      "state": "actor-1-car-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-car-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "moto"
+      },
+      "state": "actor-0-moto-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-moto-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "moto"
+      },
+      "state": "actor-1-moto-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-moto-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "capacity"
+      },
+      "state": "actor-0-capacity-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-capacity-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "capacity"
+      },
+      "state": "actor-1-capacity-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-capacity-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "power"
+      },
+      "state": "actor-0-power-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-power-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "power"
+      },
+      "state": "actor-1-power-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-power-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "speed"
+      },
+      "state": "actor-0-speed-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-speed-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "speed"
+      },
+      "state": "actor-1-speed-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-speed-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "life"
+      },
+      "state": "actor-0-life-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-life-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "life"
+      },
+      "state": "actor-1-life-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-life-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "shield"
+      },
+      "state": "actor-0-shield-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-shield-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "shield"
+      },
+      "state": "actor-1-shield-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-shield-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 0,
+        "kind": "invincibility"
+      },
+      "state": "actor-0-invincibility-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-0-invincibility-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "actor": 1,
+        "kind": "invincibility"
+      },
+      "state": "actor-1-invincibility-created"
+    },
+    {
+      "command": "step 1",
+      "state": "actor-1-invincibility-collected"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "capture": "after-pickups"
+    },
+    {
+      "command": "events off"
+    }
+  ]
+}

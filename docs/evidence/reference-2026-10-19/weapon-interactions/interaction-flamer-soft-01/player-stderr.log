@@ -1,0 +1,22 @@
+2026-10-19T21:02:07.512191Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+	loader_add_layer_properties: 'layers' tag not supported until file version 1.0.1, but C:\WINDOWS\System32\DriverStore\FileRepository\nvlti.inf_amd64_f8a7dff6a7392688\nv-vk64.json is reporting version 1
+2026-10-19T21:02:07.512444Z  WARN wgpu_hal::vulkan::instance: 	objects: (type: INSTANCE, hndl: 0x1c56f7bb980, name: ?)
+2026-10-19T21:02:07.512575Z ERROR wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+	loader_get_json: Failed to open JSON file C:\Program Files (x86)\Epic Games\Epic Online Services\managedArtifacts\98bc04bc842e4906993fd6d6644ffb8d\EOSOverlayVkLayer-Win64.json
+2026-10-19T21:02:07.512806Z ERROR wgpu_hal::vulkan::instance: 	objects: (type: INSTANCE, hndl: 0x1c56f7bb980, name: ?)
+2026-10-19T21:02:07.513675Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+	windows_read_data_files_in_registry: Registry lookup failed to get layer manifest files.
+2026-10-19T21:02:07.513718Z  WARN wgpu_hal::vulkan::instance: 	objects: (type: INSTANCE, hndl: 0x1c56f7bb980, name: ?)
+adapter: AdapterInfo { name: "NVIDIA GeForce RTX 3080 Laptop GPU", vendor: 4318, device: 9436, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "555.85", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: Some(false), limit_bucket: None }
+2026-10-19T21:02:08.301967Z  WARN ruffle_core::library: Unknown device font "SimSun" (bold: false, italic: false)
+2026-10-19T21:02:08.326979Z  WARN ruffle_core::library: Unknown device font "Times New Roman" (bold: false, italic: false)
+2026-10-19T21:02:08.431809Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Security.allowDomain()
+2026-10-19T21:02:08.438289Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.display.NativeMenuItem constructor
+2026-10-19T21:02:08.439751Z  WARN ruffle_core::library: Unknown device font "Noto Sans" (bold: true, italic: false)
+2026-10-19T21:02:08.719614Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.net.URLLoader.close()
+2026-10-19T21:02:08.837391Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Capabilities.manufacturer getter
+2026-10-19T21:02:08.837783Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Capabilities.isDebugger getter
+2026-10-19T21:02:08.837975Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Capabilities.screenColor getter
+2026-10-19T21:02:08.847747Z  WARN ruffle_core::library: Unknown device font "Tahoma" (bold: true, italic: false)
+2026-10-19T21:02:09.025102Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.net.SharedObject.close()
+2026-10-19T21:02:09.592959Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.utils.Dictionary constructor with weak keys

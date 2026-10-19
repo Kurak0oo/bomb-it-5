@@ -1,0 +1,23 @@
+2026-10-19T21:05:34.950864Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+	loader_add_layer_properties: 'layers' tag not supported until file version 1.0.1, but C:\WINDOWS\System32\DriverStore\FileRepository\nvlti.inf_amd64_f8a7dff6a7392688\nv-vk64.json is reporting version 1
+2026-10-19T21:05:34.951017Z  WARN wgpu_hal::vulkan::instance: 	objects: (type: INSTANCE, hndl: 0x2c084670a60, name: ?)
+2026-10-19T21:05:34.951142Z ERROR wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+	loader_get_json: Failed to open JSON file C:\Program Files (x86)\Epic Games\Epic Online Services\managedArtifacts\98bc04bc842e4906993fd6d6644ffb8d\EOSOverlayVkLayer-Win64.json
+2026-10-19T21:05:34.951433Z ERROR wgpu_hal::vulkan::instance: 	objects: (type: INSTANCE, hndl: 0x2c084670a60, name: ?)
+2026-10-19T21:05:34.952489Z  WARN wgpu_hal::vulkan::instance: GENERAL [Loader Message (0x0)]
+	windows_read_data_files_in_registry: Registry lookup failed to get layer manifest files.
+2026-10-19T21:05:34.952524Z  WARN wgpu_hal::vulkan::instance: 	objects: (type: INSTANCE, hndl: 0x2c084670a60, name: ?)
+adapter: AdapterInfo { name: "NVIDIA GeForce RTX 3080 Laptop GPU", vendor: 4318, device: 9436, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "555.85", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: Some(false), limit_bucket: None }
+2026-10-19T21:05:36.005006Z  WARN ruffle_core::library: Unknown device font "SimSun" (bold: false, italic: false)
+2026-10-19T21:05:36.049755Z  WARN ruffle_core::library: Unknown device font "Times New Roman" (bold: false, italic: false)
+2026-10-19T21:05:36.184061Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Security.allowDomain()
+2026-10-19T21:05:36.192822Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.display.NativeMenuItem constructor
+2026-10-19T21:05:36.195096Z  WARN ruffle_core::library: Unknown device font "Noto Sans" (bold: true, italic: false)
+2026-10-19T21:05:36.566948Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.net.URLLoader.close()
+2026-10-19T21:05:36.744184Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Capabilities.manufacturer getter
+2026-10-19T21:05:36.744582Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Capabilities.isDebugger getter
+2026-10-19T21:05:36.744869Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.system.Capabilities.screenColor getter
+2026-10-19T21:05:36.764508Z  WARN ruffle_core::library: Unknown device font "Tahoma" (bold: true, italic: false)
+2026-10-19T21:05:37.033997Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.net.SharedObject.close()
+2026-10-19T21:05:38.421724Z  WARN ruffle_core::stub: Encountered stub: AVM2 flash.utils.Dictionary constructor with weak keys
+2026-10-19T21:05:46.108453Z  WARN ruffle_render_wgpu::filters: Unsupported filter GradientGlowFilter(GradientFilter { colors: [GradientRecord { ratio: 0, color: Color(0x00ffffcc) }, GradientRecord { ratio: 20, color: Color(0x007fffcc) }, GradientRecord { ratio: 40, color: Color(0x0000ffcc) }, GradientRecord { ratio: 60, color: Color(0x7f00ffcc) }, GradientRecord { ratio: 80, color: Color(0xff00ffcc) }, GradientRecord { ratio: 100, color: Color(0xff007fcc) }, GradientRecord { ratio: 120, color: Color(0xff0000cc) }, GradientRecord { ratio: 140, color: Color(0xff0000cc) }, GradientRecord { ratio: 160, color: Color(0xff7f00cc) }, GradientRecord { ratio: 180, color: Color(0xffff00cc) }, GradientRecord { ratio: 200, color: Color(0x7fff00cc) }, GradientRecord { ratio: 220, color: Color(0x00ff00cc) }, GradientRecord { ratio: 240, color: Color(0x00ff7fcc) }], blur_x: 18.0, blur_y: 18.0, angle: 1.0471954345703125, distance: -20.0, strength: 1.0, flags: GradientFilterFlags(INNER_SHADOW | COMPOSITE_SOURCE | 0x3) })

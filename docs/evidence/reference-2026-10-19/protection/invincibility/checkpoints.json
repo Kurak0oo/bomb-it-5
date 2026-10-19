@@ -1,0 +1,1754 @@
+[
+  {
+    "name": "opening-board",
+    "frame": 721,
+    "source_file": "opening-board.json",
+    "source_sha256": "69f0e384ada10e094fa86f50b534b7e69adaddf64ec0944293202ff19b5f5f40",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 1
+    },
+    "registered_robots": 4,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [
+      {
+        "id": "0x1d91ab67a00",
+        "_bombAdder": {
+          "$ref": "0x1d91b57b880",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_xN": 15,
+        "_yN": 2,
+        "_time": 8,
+        "_isBlast": false,
+        "_bombPow": 1,
+        "_continueTime": 0
+      },
+      {
+        "id": "0x1d91ad87e10",
+        "_bombAdder": {
+          "$ref": "0x1d91b582680",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_xN": 15,
+        "_yN": 12,
+        "_time": 6,
+        "_isBlast": false,
+        "_bombPow": 1,
+        "_continueTime": 0
+      },
+      {
+        "id": "0x1d91ad8a250",
+        "_bombAdder": {
+          "$ref": "0x1d91b582040",
+          "class": "zlong.bombit5.gameengine.robot::AIRobot"
+        },
+        "_xN": 2,
+        "_yN": 13,
+        "_time": 4,
+        "_isBlast": false,
+        "_bombPow": 1,
+        "_continueTime": 0
+      }
+    ],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": false,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 1,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 70.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "id": "0x1d91b57a020",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          }
+        ]
+      },
+      {
+        "player_index": 1,
+        "robot": "0x1d91b57b880",
+        "isExist": false,
+        "state": "normal",
+        "currentX": 15,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 1,
+        "speed": {
+          "$ref": "0x1d91b57c500",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 0.03963371762221055
+          }
+        },
+        "physical": {
+          "x": 633.0,
+          "y": 95.9,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b8277a0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b57b2e0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "id": "0x1d91b57c0a0",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          }
+        ]
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": false,
+        "state": "normal",
+        "currentX": 2,
+        "currentY": 13,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 1,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.3058157223936,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 238.9,
+          "y": 430.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "id": "0x1d91b581140",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          }
+        ]
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": false,
+        "state": "normal",
+        "currentX": 15,
+        "currentY": 12,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 1,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -0.110093660061696
+          }
+        },
+        "physical": {
+          "x": 633.0,
+          "y": 403.75,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "id": "0x1d91b586aa0",
+            "_nvincibilityTimeCount": 20,
+            "_totalFrames": 80
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "spawn-protection-finished",
+    "frame": 821,
+    "source_file": "spawn-protection-finished.json",
+    "source_sha256": "c677c780698d971a1d1beb685697b5e19698828d39835b0a7a805d64a38f766a",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 1
+    },
+    "registered_robots": 4,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 1,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 70.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 1,
+        "robot": "0x1d91b57b880",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 5,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b57c500",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 2.5893445841133014e-24
+          }
+        },
+        "physical": {
+          "x": 333.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b8277a0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b57b2e0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 9,
+        "currentY": 5,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 1.997951067988659e-23,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 453.0,
+          "y": 190.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 13,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -7.192623844759171e-24
+          }
+        },
+        "physical": {
+          "x": 573.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      }
+    ]
+  },
+  {
+    "name": "target-shield",
+    "frame": 822,
+    "source_file": "target-shield.json",
+    "source_sha256": "9824a2aaab02918bc569d4fd9fc6850aea1e383a4fdcfcb41a0a12dc87de9a04",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 2
+    },
+    "registered_robots": 4,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 100
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 1,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 70.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 1,
+        "robot": "0x1d91b57b880",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": {
+          "$ref": "0x1d91d26fe60",
+          "class": "zlong.bombit5.items.tools::ShieldProp"
+        },
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b57c500",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 1.5536067504679808e-24
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 100.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b8277a0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b57b2e0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 9,
+        "currentY": 5,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 1.1987706407931953e-23,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 453.0,
+          "y": 190.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 13,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -4.3155743068555024e-24
+          }
+        },
+        "physical": {
+          "x": 573.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      }
+    ]
+  },
+  {
+    "name": "invincibility-introduction",
+    "frame": 823,
+    "source_file": "invincibility-introduction.json",
+    "source_sha256": "0a7149b80231313ac2e7c71d16402cef2a862ee481b45e928e7ff76d43bc6a90",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 2
+    },
+    "registered_robots": 4,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 100
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": false,
+        "state": "Invincible",
+        "currentX": 1,
+        "currentY": 1,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 70.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.weapon::InvincibilityCommandChain",
+            "id": "0x1d91d2632a0"
+          },
+          {
+            "class": "CountMcPlayCommand",
+            "id": "0x1d91d263480"
+          }
+        ]
+      },
+      {
+        "player_index": 1,
+        "robot": "0x1d91b57b880",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": {
+          "$ref": "0x1d91d26fe60",
+          "class": "zlong.bombit5.items.tools::ShieldProp"
+        },
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b57c500",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 9.321640502807884e-25
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 100.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b8277a0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b57b2e0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 9,
+        "currentY": 5,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 7.192623844759171e-24,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 453.0,
+          "y": 190.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 13,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -2.5893445841133014e-24
+          }
+        },
+        "physical": {
+          "x": 573.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      }
+    ]
+  },
+  {
+    "name": "invincibility-active",
+    "frame": 857,
+    "source_file": "invincibility-active.json",
+    "source_sha256": "ddcbaae6d63818926a5d6c579cac9a36df11ca66cbde8de49a1cb1890d5b06b2",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 3
+    },
+    "registered_robots": 4,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 100
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": false,
+        "state": "Invincible",
+        "currentX": 1,
+        "currentY": 1,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 70.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.weapon::InvincibilityCommandChain",
+            "id": "0x1d91d2632a0"
+          },
+          {
+            "class": "CountInvincibilityCommand",
+            "id": "0x1d91d2608c0",
+            "_time": 6,
+            "_totalTime": 350
+          }
+        ]
+      },
+      {
+        "player_index": 1,
+        "robot": "0x1d91b57b880",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": {
+          "$ref": "0x1d91d26fe60",
+          "class": "zlong.bombit5.items.tools::ShieldProp"
+        },
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b57c500",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 2.670759999021537e-32
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 100.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b8277a0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b57b2e0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 9,
+        "currentY": 5,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 2.060771604183285e-31,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 453.0,
+          "y": 190.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 13,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -7.418777775059826e-32
+          }
+        },
+        "physical": {
+          "x": 573.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      }
+    ]
+  },
+  {
+    "name": "contact-shield",
+    "frame": 869,
+    "source_file": "contact-shield.json",
+    "source_sha256": "6890a891a052efba2ea78acac0728511d2aac8042b290e78527ba4b71285d570",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 3
+    },
+    "registered_robots": 4,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 0,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 100
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": false,
+        "state": "Invincible",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0,
+            "y": 3.9912928706560002
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 111.7,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.weapon::InvincibilityCommandChain",
+            "id": "0x1d91d2632a0"
+          },
+          {
+            "class": "CountInvincibilityCommand",
+            "id": "0x1d91d2608c0",
+            "_time": 18,
+            "_totalTime": 350
+          }
+        ]
+      },
+      {
+        "player_index": 1,
+        "robot": "0x1d91b57b880",
+        "isExist": false,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b57c500",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 5.813663189565458e-35
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 100.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b8277a0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b57b2e0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.robot::InvincibilityCommand",
+            "id": "0x1d91d28cba0",
+            "_nvincibilityTimeCount": 6,
+            "_totalFrames": 80
+          }
+        ]
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 9,
+        "currentY": 5,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 4.485851226516556e-34,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 453.0,
+          "y": 190.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 13,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -1.6149064415459604e-34
+          }
+        },
+        "physical": {
+          "x": 573.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      }
+    ]
+  },
+  {
+    "name": "contact-after-immunity",
+    "frame": 969,
+    "source_file": "contact-after-immunity.json",
+    "source_sha256": "511a8ea37b6695bd965db3e3b3705a8c653cc5b595794a676e9c3037795381fe",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 6
+    },
+    "registered_robots": 3,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 100,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 100
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": false,
+        "state": "Invincible",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 2.6075859642426157e-22
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 111.7,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.weapon::InvincibilityCommandChain",
+            "id": "0x1d91d2632a0"
+          },
+          {
+            "class": "CountInvincibilityCommand",
+            "id": "0x1d91d2608c0",
+            "_time": 118,
+            "_totalTime": 350
+          }
+        ]
+      },
+      {
+        "player_index": 1,
+        "robot": "0x1d91b57b880",
+        "isExist": true,
+        "state": "dead",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b57c500",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 8.015763530432268e-52
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 100.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b8277a0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b57b2e0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 9,
+        "currentY": 5,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 2.930690148533891e-56,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 453.0,
+          "y": 190.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 13,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -1.0550484534722007e-56
+          }
+        },
+        "physical": {
+          "x": 573.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      }
+    ]
+  },
+  {
+    "name": "invincibility-expired",
+    "frame": 1239,
+    "source_file": "invincibility-expired.json",
+    "source_sha256": "72a4cf3ba747acdae14b92b6485f920b2b26bb1fdc108640d3c49c208eaa7a11",
+    "available": true,
+    "game": {
+      "gamePaused": false,
+      "gameOver": false,
+      "gameStarted": true,
+      "pastTime": 12
+    },
+    "registered_robots": 3,
+    "players": [
+      {
+        "index": 0,
+        "id": "0x1d91b576d80",
+        "_life": 3,
+        "_modePoint": 100,
+        "_boxPoint": 0,
+        "_itemPoint": 0
+      },
+      {
+        "index": 1,
+        "id": "0x1d91b57ad40",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 100
+      },
+      {
+        "index": 2,
+        "id": "0x1d91b5804c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      },
+      {
+        "index": 3,
+        "id": "0x1d91b5836c0",
+        "_life": 1,
+        "_modePoint": 0,
+        "_boxPoint": 10,
+        "_itemPoint": 0
+      }
+    ],
+    "bombs": [],
+    "actors": [
+      {
+        "player_index": 0,
+        "robot": "0x1d91b576f60",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 1,
+        "currentY": 2,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b577f00",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": 3.289093642576097e-82
+          }
+        },
+        "physical": {
+          "x": 213.0,
+          "y": 111.7,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b820500",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b576ba0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": [
+          {
+            "class": "zlong.bombit5.commands.weapon::InvincibilityCommandChain",
+            "id": "0x1d91d2632a0"
+          }
+        ]
+      },
+      {
+        "player_index": 1,
+        "robot": null
+      },
+      {
+        "player_index": 2,
+        "robot": "0x1d91b582040",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 9,
+        "currentY": 5,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b580ba0",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 3.6966429747994916e-116,
+            "y": 0.0
+          }
+        },
+        "physical": {
+          "x": 453.0,
+          "y": 190.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b838ec0",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b581640",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      },
+      {
+        "player_index": 3,
+        "robot": "0x1d91b582680",
+        "isExist": true,
+        "state": "normal",
+        "currentX": 13,
+        "currentY": 4,
+        "vehicle": "",
+        "weapon": null,
+        "velocity": 1.6,
+        "robotVelocity": 1.6,
+        "_moveSpeed": 1.6,
+        "shieldObj": null,
+        "bombNum": 0,
+        "speed": {
+          "$ref": "0x1d91b582180",
+          "class": "flash.geom::Point",
+          "point": {
+            "x": 0.0,
+            "y": -1.330791470927817e-116
+          }
+        },
+        "physical": {
+          "x": 573.0,
+          "y": 160.0,
+          "current_frame": 0
+        },
+        "stage": null,
+        "bomb_handler": {
+          "$ref": "0x1d91b840160",
+          "class": "Function",
+          "function": "zlong.bombit5.gameengine.robot::RobotController/addBomb()",
+          "receiver": {
+            "$ref": "0x1d91b5838a0",
+            "class": "zlong.bombit5.gameengine.robot::RobotController"
+          }
+        },
+        "commands": []
+      }
+    ]
+  }
+]

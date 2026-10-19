@@ -30,6 +30,11 @@ The XML export completed locally and is retained only in ignored audit storage. 
 
 ## Playback harness audit
 
+This section records the initial static audit. Subsequent work independently
+built and replayed the pinned player; see the [reference session](edition-5-reference-session.md)
+and [trace tooling](edition-5-reference-trace-design.md). The remaining dynamic
+behavior gates below are not completed merely by reproducing that session.
+
 The supplied reference material is usable preparation, not an independently reproduced runtime baseline yet:
 
 | Artifact / observation | What was checked now | Limit |

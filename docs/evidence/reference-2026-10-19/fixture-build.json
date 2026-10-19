@@ -1,0 +1,14 @@
+{
+  "revision": "45366370ed7d1a59c89aa3cf7b765c7a274407cd",
+  "rustc": "rustc 1.97.0 (2d8144b78 2026-07-07)\nbinary: rustc\ncommit-hash: 2d8144b7880597b6e6d3dfd63a9a9efae3f533d3\ncommit-date: 2026-07-07\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.0\nLLVM version: 22.1.6",
+  "cargo": "cargo 1.97.0 (c980f4866 2026-06-30)",
+  "platform": "Microsoft Windows NT 10.0.26200.0",
+  "profile": "ci",
+  "observer": true,
+  "fixtures": true,
+  "observer_patch_sha256": "527817098256ce1a17650df5d8489a39b904bc4425f9ee181ae6085980aaa1b0",
+  "lock_sha256": "cb5e2d793db0fb030f3a8df074e8fe2f8ba78accc0871f755df5b173086b3431",
+  "source_sha256": "80e4b74407134bfd51674586cbc15cafa285ef8a7c4a2791e96ca57dabe0c70f",
+  "tracked_changes": " Cargo.lock                | 13 +++++++++++++\n Cargo.toml                |  1 +\n core/src/avm2.rs          |  6 ++++++\n core/src/avm2/function.rs |  4 ++++\n core/src/player.rs        | 13 +++++++++++++\n 5 files changed, 37 insertions(+)",
+  "player_sha256": "58840f55aebde7774cde4e9c0427a9210d391827fc6b9e2119b7b44b2112e9ce"
+}

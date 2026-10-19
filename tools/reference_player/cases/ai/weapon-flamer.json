@@ -1,0 +1,191 @@
+{
+  "name": "original-normal-ai-weapon-flamer",
+  "origin": "Initial seed2. Original AI stop and reposition isolate actor1 at4,5 and human0 at5,5 with other actors at1,5 and2,7. Original pickup constructor and normal GetItemCommand equip actor1; original AI start chooses subsequent actions. No private AI state/outcome/stat writes.",
+  "actions": [
+    {
+      "command": "seed 2"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 4,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 1,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 2,
+        "y": 7
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 0,
+        "x": 5,
+        "y": 5
+      }
+    },
+    {
+      "command": "step 100"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "capture": "before-weapon"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "flamer",
+        "actor": 1
+      }
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "capture": "armed-ai"
+    },
+    {
+      "observe_command": "events events 100000 zlong.bombit5.gameengine.ai zlong.bombit5.gameengine.robot zlong.bombit5.items.weapons zlong.bombit5.commands"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "start"
+      }
+    },
+    {
+      "observe_command": "trace-focus trace"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "capture": "after-attack-window"
+    },
+    {
+      "command": "step 50"
+    },
+    {
+      "capture": "after-recovery-window"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

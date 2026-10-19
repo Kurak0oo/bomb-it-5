@@ -1,0 +1,25 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\movement-cardinal-down-42-01",
+  "case_sha256": "35866d84990355dc90cb05f5ef56d51b9a4420419146a106caa742c3e22ea6ad",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "trace_frames": 78,
+  "events": {
+    "events": 12650,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "reentry-blocked.png",
+      "sha256": "1b761c5b0e2f9adfb63c4ee5ddaf466e677f617ecc78eb2a8fde4f71527d156f",
+      "bytes": 548523
+    }
+  ],
+  "limits": [
+    "Selected native/raw source observations; no complete Flash equivalence claim.",
+    "Fixtures invoke original methods and do not implement new gameplay.",
+    "Position/state and original callback timing must be interpreted separately."
+  ]
+}

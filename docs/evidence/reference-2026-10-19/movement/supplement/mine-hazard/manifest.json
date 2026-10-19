@@ -1,0 +1,297 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-mine-hazard-at-portal-destination",
+  "case_sha256": "b113964afb6cc9c4d676e5310172c0f01c3222459d31ca3443a7995328667d31",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "ba63a1b4ab3b5ff9619a26e5d2479c8bf9b4fb2c3c3be2d812053ec782c7e462"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "2b56c3faea10652f193cfdbab7ce66a91feef7c581926febe2c49f736e8a3a72"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "ccc6db0d3e2b6fd541b00366d3bc3d0a2e43a7715ac6fd67a73685eeffb6413b"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "f3bfb45571e71a3aaf00eaf6cea937fe0d65f0d3e02bd5745e6b3c6283b76b6a"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "07c5a77ed3ff82c7915529a4124e5fea2b4c73c5f5715290693774f3d499136a"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 760,
+      "sha256": "a712e4ebe0036ce6ce0514bb5382e1d5f7498f8e0d684ea20fb84be77a1e8a37"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 773,
+      "sha256": "acc68ce5eabd9da60ea028729a8c4f37dbbc7ca37546dc81e182de52c01c829b"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 773,
+      "sha256": "6e65f4f7a1c641e17229445b82de5826f0bfd73a5052a3d447c5726fc3ab94e6"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 774,
+      "sha256": "36899868834c66213e4fc5b9a4cd383104df40afecbd63dcca8c40c5e91f10b1"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 775,
+      "sha256": "2e4e53932ae18a51ab8f7db4db2aa89f85fe1fc86d4b5d11ed94a9bf16080c2b"
+    },
+    {
+      "name": "fixture-0010",
+      "frame": 776,
+      "sha256": "6a49fc7cdb8820b0ba90a300f889f6065c9838bda9b22de1640fbb95db8bc1ad"
+    },
+    {
+      "name": "fixture-0011",
+      "frame": 777,
+      "sha256": "8a2e4ffeabfc81ca0679cc1955b9c29133580d9b6bfc8b5e46221367ab0dde22"
+    },
+    {
+      "name": "fixture-0012",
+      "frame": 778,
+      "sha256": "2efc60d62833f1c0d7062c135912df26537edf4d7d8a4433d3c0aff64eea0105"
+    },
+    {
+      "name": "fixture-0013",
+      "frame": 779,
+      "sha256": "19a1a847d98de24a93ab72fcb78951e1cbcf9069f7164025ecc2ab4ba605f8b9"
+    },
+    {
+      "name": "fixture-0014",
+      "frame": 780,
+      "sha256": "3cf78ac4e896fb48d027d0e56f7d6dba34c8bec96cb50a1a1144f6f34ef4c35f"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-q0qx57z_\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 821,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "mine-owner-arrived",
+      "frame": 759,
+      "sha256": "081f0a9f419245c6ecc54c939aa2fdf2ef1690d83b5a787f867e4495a62071fa",
+      "bytes": 551495
+    },
+    {
+      "name": "mine-on-portal",
+      "frame": 760,
+      "sha256": "92cfa2da3bfcb237b2b2c8945e36222c5564ccc08b219c6c809da12109a38597",
+      "bytes": 550847
+    },
+    {
+      "name": "mine-owner-exited",
+      "frame": 770,
+      "sha256": "31fe2d1bf92b1aa0264b8efcf2325a392df0456af9870241d2dbe4dc0b13e798",
+      "bytes": 551047
+    },
+    {
+      "name": "mine-armed",
+      "frame": 773,
+      "sha256": "b41202a3f86c88b9d201dc2d5a316fafc163664074f8e8c65013054c215da22d",
+      "bytes": 551578
+    },
+    {
+      "name": "ai-traveler-transit",
+      "frame": 781,
+      "sha256": "9358f4ba0c97c250f8ff3d2a166b6cd5c6d0509338d27071a67d86f4ea231816",
+      "bytes": 550940
+    },
+    {
+      "name": "hazardous-destination-after",
+      "frame": 821,
+      "sha256": "c290920528e6bf07dd93d85997171bf3b388ac4d04c445902ad5722a34e75748",
+      "bytes": 547325
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "336527e7214641a6261d2cd86f66765e5c27278d3e5b14f960c3054606070206",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "mine-owner-arrived",
+      "frame": 759,
+      "sha256": "10992a7629469a44f67d9156fad9a5735aaa7b4be48cbfc5e3dd8885d787fffa",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "mine-on-portal",
+      "frame": 760,
+      "sha256": "a1469d8a6881843a693dee1ae101925d3f34bcd1d6dc7e0ad96509e8174eb691",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "mine-owner-exited",
+      "frame": 770,
+      "sha256": "0a9ffc19f21c1be483dbf5f18a4f95d3c10890510eb257f0102f631cfe509292",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "mine-armed",
+      "frame": 773,
+      "sha256": "edad9ecae91e662e789fc7c382df40a88009541a56dd2a39ceb9355162f6b93d",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "ai-traveler-transit",
+      "frame": 781,
+      "sha256": "57c6d054b8eb4244c5a0a1a0d4765886110a06af420a06506f6403f57a4c43db",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "hazardous-destination-after",
+      "frame": 821,
+      "sha256": "2961dd699e74afff0591ef683caec0296c340f1307e44609366a52fe07314248",
+      "objects": 397,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "3c1fc2b8812d9572d2bb537d30a13597107e5001cd25ee819719b0cd3eb05e08",
+  "stderr_sha256": "898e4f3fbf5cc3489bd1c4d9171f01569454ca28f8cfd02c202f0fc0eea4ec68"
+}

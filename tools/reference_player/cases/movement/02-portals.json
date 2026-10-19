@@ -1,0 +1,252 @@
+{
+  "name": "original-both-cinema-portal-round-trips",
+  "origin": "Explicit seed42, original AI stop methods and two collision-guarded human relocations to empty neighboring floor. Every portal entry/exit is original keyboard movement; portals/health/timers/occupancy never written by fixture.",
+  "actions": [
+    {
+      "command": "seed 42"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "events template-events 30000 zlong.bombit5.maps.mapData"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "events off"
+    },
+    {
+      "command": "state opening-full.json"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 3,
+        "y": 3
+      },
+      "capture": "pair1-neighbor"
+    },
+    {
+      "observe_command": "trace-focus portal-trace"
+    },
+    {
+      "command": "events portal-events 10000 zlong.bombit5.maps.platform zlong.bombit5.commands zlong.bombit5.gameengine.robot::PersonInteractiveController flash.display::DisplayObject/set"
+    },
+    {
+      "command": "kd up"
+    },
+    {
+      "command": "step 8",
+      "capture": "pair1-transit-frame1"
+    },
+    {
+      "command": "ku up"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 3",
+      "capture": "pair1-controls-blocked"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "ku right"
+    },
+    {
+      "command": "step 26",
+      "capture": "pair1-physical-arrival"
+    },
+    {
+      "command": "step 20",
+      "capture": "pair1-latch-idle"
+    },
+    {
+      "command": "kd up"
+    },
+    {
+      "command": "step 10",
+      "capture": "pair1-exited"
+    },
+    {
+      "command": "ku up"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 10",
+      "capture": "pair1-return-start"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "command": "step 40",
+      "capture": "pair1-return-arrived"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 10",
+      "capture": "pair1-top-exited"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 13,
+        "y": 3
+      },
+      "capture": "pair2-neighbor"
+    },
+    {
+      "command": "kd up"
+    },
+    {
+      "command": "step 8",
+      "capture": "pair2-entered-cell"
+    },
+    {
+      "command": "ku up"
+    },
+    {
+      "command": "step 29",
+      "capture": "pair2-transit-frame29"
+    },
+    {
+      "command": "step 1",
+      "capture": "pair2-physical-arrival"
+    },
+    {
+      "command": "step 19",
+      "capture": "pair2-latch-idle"
+    },
+    {
+      "command": "kd up"
+    },
+    {
+      "command": "step 10",
+      "capture": "pair2-exited"
+    },
+    {
+      "command": "ku up"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 10",
+      "capture": "pair2-return-start"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "command": "step 40",
+      "capture": "pair2-return-arrived"
+    },
+    {
+      "command": "events off"
+    },
+    {
+      "observe_command": "trace-focus off"
+    }
+  ]
+}

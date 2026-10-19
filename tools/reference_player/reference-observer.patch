@@ -1,0 +1,173 @@
+--- a/core/src/avm2.rs
++++ b/core/src/avm2.rs
+@@ -70,6 +70,7 @@
+ mod property_map;
+ mod qname;
+ mod regexp;
++pub(crate) mod reference_trace;
+ mod scope;
+ pub mod script;
+ #[cfg(feature = "known_stubs")]
+@@ -170,6 +171,9 @@
+     /// currently present on the display list. This list keeps track of that.
+     broadcast_list: FnvHashMap<AvmString<'gc>, Vec<WeakObject<'gc>>>,
+ 
++    /// Investigation-only weak observations; never keep a session alive.
++    reference_games: Vec<WeakObject<'gc>>,
++
+     alias_to_class_map: FnvHashMap<AvmString<'gc>, ClassObject<'gc>>,
+     class_to_alias_map: FnvHashMap<Class<'gc>, AvmString<'gc>>,
+ 
+@@ -226,6 +230,7 @@
+             native_custom_constructor_table: Default::default(),
+             native_fast_call_list: Default::default(),
+             broadcast_list: Default::default(),
++            reference_games: Default::default(),
+ 
+             alias_to_class_map: Default::default(),
+             class_to_alias_map: Default::default(),
+--- a/core/src/avm2/function.rs
++++ b/core/src/avm2/function.rs
+@@ -80,6 +80,10 @@
+             activation,
+             callee,
+         )
++    }
++
++    pub(crate) fn reference_bound_receiver(&self) -> Option<Value<'gc>> {
++        self.bound_receiver
+     }
+ 
+     pub fn as_method(&self) -> Method<'gc> {
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2292,6 +2292,13 @@
+         }
+     }
+ 
++    /// Investigation-only read-only AVM2 slot graph. No game code is executed.
++    pub fn reference_state(&mut self, max_depth: usize, max_objects: usize) -> serde_json::Value {
++        self.mutate_with_update_context(|context| {
++            crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
++        })
++    }
++
+     /// Runs the closure `f` with an `UpdateContext`.
+     /// This takes cares of populating the `UpdateContext` struct, avoiding borrow issues.
+     pub fn mutate_with_update_context<F, R>(&mut self, f: F) -> R
+--- /dev/null
++++ b/core/src/avm2/reference_trace.rs
+@@ -0,0 +1,113 @@
++//! Investigation-only bounded, slot-only graph observer. Never execute game getters.
++use super::dynamic_map::DynamicKey;
++use super::property::Property;
++use super::{Object, TObject, Value};
++use crate::context::UpdateContext;
++use crate::display_object::{TDisplayObject, TDisplayObjectContainer};
++use serde_json::{json, Value as Json};
++use std::collections::{BTreeMap, HashSet, VecDeque};
++
++struct Walk<'gc> {
++    queue: VecDeque<(Object<'gc>, usize)>,
++    seen: HashSet<String>,
++    max_depth: usize,
++    max_objects: usize,
++    truncated: bool,
++}
++impl<'gc> Walk<'gc> {
++    fn value(&mut self, value: Value<'gc>, depth: usize) -> Json {
++        match value {
++            Value::Undefined => json!({"$undefined":true}),
++            Value::Null => Json::Null,
++            Value::Bool(v) => json!(v),
++            Value::Integer(v) => json!(v),
++            Value::Number(v) => serde_json::Number::from_f64(v).map(Json::Number)
++                .unwrap_or_else(|| json!({"$number":format!("{v}")})),
++            Value::String(v) => json!(v.to_utf8_lossy()),
++            Value::Object(object) => {
++                let id = format!("{:p}", object.as_ptr());
++                if !self.seen.contains(&id) {
++                    if depth <= self.max_depth && self.seen.len() < self.max_objects {
++                        self.seen.insert(id.clone());
++                        self.queue.push_back((object, depth));
++                    } else {
++                        self.truncated = true;
++                        return json!({"$ref":id,"$truncated":true});
++                    }
++                }
++                json!({"$ref":id})
++            }
++        }
++    }
++}
++
++pub(crate) fn snapshot(context: &mut UpdateContext<'_>, max_depth: usize, max_objects: usize) -> Json {
++    let mut walk = Walk {
++        queue: VecDeque::new(), seen: HashSet::new(),
++        max_depth: max_depth.min(32), max_objects: max_objects.clamp(1, 20000), truncated:false,
++    };
++    // Broadcast registration retains off-display-list GameEngine objects.
++    let mut roots: Vec<_> = context.avm2.broadcast_list.values().flatten()
++        .filter_map(|weak| weak.upgrade(context.gc()))
++        .filter(|object| object.instance_class().name().local_name().to_utf8_lossy() == "GameEngine")
++        .collect();
++    roots.extend(context.avm2.reference_games.iter().filter_map(|weak| weak.upgrade(context.gc())));
++    context.avm2.reference_games.retain(|weak| weak.upgrade(context.gc_context).is_some());
++    let roots: Vec<_> = roots.into_iter().map(|object| walk.value(object.into(), 0)).collect();
++    let mut nodes = BTreeMap::new();
++    while let Some((object, depth)) = walk.queue.pop_front() {
++        let id = format!("{:p}", object.as_ptr());
++        if object.instance_class().name().local_name().to_utf8_lossy() == "Game"
++            && !context.avm2.reference_games.iter().any(|weak| std::ptr::eq(weak.as_ptr(), object.as_ptr())) {
++            context.avm2.reference_games.push(object.downgrade());
++        }
++        let mut slots = Vec::new();
++        // Preserve namespace identity; do not assume same local name means same property.
++        for (name, namespace, property) in object.vtable().resolved_traits().iter() {
++            if let Property::Slot { slot_id } | Property::ConstSlot { slot_id } = *property {
++                slots.push(json!({"name":name.to_utf8_lossy(), "namespace":format!("{namespace:?}"),
++                    "slot":slot_id, "value":walk.value(object.get_slot(slot_id), depth+1)}));
++            }
++        }
++        slots.sort_by_key(|entry| (entry["name"].to_string(), entry["namespace"].to_string()));
++        let mut dynamic = Vec::new();
++        // Direct storage iteration does not change DynamicMap's Flash enumeration cursor.
++        for (key, property) in object.base().values().iter() {
++            let key = match *key {
++                DynamicKey::String(v) => json!({"string":v.to_utf8_lossy()}),
++                DynamicKey::Uint(v) => json!({"uint":v}),
++                DynamicKey::Object(v) => walk.value(v.into(), depth+1),
++            };
++            dynamic.push(json!({"key":key,"value":walk.value(property.value, depth+1),"enumerable":property.enumerable}));
++        }
++        let mut node = json!({"class":object.instance_of_class_name(context.gc()).to_utf8_lossy(),
++            "depth":depth,"slots":slots,"dynamic":dynamic});
++        if let Some(array) = object.as_array_object() {
++            let storage = array.storage();
++            node["array_length"] = json!(storage.length());
++            node["elements"] = Json::Array(storage.iter().take(1024).map(|v|
++                v.map(|v|walk.value(v,depth+1)).unwrap_or_else(||json!({"$hole":true}))).collect());
++            if storage.length()>1024 { walk.truncated=true; node["elements_truncated"]=json!(true); }
++        }
++        if let Some(function) = object.as_function_object() {
++            node["function"] = json!(function.executable().debug_full_name().to_utf8_lossy());
++            if let Some(receiver) = function.executable().reference_bound_receiver() {
++                node["receiver"] = walk.value(receiver,depth+1);
++            }
++        }
++        if let Some(display) = object.as_display_object() {
++            node["display"] = json!({"x":display.x().to_pixels(),"y":display.y().to_pixels()});
++            if let Some(movie) = display.as_movie_clip() {
++                node["display"]["current_frame"] = json!(movie.current_frame());
++            }
++            if let Some(container) = display.as_container() {
++                node["display"]["children"] = Json::Array(container.iter_render_list()
++                    .filter_map(|child|child.object2()).map(|child|walk.value(child.into(),depth+1)).collect());
++            }
++        }
++        nodes.insert(id,node);
++    }
++    json!({"schema":"bombit5-reference-graph-v1","roots":roots,"objects":nodes,"truncated":walk.truncated,
++        "limits":{"max_depth":walk.max_depth,"max_objects":walk.max_objects,"array_elements":1024},
++        "observation":"post-step native storage only; getters/methods not executed"})
++}

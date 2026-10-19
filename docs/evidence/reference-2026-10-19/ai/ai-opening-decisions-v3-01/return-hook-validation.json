@@ -1,0 +1,27 @@
+{
+  "schema": "bombit5-ai-return-hook-comparison-v1",
+  "authority_swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "before_run": "ai-opening-decisions-02",
+  "after_run": "ai-opening-decisions-v3-01",
+  "attempted_frame_captures": 111,
+  "available_game_captures": 53,
+  "captures_with_ai_objects": 51,
+  "projection_mismatches": 0,
+  "compared": [
+    "robotNum",
+    "native view._container display x/y",
+    "model bombNum/state/weapon",
+    "machine currentState class",
+    "Action stored route/step/orientaCount/nextStep"
+  ],
+  "excluded": [
+    "process pointers",
+    "host/getTimer timestamps",
+    "native geometry bounds beyond x/y"
+  ],
+  "observed_return_metadata_records": 179,
+  "nested_array_truncations": 0,
+  "limitations": [
+    "Comparison is bounded to these runs and fields. No getter/RNG calls made by projection. No native Flash equivalence claimed."
+  ]
+}

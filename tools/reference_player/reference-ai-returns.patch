@@ -1,0 +1,83 @@
+--- a/core/src/avm2/reference_events.rs
++++ b/core/src/avm2/reference_events.rs
+@@ -1,6 +1,7 @@
+ //! Investigation-only event observation. Owned data only; no ActionScript calls or GC roots.
+ use super::function::{display_function, FunctionArgs};
+ use super::method::Method;
++use super::property::Property;
+ use super::{Error, TObject, Value};
+ use crate::string::WString;
+ use serde_json::{json, Value as Json};
+@@ -56,6 +57,33 @@
+     }
+ }
+ 
++// Snapshots are copied at actual method return, before later selectors mutate arrays.
++// No receiver is retained in State or Token and no AS getters are called.
++fn return_fields(v: Value<'_>, names: &[&str]) -> Json {
++    let Some(object)=v.as_object() else {return Json::Null;};
++    let mut fields=serde_json::Map::new();
++    for name in names {
++        let slots=object.vtable().resolved_traits().iter().filter_map(|(local,_,property)| {
++            if local.to_utf8_lossy()!=*name {return None;}
++            match *property {Property::Slot{slot_id}|Property::ConstSlot{slot_id}=>Some(slot_id),_=>None}
++        }).collect::<std::collections::BTreeSet<_>>();
++        let entry=if slots.len()==1 {return_value(object.get_slot(*slots.first().unwrap()),0)}
++            else {json!({"$unavailable":true,"distinct_slots":slots.len()})};
++        fields.insert((*name).into(),entry);
++    }
++    json!({"object":value(v,2),"fields":fields,"array_limit":128,"array_depth":3})
++}
++fn return_value(v: Value<'_>, depth: usize) -> Json {
++    if let Some(array)=v.as_object().and_then(|o|o.as_array_object()) {
++        let storage=array.storage();
++        return json!({"$ref":format!("{:p}",array.as_ptr()),"class":"Array",
++            "array_length":storage.length(),"array_truncated":storage.length()>128 || depth>=3,
++            "elements":if depth<3 {storage.iter().take(128).map(|entry|entry.map(|v|return_value(v,depth+1))
++                .unwrap_or_else(||json!({"$hole":true}))).collect::<Vec<_>>()} else {vec![]}});
++    }
++    value(v,2)
++}
++
+ impl State {
+     pub(crate) fn configure(&mut self, enabled: bool, capacity: usize, prefixes: Vec<String>) -> Result<(),String> {
+         if self.depth != 0 { return Err("event configuration requires an outer command boundary".into()); }
+@@ -105,14 +133,25 @@
+         Some(token)
+     }
+ 
+-    pub(crate) fn exit(&mut self, token: Token, result: &Result<Value<'_>, Error<'_>>) {
++    pub(crate) fn exit(&mut self, token: Token, receiver: Value<'_>, result: &Result<Value<'_>, Error<'_>>) {
++        let method=self.stack.last().filter(|(id,_)|*id==token.id).map(|(_,name)|name.as_str());
++        let snapshot=match (method,result) {
++            (Some(name),Ok(value)) if name.contains("RoadSearch/") && name.contains("findPath(") =>
++                Some(("returned_path",return_fields(*value,&["cost","pathArray"]))),
++            (Some(name),Ok(_)) if name.contains("AIControl/") && name.contains("updatePerceptions(") =>
++                Some(("receiver_after",return_fields(receiver,&["bombArr","otherRobotArr","propArr","weaponArr",
++                    "vehicleArr","propCoinArr","dangerArr","dangerArrAttack","boxArr","freeArr","flagArr"]))),
++            _=>None,
++        };
+         if token.stored {self.stack.pop();}
+         self.depth-=1;
+         let (kind,result)=match result {
+             Ok(v)=>("return",value(*v,0)),
+             Err(error)=>("error",error.as_avm_error().map(|v|value(v,0)).unwrap_or_else(||json!({"$rust_error":true}))),
+         };
+-        self.push(json!({"kind":kind,"call":token.id,"selected_depth":token.depth,"result":result}));
++        let mut event=json!({"kind":kind,"call":token.id,"selected_depth":token.depth,"result":result});
++        if let Some((key,snapshot))=snapshot {event[key]=snapshot;}
++        self.push(event);
+     }
+ 
+     pub(crate) fn random(&mut self, raw: i32, result: f64) {
+--- a/core/src/avm2/function.rs
++++ b/core/src/avm2/function.rs
+@@ -246,7 +246,7 @@
+ ) -> Result<Value<'gc>, Error<'gc>> {
+     let token=activation.context.avm2.reference_events.enter(method,receiver,user_arguments);
+     let result=exec_reference_inner(method,scope,receiver,bound_superclass,user_arguments,activation,callee);
+-    if let Some(token)=token { activation.context.avm2.reference_events.exit(token,&result); }
++    if let Some(token)=token { activation.context.avm2.reference_events.exit(token,receiver,&result); }
+     result
+ }
+ 

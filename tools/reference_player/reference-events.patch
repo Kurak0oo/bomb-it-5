@@ -1,0 +1,253 @@
+--- a/core/src/avm2.rs
++++ b/core/src/avm2.rs
+@@ -71,6 +71,7 @@
+ mod qname;
+ mod regexp;
+ pub(crate) mod reference_trace;
++pub(crate) mod reference_events;
+ pub(crate) mod reference_fixtures;
+ mod scope;
+ pub mod script;
+@@ -175,6 +176,10 @@
+     /// Investigation-only weak observations; never keep a session alive.
+     reference_games: Vec<WeakObject<'gc>>,
+ 
++    /// Research metadata only; no GC object references. Default disabled.
++    #[collect(require_static)]
++    pub(crate) reference_events: reference_events::State,
++
+     alias_to_class_map: FnvHashMap<AvmString<'gc>, ClassObject<'gc>>,
+     class_to_alias_map: FnvHashMap<Class<'gc>, AvmString<'gc>>,
+ 
+@@ -232,6 +237,7 @@
+             native_fast_call_list: Default::default(),
+             broadcast_list: Default::default(),
+             reference_games: Default::default(),
++            reference_events: Default::default(),
+ 
+             alias_to_class_map: Default::default(),
+             class_to_alias_map: Default::default(),
+--- a/core/src/avm2/function.rs
++++ b/core/src/avm2/function.rs
+@@ -244,6 +244,21 @@
+     activation: &mut Activation<'_, 'gc>,
+     callee: Option<FunctionObject<'gc>>,
+ ) -> Result<Value<'gc>, Error<'gc>> {
++    let token=activation.context.avm2.reference_events.enter(method,receiver,user_arguments);
++    let result=exec_reference_inner(method,scope,receiver,bound_superclass,user_arguments,activation,callee);
++    if let Some(token)=token { activation.context.avm2.reference_events.exit(token,&result); }
++    result
++}
++
++fn exec_reference_inner<'gc>(
++    method: Method<'gc>,
++    scope: ScopeChain<'gc>,
++    receiver: Value<'gc>,
++    bound_superclass: Option<ClassObject<'gc>>,
++    user_arguments: FunctionArgs<'_, 'gc>,
++    activation: &mut Activation<'_, 'gc>,
++    callee: Option<FunctionObject<'gc>>,
++) -> Result<Value<'gc>, Error<'gc>> {
+     let mc = activation.gc();
+ 
+     let caller_dxns = activation.default_xml_namespace();
+--- a/core/src/avm2/globals/math.rs
++++ b/core/src/avm2/globals/math.rs
+@@ -155,5 +155,7 @@
+         .context
+         .rng
+         .generate_random_number(activation.context.locale);
+-    Ok(((rand as f64) / (MAX_VAL as f64 + 1f64)).into())
++    let result=(rand as f64) / (MAX_VAL as f64 + 1f64);
++    activation.context.avm2.reference_events.random(rand,result);
++    Ok(result.into())
+ }
+--- a/core/src/avm_rng.rs
++++ b/core/src/avm_rng.rs
+@@ -15,6 +15,13 @@
+ }
+ 
+ impl AvmRng {
++    /// Research-only initial seed: reject zero and a generator already initialized.
++    pub(crate) fn reference_seed(&mut self, seed: u32) -> Result<(),String> {
++        if seed==0 || self.u_value!=0 { return Err("seed must be nonzero and supplied before first RNG use".into()); }
++        self.init_with_seed(seed);
++        Ok(())
++    }
++
+     fn init_with_seed(&mut self, seed: u32) {
+         self.u_value = seed;
+     }
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2293,6 +2293,28 @@
+     }
+ 
+     /// Investigation-only read-only AVM2 slot graph. No game code is executed.
++    /// Research-only observer control. Call only between outer harness commands.
++    pub fn reference_events_enable(&mut self, enabled: bool, capacity: usize, prefixes: Vec<String>) -> Result<(),String> {
++        self.mutate_with_update_context(|context|context.avm2.reference_events.configure(enabled,capacity,prefixes))
++    }
++
++    pub fn reference_events_mark(&mut self, frame: u64, label: String) -> Result<(),String> {
++        self.mutate_with_update_context(|context|context.avm2.reference_events.mark(frame,label))
++    }
++
++    pub fn reference_events_drain(&mut self) -> serde_json::Value {
++        self.mutate_with_update_context(|context|context.avm2.reference_events.drain())
++    }
++
++    /// Explicit deterministic fixture before RNG use; harness also enforces frame zero.
++    pub fn reference_rng_seed(&mut self, seed: u32) -> Result<(),String> {
++        self.mutate_with_update_context(|context| {
++            context.rng.reference_seed(seed)?;
++            context.avm2.reference_events.seed(seed);
++            Ok(())
++        })
++    }
++
+     pub fn reference_state(&mut self, max_depth: usize, max_objects: usize) -> serde_json::Value {
+         self.mutate_with_update_context(|context| {
+             crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
+--- /dev/null
++++ b/core/src/avm2/reference_events.rs
+@@ -0,0 +1,139 @@
++//! Investigation-only event observation. Owned data only; no ActionScript calls or GC roots.
++use super::function::{display_function, FunctionArgs};
++use super::method::Method;
++use super::{Error, TObject, Value};
++use crate::string::WString;
++use serde_json::{json, Value as Json};
++
++#[derive(Default)]
++pub(crate) struct State {
++    enabled: bool,
++    capacity: usize,
++    prefixes: Vec<String>,
++    events: Vec<Json>,
++    bytes: usize,
++    dropped: u64,
++    sequence: u64,
++    call_id: u64,
++    depth: usize,
++    stack: Vec<(u64, String)>,
++    stack_truncated: u64,
++    frame: u64,
++    label: String,
++    rng_draws: u64,
++    seed: Option<u32>,
++}
++
++pub(crate) struct Token {
++    id: u64,
++    depth: usize,
++    stored: bool,
++}
++
++fn value(v: Value<'_>, depth: usize) -> Json {
++    match v {
++        Value::Undefined => json!({"$undefined":true}),
++        Value::Null => Json::Null,
++        Value::Bool(v) => json!(v),
++        Value::Integer(v) => json!(v),
++        Value::Number(v) => serde_json::Number::from_f64(v).map(Json::Number)
++            .unwrap_or_else(|| json!({"$number":format!("{v}")})),
++        Value::String(v) => json!({"$string":v.slice(..v.len().min(1024)).unwrap().to_utf8_lossy(),
++            "utf16_length":v.len(), "truncated":v.len()>1024}),
++        Value::Object(v) => {
++            let mut result = json!({"$ref":format!("{:p}",v.as_ptr()),
++                "class":v.instance_class().name().to_qualified_name_no_mc().to_utf8_lossy()});
++            if depth < 2 && let Some(array) = v.as_array_object() {
++                let storage = array.storage();
++                result["array_length"] = json!(storage.length());
++                result["elements"] = json!(storage.iter().take(16)
++                    .map(|item| item.map(|v|value(v,depth+1)).unwrap_or_else(||json!({"$hole":true})))
++                    .collect::<Vec<_>>());
++                result["array_truncated"] = json!(storage.length()>16);
++            }
++            result
++        }
++    }
++}
++
++impl State {
++    pub(crate) fn configure(&mut self, enabled: bool, capacity: usize, prefixes: Vec<String>) -> Result<(),String> {
++        if self.depth != 0 { return Err("event configuration requires an outer command boundary".into()); }
++        if prefixes.len()>32 || prefixes.iter().any(|p|p.is_empty() || p.len()>256) {
++            return Err("supply at most 32 nonempty prefixes, each at most 256 bytes".into());
++        }
++        self.enabled=enabled;
++        self.capacity=capacity.clamp(1,200000);
++        self.prefixes=if prefixes.is_empty() { vec!["zlong.bombit5".into()] } else { prefixes };
++        self.events.clear(); self.bytes=0; self.dropped=0; self.stack_truncated=0;
++        Ok(())
++    }
++
++    pub(crate) fn mark(&mut self, frame: u64, label: String) -> Result<(),String> {
++        if self.depth!=0 || label.len()>256 { return Err("mark requires command boundary and label <=256 bytes".into()); }
++        self.frame=frame; self.label=label; Ok(())
++    }
++
++    fn push(&mut self, mut event: Json) {
++        self.sequence+=1;
++        if self.events.len()>=self.capacity { self.dropped+=1; return; }
++        event["sequence"]=json!(self.sequence);
++        event["frame_label"]=json!(self.frame);
++        event["command_label"]=json!(self.label);
++        let bytes=serde_json::to_vec(&event).map(|v|v.len()).unwrap_or(usize::MAX);
++        if bytes>32*1024*1024-self.bytes {self.dropped+=1;return;}
++        self.bytes+=bytes;
++        self.events.push(event);
++    }
++
++    pub(crate) fn enter(&mut self, method: Method<'_>, receiver: Value<'_>, args: FunctionArgs<'_, '_>) -> Option<Token> {
++        if !self.enabled { return None; }
++        let mut name=WString::new(); display_function(&mut name,method);
++        let name=name.to_utf8_lossy().into_owned();
++        let receiver_class=receiver.as_object().map(|o|o.instance_class().name().to_qualified_name_no_mc().to_utf8_lossy().into_owned());
++        if !self.prefixes.iter().any(|prefix|name.starts_with(prefix)
++            || receiver_class.as_ref().is_some_and(|class|class.starts_with(prefix))) { return None; }
++        self.call_id+=1;
++        let token=Token {id:self.call_id,depth:self.depth,stored:self.stack.len()<256};
++        self.depth+=1;
++        let parent=self.stack.last().map(|(id,_)|*id);
++        self.push(json!({"kind":"enter","call":token.id,"selected_depth":token.depth,"parent":parent,
++            "method":name,"abc_method_index":method.abc_method_index(),"receiver":value(receiver,0),
++            "argument_count":args.len(),"arguments":args.iter().take(8).map(|v|value(v,0)).collect::<Vec<_>>(),
++            "arguments_truncated":args.len()>8}));
++        if token.stored {self.stack.push((token.id,name));} else {self.stack_truncated+=1;}
++        Some(token)
++    }
++
++    pub(crate) fn exit(&mut self, token: Token, result: &Result<Value<'_>, Error<'_>>) {
++        if token.stored {self.stack.pop();}
++        self.depth-=1;
++        let (kind,result)=match result {
++            Ok(v)=>("return",value(*v,0)),
++            Err(error)=>("error",error.as_avm_error().map(|v|value(v,0)).unwrap_or_else(||json!({"$rust_error":true}))),
++        };
++        self.push(json!({"kind":kind,"call":token.id,"selected_depth":token.depth,"result":result}));
++    }
++
++    pub(crate) fn random(&mut self, raw: i32, result: f64) {
++        self.rng_draws+=1;
++        if !self.enabled {return;}
++        self.push(json!({"kind":"math_random","draw":self.rng_draws,"raw":raw,"result":result,
++            "selected_depth":self.depth,"selected_call_chain":self.stack,
++            "chain_truncated":self.depth>self.stack.len()}));
++    }
++
++    pub(crate) fn seed(&mut self, seed: u32) {self.seed=Some(seed);}
++
++    pub(crate) fn drain(&mut self) -> Json {
++        let events=std::mem::take(&mut self.events);
++        self.bytes=0;
++        let dropped=std::mem::take(&mut self.dropped);
++        json!({"schema":"bombit5-reference-events-v1","enabled":self.enabled,"capacity":self.capacity,
++            "prefixes":self.prefixes,"events":events,"dropped":dropped,"overflow":dropped>0,
++            "selected_stack_overflows_total":self.stack_truncated,"last_sequence":self.sequence,
++            "rng_draws_total":self.rng_draws,"explicit_initial_seed":self.seed,
++            "limits":{"arguments":8,"array_elements":16,"array_depth":2,"string_utf16":1024,"selected_stack":256,"serialized_event_bytes":33554432},
++            "observation":"native metadata only; frame/command labels supplied by harness; object addresses process-local"})
++    }
++}

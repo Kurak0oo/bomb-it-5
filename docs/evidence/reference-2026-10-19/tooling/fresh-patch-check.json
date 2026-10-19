@@ -1,0 +1,18 @@
+{
+  "pinned_revision": "45366370ed7d1a59c89aa3cf7b765c7a274407cd",
+  "patches": 14,
+  "files": 9,
+  "clean_pristine_apply": true,
+  "all_live_sources_match_ignoring_line_endings": true,
+  "normalized_source_sha256": {
+    "core/src/avm2.rs": "1b476852ed4753848bf3908c70cdba18282e675edb751093354263dcdb2fb709",
+    "core/src/avm2/function.rs": "78c27a6d1c27684fe4fea8955c4aab56052f91f5b0f38086d6ecfb188baf6183",
+    "core/src/avm2/globals/math.rs": "82a61c3850ef1da5475b39b7be9660f498303e94ca8af0b184498972bcfb4d00",
+    "core/src/avm2/reference_events.rs": "b118c7bc7ea70b6122042a0738561a156134f4711bb6352bbe1c55ced0ecdca1",
+    "core/src/avm2/reference_fixtures.rs": "f620182d50aed6b88245620ee24ea0324411ad5dd7d0af8c33f405ce9a253e3f",
+    "core/src/avm2/reference_focus.rs": "4e7236b7b36c83d383e9f84188cd3c31985f1bc027e1be2bf8a22da55593629a",
+    "core/src/avm2/reference_trace.rs": "6132cbdc8d3c7527eea732c1418d66934386434eb5c383eed2a9bf0b85039480",
+    "core/src/avm_rng.rs": "5b1aa3ef57e2a8145fa29e44043af86981ba84d1336f481b83df4d3dc0cc7b61",
+    "core/src/player.rs": "c1a469e2a06d26a4f918b308ca67bc16ebee862805b7083446a8eec20a3ddf0a"
+  }
+}

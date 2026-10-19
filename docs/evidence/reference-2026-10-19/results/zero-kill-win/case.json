@@ -1,0 +1,209 @@
+{
+  "name": "original-zero-human-kill-victory-next-and-loss",
+  "origin": "Seed42; original AI stop and selected original controller.addBomb calls create three enemy-owned stationary self-bombs. No human attacks in first round. Natural result callbacks, Space Next, LifeProp and legal human self-bomb on next round; no health/outcome/score writes.",
+  "actions": [
+    {
+      "command": "seed 42"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "observe_command": "events result-events 20000 zlong.bombit5.gameengine zlong.bombit5.ui zlong.bombit5.commands.robot::RobotDeadCommand"
+    },
+    {
+      "fixture": {
+        "op": "bomb",
+        "actor": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "bomb",
+        "actor": 2
+      }
+    },
+    {
+      "fixture": {
+        "op": "bomb",
+        "actor": 3
+      }
+    },
+    {
+      "capture": "ai-self-bombs"
+    },
+    {
+      "observe_command": "trace-focus death-trace"
+    },
+    {
+      "command": "step 120",
+      "capture": "ending-before-settlement"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "step 180",
+      "capture": "win-results"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 100",
+      "capture": "next-opening"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "life"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "next-life-picked"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "next-bomb-placed"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "step 285",
+      "capture": "next-loss-results"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

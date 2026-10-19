@@ -1,0 +1,199 @@
+{
+  "name": "original-ai-two-bomb-scan-open-first",
+  "origin": "Seed2; original capacity collection plus legal human Space at4,7 then6,4, original reposition between inputs. Wait45 callbacks then start isolated AI1 at[6, 3]. No writes to bomb times, AI perception/ray flags or RNG. Compare observed source scan order and upper6,3 danger.",
+  "actions": [
+    {
+      "command": "seed 2"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 6,
+        "y": 3
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 1,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 4,
+        "y": 5
+      }
+    },
+    {
+      "command": "step 100"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity",
+        "actor": 0
+      }
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 0,
+        "x": 4,
+        "y": 7
+      }
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 0,
+        "x": 6,
+        "y": 4
+      }
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 0,
+        "x": 1,
+        "y": 1
+      }
+    },
+    {
+      "command": "step 45"
+    },
+    {
+      "capture": "two-imminent-bombs"
+    },
+    {
+      "observe_command": "events events 100000 zlong.bombit5.gameengine.ai zlong.bombit5.gameengine.robot zlong.bombit5.gameengine::GameEngine/"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "start"
+      }
+    },
+    {
+      "observe_command": "trace-focus trace"
+    },
+    {
+      "command": "step 3"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "capture": "after-perception"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

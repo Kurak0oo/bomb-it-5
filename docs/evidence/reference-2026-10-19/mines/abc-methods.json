@@ -1,0 +1,26 @@
+{
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "abc_method_indices": {
+    "zlong.bombit5.items.weapons::LandmineProp()": 5798,
+    "zlong.bombit5.items.weapons::LandmineProp/initWeapon()": 5799,
+    "zlong.bombit5.items.weapons::LandmineProp/initPlayPos()": 5802,
+    "zlong.bombit5.items.weapons::LandmineProp/setNum()": 5804,
+    "zlong.bombit5.items.weapons::LandmineProp/addWeaponProp()": 5800,
+    "zlong.bombit5.items.weapons::LandmineProp/bombDown()": 5805,
+    "zlong.bombit5.commands.weapon::LandminePlayCommand$cinit()": 6381,
+    "zlong.bombit5.commands.weapon::LandminePlayCommand()": 6382,
+    "zlong.bombit5.items.weapons::AbstractWeapon/bombDown()": 5205,
+    "zlong.bombit5.items.weapons::LandmineProp/robotMoveStop()": 5801,
+    "zlong.bombit5.items.weapons::LandmineProp/createWeaponPlay()": 5803,
+    "zlong.bombit5.commands.weapon::LandminePlayCommand/get name()": 6383,
+    "zlong.bombit5.commands.weapon::LandminePlayCommand/execute()": 6384,
+    "zlong.bombit5.bombs::LandmineBomb()": 6387,
+    "zlong.bombit5.bombs::LandmineBomb/init()": 6388,
+    "zlong.bombit5.bombs::LandmineBomb/setBombPow()": 6392,
+    "zlong.bombit5.bombs::LandmineBomb/setBombMc()": 6390,
+    "zlong.bombit5.bombs::LandmineBomb/blastMode()": 6391,
+    "zlong.bombit5.bombs::LandmineBomb/hitReset()": 6393,
+    "zlong.bombit5.bombs::Bomb/blastHandle()": 5377
+  },
+  "authority": "Native AVM2 method metadata recorded on original execution; not an independently recompiled source."
+}

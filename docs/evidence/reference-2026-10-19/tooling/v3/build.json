@@ -1,0 +1,66 @@
+{
+  "revision": "45366370ed7d1a59c89aa3cf7b765c7a274407cd",
+  "rustc": "rustc 1.97.0 (2d8144b78 2026-07-07)\nbinary: rustc\ncommit-hash: 2d8144b7880597b6e6d3dfd63a9a9efae3f533d3\ncommit-date: 2026-07-07\nhost: x86_64-pc-windows-msvc\nrelease: 1.97.0\nLLVM version: 22.1.6",
+  "cargo": "cargo 1.97.0 (c980f4866 2026-06-30)",
+  "platform": "Microsoft Windows NT 10.0.26200.0",
+  "profile": "ci",
+  "observer": true,
+  "fixtures": true,
+  "events": true,
+  "compact": true,
+  "focus": true,
+  "installed_patches": [
+    {
+      "sha256": "f4fc3839ed87a870b09e6b7b1dfcb11e64b385100e5f95ece9c5ec5ce9a3fd31",
+      "name": "reference-observer.patch"
+    },
+    {
+      "sha256": "c9af9e99f19afcd5c6d7bd0b2e40a7c6b0f41d835f7a8e1985035ddcc7bdbd96",
+      "name": "reference-fixtures.patch"
+    },
+    {
+      "sha256": "82a2fd7c45ffb573a85ca7a441c1b777f5672a699cd8b85365c1319a73cf45dc",
+      "name": "reference-events.patch"
+    },
+    {
+      "sha256": "b013de392004ce48842f43cef00da5900d581b2cf2eb3dd3b3389772d5e2a3f3",
+      "name": "reference-compact.patch"
+    },
+    {
+      "sha256": "312126537f1377e7daac47da5b872f99d51747ef735f06b885dd37e62fa45697",
+      "name": "reference-focus.patch"
+    },
+    {
+      "sha256": "c2396e1c92a952ee0731bc99b64e2d99dbb9ae1b4d6fd541804e93f6c58f4bcf",
+      "name": "reference-actors.patch"
+    },
+    {
+      "sha256": "9e65ca113cc29529089fba8904e738cf2a0d86f8a19c2d826b8de9479c658c72",
+      "name": "reference-geometry.patch"
+    },
+    {
+      "sha256": "6c1868fb8ed3ad4f1a3f4c3cd68f97c1d49150236a2133c7242264dc79a5d807",
+      "name": "reference-drops.patch"
+    },
+    {
+      "sha256": "15f15c681d2fe2dfa792b6fbad6da758fb2c03b7b36c62d2949513fb0be2c6c9",
+      "name": "reference-session-state.patch"
+    },
+    {
+      "sha256": "c6936095a496e87eefaf916a65c0fbeeb229052aa64c93be462837770e1b175a",
+      "name": "reference-class-names.patch"
+    },
+    {
+      "sha256": "78ba0adc8d053f1b17e9c64f5d09b7becb7b5a01ad2064577b054001a22893da",
+      "name": "reference-actor-bombs.patch"
+    },
+    {
+      "sha256": "f359707a67b2958aaeca71704e41c2969efe5e5d56f8a5186e2575ec048ab1ff",
+      "name": "reference-ai-returns.patch"
+    }
+  ],
+  "lock_sha256": "cb5e2d793db0fb030f3a8df074e8fe2f8ba78accc0871f755df5b173086b3431",
+  "source_sha256": "5545a202a027c9d17de3765e6694aae36239d0908b2f69c32fce3baae2bb9b4a",
+  "tracked_changes": " Cargo.lock                    | 13 ++++++++++++\n Cargo.toml                    |  1 +\n core/src/avm2.rs              | 13 ++++++++++++\n core/src/avm2/function.rs     | 19 +++++++++++++++++\n core/src/avm2/globals/math.rs |  4 +++-\n core/src/avm_rng.rs           |  7 +++++++\n core/src/player.rs            | 48 +++++++++++++++++++++++++++++++++++++++++++\n 7 files changed, 104 insertions(+), 1 deletion(-)",
+  "player_sha256": "ad5a666f20db340b3d21a29c000ba59d8d90f666e21ff5e24ce503fdf4b31ae9"
+}

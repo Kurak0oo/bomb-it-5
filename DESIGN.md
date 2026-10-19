@@ -101,6 +101,8 @@ Following desktop play, the user prioritizes reproducing original edition 5 game
 
 The user subsequently requests reverse engineering first. Reconstruct and verify the original selected-scope ownership, execution order, command/AI lifecycles and animation-dependent behavior before further fidelity porting or final redraw. Static decompilation, bytecode corroboration, runtime observation and matched replay are different levels of evidence; do not call a source inventory or new-game test suite complete original-game parity. Keep the current playable build available while this recovery proceeds.
 
+The subsequent implement instruction approves the 16 recovery tickets [#22–#37](https://github.com/Kurak0oo/bomb-it-5/issues/22), covering controlled original playback, bomb/fire/phase edges, movement/portals, items/vehicles/weapons, Normal AI and death/results, ending in a reviewed porting handoff. These are evidence-recovery gates before further fidelity implementation. They preserve the accepted adaptations above and do not resolve the four deferred item slots, approve finished artwork or require early phone tests.
+
 ## Decision history
 
 Implementation policy recorded during the user's 2026-10-19 instruction to implement the complete ticket graph without permission stops:

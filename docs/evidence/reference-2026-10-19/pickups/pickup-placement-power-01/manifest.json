@@ -1,0 +1,128 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "placement-time-power",
+  "case_sha256": "73fefb8c1f2fafd882128ec9d4c75693dbd1aab136aeef4933b795612e6d2c39",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 821,
+      "sha256": "d5ddf5b9f364b6a110e863dbe8b44b7bad727c988be1e7632017ce74b937ea22"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 843,
+      "sha256": "a83fff9d7aa1df5236164fa4faba2881baec060c81cc46e349c3cc4ec07ae2d2"
+    }
+  ],
+  "observation_mode": "compact",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "b558d22562613586ae4ba74858ee7048ff5c91e544cda3a2daea23b30cf42609",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-c9ute6ag\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 845,
+  "captures": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "57324702ce8d301e19180b8b548337ed3b4d1fd419f722b77df129832d36cd0c",
+      "bytes": 267041
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "565cec9301991826c75b1d980fc46b676e90f6b3f76b5b194d5f5ad382eada75",
+      "bytes": 533119
+    },
+    {
+      "name": "baseline",
+      "frame": 821,
+      "sha256": "c3c4256816c8d391d273221de66ce85856bf47e15edd589ecfca73c217d9baee",
+      "bytes": 531017
+    },
+    {
+      "name": "upgrade-cell",
+      "frame": 843,
+      "sha256": "64df8fa792acd5481ae8a61371309bcbb55c1b1baa027be605f1981d3e99733b",
+      "bytes": 532924
+    },
+    {
+      "name": "actor-power-two-old-bomb-one",
+      "frame": 844,
+      "sha256": "b84c9c51393a145f4e704a28d3c77afe73b3436958af3c0a4ddc19a1f1e1edd2",
+      "bytes": 534369
+    },
+    {
+      "name": "two-bombs-different-power",
+      "frame": 845,
+      "sha256": "3ef809f128823a808eb5d7fe4f6fe27d0fad5194f31b7c588698379600ae9f21",
+      "bytes": 534374
+    }
+  ],
+  "states": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "e1e4bd75fe5cc086d06d0fae1a0bdf2e846273b08aaf81e622f31fd351e64a10",
+      "objects": 0,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "a9d38b838054b3abe611e8d407497546425795391b70de16c3a6c8b5c8d2d5b3",
+      "objects": 4311,
+      "truncated": false
+    },
+    {
+      "name": "baseline",
+      "frame": 821,
+      "sha256": "2ff08f3fff4a40f0bbec41226e6cfdf65f1e8589b6736f649f2cd0e674da35b4",
+      "objects": 4253,
+      "truncated": false
+    },
+    {
+      "name": "old-bomb-power-one",
+      "frame": 832,
+      "sha256": "97b4a506eceae0717f33f9c28967b9dd83fba5de0b02ffbd166766849136c960",
+      "objects": 4264,
+      "truncated": false
+    },
+    {
+      "name": "upgrade-cell",
+      "frame": 843,
+      "sha256": "563cf3ee3c04335b6fa5f291b71c316e7928e27f38f0c32e752d8a3e1dcea9e1",
+      "objects": 4296,
+      "truncated": false
+    },
+    {
+      "name": "actor-power-two-old-bomb-one",
+      "frame": 844,
+      "sha256": "f4e1f41759bf73c4fd786f7720029ea5a3ad2d022ef6003264d6b69dd2c416a8",
+      "objects": 4322,
+      "truncated": false
+    },
+    {
+      "name": "new-bomb-power-two",
+      "frame": 844,
+      "sha256": "377871cc1d212e4b12d0987c1fb42e3c4b6df1b1d4fa44498a501cea9ceb02a4",
+      "objects": 4341,
+      "truncated": false
+    },
+    {
+      "name": "two-bombs-different-power",
+      "frame": 845,
+      "sha256": "6aa1342d5e1acb9e7bbdcac61e1350e0d64d11a718055b650258ef72de5ac52d",
+      "objects": 4341,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "9b3545436d71d0d460ecbaf343742eb7b5eb677a8c492b93ac0d5c9ec1d07093",
+  "stderr_sha256": "f79fc31d53a425d13c015811af1fcfa1c70c9a6c640c0a2b8c75ef38e525274f"
+}

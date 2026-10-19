@@ -1,0 +1,510 @@
+{
+  "passed": 126,
+  "total": 126,
+  "checks": [
+    {
+      "check": "lifecycle-fireball-paced-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-paced-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-paced-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-paced-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-paced-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-paced-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-paced-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-pause-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-pause-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-pause-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-pause-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-pause-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-pause-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-pause-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-recovery-pause-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-recovery-pause-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-recovery-pause-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-recovery-pause-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-recovery-pause-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-recovery-pause-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-recovery-pause-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-replacement-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-replacement-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-replacement-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-replacement-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-replacement-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-replacement-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-fireball-replacement-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-late-replacement-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-late-replacement-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-late-replacement-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-late-replacement-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-late-replacement-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-late-replacement-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-late-replacement-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-pause-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-pause-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-pause-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-pause-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-pause-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-pause-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-pause-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-replacement-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-replacement-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-replacement-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-replacement-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-replacement-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-replacement-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-flamer-replacement-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-pause-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-pause-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-pause-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-pause-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-pause-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-pause-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-pause-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-replacement-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-replacement-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-replacement-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-replacement-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-replacement-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-replacement-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-hammer-replacement-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-pause-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-pause-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-pause-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-pause-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-pause-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-pause-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-pause-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-replacement-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-replacement-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-replacement-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-replacement-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-replacement-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-replacement-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-laser-replacement-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-paced-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-paced-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-paced-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-paced-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-paced-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-paced-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-paced-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-pause-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-pause-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-pause-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-pause-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-pause-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-pause-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-pause-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-recovery-pause-02 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-recovery-pause-02 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-recovery-pause-02 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-recovery-pause-02 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-recovery-pause-02 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-recovery-pause-02 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-recovery-pause-02 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-replacement-01 exact completed/public case",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-replacement-01 source player manifest identity",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-replacement-01 acknowledged log hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-replacement-01 stderr hash",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-replacement-01 selected original execution zeroerrors balanced",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-replacement-01 native frame hashes",
+      "passed": true
+    },
+    {
+      "check": "lifecycle-triple-replacement-01 copied screenshots authentic",
+      "passed": true
+    },
+    {
+      "check": "hammer early actualpause/recovery",
+      "passed": true
+    },
+    {
+      "check": "laser early actualpause/recovery",
+      "passed": true
+    },
+    {
+      "check": "flamer early actualpause/recovery",
+      "passed": true
+    },
+    {
+      "check": "triple early actualpause/recovery",
+      "passed": true
+    },
+    {
+      "check": "fireball early actualpause/recovery",
+      "passed": true
+    },
+    {
+      "check": "hammer early replacement collected and recovered",
+      "passed": true
+    },
+    {
+      "check": "laser early replacement collected and recovered",
+      "passed": true
+    },
+    {
+      "check": "triple early replacement collected and recovered",
+      "passed": true
+    },
+    {
+      "check": "fireball early replacement collected and recovered",
+      "passed": true
+    },
+    {
+      "check": "initial flamer replacement did not replace pickup",
+      "passed": true
+    },
+    {
+      "check": "late flamer replacement collected and recovered736",
+      "passed": true
+    },
+    {
+      "check": "late flamer original fire/equipment disposal736",
+      "passed": true
+    },
+    {
+      "check": "fireball pending recovery follows actualhumanpause",
+      "passed": true
+    },
+    {
+      "check": "fireball recovery observed during pause",
+      "passed": true
+    },
+    {
+      "check": "fireball resumeSpace starts nextaction",
+      "passed": true
+    },
+    {
+      "check": "triple pending recovery follows actualhumanpause",
+      "passed": true
+    },
+    {
+      "check": "triple recovery observed during pause",
+      "passed": true
+    },
+    {
+      "check": "triple resumeSpace starts nextaction",
+      "passed": true
+    },
+    {
+      "check": "triple paced recovery bound",
+      "passed": true
+    },
+    {
+      "check": "fireball paced recovery bound",
+      "passed": true
+    },
+    {
+      "check": "all24firstactions and15latestlifecycles complete",
+      "passed": true
+    }
+  ]
+}

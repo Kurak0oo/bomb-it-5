@@ -1,0 +1,89 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "normal-arcade-opening",
+  "case_sha256": "e829aedc35f36ab527b4d8f4114829589b04bb2b45b07cd623be3e3b7a013428",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "848250e92912794cd7b1d32b0b3567a22ec96f4afc4b59e8bd23e1b9c328a07f",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-zz2o7nqs\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 824,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "1e02b0aac9c64f2f8ea474975787f648491c8bd81422515c6916fc4feae666d1",
+      "bytes": 411277
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "3ed9aa4c36f04b6e0797cb6d632b38c96a4e3f26f921077f5d87cbe6ca71b5f7",
+      "bytes": 585720
+    },
+    {
+      "name": "moved",
+      "frame": 731,
+      "sha256": "377c2254331e8dc221fdf31437cf65f6addfc6c1f67e319d626f32e59ff73411",
+      "bytes": 586039
+    },
+    {
+      "name": "bomb",
+      "frame": 732,
+      "sha256": "744bef5e08d8791d7b13a6d7b66c0a1c4229d8dfccff6299dc2099d9dfb9e9bf",
+      "bytes": 585842
+    },
+    {
+      "name": "explosion",
+      "frame": 804,
+      "sha256": "10e03291bd77f9fd310c30999453e1e4637eb009b3682605bf81cdef7ea589c6",
+      "bytes": 585165
+    },
+    {
+      "name": "after-fire",
+      "frame": 824,
+      "sha256": "6902604960909b0da2d64fc5030b2ef9a8dcd4564b56f7e3f367236633527b26",
+      "bytes": 588449
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ]
+}

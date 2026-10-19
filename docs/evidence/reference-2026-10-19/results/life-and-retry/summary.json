@@ -1,0 +1,59 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\results-loss-retry-42-02",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "e9c9f65d03c3af960d84934e0becee5d65de3d23d70f9ea2e725418aabf63292",
+  "case_sha256": "fc1cd63595a71035c83792b4b606e4b183f593c1edfdd0529a8f0ded9aca250d",
+  "trace_frames": 105,
+  "events": {
+    "events": 44740,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "life-picked.png",
+      "sha256": "a752e31c17b4635b2e4f839175f3a01f02cf7045a2242109aedd21de93823a98",
+      "bytes": 551321
+    },
+    {
+      "name": "death-late.png",
+      "sha256": "d977ebbbc5b24505a879aff89e62d7dead10b5ed29c63690b8b95fccbe0b1171",
+      "bytes": 550003
+    },
+    {
+      "name": "loss-results.png",
+      "sha256": "7e60f41f7ff815c924e49b6a8c036b04bc158b9115cc9543a519a539bb2a0b98",
+      "bytes": 176258
+    },
+    {
+      "name": "retry-opening.png",
+      "sha256": "0db0be9bedcdb6eb89f1f2469c6fd74819dc9acbec5bb78da2c515a072aa6764",
+      "bytes": 537073
+    }
+  ],
+  "settlements": [
+    {
+      "call": 7730,
+      "enter_frame": 944,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x21ee4404740",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        false
+      ],
+      "exit_frame": 944,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    }
+  ],
+  "limits": [
+    "Controlled original-method setup; no raw health/score/outcome writes.",
+    "Date/Tween wall time and explicit logical steps are distinct.",
+    "Encrypted score getters/setters are observed original calls; stale private slots are not their oracle."
+  ]
+}

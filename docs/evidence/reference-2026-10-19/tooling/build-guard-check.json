@@ -1,0 +1,7 @@
+{
+  "old_worktree_only_guard_missed_staged_change": true,
+  "fixed_build_rejected_before_cargo": true,
+  "fixed_build_exit_code": 1,
+  "baseline_core_restored_clean": true,
+  "core_file_sha256_before_and_after": "ed3e3bc9335c7b8386fa14be82ee821bde0d69b0ac528a627d19bc54fab834ba"
+}

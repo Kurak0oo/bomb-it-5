@@ -1,0 +1,70 @@
+--- a/core/src/avm2/reference_trace.rs
++++ b/core/src/avm2/reference_trace.rs
+@@ -42,6 +42,14 @@
+ }
+ 
+ pub(crate) fn snapshot(context: &mut UpdateContext<'_>, max_depth: usize, max_objects: usize) -> Json {
++    snapshot_mode(context, max_depth, max_objects, false)
++}
++
++pub(crate) fn compact_snapshot(context: &mut UpdateContext<'_>, max_depth: usize, max_objects: usize) -> Json {
++    snapshot_mode(context, max_depth, max_objects, true)
++}
++
++fn snapshot_mode(context: &mut UpdateContext<'_>, max_depth: usize, max_objects: usize, compact: bool) -> Json {
+     let mut walk = Walk {
+         queue: VecDeque::new(), seen: HashSet::new(),
+         max_depth: max_depth.min(32), max_objects: max_objects.clamp(1, 20000), truncated:false,
+@@ -60,6 +68,19 @@
+         if object.instance_class().name().local_name().to_utf8_lossy() == "Game"
+             && !context.avm2.reference_games.iter().any(|weak| std::ptr::eq(weak.as_ptr(), object.as_ptr())) {
+             context.avm2.reference_games.push(object.downgrade());
++        }
++        // Native painting state is intentionally a leaf in compact mode. Keep the
++        // source GameEngine's logical callback slots even though it extends Sprite.
++        if compact && object.as_display_object().is_some()
++            && object.instance_class().name().local_name().to_utf8_lossy() != "GameEngine" {
++            let display = object.as_display_object().unwrap();
++            let mut native = json!({"x":display.x().to_pixels(),"y":display.y().to_pixels()});
++            if let Some(movie) = display.as_movie_clip() {
++                native["current_frame"] = json!(movie.current_frame());
++            }
++            nodes.insert(id,json!({"class":object.instance_of_class_name(context.gc()).to_utf8_lossy(),
++                "depth":depth,"display":native,"omitted":"painting slots, dynamic children and display tree"}));
++            continue;
+         }
+         let mut slots = Vec::new();
+         // Preserve namespace identity; do not assume same local name means same property.
+@@ -100,14 +121,14 @@
+             if let Some(movie) = display.as_movie_clip() {
+                 node["display"]["current_frame"] = json!(movie.current_frame());
+             }
+-            if let Some(container) = display.as_container() {
++            if !compact && let Some(container) = display.as_container() {
+                 node["display"]["children"] = Json::Array(container.iter_render_list()
+                     .filter_map(|child|child.object2()).map(|child|walk.value(child.into(),depth+1)).collect());
+             }
+         }
+         nodes.insert(id,node);
+     }
+-    json!({"schema":"bombit5-reference-graph-v1","roots":roots,"objects":nodes,"truncated":walk.truncated,
++    json!({"schema":if compact {"bombit5-reference-compact-graph-v1"} else {"bombit5-reference-graph-v1"},"roots":roots,"objects":nodes,"truncated":walk.truncated,
+         "limits":{"max_depth":walk.max_depth,"max_objects":walk.max_objects,"array_elements":1024},
+         "observation":"post-step native storage only; getters/methods not executed"})
+ }
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2292,6 +2292,13 @@
+         }
+     }
+ 
++    /// Investigation-only logical graph; native painting/display trees are omitted.
++    pub fn reference_compact_state(&mut self, max_depth: usize, max_objects: usize) -> serde_json::Value {
++        self.mutate_with_update_context(|context| {
++            crate::avm2::reference_trace::compact_snapshot(context, max_depth, max_objects)
++        })
++    }
++
+     /// Investigation-only read-only AVM2 slot graph. No game code is executed.
+     /// Research-only observer control. Call only between outer harness commands.
+     pub fn reference_events_enable(&mut self, enabled: bool, capacity: usize, prefixes: Vec<String>) -> Result<(),String> {

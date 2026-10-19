@@ -1,0 +1,136 @@
+{
+  "name": "ordinary-bomb-escape",
+  "origin": "Replay of the supplied original input chronology, followed by legal move/place/escape inputs; no fixture mutation.",
+  "actions": [
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku right",
+      "capture": "moved"
+    },
+    {
+      "observe_command": "trace trace"
+    },
+    {
+      "command": "kd space",
+      "state": "placed-before-frame"
+    },
+    {
+      "command": "step 1",
+      "capture": "bomb"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "command": "step 50",
+      "capture": "pre-detonation"
+    },
+    {
+      "command": "cap fire-frames"
+    },
+    {
+      "command": "step 20",
+      "capture": "after-fire"
+    },
+    {
+      "command": "cap off"
+    },
+    {
+      "observe_command": "trace off"
+    }
+  ]
+}

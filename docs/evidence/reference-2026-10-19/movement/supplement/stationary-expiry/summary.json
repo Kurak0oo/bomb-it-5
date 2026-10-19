@@ -1,0 +1,30 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\movement-stationary-expiry-42-01",
+  "case_sha256": "16d3968e79e8a0f0917d9b99a4fd4330a5bf36f075fc12aeb3bc401d6a15b9d9",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "trace_frames": 169,
+  "events": {
+    "events": 27842,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "stationary-expiry-in-fire.png",
+      "sha256": "6eb60a4877d54f9d6ad29be5845b2478f4e74273d1cef398b685c09fcb83f2d3",
+      "bytes": 542822
+    },
+    {
+      "name": "stationary-after-fire.png",
+      "sha256": "c8b0cbedf31d0185ad0dd86d67e65394ebe1de0c9f5e01b3f4589284435c7329",
+      "bytes": 543081
+    }
+  ],
+  "limits": [
+    "Selected native/raw source observations; no complete Flash equivalence claim.",
+    "Fixtures invoke original methods and do not implement new gameplay.",
+    "Position/state and original callback timing must be interpreted separately."
+  ]
+}

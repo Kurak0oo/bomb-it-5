@@ -1,0 +1,254 @@
+{
+  "name": "bomb-trigger-armed",
+  "classification": "Controlled original-method fixtures, normal collection and legal human input; no raw health, damage, weapon or outcome writes.",
+  "actions": [
+    {
+      "command": "seed 12345"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 5,
+        "y": 4
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 9,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 13,
+        "y": 4
+      }
+    },
+    {
+      "command": "step 100",
+      "capture": "spawn-protection-finished"
+    },
+    {
+      "command": "trace-focus frames"
+    },
+    {
+      "command": "events events 50000 zlong.bombit5.bombs zlong.bombit5.commands zlong.bombit5.items.weapons zlong.bombit5.gameengine.robot zlong.bombit5.gameengine::GameEngine"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "invincibility"
+      }
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "landmine"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "equipped"
+    },
+    {
+      "command": "kd space",
+      "capture": "input"
+    },
+    {
+      "command": "step 1",
+      "capture": "placed"
+    },
+    {
+      "command": "ku space",
+      "capture": "released"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 1,
+        "y": 3
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "armed"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 2,
+        "y": 1,
+        "actor": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "bomb",
+        "actor": 1
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 5,
+        "y": 4,
+        "actor": 1
+      }
+    },
+    {
+      "command": "step 71",
+      "capture": "before-trigger"
+    },
+    {
+      "command": "step 1",
+      "capture": "triggered"
+    },
+    {
+      "command": "step 20",
+      "capture": "after-cleanup"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "negative-count-first-bomb"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 3,
+        "y": 1
+      }
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "negative-count-second-bomb"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 1,
+        "y": 2
+      }
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "capture": "normal-guard-after-negative"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "events off"
+    },
+    {
+      "command": "trace-focus off"
+    }
+  ]
+}

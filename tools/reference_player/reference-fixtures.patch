@@ -1,0 +1,201 @@
+--- a/core/src/avm2.rs
++++ b/core/src/avm2.rs
+@@ -71,6 +71,7 @@
+ mod qname;
+ mod regexp;
+ pub(crate) mod reference_trace;
++pub(crate) mod reference_fixtures;
+ mod scope;
+ pub mod script;
+ #[cfg(feature = "known_stubs")]
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2299,6 +2299,13 @@
+         })
+     }
+ 
++    /// Investigation-only active fixture using original game constructors and methods.
++    pub fn reference_fixture(&mut self, command: &str) -> Result<serde_json::Value, String> {
++        self.mutate_with_update_context(|context| {
++            crate::avm2::reference_fixtures::run(context, command)
++        })
++    }
++
+     /// Runs the closure `f` with an `UpdateContext`.
+     /// This takes cares of populating the `UpdateContext` struct, avoiding borrow issues.
+     pub fn mutate_with_update_context<F, R>(&mut self, f: F) -> R
+--- /dev/null
++++ b/core/src/avm2/reference_fixtures.rs
+@@ -0,0 +1,172 @@
++//! Optional active reference fixtures. Calls original AVM2 constructors/methods only.
++use super::property::Property;
++use super::{Activation, FunctionArgs, Object, TObject, Value};
++use crate::context::UpdateContext;
++use crate::string::AvmString;
++use serde_json::{json, Value as Json};
++
++enum Operation {
++    Pickup { class: &'static str },
++    Reposition { x: i32, y: i32 },
++    Bomb,
++}
++fn parse(input: &str) -> Result<(Operation, Json), String> {
++    let json: Json = serde_json::from_str(input).map_err(|e|e.to_string())?;
++    let map = json.as_object().ok_or("Fixture must be a JSON object")?;
++    let op = map.get("op").and_then(Json::as_str).ok_or("Missing string op")?;
++    let operation = match op {
++        "pickup" => {
++            if map.len()!=2 { return Err("pickup requires only op and kind".into()); }
++            let class = match map.get("kind").and_then(Json::as_str) {
++                Some("hammer") => "zlong.bombit5.items.weapons.HammerProp",
++                Some("flamer") => "zlong.bombit5.items.weapons.FlamerProp",
++                Some("laser") => "zlong.bombit5.items.weapons.LaserGunProp",
++                Some("triple") => "zlong.bombit5.items.weapons.TripleShootGunProp",
++                Some("fireball") => "zlong.bombit5.items.weapons.ShotGunProp",
++                Some("landmine") => "zlong.bombit5.items.weapons.LandmineProp",
++                Some("capacity") => "zlong.bombit5.items.tools.NumProp",
++                Some("power") => "zlong.bombit5.items.tools.PowProp",
++                Some("speed") => "zlong.bombit5.items.tools.SpeedProp",
++                Some("life") => "zlong.bombit5.items.tools.LifeProp",
++                Some("shield") => "zlong.bombit5.items.tools.ShieldProp",
++                Some("invincibility") => "zlong.bombit5.items.tools.InvincibilityProp",
++                Some("car") => "zlong.bombit5.items.rides.CarProp",
++                Some("moto") => "zlong.bombit5.items.rides.MotoCycleProp",
++                _ => return Err("Unsupported pickup kind".into()),
++            };
++            Operation::Pickup { class }
++        },
++        "reposition" => {
++            if map.len()!=3 { return Err("reposition requires only op, x and y".into()); }
++            let coordinate = |key| map.get(key).and_then(Json::as_i64)
++                .and_then(|n| i32::try_from(n).ok()).ok_or_else(||format!("{key} must be an i32 cell coordinate"));
++            Operation::Reposition { x:coordinate("x")?, y:coordinate("y")? }
++        },
++        "bomb" if map.len()==1 => Operation::Bomb,
++        _ => return Err("Unsupported fixture operation/fields".into()),
++    };
++    Ok((operation,json))
++}
++fn slot<'gc>(object: Object<'gc>, name: &str) -> Option<Value<'gc>> {
++    object.vtable().resolved_traits().iter().find_map(|(local, _, property)| {
++        if local.to_utf8_lossy()!=name { return None; }
++        match *property {
++            Property::Slot {slot_id} | Property::ConstSlot {slot_id} => Some(object.get_slot(slot_id)),
++            _ => None,
++        }
++    })
++}
++fn object_slot<'gc>(object: Object<'gc>, name: &str) -> Result<Object<'gc>,String> {
++    slot(object,name).and_then(|v|v.as_object()).ok_or_else(||format!("Missing object slot {name}"))
++}
++fn number(value: Value<'_>) -> Result<f64,String> {
++    value.try_as_f64().filter(|n|n.is_finite()).ok_or("Expected finite original numeric value".into())
++}
++fn get<'gc>(value: Value<'gc>, name: &str, activation: &mut Activation<'_, 'gc>) -> Result<Value<'gc>,String> {
++    let key=AvmString::new_utf8(activation.gc(),name);
++    value.get_public_property(key,activation).map_err(|e|e.to_string(activation))
++}
++fn call<'gc>(value: Value<'gc>, name: &str, args: &[Value<'gc>], activation: &mut Activation<'_, 'gc>) -> Result<Value<'gc>,String> {
++    let key=AvmString::new_utf8(activation.gc(),name);
++    value.call_public_property(key,FunctionArgs::from_slice(args),activation).map_err(|e|e.to_string(activation))
++}
++fn set<'gc>(value: Value<'gc>, name: &str, data: Value<'gc>, activation: &mut Activation<'_, 'gc>) -> Result<(),String> {
++    let key=AvmString::new_utf8(activation.gc(),name);
++    value.set_public_property(key,data,activation).map_err(|e|e.to_string(activation))
++}
++fn state<'gc>(robot: Object<'gc>, activation: &mut Activation<'_, 'gc>) -> Result<Json,String> {
++    let view=object_slot(robot,"view")?;
++    let model=object_slot(robot,"model")?;
++    Ok(json!({"x_pos":number(get(view.into(),"xPos",activation)?)?,
++        "y_pos":number(get(view.into(),"yPos",activation)?)?,
++        "cell_x":number(get(view.into(),"xN",activation)?)?,
++        "cell_y":number(get(view.into(),"yN",activation)?)?,
++        "bomb_num":slot(model,"bombNum").map(|v|number(v)).transpose()?,
++        "weapon":match slot(model,"weapon") {Some(Value::String(v))=>Some(v.to_utf8_lossy().into_owned()),_=>None},
++        "is_exist":slot(robot,"isExist").map(|v|v.coerce_to_boolean())}))
++}
++
++pub(crate) fn run(context: &mut UpdateContext<'_>, input: &str) -> Result<Json,String> {
++    let (operation,command)=parse(input)?; // Validate everything syntactic before any AVM2 call.
++    let game=context.avm2.reference_games.iter().rev().filter_map(|weak|weak.upgrade(context.gc()))
++        .find(|game|matches!(slot(*game,"gameStarted"),Some(Value::Bool(true)))
++            && !matches!(slot(*game,"gameOver"),Some(Value::Bool(true)))
++            && object_slot(*game,"gameEngine").is_ok())
++        .ok_or("No observed active original Game; capture state after starting a match first")?;
++    let robots=object_slot(game,"robots")?.as_array_object().ok_or("Game.robots is not Array")?;
++    let robot=robots.storage().iter().flatten().filter_map(|v|v.as_object())
++        .find(|robot|robot.instance_class().name().local_name().to_utf8_lossy()=="PersonRobot")
++        .ok_or("No live original PersonRobot")?;
++    let model=object_slot(robot,"model")?;
++    if matches!(slot(model,"state"),Some(Value::String(state)) if state.to_utf8_lossy()=="dead") {
++        return Err("Human robot is dead".into());
++    }
++    // Membership in Game.robots above establishes registration; isExist is damage eligibility,
++    // and may legitimately be false during spawn or other protection.
++    let controller=object_slot(robot,"controller")?;
++    if slot(controller,"_stageFunc").is_some_and(|v|!matches!(v,Value::Null|Value::Undefined)) {
++        return Err("Human movement/action is currently interrupted; wait for normal recovery".into());
++    }
++    let view=object_slot(robot,"view")?;
++    let map=object_slot(game,"map")?;
++    let domain=context.avm2.stage_domain();
++    let mut activation=Activation::from_domain(context,domain);
++    let before=state(robot,&mut activation)?;
++    let x=number(get(view.into(),"xN",&mut activation)?)? as i32;
++    let y=number(get(view.into(),"yN",&mut activation)?)? as i32;
++    let effects;
++    match operation {
++        Operation::Pickup { class } => {
++            let cell=[Value::Integer(x),Value::Integer(y)];
++            if !call(map.into(),"isEmpty",&cell,&mut activation)?.coerce_to_boolean() {
++                return Err("Current cell is not original empty floor".into());
++            }
++            if !matches!(call(map.into(),"getProp",&cell,&mut activation)?,Value::Null|Value::Undefined) {
++                return Err("Current cell already has a pickup; fixture will not replace it".into());
++            }
++            let name=AvmString::new_utf8(activation.gc(),class);
++            let definition=domain.get_defined_value_handling_vector(&mut activation,name)
++                .map_err(|e|e.to_string(&mut activation))?;
++            let constructor=definition.as_object().and_then(|o|o.as_class_object()).ok_or("Original pickup class not found")?;
++            constructor.construct(&mut activation,&[game.into(),Value::Integer(x),Value::Integer(y)])
++                .map_err(|e|e.to_string(&mut activation))?;
++            effects=json!({"original_constructor":class,"cell":[x,y],"collection":"pending normal GetItemCommand on subsequent engine frame"});
++        },
++        Operation::Reposition {x:target_x,y:target_y} => {
++            let cell=[Value::Integer(target_x),Value::Integer(target_y)];
++            if !call(map.into(),"isEmpty",&cell,&mut activation)?.coerce_to_boolean() {
++                return Err("Target must be an original empty floor cell".into());
++            }
++            if !matches!(call(map.into(),"getProp",&cell,&mut activation)?,Value::Null|Value::Undefined) {
++                return Err("Target has a pickup; choose another floor".into());
++            }
++            let name=AvmString::new_utf8(activation.gc(),"GameConfig");
++            let config=domain.get_defined_value_handling_vector(&mut activation,name).map_err(|e|e.to_string(&mut activation))?;
++            let width=number(get(config,"GRID_WIDTH",&mut activation)?)?;
++            let px=f64::from(target_x)*width; let py=f64::from(target_y)*width;
++            for other in robots.storage().iter().flatten().filter_map(|v|v.as_object()) {
++                if std::ptr::eq(other.as_ptr(),robot.as_ptr()) { continue; }
++                let other_view=object_slot(other,"view")?;
++                let ox=number(get(other_view.into(),"xPos",&mut activation)?)?;
++                let oy=number(get(other_view.into(),"yPos",&mut activation)?)?;
++                if (ox-px).abs()<width && (oy-py).abs()<width { return Err("Target footprint overlaps another actor".into()); }
++            }
++            let fire=call(map.into(),"getFire",&cell,&mut activation)?.coerce_to_boolean();
++            set(view.into(),"xPos",Value::Number(px),&mut activation)?;
++            set(view.into(),"yPos",Value::Number(py),&mut activation)?;
++            call(robot.into(),"updateRobotPosition",&[],&mut activation)?;
++            call(view.into(),"resetMainContainer",&[],&mut activation)?;
++            effects=json!({"target_cell":[target_x,target_y],"target_had_fire":fire,
++                "side_effects":"original occupancy and position-change commands executed; hazards may damage/kill actor; held input and velocity unchanged"});
++        },
++        Operation::Bomb => {
++            let before_count=slot(object_slot(robot,"model")?,"bombNum").ok_or("Missing bombNum")?;
++            call(controller.into(),"addBomb",&[],&mut activation)?;
++            let after_count=slot(object_slot(robot,"model")?,"bombNum").ok_or("Missing bombNum")?;
++            effects=json!({"original_method":"RobotController.addBomb","placed":number(after_count)?>number(before_count)?,
++                "note":"fixture invokes ordinary-bomb method directly, bypassing equipped action input"});
++        },
++    }
++    Ok(json!({"schema":"bombit5-reference-fixture-v1","command":command,"before":before,"after":state(robot,&mut activation)?,"effects":effects,
++        "classification":"controlled original-method fixture, not naturally achieved input-only play"}))
++}

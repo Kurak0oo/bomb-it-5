@@ -1,0 +1,1604 @@
+[
+  {
+    "case": "hammer-enemy-interaction",
+    "directory": "interaction-hammer-enemy-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": 847,
+    "shield_lost_observed": null,
+    "first_control_restored": 847,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1c436b434a0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "hammer-own-cell-enemy-interaction",
+    "directory": "interaction-hammer-own-cell-enemy-03",
+    "frames": 160,
+    "event_packets": 172,
+    "first_input": 833,
+    "enemy_dead_observed": 857,
+    "shield_lost_observed": null,
+    "first_control_restored": 857,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 240.35,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x250a6bdea20",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "hammer-shield-interaction",
+    "directory": "interaction-hammer-shield-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 824,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": 848,
+    "first_control_restored": 848,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 243.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x24fe0ef2750",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "hammer-soft-interaction",
+    "directory": "interaction-hammer-soft-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 847,
+    "target_removed_observed": 847,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x24052c76230",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "hammer-bomb-interaction",
+    "directory": "interaction-hammer-bomb-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": null,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": false,
+      "projected": false
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x2c859a55fc0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "hammer-pickup-interaction",
+    "directory": "interaction-hammer-pickup-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 847,
+    "target_removed_observed": 847,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x26a0c5571f0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "hammer-solid-interaction",
+    "directory": "interaction-hammer-solid-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 847,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1accc2f3040",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "flamer-enemy-interaction",
+    "directory": "interaction-flamer-enemy-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": 828,
+    "shield_lost_observed": null,
+    "first_control_restored": 846,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x2017725b250",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "flamer-own-cell-enemy-interaction",
+    "directory": "interaction-flamer-own-cell-enemy-03",
+    "frames": 160,
+    "event_packets": 172,
+    "first_input": 833,
+    "enemy_dead_observed": 834,
+    "shield_lost_observed": null,
+    "first_control_restored": 856,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 240.35,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x24297fd0c60",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "flamer-shield-interaction",
+    "directory": "interaction-flamer-shield-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 824,
+    "enemy_dead_observed": 911,
+    "shield_lost_observed": 829,
+    "first_control_restored": 847,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x260dc41ad40",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "flamer-soft-interaction",
+    "directory": "interaction-flamer-soft-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 846,
+    "target_removed_observed": 828,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1c50f3e7b40",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "flamer-bomb-interaction",
+    "directory": "interaction-flamer-bomb-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": null,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": false,
+      "projected": false
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x15adbad7bf0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "flamer-pickup-interaction",
+    "directory": "interaction-flamer-pickup-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 846,
+    "target_removed_observed": 828,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x14261571d50",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "flamer-solid-interaction",
+    "directory": "interaction-flamer-solid-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 846,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x20ce0563c40",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "laser-enemy-interaction",
+    "directory": "interaction-laser-enemy-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": 834,
+    "shield_lost_observed": null,
+    "first_control_restored": 845,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x19971857170",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "laser-own-cell-enemy-interaction",
+    "directory": "interaction-laser-own-cell-enemy-03",
+    "frames": 160,
+    "event_packets": 172,
+    "first_input": 833,
+    "enemy_dead_observed": 844,
+    "shield_lost_observed": null,
+    "first_control_restored": 855,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 240.35,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x172db244c40",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "laser-shield-interaction",
+    "directory": "interaction-laser-shield-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 824,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": 835,
+    "first_control_restored": 846,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 243.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x22f0df97520",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "laser-soft-interaction",
+    "directory": "interaction-laser-soft-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 845,
+    "target_removed_observed": 834,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x20f47edc000",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "laser-bomb-interaction",
+    "directory": "interaction-laser-bomb-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": null,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": false,
+      "projected": false
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x213c7e8ec40",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "laser-pickup-interaction",
+    "directory": "interaction-laser-pickup-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 845,
+    "target_removed_observed": 834,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1c7685529d0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "laser-solid-interaction",
+    "directory": "interaction-laser-solid-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 845,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1f68407a720",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "triple-enemy-interaction",
+    "directory": "interaction-triple-enemy-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": 827,
+    "shield_lost_observed": null,
+    "first_control_restored": 858,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x238fe647cd0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "triple-own-cell-enemy-interaction",
+    "directory": "interaction-triple-own-cell-enemy-03",
+    "frames": 160,
+    "event_packets": 172,
+    "first_input": 833,
+    "enemy_dead_observed": 835,
+    "shield_lost_observed": null,
+    "first_control_restored": 869,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 240.35,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1b9924af4a0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "triple-shield-interaction",
+    "directory": "interaction-triple-shield-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 824,
+    "enemy_dead_observed": 910,
+    "shield_lost_observed": 828,
+    "first_control_restored": 860,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x24df5254810",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "triple-soft-interaction",
+    "directory": "interaction-triple-soft-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 859,
+    "target_removed_observed": 825,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1a1e00bb4b0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "triple-bomb-interaction",
+    "directory": "interaction-triple-bomb-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": null,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": false,
+      "projected": false
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x22df3b0d660",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "triple-pickup-interaction",
+    "directory": "interaction-triple-pickup-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 859,
+    "target_removed_observed": 827,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x22ac039c840",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "triple-solid-interaction",
+    "directory": "interaction-triple-solid-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 860,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1be1e9b0950",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "fireball-enemy-interaction",
+    "directory": "interaction-fireball-enemy-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": 839,
+    "shield_lost_observed": null,
+    "first_control_restored": 842,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1fad21c1de0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "fireball-own-cell-enemy-interaction",
+    "directory": "interaction-fireball-own-cell-enemy-03",
+    "frames": 160,
+    "event_packets": 172,
+    "first_input": 833,
+    "enemy_dead_observed": 848,
+    "shield_lost_observed": null,
+    "first_control_restored": 852,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 240.35,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x143bcb24e10",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "fireball-shield-interaction",
+    "directory": "interaction-fireball-shield-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 824,
+    "enemy_dead_observed": 922,
+    "shield_lost_observed": 840,
+    "first_control_restored": 843,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x16ba0d986f0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "fireball-soft-interaction",
+    "directory": "interaction-fireball-soft-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 842,
+    "target_removed_observed": 838,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x18dc586a2f0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "fireball-bomb-interaction",
+    "directory": "interaction-fireball-bomb-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": null,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": false,
+      "projected": false
+    },
+    "enemy_final": {
+      "registered": false,
+      "projected": false
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x1bf5283cd70",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "fireball-pickup-interaction",
+    "directory": "interaction-fireball-pickup-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 843,
+    "target_removed_observed": 839,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x10dd9ad1420",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  },
+  {
+    "case": "fireball-solid-interaction",
+    "directory": "interaction-fireball-solid-01",
+    "frames": 160,
+    "event_packets": 162,
+    "first_input": 823,
+    "enemy_dead_observed": null,
+    "shield_lost_observed": null,
+    "first_control_restored": 842,
+    "target_removed_observed": null,
+    "human_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 213.0,
+        "y": 70.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "enemy_final": {
+      "registered": true,
+      "state": "normal",
+      "damage_eligible": true,
+      "physical": {
+        "x": 333.0,
+        "y": 160.0
+      },
+      "weapon": null,
+      "vehicle": "",
+      "shield": false,
+      "interrupted": false,
+      "equipment": [],
+      "projected": true
+    },
+    "target_final": {
+      "box": null,
+      "prop": null,
+      "fire": false,
+      "bombs": {
+        "$ref": "0x2977954bba0",
+        "class": "Array",
+        "length": 0,
+        "elements": []
+      }
+    },
+    "errors": 0
+  }
+]

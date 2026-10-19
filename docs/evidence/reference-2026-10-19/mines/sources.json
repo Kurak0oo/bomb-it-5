@@ -1,0 +1,1442 @@
+[
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\bombs\\LandmineBomb.as",
+    "sha256": "bea40fde01448c2d8b9db6f6858e14684a1c76b068aebaa4d0788c9aebf36a9a",
+    "functions": [
+      {
+        "line": 17,
+        "source": "public function LandmineBomb(param1:Game, param2:AbstractRobot)"
+      },
+      {
+        "line": 25,
+        "source": "override protected function init() : void"
+      },
+      {
+        "line": 32,
+        "source": "override public function dispose() : void"
+      },
+      {
+        "line": 41,
+        "source": "override protected function setBombMc() : void"
+      },
+      {
+        "line": 46,
+        "source": "override protected function blastMode() : void"
+      },
+      {
+        "line": 51,
+        "source": "override protected function setBombPow() : void"
+      },
+      {
+        "line": 56,
+        "source": "private function hitReset() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\bombs\\Bomb.as",
+    "sha256": "b710462a032e1707ec137a450b4f48dba20c5e245c3c02d9c3ab34bab8b1ffb8",
+    "functions": [
+      {
+        "line": 54,
+        "source": "public function Bomb(param1:Game, param2:IBombAdder, param3:int = -1, param4:int = -1)"
+      },
+      {
+        "line": 62,
+        "source": "public static function get blastTime() : int"
+      },
+      {
+        "line": 67,
+        "source": "protected function init() : void"
+      },
+      {
+        "line": 89,
+        "source": "protected function setBombPosition() : void"
+      },
+      {
+        "line": 98,
+        "source": "public function moveBombPos(param1:int, param2:int) : void"
+      },
+      {
+        "line": 106,
+        "source": "protected function createMC() : void"
+      },
+      {
+        "line": 113,
+        "source": "protected function setMapInfo() : void"
+      },
+      {
+        "line": 118,
+        "source": "protected function addBombSound() : void"
+      },
+      {
+        "line": 123,
+        "source": "protected function setBombPow() : void"
+      },
+      {
+        "line": 135,
+        "source": "protected function setBlastMc() : void"
+      },
+      {
+        "line": 140,
+        "source": "protected function setBombMc() : void"
+      },
+      {
+        "line": 145,
+        "source": "protected function blastMode() : void"
+      },
+      {
+        "line": 152,
+        "source": "override public function resetDisplay() : void"
+      },
+      {
+        "line": 162,
+        "source": "protected function blastHandle(param1:Event) : void"
+      },
+      {
+        "line": 168,
+        "source": "protected function takeCount() : void"
+      },
+      {
+        "line": 193,
+        "source": "public function bombEngine() : void"
+      },
+      {
+        "line": 202,
+        "source": "override public function dispose() : void"
+      },
+      {
+        "line": 208,
+        "source": "public function disappear() : void"
+      },
+      {
+        "line": 228,
+        "source": "public function get engineArr() : Array"
+      },
+      {
+        "line": 233,
+        "source": "public function updateBombPos() : void"
+      },
+      {
+        "line": 244,
+        "source": "public function blast() : void"
+      },
+      {
+        "line": 425,
+        "source": "public function resetEngine() : void"
+      },
+      {
+        "line": 430,
+        "source": "public function ended() : void"
+      },
+      {
+        "line": 445,
+        "source": "protected function deleFire() : void"
+      },
+      {
+        "line": 463,
+        "source": "override public function motionEnd() : void"
+      },
+      {
+        "line": 471,
+        "source": "public function resetMap() : void"
+      },
+      {
+        "line": 476,
+        "source": "public function get bombPow() : int"
+      },
+      {
+        "line": 481,
+        "source": "public function get leavingsTime() : int"
+      },
+      {
+        "line": 486,
+        "source": "public function get nodeCost() : int"
+      },
+      {
+        "line": 491,
+        "source": "public function set shootFuncDeputize(param1:Function) : void"
+      },
+      {
+        "line": 496,
+        "source": "public function get shootFuncDeputize() : Function"
+      },
+      {
+        "line": 501,
+        "source": "public function set shootSpeed(param1:int) : void"
+      },
+      {
+        "line": 506,
+        "source": "public function shootFunc() : void"
+      },
+      {
+        "line": 512,
+        "source": "public function startFly() : void"
+      },
+      {
+        "line": 517,
+        "source": "private function kickedFly() : void"
+      },
+      {
+        "line": 537,
+        "source": "protected function changeBombDirection() : void"
+      },
+      {
+        "line": 576,
+        "source": "public function leftAfoul(param1:int) : void"
+      },
+      {
+        "line": 581,
+        "source": "public function rightAfoul(param1:int) : void"
+      },
+      {
+        "line": 586,
+        "source": "public function upAfoul(param1:int) : void"
+      },
+      {
+        "line": 591,
+        "source": "public function downAfoul(param1:int) : void"
+      },
+      {
+        "line": 596,
+        "source": "public function get hitMove() : HitMove"
+      },
+      {
+        "line": 601,
+        "source": "public function get isMovedByBasket() : Boolean"
+      },
+      {
+        "line": 606,
+        "source": "public function set isMovedByBasket(param1:Boolean) : void"
+      },
+      {
+        "line": 611,
+        "source": "public function set blastTime(param1:int) : void"
+      },
+      {
+        "line": 616,
+        "source": "public function set bombPower(param1:int) : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\bombs\\AbstractBomb.as",
+    "sha256": "b4f657acfd28dd061ba92a811b4f23c46fe95f356bcdc007d42a565ac74cb230",
+    "functions": [
+      {
+        "line": 30,
+        "source": "public function AbstractBomb(param1:Game, param2:IBombAdder)"
+      },
+      {
+        "line": 36,
+        "source": "public function hitRobot(param1:AbstractRobot) : void"
+      },
+      {
+        "line": 51,
+        "source": "public function hitRobotUnderPoint(param1:int, param2:int, param3:Boolean = true) : void"
+      },
+      {
+        "line": 85,
+        "source": "public function hitItem(param1:int, param2:int) : void"
+      },
+      {
+        "line": 121,
+        "source": "private function changeSlideDirection(param1:int, param2:int) : void"
+      },
+      {
+        "line": 129,
+        "source": "private function deleBox(param1:int, param2:int, param3:String) : void"
+      },
+      {
+        "line": 155,
+        "source": "private function deleBomb(param1:int, param2:int) : void"
+      },
+      {
+        "line": 170,
+        "source": "private function deleProp(param1:int, param2:int) : void"
+      },
+      {
+        "line": 178,
+        "source": "public function get bombAdder() : IBombAdder"
+      },
+      {
+        "line": 183,
+        "source": "public function set bombAdder(param1:IBombAdder) : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\items\\weapons\\LandmineProp.as",
+    "sha256": "ee6bd29a79b0e1642f7dbd39a8f6887334a659cc7a852621a0f8a5a03874ad91",
+    "functions": [
+      {
+        "line": 15,
+        "source": "public function LandmineProp(param1:Game, param2:int, param3:int)"
+      },
+      {
+        "line": 20,
+        "source": "override protected function initWeapon() : void"
+      },
+      {
+        "line": 32,
+        "source": "override protected function addWeaponProp() : void"
+      },
+      {
+        "line": 36,
+        "source": "override public function robotMoveStop() : void"
+      },
+      {
+        "line": 45,
+        "source": "override protected function initPlayPos() : void"
+      },
+      {
+        "line": 53,
+        "source": "override public function createWeaponPlay() : MovieClip"
+      },
+      {
+        "line": 58,
+        "source": "override protected function setNum() : void"
+      },
+      {
+        "line": 63,
+        "source": "override protected function bombDown() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\items\\weapons\\AbstractWeapon.as",
+    "sha256": "e9c3e93c629cd08a46c05a979de492b8b6806a3794688960eb470c97fc4767c6",
+    "functions": [
+      {
+        "line": 52,
+        "source": "public function AbstractWeapon(param1:Game, param2:int, param3:int)"
+      },
+      {
+        "line": 59,
+        "source": "public function set isDefaultWeapon(param1:Boolean) : void"
+      },
+      {
+        "line": 65,
+        "source": "public function robotMoveStop() : void"
+      },
+      {
+        "line": 74,
+        "source": "public function robotMoveStart() : void"
+      },
+      {
+        "line": 83,
+        "source": "override public function changeStage(param1:AbstractRobot) : void"
+      },
+      {
+        "line": 104,
+        "source": "protected function initWeapon() : void"
+      },
+      {
+        "line": 108,
+        "source": "protected function initPlayPos() : void"
+      },
+      {
+        "line": 112,
+        "source": "protected function bombDown() : void"
+      },
+      {
+        "line": 148,
+        "source": "public function createWeaponPlay() : MovieClip"
+      },
+      {
+        "line": 155,
+        "source": "protected function bombUp() : void"
+      },
+      {
+        "line": 159,
+        "source": "public function updateWeaponDisplay() : void"
+      },
+      {
+        "line": 212,
+        "source": "protected function addWeaponProp() : void"
+      },
+      {
+        "line": 220,
+        "source": "protected function setWeaponMc() : void"
+      },
+      {
+        "line": 225,
+        "source": "protected function setWeaponTimesMc() : void"
+      },
+      {
+        "line": 242,
+        "source": "public function updateWeaponTimes() : void"
+      },
+      {
+        "line": 248,
+        "source": "override public function dispose() : void"
+      },
+      {
+        "line": 281,
+        "source": "private function clearWeaponMc() : void"
+      },
+      {
+        "line": 294,
+        "source": "public function get weaponTimesMc() : MovieClip"
+      },
+      {
+        "line": 299,
+        "source": "public function changeUseNum() : void"
+      },
+      {
+        "line": 305,
+        "source": "public function initUseNum() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\weapon\\LandminePlayCommand.as",
+    "sha256": "415694c4f396987133051a7ed4bf8a8813d257b757c5fd8f8170cc3445600d37",
+    "functions": [
+      {
+        "line": 26,
+        "source": "public function LandminePlayCommand(param1:LandmineProp)"
+      },
+      {
+        "line": 32,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 37,
+        "source": "override public function execute() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\gameengine\\robot\\RobotController.as",
+    "sha256": "0a52bf26ab7cb5bfa5d36475abcde40f7a06282025702fa7ab195b2a95449b6e",
+    "functions": [
+      {
+        "line": 35,
+        "source": "public function RobotController(param1:AbstractRobot, param2:RobotView, param3:RobotModel)"
+      },
+      {
+        "line": 48,
+        "source": "public function initWeapon() : void"
+      },
+      {
+        "line": 58,
+        "source": "public function initBombHandle() : void"
+      },
+      {
+        "line": 63,
+        "source": "public function robot_turnHandler(param1:Event) : void"
+      },
+      {
+        "line": 74,
+        "source": "public function normalStopHandle() : void"
+      },
+      {
+        "line": 79,
+        "source": "public function moveLeft() : void"
+      },
+      {
+        "line": 88,
+        "source": "public function moveRight() : void"
+      },
+      {
+        "line": 97,
+        "source": "public function moveUp() : void"
+      },
+      {
+        "line": 106,
+        "source": "public function moveDown() : void"
+      },
+      {
+        "line": 115,
+        "source": "public function moveStop() : void"
+      },
+      {
+        "line": 121,
+        "source": "public function leftAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 126,
+        "source": "public function rightAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 131,
+        "source": "public function upAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 136,
+        "source": "public function downAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 141,
+        "source": "public function robot_addBoomHandler(param1:Event) : void"
+      },
+      {
+        "line": 146,
+        "source": "public function robot_addBoomHandler_UP(param1:Event) : void"
+      },
+      {
+        "line": 154,
+        "source": "public function addBomb() : void"
+      },
+      {
+        "line": 168,
+        "source": "public function deleteBomb(param1:Bomb) : void"
+      },
+      {
+        "line": 174,
+        "source": "public function initStage() : void"
+      },
+      {
+        "line": 186,
+        "source": "public function resetStage() : void"
+      },
+      {
+        "line": 197,
+        "source": "public function robotMoveStart() : void"
+      },
+      {
+        "line": 232,
+        "source": "public function robotMoveStop(param1:Boolean = false) : void"
+      },
+      {
+        "line": 246,
+        "source": "public function robotFrozen() : void"
+      },
+      {
+        "line": 253,
+        "source": "public function robotPause() : void"
+      },
+      {
+        "line": 267,
+        "source": "public function robotResume() : void"
+      },
+      {
+        "line": 281,
+        "source": "private function clearMovStage() : void"
+      },
+      {
+        "line": 288,
+        "source": "public function nullFuc() : void"
+      },
+      {
+        "line": 292,
+        "source": "public function get bombHandler_up() : Function"
+      },
+      {
+        "line": 297,
+        "source": "public function set bombHandler_up(param1:Function) : void"
+      },
+      {
+        "line": 302,
+        "source": "public function get stopMcSurrogate() : Function"
+      },
+      {
+        "line": 307,
+        "source": "public function set stopMcSurrogate(param1:Function) : void"
+      },
+      {
+        "line": 312,
+        "source": "public function get bombHandler() : Function"
+      },
+      {
+        "line": 317,
+        "source": "public function set bombHandler(param1:Function) : void"
+      },
+      {
+        "line": 322,
+        "source": "public function get funcDelay() : Function"
+      },
+      {
+        "line": 327,
+        "source": "public function set funcDelay(param1:Function) : void"
+      },
+      {
+        "line": 332,
+        "source": "public function get hitMove() : HitMove"
+      },
+      {
+        "line": 337,
+        "source": "public function set hitMove(param1:HitMove) : void"
+      },
+      {
+        "line": 342,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 354,
+        "source": "public function robotBombStop() : void"
+      },
+      {
+        "line": 359,
+        "source": "public function robotBombStart() : void"
+      },
+      {
+        "line": 364,
+        "source": "public function initReliveStage() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\gameengine\\robot\\RobotView.as",
+    "sha256": "ce5eec4eb33bac82b8540766a4831c9f73e6cf17b5aaa7dc78848657445cae07",
+    "functions": [
+      {
+        "line": 49,
+        "source": "public function RobotView(param1:RobotModel, param2:Game, param3:int, param4:int)"
+      },
+      {
+        "line": 62,
+        "source": "public function setRobotMc(param1:int = -1, param2:String = \"_Down\") : void"
+      },
+      {
+        "line": 156,
+        "source": "public function removeShieldDisplay() : void"
+      },
+      {
+        "line": 164,
+        "source": "public function setFootMc() : void"
+      },
+      {
+        "line": 178,
+        "source": "public function setItemMc() : void"
+      },
+      {
+        "line": 183,
+        "source": "public function resetRobotMc() : void"
+      },
+      {
+        "line": 188,
+        "source": "public function clearWeapon() : void"
+      },
+      {
+        "line": 199,
+        "source": "public function clearDisplay() : void"
+      },
+      {
+        "line": 221,
+        "source": "public function robotTurn(param1:String) : void"
+      },
+      {
+        "line": 235,
+        "source": "public function normalStop() : void"
+      },
+      {
+        "line": 248,
+        "source": "override public function dispose() : void"
+      },
+      {
+        "line": 257,
+        "source": "public function stopStage() : void"
+      },
+      {
+        "line": 271,
+        "source": "private function playAllMovies() : void"
+      },
+      {
+        "line": 300,
+        "source": "private function stopAllMovies() : void"
+      },
+      {
+        "line": 329,
+        "source": "public function robotMoveStop(param1:Boolean) : void"
+      },
+      {
+        "line": 350,
+        "source": "public function robotPause() : void"
+      },
+      {
+        "line": 356,
+        "source": "public function robotResume(param1:Boolean) : void"
+      },
+      {
+        "line": 368,
+        "source": "public function get weaponObj() : AbstractWeapon"
+      },
+      {
+        "line": 373,
+        "source": "public function set weaponObj(param1:AbstractWeapon) : void"
+      },
+      {
+        "line": 383,
+        "source": "public function get shieldContainer() : MovieClip"
+      },
+      {
+        "line": 388,
+        "source": "public function set shieldContainer(param1:MovieClip) : void"
+      },
+      {
+        "line": 393,
+        "source": "public function resetMainContainer() : void"
+      },
+      {
+        "line": 403,
+        "source": "public function get mcFilter() : InvincibilityProp"
+      },
+      {
+        "line": 408,
+        "source": "public function set mcFilter(param1:InvincibilityProp) : void"
+      },
+      {
+        "line": 413,
+        "source": "public function get itemMc() : Sprite"
+      },
+      {
+        "line": 418,
+        "source": "public function set itemMc(param1:Sprite) : void"
+      },
+      {
+        "line": 423,
+        "source": "public function getRobotxGrid() : int"
+      },
+      {
+        "line": 441,
+        "source": "public function getRobotyGrid() : int"
+      },
+      {
+        "line": 459,
+        "source": "public function get clothID() : int"
+      },
+      {
+        "line": 464,
+        "source": "public function set clothID(param1:int) : void"
+      },
+      {
+        "line": 469,
+        "source": "public function get hatID() : int"
+      },
+      {
+        "line": 474,
+        "source": "public function set hatID(param1:int) : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\gameengine\\robot\\AbstractRobot.as",
+    "sha256": "8d9b8ce6276b2cb5a24044c3773e5581f09648fce0ee87e8bc145fca492d05c1",
+    "functions": [
+      {
+        "line": 73,
+        "source": "public function AbstractRobot(param1:Game, param2:int, param3:AbstractPlayer, param4:int, param5:int)"
+      },
+      {
+        "line": 84,
+        "source": "protected function init() : void"
+      },
+      {
+        "line": 110,
+        "source": "protected function initInteractiveController() : void"
+      },
+      {
+        "line": 114,
+        "source": "protected function deleteInteractiveController() : void"
+      },
+      {
+        "line": 119,
+        "source": "protected function initEvent() : void"
+      },
+      {
+        "line": 129,
+        "source": "protected function deleteEvent() : void"
+      },
+      {
+        "line": 139,
+        "source": "public function bombItemScore() : void"
+      },
+      {
+        "line": 144,
+        "source": "public function bombRobotScore() : void"
+      },
+      {
+        "line": 153,
+        "source": "public function killSelf() : void"
+      },
+      {
+        "line": 158,
+        "source": "public function robotEngine() : void"
+      },
+      {
+        "line": 167,
+        "source": "public function updateRobotPosition() : void"
+      },
+      {
+        "line": 192,
+        "source": "public function initEngine() : void"
+      },
+      {
+        "line": 203,
+        "source": "public function initPositionChangeEngine() : void"
+      },
+      {
+        "line": 211,
+        "source": "public function clearEngineArr() : void"
+      },
+      {
+        "line": 221,
+        "source": "public function fall() : void"
+      },
+      {
+        "line": 233,
+        "source": "public function kill() : void"
+      },
+      {
+        "line": 244,
+        "source": "private function clearWeapon() : void"
+      },
+      {
+        "line": 250,
+        "source": "public function relive() : void"
+      },
+      {
+        "line": 264,
+        "source": "protected function updateUi() : void"
+      },
+      {
+        "line": 271,
+        "source": "protected function registRobot() : void"
+      },
+      {
+        "line": 278,
+        "source": "protected function unRegistRobot() : void"
+      },
+      {
+        "line": 285,
+        "source": "public function robotFrozen() : void"
+      },
+      {
+        "line": 292,
+        "source": "public function robotStop() : void"
+      },
+      {
+        "line": 297,
+        "source": "public function robotStart() : void"
+      },
+      {
+        "line": 302,
+        "source": "public function minLife() : void"
+      },
+      {
+        "line": 306,
+        "source": "public function addLife() : void"
+      },
+      {
+        "line": 310,
+        "source": "public function deleteBomb(param1:Bomb) : void"
+      },
+      {
+        "line": 315,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 335,
+        "source": "public function get robotID() : int"
+      },
+      {
+        "line": 340,
+        "source": "public function set baseWeapon(param1:AbstractWeapon) : void"
+      },
+      {
+        "line": 351,
+        "source": "public function get baseWeapon() : AbstractWeapon"
+      },
+      {
+        "line": 356,
+        "source": "public function set engineArr(param1:CommandChain) : void"
+      },
+      {
+        "line": 361,
+        "source": "public function get engineArr() : CommandChain"
+      },
+      {
+        "line": 366,
+        "source": "public function get inEngineArr() : CommandChain"
+      },
+      {
+        "line": 371,
+        "source": "public function get currentX() : int"
+      },
+      {
+        "line": 376,
+        "source": "public function get currentY() : int"
+      },
+      {
+        "line": 381,
+        "source": "public function set currentX(param1:int) : void"
+      },
+      {
+        "line": 386,
+        "source": "public function set currentY(param1:int) : void"
+      },
+      {
+        "line": 391,
+        "source": "public function get interactiveController() : InteractiveController"
+      },
+      {
+        "line": 396,
+        "source": "public function get map() : Map"
+      },
+      {
+        "line": 401,
+        "source": "public function get bombNum() : int"
+      },
+      {
+        "line": 406,
+        "source": "public function set bombNum(param1:int) : void"
+      },
+      {
+        "line": 411,
+        "source": "public function set baseCarProp(param1:AbstractItem) : void"
+      },
+      {
+        "line": 417,
+        "source": "public function set bombPow(param1:int) : void"
+      },
+      {
+        "line": 423,
+        "source": "public function get bombPow() : int"
+      },
+      {
+        "line": 428,
+        "source": "public function set allowBomb(param1:int) : void"
+      },
+      {
+        "line": 434,
+        "source": "public function get allowBomb() : int"
+      },
+      {
+        "line": 439,
+        "source": "public function set speed(param1:Number) : void"
+      },
+      {
+        "line": 449,
+        "source": "public function get speed() : Number"
+      },
+      {
+        "line": 454,
+        "source": "public function set moveFunc(param1:Function) : void"
+      },
+      {
+        "line": 459,
+        "source": "public function get moveFunc() : Function"
+      },
+      {
+        "line": 464,
+        "source": "public function get positionChangeEngine() : CommandChain"
+      },
+      {
+        "line": 469,
+        "source": "public function set positionChangeEngine(param1:CommandChain) : void"
+      },
+      {
+        "line": 474,
+        "source": "public function get clothId() : int"
+      },
+      {
+        "line": 479,
+        "source": "public function set clothId(param1:int) : void"
+      },
+      {
+        "line": 485,
+        "source": "public function get areas() : Array"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\robot\\TryToKillCommandChain.as",
+    "sha256": "7f1fb3a3e7298c91b63619113bd9b9df2743588d9b5f50153836b6c8bec933b1",
+    "functions": [
+      {
+        "line": 18,
+        "source": "public function TryToKillCommandChain(param1:AbstractRobot)"
+      },
+      {
+        "line": 24,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 29,
+        "source": "override public function execute() : void"
+      },
+      {
+        "line": 72,
+        "source": "private function vehicleComplete() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\gameengine\\HitMove.as",
+    "sha256": "eb167e1fbe0f51ec1be03e031c43dc6b09fadb689d7de3670218cb813924e0e2",
+    "functions": [
+      {
+        "line": 36,
+        "source": "public function HitMove(param1:AbstractObject, param2:Game)"
+      },
+      {
+        "line": 44,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 53,
+        "source": "private function init() : void"
+      },
+      {
+        "line": 63,
+        "source": "public function leftAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 184,
+        "source": "public function rightAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 309,
+        "source": "public function upAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 434,
+        "source": "public function downAfoul(param1:Number, param2:Class = null) : void"
+      },
+      {
+        "line": 559,
+        "source": "public function cutTest(param1:AbstractObject, param2:AbstractObject, param3:Point) : Boolean"
+      },
+      {
+        "line": 572,
+        "source": "public function fixedHitTest(param1:int, param2:int, param3:Class) : Boolean"
+      },
+      {
+        "line": 665,
+        "source": "public function set hitHandleArr(param1:Function) : void"
+      },
+      {
+        "line": 670,
+        "source": "public function deleHitHandleArr() : void"
+      },
+      {
+        "line": 675,
+        "source": "private function get transSpeed() : Point"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\maps\\Grid.as",
+    "sha256": "2b5a39134753bf20a2fa2556c6647b9f98e49c7e49f77d16e624136afb0acb17",
+    "functions": [
+      {
+        "line": 72,
+        "source": "public function Grid(param1:Game)"
+      },
+      {
+        "line": 79,
+        "source": "private function init() : void"
+      },
+      {
+        "line": 91,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 115,
+        "source": "public function get tramcar() : Tractor"
+      },
+      {
+        "line": 120,
+        "source": "public function set tramcar(param1:Tractor) : void"
+      },
+      {
+        "line": 125,
+        "source": "public function deleTramcar() : void"
+      },
+      {
+        "line": 130,
+        "source": "public function get transmittal() : WaterSlide"
+      },
+      {
+        "line": 135,
+        "source": "public function set transmittal(param1:WaterSlide) : void"
+      },
+      {
+        "line": 140,
+        "source": "public function get isBlock() : Boolean"
+      },
+      {
+        "line": 154,
+        "source": "public function get isEmpty() : Boolean"
+      },
+      {
+        "line": 164,
+        "source": "public function get item() : AbstractObject"
+      },
+      {
+        "line": 186,
+        "source": "public function deleItem() : void"
+      },
+      {
+        "line": 192,
+        "source": "public function paint(param1:AbstractPlayer) : void"
+      },
+      {
+        "line": 211,
+        "source": "public function clearPaint() : void"
+      },
+      {
+        "line": 221,
+        "source": "public function deleProp() : void"
+      },
+      {
+        "line": 229,
+        "source": "public function get allNull() : Number"
+      },
+      {
+        "line": 234,
+        "source": "public function set allNull(param1:Number) : void"
+      },
+      {
+        "line": 239,
+        "source": "public function get other() : Number"
+      },
+      {
+        "line": 244,
+        "source": "public function set other(param1:Number) : void"
+      },
+      {
+        "line": 249,
+        "source": "public function get midBox() : int"
+      },
+      {
+        "line": 254,
+        "source": "public function set midBox(param1:int) : void"
+      },
+      {
+        "line": 259,
+        "source": "public function setRobot(param1:AbstractRobot) : void"
+      },
+      {
+        "line": 264,
+        "source": "public function getRobot() : Array"
+      },
+      {
+        "line": 269,
+        "source": "public function deleRobot(param1:AbstractRobot) : void"
+      },
+      {
+        "line": 274,
+        "source": "public function addBomb(param1:Bomb) : void"
+      },
+      {
+        "line": 279,
+        "source": "public function delBomb(param1:Bomb) : void"
+      },
+      {
+        "line": 284,
+        "source": "public function get bombArr() : Array"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\gameengine\\Game.as",
+    "sha256": "d71c7a75bad67a7b8cb291fa07954a4a6bf0bdf051725dd9034a9ebf9efe6ac8",
+    "functions": [
+      {
+        "line": 130,
+        "source": "public function Game(param1:UIManager)"
+      },
+      {
+        "line": 137,
+        "source": "private function init() : void"
+      },
+      {
+        "line": 175,
+        "source": "private function initEvent() : void"
+      },
+      {
+        "line": 183,
+        "source": "private function onKeyDownHandler(param1:KeyboardEvent) : void"
+      },
+      {
+        "line": 191,
+        "source": "private function gameActive(param1:Event) : void"
+      },
+      {
+        "line": 196,
+        "source": "private function gameDeactivate(param1:Event) : void"
+      },
+      {
+        "line": 219,
+        "source": "private function inGameDeactived() : void"
+      },
+      {
+        "line": 224,
+        "source": "private function notInGameDeactived() : void"
+      },
+      {
+        "line": 239,
+        "source": "private function destroyGameInterface(param1:Event) : void"
+      },
+      {
+        "line": 248,
+        "source": "private function displayInit() : void"
+      },
+      {
+        "line": 255,
+        "source": "private function displayReInit() : void"
+      },
+      {
+        "line": 294,
+        "source": "private function dataInit() : void"
+      },
+      {
+        "line": 309,
+        "source": "private function dataReInit() : void"
+      },
+      {
+        "line": 346,
+        "source": "public function mapProgress(param1:Number) : void"
+      },
+      {
+        "line": 351,
+        "source": "private function mapInit() : void"
+      },
+      {
+        "line": 364,
+        "source": "private function robotInit() : void"
+      },
+      {
+        "line": 419,
+        "source": "private function getRobotPositions(param1:String) : Array"
+      },
+      {
+        "line": 448,
+        "source": "private function robotReInit() : void"
+      },
+      {
+        "line": 467,
+        "source": "private function restartRobots(param1:Array) : void"
+      },
+      {
+        "line": 476,
+        "source": "private function firstMapLoadOver() : void"
+      },
+      {
+        "line": 484,
+        "source": "private function reMapLoadOver() : void"
+      },
+      {
+        "line": 494,
+        "source": "public function gameStartHandler() : void"
+      },
+      {
+        "line": 517,
+        "source": "public function gameResume(param1:Event = null) : void"
+      },
+      {
+        "line": 531,
+        "source": "private function speedModeGameStart() : void"
+      },
+      {
+        "line": 538,
+        "source": "private function normalGameStart() : void"
+      },
+      {
+        "line": 544,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 561,
+        "source": "public function mapLoadComplete() : void"
+      },
+      {
+        "line": 566,
+        "source": "public function setKeys() : void"
+      },
+      {
+        "line": 600,
+        "source": "public function doGameResume() : void"
+      },
+      {
+        "line": 628,
+        "source": "private function gameResumeNotIngame(param1:Event = null) : void"
+      },
+      {
+        "line": 640,
+        "source": "public function gamePause(param1:Event = null) : void"
+      },
+      {
+        "line": 645,
+        "source": "public function doGamePause() : void"
+      },
+      {
+        "line": 671,
+        "source": "public function stopPause() : void"
+      },
+      {
+        "line": 681,
+        "source": "private function afterStopPause() : void"
+      },
+      {
+        "line": 695,
+        "source": "private function mainMenu(param1:Event = null) : void"
+      },
+      {
+        "line": 704,
+        "source": "public function gameReInit() : void"
+      },
+      {
+        "line": 715,
+        "source": "public function clearPlayerScore() : void"
+      },
+      {
+        "line": 724,
+        "source": "public function overInit() : void"
+      },
+      {
+        "line": 745,
+        "source": "private function delEvent() : void"
+      },
+      {
+        "line": 758,
+        "source": "public function overDisplay() : void"
+      },
+      {
+        "line": 783,
+        "source": "public function judgeGameWin(param1:AbstractPlayer) : int"
+      },
+      {
+        "line": 796,
+        "source": "private function countTime() : void"
+      },
+      {
+        "line": 820,
+        "source": "public function addhitArr(param1:AbstractObject) : void"
+      },
+      {
+        "line": 825,
+        "source": "public function deleRobot(param1:AbstractRobot) : void"
+      },
+      {
+        "line": 831,
+        "source": "public function getDisArr(param1:int) : Sprite"
+      },
+      {
+        "line": 836,
+        "source": "public function get interFace() : GameInterFace"
+      },
+      {
+        "line": 841,
+        "source": "public function get soundManager() : SoundManger"
+      },
+      {
+        "line": 846,
+        "source": "public function get gameDeactive() : Boolean"
+      },
+      {
+        "line": 851,
+        "source": "public function set gameDeactive(param1:Boolean) : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\embedded-6787.xml",
+    "sha256": "6bd8fe14a186e49dbb77ea3412d93549bd212bd56e0265f632f3d9de6ea6cf22",
+    "locators": [
+      {
+        "line": 99,
+        "source": "<LandmineProp value=\"0.10\" />"
+      },
+      {
+        "line": 118,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 124,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 156,
+        "source": "<LandmineProp value=\"0\" />"
+      },
+      {
+        "line": 178,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 210,
+        "source": "<LandmineProp value=\"0.10\" />"
+      },
+      {
+        "line": 229,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 235,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 242,
+        "source": "<ArcadeMode totalTime=\"180\" personLife=\"3\" aiLife=\"1\""
+      },
+      {
+        "line": 269,
+        "source": "<LandmineProp value=\"0.01\" />"
+      },
+      {
+        "line": 288,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 294,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 298,
+        "source": "</ArcadeMode>"
+      },
+      {
+        "line": 314,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 328,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 343,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 360,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 375,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 390,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 404,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 417,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 430,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 446,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 460,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      },
+      {
+        "line": 474,
+        "source": "LandmineProp,ShotGunProp,BoxingProp,FlamerProp,HammerProp,LaserGunProp,TripleShootGunProp,"
+      }
+    ]
+  }
+]

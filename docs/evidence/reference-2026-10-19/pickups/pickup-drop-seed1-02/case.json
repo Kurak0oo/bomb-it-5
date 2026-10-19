@@ -1,0 +1,132 @@
+{
+  "name": "conditional-drop-seed-1",
+  "origin": "Original legal bomb/place/escape;seed1beforefirstframe;no runtime fixture;events/compact observe block destruction and possible random reveal.",
+  "actions": [
+    {
+      "command": "seed 1"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "kd right"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku right",
+      "capture": "bomb-cell"
+    },
+    {
+      "command": "kd space",
+      "state": "placed"
+    },
+    {
+      "command": "step 1"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "kd left"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku left"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "command": "step 45",
+      "capture": "before-drop-window"
+    },
+    {
+      "command": "events events 20000 zlong.bombit5.maps::Box zlong.bombit5.maps::MapMaster zlong.bombit5.items"
+    },
+    {
+      "observe_command": "trace-compact trace"
+    },
+    {
+      "command": "step 25",
+      "capture": "after-drop-window"
+    },
+    {
+      "observe_command": "trace-compact off"
+    },
+    {
+      "command": "events off"
+    }
+  ]
+}

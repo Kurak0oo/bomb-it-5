@@ -1,0 +1,18 @@
+{
+  "schema": "bombit5-protection-extract-v1",
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\protection-pause-02",
+  "raw_manifest_sha256": "78d68ac2cf64a63fdc69b8bba2006d8f7c4cd265b450970cb6434144cf057891",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "case_sha256": "ec620a676254cec86502b21b9dc3237837aafe9d6edc00e2cf69d701d3ad0e34",
+  "checkpoints": 9,
+  "timeline_frames": {
+    "pause": 55
+  },
+  "limits": [
+    "Focus omissions remain in force; absent records are not zero state.",
+    "Per-frame timeline retains players 0/1 only; checkpoints retain all projected actors.",
+    "No pending timer/Tween queue or native display children were observed.",
+    "Frame counters and host wall time are different clocks."
+  ]
+}

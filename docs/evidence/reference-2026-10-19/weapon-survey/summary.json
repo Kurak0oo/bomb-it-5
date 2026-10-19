@@ -1,0 +1,194 @@
+[
+  {
+    "case": "fireball-down-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 743,
+    "intervals": 20,
+    "errors": 0,
+    "events": 17707
+  },
+  {
+    "case": "fireball-left-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 743,
+    "intervals": 20,
+    "errors": 0,
+    "events": 17103
+  },
+  {
+    "case": "fireball-right-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 743,
+    "intervals": 20,
+    "errors": 0,
+    "events": 17529
+  },
+  {
+    "case": "fireball-up-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 743,
+    "intervals": 20,
+    "errors": 0,
+    "events": 17103
+  },
+  {
+    "case": "flamer-down-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 746,
+    "intervals": 23,
+    "errors": 0,
+    "events": 19929
+  },
+  {
+    "case": "flamer-left-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 746,
+    "intervals": 23,
+    "errors": 0,
+    "events": 21297
+  },
+  {
+    "case": "flamer-right-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 746,
+    "intervals": 23,
+    "errors": 0,
+    "events": 20019
+  },
+  {
+    "case": "flamer-up-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 746,
+    "intervals": 23,
+    "errors": 0,
+    "events": 21297
+  },
+  {
+    "case": "hammer-down-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 747,
+    "intervals": 24,
+    "errors": 0,
+    "events": 17025
+  },
+  {
+    "case": "hammer-left-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 747,
+    "intervals": 24,
+    "errors": 0,
+    "events": 16899
+  },
+  {
+    "case": "hammer-right-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 747,
+    "intervals": 24,
+    "errors": 0,
+    "events": 16969
+  },
+  {
+    "case": "hammer-up-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 747,
+    "intervals": 24,
+    "errors": 0,
+    "events": 16901
+  },
+  {
+    "case": "landmine-down-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 724,
+    "intervals": 1,
+    "errors": 0,
+    "events": 17641
+  },
+  {
+    "case": "landmine-left-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 724,
+    "intervals": 1,
+    "errors": 0,
+    "events": 17515
+  },
+  {
+    "case": "landmine-right-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 724,
+    "intervals": 1,
+    "errors": 0,
+    "events": 17585
+  },
+  {
+    "case": "landmine-up-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 724,
+    "intervals": 1,
+    "errors": 0,
+    "events": 17515
+  },
+  {
+    "case": "laser-down-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 745,
+    "intervals": 22,
+    "errors": 0,
+    "events": 17303
+  },
+  {
+    "case": "laser-left-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 745,
+    "intervals": 22,
+    "errors": 0,
+    "events": 17141
+  },
+  {
+    "case": "laser-right-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 745,
+    "intervals": 22,
+    "errors": 0,
+    "events": 17239
+  },
+  {
+    "case": "laser-up-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 745,
+    "intervals": 22,
+    "errors": 0,
+    "events": 17141
+  },
+  {
+    "case": "triple-down-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 759,
+    "intervals": 36,
+    "errors": 0,
+    "events": 20248
+  },
+  {
+    "case": "triple-left-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 759,
+    "intervals": 36,
+    "errors": 0,
+    "events": 17207
+  },
+  {
+    "case": "triple-right-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 759,
+    "intervals": 36,
+    "errors": 0,
+    "events": 19647
+  },
+  {
+    "case": "triple-up-original-action",
+    "input_counter": 723,
+    "first_uninterrupted": 760,
+    "intervals": 37,
+    "errors": 0,
+    "events": 17193
+  }
+]

@@ -1,0 +1,170 @@
+{
+  "name": "original-laser-empty-portal-ray",
+  "origin": "Seed42 Normal ArcadeCinemaStage3; human original laser collection at empty13,11, facing original defaultDown. Occupied variants use AI1 guarded empty-floor setup and original move-step calls into source portal; legal human Space laser action. No portal/health/outcome/score writes.",
+  "actions": [
+    {
+      "command": "seed 42"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "x": 13,
+        "y": 11
+      }
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "laser"
+      }
+    },
+    {
+      "command": "step 1",
+      "capture": "laser-equipped"
+    },
+    {
+      "capture": "pre-shot"
+    },
+    {
+      "observe_command": "events laser-events 20000 zlong.bombit5 ShootLaserCommand LaserEndCommand flash.display::DisplayObjectContainer/removeChild"
+    },
+    {
+      "observe_command": "trace-focus laser-trace"
+    },
+    {
+      "command": "kd space",
+      "capture": "laser-input"
+    },
+    {
+      "command": "step 1",
+      "capture": "charge-first"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 10",
+      "capture": "beam-creation"
+    },
+    {
+      "command": "step 1",
+      "capture": "beam-end-first"
+    },
+    {
+      "command": "step 2",
+      "capture": "beam-visible"
+    },
+    {
+      "command": "step 14",
+      "capture": "beam-cleaned"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 3",
+      "capture": "fresh-movement"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+--- a/core/src/avm2/reference_focus.rs
++++ b/core/src/avm2/reference_focus.rs
+@@ -5,6 +5,43 @@
+ use crate::display_object::TDisplayObject;
+ use serde_json::{json, Map, Value as Json};
+ use std::collections::{BTreeMap, HashSet};
++
++// Research-only native geometry reads. No AVM2 property access or transform-cache getters.
++fn reference_geometry(display: crate::display_object::DisplayObject<'_>) -> Json {
++    use crate::display_object::{BoundsMode, TDisplayObjectContainer};
++    let mut todo=vec![(display,0usize)];
++    let mut visited=0;
++    while let Some((node,depth))=todo.pop() {
++        visited+=1;
++        if visited>512 || depth>64 {return json!({"truncated":true,"reason":"display subtree limit"});}
++        if let Some(container)=node.as_container() {
++            for child in container.iter_render_list() {
++                if todo.len()+visited>=512 {return json!({"truncated":true,"reason":"display subtree limit"});}
++                todo.push((child,depth+1));
++            }
++        }
++    }
++    let mut parent=display.parent(); let mut ancestors=0;
++    while let Some(node)=parent {
++        ancestors+=1;
++        if ancestors>64 {return json!({"truncated":true,"reason":"display ancestor limit"});}
++        parent=node.parent();
++    }
++    let matrix=|m:ruffle_render::matrix::Matrix|json!({"a":m.a,"b":m.b,"c":m.c,"d":m.d,
++        "tx_pixels":m.tx.to_pixels(),"ty_pixels":m.ty.to_pixels()});
++    let bounds=|b:swf::Rectangle<swf::Twips>|json!({"valid":b.is_valid(),
++        "x_min":b.x_min.to_pixels(),"x_max":b.x_max.to_pixels(),
++        "y_min":b.y_min.to_pixels(),"y_max":b.y_max.to_pixels(),
++        "width":b.width().to_pixels(),"height":b.height().to_pixels()});
++    json!({"truncated":false,"units":"pixels","render_subtree_nodes":visited,
++        "name":display.name().map(|n|n.to_utf8_lossy().into_owned()),
++        "script_width":display.width(),"script_height":display.height(),
++        "matrix":matrix(display.base().matrix()),
++        "local_to_stage_matrix":matrix(display.local_to_global_matrix()),
++        "untransformed_script_bounds":bounds(display.bounds(BoundsMode::Script)),
++        "parent_script_bounds":bounds(display.local_bounds(BoundsMode::Script)),
++        "stage_script_bounds":bounds(display.world_bounds(BoundsMode::Script))})
++}
+ 
+ const ARRAY_LIMIT: usize = 512;
+ const ARRAY_DEPTH: usize = 6;
+@@ -64,6 +101,7 @@
+                     }
+                 } else if let Some(display)=object.as_display_object() {
+                     out["display"]=json!({"x":display.x().to_pixels(),"y":display.y().to_pixels()});
++                    out["display"]["geometry"]=reference_geometry(display);
+                     if let Some(movie)=display.as_movie_clip() {out["display"]["current_frame"]=json!(movie.current_frame());}
+                 } else if class=="flash.geom::Point" {
+                     out["point"]=json!({"x":slot(object,"x").map(|v|self.value(v,depth+1)),"y":slot(object,"y").map(|v|self.value(v,depth+1))});

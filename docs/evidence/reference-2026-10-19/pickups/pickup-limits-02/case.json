@@ -1,0 +1,410 @@
+{
+  "name": "basic-pickup-limits",
+  "origin": "Unseeded explicit original allowlisted pickup constructors at live human cell;ordinary GetItemCommand collection.No direct stat/score writes.Repeated pickups measure original caps and consumption;final legal own bomb measures live actor death despite extra retry lives.",
+  "actions": [
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "step 100",
+      "capture": "baseline"
+    },
+    {
+      "command": "events events 20000 zlong.bombit5.items zlong.bombit5.commands.robot::GetItemCommand zlong.bombit5.gameengine::AbstractPlayer"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-01-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-01-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-02-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-02-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-03-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-03-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-04-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-04-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-05-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-05-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-06-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-06-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-07-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-07-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-08-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-08-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-09-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-09-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "capacity"
+      },
+      "state": "capacity-10-created"
+    },
+    {
+      "command": "step 1",
+      "state": "capacity-10-collected",
+      "capture": "capacity-finished"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "power"
+      },
+      "state": "power-01-created"
+    },
+    {
+      "command": "step 1",
+      "state": "power-01-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "power"
+      },
+      "state": "power-02-created"
+    },
+    {
+      "command": "step 1",
+      "state": "power-02-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "power"
+      },
+      "state": "power-03-created"
+    },
+    {
+      "command": "step 1",
+      "state": "power-03-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "power"
+      },
+      "state": "power-04-created"
+    },
+    {
+      "command": "step 1",
+      "state": "power-04-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "power"
+      },
+      "state": "power-05-created"
+    },
+    {
+      "command": "step 1",
+      "state": "power-05-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "power"
+      },
+      "state": "power-06-created"
+    },
+    {
+      "command": "step 1",
+      "state": "power-06-collected",
+      "capture": "power-finished"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-01-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-01-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-02-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-02-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-03-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-03-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-04-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-04-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-05-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-05-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-06-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-06-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-07-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-07-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-08-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-08-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-09-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-09-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "speed"
+      },
+      "state": "speed-10-created"
+    },
+    {
+      "command": "step 1",
+      "state": "speed-10-collected",
+      "capture": "speed-finished"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "life"
+      },
+      "state": "life-01-created"
+    },
+    {
+      "command": "step 1",
+      "state": "life-01-collected"
+    },
+    {
+      "fixture": {
+        "op": "pickup",
+        "kind": "life"
+      },
+      "state": "life-02-created"
+    },
+    {
+      "command": "step 1",
+      "state": "life-02-collected",
+      "capture": "life-finished"
+    },
+    {
+      "command": "events off"
+    },
+    {
+      "capture": "final"
+    },
+    {
+      "command": "kd space"
+    },
+    {
+      "command": "step 1",
+      "state": "power-five-bomb"
+    },
+    {
+      "command": "ku space"
+    },
+    {
+      "command": "step 73",
+      "capture": "life-is-not-hitpoints"
+    }
+  ]
+}

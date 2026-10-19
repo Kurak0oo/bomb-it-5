@@ -1,0 +1,166 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "laser-late-chain",
+  "case_sha256": "c4dc1969451e55d18f4ea892978fa2c106f6b6fe7f9cddcc4b2904acb2081ffa",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "ebd84b9788ed4700a05dc64f5a1cd6c1e50eac98cf0189bc1e225185f0b29284"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "676b5851c9ddd99f5b973b9198c799395cee2ecfb18c10d373987306cffff67c"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "94510e74a6f607bc143bcc4e02d8d0ae5f81494ea2da4d4f9980b2b26e2ffca0"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "3841e8f7b0a67f45e65fb766821b1ed08b75c3c1c0a184e513576be39c948732"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "5e2ef1d252331a8788fbe9f17e88745d2ba07bebeb4f6615d8fec33a74307f7c"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "71309726d0c0f97d385889a03050051f2c55e26c0c118cf33b7d0d0a70c8d651"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 821,
+      "sha256": "f59ce80b61fbbe4b1f483cba25b71ad669d4fb002840fb0826f5664428e69abf"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 822,
+      "sha256": "1f97679b9307b902554d3af26959e035fdb59a989f5527e8eded9eb34abb9acc"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 823,
+      "sha256": "ae4d6394c16d266df34c8a0705bc75426d92db617cc7835ccbeb86945d226066"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 823,
+      "sha256": "729cc98c706375451c5c68a0d5485849e01f8fc2e7e171a21c294e11880fe3f9"
+    },
+    {
+      "name": "fixture-0010",
+      "frame": 883,
+      "sha256": "f8e8aadedae0df7d53ab57723858adfac8e322837a48e1f22820a3837ebe75e3"
+    },
+    {
+      "name": "fixture-0011",
+      "frame": 883,
+      "sha256": "ca60c4e347e60d14df16cfd4a231884a8c6003162fc934368606570920b8dda5"
+    },
+    {
+      "name": "fixture-0012",
+      "frame": 883,
+      "sha256": "36fb00c36d926e137f034dd1d5ba14e134051f7e901cd3b33ff4afcfe9c73e1d"
+    },
+    {
+      "name": "fixture-0013",
+      "frame": 883,
+      "sha256": "a5892898cae7abce88a63979964c88999a70cebb4ced4aaea3477622691d0cff"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-6b_q2yls\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 916,
+  "captures": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "e1163b7542384987b0c26b805bad38d4144000055ec21238e4536c2861f28d2e",
+      "bytes": 543398
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "1c8378bd6881087a4ed7364f861fc3e59392d0521a2ecc423908ce43e2aa91f9",
+      "bytes": 544611
+    },
+    {
+      "name": "before-laser",
+      "frame": 895,
+      "sha256": "701cabb854d26771d9fb0fbc34d42db8dbdfca29df0f1f4ce8997bd945ac0d94",
+      "bytes": 546878
+    },
+    {
+      "name": "after-laser-chain",
+      "frame": 896,
+      "sha256": "b49841d923b7410ce44021d873ed617cc06352e63104692a53c23dbd50ea0a6b",
+      "bytes": 546951
+    },
+    {
+      "name": "late-chain-cleaned",
+      "frame": 916,
+      "sha256": "35e7e2116771317f9819518d05d958b46cd048dfea987575d3a9eb3de6351e0f",
+      "bytes": 546492
+    }
+  ],
+  "states": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "d71e4cbb7c5b0b23090a626019ef10cb34fcf06d24ba280d4d63be28a1f4605a",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "4ae390d6cd52ce295baf023dab160b85b823bfe102340d37dc7876e018cbe8dc",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "before-laser",
+      "frame": 895,
+      "sha256": "4aea0226fa080b85d286accb3b6c6e6a683a1c0a874a481e1112e29503cd5c08",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-laser-chain",
+      "frame": 896,
+      "sha256": "ead1ff3f46a74d4dcddcb3e80f9d63b5178405bd97fc459e70e710ae9b826e5f",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "late-chain-cleaned",
+      "frame": 916,
+      "sha256": "6f5c0d2c32cc9f25d465e088c143c7baa502f4c76f231f79747c5b28c362b4f5",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "801dcfb5b7bcb0d65066afffe5590d5c33f3a1b5912a0c0c21661156cd86ca3f",
+  "stderr_sha256": "14648a4864cf8abc74b956f4b9ade191a6c58a1fcbdc692f5cc9f7bb1c80d788"
+}

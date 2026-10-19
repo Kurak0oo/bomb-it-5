@@ -1,0 +1,25 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\movement-ordinary-overlap-42-01",
+  "case_sha256": "22ecf614cfd1ce3f9932f5f1e5521e01853c847ec4d278c959fe7bc433778fd0",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "trace_frames": 78,
+  "events": {
+    "events": 13624,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "overlap-after-spawn-protection.png",
+      "sha256": "722638473d02344525b7934f625277876dcc5b2d156837e83cad3d314b68d9bd",
+      "bytes": 547743
+    }
+  ],
+  "limits": [
+    "Selected native/raw source observations; no complete Flash equivalence claim.",
+    "Fixtures invoke original methods and do not implement new gameplay.",
+    "Position/state and original callback timing must be interpreted separately."
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "checks": [
+    {
+      "check": "chain-human-first target eligible before",
+      "passed": true
+    },
+    {
+      "check": "chain-human-first original victim died/unregistered",
+      "passed": true
+    },
+    {
+      "check": "chain-human-first AI bomb ownership score preserved",
+      "passed": true
+    },
+    {
+      "check": "chain-human-first both bombs blasted with first cleanup callback",
+      "passed": true
+    },
+    {
+      "check": "chain-human-first owners capacity released",
+      "passed": true
+    },
+    {
+      "check": "chain-human-first occupancy removed later",
+      "passed": true
+    },
+    {
+      "check": "chain-human-first recursive child nested",
+      "passed": true
+    },
+    {
+      "check": "chain-ai-first target eligible before",
+      "passed": true
+    },
+    {
+      "check": "chain-ai-first original victim died/unregistered",
+      "passed": true
+    },
+    {
+      "check": "chain-ai-first AI bomb ownership score preserved",
+      "passed": true
+    },
+    {
+      "check": "chain-ai-first both bombs blasted with first cleanup callback",
+      "passed": true
+    },
+    {
+      "check": "chain-ai-first owners capacity released",
+      "passed": true
+    },
+    {
+      "check": "chain-ai-first occupancy removed later",
+      "passed": true
+    },
+    {
+      "check": "chain-ai-first recursive child nested",
+      "passed": true
+    },
+    {
+      "check": "overlap-left-first overlap hazard initially true",
+      "passed": true
+    },
+    {
+      "check": "overlap-left-first older cleanup clears active younger hazard",
+      "passed": true
+    },
+    {
+      "check": "overlap-left-first eligible human survived actual shared entry",
+      "passed": true
+    },
+    {
+      "check": "overlap-left-first eligible human survives later stepping",
+      "passed": true
+    },
+    {
+      "check": "overlap-right-first overlap hazard initially true",
+      "passed": true
+    },
+    {
+      "check": "overlap-right-first older cleanup clears active younger hazard",
+      "passed": true
+    },
+    {
+      "check": "overlap-right-first eligible human survived actual shared entry",
+      "passed": true
+    },
+    {
+      "check": "overlap-right-first eligible human survives later stepping",
+      "passed": true
+    },
+    {
+      "check": "late laser bomb no same-frame ended callback",
+      "passed": true
+    },
+    {
+      "check": "cleanup precedes laser and nested bomb",
+      "passed": true
+    },
+    {
+      "check": "portal replaces80with45 new object",
+      "passed": true
+    },
+    {
+      "check": "portal finish no commands",
+      "passed": true
+    },
+    {
+      "check": "bounded event off/on105frames agree",
+      "passed": true
+    }
+  ],
+  "passed": 27,
+  "total": 27
+}

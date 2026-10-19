@@ -1,0 +1,768 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "normal-human-ai-pickup-eligibility",
+  "case_sha256": "045aab68aa3d3ef145bb066baa1a4895f7a0890d124fd4faabcb612ed8f90f01",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "bb4009575006f65246bb6e6396773d742ff5eb4a37c12357adc42457e2173a43"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "3ab44d579b07300c0c63c47b2013067ec1a135ded03a88e5cb4bc996f4cb109f"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "5e008403b5f3112e536e9387d772c27cd37749b1921f35ffd20585625cf84e69"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "fedff1c116754f4eeaa3311d2bbeca3f718add5f937cdd55754c23ed76ef3ae4"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "c609bebc032216fe1fd274afb89edccbe5c7dc66f254b2868bcc12ad8a43847a"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 722,
+      "sha256": "0855c9df30bb534cf0fe946a62a30344872be864b8c562c4f8091e8ea4c8bbeb"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 723,
+      "sha256": "d8ed85cb790502f130723ae080cb67cd61c91db12c43efea2c3fb05eb5d34340"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 723,
+      "sha256": "198bca0a336385e5f16a709cdaf7a5232be168714778662f34803e8f1fb244a4"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 724,
+      "sha256": "f3eda4bc32301ffe4c314e9f1b1bcbcab206e80572d057e9fed93ba647c12503"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 725,
+      "sha256": "66b647ad0179737962b2896a40ee631d91cb035d8ba95da0e3ba3f2a23260e90"
+    },
+    {
+      "name": "fixture-0010",
+      "frame": 725,
+      "sha256": "f41b4e208c09c00eb02a38fecb92b3f16d504c12f057e9828f094ebbe69b9941"
+    },
+    {
+      "name": "fixture-0011",
+      "frame": 726,
+      "sha256": "d2eecf3ec0570321cfb1eae5b433e8941cd7646a80d3a7880c79a413651ddf2d"
+    },
+    {
+      "name": "fixture-0012",
+      "frame": 727,
+      "sha256": "fd183ce6f4e3e4c4031a63d4ea1b4ae7c9db1a9d839df20ff695c924f0ba8bd8"
+    },
+    {
+      "name": "fixture-0013",
+      "frame": 727,
+      "sha256": "f2ff18e3f215e1d023f0672abbbb6cdec41588753d132663a87c0c41564f9cac"
+    },
+    {
+      "name": "fixture-0014",
+      "frame": 728,
+      "sha256": "ced28248aa81e752bd28c75c412bc5c898efaff2b3c181fc71262d8dbfc4aa84"
+    },
+    {
+      "name": "fixture-0015",
+      "frame": 729,
+      "sha256": "4a64018d44fa0ad01749734d58bffd5ea8094042bb70e9f9b03259e48117f033"
+    },
+    {
+      "name": "fixture-0016",
+      "frame": 729,
+      "sha256": "c52628f9e5b94438187d7475f1475db3fa13787db08bbb41552f0c2fc627d8f6"
+    },
+    {
+      "name": "fixture-0017",
+      "frame": 730,
+      "sha256": "34a736f77e9e964bdb5584e852a7468b94088d6823b53be4b1b09fc6613d6014"
+    },
+    {
+      "name": "fixture-0018",
+      "frame": 731,
+      "sha256": "bf6c118864f05bccb107a093bab2e42ea58e0a5e7f54fa530edbae794a3b667c"
+    },
+    {
+      "name": "fixture-0019",
+      "frame": 731,
+      "sha256": "c9caa699208dcfed6ad21afbd39a1215519e9931782301659325ab0fe2560d56"
+    },
+    {
+      "name": "fixture-0020",
+      "frame": 732,
+      "sha256": "f2adfb966fc152a71cfa157ea06cd6406414124e0c69965ec61752ab680401e3"
+    },
+    {
+      "name": "fixture-0021",
+      "frame": 733,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0022",
+      "frame": 733,
+      "sha256": "5931afee9716c0e3b768b8623e8388b129d25a350917c71e9c29c768dfeba0f9"
+    },
+    {
+      "name": "fixture-0023",
+      "frame": 734,
+      "sha256": "83394f9456c48f8c13efb3fc72c1f2df49656309f96a6bd543ac497ce26cb676"
+    },
+    {
+      "name": "fixture-0024",
+      "frame": 735,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0025",
+      "frame": 735,
+      "sha256": "842859c3de12e762bc67e5a466e21547dabcb274bcc308702b7358465604215f"
+    },
+    {
+      "name": "fixture-0026",
+      "frame": 736,
+      "sha256": "b845d3bf865eecb5f9dc27afb349560e154661ca662125422839636b0792fec6"
+    },
+    {
+      "name": "fixture-0027",
+      "frame": 737,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0028",
+      "frame": 737,
+      "sha256": "82101da02002ce2fd6bfdb93aaa904c8a334b3a4517a676bb1d858f08b8e2d98"
+    },
+    {
+      "name": "fixture-0029",
+      "frame": 738,
+      "sha256": "4bf9fcd13d27c3c03cc21ee94209baea9a6503f92460d42884b4f34e5c3f915d"
+    },
+    {
+      "name": "fixture-0030",
+      "frame": 739,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0031",
+      "frame": 739,
+      "sha256": "4b7fb82b8de400c8ab03fc7dd6e9c2d1218d2d303c3ca84062b19d4f602c218e"
+    },
+    {
+      "name": "fixture-0032",
+      "frame": 740,
+      "sha256": "e7a1b6d1709fa08a06d711bf6a02b642155a6cb13f2339e80e6a31ddaf0c3909"
+    },
+    {
+      "name": "fixture-0033",
+      "frame": 741,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0034",
+      "frame": 741,
+      "sha256": "c8c608ec529bc7f7583c3e4c93a8f891a5f171485ae69158b0e5877b1c11323a"
+    },
+    {
+      "name": "fixture-0035",
+      "frame": 742,
+      "sha256": "4f3153599c07af37d58c33a3a5a1143c607bc56399e2cac5476293d5646fce84"
+    },
+    {
+      "name": "fixture-0036",
+      "frame": 743,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0037",
+      "frame": 743,
+      "sha256": "c754dd47cbb9c61fe9dac77ec94a9047659ba1c0e5a443ac1b867c46be43376d"
+    },
+    {
+      "name": "fixture-0038",
+      "frame": 744,
+      "sha256": "e05af48f91bced425e9e1a5977087c567a891adcc6a96dd13e12ad9266bb1e2f"
+    },
+    {
+      "name": "fixture-0039",
+      "frame": 745,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0040",
+      "frame": 745,
+      "sha256": "82f5278fde44e27d30402694df21d95d2e950f6b6d0f632b028eee5e608a9c61"
+    },
+    {
+      "name": "fixture-0041",
+      "frame": 746,
+      "sha256": "0672546a66f5c834a6c1cc438e23101554f07647e31c3d919ce90411769c60db"
+    },
+    {
+      "name": "fixture-0042",
+      "frame": 747,
+      "sha256": "5f58c040507c6bca02f069671063674d02b39b9f1bc79eb681de3b817930d318"
+    },
+    {
+      "name": "fixture-0043",
+      "frame": 747,
+      "sha256": "d522c2aaaabd4c8e57847c1a2da9bd9398b1afa10ea9c1d5752630984abd08d6"
+    },
+    {
+      "name": "fixture-0044",
+      "frame": 748,
+      "sha256": "78ae3e85aa42d5e80b1be3b22b7edcf38da5097f81504cb63fd23ed222395a63"
+    },
+    {
+      "name": "fixture-0045",
+      "frame": 749,
+      "sha256": "f8ca5aa022b804d29700c75021c639381eb47f85ef3dd5e4aacb12cdebc5e37d"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "eeebea71c77ac5d9fb2f10478d225b457f61d3459387862a46cde632d19812c7",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-tmgc5ph6\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 749,
+  "captures": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "57324702ce8d301e19180b8b548337ed3b4d1fd419f722b77df129832d36cd0c",
+      "bytes": 267041
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "df0fe1b87037a560704aac56e0b6768ff80d38cff74cf56817ed13ccc3ba5b84",
+      "bytes": 534165
+    },
+    {
+      "name": "ai-collector-floor",
+      "frame": 721,
+      "sha256": "17bbc779750ed68cc42eda5d1274b30dc987ab44699b2875b1cbf2dd37addde8",
+      "bytes": 534049
+    },
+    {
+      "name": "after-pickups",
+      "frame": 749,
+      "sha256": "4c7d751c0b80cb0df60b263e6c50616b32a6fdbbd8d1e4e2d47e065a325dce82",
+      "bytes": 538601
+    }
+  ],
+  "states": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "ebeebf81a9d178baf2f80ee7e32dc4d9191cc07ea77f3d281a1aee17fd691204",
+      "objects": 398,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "ai-collector-floor",
+      "frame": 721,
+      "sha256": "0bf14b010b8d66c03d8ddabb2d4aed7f17b11e1c8c6dabd95397b343150ae76f",
+      "objects": 398,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "before-pickups",
+      "frame": 721,
+      "sha256": "0bf14b010b8d66c03d8ddabb2d4aed7f17b11e1c8c6dabd95397b343150ae76f",
+      "objects": 398,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-landmine-created",
+      "frame": 721,
+      "sha256": "07856f932d7c0d5cc414184b08a36f6e9606c36422e414d763b643292762fd3a",
+      "objects": 398,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-landmine-collected",
+      "frame": 722,
+      "sha256": "d875c143e29889345bd2e05c897d842e4582deb27fae60e42f67c26c52c7a7df",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-landmine-created",
+      "frame": 722,
+      "sha256": "2556607106acd8ddce43ae8e66a627710e07ec98d2c5027d8f05ac31e8ad1100",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-landmine-collected",
+      "frame": 723,
+      "sha256": "4d6bc1a6f013b6d9793703023729a9f88715b89c46bb2e560d7073aa9fe10bda",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-hammer-created",
+      "frame": 723,
+      "sha256": "58cbd6da6193405dff88cc1ede27450263404ea7920d9bbecb7066d2e2b57eee",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-hammer-collected",
+      "frame": 724,
+      "sha256": "5fc0a7d99fbf062aa690ef091a51fef3f436f3e791184ea3e43598ba14274380",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-hammer-created",
+      "frame": 724,
+      "sha256": "cd4ccf27da44b94d568bba26732a9bd17c8806fc8aed61cb8846f947631abe47",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-hammer-collected",
+      "frame": 725,
+      "sha256": "98fdd16f6e4e98cd21faf8df3303997019e8b6d31f2aa690e83044ee35a46502",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-flamer-created",
+      "frame": 725,
+      "sha256": "3164f54d798a81c9d6e3bf1d99e9ed0bf7212913134c39b58af62fc95fd94cde",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-flamer-collected",
+      "frame": 726,
+      "sha256": "70f30cc87cc290bd7edba1cb343ad03e4bf6ec60cc99089aeda13b3b004fcbd4",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-flamer-created",
+      "frame": 726,
+      "sha256": "3646a98b6b9b6cd93a45544a39cf014b333a2a0ac4b78046b05971bfda0918c2",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-flamer-collected",
+      "frame": 727,
+      "sha256": "d1691b0d194c42789c161fb60ced55909ad1a4d3a7147d35d81959ecc8f542b8",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-laser-created",
+      "frame": 727,
+      "sha256": "18f31f6944aef9094dc3ab7a0ab3e5ccccf198575872c67a54fc1aa521848754",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-laser-collected",
+      "frame": 728,
+      "sha256": "fa5b6678fbeb1cd5d53364d8f80124787a30542c6774bcb3b0820f50358f5059",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-laser-created",
+      "frame": 728,
+      "sha256": "b69007e99397f5444f789c48a9269fd566c3b473a103c040722fdffcccdd4d2f",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-laser-collected",
+      "frame": 729,
+      "sha256": "ffda09643a489e702c2a4e2161a5aecdb3dd8041f85d90881ae3ae422e74bd7d",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-triple-created",
+      "frame": 729,
+      "sha256": "c71827b8e9def4f6edc779bb3e5096ac73dd58c6a7e1ccbe6f95622a36b5e0b0",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-triple-collected",
+      "frame": 730,
+      "sha256": "e97857b7c3a701cd5860f792f0a807b0a318ccdddf1748cd7b9cd7a9da0abe82",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-triple-created",
+      "frame": 730,
+      "sha256": "cb61a5e0fad79004d770726f1fe86942c6b10220e901ed608632083b09231be0",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-triple-collected",
+      "frame": 731,
+      "sha256": "d4bceb14ba647f3e40a34843182389794d8edd2e9ff0ce4dae4d8ecd94a53a7a",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-fireball-created",
+      "frame": 731,
+      "sha256": "d699ae2fa24b34e2a68a6746197e017f309db68c85a5bd710e889f51aa0fbc1c",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-fireball-collected",
+      "frame": 732,
+      "sha256": "cdf95f767358d58579291e4c31d77c9b75b0f1e85e4bd64f81ea50e823697e9d",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-fireball-created",
+      "frame": 732,
+      "sha256": "396b2d9dc8338cb39941b0838139b5963afb63e4d6f5cccb4272f2548934c364",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-fireball-collected",
+      "frame": 733,
+      "sha256": "f8734308779bec706daa21a72ccb7549f7d7a493e1fea1b320c66a8ab4102b0e",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-car-created",
+      "frame": 733,
+      "sha256": "103deaf4527e0c0ba1d77a3c39f70a3093c07a58da7c1270538b6d84ad460f99",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-car-collected",
+      "frame": 734,
+      "sha256": "b3b15b84d2b4c2532055dbe90050c9faa84e2e2f2d442d185940bdc760c912d2",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-car-created",
+      "frame": 734,
+      "sha256": "cb67ab8f86252cef10c7f76df4011e2b904e45509ded9686418f7471dbe1f41f",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-car-collected",
+      "frame": 735,
+      "sha256": "54f5e8b76a80c6f392965c467ab7eda2c30ec9ebac40871b41a0afc842576bc3",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-moto-created",
+      "frame": 735,
+      "sha256": "2829399d619fea5afc41adf9010625cba3d64b8f24bf6e60f0340c5c2b9fbd68",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-moto-collected",
+      "frame": 736,
+      "sha256": "a88b59d510ae34c7c3cb10a6bff2b0c90b18b39d1a2197d465a645ac388d83b6",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-moto-created",
+      "frame": 736,
+      "sha256": "3fdabe05e5b9d24d9e5459498f0ea2059c38584cad6772a46850fc8f50aa6dae",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-moto-collected",
+      "frame": 737,
+      "sha256": "866bf596d32c2fdb24e62f0cfabfe29a405a9ab1d21e5c822d55e11c794f65ca",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-capacity-created",
+      "frame": 737,
+      "sha256": "fd460fc9a0a4ccb4d597c7f6c1191a6480baf47370c9644096259b015a67c78b",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-capacity-collected",
+      "frame": 738,
+      "sha256": "2e1a7c8ca9f184228ba3304a60995c25352eb3bddd7a8ddbb7be53cb88e3b34f",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-capacity-created",
+      "frame": 738,
+      "sha256": "9df18b40469f900da91374a894e6ab7ce84c39547f668281e70d8102adb67c7b",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-capacity-collected",
+      "frame": 739,
+      "sha256": "d6b09d034ed1a675e037d13e1a84608699a6454184ee6555ea79f50ad802e7a6",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-power-created",
+      "frame": 739,
+      "sha256": "bfb5a651eec87d43f78f8a73129f6216ae20a0ecf8c18d2d1149a34c57a24fd2",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-power-collected",
+      "frame": 740,
+      "sha256": "419c5673d52ce4dc9612104046cc697b578e22245a152cd8cd090f0abcb48863",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-power-created",
+      "frame": 740,
+      "sha256": "a7167ac810dbc60b3f252aaef1ff694409479ed645279d4030b1650de0210617",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-power-collected",
+      "frame": 741,
+      "sha256": "f9cd4858106cf36c2147f128779a4717929ca799245d6e82524a1abedbae63b6",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-speed-created",
+      "frame": 741,
+      "sha256": "68db142e52b2ce8a3c483120a6bd2e866e8c8fb013b64b62956d6011222d3df5",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-speed-collected",
+      "frame": 742,
+      "sha256": "9d8320ca9b30674e9baa1452ec7e1e776847add83e1d4a9c73efa7be2545964b",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-speed-created",
+      "frame": 742,
+      "sha256": "ede13d66d0e20c15dc1c03e7e818a09aea3e1c48fec475b2c9c997979574df79",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-speed-collected",
+      "frame": 743,
+      "sha256": "c956228f7830fd779653f5f9d8198b6ac67d5625d0b8d7ed9431da76dda3fc33",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-life-created",
+      "frame": 743,
+      "sha256": "a3b3ea17bcfb38e58b37ed767d64678c02e04677ddacd5cc67e5404eca980937",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-life-collected",
+      "frame": 744,
+      "sha256": "e36b8e33fb70904790021be915f72e210d65e5e875645789343298a3e67c0a9f",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-life-created",
+      "frame": 744,
+      "sha256": "b6d55349f9b9f8dc9bb25e93d851eaadd56ebe7ff83e9a6a722ab65d169121db",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-life-collected",
+      "frame": 745,
+      "sha256": "bcaa6c2132b40ac7484209e782ec38a68c6639cff02805ab35c51e668e2b95df",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-shield-created",
+      "frame": 745,
+      "sha256": "4946848aa0695e0490b3bc0fc886362daee1fed82d06b0a98daa0eda071a33db",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-shield-collected",
+      "frame": 746,
+      "sha256": "b6868fb3a65b1343d5178438ab980b76dcddf094cb2f8635f722eb967c086a8b",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-shield-created",
+      "frame": 746,
+      "sha256": "c546757e718afa3a15b5090953657788d9060edf1ccd818d5809b16efa1ed391",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-shield-collected",
+      "frame": 747,
+      "sha256": "14cd26f661eac6b53ccbc1b21f2e5e905c2ae65c088b3b452ecfadf149222307",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-invincibility-created",
+      "frame": 747,
+      "sha256": "9337ac9028c98a211304497d32ba8bb7a95d1d146313d1ef6bced70a2c88734e",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-0-invincibility-collected",
+      "frame": 748,
+      "sha256": "b089288a37e8d07618ae7d09daf262e6391769e9f3be2c6fb49b6a414a046fb4",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-invincibility-created",
+      "frame": 748,
+      "sha256": "71572924e9115f9ae95d9edbcbd82caf37a460a69fdca7b127f55564d517fbb6",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "actor-1-invincibility-collected",
+      "frame": 749,
+      "sha256": "7255eea3fddb9d00160108069ab3db233251e7d2467ab85a4839c005c33204dd",
+      "objects": 404,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-pickups",
+      "frame": 749,
+      "sha256": "7255eea3fddb9d00160108069ab3db233251e7d2467ab85a4839c005c33204dd",
+      "objects": 404,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "2c0c393a0a601491492432393eae26b38f1336b6a95a582234cef8dc10596e7c",
+  "stderr_sha256": "cfa06757be0b0bb22f6aa24019e95bbce85b912b428267df9c60a42f32b5fa37"
+}

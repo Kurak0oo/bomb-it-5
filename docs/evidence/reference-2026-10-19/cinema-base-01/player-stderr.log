@@ -1,0 +1,1 @@
+adapter: AdapterInfo { name: "NVIDIA GeForce RTX 3080 Laptop GPU", vendor: 4318, device: 9436, device_type: DiscreteGpu, device_pci_bus_id: "0000:01:00.0", driver: "NVIDIA", driver_info: "555.85", backend: Vulkan, subgroup_min_size: 32, subgroup_max_size: 32, transient_saves_memory: Some(false), limit_bucket: None }

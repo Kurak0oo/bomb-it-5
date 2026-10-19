@@ -1,0 +1,165 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-normal-ai-weapon-fireball",
+  "case_sha256": "fc56af07eca23cfc8914d0720c67eb1950269c73f5ab05d8486309e35dae00a0",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "3cfc5b18b2a6f719b1c61a1125ae823b7910f63cc8042cd3b444ffb483c38f4a"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "467b7f8b510eb40f089a70c405e8ba2c9f2a00434564085fb67cff2067e1604b"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "031f779afabcb3355dee785b56a056547f060b66a0115b73fd274690dc4f2043"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "cddc7cedb41388625d3d027fd5014d320fe58eb248267e5b5fa0771a79f273a8"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "6e0c70312c9d848b4182df847bfc086283aaed1ba680dd3c219f3eb9adf7f1f6"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "ee138e5191d19efe483ab5d76af7c5fa918b6c14bd1e127aea72287759d36372"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 721,
+      "sha256": "a9710097692506a0d9af451cace5b8ea2c112c219db162c61c618bc57b9a3e5f"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 821,
+      "sha256": "7d5b6fbc5f4afa7ed98cca67dffc2dd5f078fcf45cce69b4f96ff23085438dd0"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 821,
+      "sha256": "b932ce629dec2340d18ac92847affa8b77d11cd7c6f6ebad05faf83738b43d3a"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 822,
+      "sha256": "b54737de66d98fa88656278f70c391548c68f615c49634c6b7caeab90ec9de1f"
+    },
+    {
+      "name": "fixture-0010",
+      "frame": 822,
+      "sha256": "dd8bd5de31ca170f46df694f1aef9b3cb3ba89e6f001bb5192ffc255ef8a40b9"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "ad5a666f20db340b3d21a29c000ba59d8d90f666e21ff5e24ce503fdf4b31ae9",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-vzp1fgkx\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 912,
+  "captures": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "57324702ce8d301e19180b8b548337ed3b4d1fd419f722b77df129832d36cd0c",
+      "bytes": 267041
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "df0fe1b87037a560704aac56e0b6768ff80d38cff74cf56817ed13ccc3ba5b84",
+      "bytes": 534165
+    },
+    {
+      "name": "before-weapon",
+      "frame": 821,
+      "sha256": "07ae8eeed30ade79c96785c2d906b429004dfafb0d3d21c7cdf634dec2f01012",
+      "bytes": 532132
+    },
+    {
+      "name": "armed-ai",
+      "frame": 822,
+      "sha256": "3c9acea8f2294644bb51c8a0ff03d85c72faec8ff4d6c31115cd3ef16a349725",
+      "bytes": 533040
+    },
+    {
+      "name": "after-attack-window",
+      "frame": 862,
+      "sha256": "71ea2008f97e7fa566edf23629933fa8221aa55b8b5c9cdb0c02a7b948d552ec",
+      "bytes": 531451
+    },
+    {
+      "name": "after-recovery-window",
+      "frame": 912,
+      "sha256": "cd9ba5e3c3f949d0b1bf10712ca2ce0f1de38e3863b21bf569c83eabeb10e360",
+      "bytes": 507801
+    }
+  ],
+  "states": [
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "297e645bc625673f6c210a98930db58b0923bfb656388c4c5c2b7ef4e5a8fa1c",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "before-weapon",
+      "frame": 821,
+      "sha256": "cf7dc90578dc6a3f01c7dbb784ef73e37213e32aecf213f0bca73cd04e7b55d5",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "armed-ai",
+      "frame": 822,
+      "sha256": "b4c8c00ff6dbcaaaa2f88069677e9cde26e33e65da58b8b5f67a35ad703797cd",
+      "objects": 395,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-attack-window",
+      "frame": 862,
+      "sha256": "4b57022dc629fb5d74526238623fa7db9a547f09d0fe955d87ae51fb705bcdbe",
+      "objects": 397,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "after-recovery-window",
+      "frame": 912,
+      "sha256": "77a467eb224ee99c5e5bf6cdfdb9277ac7d6c4bb2ddbaaf5dde9dd716af87cce",
+      "objects": 384,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "8264c597b04294e5dae0007843c1851baa5fedf583711654379d529579d664bc",
+  "stderr_sha256": "abd6a6978ec2892449c693d8106f89452434e897c5a1bb306e6d04d31234325c"
+}

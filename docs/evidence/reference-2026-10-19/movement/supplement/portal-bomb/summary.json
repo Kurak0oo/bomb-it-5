@@ -1,0 +1,30 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\movement-portal-bomb-42-01",
+  "case_sha256": "ea11f90b287ae28936b33f519bf2302ef00baec69fdd3bbac69ce3725274aa0c",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "trace_frames": 95,
+  "events": {
+    "events": 7432,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "blast-blocked-arrival.png",
+      "sha256": "289035c8e32c8c85d376dae711f8a9a4e6decda0229e37786f54418233066a04",
+      "bytes": 546712
+    },
+    {
+      "name": "portal-bomb-rejected.png",
+      "sha256": "1cc8819b1b64f45f39750826f4970bb9f1690a2de9add1567983a4b1ac6226c9",
+      "bytes": 545427
+    }
+  ],
+  "limits": [
+    "Selected native/raw source observations; no complete Flash equivalence claim.",
+    "Fixtures invoke original methods and do not implement new gameplay.",
+    "Position/state and original callback timing must be interpreted separately."
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "passed": 63,
+  "total": 63,
+  "checks": [
+    {
+      "check": "bomb-trigger-armed collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-armed exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-unarmed collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-unarmed exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "capacity-and-occupancy collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "capacity-and-occupancy exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "mine-on-existing-bomb collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "mine-on-existing-bomb exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "other-invincible-contact collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "other-invincible-contact exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "other-normal-contact collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "other-normal-contact exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "other-shield-contact collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "other-shield-contact exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "owner-return-power collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "owner-return-power exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "pause-teardown collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "pause-teardown exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "replacement-down-up collector complete balanced",
+      "passed": true
+    },
+    {
+      "check": "replacement-down-up exact case hash current",
+      "passed": true
+    },
+    {
+      "check": "fixed mine power2 from ordinary power1",
+      "passed": true
+    },
+    {
+      "check": "mine leaves ordinary bombNum0",
+      "passed": true
+    },
+    {
+      "check": "owner still present no fuse80frames",
+      "passed": true
+    },
+    {
+      "check": "armed idle100frames no fuse",
+      "passed": true
+    },
+    {
+      "check": "owner shield consumed contact survived",
+      "passed": true
+    },
+    {
+      "check": "power2 kills target two cells away",
+      "passed": true
+    },
+    {
+      "check": "contact flag remainsfalse despite ended",
+      "passed": true
+    },
+    {
+      "check": "contact cleanup count remainszero",
+      "passed": true
+    },
+    {
+      "check": "other-normal-contact original approach occupied before hit",
+      "passed": true
+    },
+    {
+      "check": "other-normal-contact outcome and score",
+      "passed": true
+    },
+    {
+      "check": "other-normal-contact contact keeps bombNum0",
+      "passed": true
+    },
+    {
+      "check": "other-normal-contact later mine removed",
+      "passed": true
+    },
+    {
+      "check": "other-shield-contact original approach occupied before hit",
+      "passed": true
+    },
+    {
+      "check": "other-shield-contact outcome and score",
+      "passed": true
+    },
+    {
+      "check": "other-shield-contact contact keeps bombNum0",
+      "passed": true
+    },
+    {
+      "check": "other-shield-contact later mine removed",
+      "passed": true
+    },
+    {
+      "check": "other-invincible-contact original approach occupied before hit",
+      "passed": true
+    },
+    {
+      "check": "other-invincible-contact outcome and score",
+      "passed": true
+    },
+    {
+      "check": "other-invincible-contact contact keeps bombNum0",
+      "passed": true
+    },
+    {
+      "check": "other-invincible-contact later mine removed",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-armed latch before trigger",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-armed external detonation inherited timer/flag",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-armed counter underflow",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-unarmed latch before trigger",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-unarmed external detonation inherited timer/flag",
+      "passed": true
+    },
+    {
+      "check": "bomb-trigger-unarmed counter underflow",
+      "passed": true
+    },
+    {
+      "check": "underflow permits two ordinary bombs at allow1",
+      "passed": true
+    },
+    {
+      "check": "third ordinary blocked",
+      "passed": true
+    },
+    {
+      "check": "ordinary same mine cell blocked",
+      "passed": true
+    },
+    {
+      "check": "mine does not occupy ordinary capacity",
+      "passed": true
+    },
+    {
+      "check": "ordinary capacity guard holds",
+      "passed": true
+    },
+    {
+      "check": "nonadjacent ordinary cleanup leaves armed mine",
+      "passed": true
+    },
+    {
+      "check": "mine placed on occupied full-capacity original bomb",
+      "passed": true
+    },
+    {
+      "check": "same-center ordinary explosion leaves unarmed mine",
+      "passed": true
+    },
+    {
+      "check": "mine hammer mine replacement",
+      "passed": true
+    },
+    {
+      "check": "input consumes exactly one use",
+      "passed": true
+    },
+    {
+      "check": "exhaustion restores original ordinary handler",
+      "passed": true
+    },
+    {
+      "check": "held input no repeat mine",
+      "passed": true
+    },
+    {
+      "check": "default same-cell remains blocked",
+      "passed": true
+    },
+    {
+      "check": "paused original game retains same armed mine",
+      "passed": true
+    },
+    {
+      "check": "resume retains armed mine",
+      "passed": true
+    },
+    {
+      "check": "teardown old game unavailable later",
+      "passed": true
+    },
+    {
+      "check": "no mine callback between stable paused checkpoints834to864",
+      "passed": true
+    }
+  ]
+}

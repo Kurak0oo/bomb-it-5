@@ -1,0 +1,166 @@
+{
+  "name": "normal-cinema-natural-timed-spawn",
+  "origin": "Seed2; original AI stop/reposition fixtures keep four actors alive and safe. Original Date-counting and ArcadeMode.timePassed run under approximately60seconds paced frames; no time/counter setters or direct timePassed fixture. Sparse focus plus original method/RNG events.",
+  "actions": [
+    {
+      "command": "seed 2"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 1,
+        "x": 1,
+        "y": 5
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 2,
+        "x": 2,
+        "y": 7
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "reposition",
+        "actor": 3,
+        "x": 4,
+        "y": 5
+      }
+    },
+    {
+      "command": "step 100",
+      "capture": "before-paced-clock"
+    },
+    {
+      "command": "events events 20000 zlong.bombit5.gameengine::Game/countTime zlong.bombit5.gameengine.gamemode::ArcadeMode/timePassed zlong.bombit5.maps::Map/createRamdonProp zlong.bombit5.items"
+    },
+    {
+      "command": "realtime 1"
+    },
+    {
+      "command": "step 300",
+      "state": "clock-sample-1"
+    },
+    {
+      "command": "step 300",
+      "state": "clock-sample-2"
+    },
+    {
+      "command": "step 300",
+      "state": "clock-sample-3"
+    },
+    {
+      "command": "step 300",
+      "state": "clock-sample-4"
+    },
+    {
+      "command": "step 300",
+      "state": "clock-sample-5"
+    },
+    {
+      "command": "step 300",
+      "state": "clock-sample-6"
+    },
+    {
+      "command": "step 300",
+      "state": "clock-sample-7"
+    },
+    {
+      "command": "realtime 0"
+    },
+    {
+      "capture": "after-paced-clock"
+    },
+    {
+      "command": "events off"
+    }
+  ]
+}

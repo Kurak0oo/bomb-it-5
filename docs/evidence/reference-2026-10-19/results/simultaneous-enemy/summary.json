@@ -1,0 +1,44 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\results-simultaneous-enemy-42-01",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "case_sha256": "5a5104f02fee0f4aeff52bd076db2d8997d5769977795a5a1075aca5deb1fee9",
+  "trace_frames": 125,
+  "events": {
+    "events": 24255,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0
+  },
+  "screenshots": [
+    {
+      "name": "simultaneous-results.png",
+      "sha256": "2ee2a45ba970b375e8e688d3992737bb3abf4122602af121d95adcb207be6047",
+      "bytes": 175935
+    }
+  ],
+  "settlements": [
+    {
+      "call": 12002,
+      "enter_frame": 1076,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x1df59f9f7e0",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        false
+      ],
+      "exit_frame": 1076,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    }
+  ],
+  "limits": [
+    "Controlled original-method setup; no raw health/score/outcome writes.",
+    "Date/Tween wall time and explicit logical steps are distinct.",
+    "Encrypted score getters/setters are observed original calls; stale private slots are not their oracle."
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-ordinary-actor-overlap",
+  "case_sha256": "22ecf614cfd1ce3f9932f5f1e5521e01853c847ec4d278c959fe7bc433778fd0",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "40ee79b64c9fafa41114616769f3601bbe435c02153537aba4a0749e2ea40f5c"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "e340b1643b75786b5f9d705f853b16ce6eda014144beacffe61ac3d422907766"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "476afbc3058884639407dacd66dc8ace5ab2e0b7cc58b4ecc7361b77b26d35df"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "ebd066e27149168505b11ad3b1eb0eafbb2e42dd13a3c0d3a0f17b0a43e95760"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-gi31rhoa\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 799,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "ordinary-overlap",
+      "frame": 729,
+      "sha256": "1ea49d25dc5950723963091dca764c9fc84842581c5bd55a692d00c95a9d6439",
+      "bytes": 549619
+    },
+    {
+      "name": "overlap-after-spawn-protection",
+      "frame": 799,
+      "sha256": "722638473d02344525b7934f625277876dcc5b2d156837e83cad3d314b68d9bd",
+      "bytes": 547743
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "77731742d66933e3b2d51daf8d30a8755d082647f8f38099fead869e5671dd87",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "ordinary-overlap",
+      "frame": 729,
+      "sha256": "59b10058e632b1b3a144be78b2cfff341be0df235a9eedabdc36559cc29d885a",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "overlap-after-spawn-protection",
+      "frame": 799,
+      "sha256": "68b510b14e4d4d82fbe19f28b1b511154b762829562c75fa766fb711a67446ed",
+      "objects": 396,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "d706ea89aa772653d5db4ed803bfb4f772c8e7fe119734c8a7d2c57bba4440ec",
+  "stderr_sha256": "21959c382eba5bdbc06b11204e7cd787b0f2de2ae9d8523f54a2f7ba099906a1"
+}

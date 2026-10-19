@@ -1,0 +1,97 @@
+# Edition 5 Normal AI runtime probes
+
+Executed 2026-10-19 for recovery [#34](https://github.com/Kurak0oo/bomb-it-5/issues/34) and [#35](https://github.com/Kurak0oo/bomb-it-5/issues/35). These original-SWF recordings establish representative state selection, perception, routes, cancellation, ordinary planting/escape and use of all six selected weapons. They also reproduce the cached decision accumulator, asymmetric danger construction, scan-order dependence and an item-name parsing defect. This report does not close either ticket or change Godot behavior.
+
+## Authority and observation boundary
+
+Authority is the untouched publisher SWF, SHA-256 `718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2`. Source locators below are relative to `.scratch/edition-5-research/publisher-scripts/scripts/zlong/bombit5/`; XML refers to `.scratch/edition-5-research/embedded-6787.xml`. See [structural reconstruction](edition-5-structure-reconstruction.md), [AI trace plan](edition-5-ai-trace-plan.md) and [trace instrumentation](edition-5-reference-trace-design.md).
+
+The pinned Ruffle revision is `45366370ed7d1a59c89aa3cf7b765c7a274407cd`. Cadence cases use preserved `reference-player-recovery/probe.exe`, SHA-256 `e9c9f65d03c3af960d84934e0becee5d65de3d23d70f9ea2e725418aabf63292`. Other completed cases use `reference-player-recovery-v3/probe.exe`, SHA-256 `ad5a666f20db340b3d21a29c000ba59d8d90f666e21ff5e24ce503fdf4b31ae9`. Both paths are under `.scratch/edition-5-research/`; adjacent build manifests pin their research patches. No interception of random return values, AI-state assignment, budget assignment or forced damage/outcome is used.
+
+The v3 read-only return hook records the **actual** `RoadSearch.findPath` result's stored `cost/pathArray` and the actual `AIControl.updatePerceptions` receiver arrays immediately on return. This avoids mistaking later shared-node searches or destructively sampled arrays for the earlier decision's inputs. It invokes no getters or original methods. All retained new return arrays report nontruncation; event loss, event overflow and selected-stack overflow are zero in these completed cases.
+
+Validation compared the original opening case with and without this hook: all 111 attempted frame captures641–751 agree after normalizing process-local identities. There are 53 available Game captures699–751, 51 containing AI objects. Native container coordinates, robot IDs, model state/bomb count/weapon, state classes, route arrays, step and orientation count agree in every comparable capture. There are 179 returned perception/path records in the v3 opening run. This is a bounded observation comparison, not proof of no clock impact or native Flash equivalence.
+
+**Position caveat:** inherited `RobotView._xPos/_yPos/_xN/_yN` remain zero in these instances. Original getters derive position from native `_container.x/y` minus183/40, and logical cell from `(position + item size/2)/30` (`AbstractObject.as:63–90`; `GameConfig.as:51–53`). Summaries compute those formulas from passive native reads; they do not execute getters. `isExist=false` means damage ineligibility and can occur during portal transfer/protection, rather than proving death.
+
+## Reproduction and retained bundle
+
+Runnable cases live under [cases/ai](../../tools/reference_player/cases/ai); curated evidence lives under [the AI bundle](reference-2026-10-19/ai). Each completed run retains its exact executed case, manifest, command chronology, stderr, full fixture acknowledgements where used, selected original event JSONs (losslessly compressed as `.json.gz`), inspected PNGs and a readable `summary.json`. The lossless larger derived projection is `summary-full.json.gz` (read either compressed artifact with Python `gzip.open(path, "rt")`); the readable summary records its compressed and uncompressed hashes. Large raw focused graphs and complete per-frame event directories remain ignored under `.scratch/edition-5-research/reference-runs/<run>/`. `.gdignore` excludes the research artwork from Godot resources.
+
+```powershell
+python tools/replay_reference.py --player .scratch/edition-5-research/reference-player-recovery-v3/probe.exe --case tools/reference_player/cases/ai/opening-decisions.json --observe --focus --output .scratch/edition-5-research/reference-runs/ai-opening-new
+python tools/replay_reference.py --player .scratch/edition-5-research/reference-player-recovery-v3/probe.exe --case tools/reference_player/cases/ai/weapon-hammer.json --observe --focus --fixtures --output .scratch/edition-5-research/reference-runs/ai-hammer-new
+```
+
+Opening/cadence/profile-parser cases use original menu inputs and initial seed2, without actor fixtures. Controlled cases use original AI stop/start and original reposition/occupancy methods, then original pickup constructors followed by normal `GetItemCommand`. Other AI remain stopped for isolation. Stop does not clear the current state or cancel pending timers/tweens; these callbacks remain visible. Human bombs are placed with ordinary Space down/up, sometimes with an explicitly recorded fixture reposition between placements or to escape. These setups isolate source decisions; they are not claims of wholly input-only play or natural scenario frequency. The same initial seed is not promised to align all wall-clock-sensitive runs.
+
+## Profile, targeting list and state identities
+
+Live Normal AI use profile010201, threshold20 and findRange6; ordered states are Attack, Evade, GetItem, Box, Free, Escape, with a **separate Free default instance**. The state references and settings are retained in [the opening summary](reference-2026-10-19/ai/ai-opening-decisions-v3-01/summary.json). This agrees with XML319–330 and `AIFactory.as:23–100`. Factory class lookup and settings assignment are observed rather than assumed from textual XML alone.
+
+The live targeting list has 15 classes, excluding SpeedProp, LandmineProp and DragonProp even though the XML text lists them. [profile-parser.json](../../tools/reference_player/cases/ai/profile-parser.json), run `ai-profile-parser-v3-02`, observes clean names resolving to real classes at640; at697 actual original `AIFactory.getClassByName` receives `\t\t\t\tSpeedProp` (13 UTF-16 units), similarly tab-prefixed LandmineProp/DragonProp, and returns null. The definitions exist; the malformed lookup names fail. `AIFactory.as:52–60` removes CRLF and literal spaces but leaves tabs; `getClassByName` rejects unresolved definitions through `hasDefinition` at116–129. This is an executed source/parser defect in this emulator run, not an intentional design exclusion.
+
+In `pickup-route`, both NumProp(4,7) and SpeedProp(5,9) remain on the board, but perception returns only NumProp in `propArr`. This targeting filter differs from collection permission: [paired original pickup probes](edition-5-pickup-probes.md) already observe AI consuming speed and mine through normal `canEated=true`. Do not unify the two policies or infer pickup ineligibility from failure to seek an item.
+
+## Decision cadence and independent route following
+
+[Cadence unpaced](reference-2026-10-19/ai/ai-cadence-unpaced-02/summary.json) and [cadence paced](reference-2026-10-19/ai/ai-cadence-paced-01/summary.json) each cover18 consecutive frames722–739 without fixtures. There is exactly one `AIControl.update` entry per frame, cycling UI players3→1→2. Engine index rotates0/1/2 accordingly. In the unpaced run, cached `_time` stays1222/1227/1229 for robot IDs5/3/7; `_lastTime` advances on selected opportunities. Paced values differ (1103/1107/1109) but exhibit the same unchanged accumulator and rotation.
+
+The source successful branch never resets `_time`; once it exceeds20, each subsequent selected opportunity can run perception/machine (`AIControl.as:141–157`). This surprising code is also corroborated by authority P-code in the structural report. It is not a repeating20ms delay. `GameEngine.runAISeq` selects one registered handler, increments its index and wraps using the live count (`GameEngine.as:289–301`). Removing handlers can change the next opportunity; stored `_aiFuncArr` is not a reliable active-roster oracle.
+
+Route following is separate. UI1's original map y position is55.9 at723,54.3 at724,51.7 at725 and48.55 at726, while its brain is selected at723 and726. Its registered `Action.orienta` runs on intervening frames. This agrees with `AIRobot.robotEngine` iterating `_aiMoveArr` before normal robot processing (`AIRobot.as:34–51`) and GameEngine's later general/movement phases (`GameEngine.as:230–272`). A brain opportunity and a movement step are not the same operation.
+
+`AIEngine.update` can return immediately while the current state is incomplete (`AIEngine.as:38–55`). Actual events include such updates without transition checks; later completed states trigger ordered checks. Stored Action routes/callbacks can survive a same-cell `setAction`, which schedules a Tween callback without replacing them (`Action.as:61–75`). Route registration and actual events are needed to distinguish active navigation from stale fields.
+
+## Actual perception and source search semantics
+
+[upward-danger.json](../../tools/reference_player/cases/ai/upward-danger.json), run `ai-upward-danger-v3-01`, places a legal human bomb at(3,8). Actual returned perception at860 contains bomb[3,8,31] but no upper[3,7] danger;861 contains remaining30 with no upper danger;862 contains remaining29 and danger[3,7,29]. Node-cost writing is a separate source operation. This confirms strict `<30` for upward danger, unlike the other ray directions (`AIControl.as:189–291`).
+
+Two original bombs are then compared in [blocked-first](../../tools/reference_player/cases/ai/two-bomb-blocked-first.json) and [open-first](../../tools/reference_player/cases/ai/two-bomb-open-first.json). Legal placement order is(4,7), then(6,4); both have remaining23 at869. With AI at(3,7), actual bomb scan order is[[4,7,23],[6,4,23]] and upper(6,3) is absent. With AI at(6,3), order reverses and danger[6,3,23] appears. The first bomb's blocked upward ray carries its false flag into the later bomb because flags are initialized outside the per-bomb loop. These are actual pre-selection perception arrays, not a symmetric ray reconstruction imposed by tooling. The two run summaries retain both orders and results.
+
+Actual path returns also discriminate source ranking. Opening705 returns adjacent route[[15,1],[15,2]] with cost0; same-cell paths return−2, unreachable paths−1/empty. At706 the nine-node route from(1,13) to(5,9), crossing portal(3,9), returns cost252. `RoadSearch` sums node estimate prices, not tile count; estimation multiplies by node cost, checks neighbors Up/Down/Left/Right, and selects the first strictly lowest waiting estimate (`RoadSearch.as:76–105,131–242`). Returned cost/path is captured at its own return; later shared node fields are not reassigned to an earlier AI's search.
+
+[random-item-ranking.json](../../tools/reference_player/cases/ai/random-item-ranking.json), run `ai-random-item-ranking-v3-02`, exposes the target policy directly. AI starts(3,8), perceives NumProp(4,7) then PowProp(5,9); actual filter draw438=`0.7361214081756771` selects index1. It searches(5,9), returns cost62 and chooses it immediately; it does not query the nearer(4,7) within that selection. This is first acceptable randomized sampling with replacement, rather than comparison of all item costs (`StateGetItem.as:31–53`). `getBestPosition` instead uses destructive randomized sampling and can stop below100 (`AbstractState.as:152–216`). Source search cost is not ordinary geometric distance.
+
+## Selection, cancellation and transfer cases
+
+| Completed run | Actual decision evidence |
+| --- | --- |
+| `ai-opening-decisions-v3-01` | At705: Attack draw398=.59528 passes its .6 gate but returns null; Evade draw399=.71318 returns null; GetItem draw400=.91731 fails .8; Box draw401=.07463 passes .7, `canPutBomb(15,2)=true`, and wins. Later states are not checked. |
+| `ai-pickup-route-v3-02` | At823 Attack/Evade return null; GetItem draw437=.31039 passes, sample438=.73612 selects NumProp(4,7), cost0, and normal movement/collection raises AI capacity1→2 and adds100 item points. |
+| `ai-bomb-evade-v3-02` | Legal power3 bomb(4,7), imminent by AI start. At870 Attack returns null, Evade draw436=.57959 passes, chooses(5,9) with actual route cost96 through(3,8),(3,9),(4,9); later states are not checked. AI survives and later navigates. |
+| `ai-invincible-escape-v3-02` | At871 Attack/Evade/GetItem fail; Box candidate fails escape feasibility; Free draw481=.87785 fails .8; Escape draw482=.06366 passes1, observes the invincible human, and wins. Free can win on earlier opportunities despite the protected human. |
+| `ai-trapped-death-v3-01` | Active AI at(4,7), legal imminent human bomb(3,7). `StateBox.canPutBomb(4,7)=false` at877/878/882. Original blast kills it at895; lack of survival is explained by the actual source opportunities, not forced damage. |
+
+Escape excludes positions within Manhattan distance4 of an invincible actor (`StateEscape.as:49–107,186–220`), whereas Evade's danger predicate and bomb escape-feasibility searches use other rules. The source priority is Attack before Evade; this report observes actual earlier failures followed by Evade, not an invented claim that every attack opportunity outranks every hazard in all circumstances.
+
+Cancellation is observed separately from state timers. In pickup-route, orientation count is9 at871 and10 at872; at873 `Action.orienta → Action.cancel → StateFree.onCancel` runs, resets count to0 and removes its route callback. Source tests `orientaCount > 10`, not elapsed time or an explicit displacement comparison (`Action.as:144–183`). Original Timer callbacks also invoke `timerCompleteHandler → onCancel`; those are distinct2000ms state timers (`AbstractState.as:43–78,140–145`). An action can be cancelled during portal interruption even while old route fields remain stored.
+
+[rotation-transfer.json](../../tools/reference_player/cases/ai/rotation-transfer.json), run `ai-rotation-transfer-v3-01`, records actual engine handler removal at869, restoration at898, and original `SendRobotCommand.sendEnd` at898. A second transfer removes at922 and restores at951. Source Portal stops movement/bomb controls and creates send/protection commands (`maps/platform/Portal.as:73–89`); SendRobotCommand restores controls after30 executions and assigns the paired position (`commands/robot/SendRobotCommand.as:38–61`). These portal movements are produced by original navigation/commands, not a destination teleport fixture.
+
+[rotation-death.json](../../tools/reference_player/cases/ai/rotation-death.json), run `ai-rotation-death-v3-01`, adds the active brain at868, records `RobotDeadCommand.execute` and removal of that same engine handler at895; later disposal949 requests removal again. Dense focused graphs independently record the roster change and dead model. Stop/death/transfer are therefore distinguished from a stale action array or `isExist=false` alone.
+
+## Ordinary attacks and selected weapons
+
+Opening Box opportunities return `canPutBomb=true` at705–707. Actual ordinary `attackAndEscape → bomb_down/bomb_up → RobotController.addBomb` occurs at713/714/723. Corresponding escape callbacks occur723/724/733 in `update_timers`; route arrivals complete740/741/749. Source `_escapeRetry=300` schedules the escape after ordinary delivery (`AbstractAttackState.as:322–350,419–457`). Actual frame separations are observations from this run, not universal conversions of300ms.
+
+The six [weapon cases](../../tools/reference_player/cases/ai) isolate AI1 at(4,5) and the human at(5,5), with original pickups/collection and original AI restart. At824 each chooses StateAttack at current cell with `aimBox=[5,5]`; hammer's actual gate draw444=.04047 passes .6. Same-cell `setAction` schedules the arrival callback; `turnAndAttack` occurs826. `delayAttack` occurs831 in timer advancement, turns Right and dispatches ordinary AI down/up through InteractiveController/RobotController. Source distinguishes weapon dispatch from ordinary planting (`AbstractAttackState.as:67–89,322–390`).
+
+| Pickup / internal model name | Observed range / minimum | Actual original command | Result through captured window |
+| --- | --- | --- | --- |
+| Mine / `mine` |1 /1 |`LandminePlayCommand` |Mine placed831, single use exhausted; no direct human death; AI later Evade/Free and weapon gone. |
+| Hammer / `sinker` |1 /1 |`HammerPlayCommand` |Human killed; use count0→1 by862; second delayed attack869, later weapon disposed and AI Free. |
+| Flamer / `thrower` |3 /1 |`FlamerPlayCommand` |Human killed; second delayed attack869; later weapon disposed and AI Free. |
+| Laser / `lasergun` |17 /1 |`LaserGunPlayCommand`, `LaserPlayCommandChain` |Human killed; second delayed attack861; later weapon disposed and AI GetItem. |
+| Triple / `shotgun` |17 /1 |`NinjialPlayCommand` |Human killed; second delayed attack886; spent count2 and weapon still retained at912. |
+| Fireball / `fireball` |17 /1 |`ShotGunPlayCommand` |Human killed; second delayed attack857; spent count2 and weapon still retained at912. |
+
+The counter/retention observations are separate from animation completion. Triple/fireball are not declared fully disposed merely because two uses were spent. Corresponding weapon recovery tickets provide deeper lifecycle measurement. Five kills are tied to actual original TryToKill/RobotDead commands and dead human state, not only screenshots. Mine's lack of an immediate kill is its actual distinct behavior. All six original after-attack screenshots were opened and inspected; adjacent-human setup provides representative use, not a range/geometry sweep.
+
+## Remaining gaps and faithful-port implications
+
+The executed cases cover representative state selection, source-specific perception/search, pickup/free/evade/escape, ordinary safe and failed opportunities, cancellation, stop/death/transfer registration, delayed action and all selected weapon families. They do not exhaust every candidate ordering, capacity/occupied-placement failure, target invalidation between scheduling and firing, successful opportunistic `turnAntHit`, round-end/pause teardown during delayed action, or every projectile's final disposal. `stepAttack` entries are observed, but no successful opportunistic turn-and-hit branch is claimed. Two-bomb scan results are controlled comparisons of starting positions, not identical actor-position experiments with only enumeration changed.
+
+The unrelated large Hot Pursuit localization allocation in `StateAttack.escapeRouteAnalysis` is authority-bytecode-confirmed in the structural report. It is a source artifact, not an added gameplay feature to reproduce; its performance impact remains unmeasured here.
+
+A faithful reconstruction needs separate brain rotation, per-frame route callbacks, source state identity/completion, actual weighted search policy, controller-dispatched equipment actions and timed/animation recovery. The accepted eight-direction Godot movement and scheduler batching remain explicit adaptations; original AI routes here are cardinal. Reproducing source bugs versus accepting deliberate corrections should be decided explicitly after this evidence, rather than silently replacing the original structure with a conventional AI. No production logic, assets, accepted specification or tracker status was changed by these probes.

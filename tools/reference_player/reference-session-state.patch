@@ -1,0 +1,20 @@
+--- a/core/src/avm2/reference_focus.rs
++++ b/core/src/avm2/reference_focus.rs
+@@ -233,6 +233,9 @@
+         }
+     }
+     let game_record=focus.record(game,&[]);let mode=focus.named_child(game,"modeController",&[]);
++    let map_master=focus.named_child(game,"mapMaster",&[]);
++    let world_set=focus.named_child(game,"worldSet",&[]);
++    let ending=focus.named_child(game,"endCartoon",&[]);
+     let mut bombs=BTreeMap::new();let mut rounds=0;
+     loop {
+         let pending=focus.discovered_bombs.iter().filter(|(id,_)|!bombs.contains_key(*id)).map(|(id,o)|(id.clone(),*o)).collect::<Vec<_>>();
+@@ -242,6 +245,7 @@
+     }
+     json!({"schema":"bombit5-reference-focus-v1","available":true,"game":game_record,"mode":mode,
+         "players":players,"robots":robots,"engine":engine,"cells":cells,"nodes":nodes,"bombs":bombs,"ai":ais,
++        "map_master":map_master,"world_set":world_set,"ending":ending,
+         "layouts":focus.layouts,"record_count":focus.records,"truncated":focus.truncated,
+         "limits":{"array_elements":ARRAY_LIMIT,"array_depth":ARRAY_DEPTH,"records":RECORD_LIMIT},
+         "omissions":["No arbitrary object graph traversal","No native display children or painted bounds","No Box/HitMove internals","RoadSearch._NodeArr omitted; only cell cost/block flags and selected working nodes","No timer/tween pending-queue inspection","Arrays deeper/larger than limits explicitly truncate"],

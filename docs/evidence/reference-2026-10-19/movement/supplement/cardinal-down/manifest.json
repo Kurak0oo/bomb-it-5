@@ -1,0 +1,251 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-cardinal-down-release-reversal-bomb-contact",
+  "case_sha256": "35866d84990355dc90cb05f5ef56d51b9a4420419146a106caa742c3e22ea6ad",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "8340bd0d4f3d87efe86f25f2b0d66fe4ff7a1bce15e4b14d40b80059d752b03a"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "05343e6d72cf20fa34f0e0895c8d9a654171b7afd883e772ed24bcd539397815"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "1f305bc1b3f3386e1020688021bad5babe68a565f7011ff259764dc91611aa3a"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-x1bbjqbt\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 799,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "cardinal-start",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "held-direction",
+      "frame": 736,
+      "sha256": "271ea182e6ab317169ec3dd993d8c230185ac9fcbf422f7c5c218f0d92d847ef",
+      "bytes": 551806
+    },
+    {
+      "name": "released",
+      "frame": 740,
+      "sha256": "a107934245c097814f570596ca7d358034e788d3b3f3c495b548227696609a64",
+      "bytes": 551214
+    },
+    {
+      "name": "reverse-wall",
+      "frame": 760,
+      "sha256": "70c537e79e3183033a69a30d177a9700fa4d27222c0bb2ccc3ba3e6480f10a54",
+      "bytes": 551235
+    },
+    {
+      "name": "bomb-placed",
+      "frame": 765,
+      "sha256": "0306ae3b6a20b6af84b27347a111366329c961b1ff93aaeea1ca8d0a5f9560aa",
+      "bytes": 551476
+    },
+    {
+      "name": "departed",
+      "frame": 781,
+      "sha256": "fb0b88205d6bb132e8fccba2d5a5cec718f79d92481087fbfbc261c20f86feaa",
+      "bytes": 552924
+    },
+    {
+      "name": "reentry-blocked",
+      "frame": 799,
+      "sha256": "1b761c5b0e2f9adfb63c4ee5ddaf466e677f617ecc78eb2a8fde4f71527d156f",
+      "bytes": 548523
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "c71ad6bde3895a2b30797646ebd818c6cfe69d4df168022fc15c4f095dcdbbcf",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "cardinal-start",
+      "frame": 721,
+      "sha256": "3c05329f55ca87150c5cae34003d12426e910613404239a7bb05a4c651cd8af3",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "held-direction",
+      "frame": 736,
+      "sha256": "2e1769979c32a64ec1292f995867b3f8a8660e98cfe48af090cb1c476e5baa80",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "released",
+      "frame": 740,
+      "sha256": "1ced175415983a9f91aab0feb90f8465708529ffa3a76643daea9f2e1593d0be",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "reverse-wall",
+      "frame": 760,
+      "sha256": "02fbb1bf9eab95adc97a4b958a5dc44cc5fa3fc28d839689d4d02f0aff2b35c5",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "bomb-placed",
+      "frame": 765,
+      "sha256": "a01a6bca488ca6f2520e39d618b7be541806b08338541e3b0e531523b8de544c",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "departed",
+      "frame": 781,
+      "sha256": "deee6a826a40b419754562c3531dce6ce9cf59c46ad2a364e0b86e123a4880d6",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "reentry-blocked",
+      "frame": 799,
+      "sha256": "ec27b097058af96f5f289e88df92ab62284baa801571d9fb9b11f017b48650fe",
+      "objects": 397,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "47522bdd41fe91bbff155c5933d8a997ddb070a2cadc2a0fad26bb6c92983e85",
+  "stderr_sha256": "ccba0faef5998ab71e95ed9727f614643420dc6b908ee6ee7409a115017558ab"
+}

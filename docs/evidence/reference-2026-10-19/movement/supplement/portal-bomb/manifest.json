@@ -1,0 +1,234 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-portal-ordinary-bomb-placement-and-ray-block",
+  "case_sha256": "ea11f90b287ae28936b33f519bf2302ef00baec69fdd3bbac69ce3725274aa0c",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "ae742976cf4239edc7e4a24bb7eaf24f25765d4df763b8eda5c13e4e0ce68153"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "8b563acc48edd9211e710a812a6e3c1a83b5c3de3d54652a6f92f44363094ec5"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "39416c78e0626f45939ecf74e9c09629643261cf63ebd2b0ad76017f216ff937"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "c0ca9fc964b617939721c1df4262d0d9eef9e818279aef2dd9f92f6a8804f709"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "f3e0dd99ac30f946d5de3b228eca3a94ddd13036ac3cdf28332ff00001818409"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 722,
+      "sha256": "01a8728772547c1a8676f84538c464fdfd39b692f11f03764d62865fc471cfa8"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 722,
+      "sha256": "3fc3d3747986fbd67e6f914fda46653dce462a63ad987e2a129b01824c326857"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 798,
+      "sha256": "39023c1292cf071e3c5023ecaff38396d89bf84c55a84a844e9d10f00dacc94e"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "9c1dcc316e1344e5061194ba5062abc01396145d89318ea27582058a6bb1ea3c",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-2o_ignz6\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 817,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "bomb-near-destination-transit",
+      "frame": 769,
+      "sha256": "d3450951ea32981c4d2ad801082a08fac732e1bf348cdc99c304c95ca9d54e2c",
+      "bytes": 550686
+    },
+    {
+      "name": "blast-blocked-arrival",
+      "frame": 798,
+      "sha256": "289035c8e32c8c85d376dae711f8a9a4e6decda0229e37786f54418233066a04",
+      "bytes": 546712
+    },
+    {
+      "name": "portal-bomb-rejected",
+      "frame": 799,
+      "sha256": "1cc8819b1b64f45f39750826f4970bb9f1690a2de9add1567983a4b1ac6226c9",
+      "bytes": 545427
+    },
+    {
+      "name": "portal-fire-cleanup",
+      "frame": 817,
+      "sha256": "e40ed982e472de225759b0e0a0aa7d17f43b2d2c8d4687b61a5e6ba3cabdd5c4",
+      "bytes": 546323
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "0105412fdb27c4f077054516c027cee7403676eb827732a9d695d6ad78bcce26",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "bomb-near-destination-transit",
+      "frame": 769,
+      "sha256": "8c82ef4707ccf9a993d52b5e19af6e243b1b15e13b8f45fdcc87ec759d3e7359",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "blast-blocked-arrival",
+      "frame": 798,
+      "sha256": "b4819970d418fdf98404d16539c4bac71f0abcd08d6731ba1602eefc0fccc67b",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "portal-bomb-rejected",
+      "frame": 799,
+      "sha256": "d5b6ac57ebd22e56678cac9ccba56bbafb89ea39b2f9725459450c0cd6077f3d",
+      "objects": 399,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "portal-fire-cleanup",
+      "frame": 817,
+      "sha256": "7c4a5725c8232f025e60a00de2fae2721155412bc3cdf42d207ccaad8c073e62",
+      "objects": 395,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "0f00786b8b2a5c76e9d0f3cd3fa561d86e3ab8f6d98e8d9d84383c14bc4d1b9e",
+  "stderr_sha256": "ae447f51b307296db9b43b219cfe20e7aaf1b8dc1fe365fe848a0647cc482fac"
+}

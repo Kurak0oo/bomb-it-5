@@ -1,0 +1,876 @@
+[
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\gameengine\\GameEngine.as",
+    "sha256": "e4c65ff75ac9bda5395426eaa064b247697abf07c909d3eda67fb56e6d67c9f6",
+    "functions": [
+      {
+        "line": 49,
+        "source": "public function GameEngine()"
+      },
+      {
+        "line": 55,
+        "source": "public function start() : void"
+      },
+      {
+        "line": 61,
+        "source": "public function stop() : void"
+      },
+      {
+        "line": 67,
+        "source": "public function clearEngine() : void"
+      },
+      {
+        "line": 81,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 87,
+        "source": "public function addBombHandler(param1:Function) : void"
+      },
+      {
+        "line": 92,
+        "source": "public function removeBombHandler(param1:Function) : void"
+      },
+      {
+        "line": 97,
+        "source": "public function addDeadHandler(param1:Function) : void"
+      },
+      {
+        "line": 102,
+        "source": "public function removeDeadHandler(param1:Function) : void"
+      },
+      {
+        "line": 107,
+        "source": "public function hasTweenEngine(param1:Function) : Boolean"
+      },
+      {
+        "line": 112,
+        "source": "public function addTweenHandler(param1:Function) : void"
+      },
+      {
+        "line": 117,
+        "source": "public function removeTweenHandler(param1:Function) : void"
+      },
+      {
+        "line": 122,
+        "source": "public function removeBrickExplosionHandler(param1:Function) : void"
+      },
+      {
+        "line": 127,
+        "source": "public function addBrickExplosionHandler(param1:Function) : void"
+      },
+      {
+        "line": 132,
+        "source": "public function addBlast(param1:Function) : void"
+      },
+      {
+        "line": 137,
+        "source": "public function removeBlastHandler(param1:Bomb) : void"
+      },
+      {
+        "line": 142,
+        "source": "public function addEngineHandler(param1:Function) : void"
+      },
+      {
+        "line": 150,
+        "source": "public function addAIEngineHandler(param1:Function) : void"
+      },
+      {
+        "line": 159,
+        "source": "public function removeAIEngineHandler(param1:Function) : void"
+      },
+      {
+        "line": 168,
+        "source": "public function addSeqEngineHandler(param1:Function) : void"
+      },
+      {
+        "line": 177,
+        "source": "public function removeSeqEngineHandler(param1:Function) : void"
+      },
+      {
+        "line": 186,
+        "source": "public function removeEngine(param1:Function) : void"
+      },
+      {
+        "line": 191,
+        "source": "public function hasEngine(param1:Function) : Boolean"
+      },
+      {
+        "line": 196,
+        "source": "public function addMovHandler(param1:Array) : void"
+      },
+      {
+        "line": 201,
+        "source": "public function removeMoveHandler(param1:Array) : void"
+      },
+      {
+        "line": 206,
+        "source": "public function set pauseGame(param1:Boolean) : void"
+      },
+      {
+        "line": 211,
+        "source": "public function get pauseGame() : Boolean"
+      },
+      {
+        "line": 216,
+        "source": "private function init() : void"
+      },
+      {
+        "line": 230,
+        "source": "private function enterFrameHandle(param1:Event) : void"
+      },
+      {
+        "line": 272,
+        "source": "private function runSeq() : void"
+      },
+      {
+        "line": 288,
+        "source": "private function runAISeq() : void"
+      },
+      {
+        "line": 304,
+        "source": "private function run() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\bombs\\Bomb.as",
+    "sha256": "b710462a032e1707ec137a450b4f48dba20c5e245c3c02d9c3ab34bab8b1ffb8",
+    "functions": [
+      {
+        "line": 54,
+        "source": "public function Bomb(param1:Game, param2:IBombAdder, param3:int = -1, param4:int = -1)"
+      },
+      {
+        "line": 62,
+        "source": "public static function get blastTime() : int"
+      },
+      {
+        "line": 67,
+        "source": "protected function init() : void"
+      },
+      {
+        "line": 89,
+        "source": "protected function setBombPosition() : void"
+      },
+      {
+        "line": 98,
+        "source": "public function moveBombPos(param1:int, param2:int) : void"
+      },
+      {
+        "line": 106,
+        "source": "protected function createMC() : void"
+      },
+      {
+        "line": 113,
+        "source": "protected function setMapInfo() : void"
+      },
+      {
+        "line": 118,
+        "source": "protected function addBombSound() : void"
+      },
+      {
+        "line": 123,
+        "source": "protected function setBombPow() : void"
+      },
+      {
+        "line": 135,
+        "source": "protected function setBlastMc() : void"
+      },
+      {
+        "line": 140,
+        "source": "protected function setBombMc() : void"
+      },
+      {
+        "line": 145,
+        "source": "protected function blastMode() : void"
+      },
+      {
+        "line": 152,
+        "source": "override public function resetDisplay() : void"
+      },
+      {
+        "line": 162,
+        "source": "protected function blastHandle(param1:Event) : void"
+      },
+      {
+        "line": 168,
+        "source": "protected function takeCount() : void"
+      },
+      {
+        "line": 193,
+        "source": "public function bombEngine() : void"
+      },
+      {
+        "line": 202,
+        "source": "override public function dispose() : void"
+      },
+      {
+        "line": 208,
+        "source": "public function disappear() : void"
+      },
+      {
+        "line": 228,
+        "source": "public function get engineArr() : Array"
+      },
+      {
+        "line": 233,
+        "source": "public function updateBombPos() : void"
+      },
+      {
+        "line": 244,
+        "source": "public function blast() : void"
+      },
+      {
+        "line": 425,
+        "source": "public function resetEngine() : void"
+      },
+      {
+        "line": 430,
+        "source": "public function ended() : void"
+      },
+      {
+        "line": 445,
+        "source": "protected function deleFire() : void"
+      },
+      {
+        "line": 463,
+        "source": "override public function motionEnd() : void"
+      },
+      {
+        "line": 471,
+        "source": "public function resetMap() : void"
+      },
+      {
+        "line": 476,
+        "source": "public function get bombPow() : int"
+      },
+      {
+        "line": 481,
+        "source": "public function get leavingsTime() : int"
+      },
+      {
+        "line": 486,
+        "source": "public function get nodeCost() : int"
+      },
+      {
+        "line": 491,
+        "source": "public function set shootFuncDeputize(param1:Function) : void"
+      },
+      {
+        "line": 496,
+        "source": "public function get shootFuncDeputize() : Function"
+      },
+      {
+        "line": 501,
+        "source": "public function set shootSpeed(param1:int) : void"
+      },
+      {
+        "line": 506,
+        "source": "public function shootFunc() : void"
+      },
+      {
+        "line": 512,
+        "source": "public function startFly() : void"
+      },
+      {
+        "line": 517,
+        "source": "private function kickedFly() : void"
+      },
+      {
+        "line": 537,
+        "source": "protected function changeBombDirection() : void"
+      },
+      {
+        "line": 576,
+        "source": "public function leftAfoul(param1:int) : void"
+      },
+      {
+        "line": 581,
+        "source": "public function rightAfoul(param1:int) : void"
+      },
+      {
+        "line": 586,
+        "source": "public function upAfoul(param1:int) : void"
+      },
+      {
+        "line": 591,
+        "source": "public function downAfoul(param1:int) : void"
+      },
+      {
+        "line": 596,
+        "source": "public function get hitMove() : HitMove"
+      },
+      {
+        "line": 601,
+        "source": "public function get isMovedByBasket() : Boolean"
+      },
+      {
+        "line": 606,
+        "source": "public function set isMovedByBasket(param1:Boolean) : void"
+      },
+      {
+        "line": 611,
+        "source": "public function set blastTime(param1:int) : void"
+      },
+      {
+        "line": 616,
+        "source": "public function set bombPower(param1:int) : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\bombs\\AbstractBomb.as",
+    "sha256": "b4f657acfd28dd061ba92a811b4f23c46fe95f356bcdc007d42a565ac74cb230",
+    "functions": [
+      {
+        "line": 30,
+        "source": "public function AbstractBomb(param1:Game, param2:IBombAdder)"
+      },
+      {
+        "line": 36,
+        "source": "public function hitRobot(param1:AbstractRobot) : void"
+      },
+      {
+        "line": 51,
+        "source": "public function hitRobotUnderPoint(param1:int, param2:int, param3:Boolean = true) : void"
+      },
+      {
+        "line": 85,
+        "source": "public function hitItem(param1:int, param2:int) : void"
+      },
+      {
+        "line": 121,
+        "source": "private function changeSlideDirection(param1:int, param2:int) : void"
+      },
+      {
+        "line": 129,
+        "source": "private function deleBox(param1:int, param2:int, param3:String) : void"
+      },
+      {
+        "line": 155,
+        "source": "private function deleBomb(param1:int, param2:int) : void"
+      },
+      {
+        "line": 170,
+        "source": "private function deleProp(param1:int, param2:int) : void"
+      },
+      {
+        "line": 178,
+        "source": "public function get bombAdder() : IBombAdder"
+      },
+      {
+        "line": 183,
+        "source": "public function set bombAdder(param1:IBombAdder) : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\CommandChain.as",
+    "sha256": "aaafe222b3731a41101e14124b0e4d9ee5fa50793a5fa1a89cb9c248e7e8c827",
+    "functions": [
+      {
+        "line": 21,
+        "source": "public function CommandChain()"
+      },
+      {
+        "line": 27,
+        "source": "public function addCommands(... rest) : void"
+      },
+      {
+        "line": 36,
+        "source": "public function addCommand(param1:ICommand) : void"
+      },
+      {
+        "line": 51,
+        "source": "public function enableCommand(param1:ICommand) : void"
+      },
+      {
+        "line": 56,
+        "source": "public function getCommandByName(param1:String) : ICommand"
+      },
+      {
+        "line": 61,
+        "source": "public function disableCommand(param1:ICommand) : void"
+      },
+      {
+        "line": 66,
+        "source": "public function removeCommand(param1:ICommand) : void"
+      },
+      {
+        "line": 84,
+        "source": "public function execute() : void"
+      },
+      {
+        "line": 103,
+        "source": "public function get length() : int"
+      },
+      {
+        "line": 108,
+        "source": "public function clear() : void"
+      },
+      {
+        "line": 120,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 132,
+        "source": "public function get enable() : Boolean"
+      },
+      {
+        "line": 137,
+        "source": "public function set enable(param1:Boolean) : void"
+      },
+      {
+        "line": 142,
+        "source": "public function get chain() : CommandChain"
+      },
+      {
+        "line": 147,
+        "source": "public function set chain(param1:CommandChain) : void"
+      },
+      {
+        "line": 152,
+        "source": "public function get name() : String"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\weapon\\LaserGunPlayCommand.as",
+    "sha256": "04e55f4f842ad6751321a3a58e7c6f63cb6172b75bb924d817d162415a5c3448",
+    "functions": [
+      {
+        "line": 28,
+        "source": "public function LaserGunPlayCommand(param1:LaserGunProp)"
+      },
+      {
+        "line": 34,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 39,
+        "source": "override public function execute() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\weapon\\LaserPlayCommandChain.as",
+    "sha256": "58e3c98ba8adc84150da228d45c857ec1b3f4c3bea837a54a859a1356548acfb",
+    "functions": [
+      {
+        "line": 13,
+        "source": "public function LaserPlayCommandChain(param1:Laser)"
+      },
+      {
+        "line": 20,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 75,
+        "source": "public function ShootLaserCommand(param1:Laser)"
+      },
+      {
+        "line": 81,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 86,
+        "source": "override public function execute() : void"
+      },
+      {
+        "line": 229,
+        "source": "public function LaserEndCommand(param1:Laser)"
+      },
+      {
+        "line": 235,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 240,
+        "source": "override public function execute() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\maps\\platform\\Portal.as",
+    "sha256": "2c7441bc1c8ae2dc5dbe32d7cb3e4026dbbfa69e2410b894fe433e1be1808ee3",
+    "functions": [
+      {
+        "line": 21,
+        "source": "public function Portal(param1:Game, param2:int, param3:int, param4:int)"
+      },
+      {
+        "line": 27,
+        "source": "override public function dispose() : void"
+      },
+      {
+        "line": 33,
+        "source": "override public function postAdd(param1:Map) : void"
+      },
+      {
+        "line": 38,
+        "source": "override protected function init(param1:int, param2:int) : void"
+      },
+      {
+        "line": 45,
+        "source": "override protected function setMc() : void"
+      },
+      {
+        "line": 51,
+        "source": "private function adjustContainer() : void"
+      },
+      {
+        "line": 57,
+        "source": "private function addEngine() : void"
+      },
+      {
+        "line": 62,
+        "source": "private function runEngine() : void"
+      },
+      {
+        "line": 80,
+        "source": "public function set associatedPortal(param1:Portal) : void"
+      },
+      {
+        "line": 85,
+        "source": "public function get associatedPortal() : Portal"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\robot\\SendRobotCommand.as",
+    "sha256": "788909bac3b1c8b63a4daf5fb063cc6ac2271a1ff0e4d1f3897d9e2e3f6e1815",
+    "functions": [
+      {
+        "line": 23,
+        "source": "public function SendRobotCommand(param1:AbstractRobot, param2:int, param3:int, param4:int = 30)"
+      },
+      {
+        "line": 33,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 38,
+        "source": "override public function execute() : void"
+      },
+      {
+        "line": 53,
+        "source": "private function sendEnd() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\robot\\InvincibilityCommand.as",
+    "sha256": "e8883cdc0fb6d135f78bb48f24a1d66fc8bddceb1f99f4ba74bd604d92fb5618",
+    "functions": [
+      {
+        "line": 23,
+        "source": "public function InvincibilityCommand(param1:AbstractRobot, param2:int = 80)"
+      },
+      {
+        "line": 31,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 36,
+        "source": "override public function dispose() : void"
+      },
+      {
+        "line": 41,
+        "source": "override public function execute() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\commands\\robot\\TryToKillCommandChain.as",
+    "sha256": "7f1fb3a3e7298c91b63619113bd9b9df2743588d9b5f50153836b6c8bec933b1",
+    "functions": [
+      {
+        "line": 18,
+        "source": "public function TryToKillCommandChain(param1:AbstractRobot)"
+      },
+      {
+        "line": 24,
+        "source": "override public function get name() : String"
+      },
+      {
+        "line": 29,
+        "source": "override public function execute() : void"
+      },
+      {
+        "line": 72,
+        "source": "private function vehicleComplete() : void"
+      }
+    ]
+  },
+  {
+    "path": ".scratch\\edition-5-research\\publisher-scripts\\scripts\\zlong\\bombit5\\maps\\Map.as",
+    "sha256": "5a1f0836fffba1323b0943b85398adeebc245ba69d47c068aa2d7a7b77691d16",
+    "functions": [
+      {
+        "line": 37,
+        "source": "public function Map(param1:Game)"
+      },
+      {
+        "line": 44,
+        "source": "private function init() : void"
+      },
+      {
+        "line": 73,
+        "source": "public function createRamdonProp(param1:int = 2) : void"
+      },
+      {
+        "line": 88,
+        "source": "public function createCoins(param1:int) : void"
+      },
+      {
+        "line": 99,
+        "source": "public function getAllEmptyPosition() : Array"
+      },
+      {
+        "line": 131,
+        "source": "private function getRandomPropPosition(param1:int) : Array"
+      },
+      {
+        "line": 171,
+        "source": "public function addSheep(param1:SheepRobot) : void"
+      },
+      {
+        "line": 176,
+        "source": "public function deleteSheep(param1:SheepRobot) : void"
+      },
+      {
+        "line": 181,
+        "source": "public function addPlatForm(param1:AbstractPlatForm, param2:int, param3:int) : void"
+      },
+      {
+        "line": 190,
+        "source": "public function removePlatForm(param1:AbstractPlatForm, param2:int, param3:int) : void"
+      },
+      {
+        "line": 200,
+        "source": "public function addBox(param1:AbstractObject, param2:int, param3:int) : void"
+      },
+      {
+        "line": 206,
+        "source": "public function deleBox(param1:int, param2:int) : void"
+      },
+      {
+        "line": 215,
+        "source": "public function addItem(param1:AbstractObject, param2:int, param3:int) : void"
+      },
+      {
+        "line": 235,
+        "source": "public function setNodeDirection(param1:int, param2:int, param3:String) : void"
+      },
+      {
+        "line": 240,
+        "source": "public function blockNode(param1:int, param2:int, param3:Boolean) : void"
+      },
+      {
+        "line": 245,
+        "source": "public function setNodeCost(param1:int, param2:int, param3:Number) : void"
+      },
+      {
+        "line": 250,
+        "source": "public function isEmpty(param1:int, param2:int) : Boolean"
+      },
+      {
+        "line": 264,
+        "source": "public function isHandTouch(param1:int, param2:int) : Boolean"
+      },
+      {
+        "line": 269,
+        "source": "public function isBelt(param1:int, param2:int) : Boolean"
+      },
+      {
+        "line": 274,
+        "source": "public function isBlock(param1:int, param2:int) : Boolean"
+      },
+      {
+        "line": 279,
+        "source": "public function isOutOfScene(param1:int, param2:int) : Boolean"
+      },
+      {
+        "line": 289,
+        "source": "public function getSheep(param1:int, param2:int) : SheepRobot"
+      },
+      {
+        "line": 304,
+        "source": "public function getItem(param1:int, param2:int) : AbstractObject"
+      },
+      {
+        "line": 309,
+        "source": "public function getProp(param1:int, param2:int) : AbstractItem"
+      },
+      {
+        "line": 314,
+        "source": "public function deleProp(param1:int, param2:int) : void"
+      },
+      {
+        "line": 320,
+        "source": "public function addProp(param1:int, param2:int, param3:AbstractItem) : void"
+      },
+      {
+        "line": 325,
+        "source": "public function addBomb(param1:int, param2:int, param3:Bomb) : void"
+      },
+      {
+        "line": 389,
+        "source": "public function getBomb(param1:int, param2:int) : Array"
+      },
+      {
+        "line": 394,
+        "source": "public function deleBomb(param1:int, param2:int, param3:Bomb) : void"
+      },
+      {
+        "line": 404,
+        "source": "public function moveBomb(param1:int, param2:int, param3:int, param4:int) : void"
+      },
+      {
+        "line": 416,
+        "source": "public function getBox(param1:int, param2:int) : Box"
+      },
+      {
+        "line": 421,
+        "source": "public function getTramcar(param1:int, param2:int) : Tractor"
+      },
+      {
+        "line": 426,
+        "source": "public function setTramcar(param1:int, param2:int, param3:Tractor) : void"
+      },
+      {
+        "line": 432,
+        "source": "public function deleTramcar(param1:int, param2:int) : void"
+      },
+      {
+        "line": 438,
+        "source": "public function deleteItem(param1:int, param2:int) : void"
+      },
+      {
+        "line": 443,
+        "source": "public function setFire(param1:int, param2:int, param3:Boolean) : void"
+      },
+      {
+        "line": 448,
+        "source": "public function getFire(param1:int, param2:int) : Boolean"
+      },
+      {
+        "line": 453,
+        "source": "public function getPlatForm(param1:int, param2:int) : AbstractPlatForm"
+      },
+      {
+        "line": 458,
+        "source": "public function setResistance(param1:int, param2:int, param3:Number) : void"
+      },
+      {
+        "line": 463,
+        "source": "public function getResistance(param1:int, param2:int) : Number"
+      },
+      {
+        "line": 468,
+        "source": "public function getNull(param1:int, param2:int) : Number"
+      },
+      {
+        "line": 473,
+        "source": "public function setNull(param1:int, param2:int, param3:Number) : void"
+      },
+      {
+        "line": 478,
+        "source": "public function getFixedBox(param1:int, param2:int) : Number"
+      },
+      {
+        "line": 483,
+        "source": "public function getFixedBoxMc(param1:int, param2:int) : int"
+      },
+      {
+        "line": 488,
+        "source": "public function setFixedBox(param1:int, param2:int, param3:Number) : void"
+      },
+      {
+        "line": 493,
+        "source": "public function setFixedBoxMc(param1:int, param2:int, param3:int) : void"
+      },
+      {
+        "line": 498,
+        "source": "public function getUnfixedBox(param1:int, param2:int) : Number"
+      },
+      {
+        "line": 503,
+        "source": "public function setUnfixedBox(param1:int, param2:int, param3:Number) : void"
+      },
+      {
+        "line": 508,
+        "source": "public function getOther(param1:int, param2:int) : Number"
+      },
+      {
+        "line": 513,
+        "source": "public function setOther(param1:int, param2:int, param3:Number) : void"
+      },
+      {
+        "line": 518,
+        "source": "public function getMidBox(param1:int, param2:int) : int"
+      },
+      {
+        "line": 523,
+        "source": "public function setMidBox(param1:int, param2:int, param3:int) : void"
+      },
+      {
+        "line": 528,
+        "source": "public function setRobot(param1:int, param2:int, param3:AbstractRobot) : void"
+      },
+      {
+        "line": 533,
+        "source": "public function getRobot(param1:int, param2:int) : Array"
+      },
+      {
+        "line": 538,
+        "source": "public function deleRobot(param1:int, param2:int, param3:AbstractRobot) : void"
+      },
+      {
+        "line": 543,
+        "source": "public function drawFloor(param1:int, param2:int, param3:int, param4:uint, param5:Sprite, param6:AbstractPlayer) : void"
+      },
+      {
+        "line": 548,
+        "source": "public function getPlayer(param1:int, param2:int) : AbstractPlayer"
+      },
+      {
+        "line": 553,
+        "source": "public function getArea(param1:int, param2:int) : int"
+      },
+      {
+        "line": 558,
+        "source": "public function setArea(param1:int, param2:int, param3:int) : void"
+      },
+      {
+        "line": 563,
+        "source": "public function getGrid(param1:int, param2:int) : Grid"
+      },
+      {
+        "line": 568,
+        "source": "public function getPaintedNum(param1:AbstractPlayer) : int"
+      },
+      {
+        "line": 596,
+        "source": "public function clearPlayerPaintedGrid(param1:AbstractPlayer) : void"
+      },
+      {
+        "line": 622,
+        "source": "public function dispose() : void"
+      },
+      {
+        "line": 643,
+        "source": "public function get sheepsArr() : Array"
+      },
+      {
+        "line": 648,
+        "source": "public function set sheepsArr(param1:Array) : void"
+      },
+      {
+        "line": 653,
+        "source": "public function setCheckPoint(param1:CheckPoint) : void"
+      }
+    ]
+  }
+]

@@ -1,0 +1,71 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\results-zero-win-42-01",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "case_sha256": "b438a1df15f32c709fb18580da6cb3f904a0fee12673c20f6880c93da4f8f915",
+  "trace_frames": 120,
+  "events": {
+    "events": 60277,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 1
+  },
+  "screenshots": [
+    {
+      "name": "win-results.png",
+      "sha256": "4c4cf922cef810d5a120e8fd92b36b2778848ba97b007e2c3b29d36345ec4839",
+      "bytes": 214149
+    },
+    {
+      "name": "next-opening.png",
+      "sha256": "b2e142f24fa08de54f35fbddde21b213325a6ca91269d31c62abfb33f972aa12",
+      "bytes": 537341
+    },
+    {
+      "name": "next-loss-results.png",
+      "sha256": "c374d369e5e26246e1a1194ae3b635b2656f36effc181e349d9eb257ef7b09f6",
+      "bytes": 177806
+    }
+  ],
+  "settlements": [
+    {
+      "call": 7667,
+      "enter_frame": 939,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x21513b71870",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        true
+      ],
+      "exit_frame": 939,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    },
+    {
+      "call": 29729,
+      "enter_frame": 1333,
+      "method": "zlong.bombit5.gameengine.gamemode::ArcadeMode/countScore()",
+      "receiver": {
+        "$ref": "0x21513b71870",
+        "class": "zlong.bombit5.gameengine.gamemode::ArcadeMode"
+      },
+      "arguments": [
+        false
+      ],
+      "exit_frame": 1333,
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      }
+    }
+  ],
+  "limits": [
+    "Controlled original-method setup; no raw health/score/outcome writes.",
+    "Date/Tween wall time and explicit logical steps are distinct.",
+    "Encrypted score getters/setters are observed original calls; stale private slots are not their oracle."
+  ]
+}

@@ -1,0 +1,174 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "fireball-shield-interaction",
+  "case_sha256": "3ee47f9b0aa737c0990465cdff0031723bc7eaab9416c9633a295ffdf716e64c",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "a477d00133f925bce0a1d4e831f7b10d2487344c297f8cfc86458f0b3319bb67"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "ce6ab6752974bc09d41474b974c1a4a9d700d15b6c876307514926c93fad1a32"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "063842fe15356135e7460b593a84af3f97d0eb27795fa8287558fa70ff66afc8"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "ee040dfa1563b1b5d790757e09c5e8c35a00bce28f90b79fdc53aadd6a693c6c"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "9b33d641a8557bef24bdda4b5aa0894734b25e25f620df4dd21807a06f4a3007"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 721,
+      "sha256": "4c6fcd6656d88988d75be630fd1a8dea337c457f58208eb7103efd612e528d65"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 821,
+      "sha256": "6d2e3d1b850bb651f208460f76db49000d34d517d6325c3579ae9498ae3a048c"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 821,
+      "sha256": "80a5014da1321bd751f71df00df2933a06bc492bbc3d703d35fe0fa9d46b0cf2"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 823,
+      "sha256": "6641ecd157f762ac618e0408b0b2391b476b78a97862846baf5b01c277785aa1"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 823,
+      "sha256": "95506eadd72d4ebfbfae4a6a5800ab1f93db76718778d9f6e8316ca08c31b93f"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "5a7adba2c2781818a418f19f5976bad1917b8c64568fd7b562a7660bdc99bb74",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-n8d1r7xg\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 984,
+  "captures": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "e1163b7542384987b0c26b805bad38d4144000055ec21238e4536c2861f28d2e",
+      "bytes": 543398
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "6f72225c55efc27f4123f14fb6b2503e7dc174aae9d2df30863f7b617a64c511",
+      "bytes": 544553
+    },
+    {
+      "name": "equipped",
+      "frame": 824,
+      "sha256": "b271e11758781aea772b69d0be1bfd6632e1b5f8511bc43c8e63ab0248c1e7d8",
+      "bytes": 546367
+    },
+    {
+      "name": "input",
+      "frame": 824,
+      "sha256": "c3a4aa48999802556b4a0859f15c01a82dbf3f745bd1336738dccb07fe84d373",
+      "bytes": 546300
+    },
+    {
+      "name": "first-recovered",
+      "frame": 904,
+      "sha256": "3e509555fe5651ed90c488afe8a5ccb3d637129e9075d7fe18e671ceb2564aba",
+      "bytes": 547077
+    },
+    {
+      "name": "second-input",
+      "frame": 904,
+      "sha256": "188f3a93be4568dcdb7e4c181b9fc461f8a60cb3b6bf28b9c95bb3f17862d45d",
+      "bytes": 547099
+    },
+    {
+      "name": "second-recovered",
+      "frame": 984,
+      "sha256": "dde41a29a17b762ebd0e5bf69b291eacfb4d78124077366a382cae97166a45ec",
+      "bytes": 541018
+    }
+  ],
+  "states": [
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "fe52d51b11244446cf772867d051e27890b4db602dd710aabfbe7eaa59f99fff",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "spawn-protection-finished",
+      "frame": 821,
+      "sha256": "bc0da788612985a3c024c0edb13d82f21b05bd1992131ea1b9cb5ef396b7974e",
+      "objects": 394,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "equipped",
+      "frame": 824,
+      "sha256": "b733f79e4265f5fe63e10f76b3758f7606b4caca205bb9b53c887c68ca9235e7",
+      "objects": 395,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "input",
+      "frame": 824,
+      "sha256": "03c4b3513999642eaff3bbe81964b18b187b2655c47cdecb066dba58a228040c",
+      "objects": 396,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "first-recovered",
+      "frame": 904,
+      "sha256": "74f98f74475760dd2ded8ad450159d46d4e6c5962a2928917a9933d6722037bb",
+      "objects": 397,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "second-input",
+      "frame": 904,
+      "sha256": "240e6111eeca3e9a87cf14b74c93ce79fea96ee2943a97addad00ca7930ecb87",
+      "objects": 398,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "second-recovered",
+      "frame": 984,
+      "sha256": "65581989722ffb856c5307502a182e3e99d761c1744641d6d3cacce86eade1b9",
+      "objects": 355,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "34e505cac82369dc5c51df8cf2a3f45f58f786737e07ac0e8dbf4cacef90d4f2",
+  "stderr_sha256": "c4bc01730ecb1321317346dff497854686a91a8757408110a6049b9cbd455795"
+}

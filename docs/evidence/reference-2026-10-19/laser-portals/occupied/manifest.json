@@ -1,0 +1,367 @@
+{
+  "status": "executed_reference_case_not_yet_behavior_verified",
+  "case": "original-laser-occupied-portal-ray",
+  "case_sha256": "77405a32da8d7de506882e0a155858514c08262d3c8ba5f9dc503ea9669fb36f",
+  "fixtures": true,
+  "fixture_results": [
+    {
+      "name": "fixture-0000",
+      "frame": 721,
+      "sha256": "f4d7678a1b16b3ad4a8e669ec3863a37a1bfffcc2755e0404d846c9e233e01e9"
+    },
+    {
+      "name": "fixture-0001",
+      "frame": 721,
+      "sha256": "e8a6435b2814710295ddee0dfbf0fdd8a504ffe0a6613ca7a81d6f3693d2cbc5"
+    },
+    {
+      "name": "fixture-0002",
+      "frame": 721,
+      "sha256": "c3358e63fc67c7faac35cb7406242decdf8fb53899e804236fae2f8db97b7f18"
+    },
+    {
+      "name": "fixture-0003",
+      "frame": 721,
+      "sha256": "a17e92e992172aabde9ca1b42863fdddd942c3a31e4d225f138df1b30adebad1"
+    },
+    {
+      "name": "fixture-0004",
+      "frame": 721,
+      "sha256": "1ac43018edd86972ec14eccce96296e619c67c1484854e3f49fbc47c69903235"
+    },
+    {
+      "name": "fixture-0005",
+      "frame": 722,
+      "sha256": "11576b93a470d9ecf14ec075c628b130a2a06df4ba57a1331d527cf0a76574dd"
+    },
+    {
+      "name": "fixture-0006",
+      "frame": 722,
+      "sha256": "620f50f3eb407ad8f6cebd4accb3e6c1a93ca4dbadcf055c0f6226e781653e1e"
+    },
+    {
+      "name": "fixture-0007",
+      "frame": 723,
+      "sha256": "05f13bed19e9ab119b604437c3d78476aeaababe8d4fe28a1b7b010b7d44e531"
+    },
+    {
+      "name": "fixture-0008",
+      "frame": 724,
+      "sha256": "3b1bb7b86527f2ed73a1bb9ab8a5c0de3eeb2085da8a7d85dee19c0feb8aa804"
+    },
+    {
+      "name": "fixture-0009",
+      "frame": 725,
+      "sha256": "32e295a043528d76ded079ffbfc994d466e81cde8fba66b346c21c607168b420"
+    },
+    {
+      "name": "fixture-0010",
+      "frame": 726,
+      "sha256": "16fea10043a14bb7cc576ce5dec1a48856952e7d0f4190ff3d77d33aadfe80bd"
+    },
+    {
+      "name": "fixture-0011",
+      "frame": 727,
+      "sha256": "9334f50aae078686ba8c4987790d5167092256adadbcf31bd59026f16bccac73"
+    },
+    {
+      "name": "fixture-0012",
+      "frame": 728,
+      "sha256": "53e961bb8faaecdcee49ae7aefb4193b215fa18658184c4429d17767650cab19"
+    },
+    {
+      "name": "fixture-0013",
+      "frame": 729,
+      "sha256": "5829ed50f9cf1f9c34dc373aa281c3eff84cfb7d1e69288493897b85ae8b6b8a"
+    },
+    {
+      "name": "fixture-0014",
+      "frame": 759,
+      "sha256": "7fbf5c06f693b1db20907eede8290a78eefe11d68cea28d8ea027f5ecc5d0aa1"
+    }
+  ],
+  "observation_mode": "focus",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "33d2791282aa7d93d5b9bfe7a1ce166a31e155355e02c8bd584b08a60354ffe8",
+  "load_path": "C:\\Users\\Eiji\\AppData\\Local\\Temp\\bombit5-reference-c6mb4cqg\\original.swf",
+  "load_path_reason": "Byte-identical temporary copy avoids SharedObject dot-path rejection.",
+  "last_frame": 792,
+  "captures": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "2f3f99ea7794273384466e63d2f3072c7f91e3a631f785af82f17d3ff20ab64d",
+      "bytes": 231347
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "6764408c0c4ccb89eab616f9dd6eb2fc9a82a62b2af74aaad6154c655bef35a2",
+      "bytes": 408108
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "f2cfdbf3db23674bcc3eaebde6639da24d8346075da64d8f86a8d183e1d75979",
+      "bytes": 270154
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "7401836a4dec2a3f629f0751e106853be6b8fb66350efbca587ed4cd437e150a",
+      "bytes": 266922
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "14b027dc5f80e78744eb553a1de792c1c5c258cae46f746007b05849948864bf",
+      "bytes": 264282
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "d04e7e7bc30054bd44d1a1abbf1b758103b2b7bda76111d38020e71ad2e67b92",
+      "bytes": 267043
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "07d11f8b26bd34db16f4a462a486c7f471db5d11773ba7579624df75613c1905",
+      "bytes": 219650
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "6009df257b7095fc7edf2d15962db8b962b328f680166acc9aea24d9d4d4dfc5",
+      "bytes": 551097
+    },
+    {
+      "name": "laser-equipped",
+      "frame": 722,
+      "sha256": "caf874b06134fc26e34ff4a8b40339188a349e462d08ad4c37d4ca84cdb6c757",
+      "bytes": 551620
+    },
+    {
+      "name": "physical-arrival",
+      "frame": 759,
+      "sha256": "c9a23c87f2e254a4736568c67a3843e4a717667a3904c0e58b8756dae6b3db16",
+      "bytes": 551353
+    },
+    {
+      "name": "traveler-arrived",
+      "frame": 761,
+      "sha256": "bdba1df85eda1e6247fdb927a36456d4fd1a990573b802c4dc257b3631127d9d",
+      "bytes": 551431
+    },
+    {
+      "name": "pre-shot",
+      "frame": 761,
+      "sha256": "bdba1df85eda1e6247fdb927a36456d4fd1a990573b802c4dc257b3631127d9d",
+      "bytes": 551431
+    },
+    {
+      "name": "laser-input",
+      "frame": 761,
+      "sha256": "27c044443e61519e42b468a5551d1abec30bbca2283125b1b194512dddf9d666",
+      "bytes": 551366
+    },
+    {
+      "name": "charge-first",
+      "frame": 762,
+      "sha256": "9f384b9bc20dfa7e3e6bc765334085199c5bf4db1ea1f42ac762787214625023",
+      "bytes": 551312
+    },
+    {
+      "name": "beam-creation",
+      "frame": 772,
+      "sha256": "18f58df8d1b1a1573e1ef37212d90e12ed7d4fe2ff551aa4d507fe5dab588857",
+      "bytes": 549402
+    },
+    {
+      "name": "beam-end-first",
+      "frame": 773,
+      "sha256": "52db4c9eed56c048f96d6d12f9a42d3ca9655d23dfb688c1cc9fff5b36887d9a",
+      "bytes": 549818
+    },
+    {
+      "name": "beam-visible",
+      "frame": 775,
+      "sha256": "5eae6422f9b7f0ba57eaac7fec025a571df41b82aebba4d76198c61cf5b186db",
+      "bytes": 550354
+    },
+    {
+      "name": "beam-cleaned",
+      "frame": 789,
+      "sha256": "27d91ef8c5e22a571b48c8dde0c0859ff88b45a0b7a90a31ddd9f0ce5e08b72c",
+      "bytes": 549504
+    },
+    {
+      "name": "fresh-movement",
+      "frame": 792,
+      "sha256": "33fa5adbdd390d32248f497b5ed65139067a210a3cfafceabd8cb23fd12a9f6d",
+      "bytes": 548038
+    }
+  ],
+  "states": [
+    {
+      "name": "title",
+      "frame": 301,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "menu",
+      "frame": 541,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-default",
+      "frame": 571,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-normal",
+      "frame": 596,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "arena-dropdown",
+      "frame": 598,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "settings-cinema",
+      "frame": 600,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "character",
+      "frame": 640,
+      "sha256": "95b45d5d1662a18dc5ce1012a9a25007edc58008925e75947168356a9612a309",
+      "objects": 0,
+      "available": false,
+      "truncated": false
+    },
+    {
+      "name": "opening-board",
+      "frame": 721,
+      "sha256": "3ab7f0bd560c100fd161c2369ab1e59db2c882c835f306a7c11a5e0ae97b7c99",
+      "objects": 400,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "laser-equipped",
+      "frame": 722,
+      "sha256": "72582b6076be58f22ad0769c8e4004895d8e7ee641497f5ab442aa1aaaaf7062",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "physical-arrival",
+      "frame": 759,
+      "sha256": "9a923e5b6d191c84be6747288a89a41ba2397c9af468d6cfc141ed6d4ca5497e",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "traveler-arrived",
+      "frame": 761,
+      "sha256": "b11a854d7c85d2320b12fcf7a43a9e0c73af8a20640d6df1036ac91437087379",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "pre-shot",
+      "frame": 761,
+      "sha256": "b11a854d7c85d2320b12fcf7a43a9e0c73af8a20640d6df1036ac91437087379",
+      "objects": 402,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "laser-input",
+      "frame": 761,
+      "sha256": "064ee986cbbb805011a2821680e60e4d70c0bad3c5822a01f2c1d1e771ef36e1",
+      "objects": 403,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "charge-first",
+      "frame": 762,
+      "sha256": "664d07e7bb666f858aa6725e2d60100dc8a55d232ef490a9ff95fcadd9948a86",
+      "objects": 403,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "beam-creation",
+      "frame": 772,
+      "sha256": "73dc29ba064425403a9afbd0d0e7985b291789e568655ce96ab862cc7c25a949",
+      "objects": 405,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "beam-end-first",
+      "frame": 773,
+      "sha256": "e22d1d157b09b0db124f15dd074f714557b2c00ce9cf017167371f3939976ee9",
+      "objects": 405,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "beam-visible",
+      "frame": 775,
+      "sha256": "8e04e9a7292d73fc0b259a738cb50b4bdac81438d558e381b05b11fac6d16910",
+      "objects": 405,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "beam-cleaned",
+      "frame": 789,
+      "sha256": "a46b27c056f36076e76ee40fe238d76c8f23f8b3cac351d6f0b6e832a7c0aab7",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    },
+    {
+      "name": "fresh-movement",
+      "frame": 792,
+      "sha256": "3c3f036c18cdb8be5b0b3c2edd9a5ea0e0222869529883bfadb68ec852572ad8",
+      "objects": 401,
+      "available": true,
+      "truncated": false
+    }
+  ],
+  "limits": [
+    "No RNG determinism implied.",
+    "Frame stepping and host wall clock are different clocks.",
+    "Visual content and game state require separate assessment."
+  ],
+  "exit_code": 0,
+  "command_log_sha256": "bf90d11650dddb02c448b1c94cd0632c9163b1cea3171ec44a22a0421394d395",
+  "stderr_sha256": "5047dc6a4a98f4e72e20f21519b39c5b64ef20f7949b50e1f6a76bb993266af1"
+}

@@ -1,0 +1,274 @@
+{
+  "raw_run": ".scratch\\edition-5-research\\reference-runs\\laser-shielded-portal-42-03",
+  "case_sha256": "4acca92ecfb7c404938b97d46d1253e26b78304a5de6b551a467559272c4c4b8",
+  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "player_sha256": "33d2791282aa7d93d5b9bfe7a1ce166a31e155355e02c8bd584b08a60354ffe8",
+  "trace_frames": 31,
+  "events": {
+    "events": 11652,
+    "dropped": 0,
+    "overflow_files": 0,
+    "errors": 0,
+    "stack_overflows": 0
+  },
+  "shoot": {
+    "call": 1712,
+    "parent": 1710,
+    "enter_frame": 773,
+    "enter_sequence": 3419,
+    "method": "ShootLaserCommand/execute()",
+    "receiver": {
+      "$ref": "0x1bdd31f4b00",
+      "class": "ShootLaserCommand"
+    },
+    "arguments": [],
+    "kind": "return",
+    "result": {
+      "$undefined": true
+    },
+    "exit_frame": 773,
+    "exit_sequence": 3672
+  },
+  "direct_ray_queries": [
+    {
+      "call": 1729,
+      "parent": 1712,
+      "enter_frame": 773,
+      "enter_sequence": 3452,
+      "method": "zlong.bombit5.maps::Map/isBlock()",
+      "receiver": {
+        "$ref": "0x1bdcdb0e260",
+        "class": "zlong.bombit5.maps::Map"
+      },
+      "arguments": [
+        13.0,
+        11.0
+      ],
+      "kind": "return",
+      "result": false,
+      "exit_frame": 773,
+      "exit_sequence": 3457
+    },
+    {
+      "call": 1747,
+      "parent": 1712,
+      "enter_frame": 773,
+      "enter_sequence": 3488,
+      "method": "zlong.bombit5.maps::Map/isBlock()",
+      "receiver": {
+        "$ref": "0x1bdcdb0e260",
+        "class": "zlong.bombit5.maps::Map"
+      },
+      "arguments": [
+        13.0,
+        12.0
+      ],
+      "kind": "return",
+      "result": false,
+      "exit_frame": 773,
+      "exit_sequence": 3493
+    },
+    {
+      "call": 1793,
+      "parent": 1712,
+      "enter_frame": 773,
+      "enter_sequence": 3580,
+      "method": "zlong.bombit5.maps::Map/isBlock()",
+      "receiver": {
+        "$ref": "0x1bdcdb0e260",
+        "class": "zlong.bombit5.maps::Map"
+      },
+      "arguments": [
+        13.0,
+        13.0
+      ],
+      "kind": "return",
+      "result": true,
+      "exit_frame": 773,
+      "exit_sequence": 3585
+    },
+    {
+      "call": 1796,
+      "parent": 1712,
+      "enter_frame": 773,
+      "enter_sequence": 3586,
+      "method": "zlong.bombit5.maps::Map/getRobot()",
+      "receiver": {
+        "$ref": "0x1bdcdb0e260",
+        "class": "zlong.bombit5.maps::Map"
+      },
+      "arguments": [
+        13.0,
+        13.0
+      ],
+      "kind": "return",
+      "result": {
+        "$ref": "0x1bdceb96830",
+        "class": "Array",
+        "array_length": 0,
+        "elements": [],
+        "array_truncated": false
+      },
+      "exit_frame": 773,
+      "exit_sequence": 3589
+    },
+    {
+      "call": 1798,
+      "parent": 1712,
+      "enter_frame": 773,
+      "enter_sequence": 3590,
+      "method": "zlong.bombit5.maps::Map/isEmpty()",
+      "receiver": {
+        "$ref": "0x1bdcdb0e260",
+        "class": "zlong.bombit5.maps::Map"
+      },
+      "arguments": [
+        13.0,
+        13.0
+      ],
+      "kind": "return",
+      "result": false,
+      "exit_frame": 773,
+      "exit_sequence": 3593
+    }
+  ],
+  "actor_hit_cells": [
+    [
+      13.0,
+      11.0,
+      false
+    ],
+    [
+      13.0,
+      12.0,
+      false
+    ]
+  ],
+  "item_hit_cells": [
+    [
+      13.0,
+      11.0
+    ],
+    [
+      13.0,
+      12.0
+    ],
+    [
+      13.0,
+      13.0
+    ]
+  ],
+  "laser_end_frames": [
+    774,
+    775,
+    776,
+    777,
+    778,
+    779,
+    780,
+    781,
+    782,
+    783,
+    784
+  ],
+  "cleanup": [
+    {
+      "call": 3698,
+      "parent": 3691,
+      "enter_frame": 784,
+      "enter_sequence": 7392,
+      "method": "zlong.bombit5.items.weapons::LaserGunProp/renewRobot()",
+      "receiver": {
+        "$ref": "0x1bdd0036e90",
+        "class": "zlong.bombit5.items.weapons::LaserGunProp"
+      },
+      "arguments": [],
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      },
+      "exit_frame": 784,
+      "exit_sequence": 7441
+    },
+    {
+      "call": 3724,
+      "parent": 3691,
+      "enter_frame": 784,
+      "enter_sequence": 7444,
+      "method": "zlong.bombit5.items.weapons::LaserGunProp/resetPlayMc()",
+      "receiver": {
+        "$ref": "0x1bdd0036e90",
+        "class": "zlong.bombit5.items.weapons::LaserGunProp"
+      },
+      "arguments": [],
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      },
+      "exit_frame": 784,
+      "exit_sequence": 7447
+    },
+    {
+      "call": 3726,
+      "parent": 3691,
+      "enter_frame": 784,
+      "enter_sequence": 7448,
+      "method": "zlong.bombit5.bombs::Laser/deleFire()",
+      "receiver": {
+        "$ref": "0x1bdd31f47e0",
+        "class": "zlong.bombit5.bombs::Laser"
+      },
+      "arguments": [],
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      },
+      "exit_frame": 784,
+      "exit_sequence": 7449
+    },
+    {
+      "call": 3728,
+      "parent": 3691,
+      "enter_frame": 784,
+      "enter_sequence": 7452,
+      "method": "zlong.bombit5.items.weapons::LaserGunProp/countWeapon()",
+      "receiver": {
+        "$ref": "0x1bdd0036e90",
+        "class": "zlong.bombit5.items.weapons::LaserGunProp"
+      },
+      "arguments": [],
+      "kind": "return",
+      "result": {
+        "$undefined": true
+      },
+      "exit_frame": 784,
+      "exit_sequence": 7453
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "pre-shot.png",
+      "sha256": "718c22c4ef6104bfab611d8b0cf3f481844f38abaac9312b38e317d0ce390fb5",
+      "bytes": 551798
+    },
+    {
+      "name": "beam-creation.png",
+      "sha256": "3cdd5af513f5165c27d1378594e558001d16820f33d3937e463621f1a014ad56",
+      "bytes": 551807
+    },
+    {
+      "name": "beam-cleaned.png",
+      "sha256": "9ed5004a53289cfc8221b3d1eeff4f4054f3f3b7615e8ae79f7984bb2b83ff0a",
+      "bytes": 550853
+    },
+    {
+      "name": "fresh-movement.png",
+      "sha256": "aed7588ea26386c04b213d43c5bee19e85d36fcb1562a5dc251f9c79c5f700eb",
+      "bytes": 549076
+    }
+  ],
+  "limits": [
+    "Actual original SWF in pinned Ruffle; native Flash equivalence not established.",
+    "A bare portal is nonblocking for this source query; occupied-blocked exception is not presumed."
+  ]
+}

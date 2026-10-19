@@ -1,0 +1,7 @@
+--- a/core/src/avm2/reference_fixtures.rs
++++ b/core/src/avm2/reference_fixtures.rs
+@@ -64,3 +64,3 @@
+-        "bomb" if map.len()==1 => Operation::Bomb,
++        "bomb" if map.len()==1+actor_fields => Operation::Bomb,
+         "ai-control" if map.len()==3 && actor.is_some() => {
+             let start=match map.get("mode").and_then(Json::as_str) {
