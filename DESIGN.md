@@ -93,6 +93,12 @@ The [source movement record](docs/evidence/edition-5-movement-and-board.md) esta
 
 The [complete runnable Godot game specification](docs/specs/runnable-godot-game.md) consolidates the accepted scope through Q28, completion criteria and remaining source-recovery prerequisites. It does not replace evidence records or resolve unaccepted gameplay choices. The user confirmed testing through the existing scheduler and real round simulation, observing public state/results, with a small set of scene tests for controls, display and playable flow. Prefer that shared boundary over separate test interfaces for internal gameplay modules.
 
+## Desktop assessment priorities (2026-10-19)
+
+The user deferred further joystick polish to the physical phone-testing stage. Retain the current functional fixed eight-direction control during desktop assessment; do not make joystick refinement a new prerequisite for that stage.
+
+Following desktop play, the user prioritizes reproducing original edition 5 gameplay feel and logic before replacing presentation with final original artwork. Audit animation-driven attack timing, movement interruption/recovery and damage geometry against the actual edition 5 SWF; replacing pictures alone is not fidelity. Use original source, animations and reference playback to establish the behavior. The edition 1 project is a workflow comparison, not a source for importing code or assets. Existing accepted timing/input/diagonal adaptations and the production asset boundary remain in effect.
+
 ## Decision history
 
 Implementation policy recorded during the user's 2026-10-19 instruction to implement the complete ticket graph without permission stops:
