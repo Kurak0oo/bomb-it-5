@@ -31,7 +31,6 @@ static func step(actor: Dictionary, direction: Vector2, board: Dictionary, bombs
 		for axis in [Vector2(part.x, 0), Vector2(0, part.y)]:
 			if can_stand(actor.position + axis, actor, board, bombs):
 				actor.position += axis
-	actor.cell = Vector2i(floori(actor.position.x + 0.5), floori(actor.position.y + 0.5))
 	for cell in actor.departures.duplicate():
 		if not overlaps(actor.position, cell):
 			actor.departures.erase(cell)

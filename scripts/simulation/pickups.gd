@@ -6,21 +6,12 @@ const WEIGHTS := {&"capacity": 28, &"power": 24, &"speed": 22, &"life": 1, &"shi
 	&"flamer": 1, &"laser": 1, &"hammer": 1, &"triple": 1, &"shotgun": 1, &"vehicle": 3}
 
 
-static func choose(rng: RandomNumberGenerator, vehicles: int) -> StringName:
-	var total := 0
+static func build_pool(draw: Callable) -> Array[StringName]:
+	var pool: Array[StringName] = []
 	for kind in WEIGHTS:
-		if kind != &"vehicle" or vehicles > 0:
-			total += WEIGHTS[kind]
-	var draw := rng.randi_range(0, total - 1)
-	for kind in WEIGHTS:
-		if kind == &"vehicle" and vehicles <= 0:
-			continue
-		draw -= WEIGHTS[kind]
-		if draw < 0:
-			if kind in [&"reserved_kick", &"reserved_boxing"]:
-				return &""
-			return kind
-	return &""
+		for index in WEIGHTS[kind]:
+			pool.append((&"moto" if draw.call() < 0.5 else &"car") if kind == &"vehicle" else kind)
+	return pool
 
 
 static func apply(actor: Dictionary, kind: StringName, tick: int) -> void:
@@ -28,12 +19,14 @@ static func apply(actor: Dictionary, kind: StringName, tick: int) -> void:
 		&"capacity": actor.capacity = mini(9, actor.capacity + 1)
 		&"power": actor.power = mini(5, actor.power + 1)
 		&"speed": actor.speed = minf(2.3, actor.speed + 0.1)
-		&"life": actor.lives += 1
+		&"life":
+			if actor.get("is_human", false): actor.lives += 1
 		&"shield": actor.shield = 1
 		&"invincible":
 			actor.invincible_active_from = tick + 29
-			actor.invincible_until = tick + 29 + 352
+			actor.invincible_until = tick + 29 + 351
 			actor.protected_until = actor.invincible_until
+			actor.protection_stage = &"introduction"
 		&"car", &"moto":
 			actor.vehicle = kind
 			actor.drive_speed = 1.6 * (1.6 if kind == &"car" else 1.3)
@@ -43,4 +36,4 @@ static func apply(actor: Dictionary, kind: StringName, tick: int) -> void:
 		&"hammer", &"flamer", &"laser", &"triple", &"shotgun":
 			actor.weapon = kind
 			actor.ammo = 2
-	actor.score += 100
+	if kind != &"invincible": actor.score += 100

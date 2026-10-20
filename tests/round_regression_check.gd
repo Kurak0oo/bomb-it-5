@@ -121,12 +121,12 @@ func _hazards() -> void:
 	_expect(state.flames.size() == 1 and state.actors[&"human"].alive, "detonation creates a persistent flame and respects protection")
 	var rejected: Dictionary = game.advance([])
 	_expect(not rejected.accepted and rejected.tick == 73 and rejected.flames == state.flames, "atomic rejection freezes active hazards")
-	_expect(_ticks(game, 16).flames.size() == 1, "flames remain through their seventeenth visible tick")
+	_expect(_ticks(game, 15).flames.size() == 1, "flames remain before the seventeenth cleanup callback")
 	_expect(_ticks(game, 1).flames.is_empty(), "expired flames are removed")
 	game = _game({"damage": true, "drops": true}, {}, _board())
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"])])
 	state = _ticks(game, 72)
-	_expect(not state.actors[&"human"].alive and state.actors[&"human"].lives == 2, "unprotected self-hit consumes one life")
+	_expect(not state.actors[&"human"].alive and state.actors[&"human"].lives == 3, "unprotected self-hit detaches the actor without spending a retry heart")
 	var dead_at: Vector2 = state.actors[&"human"].position
 	state = game.advance([_command(&"human", Vector2.RIGHT, [&"down"])])
 	_expect(state.actors[&"human"].position == dead_at and state.bombs.is_empty(), "dead actors neither move nor place bombs")
@@ -140,8 +140,8 @@ func _drops() -> void:
 		var game := _game({"damage": true, "drops": true, "seed": seed_value},
 			{&"human": {"cell": Vector2i(2, 3), "protected_until": 1000}}, board)
 		game.advance([_command(&"human", Vector2.ZERO, [&"down"])])
-		var early := _ticks(game, 82)
-		_expect(early.pickups.is_empty(), "drops wait for the eleven-frame brick animation")
+		var early := _ticks(game, 81)
+		_expect(early.pickups.is_empty(), "drops wait for the recovered brick animation boundary")
 		var ready := _ticks(game, 1)
 		appeared += ready.pickups.size()
 	_expect(appeared > 0 and appeared < 40, "eligible soft blocks have conditional rather than guaranteed drops")
@@ -156,7 +156,7 @@ func _drops() -> void:
 	for kind in [&"capacity", &"power", &"speed", &"life", &"shield", &"invincible"]:
 		game = _game({"drops": true, "pickups": {Vector2i(2, 3): kind}})
 		var state := _ticks(game, 1)
-		_expect(state.pickups.is_empty() and state.actors[&"human"].score == 100, "a collected pickup is removed and awards its source HUD points")
+		_expect(state.pickups.is_empty() and state.actors[&"human"].score == (0 if kind == &"invincible" else 100), "a collected pickup is removed and awards its source HUD points")
 
 
 func _outcomes() -> void:
@@ -164,15 +164,15 @@ func _outcomes() -> void:
 		&"a": {"cell": Vector2i(3, 3)}, &"b": {"cell": Vector2i(2, 4)}, &"c": {"cell": Vector2i(2, 2)}}
 	var game := _game({"round": true, "damage": true}, actors)
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"]), _command(&"a"), _command(&"b"), _command(&"c")])
-	var state := _ticks(game, 72, Vector2.ZERO, actors.keys())
+	var state := _ticks(game, 236, Vector2.ZERO, actors.keys())
 	_expect(state.outcome == &"won" and state.actors[&"human"].kills == 3, "eliminating all three enemies wins a round")
-	_expect(state.result_score == 4680, "Normal victory awards three kills, difficulty bonus and the displayed 178 remaining seconds")
+	_expect(state.result_score == 4670, "Normal victory awards kills, difficulty and time captured at delayed mode judgment")
 	var after := _ticks(game, 40, Vector2.ZERO, actors.keys())
-	_expect(after.tick == 73 and after.result_score == 4680, "a completed round cannot advance or recount its result")
+	_expect(after.tick == 237 and after.result_score == 4670, "a completed round cannot advance or recount its result")
 	actors[&"human"].shield = 0
 	game = _game({"round": true, "damage": true}, actors)
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"]), _command(&"a"), _command(&"b"), _command(&"c")])
-	_expect(_ticks(game, 72, Vector2.ZERO, actors.keys()).outcome == &"lost", "human defeat takes priority in a simultaneous elimination batch")
+	_expect(_ticks(game, 236, Vector2.ZERO, actors.keys()).outcome == &"lost", "human defeat takes priority in a simultaneous elimination batch")
 
 
 func _weapons() -> void:
@@ -197,7 +197,7 @@ func _weapons() -> void:
 	game.advance([_command()])
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"])])
 	state = _ticks(game, 72)
-	_expect(state.actors[&"human"].alive and state.actors[&"human"].vehicle == &"", "a blast destroys the vehicle before killing its rider")
+	_expect(state.actors[&"human"].alive and state.actors[&"human"].vehicle == &"car" and state.actors[&"human"].vehicle_recovery_until > state.tick, "a blast starts retained vehicle recovery before any rider death")
 	_expect(state.actors[&"human"].protected_until > state.tick, "vehicle loss grants its recovery protection")
 	game = _game({"movement": true, "drops": true,
 		"pickups": {Vector2i(2, 3): &"laser", Vector2i(3, 3): &"car"}})
@@ -235,7 +235,7 @@ func _surviving_controller() -> void:
 	var scheduler := Scheduler.new([&"human", &"a", &"b", &"c"], game)
 	var controller := AI.new(5)
 	scheduler.set_controller(&"c", func(): return controller.command(game.snapshot(), &"c"))
-	scheduler.advance_time(1.0 / 35)
+	for index in 5: scheduler.advance_time(1.0 / 35)
 	_expect(game.snapshot().actors[&"c"].position != Vector2(6, 4),
 		"the surviving AI receives a decision turn without waiting for eliminated controllers")
 	scheduler.free()
@@ -249,11 +249,11 @@ func _escape_following() -> void:
 		&"b": {"cell": Vector2i(1, 3)}, &"c": {"cell": Vector2i(7, 3)}}
 	var game := _game({"movement": true}, actors, board)
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"]), _command(&"a"), _command(&"b"), _command(&"c")])
-	_ticks(game, 2, Vector2.ZERO, actors.keys())
+	_ticks(game, 33, Vector2.ZERO, actors.keys())
 	var scheduler := Scheduler.new([&"human", &"a", &"b", &"c"], game)
 	var controller := AI.new(5)
 	scheduler.set_controller(&"a", func(): return controller.command(game.snapshot(), &"a"))
-	scheduler.advance_time(1.0 / 35)
+	for index in 12: scheduler.advance_time(1.0 / 35)
 	var first: Vector2 = game.snapshot().actors[&"a"].position
 	scheduler.advance_time(1.0 / 35)
 	_expect(first.x > 4 and game.snapshot().actors[&"a"].position.x > first.x,

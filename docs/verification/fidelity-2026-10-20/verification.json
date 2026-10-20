@@ -1,0 +1,1485 @@
+{
+  "authority_swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2",
+  "ruffle_revision": "45366370ed7d1a59c89aa3cf7b765c7a274407cd",
+  "baseline_commit": "74ab044",
+  "godot": "4.5.stable.official.876b29033",
+  "checks": 160,
+  "failed_comparisons": 0,
+  "comparison_fixtures": 40,
+  "comparison_artifact": {
+    "path": "docs/verification/fidelity-2026-10-20/comparisons.json",
+    "sha256": "041a50b9002348da1fa71f2a591755187aaec7118d796e003bcca57046a9d12e"
+  },
+  "production_scripts": [
+    {
+      "path": "scripts/game.gd",
+      "sha256": "23a7abc3aa1bed07e20acc679efd7e8318133eec3fdb5eca3205c6def4b9410c"
+    },
+    {
+      "path": "scripts/game_view.gd",
+      "sha256": "3f1ec3c7bd0b3f844435d9d2e86b0f9ebdcdf4cf8777acdf2bb7257c2ec85b68"
+    },
+    {
+      "path": "scripts/simulation/ai_controller.gd",
+      "sha256": "e11cf1e3a41d68d7b6ddb00fde46a025f4d7217c027d68eb685cf7aee64dcae7"
+    },
+    {
+      "path": "scripts/simulation/ai_perception.gd",
+      "sha256": "1ede9a0307725285824d7647230ee10bce3aa3ca1d9d5198ccee8c96d9b5aa95"
+    },
+    {
+      "path": "scripts/simulation/ai_search.gd",
+      "sha256": "56cde60c447d12ce95742c3c2f410f1d514c7551861b4f2ea43a91ae462f91ee"
+    },
+    {
+      "path": "scripts/simulation/bomb_event_queue.gd",
+      "sha256": "72db7318f4cabc708181a0e436356e915c2c00acab065ac7c647cf6643d39395"
+    },
+    {
+      "path": "scripts/simulation/bomb_simulation.gd",
+      "sha256": "2c914cc8307aff5ce22409f5374a852da67b1ed51020362ebaf2143d4476f170"
+    },
+    {
+      "path": "scripts/simulation/command_boundary.gd",
+      "sha256": "d832bc552f23639767b01f13c9245704f730b63e50115e1f4340134d71bc231a"
+    },
+    {
+      "path": "scripts/simulation/movement.gd",
+      "sha256": "cd660cbf57e09ff5f90c20d45864abe921eb15ed8bd37cfce3413fcf0893f6af"
+    },
+    {
+      "path": "scripts/simulation/pickups.gd",
+      "sha256": "13e4015fb77d47aca744153eb38ef57549c855baadebd72e04a607b413cb3f3c"
+    },
+    {
+      "path": "scripts/simulation/tick_scheduler.gd",
+      "sha256": "563208336c39c1eb5fdf0845e160e927c932aca4a7c8933fda3f90cdc8958ec8"
+    },
+    {
+      "path": "scripts/simulation/weapon_geometry.gd",
+      "sha256": "b783bc5a7c95471dd452095934d955b88f5802c86cd7a11e082c47441337f3ba"
+    },
+    {
+      "path": "scripts/simulation/weapons.gd",
+      "sha256": "0fd09f956ca19ba829f4b7c8037d88138b981be4633505b4652e5679e8f2756e"
+    },
+    {
+      "path": "scripts/touch_controls.gd",
+      "sha256": "0c3691885901d811cdbdd2a67edc8c44c7ebdd6ccbc7ad812b21ced4502c0baa"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/verification/fidelity-2026-10-20/desktop/death.png",
+      "sha256": "37ed70060b7d0466f6cfba56f5994d70ea6b85112e15219e877dced8e409168d"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/desktop/ending.png",
+      "sha256": "31ff2b9dc1ccae457c47694a360ae1c7e59b05c40acd4418f291afcc3d34bb14"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/desktop/game-over.png",
+      "sha256": "3b14273859633bd42272a7a65c389bcb9d47404d8a10c619b008cd0a61aa6410"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/desktop/match.png",
+      "sha256": "22ea9a5179a660f71f128a7ccb30a49d25c72b2c3ed09458f35fa6ec241ca576"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/desktop/pause.png",
+      "sha256": "cddf443c6a40f15f10591b20d8aa0f2858cdb715a127e78c862d54c1dd05513f"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/desktop/results.png",
+      "sha256": "4d0957c2fc4ec81f1b561f2264aa5282c5a7b1303db70a1495f6cc6affc5d7f3"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/desktop/victory.png",
+      "sha256": "7f5eafc7aca8be2813d3902a01e05538d0170baac610bdd2dadc46c396d6beaf"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/fireball-charge.png",
+      "sha256": "31013a2a130fe6e208af832231f4d02730c4001e3eebf87a9170dcc786f20475"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/fireball-independent-recovery.png",
+      "sha256": "36d32f655e8132a491c88d1d485f4e20283a1d5b70160b7ff6f58ce96e3d345d"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/flamer-final-tip.png",
+      "sha256": "f3b9ddcccdaa50e164326a01e927cd139ccf8d865d3cecbde78c60f44bce1616"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/flamer-first-tip.png",
+      "sha256": "7258fba65979ba47f38b22400303c677ac3f2f06214dc28089b2a1f16370d5b9"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/hammer-layer-frame12.png",
+      "sha256": "67a5affe9dd12eea5a88c25336cb39a49e737e0855710cc29c08459b8500cc05"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/laser-beam.png",
+      "sha256": "9bda4f922c99597aed4ff83fc41b3720b48b9f68c3eb3714a2cb6a0bd2d92239"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/laser-charge.png",
+      "sha256": "1a2745c7966cc9a57172a19b666dda6a224624a1db2b3b711380e69398c21dff"
+    },
+    {
+      "path": "docs/verification/fidelity-2026-10-20/actions/triple-third-emission.png",
+      "sha256": "0759864dd7c2fe794062966e2a71ae85c2115800ed7e32acca74c22446d3a7b0"
+    }
+  ],
+  "recovery_case_inventory": [
+    {
+      "path": "tools/reference_player/cases/ai/bomb-evade.json",
+      "sha256": "c0d0f8481f550c11e251dd89cdd8996ca2d0c056829265c7db331dd9346c9df8"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/cadence-paced.json",
+      "sha256": "77f892c8607f0a6da4c28c0531ae7f527c6732adcb40bd009450aee54309d733"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/cadence-unpaced.json",
+      "sha256": "fb2d780632a88c6007268a4b67f40ee241fcbc5206f14d813219bc9243edbe26"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/invincible-escape.json",
+      "sha256": "af6e51f257ecf1a6d5567c403ccca7013ac55c185589c26f483e4d0700a197f1"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/opening-decisions.json",
+      "sha256": "03bf0efa56349bf2e8f2cbb35f71df485853e54aec98bc5c9e9ad588e8ee1e5a"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/pickup-route.json",
+      "sha256": "6c807a7c021eb9b951c9c727d578e5fe6d165be6da3f81914368f515f6710212"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/profile-parser.json",
+      "sha256": "45cfef2b518617c50b681c3754db96b86a7f422c620f98dd7ae8517b8193eca7"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/random-item-ranking.json",
+      "sha256": "3cce9a8b3c9add2d557782e55e53ad656dd006dd7d87dec822600fe9b40372dc"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/rotation-death.json",
+      "sha256": "3c6a506d44add2657101cf6acfdee2d39e5994ce57884096dfc4b5f486196ca2"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/rotation-transfer.json",
+      "sha256": "9fc0239a2a98fc6dec055df63f7f555a347102c7cbf4e48cfb86962c860ef7c3"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/trapped-death.json",
+      "sha256": "d44c3ce1f8028a108ed2f872ebd7ca621f66d656afb0eee886d4a00a3b3480bb"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/two-bomb-blocked-first.json",
+      "sha256": "8d708fa37dd75714ea40841ea1ceda421ca7c5132608fa542bedfec549f82598"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/two-bomb-open-first.json",
+      "sha256": "c1d0b4c97752f5f9cb359bf385cc48f55feab35323f868633d385b08cb9bd84d"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/upward-danger.json",
+      "sha256": "d68c4b72855643485e23889900c53d87d06490a4c28e84adfb515a128ad1efc1"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/weapon-fireball.json",
+      "sha256": "fc56af07eca23cfc8914d0720c67eb1950269c73f5ab05d8486309e35dae00a0"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/weapon-flamer.json",
+      "sha256": "0d4e167bccb536a8bf92c33e8045ad5b86c25aa1b388857fd2f5637f876441df"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/weapon-hammer.json",
+      "sha256": "d40f87fd8b5b393a1af38011017491895a00baddb5d7265ce43bcc94753c6db2"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/weapon-landmine.json",
+      "sha256": "1f1886144026ca55f861e9375e98997fedff84df840e0fd85e26e89454a34d85"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/weapon-laser.json",
+      "sha256": "11123d809237ed1048a4c944d5e0f2bfc55cb71b4bd343311932f603bf13fc4a"
+    },
+    {
+      "path": "tools/reference_player/cases/ai/weapon-triple.json",
+      "sha256": "a0142bf64475547e130aefa319b367b66e621dd9f4ae9efc80c179deabc7d607"
+    },
+    {
+      "path": "tools/reference_player/cases/bomb-self-contact.json",
+      "sha256": "7e1bd3adc23477977d12371015f70a1ffa999992ef0b6cd44b8796ff08bdd7b2"
+    },
+    {
+      "path": "tools/reference_player/cases/chains/chain-ai-first.json",
+      "sha256": "299dda16a4423d1fde41a61e92a3ec097ab6af3a2a31a9fe9ba6d11324c655c0"
+    },
+    {
+      "path": "tools/reference_player/cases/chains/chain-human-first.json",
+      "sha256": "1d770485100dbe7f42ba2e373e9362afb4625ad0850783c17666a68edc37eeb4"
+    },
+    {
+      "path": "tools/reference_player/cases/chains/laser-late-chain.json",
+      "sha256": "c4dc1969451e55d18f4ea892978fa2c106f6b6fe7f9cddcc4b2904acb2081ffa"
+    },
+    {
+      "path": "tools/reference_player/cases/chains/overlap-left-first.json",
+      "sha256": "d548a06d0e6bbf16a2fa42ebdcf350175a393ac3d05c7a98cac9722cddea25d1"
+    },
+    {
+      "path": "tools/reference_player/cases/chains/overlap-right-first.json",
+      "sha256": "7e476590a6545e3b257bc0a7fa59f0945757c8a22674df2f84ba5a7bae4ee9b2"
+    },
+    {
+      "path": "tools/reference_player/cases/chains/portal-command-replacement.json",
+      "sha256": "0ae1baa2e35d2185b8d946663a6a8d048070a308c43e917d3650464716870896"
+    },
+    {
+      "path": "tools/reference_player/cases/hammer.json",
+      "sha256": "0ddb20dbccf491d0bf70defe2fdb63c4d8160f08d3ae17079b713fff47f67353"
+    },
+    {
+      "path": "tools/reference_player/cases/laser-portals/01-empty-portal.json",
+      "sha256": "6184d9a9e6d50467e48bb9226ac48bcf6035f9275beb6910dafae0d1082143cc"
+    },
+    {
+      "path": "tools/reference_player/cases/laser-portals/02-occupied-portal.json",
+      "sha256": "77405a32da8d7de506882e0a155858514c08262d3c8ba5f9dc503ea9669fb36f"
+    },
+    {
+      "path": "tools/reference_player/cases/laser-portals/03-shielded-portal.json",
+      "sha256": "4acca92ecfb7c404938b97d46d1253e26b78304a5de6b551a467559272c4c4b8"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/bomb-trigger-armed.json",
+      "sha256": "381956af25d0203b7ebea70bbeeb3703bdb7b0825cdabf29457e88393c0fdaa3"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/bomb-trigger-unarmed.json",
+      "sha256": "da9fde0b6ac98aef9195b2dcfdff2623da1e45916fd82b21c3eaca36edf915e5"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/capacity-and-occupancy.json",
+      "sha256": "dd127a5eb712eb75c849e294122945be4573d6751c86b756c0602f9966871d98"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/mine-on-existing-bomb.json",
+      "sha256": "0daead13084c4db4154a4fe7a61f82b317903000f2028aa49acaa7e0f9bf76e6"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/other-invincible-contact.json",
+      "sha256": "65c441e975954933f02434d539a0c7cc6105664ee6fc67eca3edde5236bca6ae"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/other-normal-contact.json",
+      "sha256": "816661a14ff8f9f73a39cdcb1df312843e9e77afbdbf229f41d551840cf63b6e"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/other-shield-contact.json",
+      "sha256": "8ac280b6ad25a1efef19c616b44edd96dc475e41f305e9971512ba100a751e0c"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/owner-return-power.json",
+      "sha256": "7e5a8a0ef70f26747ad571134ad22f5ff3f79271e3275f276959ab183fa8936f"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/pause-teardown.json",
+      "sha256": "bf5a50b76b3e18065c575175d0ce3988bd4064f73d1bd0c9b3aadc85d169fbcd"
+    },
+    {
+      "path": "tools/reference_player/cases/mines/replacement-down-up.json",
+      "sha256": "dc23ddc1bb2cce6141d4b728979bdfd19a3198a61036533e6ea946027b079129"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/00-survey.json",
+      "sha256": "a5e4c6a3fd9664a42e9c1395991948e7f6aa001b1587ac6c4fab036e1a4528d1"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/01-motion-contact.json",
+      "sha256": "cb7ec3bfb595c4d83f38158d41ce0181c148f16de9744a9a4ceb937cd9413b6c"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/02-portals.json",
+      "sha256": "b91ca92c463ef3073cfc8929de897c46bf064dc200337ea8c546170a11315fe4"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/03-cardinal-down.json",
+      "sha256": "35866d84990355dc90cb05f5ef56d51b9a4420419146a106caa742c3e22ea6ad"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/04-cardinal-left.json",
+      "sha256": "7f15a115449b1b60d3d556411d597816fa4406da82788603c4e5fb83f06f73cc"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/05-cardinal-up.json",
+      "sha256": "87e452742ddd2612f99f6d3010b276b95b3c21e76297e9fec0c1ff8185f96131"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/06-protected-portal.json",
+      "sha256": "5ba1a55df73d724a94556e400ae173c7b6c21172d308d9724a97486f69be5f68"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/07-portal-ordinary-bomb.json",
+      "sha256": "ea11f90b287ae28936b33f519bf2302ef00baec69fdd3bbac69ce3725274aa0c"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/08-portal-pause.json",
+      "sha256": "f99207d54150a24b479182b796ed95b3f2378bf4c24507abd573bc62e4a33365"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/09-portal-mine-hazard.json",
+      "sha256": "b113964afb6cc9c4d676e5310172c0f01c3222459d31ca3443a7995328667d31"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/10-ordinary-overlap.json",
+      "sha256": "22ecf614cfd1ce3f9932f5f1e5521e01853c847ec4d278c959fe7bc433778fd0"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/11-stationary-fire-expiry.json",
+      "sha256": "16d3968e79e8a0f0917d9b99a4fd4330a5bf36f075fc12aeb3bc401d6a15b9d9"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/12-corridor-right.json",
+      "sha256": "762f2e473c624b22ed12a8d222c446f2d843a4aa803f7ddb90d6d669e4ee24b6"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/13-corridor-left.json",
+      "sha256": "d5f91854727811058140dbf547e14750c6063e30c23cb542e0536d308fe4e117"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/14-corridor-up.json",
+      "sha256": "83f735243035a035b2436c91bdd83a9c2ca8e945f0eaa5db80db82cabde4c631"
+    },
+    {
+      "path": "tools/reference_player/cases/movement/15-corridor-down.json",
+      "sha256": "91766cbbce4b3a25627fbcf9d45264332e689f8879a8788c558e90da3abfb8bd"
+    },
+    {
+      "path": "tools/reference_player/cases/normal-arcade.json",
+      "sha256": "e829aedc35f36ab527b4d8f4114829589b04bb2b45b07cd623be3e3b7a013428"
+    },
+    {
+      "path": "tools/reference_player/cases/ordinary-bomb.json",
+      "sha256": "a5533d6dafee149dee4a0115f10117106f0c9ce1f134cc414de54afb26d1b19d"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/actor-eligibility.json",
+      "sha256": "045aab68aa3d3ef145bb066baa1a4895f7a0890d124fd4faabcb612ed8f90f01"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/basic-limits.json",
+      "sha256": "2f1af1e1698a26c2d6b465b09e81a45553e9cb6f8e2e3895ec7beeb75081329e"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/conditional-seed-1.json",
+      "sha256": "41074398fff177dbd02b89ec93bc7cb437d2089854f737d26a85e8785a16c3b6"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/conditional-seed-2.json",
+      "sha256": "44dac611007eb0dde11aa5d7a5e9dd531b5c4936377d7a429a99858544efb727"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/conditional-seed-3.json",
+      "sha256": "a5775f20a0435af741663b1f37afb99af9bb13423e32b9b9f79c4d4c216be856"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/conditional-seed-4.json",
+      "sha256": "88b999d21289a1bb04f141b028a091b8ca479e31c35c4db57d1dfb96429268cc"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/conditional-seed-5.json",
+      "sha256": "4885bba0b3b719e3e4da602d86a72f6122883a26245aebdc5d63a160ffee4c38"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/occupied-drop.json",
+      "sha256": "c4eb0205eef08ac906e388eda2dbf80f87dae51ffe0b57c446239786b91c2b48"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/placement-power.json",
+      "sha256": "73fefb8c1f2fafd882128ec9d4c75693dbd1aab136aeef4933b795612e6d2c39"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/quota-boundary.json",
+      "sha256": "86aa705ea771265700d630a7a35ccd9b77cf4aa95361b314cceb5028246572d5"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/timed-natural.json",
+      "sha256": "65f39f01f83292f430a7c753b20f2e549a5139e54e6df6c656cab0a2883954cf"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/vehicle-boundary.json",
+      "sha256": "19eb2843630e7776a382baca91eabbe2d6c9b2d5c6381f97d096d5f40295935c"
+    },
+    {
+      "path": "tools/reference_player/cases/pickups/vehicle-timed-bypass.json",
+      "sha256": "69702589cc914d0ed28809d88e0c2db95a0c552fbe21c7438fab339a39e83020"
+    },
+    {
+      "path": "tools/reference_player/cases/protection/car-shield-weapon-lifecycle.json",
+      "sha256": "65d88a73213627ac691c953d8c71b7cc676b83623415a02e07fdbd3fbe2f25a5"
+    },
+    {
+      "path": "tools/reference_player/cases/protection/invincibility-contact-expiry.json",
+      "sha256": "c73451e886995ad50ea4e85fd656c79437d70f0af228bafbecca81a3549215be"
+    },
+    {
+      "path": "tools/reference_player/cases/protection/invincibility-pause-menu.json",
+      "sha256": "ec620a676254cec86502b21b9dc3237837aafe9d6edc00e2cf69d701d3ad0e34"
+    },
+    {
+      "path": "tools/reference_player/cases/protection/moto-shield-weapon-lifecycle.json",
+      "sha256": "4f3dc0cb78063587b713cacb74b6455a03f2a31e4193d1e3f486ce4d591a2e10"
+    },
+    {
+      "path": "tools/reference_player/cases/protection/ordinary-enemy-bomb.json",
+      "sha256": "91320730f724b9a001dc2b3ea580445bef1b85b1f0b460ae996b675d6f796fbd"
+    },
+    {
+      "path": "tools/reference_player/cases/results/01-loss-retry.json",
+      "sha256": "fc1cd63595a71035c83792b4b606e4b183f593c1edfdd0529a8f0ded9aca250d"
+    },
+    {
+      "path": "tools/reference_player/cases/results/02-zero-kill-win-next.json",
+      "sha256": "b438a1df15f32c709fb18580da6cb3f904a0fee12673c20f6880c93da4f8f915"
+    },
+    {
+      "path": "tools/reference_player/cases/results/03-hearts-game-over.json",
+      "sha256": "6f0067979fd6600d321cd405cde28eb9a60f34654acb1f5f3736e02f876db64f"
+    },
+    {
+      "path": "tools/reference_player/cases/results/04-simultaneous-human.json",
+      "sha256": "6dc1aa5140f0ade2027167bd8b8a49b48b0996c0fb8bf18e57fd813e506ba68b"
+    },
+    {
+      "path": "tools/reference_player/cases/results/05-simultaneous-enemy.json",
+      "sha256": "5a5104f02fee0f4aeff52bd076db2d8997d5769977795a5a1075aca5deb1fee9"
+    },
+    {
+      "path": "tools/reference_player/cases/results/06-hud-awards-win.json",
+      "sha256": "d75725fd6c1f24af09a7038505368d572b1c7d1329fb220544e1f93489fdc360"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/fireball-down.json",
+      "sha256": "a438d058941331d006cff0769ee168c7ffd9531e601173a3cee878304c529470"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/fireball-left.json",
+      "sha256": "bff0055cd59616cc500abb3ac036658a7e755475344f91e6189cfa7b5ca449a8"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/fireball-right.json",
+      "sha256": "73419a8b14e0038daa83332a0f6c303b6558b8fa5118ca93e5b3705b90e1f210"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/fireball-up.json",
+      "sha256": "222c1a67a85935aebd0b44968e928fa89ba3bc84e333defc49ebad7f42f0e7ab"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/flamer-down.json",
+      "sha256": "f16d8afb15be5eaa8ef66276f6f875d9b077c7fa2822fb5941e84227afc7909e"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/flamer-left.json",
+      "sha256": "a2dac37740f244669a2b2b5de7b2721913eb95980a2018a88e5acfd4d4d7f071"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/flamer-right.json",
+      "sha256": "c89f76540624440ab034c345e559b7730fb240e6e3e31d9894103d551525cdc0"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/flamer-up.json",
+      "sha256": "da432aebeaa916d229294ede9dfc4f3a172aca23769ac307d46978c0a442a485"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/hammer-down.json",
+      "sha256": "81017eb1cbc2a18a004206711e327a5c085613a688c0cafcb69cb8d4f30132ea"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/hammer-left.json",
+      "sha256": "c30c47a3fcffc355e8d323b9669b281abf883f5dd129a57b7bb667f482aa05e7"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/hammer-right.json",
+      "sha256": "c719e5bc5365abcbeecdc635bbdb521e5cd4b926737707ed7cb17b06e2da27fe"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/hammer-up.json",
+      "sha256": "a4b3cad27ed45eb3d59bc59880a36416a2155ac892cecdc72a5438dc7b9bd87f"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/fireball-bomb.json",
+      "sha256": "99dc32bf7d14f38a8b26e4bf1e6be6d043dab48c81ccbe587343bd3f4c2cd082"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/fireball-enemy.json",
+      "sha256": "f3984bafc19ac5d9721159e5b0cbebc5f2bd3621c24f6dc69b13b836412ae1d6"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/fireball-own-cell-enemy.json",
+      "sha256": "e6b667e121a27e71b07c1b064e8cecf13d91de7c5c4aeaa853df79021ff01976"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/fireball-pickup.json",
+      "sha256": "7cc6a5d1485fea1e30c5275f9cb0f90cd669218066344526ecd16363620bafff"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/fireball-shield.json",
+      "sha256": "3ee47f9b0aa737c0990465cdff0031723bc7eaab9416c9633a295ffdf716e64c"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/fireball-soft.json",
+      "sha256": "69f59531e762cd4048049c18cb6fca0387c4588612162ad8977f263e72faf4e2"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/fireball-solid.json",
+      "sha256": "4b56957a7a1ff380dc65eb6fbd37424b05e6ee237d2abaf8178711c69269924c"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/flamer-bomb.json",
+      "sha256": "1edcc6cf916eb1a260f049f544906a5881e9bc693e96628443ce8972540d8bce"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/flamer-enemy.json",
+      "sha256": "a7e7f7d8c47b6279ed3ad14e2a38231146f0a72c55d4d83b8bf71a40842b29e3"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/flamer-own-cell-enemy.json",
+      "sha256": "8034d2bb24e84bd00d19c7fe688294ebd7ab0edf5ee279bf09f6eb06e6fef3d2"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/flamer-pickup.json",
+      "sha256": "709917e383795f9b8a48699ccc361e956f723e2bbe158d020c1ecd905c3af638"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/flamer-shield.json",
+      "sha256": "e579b18a2b172ab31042a2d618aef3f3082fd7038f1de8d2372fbf7ae3081abb"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/flamer-soft.json",
+      "sha256": "9841fd10de8a4415fbe1e4b1d8834dde1c74acc3e2cffbc7ec6a6e4b784f9f98"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/flamer-solid.json",
+      "sha256": "39aea28ddbff171c9dea6084561ceeb47251d3deb636fabedd2dd3b07ff97f20"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/hammer-bomb.json",
+      "sha256": "655bdb2ed75c1fdf340ed53b378ebb72a92237cc6ffd379b17123ab8f8aebba8"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/hammer-enemy.json",
+      "sha256": "af6e010ea9eaf88f7b79d37cc3ee5114983f5e5a657121b72af3aaedac0de1b8"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/hammer-own-cell-enemy.json",
+      "sha256": "c5812d4582d47e2967ef8dbc82f02dfd70c47e28ea0d809201e6e4bbfe49456b"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/hammer-pickup.json",
+      "sha256": "625f54bc355c8e16ebc758ad7756f3f3648c3f46936d3e7baa4cfa2ebf06e7a9"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/hammer-shield.json",
+      "sha256": "21b026bffc9006074985aa47fe026b2358800269fa2233cddbf949709738e608"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/hammer-soft.json",
+      "sha256": "bed8d22149c28ac9b40c73ca427c3302bb7a4a5704351a0d27aae656986869f7"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/hammer-solid.json",
+      "sha256": "bc7c8b09ba90e11416529878a7bef734b3ff43e07ee8c6248f11ede38ea022f2"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/laser-bomb.json",
+      "sha256": "def9582888c069b764aab7479e7ed63eb20f37c1a2472e6ab963ba0661215a64"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/laser-enemy.json",
+      "sha256": "221b9b665c2fe4cf59510ee820fb85bdebb5d2b3f2535fe0e170c396a9b8f28d"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/laser-own-cell-enemy.json",
+      "sha256": "86cf514a416b628ec0c3ed5262f0c76adf8fed8c7ca7ef3eeb2e0388e2151105"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/laser-pickup.json",
+      "sha256": "8cfde602feee0d05e6626509c3d5b2872cb1a8077e389dfa7f8a3644f7c70e0c"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/laser-shield.json",
+      "sha256": "7dd18bdeed6be7e4bb7fcef13ec2aa984047523f04ba9cc9bc529c5ce6bc720c"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/laser-soft.json",
+      "sha256": "d9d8059b059062b6b53332853041d976fd163bb15195cc05e170212e2b813680"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/laser-solid.json",
+      "sha256": "e5781e39ef55b230a50f7ffbb90382c5568a070189286251f6641d93bb519f13"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/triple-bomb.json",
+      "sha256": "4b7dd9585143dea8edff32d86578f8880bb300c0abb04423c5b848516dd6dfcf"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/triple-enemy.json",
+      "sha256": "53b53dd2836bb38d329ed8a4c4713c8f722b2f7635663f2521e51de7b1f824bc"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/triple-own-cell-enemy.json",
+      "sha256": "30ead7a4424423b050af13dee5fe8350dc9e5740fc0d32f6abff8787ec4746bb"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/triple-pickup.json",
+      "sha256": "dc3cf9dcffbfbba482679592038cbeb3b76edf610f423094269a39908f732a42"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/triple-shield.json",
+      "sha256": "be39a41d3385a9574cbffd1dbd018f2bf7653087e8a255639a24dc445a056438"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/triple-soft.json",
+      "sha256": "3245759df013ada21ac470db753498eb33fcd68eadd0f85d4e7961e8f8b17da0"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/interactions/triple-solid.json",
+      "sha256": "bf9569b6bf6c4973f4422091ada6d38cc02a749ff957f3edd6b7a51735e67909"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/landmine-down.json",
+      "sha256": "54bd90502c1c8a2dc6bda61effca3afcd7f018dae8be135ce53e65d5415937b4"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/landmine-left.json",
+      "sha256": "af044e50c29c869a990e1c41fe9c350c920e873eacabdb210cdcf2f37c13238b"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/landmine-right.json",
+      "sha256": "b0bfc89cf7e94f7061b4c7cfe9fa711fd6974d3fd7034d1d725327c985702b47"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/landmine-up.json",
+      "sha256": "986676df2ef2e002238c84d609526959db15b91546586bc734c93c83d5446c5e"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/laser-down.json",
+      "sha256": "19237499d896addb4c2732be2cb35eb4680c9c8f372796b127c39c2d85f679e1"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/laser-left.json",
+      "sha256": "4574110b646162eb9a4381870939584787bd0eee7baa327c08b0e7d420b25c12"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/laser-right.json",
+      "sha256": "49f793369be9bf194a21cf4c2f3c796e07f52297aeaf866f15f419416f168670"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/laser-up.json",
+      "sha256": "96dc296cd948a193329c8606c09a2b6146586fa189401ca2d31119f54e21d57e"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/fireball-paced.json",
+      "sha256": "f865917649864ce2d6c6c70a9760da94571b347069bf275532dd914a9241073e"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/fireball-pause.json",
+      "sha256": "722299b11f11d29697750827cda0cc0015b44ec3ca38c5d1fbc1ed8f29dc5211"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/fireball-recovery-pause.json",
+      "sha256": "70d2255741afb107555d08538c6e4fac2f166e6bb6c3d3bb2066df8403e41cb3"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/fireball-replacement.json",
+      "sha256": "b890e4f23136891ae6fd8b8a116637e895571f318c36d4ceb69ed50af8ba455b"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/flamer-late-replacement.json",
+      "sha256": "89b5aec7587eb759dd1ea2513fdd7a702c1e97d6652256da01fdcb6473b220ec"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/flamer-pause.json",
+      "sha256": "19add1c30dcdff363f747df1def8a34467c0babb5bb08afebec17713ec600201"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/flamer-replacement.json",
+      "sha256": "ba5dd6efd04758bd6c365758a1efdf07666f21c299900720073cc90f9436a5e4"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/hammer-pause.json",
+      "sha256": "9449c166279a4e76513698791100aaf07d289e27f2e45f53b79db6b2d273276f"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/hammer-replacement.json",
+      "sha256": "2644b6effe33be2fe971fdbf6d1de05c995197d7e08020ef12b84a9c3705c1e8"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/laser-pause.json",
+      "sha256": "ed13385a94010cdfc8dbd0bf8d5e7fc4a3c5df36458fe68c4e1528101b311946"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/laser-replacement.json",
+      "sha256": "38525ccd3d34eece9eddf6ec5e7f89a83e2502635a6dd0b1e3abc1a59f5bfc9a"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/triple-paced.json",
+      "sha256": "b7dc6d73af49659b08ad61ffdd211eb61f25383293871219bc46f1d9f9b986bf"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/triple-pause.json",
+      "sha256": "aa8842fbe1a07c641182c2897963f26267449d11fdc749b154fa935539b808c7"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/triple-recovery-pause.json",
+      "sha256": "ddb0b9ba6c88f3741fd390089bdff33c7688cf8ddc38c65ddadd6c50ab107e13"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/lifecycle/triple-replacement.json",
+      "sha256": "b0a45f2e5185d497c6e22cfb5bcb07a72f9b78442b0ab3c6a8dc0e2fd62a781d"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/triple-down.json",
+      "sha256": "4a8dc1c10efa8d89561bf119c94bd66456f4c1366a1c097e0f1bfe9e6304f1fa"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/triple-left.json",
+      "sha256": "b0c4fb235f735f3334d51a920b51d7b0b29111c20cc5447d65a8bee49732b10b"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/triple-right.json",
+      "sha256": "e4bbb3e37e615d9945c4ae518b79d2ec0728e32430369b604355da5c2aec7077"
+    },
+    {
+      "path": "tools/reference_player/cases/weapons/triple-up.json",
+      "sha256": "aa64bdf82887ea9a25040d3c2dc29abfad96c324f9f29fed7ca7e0d4ad79d71a"
+    }
+  ],
+  "preserved_reference_manifest_inventory": [
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-bomb-evade-v3-02/manifest.json",
+      "sha256": "0966b858b08cc77b1e73d5463df1bb9bb09cc59c4517e44da6c11cd10972ed7e"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-cadence-paced-01/manifest.json",
+      "sha256": "07e7b3870bc0ad5b8c2047555f039118b5a236fce5591b51d1c2d8f7eeaab61f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-cadence-unpaced-02/manifest.json",
+      "sha256": "19f4d350f471f68174731469fdc38b318bec7f1ff9d3ceccd56545b7d19ee224"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-invincible-escape-v3-02/manifest.json",
+      "sha256": "4b6db7f6b45526464b49826b9eaafdc896c46a0c96694691504f62c11f823a5e"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-opening-decisions-v3-01/comparison-baseline-manifest.json",
+      "sha256": "b99f1b5f60e477d43cff38207b5522d812f41f0f948d02c389fdd348ee5c6aec"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-opening-decisions-v3-01/manifest.json",
+      "sha256": "19f42ee15df1874d637c8431f51a43099d1db16a802ce9ad9215019bd1a1b94d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-pickup-route-v3-02/manifest.json",
+      "sha256": "c33ea1b27001034405ea248612bf317770fb23c241feb888315151c26d5de1ec"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-profile-parser-v3-02/manifest.json",
+      "sha256": "49aa217595b5de5b6cf37fe1ec69feb1dee8033b194bcbf9ec7542585c3393c1"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-random-item-ranking-v3-02/manifest.json",
+      "sha256": "afe103c7be5cd34d54db7320e15946d13245f30622e772a83443f139fe8b5eb0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-rotation-death-v3-01/manifest.json",
+      "sha256": "770329c2538f7e96933b629da2f4ce13e9e85784c28cc871d9f81b69f1e27a6a"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-rotation-transfer-v3-01/manifest.json",
+      "sha256": "c5eb9ac8ec68d796fea2047e781be9a1785e1ee882e19548b193d37dd102646f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-trapped-death-v3-01/manifest.json",
+      "sha256": "2daa24114cc13a255ca065ea4e4e53e16ef6f931ffb2935cb5a1a56f1209ecc4"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-two-bomb-blocked-first-v3-01/manifest.json",
+      "sha256": "f5f480f91c3a9fc5b51514f346caced6eebd80d76eebe53a20b26f78d03a87c7"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-two-bomb-open-first-v3-01/manifest.json",
+      "sha256": "703c13194dc56d11a1968d011eea99a42dbe05d32851f790bed0896617195468"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-upward-danger-v3-01/manifest.json",
+      "sha256": "daed587741f70164aab168b275f6fb9f897bcdbdc51704c55e343c6afaa0d766"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-weapon-fireball-v3-01/manifest.json",
+      "sha256": "9efe91914faead441026eb8fa4950bfbc2dd5b64c937a3c1f6bbff731acea753"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-weapon-flamer-v3-01/manifest.json",
+      "sha256": "03fc1f69714d3a88d4602055c34e7e13edb370b36a97953828b81e0655c113b2"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-weapon-hammer-v3-01/manifest.json",
+      "sha256": "dc64f7a03529dc35996693499d77b29d1195d2d49764bad2938471891b510ba6"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-weapon-landmine-v3-01/manifest.json",
+      "sha256": "3daa10c2a19314c3f07a3b9bc5af405ed25ea9bee1f9bd6148526aaa916a1faf"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-weapon-laser-v3-01/manifest.json",
+      "sha256": "acfc72549ef606798f07a452bcc1e31218245b1e141769e257840c6a2430ff6c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ai/ai-weapon-triple-v3-01/manifest.json",
+      "sha256": "20f1ddfd805ad69344f948a6bd8e0b991b009a82527747b426db839240e58fd1"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/chains/chain-ai-first/manifest.json",
+      "sha256": "e4cc3eec864fd0cbcb047194d2c44250b744b915604126b183b5fdd791ee06ee"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/chains/chain-human-first/manifest.json",
+      "sha256": "942b23da7fa05910448175922afbc4bfb7b4137051c2ad2d5cf0145ca5a968f7"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/chains/laser-late-chain/manifest.json",
+      "sha256": "bdee90242b6bd420aa29024cde40e53d9d6dc8e45ed9d71aeb2c1298ff6e0aff"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/chains/observer-off/manifest.json",
+      "sha256": "b1d85dc2d14c477ece0b00634ae3e5ee21f919e2679a92bbebf96520b4fa897b"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/chains/overlap-left-first/manifest.json",
+      "sha256": "4e9e5f08fc9e92ea9c39027c5a7444b20e5216391c3f1744857758d33755819a"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/chains/overlap-right-first/manifest.json",
+      "sha256": "61d8668fd4da8bc02116e80c234eb2aa1a9cd132a5f3a210744dba4eaddc6643"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/chains/portal-command-replacement/manifest.json",
+      "sha256": "dbf4f6babd549911b8c41d95a8857056dea156bd708a52b2cb1217d7174b162e"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/cinema-base-01/manifest.json",
+      "sha256": "543d70ee55aef7f267c081ad53d573947889f14bc82db1e3c7c4173859b7915d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/cinema-base-02/manifest.json",
+      "sha256": "5eae7d015c3370a0b56933d8d0338f9782a4afbf04d4b9ce2671aaf12982c254"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/cinema-log-01/manifest.json",
+      "sha256": "ca5e6d1e3f2a2187e415e4442038fd01f6750cd0c92a08bb017f8c11f682b633"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/cinema-observed-01/manifest.json",
+      "sha256": "8a5212e66f958503bdaf54d6ef3ed8b153c9bc103fbaf2218c534e3503bbda86"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/laser-portals/empty/manifest.json",
+      "sha256": "cfea2cb0d2f2cd8ba06ba6a9a414f858296e7c3e8a1ba552df34af4478e59b2f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/laser-portals/occupied/manifest.json",
+      "sha256": "222bbdd4a3098e359f5976dde42500bc02208aa7710606c7eaff5f2b60f65df9"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/laser-portals/shielded/manifest.json",
+      "sha256": "c93cf97dcb75c5f3e1d596ad3151ae31b4d3dadb9971ae126f18d3f3838dad92"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/bomb-trigger-armed/manifest.json",
+      "sha256": "48b5b83306622659a7c540d8bb971fd3c9f99d8781505d91ebf87f8e9ca62fbd"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/bomb-trigger-unarmed/manifest.json",
+      "sha256": "c7fd7b878c983933b7369d5ff7aa81785ec9670ecbdaad30ed702669aa22d400"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/capacity-and-occupancy/manifest.json",
+      "sha256": "213dcb7c75854dbec2cb293315be2b8e37fda779d00a6168260dd8a8ae810688"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/mine-on-existing-bomb/manifest.json",
+      "sha256": "828bdd804e669d8ed7e33702e145d0202e1c05098a10b819024879720a9d932d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/other-invincible-contact/manifest.json",
+      "sha256": "0982b36a5d9f81a7ad788aeb52ade50b3f95bda8d809586c7e20cc93778e0b90"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/other-normal-contact/manifest.json",
+      "sha256": "df82c5e5190ab6a64b185829766744ffe04b2dc995721d110d47897c38dc3492"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/other-shield-contact/manifest.json",
+      "sha256": "a0bd986e8affd7820840da23a89ba2ac29646d001589649d829a6e0697bd3d30"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/owner-return-power/manifest.json",
+      "sha256": "3bdf7cdd364ebbc66e617d8aa24ac528deddfbe0c093cbdfc6952b94cb1cbc86"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/pause-teardown/manifest.json",
+      "sha256": "0d5f186986718012e14c8c6c5742e25289d637fedeeb2d6df197f312528e2def"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/mines/replacement-down-up/manifest.json",
+      "sha256": "721d4b08ade97bc8c559b0fb21224e4d119b9758a6dc58f533ec2389bad4a642"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/motion-manifest.json",
+      "sha256": "d4a97d1cfa15a44013f6d0b68ddce005bd896f523013277df7b8d21cffa90a8d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/portals-manifest.json",
+      "sha256": "918870bcf135e2f1761c27297c6dabfd1051e23b4f66b692b8c37bcfb7154e9e"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/cardinal-down/manifest.json",
+      "sha256": "4d0f59f59f71d43ca59c08dcbbd38b4663725de695677f2d7ae0778cdee59125"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/cardinal-left/manifest.json",
+      "sha256": "6533274137c31e2983f9c6ca310cc94731ed7f221b374abc88d9567c2c5b8442"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/cardinal-up/manifest.json",
+      "sha256": "883ac01a2c7e557f007470e68f582f24e5a509eef10dbd790c09c787a909113d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/corridor-down/manifest.json",
+      "sha256": "fcf337e82bd7c0ee029337f2f04337ab04e7b2899a7fe308552a66fe75282688"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/corridor-left/manifest.json",
+      "sha256": "c0b2ea066c7443b9645872374fecafd48d2795e6a644ed7d49cf9d85849b5224"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/corridor-right/manifest.json",
+      "sha256": "2356709b68185c8ff357ba9ff8c63fe9a2a831e597d4f268dd55b5b0629e5181"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/corridor-up/manifest.json",
+      "sha256": "3bc553b9578f3eccf6a47eabafbce9b5fa7ea7f39dc738bb39c767835725db20"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/mine-hazard/manifest.json",
+      "sha256": "81ca1c350c0cec373bd1af769343f46a16beabb52bca8b392db35017ef951c7f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/ordinary-overlap/manifest.json",
+      "sha256": "9b3fdcc4c0fe430ca7abaed49554cb8b618b9d8a33e1341e9d25ce3367853ba2"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/portal-bomb/manifest.json",
+      "sha256": "f248d73e0de67571cb60763d242da2ded0d616afb996afe071a99621850d766c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/portal-pause/manifest.json",
+      "sha256": "825a2e68a961317dc08fae434255124239dce7fb3ec731a512c3bd1dc616bed1"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/protected-portal/manifest.json",
+      "sha256": "c090dbdb001bde5211a95ceddb1f927c5de523e66ca34104adbc59aea147726b"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/movement/supplement/stationary-expiry/manifest.json",
+      "sha256": "63eb55ab1e9414ebc08f9adbb7b202a3be1500632366f240bcbafb1482e25aec"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ordinary-baseline-01/manifest.json",
+      "sha256": "be73bb62aed1ff14f6f01ce5a2115a300eb921b59568bc636a1a8fd1c695f9ce"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/ordinary-bomb-01/manifest.json",
+      "sha256": "4488d1a321981be7ebaed8b62ee44e24295bb8790d22ad32fab307ea11ab81f7"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-actor-eligibility-02/manifest.json",
+      "sha256": "5aa969190522a22a9a3e11e41f3995cbd087d3610d0b199f3a81c3ff2c2ef35f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-occupied-01/manifest.json",
+      "sha256": "b03b386533a84fe96b64505d4cb83dec65d73278640eaaa52fa72e970e1b6596"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/manifest.json",
+      "sha256": "ecebd964b70c95ff8a09f3e737f61d4c9aadcb2ccd68f5dd465de0e5243888be"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed2-02/manifest.json",
+      "sha256": "0e86c06c9e352d936c5db23b355bffa421836a9f51a63de2bb3dec11b84a46a3"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed2-03/manifest.json",
+      "sha256": "4adeb239cc2debc452e2df281694d14419e34a494b4e783d78c6b6e950f0a075"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed2-04/manifest.json",
+      "sha256": "3ddfc985666f932b7753f3ef459152377350ddd8cc4a41d36d827c85426745ca"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed3-01/manifest.json",
+      "sha256": "0a5814d99f0a7e3ad87c00b6be752e9ac3846c9220630b2559951d25a1799dea"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed4-01/manifest.json",
+      "sha256": "775f26a2796f7fe33f6cd8e778b3fcb963f9ca3b893b1d74d05c7fb754547b29"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed5-01/manifest.json",
+      "sha256": "d6e7ac70c0ad24386ede7995a5f8ce64040d9c0f4f61e2800ceaa307f491ab97"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-limits-02/manifest.json",
+      "sha256": "960f5692c922c74d22f6beed855f711c1243b53994549472ef3d3fad61ff2dee"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-placement-power-01/manifest.json",
+      "sha256": "d14db0e33970f9f0fdd2b0ad0f51989a90a5b63050662fdcc913b13bf1435f60"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-quota-boundary-01/manifest.json",
+      "sha256": "ee375634eb44eecfc099d31a2afc0c7c16bd5d1f111e010918c89ecdc645674f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-timed-natural-02/manifest.json",
+      "sha256": "18080a081f0f57b36dd04bbaba6392593646ff64fa0fc3733136b04c2575fa68"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/manifest.json",
+      "sha256": "1e6a77e65a2736c1192f4addbe26c43409f5a6760ab7766338f5d0b73ba6861d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-timed-bypass-01/manifest.json",
+      "sha256": "eb708a1c42da1d32400f2ef49aab847f3478d4337ab42c1e975cae7be7d512b8"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/protection/car/raw-manifest.json",
+      "sha256": "d3d2e1ac0f600b5fcbf1dee71a245b1f4556fb83e0bf6a6c0fbe93d71c58c604"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/protection/invincibility/raw-manifest.json",
+      "sha256": "f4822a22174aaf8ebb27c346d72726fe824c512176e2e17df4660b5c2b896df3"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/protection/moto/raw-manifest.json",
+      "sha256": "9d14c7ccba5686533b379d8ac1f156404e94b2cc7ddaf241c91e560308791ab7"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/protection/ordinary-enemy/raw-manifest.json",
+      "sha256": "b44538f7469a42cea043c93ef7af83d541e74c8ffac753aa4b3a9becc408b903"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/protection/pause/raw-manifest.json",
+      "sha256": "78d68ac2cf64a63fdc69b8bba2006d8f7c4cd265b450970cb6434144cf057891"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/results/hearts-game-over/manifest.json",
+      "sha256": "21463f19356422263d5f842660fdef2066f4e298ab583fde9bc4a4de3942c03c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/results/hud-awards-win/manifest.json",
+      "sha256": "2bc2b0e30cbd3f26859eb28b31486ead55e68563aefcb38c8f0bc800916d0fa9"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/results/life-and-retry/manifest.json",
+      "sha256": "35d03095798612a039cc70a97ba4c8122efe03500f5cb56fb2db20701767c86f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/results/simultaneous-enemy/manifest.json",
+      "sha256": "0e02429529da771bf074236dfe0974f232c0e8678321abe5eb458765ba2f03c1"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/results/simultaneous-human/manifest.json",
+      "sha256": "17d1c2de7ac68f323fb0860632903d0f7f8e109b63aab0cd01429651be9b8499"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/results/zero-kill-win/manifest.json",
+      "sha256": "d830e3e42c0533a5b3803263aa0a07bdf06e52650356353c7637d74158ff77c0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/tooling/canonical-final/manifest.json",
+      "sha256": "fa6eac606409856ff9a5b48f25f11a0e23527baeb0649c1b433b0f9fbdcdf76c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-fireball-bomb-01/manifest.json",
+      "sha256": "51ed22a3abb98bd30420ad3dbb44dd7bcb4748f66f1360a8fcead08c6c9a934f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-fireball-enemy-01/manifest.json",
+      "sha256": "12449e95ac6226fdd03e07ce23a594b48a5fa3c503144a90c0b4d48b706f6067"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-fireball-own-cell-enemy-03/manifest.json",
+      "sha256": "1a9be3a80b3f179c4053a87b4b930e3015767e32813b9e572fdbfa5296024905"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-fireball-pickup-01/manifest.json",
+      "sha256": "695f6205b2893272c5fb11a3b482a0e63d46f0a70da3244827bdb4d421cbc5e8"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-fireball-shield-01/manifest.json",
+      "sha256": "6779a0b0a1e9cb1fc0b46c335ceaf6f8e97e32253612f704fb6fdeefd5375818"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-fireball-soft-01/manifest.json",
+      "sha256": "d5b20630c9b7cf5bf5c4e0a7fc0f78a8ba2f4211a68625b13403a80f945a1ffe"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-fireball-solid-01/manifest.json",
+      "sha256": "7773edd896dfcb66dc2af3b5454d2e7557892711bd8fd9ec5dfe1ce169c0eee0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-flamer-bomb-01/manifest.json",
+      "sha256": "3ff9a9e3b16cb84a6c61689fd755bafc568b9cc787676ce9e86746502ee6e0cc"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-flamer-enemy-01/manifest.json",
+      "sha256": "ef6fc25c63ade793cf516e65e44225bc2fe6b3092b96a7a184f35cb8a7f44666"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-flamer-own-cell-enemy-03/manifest.json",
+      "sha256": "3eb0098eef7e674356d2f07ab9e87830eaedd0a594801dc28552d0fdbe8cf68e"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-flamer-pickup-01/manifest.json",
+      "sha256": "3bc5db63a3ef7eeb21fb9999bb9b8e9e918b6e9e0e7d41e8986b5d854a014050"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-flamer-shield-01/manifest.json",
+      "sha256": "febb236c54e0243a4eb8cf27505ed771d1ffb4d772c0127bfeb50402be3cf1f0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-flamer-soft-01/manifest.json",
+      "sha256": "c3697143052b6a305f7c841834f928f9483181aad3f4521363ee50589711bf8e"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-flamer-solid-01/manifest.json",
+      "sha256": "ff82668239e58befca7d31ab1cdd92b36d523915f455ddb742320dbd32ac244d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-hammer-bomb-01/manifest.json",
+      "sha256": "84bfa4b7ac1f252dcebabb629992595aecc141b854761c53c9fb089562f0f393"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-hammer-enemy-01/manifest.json",
+      "sha256": "73979b1d1a4d93d034b670898dc0fe42544a48bcccf0b2bcfc4f5cade6728a0f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-hammer-own-cell-enemy-03/manifest.json",
+      "sha256": "e4c2968aa35cad0c24594dd285ff44e2345fe3ed11ac5746d715bc85ee1b1373"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-hammer-pickup-01/manifest.json",
+      "sha256": "2ccaf9a520205e47a05c463943ed0d10496c0428665bdf41ded939df11f092e8"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-hammer-shield-01/manifest.json",
+      "sha256": "4a9baf1e43f53ced2e4e3173447b403093cd09f9a80d008b39f6cb0af4078833"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-hammer-soft-01/manifest.json",
+      "sha256": "091172949d206c22ca8b95fbdf9ab6a55085b9a64f509ef11114e28609b027c0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-hammer-solid-01/manifest.json",
+      "sha256": "108285bb66d99adddd06276d70a6efdb30ef884cb3c69c35465c50365bf4d0d8"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-laser-bomb-01/manifest.json",
+      "sha256": "bc7d062fa4d1864fe6b13046c4c6a98d075af662c753f3a788cdd06c50f11c33"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-laser-enemy-01/manifest.json",
+      "sha256": "70f1fd57d4d43e6761cace49384429640dcb7e56d9bf8eba1e6959303d05407f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-laser-own-cell-enemy-03/manifest.json",
+      "sha256": "6a58e1518355f74d403685c786e3740bd8a244bd4d5e747bd350ed8fb956b187"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-laser-pickup-01/manifest.json",
+      "sha256": "825593658e8ad5733c32e825cff05c9f9a226121b61bac2247f1be6c6bad3622"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-laser-shield-01/manifest.json",
+      "sha256": "d28252b626b6cc60071f9a8fbc5aa490533d7080d1ce40c6c61bd610036b1a4a"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-laser-soft-01/manifest.json",
+      "sha256": "9c8e3ea68a1a3b3078fd3a84055d3250559ecaef12c342afe3fabb6079aad85c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-laser-solid-01/manifest.json",
+      "sha256": "4452df486d7ac6df2374bcb1acfd7eb18351a1359c4afdeda645a1d3ccc40b53"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-triple-bomb-01/manifest.json",
+      "sha256": "340e6a5648a11003716b3327079ae089501b34321c7dd1f17bc6f78f11d8d57d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-triple-enemy-01/manifest.json",
+      "sha256": "227d425e9e3ba1d7bc450d1c2d48b802eab70982ded5fb859226050dc5a225ae"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-triple-own-cell-enemy-03/manifest.json",
+      "sha256": "2072c8cf902be82b04b6b80a836330696ea0bcb9ad46ddf529d98a30a20ebfb6"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-triple-pickup-01/manifest.json",
+      "sha256": "c2b0cf4cbada2108db0f63b7a15dd5a054009c393eb22755b75196e7a9873f67"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-triple-shield-01/manifest.json",
+      "sha256": "29744048d16d73027292a61e10a65e993a9a74c971f453fb2c46e799659dba0c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-triple-soft-01/manifest.json",
+      "sha256": "91e68d3917052093e55be28ed5ff0b1b1c3ea961b9042c4c1c5d479ac319ed95"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-interactions/interaction-triple-solid-01/manifest.json",
+      "sha256": "4248f4bae52ce1532b7d3245305d021649cda2593ca16b1b749183f48e5679e0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/manifest.json",
+      "sha256": "d2464b2644deb61c751115e19a926733e4f0b55d8c8ed6aa2ee140eea76bc0ca"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-pause-01/manifest.json",
+      "sha256": "daff0d1814d4d5ada6ab2f9891917eec4652bc593bbbad28a4b322e3cbb3c784"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-recovery-pause-01/manifest.json",
+      "sha256": "4d983baee04e7e1391c43ef19c5e357f1383cc6b466651ff62fdda8ad76547b1"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-replacement-01/manifest.json",
+      "sha256": "c68312b886fc1fea4202d881dbbef6a8c4863fa248976e9235105e98e9c7a063"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-flamer-late-replacement-01/manifest.json",
+      "sha256": "a5291a791f52abeebb6886bf7638a3ada29d34d75a222ba6fd6c211197944e5b"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-flamer-pause-01/manifest.json",
+      "sha256": "a7f80f9ffac3a2bc3debae9750fbba80fbdeaa869ecba32f2ab8d578b431f02d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-flamer-replacement-01/manifest.json",
+      "sha256": "38a9ab93b541399494e31cc92592cb817d2bda01b25116e1a2ed39f24efbe4a2"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-hammer-pause-01/manifest.json",
+      "sha256": "e7dddcaa71a04266fc5ed8da1e87a662d915c258a5d3f7337cf4dbea27cc208c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-hammer-replacement-01/manifest.json",
+      "sha256": "5488e078877c3d1405ad2c16cb475cdc94ab18cb212e6a7cb5715c302f03d71d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-laser-pause-01/manifest.json",
+      "sha256": "1afc0eca06326f024e3ec32e68f5a87b0ce99b8f474fec3b51b3cbdf6ec3169f"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-laser-replacement-01/manifest.json",
+      "sha256": "66c399ae2d4d63f3247b3cddf3695b849c09393fd24c8dbdfd015c56c0439177"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-triple-paced-01/manifest.json",
+      "sha256": "9316693406a252fee26081952e6912a299322c24b720f0f1cf3ff620b561435a"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-triple-pause-01/manifest.json",
+      "sha256": "10c7741629cc5096d9dd7cbbd9c6d39eaefdb8d5d378fb138c0fb95599510ce4"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-triple-recovery-pause-02/manifest.json",
+      "sha256": "0d53406f3e1c31aa3b111ebcd8d341d92584801b6d3e7e72f24a528bd4fe9e49"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-triple-replacement-01/manifest.json",
+      "sha256": "019586c35752c27c799ba861957cd686117e55448b6a6847efe4edf6bc0559d7"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-down-01/manifest.json",
+      "sha256": "e9663d784c1c5d6d734041068baecaf8495d110242902ee943f725c9afec09aa"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-down-01/native-oracle-manifest.json",
+      "sha256": "4ecb14e6e1cfdecbb18a9526e498803272bde1d47cf81f70fd23ee93d53f16b0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-left-01/manifest.json",
+      "sha256": "2a5dcd478fccfd9e8d944ad39829bd2f05c4969bbada7ecdb4379280dac5670d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-left-01/native-oracle-manifest.json",
+      "sha256": "e322b687506522dcda39ebca4ac425c50b65a06e236a6f50b15eb3e95474a37c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-right-01/manifest.json",
+      "sha256": "3cbbb976f9d21eab74574e49db6853c970ad52d8bfa85e8a9020fe249567b4ac"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-right-01/native-oracle-manifest.json",
+      "sha256": "997017f5eeacc4d361cf1298e07ad41881fb3214ceb49d557d6c43fdb33ef402"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-up-01/manifest.json",
+      "sha256": "607af5152f21265a947f6a5d1016974aec1b3f03e4e3a8e4d0600ba971f0a743"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/flamer-geometry-up-01/native-oracle-manifest.json",
+      "sha256": "bd90acb70575fb93d8709daf005bab20e9a8c22dcaae4b1f0c0b8d55b3a21f59"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-fireball-down-01/manifest.json",
+      "sha256": "f66e846e642e125e5088ef2a3fde68d27d7cec5e9ca6732a957270a593f97f1e"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-fireball-left-01/manifest.json",
+      "sha256": "0007bb2a64db5b26d202c22528a6f147ccb8b0ad1b16fb1c4145d804459fd366"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-fireball-right-01/manifest.json",
+      "sha256": "eea89f93c32a5608cfb6521eebe74dc4d5b5249db15a2388d0995eeb48f40478"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-fireball-up-01/manifest.json",
+      "sha256": "1aedacf2acddc39c99473733a22111149d1b46441daa2403b6ba4abc7a6c010b"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-flamer-down-01/manifest.json",
+      "sha256": "f7e3867b1677bba75eca10fa42bd2273ffc831bdf5d0466e4976666418a39277"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-flamer-left-01/manifest.json",
+      "sha256": "de600b3997f939d88d206b010c1df0f485f6f82bec26f4ec7044e5ffe24d0d75"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-flamer-right-01/manifest.json",
+      "sha256": "2299783762ff01ac1153f0857f7b21dbddb594e30e156aed77997547f82d57f5"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-flamer-up-01/manifest.json",
+      "sha256": "1b61317431ff8ef670416c9050eb59efbdb8fc642f348391cce67373eefb0764"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-hammer-down-01/manifest.json",
+      "sha256": "42db4627f7a703e84fbd4a2a39c24c3363633d7db43f77e6801dcecd5dd1ac55"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-hammer-left-01/manifest.json",
+      "sha256": "7344a69c6778828d218421a7eb07d2172c114ef4099dd37accb19d356f77eedd"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-hammer-right-01/manifest.json",
+      "sha256": "71116f7d6f9566f7d48eb025428ffe2db34f699338971f9d769cfc9626f2262b"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-hammer-up-01/manifest.json",
+      "sha256": "ad68e47fd0baca40b402c9550674bd37ecafa53de9bd5ffd91cfa36043e27839"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-landmine-down-01/manifest.json",
+      "sha256": "c3ab59c70a1a8dd2b5b80126dea6f785bafb59c6b851aea8ed0f582b061a1ec0"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-landmine-left-01/manifest.json",
+      "sha256": "342e24c1251819dcaf30ec10ad63293a7d049585d2452be72b5506ca0d1f2a23"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-landmine-right-01/manifest.json",
+      "sha256": "ca84149c32d3834f59b2c55f138d2ff959019e55fd8ee7ad1a0a5a68f5fe3b5a"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-landmine-up-01/manifest.json",
+      "sha256": "d214799a14bc3afb5e3c9a9caac399612e31f15b639723a253003ba31eab469c"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-laser-down-01/manifest.json",
+      "sha256": "7202cd785d6b94200fb28317d9494a6e2d7ddc1bee6f818acb19cd276f5c91ff"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-laser-left-01/manifest.json",
+      "sha256": "25a4438b530a38974e85f1aab9c9b73c88fd402982bc125fc130b2fcef62b2bb"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-laser-right-01/manifest.json",
+      "sha256": "d0ef3f9fd35638506ea1c3a0bf8b5df3632fedab58d91e3fc27b10d3043c0cdd"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-laser-up-01/manifest.json",
+      "sha256": "ce7fbad591006c4bad2afded966ceda70052338b3ba6d95b7439f4a4dfed101d"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-triple-down-01/manifest.json",
+      "sha256": "f0f490c4b5825e8e67d6b714eb905df62c5c1e9b65e35c63c1e86fb7647fed73"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-triple-left-01/manifest.json",
+      "sha256": "0cd8e886ac34afdee098abd38d9ad35843804d72b2ba00728886d20a953ac1ae"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-triple-right-01/manifest.json",
+      "sha256": "d14830fe57a3195bae4052184b8ceb3a3af96b33beb045a80290a185909aa598"
+    },
+    {
+      "path": "docs/evidence/reference-2026-10-19/weapon-survey/weapon-survey-triple-up-01/manifest.json",
+      "sha256": "fb112bb24aea06ac8a2f2111732898bfce9800f1f077f1aa9587782bc9c1e43c"
+    }
+  ],
+  "limits": [
+    "Inventory presence is not a claim that every reference case was replayed or paired by this port.",
+    "88 flamer endpoints compare actual recorded original getters; other checks are focused source-derived public regressions.",
+    "Declared open/route fixtures preserve selected conditions; they are not complete SWF session replays.",
+    "RNG draws and clock categories are explicit; seed equality does not imply engine equivalence.",
+    "Numeric bounds metadata is used without source sprites, textures, music or artwork."
+  ],
+  "desktop_playthroughs": [
+    {
+      "elapsed_ms": 5318,
+      "kills": 1,
+      "outcome": "won",
+      "remaining_soft": 17,
+      "score": 3490,
+      "seed": 2,
+      "tick": 2267
+    },
+    {
+      "elapsed_ms": 5885,
+      "kills": 2,
+      "outcome": "won",
+      "remaining_soft": 12,
+      "score": 3660,
+      "seed": 5,
+      "tick": 2704
+    },
+    {
+      "elapsed_ms": 5324,
+      "kills": 1,
+      "outcome": "won",
+      "remaining_soft": 12,
+      "score": 3480,
+      "seed": 42,
+      "tick": 2297
+    }
+  ]
+}

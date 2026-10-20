@@ -105,6 +105,36 @@ The subsequent implement instruction approves the 16 recovery tickets [#22–#37
 
 ## Decision history
 
+### Fidelity implementation conversions (2026-10-20)
+
+The user's implement instruction approves fidelity tickets #38–#55. Recovered
+ownership is represented behind the same admitted round, with no second gameplay
+clock. These conversions make the accepted simulation-time, command and pause
+policies concrete; they do not certify native Flash equivalence:
+
+- Resolve an admitted nonzero heading before starting an available action, while
+  retaining the tick-start placement position. A locked action can turn and start
+  without displacement or an AI-only facing setter. Both controllers use this
+  command path; existing actions/transit retain their input locks.
+- Convert host durations to simulation deadlines with ceiling to a tick: vehicle
+  recovery 1 second/35 ticks; projectile recovery 0.3 seconds/11 ticks; ending
+  cartoon 3 seconds/105 ticks; AI delays 0.1/0.15/0.2/0.3/2 seconds become
+  4/6/7/11/70 ticks. These are conversions, not measured universal SWF callback
+  counts. Pause freezes them and resume consumes no stale input.
+- Keep callback-counted hazard cleanup separate from visible animation and map
+  occupancy. Preserve live removal skips within translated registries, Boolean
+  overlapping fire, mine counter/scoring quirks and item-list/parser behavior.
+  Original cross-registry order remains mapped to the accepted phases.
+- Keep death detachment, death-movie completion, ending judgment, cartoon and
+  settlement distinct. The round countdown runs until judgment and freezes during
+  the cartoon; a retry heart is spent once at loss settlement. The admitted
+  scheduler continues advancing the frozen-world cartoon until settlement.
+
+The [fidelity verification record](docs/verification/fidelity-2026-10-20/README.md)
+owns comparison coverage and limits. [ADR 0005](docs/adr/0005-integrate-gameplay-through-the-round.md)
+records the rationale. Existing finished-redraw #20 and desktop acceptance #21
+remain separate gates, followed by deferred physical phone/iOS evaluation.
+
 Implementation policy recorded during the user's 2026-10-19 instruction to implement the complete ticket graph without permission stops:
 
 - The playable first build uses Normal Arcade settings and the recorded Cinema board. Retry/play-again reuses that board within the selected single-map scope; it does not add a campaign or a generator. Session hearts and result totals carry across permitted retries/play-again; a new session starts fresh.

@@ -112,6 +112,10 @@ func advance_time(seconds: float) -> void:
 	var update: Dictionary = scheduler.advance_time(seconds)
 	for tick in update.ticks:
 		state = tick
+		if state.get("round_stage") == &"ending":
+			touch_controls.enabled = false
+			touch_controls.reset()
+			held.clear()
 		if not practice and state.outcome != &"running" and not result_credited:
 			result_credited = true
 			session_lives = state.actors[&"human"].lives
@@ -162,9 +166,9 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.keycode == KEY_P and event.pressed and not event.echo:
 			toggle_pause()
-		elif event.keycode == KEY_SPACE and not paused:
+		elif event.keycode == KEY_SPACE and _can_control():
 			scheduler.enqueue_bomb_event(&"human", &"down" if event.pressed else &"up")
-		elif event.keycode in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT] and not paused:
+		elif event.keycode in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT] and _can_control():
 			if event.pressed and not event.echo:
 				held.erase(event.keycode)
 				held.append(event.keycode)
@@ -198,4 +202,9 @@ func _make_button(key: String, caption: String, position_at: Vector2, action: Ca
 
 func _refresh() -> void:
 	if is_instance_valid(view) and not state.is_empty():
+		touch_controls.enabled = _can_control()
 		view.present(get_snapshot(), practice, paused)
+
+
+func _can_control() -> bool:
+	return not paused and not state.is_empty() and state.outcome == &"running" and state.get("round_stage") != &"ending" and state.actors[&"human"].alive

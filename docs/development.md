@@ -2,6 +2,15 @@
 
 ## Current boundary
 
+Fidelity implementation #38–#55 is in progress on 2026-10-20, approved by the
+user's implement instruction. The graph has 18 tickets and 32 native blocker
+edges; #20 additionally waits for #55. Source-grounded regressions use the real
+scheduler/round with copied controller observations and focused scene checks.
+See [verification](verification/fidelity-2026-10-20/README.md) for coverage,
+conversions and review status. DESIGN.md records the implementation conversions
+under its decision history. Finished original artwork #20, final desktop/human
+acceptance #21 and later physical phone/iOS evaluation remain separate.
+
 The 2026-10-16 repository audit found an empty main scene and project configuration, with no gameplay scripts, tests, SWF, or recovery records. Inspect the files for subsequent implementation state.
 
 The Godot 4.5 desktop game is runnable. It opens in one-actor practice and offers a local match against three AI on the recorded Cinema board. Continuous cardinal/diagonal movement, collision/corridor assistance, paired portals, ordinary bombs/chains, persistent hazards, damage/protection, conditional pickups, source-reachable weapons/rides, round time/endings, lives/score/HUD, results/retry/new-session flow and original vector presentation are integrated. The scene drives one scheduler and consumes owned round results. Desktop verification passes 244 checks, including full-board victory/defeat playthroughs, and rendered captures are inspected below; physical phone/iOS testing and export remain deferred. The four named unresolved item slots remain empty. Read [runtime evidence](evidence/edition-5-runtime-systems.md) for source mappings, explicit omissions and parity limits.

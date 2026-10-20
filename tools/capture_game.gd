@@ -26,16 +26,21 @@ func _run() -> void:
 	key.pressed = true
 	root.push_input(key, true)
 	for index in 73: game.advance_time(1.0 / 35.0)
+	await _capture("death")
+	for index in 59: game.advance_time(1.0 / 35.0)
+	await _capture("ending")
+	for index in 105: game.advance_time(1.0 / 35.0)
 	await _capture("results")
 	for index in 2:
 		game.retry_round()
 		root.push_input(key, true)
-		for tick in 73: game.advance_time(1.0 / 35.0)
+		for tick in 237: game.advance_time(1.0 / 35.0)
 	await _capture("game-over")
 	game.start_session(false, 2)
 	# Drive legal human commands through the existing producer seam, without changing round state.
-	game.scheduler.set_controller(&"human", func(): return game.ai.command(game.get_snapshot(), &"human"))
-	for index in 6300:
+	var driver = load("res://tools/desktop_player.gd").new(2)
+	game.scheduler.set_controller(&"human", func(): return driver.command(game.get_snapshot(), &"human"))
+	for index in 6405:
 		game.advance_time(1.0 / 35.0)
 		if game.get_snapshot().outcome != &"running": break
 	assert(game.get_snapshot().outcome == &"won", "production match must reach legitimate elimination victory")

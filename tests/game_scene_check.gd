@@ -73,7 +73,7 @@ func _run() -> void:
 		bomb_key.keycode = KEY_SPACE
 		bomb_key.pressed = true
 		root.push_input(bomb_key, true)
-		for index in 73:
+		for index in 237:
 			scene.advance_time(1.0 / 35.0)
 		_expect(scene.get_snapshot().get("session", {}).get("lives", -1) == 2,
 			"losing a match consumes one retry heart")
@@ -85,7 +85,7 @@ func _run() -> void:
 		for remaining in [1, 0]:
 			scene.retry_round()
 			root.push_input(bomb_key, true)
-			for index in 73: scene.advance_time(1.0 / 35.0)
+			for index in 237: scene.advance_time(1.0 / 35.0)
 			_expect(scene.get_snapshot().session.lives == remaining, "retry carries remaining hearts across rounds")
 		_expect(scene.get_snapshot().session.game_over, "losing the last heart enters game over")
 		scene.retry_round()

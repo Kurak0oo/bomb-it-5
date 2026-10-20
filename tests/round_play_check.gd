@@ -34,7 +34,7 @@ func _initialize() -> void:
 		state = game.advance([_command()])
 	_expect(state.actors[&"human"].cell == Vector2i(6, 5), "portal transfer arrives after thirty following callbacks")
 	game = Simulation.new([&"human", &"ai"], {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(7, 5)}}, _board(), {"round": true})
-	for index in 6300:
+	for index in 6405:
 		state = game.advance([_command(), {"actor_id": &"ai", "direction": Vector2.ZERO, "bomb_events": []}])
 	_expect(state.get("outcome", &"running") == &"timeout", "6300 accepted ticks end a round with enemies in timeout defeat")
 	game = Simulation.new([&"human"], {&"human": {"cell": Vector2i(1, 1)}}, _board(),
@@ -114,7 +114,7 @@ func _initialize() -> void:
 	var scheduler := Scheduler.new([&"human", &"ai"], game)
 	var brain := AI.new(42)
 	scheduler.set_controller(&"ai", func(): return brain.command(game.snapshot(), &"ai"))
-	for index in 8:
+	for index in 20:
 		scheduler.advance_time(1.0 / 35.0)
 	state = game.snapshot()
 	_expect(state.actors[&"ai"].ammo == 1, "AI uses the acquired laser against a visible distant actor")

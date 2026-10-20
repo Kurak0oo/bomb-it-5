@@ -76,6 +76,14 @@ No `LandmineBomb.dispose` invocation was observed on this menu path. The evidenc
 
 ## Integrity and remaining limits
 
+Implementation cross-check, 2026-10-20 (static source, not another runtime probe):
+`AbstractRobot.bombRobotScore` adds both `modePoint += ROBOT_POINT` and
+`killNum += 1`. Therefore the manually awarded protected-contact case above
+also follows the source kill-counter increment despite survival. The port
+preserves that counter quirk; a displayed kill counter is not proof that the
+corresponding actor died. The public scheduler/round regression distinguishes
+the surviving target, 100-point award and incremented counter.
+
 Each completed event collection has zero dropped records, zero stack overflow and balanced original call/return pairs. The read-only extractor rejects truncated/ambiguous Focus data, duplicate checkpoint names and hash mismatches. Original-method events carry method indices, primitive args, selected depth and process-local receiver IDs; mutation excerpts retain original sequence numbers but may omit ancestors. Full raw collector files at decisive frames and selected raw Focus checkpoints support independent inspection. General observer/fast-call and host Date/getTimer/Tween limits remain in the [instrumentation record](edition-5-reference-events.md); no whole-session determinism or native Adobe Flash equivalence is claimed.
 
 Failed/preliminary attempts remain in ignored raw storage: two contact setup attempts were rejected because a requested actor cell overlapped the human; moving the human first fixed the fixture precondition. Five movement callbacks stopped short of entering the mine; the final cases use seven and record the actual approach/contact boundary. An initial capacity run reused generic capture names and overwrote two checkpoint paths; it is excluded and replaced with unique names and matching manifest hashes. Earlier armed-chain evidence was extended with the subsequent legal capacity consequence and re-curated from its final case.

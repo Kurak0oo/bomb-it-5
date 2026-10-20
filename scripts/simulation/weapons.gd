@@ -3,6 +3,7 @@ extends RefCounted
 
 var attacks: Array[Dictionary] = []
 var projectiles: Array[Dictionary] = []
+const Geometry = preload("res://scripts/simulation/weapon_geometry.gd")
 
 
 func record_cells(effect: Dictionary, cells: Array[Vector2i]) -> void:
@@ -19,22 +20,26 @@ static func cardinal(facing: Vector2) -> Vector2i:
 
 func start(id: StringName, actor: Dictionary, tick: int) -> void:
 	var kind: StringName = actor.weapon
-	if kind not in [&"hammer", &"flamer", &"laser", &"triple", &"shotgun"]:
+	if kind not in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun"]:
 		return
 	actor.ammo -= 1
-	var windup := 23 if kind == &"hammer" else 10 if kind == &"laser" else 0
+	actor.action_started_tick = tick
+	var windup := 24 if kind == &"hammer" else 11 if kind == &"laser" else 0
 	var duration := 24 if kind == &"hammer" else 22 if kind == &"laser" else 23
 	if kind == &"triple":
-		duration = 41
+		duration = 43
 	elif kind == &"shotgun":
-		windup = 13
+		windup = 14
+		duration = 26
+	elif kind == &"flamer":
 		duration = 24
 	actor.busy_until = tick + duration
 	attacks.append({"kind": kind, "actor_id": id, "direction": cardinal(actor.facing),
 		"ready": tick + windup, "expires": tick + duration, "cell": actor.cell,
-		"started": tick, "fired": false})
-	if actor.ammo == 0:
-		actor.weapon = &""
+		"started": tick, "fired": false, "frame": 0, "phase": &"windup", "layer": &"front", "recover_at": -1})
+	if kind == &"hammer":
+		attacks[-1].expires = tick + 25
+		actor.busy_until = tick + 24
 
 
 func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> Array[Dictionary]:
@@ -44,14 +49,48 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			attacks.erase(attack)
 			continue
 		if tick >= attack.expires:
-			attacks.erase(attack)
+			complete(attack, actors[attack.actor_id], tick)
 			continue
+		if attack.recover_at >= 0 and tick >= attack.recover_at:
+			complete(attack, actors[attack.actor_id], tick)
+			continue
+		attack.frame = tick - attack.started
+		if attack.kind == &"flamer":
+			if attack.frame <= 0: continue
+			attack.direction = cardinal(actors[attack.actor_id].facing)
+			attack.endpoint = Geometry.flamer_endpoint(attack, actors[attack.actor_id], board)
+			attack.phase = &"active"
+			attack.fired = true
+			effects.append(attack.duplicate())
+			if attack.frame >= 23: complete(attack, actors[attack.actor_id], tick)
+			continue
+		if attack.kind == &"landmine":
+			if attack.frame > 0:
+				effects.append(attack.duplicate())
+				complete(attack, actors[attack.actor_id], tick)
+			continue
+		if attack.kind == &"laser" and attack.frame >= 11:
+			attack.frame = 11
+			attack.phase = &"beam"
+		if attack.kind == &"hammer":
+			attack.direction = cardinal(actors[attack.actor_id].facing)
+			attack.attachment = Geometry.HAMMER_OFFSET[attack.direction]
+			if attack.frame >= 12 and attack.direction == Vector2i.UP:
+				attack.layer = &"behind"
 		if attack.kind in [&"triple", &"shotgun"]:
 			var age: int = tick - attack.started
-			if (attack.kind == &"triple" and age in [0, 15, 30]) or (attack.kind == &"shotgun" and tick == attack.ready):
+			if (attack.kind == &"triple" and age in [1, 16, 31]) or (attack.kind == &"shotgun" and tick == attack.ready):
+				attack.direction = cardinal(actors[attack.actor_id].facing)
 				projectiles.append({"actor_id": attack.actor_id, "kind": attack.kind,
 					"position": Vector2(actors[attack.actor_id].cell), "direction": attack.direction,
+					"previous_cell": actors[attack.actor_id].cell, "phase": &"travel", "cleanup_count": 0,
 					"speed": (5.0 if attack.kind == &"triple" else 10.0) / 30.0, "born": tick})
+				attack.fired = true
+				attack.phase = &"emission"
+				if age == 31 or attack.kind == &"shotgun":
+					# Deliberate simulation-clock conversion; not an observed SWF frame count.
+					attack.recover_at = tick + ceili(0.3 * 35.0)
+					attack.phase = &"recovery"
 			continue
 		if tick >= attack.ready and (not attack.fired or attack.kind == &"flamer"):
 			var effect: Dictionary = attack.duplicate()
@@ -59,17 +98,42 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			effect.reach = mini(3, 1 + floori((tick - attack.started) * 3.0 / 22.0))
 			effects.append(effect)
 			attack.fired = true
+			attack.phase = &"beam" if attack.kind == &"laser" else &"impact"
+			if attack.kind == &"hammer": complete(attack, actors[attack.actor_id], tick)
 	for projectile in projectiles.duplicate():
 		if projectile.born == tick:
+			continue
+		if projectile.phase == &"cleanup":
+			if projectile.cleanup_count > 10: projectiles.erase(projectile)
+			projectile.cleanup_count += 1
 			continue
 		var next: Vector2 = projectile.position + Vector2(projectile.direction) * projectile.speed
 		var edge: Vector2 = next + Vector2(projectile.direction) * 0.49999
 		var leading := Vector2i(floori(edge.x + 0.5), floori(edge.y + 0.5))
 		var blocked: bool = board.get(leading) not in [&"floor", &"portal"] or bombs.any(func(b): return b.cell == leading)
-		projectile.position = next
-		var target := leading if blocked else Vector2i(floori(next.x + 0.5), floori(next.y + 0.5))
+		projectile.position = Vector2(leading - projectile.direction) if blocked else next
+		var target := Vector2i(floori(projectile.position.x + 0.5), floori(projectile.position.y + 0.5))
 		effects.append({"kind": &"projectile", "actor_id": projectile.actor_id, "cell": target,
-			"direction": Vector2i.ZERO})
+			"direction": Vector2i.ZERO, "hit_items": target != projectile.previous_cell})
+		projectile.previous_cell = target
 		if blocked:
-			projectiles.erase(projectile)
+			effects.append({"kind": &"projectile", "actor_id": projectile.actor_id,
+				"cell": target + projectile.direction, "direction": Vector2i.ZERO, "damage": false})
+			projectile.phase = &"cleanup"
 	return effects
+
+
+func complete(attack: Dictionary, actor: Dictionary, tick: int) -> void:
+	attacks.erase(attack)
+	actor.busy_until = tick
+	if actor.ammo == 0: actor.weapon = &""
+
+
+func cancel(actor: Dictionary, id: StringName) -> void:
+	for attack in attacks.duplicate():
+		if attack.actor_id == id: attacks.erase(attack)
+	actor.busy_until = 0
+
+
+func is_active(id: StringName) -> bool:
+	return attacks.any(func(attack: Dictionary): return attack.actor_id == id)

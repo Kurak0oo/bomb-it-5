@@ -12,6 +12,7 @@ var _actor_ids: Array[StringName]
 var _actors: Dictionary
 var _board: Dictionary
 var _bombs: Array[Dictionary] = []
+var _countdowns: Array[Dictionary] = []
 var _tick: int = 0
 var _rules: Dictionary
 var _flames: Array[Dictionary] = []
@@ -25,6 +26,15 @@ var _spawned_drops := 0
 var _vehicles_left := 4
 var _rng := RandomNumberGenerator.new()
 var _weapons := Weapons.new()
+var _drop_pool: Array[StringName] = []
+var _random_draws: Array = []
+var _random_index := 0
+var _late_blast := false
+var _round_stage: StringName = &"playing"
+var _pending_outcome: StringName = &""
+var _ending_started := 0
+var _gameplay_end_tick := 0
+var _judgment_ready := false
 
 
 func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, rules: Dictionary = {}) -> void:
@@ -34,6 +44,10 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 	_commands = CommandModule.new(_actor_ids)
 	_rules = rules.duplicate(true)
 	_rng.seed = _rules.get("seed", 5)
+	_random_draws = _rules.get("random_draws", []).duplicate()
+	_drop_pool = Pickups.build_pool(_draw_random)
+	_vehicles_left = _rules.get("vehicle_budget", 4)
+	_spawned_drops = _rules.get("drop_count", 0)
 	_pickups = _rules.get("pickups", {}).duplicate(true)
 	if _rules.get("portals", false) is Dictionary:
 		_portals = _rules.portals.duplicate()
@@ -42,9 +56,9 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 			Vector2i(4, 7): Vector2i(12, 7), Vector2i(12, 7): Vector2i(4, 7)}
 	for id in _actor_ids:
 		var actor: Dictionary = _actors[id]
-		actor.position = Vector2(actor.cell)
-		actor.velocity = Vector2.ZERO
-		actor.facing = Vector2.DOWN
+		actor.position = actor.get("position", Vector2(actor.cell))
+		actor.velocity = actor.get("velocity", Vector2.ZERO)
+		actor.facing = actor.get("facing", Vector2.DOWN)
 		actor.departures = []
 		actor.alive = actor.get("alive", true)
 		actor.protected_until = actor.get("protected_until", 0)
@@ -61,11 +75,22 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		actor.lives = actor.get("lives", 3 if id == _actor_ids[0] else 1)
 		actor.invincible_until = 0
 		actor.invincible_active_from = 0
-		actor.vehicle = &""
-		actor.drive_speed = actor.speed
+		actor.vehicle = actor.get("vehicle", &"")
+		actor.drive_speed = actor.get("drive_speed", actor.speed)
 		actor.busy_until = 0
-		actor.weapon = &""
-		actor.ammo = 0
+		actor.weapon = actor.get("weapon", &"")
+		actor.ammo = actor.get("ammo", 0)
+		actor.bomb_count = 0
+		actor.is_human = id == _actor_ids[0]
+		actor.protection_stage = &"none"
+		actor.vehicle_recovery_until = 0
+		actor.movement_rearm = false
+		actor.death_frame = 0
+		actor.removed = false
+		actor.model_state = &"normal"
+		actor.registered_state = &"normal"
+		actor.registered_vehicle = actor.vehicle
+		actor.action_started_tick = -1
 
 
 func advance(commands: Array[Dictionary]) -> Dictionary:
@@ -79,68 +104,100 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 	var blasts: Array[Dictionary] = []
 	var broken_soft_blocks: Array[Vector2i] = []
 	if result.accepted:
-		for flame in _flames.duplicate():
-			if _tick >= flame.expires:
+		if _round_stage == &"ending":
+			_finish_round()
+			result.merge(snapshot(), true)
+			return result
+		_late_blast = false
+		_advance_actor_states()
+		# Live registry removal deliberately skips the following cleanup callback.
+		var cleanup_index := 0
+		while cleanup_index < _flames.size():
+			var flame: Dictionary = _flames[cleanup_index]
+			if flame.count > 15:
 				for cell in flame.cells:
 					_fire.erase(cell)
+				_bombs.erase(flame.bomb)
 				_flames.erase(flame)
+			flame.count += 1
+			cleanup_index += 1
 		var by_actor: Dictionary = {}
 		for command in commands:
 			by_actor[command.actor_id] = command
 		for actor_id in _actor_ids:
 			var command: Dictionary = by_actor[actor_id]
-			if not _actors[actor_id].alive or _actors[actor_id].transit_until > 0 or _actors[actor_id].busy_until > _tick:
+			if not _actors[actor_id].alive or _actors[actor_id].transit_until > 0 or _actors[actor_id].busy_until > _tick or _weapons.is_active(actor_id):
 				continue
+			if command.direction != Vector2.ZERO:
+				_actors[actor_id].facing = command.direction.normalized()
 			for event in command.bomb_events:
 				if event == &"down":
 					var actor: Dictionary = _actors[command.actor_id]
 					if actor.busy_until > _tick:
 						continue
 					if actor.weapon == &"landmine":
-						_bombs.append({"actor_id": actor_id, "cell": actor.cell, "power": 2,
-							"kind": &"mine", "armed": false, "detonation_tick": 2147483647})
-						actor.weapon = &""
-						actor.ammo = 0
-						actor.busy_until = _tick + 1
+						_weapons.start(actor_id, actor, _tick)
 						continue
 					if actor.weapon != &"":
 						_weapons.start(actor_id, actor, _tick)
 						continue
 					if _board.get(actor.cell) != &"floor":
 						continue
-					var owned_bombs: int = _bombs.filter(
-						func(bomb: Dictionary): return bomb.actor_id == command.actor_id and bomb.get("kind", &"bomb") != &"mine").size()
-					if owned_bombs >= actor.get("capacity", 1):
+					if actor.bomb_count >= actor.get("capacity", 1):
 						continue
 					if _bombs.any(func(bomb: Dictionary): return bomb.cell == actor.cell):
 						continue
-					_bombs.append({"actor_id": command.actor_id, "cell": actor.cell,
-						"power": actor.get("power", 1), "detonation_tick": result.tick + FUSE_TICKS})
+					var placed := {"actor_id": command.actor_id, "cell": actor.cell,
+						"power": actor.get("power", 1), "born": _tick, "age": 0, "blasted": false}
+					_bombs.append(placed)
+					_countdowns.append(placed)
+					actor.bomb_count += 1
 					for other in _actors.values():
 						if Movement.overlaps(other.position, actor.cell) and actor.cell not in other.departures:
 							other.departures.append(actor.cell)
-		for bomb in _bombs.duplicate():
-			if bomb.get("kind", &"bomb") == &"mine" and _bombs.has(bomb):
-				if _actors[bomb.actor_id].cell != bomb.cell:
+		var countdown_index := 0
+		while countdown_index < _countdowns.size():
+			var bomb: Dictionary = _countdowns[countdown_index]
+			if bomb.get("kind") == &"mine":
+				if bomb.armed:
+					if _actors.values().any(func(a): return a.alive and a.cell == bomb.cell):
+						_detonate(bomb, blasts, broken_soft_blocks, true)
+				elif _actors[bomb.actor_id].cell != bomb.cell:
 					bomb.armed = true
-				if bomb.armed and _actors.values().any(func(a): return a.alive and a.cell == bomb.cell):
+			elif bomb.born < _tick:
+				bomb.age += 1
+				if bomb.age >= FUSE_TICKS:
 					_detonate(bomb, blasts, broken_soft_blocks)
-				continue
-			if _bombs.has(bomb) and result.tick >= bomb.detonation_tick:
-				_detonate(bomb, blasts, broken_soft_blocks)
+			countdown_index += 1
+		_late_blast = true
 		for effect in _weapons.advance(_tick, _actors, _board, _bombs):
 			_resolve_attack(effect, blasts, broken_soft_blocks)
+		var previous_cells := {}
+		var registered_cells := {}
+		for id in _actor_ids:
+			previous_cells[id] = _actors[id].cell
+			var position_at: Vector2 = _actors[id].position
+			registered_cells[id] = Vector2i(floori(position_at.x + 0.5), floori(position_at.y + 0.5))
 		_advance_portals()
 		if _rules.get("movement", false):
 			for command in commands:
-				if _actors[command.actor_id].alive and _actors[command.actor_id].transit_until == 0 and _actors[command.actor_id].busy_until <= _tick:
-					Movement.step(_actors[command.actor_id], command.direction, _board, _bombs)
-		if _rules.get("damage", false):
-			for actor_id in _actor_ids:
-				if _fire.has(_actors[actor_id].cell):
+				var actor: Dictionary = _actors[command.actor_id]
+				if actor.movement_rearm and command.direction == Vector2.ZERO:
+					actor.movement_rearm = false
+				if actor.alive and actor.transit_until == 0 and actor.busy_until <= _tick and not actor.movement_rearm:
+					Movement.step(actor, command.direction, _board, _bombs)
+		for actor_id in _actor_ids:
+			var actor: Dictionary = _actors[actor_id]
+			var changed: bool = previous_cells[actor_id] != registered_cells[actor_id] or actor.model_state != actor.registered_state or actor.vehicle != actor.registered_vehicle
+			actor.cell = registered_cells[actor_id]
+			actor.registered_state = actor.model_state
+			actor.registered_vehicle = actor.vehicle
+			if _rules.get("damage", false):
+				if changed and _fire.has(registered_cells[actor_id]):
 					_hurt(actor_id, &"")
 		if _rules.get("drops", false):
 			_advance_pickups()
+		_advance_death_movies()
 		if _rules.get("round", false):
 			_finish_round()
 	result.merge(snapshot(), true)
@@ -151,9 +208,11 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 
 func snapshot() -> Dictionary:
 	return {"tick": _tick, "board": _board.duplicate(true), "actors": _actors.duplicate(true),
-		"bombs": _public_bombs(),
+		"bombs": _public_bombs(), "bomb_occupancy": _bombs.duplicate(true),
 		"blasts": [], "broken_soft_blocks": [], "flames": _flames.duplicate(true),
-		"outcome": _outcome, "remaining": maxi(0, 6300 - _tick), "result_score": _result_score,
+		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
+		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
+		"remaining": maxi(0, 6300 - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
 		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys()}
 
@@ -161,6 +220,7 @@ func snapshot() -> Dictionary:
 func _public_bombs() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for bomb in _bombs:
+		if bomb.get("detonated", false): continue
 		var item := {"actor_id": bomb.actor_id, "cell": bomb.cell, "power": bomb.power}
 		if bomb.get("kind", &"bomb") == &"mine":
 			item.kind = &"mine"
@@ -168,9 +228,12 @@ func _public_bombs() -> Array[Dictionary]:
 	return result
 
 
-func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2i]) -> void:
-	# Removal before tracing also prevents a chain from detonating its parent again.
-	_bombs.erase(bomb)
+func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2i], mine_contact: bool = false) -> void:
+	if bomb.get("detonated", false): return
+	bomb.detonated = true
+	bomb.blasted = not mine_contact
+	_countdowns.erase(bomb)
+	if not mine_contact: _actors[bomb.actor_id].bomb_count -= 1
 	var cells: Array[Vector2i] = [bomb.cell]
 	_pickups.erase(bomb.cell)
 	for direction in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
@@ -190,16 +253,24 @@ func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector
 				_board[cell] = &"floor"
 				broken.append(cell)
 				_actors[bomb.actor_id].score += 10
-				_pending_drops.append({"cell": cell, "ready": _tick + 11})
+				_pending_drops.append({"cell": cell, "born": _tick, "frame": 0})
 				break
 	blasts.append({"actor_id": bomb.actor_id, "cell": bomb.cell, "cells": cells})
 	if _rules.get("damage", false):
-		_flames.append({"cells": cells.duplicate(), "expires": _tick + 17, "actor_id": bomb.actor_id})
+		_flames.append({"cells": cells.duplicate(), "count": 0 if _late_blast else 1, "bomb": bomb,
+			"expires": _tick + 16, "actor_id": bomb.actor_id})
 		for cell in cells:
 			_fire[cell] = true
 			for actor_id in _actor_ids:
 				if _actors[actor_id].cell == cell:
+					if mine_contact and cell == bomb.cell and actor_id != bomb.actor_id:
+						var target: Dictionary = _actors[actor_id]
+						if target.alive and target.vehicle == &"" and target.shield == 0 and target.protected_until > _tick:
+							_actors[bomb.actor_id].score += 100
+							_actors[bomb.actor_id].kills += 1
 					_hurt(actor_id, bomb.actor_id)
+	else:
+		_bombs.erase(bomb)
 
 
 func _hurt(actor_id: StringName, owner: StringName) -> void:
@@ -207,17 +278,20 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 	if not _rules.get("damage", false) or not actor.alive or actor.protected_until > _tick:
 		return
 	if actor.vehicle != &"":
-		actor.vehicle = &""
 		actor.busy_until = _tick + 35
-		actor.protected_until = _tick + 35 + 82
+		actor.vehicle_recovery_until = _tick + 35
+		actor.protected_until = _tick + 35
+		actor.drive_speed = actor.speed
 		actor.velocity = Vector2.ZERO
 	elif actor.shield > 0:
 		actor.shield -= 1
-		actor.protected_until = _tick + 82
+		actor.protected_until = _tick + 81
 	else:
 		actor.alive = false
-		actor.lives = maxi(0, actor.lives - 1)
+		actor.model_state = &"dead"
+		actor.death_frame = 1
 		actor.velocity = Vector2.ZERO
+		_weapons.cancel(actor, actor_id)
 		if owner != &"" and owner != actor_id and _actors.has(owner):
 			_actors[owner].kills += 1
 			_actors[owner].score += 100
@@ -233,6 +307,7 @@ func _advance_portals() -> void:
 				actor.position = Vector2(actor.cell)
 				actor.velocity = Vector2.ZERO
 				actor.transit_until = 0
+				actor.movement_rearm = true
 				# SendRobotCommand restores isExist at arrival, before the blink command ends.
 				actor.protected_until = _tick
 			continue
@@ -241,52 +316,107 @@ func _advance_portals() -> void:
 		elif actor.portal_latch != actor.cell and _portals.get(actor.cell) != actor.portal_latch:
 			actor.portal_target = _portals[actor.cell]
 			actor.portal_latch = actor.portal_target
-			actor.transit_until = _tick + 30
-			actor.protected_until = _tick + 30
-			actor.blink_until = _tick + 47
+			actor.transit_until = _tick + 29
+			actor.protected_until = _tick + 29
+			actor.blink_until = _tick + 46
+
+
+func _advance_actor_states() -> void:
+	for actor in _actors.values():
+		if actor.vehicle_recovery_until > 0 and _tick >= actor.vehicle_recovery_until:
+			actor.vehicle_recovery_until = 0
+			actor.vehicle = &""
+			actor.protected_until = _tick + 81
+			actor.movement_rearm = true
+		actor.protection_stage = &"none"
+		if actor.alive:
+			actor.model_state = &"Invincible" if actor.invincible_until > _tick else &"normal"
+		if actor.invincible_until > _tick:
+			actor.protection_stage = &"introduction" if _tick < actor.invincible_active_from else &"active"
+		elif actor.protected_until > _tick:
+			actor.protection_stage = &"recovery" if actor.vehicle_recovery_until > 0 else &"blink"
 
 
 func _finish_round() -> void:
 	var human: Dictionary = _actors[_actor_ids[0]]
+	if _round_stage == &"ending":
+		# Source GameEndCartoon uses a three-second host Tween; accepted conversion freezes on pause.
+		if _tick - _ending_started >= 105:
+			_outcome = _pending_outcome
+			_round_stage = &"settled"
+			_result_score = human.kills * 300
+			if _outcome == &"won":
+				_result_score += 2000 + ceili(maxi(0, 6300 - _gameplay_end_tick) / 35.0) * 10
+			else:
+				human.lives = maxi(0, human.lives - 1)
+			human.score = _result_score
+		return
 	var enemy_alive := false
 	for id in _actor_ids.slice(1):
 		enemy_alive = enemy_alive or _actors[id].alive
 	# ArcadeMode.end checks surviving humans before checking surviving AI.
-	if not human.alive:
-		_outcome = &"lost"
-	elif not enemy_alive:
-		_outcome = &"won"
+	if _judgment_ready and not human.alive:
+		_pending_outcome = &"lost"
+	elif _judgment_ready and not enemy_alive:
+		_pending_outcome = &"won"
 	elif _tick >= 6300:
-		_outcome = &"timeout"
-		human.lives = maxi(0, human.lives - 1)
-	if _outcome != &"running":
-		_result_score = human.kills * 300
-		if _outcome == &"won":
-			_result_score += 2000 + ceili(maxi(0, 6300 - _tick) / 35.0) * 10
+		_pending_outcome = &"lost" if not human.alive else &"won" if not enemy_alive else &"timeout"
+	if _pending_outcome != &"":
+		_round_stage = &"ending"
+		_ending_started = _tick
+		_gameplay_end_tick = _tick
+		for id in _actor_ids:
+			_weapons.cancel(_actors[id], id)
+			_actors[id].velocity = Vector2.ZERO
+		_weapons.projectiles.clear()
+
+
+func _advance_death_movies() -> void:
+	_judgment_ready = false
+	for actor in _actors.values():
+		if not actor.alive and not actor.removed:
+			_round_stage = &"death"
+			if actor.death_frame >= 60:
+				actor.removed = true
+				_judgment_ready = true
+			else:
+				actor.death_frame += 1
 
 
 func _advance_pickups() -> void:
-	for drop in _pending_drops.duplicate():
-		if _tick >= drop.ready:
+	var drop_index := 0
+	while drop_index < _pending_drops.size():
+		var drop: Dictionary = _pending_drops[drop_index]
+		if drop.born < _tick: drop.frame += 1
+		if drop.frame >= 10:
 			_pending_drops.erase(drop)
 			var occupied := false
 			for actor in _actors.values():
 				occupied = occupied or (actor.alive and actor.cell == drop.cell)
-			if not occupied and _spawned_drops < 32 and _rng.randf() < 0.5:
+			if not occupied and _spawned_drops < 32 and _draw_random() < 0.5:
 				_spawn_pickup(drop.cell, true)
+		drop_index += 1
 	# ArcadeMode.timePassed uses >45, so the first timed spawn is at 60 seconds.
 	if _tick > 45 * 35 and _tick % (15 * 35) == 0:
 		var free: Array[Vector2i] = []
-		for cell in _board:
-			if _board[cell] in [&"floor", &"portal"] and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
-				free.append(cell)
+		# Source enumerates x first, then y, chooses all positions before any class draw.
+		for x in range(1, 17):
+			for y in range(1, 15):
+				var cell := Vector2i(x, y)
+				if _board.get(cell) in [&"floor", &"portal"] and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
+					free.append(cell)
+		var selected_cells: Array[Vector2i] = []
 		for index in mini(2, free.size()):
-			var selected := _rng.randi_range(0, free.size() - 1)
-			_spawn_pickup(free[selected], false)
+			var selected := int(_draw_random() * free.size())
+			selected_cells.append(free[selected])
 			free.remove_at(selected)
+		for cell in selected_cells: _spawn_pickup(cell, false)
 	for actor in _actors.values():
-		if actor.alive and actor.transit_until == 0 and _pickups.has(actor.cell):
-			Pickups.apply(actor, _pickups[actor.cell], _tick)
+		if actor.alive and actor.transit_until == 0 and actor.action_started_tick != _tick and _pickups.has(actor.cell):
+			var kind: StringName = _pickups[actor.cell]
+			if kind in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun"]:
+				_weapons.cancel(actor, _actors.find_key(actor))
+			Pickups.apply(actor, kind, _tick)
 			_pickups.erase(actor.cell)
 	for id in _actor_ids:
 		if _actors[id].alive and _actors[id].invincible_until > _tick and _actors[id].invincible_active_from <= _tick:
@@ -296,19 +426,35 @@ func _advance_pickups() -> void:
 
 
 func _spawn_pickup(cell: Vector2i, quota: bool) -> void:
-	var kind := Pickups.choose(_rng, _vehicles_left if quota else 4)
-	if kind == &"":
-		return
-	if kind == &"vehicle":
-		kind = &"car" if _rng.randi_range(0, 1) else &"moto"
-		if quota:
-			_vehicles_left -= 1
-	_pickups[cell] = kind
+	var kind: StringName = _drop_pool[int(_draw_random() * _drop_pool.size())]
+	if quota and kind in [&"car", &"moto"]:
+		if _vehicles_left <= 0:
+			var index := 0
+			while index < _drop_pool.size():
+				if _drop_pool[index] in [&"car", &"moto"]:
+					_drop_pool.remove_at(index)
+				index += 1
+			return
+		_vehicles_left -= 1
+	if kind not in [&"reserved_kick", &"reserved_boxing"]:
+		_pickups[cell] = kind
 	if quota:
 		_spawned_drops += 1
 
 
+func _draw_random() -> float:
+	var value: float = _random_draws[_random_index] if _random_index < _random_draws.size() else _rng.randf()
+	_random_index += 1
+	return clampf(value, 0.0, 0.9999999999999999)
+
+
 func _resolve_attack(effect: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2i]) -> void:
+	if effect.kind == &"landmine":
+		var mine := {"actor_id": effect.actor_id, "cell": _actors[effect.actor_id].cell,
+			"power": 2, "kind": &"mine", "armed": false, "blasted": false, "detonated": false}
+		_bombs.append(mine)
+		_countdowns.append(mine)
+		return
 	if effect.kind == &"laser":
 		var beam: Array[Vector2i] = []
 		for distance in 17:
@@ -325,31 +471,27 @@ func _resolve_attack(effect: Dictionary, blasts: Array[Dictionary], broken: Arra
 		return
 	var target: Vector2i = effect.cell + effect.direction
 	if effect.kind == &"flamer":
-		var visible_cells: Array[Vector2i] = []
-		for distance in range(1, effect.reach + 1):
-			target = effect.cell + effect.direction * distance
-			if _board.get(target) not in [&"floor", &"portal", &"soft"]:
-				break
-			visible_cells.append(target)
+		target = effect.endpoint
+		var visible_cells: Array[Vector2i] = [target]
 		_weapons.record_cells(effect, visible_cells)
-	_hit_cell(target, effect.actor_id, blasts, broken)
+	_hit_cell(target, effect.actor_id, blasts, broken, effect.get("damage", true), effect.get("hit_items", true))
 	if effect.kind == &"hammer":
 		for id in _actor_ids:
 			if id != effect.actor_id and _actors[id].cell == effect.cell:
 				_hurt(id, effect.actor_id)
 
 
-func _hit_cell(target: Vector2i, owner: StringName, blasts: Array[Dictionary], broken: Array[Vector2i]) -> void:
-	if _board.get(target) == &"soft":
+func _hit_cell(target: Vector2i, owner: StringName, blasts: Array[Dictionary], broken: Array[Vector2i], damage: bool = true, hit_items: bool = true) -> void:
+	if hit_items and _board.get(target) == &"soft":
 		_board[target] = &"floor"
 		broken.append(target)
 		_actors[owner].score += 10
-		_pending_drops.append({"cell": target, "ready": _tick + 11})
-	else:
+		_pending_drops.append({"cell": target, "born": _tick, "frame": 0})
+	elif hit_items:
 		for bomb in _bombs.duplicate():
 			if bomb.cell == target and _bombs.has(bomb):
 				_detonate(bomb, blasts, broken)
 		_pickups.erase(target)
 	for id in _actor_ids:
-		if id != owner and _actors[id].cell == target:
+		if damage and id != owner and _actors[id].cell == target:
 			_hurt(id, owner)

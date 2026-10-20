@@ -4,6 +4,7 @@ extends SceneTree
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const Scheduler = preload("res://scripts/simulation/tick_scheduler.gd")
 const AI = preload("res://scripts/simulation/ai_controller.gd")
+const DesktopPlayer = preload("res://tools/desktop_player.gd")
 const IDS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 
 
@@ -22,12 +23,16 @@ func _initialize() -> void:
 			{"movement": true, "damage": true, "portals": true, "drops": true, "round": true, "seed": seed_value})
 		var scheduler := Scheduler.new(IDS, game)
 		var brain := AI.new(seed_value)
+		var human_driver := DesktopPlayer.new(seed_value)
 		for id in IDS:
-			scheduler.set_controller(id, _produce.bind(game, brain, id))
+			scheduler.set_controller(id, _produce.bind(game, human_driver if id == &"human" else brain, id))
+		if seed_value == 42:
+			scheduler.set_controller(&"human", func(): return {"direction": Vector2.ZERO,
+				"bomb_events": [&"down", &"up"] if game.snapshot().tick == 0 else []})
 		var state: Dictionary = game.snapshot()
 		var bomb_seen := false
 		var started := Time.get_ticks_msec()
-		for index in 6300:
+		for index in 6405:
 			scheduler.advance_time(1.0 / 35)
 			state = game.snapshot()
 			bomb_seen = bomb_seen or not state.bombs.is_empty()
@@ -38,18 +43,19 @@ func _initialize() -> void:
 			quit(1)
 			return
 		records.append({"seed": seed_value, "tick": state.tick, "outcome": state.outcome,
+			"human_input": "ordinary self-bomb then idle" if seed_value == 42 else "desktop command driver",
 			"kills": state.actors[&"human"].kills, "score": state.result_score,
 			"elapsed_ms": Time.get_ticks_msec() - started,
 			"remaining_soft": state.board.values().count(&"soft")})
 		scheduler.free()
-	if not records.any(func(record): return record.outcome == &"won") or not records.any(func(record): return record.outcome == &"lost"):
-		printerr("Full-board playthroughs must exercise both legitimate victory and defeat")
-		quit(1)
-		return
 	var path := ProjectSettings.globalize_path("res://.scratch/game-captures")
 	DirAccess.make_dir_recursive_absolute(path)
 	var log := FileAccess.open(path.path_join("playthroughs.json"), FileAccess.WRITE)
 	log.store_string(JSON.stringify(records, "  "))
+	if not records.any(func(record): return record.outcome == &"won") or not records.any(func(record): return record.outcome == &"lost"):
+		printerr("Full-board playthroughs must exercise both legitimate victory and defeat: ", JSON.stringify(records))
+		quit(1)
+		return
 	print("PASS: 3 full-board playthrough checks ", JSON.stringify(records))
 	quit(0)
 

@@ -15,6 +15,7 @@ $suites = @(
     @{ Script = 'res://tests/bomb_simulation_check.gd'; Success = '^PASS: \d+ bomb simulation checks$' }
     @{ Script = 'res://tests/round_play_check.gd'; Success = '^PASS: \d+ round play checks$' }
     @{ Script = 'res://tests/round_regression_check.gd'; Success = '^PASS: \d+ round regression checks$' }
+    @{ Script = 'res://tests/fidelity_check.gd'; Success = '^PASS: \d+ fidelity checks$' }
     @{ Script = 'res://tests/game_scene_check.gd'; Success = '^PASS: \d+ game scene checks$' }
     @{ Script = 'res://tools/playthrough_check.gd'; Success = '^PASS: 3 full-board playthrough checks ' }
 )
