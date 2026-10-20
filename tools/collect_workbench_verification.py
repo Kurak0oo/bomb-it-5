@@ -40,7 +40,7 @@ def main():
                               'References are preserved context screenshots, not a complete exported source sprite atlas.',
                               'Desktop authoring only; no phone/iOS testing or export.']})
     (OUT / 'verification.json').write_text(json.dumps(result, indent=2) + '\n')
-    print('Curated four workbench captures, 13 UI checks and five default RGB comparisons')
+    print(f"Curated four workbench captures, {result['checks']} UI/rendering checks and five default RGB comparisons")
 
 
 if __name__ == '__main__':

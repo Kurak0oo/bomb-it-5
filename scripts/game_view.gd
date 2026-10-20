@@ -9,6 +9,7 @@ const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life":
 	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
 	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●"}
 const VisualSkin = preload("res://scripts/art/skin.gd")
+const ArtCatalog = preload("res://scripts/art/catalog.gd")
 
 var state: Dictionary = {}
 var practice := true
@@ -43,7 +44,7 @@ func _draw() -> void:
 	_marquee()
 	for cell in state.pickups:
 		var at := _center(cell)
-		if skin.draw(self, "item." + state.pickups[cell], Rect2(at - Vector2.ONE * 14, Vector2.ONE * 28), state.tick): continue
+		if skin.draw(self, "item." + state.pickups[cell], ArtCatalog.rect("item." + state.pickups[cell], at), state.tick): continue
 		draw_circle(at + Vector2(1, 2), 14, Color(0, 0, 0, 0.3))
 		draw_circle(at, 13, Color("d1fff0"))
 		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
@@ -54,7 +55,7 @@ func _draw() -> void:
 	for flame in state.flames:
 		for cell in flame.cells:
 			var at := _center(cell)
-			if skin.draw(self, "effect.flame", Rect2(at - Vector2.ONE * 18, Vector2.ONE * 36), state.tick,
+			if skin.draw(self, "effect.flame", ArtCatalog.rect("effect.flame", at), state.tick,
 				Vector2.DOWN, minf(1, flame.get("count", 0) / 17.0)): continue
 			var size_factor := clampf((17.0 - flame.get("count", 0)) / 5.0, 0.15, 1.0)
 			draw_circle(at, 17 * size_factor, Color("ed7040"))
@@ -65,7 +66,7 @@ func _draw() -> void:
 	for projectile in state.projectiles:
 		if projectile.get("phase") == &"cleanup": continue
 		var at: Vector2 = ORIGIN + (projectile.position + Vector2.ONE * 0.5) * PITCH
-		if skin.draw(self, "projectile." + projectile.kind, Rect2(at - Vector2(14, 12), Vector2(28, 24)), state.tick, projectile.direction): continue
+		if skin.draw(self, "projectile." + projectile.kind, ArtCatalog.rect("projectile." + projectile.kind, at), state.tick, projectile.direction): continue
 		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, true)
 		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
 	for index in IDS.size():
@@ -144,7 +145,8 @@ func _marquee() -> void:
 
 
 func _bomb(at: Vector2, mine: bool) -> void:
-	if skin.draw(self, "effect.mine" if mine else "effect.bomb", Rect2(at - Vector2.ONE * 18, Vector2.ONE * 36), state.tick): return
+	var slot := "effect.mine" if mine else "effect.bomb"
+	if skin.draw(self, slot, ArtCatalog.rect(slot, at), state.tick): return
 	if mine:
 		_box(Rect2(at - Vector2(12, 7), Vector2(24, 14)), Color("bd9e74"), Color("e5d3a3"), 5)
 		draw_circle(at, 3, Color("ec7869"))
@@ -163,7 +165,7 @@ func _actor(actor: Dictionary, index: int) -> void:
 		if actor.get("removed", false): return
 		var progress := clampf(actor.get("death_frame", 1) / 60.0, 0.0, 1.0)
 		at.y -= sin(progress * PI) * 25
-		if skin.draw(self, "actor.%s.death" % IDS[index], Rect2(at - Vector2.ONE * 20, Vector2.ONE * 40), state.tick, actor.facing, progress,
+		if skin.draw(self, "actor.%s.death" % IDS[index], ArtCatalog.rect("actor.%s.death" % IDS[index], at), state.tick, actor.facing, progress,
 			Color(1, 1, 1, 1.0 - progress * 0.7)): return
 		var skull := Color("e4f4e8")
 		skull.a = 1.0 - progress * 0.7
@@ -173,7 +175,7 @@ func _actor(actor: Dictionary, index: int) -> void:
 		draw_line(at + Vector2(-5, 8), at + Vector2(5, 8), skull, 4, true)
 		return
 	if actor.transit_until > 0:
-		if not skin.draw(self, "effect.transit", Rect2(at - Vector2.ONE * 22, Vector2.ONE * 44), state.tick):
+		if not skin.draw(self, "effect.transit", ArtCatalog.rect("effect.transit", at), state.tick):
 			draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, true)
 		color.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
 	if actor.vehicle != &"":
@@ -182,33 +184,39 @@ func _actor(actor: Dictionary, index: int) -> void:
 		var shake := sin(state.tick * 2.0) * 3.0 if recovering else 0.0
 		var ride_slot: String = "effect." + actor.vehicle
 		if recovering and skin.texture(ride_slot + "_recovery") != null: ride_slot += "_recovery"
-		if not skin.draw(self, ride_slot, Rect2(at + Vector2(-22 + shake, -9), Vector2(44, 35)), state.tick, actor.facing):
+		if not skin.draw(self, ride_slot, ArtCatalog.rect(ride_slot, at, state.tick), state.tick, actor.facing):
 			_box(Rect2(at + Vector2(-16 + shake, 1), Vector2(32, 17)), ride_color, Color("b9dfca"), 6)
 			draw_circle(at + Vector2(-10, 15), 5, Color("203347"))
 			draw_circle(at + Vector2(10, 15), 5, Color("203347"))
 	if actor.shield > 0 or actor.protected_until > state.tick:
-		if not skin.draw(self, "effect.shield", Rect2(at - Vector2.ONE * 22, Vector2.ONE * 44), state.tick):
+		if not skin.draw(self, "effect.shield", ArtCatalog.rect("effect.shield", at), state.tick):
 			draw_arc(at, 19, 0, TAU, 32, Color("d2eeb1"), 2, true)
 	if actor.invincible_until > state.tick:
 		var introducing: bool = actor.get("protection_stage") == &"introduction"
 		var aura := "effect.invincible_intro" if introducing and skin.texture("effect.invincible_intro") != null else "effect.invincible"
-		if not skin.draw(self, aura, Rect2(at - Vector2.ONE * 24, Vector2.ONE * 48), state.tick):
+		if not skin.draw(self, aura, ArtCatalog.rect(aura, at), state.tick):
 			draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, true)
 	if actor.blink_until > state.tick or actor.get("protection_stage") == &"blink":
-		skin.draw(self, "effect.blink", Rect2(at - Vector2.ONE * 22, Vector2.ONE * 44), state.tick)
+		skin.draw(self, "effect.blink", ArtCatalog.rect("effect.blink", at), state.tick)
 		color = color.lightened(0.35 if state.tick % 6 < 3 else 0.0)
 	var bob := sin(state.tick * 0.8) * 1.5 if actor.velocity.length() > 0.02 and not paused else 0.0
 	at.y += bob
 	var requested: bool = state.get("commands", []).any(func(command): return command.actor_id == IDS[index] and command.direction != Vector2.ZERO)
-	var pose := "action" if state.attacks.any(func(attack): return attack.actor_id == IDS[index]) else "walk" if requested and actor.velocity.length() > 0.02 else "idle"
+	var action_progress := -1.0
+	for attack in state.attacks:
+		if attack.actor_id == IDS[index]:
+			action_progress = _attack_progress(attack)
+			break
+	var pose := "action" if action_progress >= 0 else "walk" if requested and actor.velocity.length() > 0.02 else "idle"
 	var modulation := Color(1, 1, 1, color.a)
 	if actor.blink_until > state.tick and state.tick % 6 < 3: modulation = Color(1.35, 1.35, 1.35, color.a)
-	var replaced: bool = skin.draw(self, "actor.%s.%s" % [IDS[index], pose], Rect2(at + Vector2(-20, -24), Vector2(40, 44)), state.tick, actor.facing, -1, modulation)
+	var slot := "actor.%s.%s" % [IDS[index], pose]
+	var replaced: bool = skin.draw(self, slot, ArtCatalog.rect(slot, at), state.tick, actor.facing, action_progress, modulation)
 	if not replaced and pose != "idle":
-		replaced = skin.draw(self, "actor.%s.idle" % IDS[index], Rect2(at + Vector2(-20, -24), Vector2(40, 44)), state.tick, actor.facing, -1, modulation)
+		replaced = skin.draw(self, "actor.%s.idle" % IDS[index], ArtCatalog.rect("actor.%s.idle" % IDS[index], at), state.tick, actor.facing, -1, modulation)
 	if replaced:
 		if actor.weapon != &"":
-			if not skin.draw(self, "held." + actor.weapon, Rect2(at + Vector2(3, -5), Vector2.ONE * 24), state.tick, actor.facing):
+			if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
 				_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
 		return
 	draw_circle(at + Vector2(0, 7), 13, Color(0.05, 0.1, 0.17, 0.5))
@@ -221,7 +229,7 @@ func _actor(actor: Dictionary, index: int) -> void:
 	draw_line(at + Vector2(0, -16), at + Vector2(0, -20), color, 2)
 	draw_circle(at + Vector2(0, -21), 2, Color("fff1b6"))
 	if actor.weapon != &"":
-		if not skin.draw(self, "held." + actor.weapon, Rect2(at + Vector2(3, -5), Vector2.ONE * 24), state.tick, actor.facing):
+		if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
 			_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
 
 
@@ -240,17 +248,27 @@ func _hud(actor: Dictionary, index: int) -> void:
 		_label(at + Vector2(174, 64), "%s ×%d" % [ITEM_NAMES.get(actor.weapon, "?"), actor.ammo], 13, Color("ffd989"))
 
 
+func _attack_animation_end(kind: StringName) -> float:
+	# Laser stops on animation frame 11 while its separate recovery lock continues.
+	# See docs/evidence/edition-5-weapon-action-recovery.md and Weapons.advance.
+	return {&"hammer": 24.0, &"laser": 11.0, &"flamer": 23.0, &"triple": 32.0, &"shotgun": 14.0}.get(kind, 24.0)
+
+
+func _attack_progress(attack: Dictionary) -> float:
+	return clampf(attack.get("frame", 0) / _attack_animation_end(attack.kind), 0, 1)
+
+
 func _attack(attack: Dictionary) -> void:
 	var at := _center(attack.cell)
 	var direction: Vector2 = Vector2(attack.direction)
 	var age: int = attack.get("frame", 0)
-	var duration: float = {&"hammer": 24.0, &"laser": 22.0, &"flamer": 23.0, &"triple": 32.0, &"shotgun": 14.0}.get(attack.kind, 24.0)
+	var progress := _attack_progress(attack)
 	if attack.kind == &"laser" and attack.get("fired", false) or attack.kind == &"flamer" and not attack.get("cells", []).is_empty():
 		if skin.texture("attack." + attack.kind) != null:
 			for cell in attack.get("cells", []):
-				skin.draw(self, "attack." + attack.kind, Rect2(_center(cell) - Vector2.ONE * 18, Vector2.ONE * 36), state.tick, direction, age / duration)
+				skin.draw(self, "attack." + attack.kind, ArtCatalog.rect("attack." + attack.kind, _center(cell), state.tick, true), state.tick, direction, progress)
 			return
-	elif skin.draw(self, "attack." + attack.kind, Rect2(at - Vector2.ONE * 24, Vector2.ONE * 48), state.tick, direction, age / duration): return
+	elif skin.draw(self, "attack." + attack.kind, ArtCatalog.rect("attack." + attack.kind, at), state.tick, direction, progress): return
 	if attack.kind == &"hammer":
 		var attachment: Vector2 = attack.get("attachment", Vector2.ZERO) * PITCH / 30.0
 		var swing := direction.rotated(lerpf(-1.5, 0.2, minf(1.0, age / 24.0)))

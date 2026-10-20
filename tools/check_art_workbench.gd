@@ -6,6 +6,7 @@ var checks := 0
 var active_before := ""
 var draft_before := ""
 var had_draft := false
+var fixture_paths: Array[String] = []
 const VisualSkin = preload("res://scripts/art/skin.gd")
 
 
@@ -75,6 +76,7 @@ func _run() -> void:
 	_expect(not bench.draft.entry("effect.bomb").is_empty(), "Undo restores the replaced component")
 	bench.file_dialog.file_selected.emit("res://docs/evidence/reference-2026-10-19/cinema-observed-01/opening-board.png")
 	_expect(bench.status.text.begins_with("Original references are view-only"), "reference art cannot be installed from the research folder")
+	await _check_rendering(folder)
 	# Always restore the user's profile before finishing this graphical check.
 	var active := FileAccess.open(VisualSkin.ACTIVE, FileAccess.WRITE)
 	active.store_string(active_before)
@@ -85,9 +87,10 @@ func _run() -> void:
 		draft.close()
 	else:
 		DirAccess.remove_absolute(ProjectSettings.globalize_path(VisualSkin.DRAFT))
-	var fixture: String = bench.draft.entry("effect.bomb").get("path", "")
-	if fixture != "" and not active_before.contains(fixture) and not draft_before.contains(fixture):
-		DirAccess.remove_absolute(ProjectSettings.globalize_path(fixture))
+	fixture_paths.append(bench.draft.entry("effect.bomb").get("path", ""))
+	for fixture in fixture_paths:
+		if fixture != "" and not active_before.contains(fixture) and not draft_before.contains(fixture):
+			DirAccess.remove_absolute(ProjectSettings.globalize_path(fixture))
 	var report := FileAccess.open(folder.path_join("result.json"), FileAccess.WRITE)
 	report.store_string(JSON.stringify({"checks": checks, "failures": failures,
 		"components": bench.definitions.size(), "picker_completion": "public file_selected signal",
@@ -95,6 +98,117 @@ func _run() -> void:
 	report.close()
 	print("%s: %d art workbench UI checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
+
+
+func _check_rendering(folder: String) -> void:
+	# Render copied public snapshots: this fixture never mutates the live round.
+	var library := VisualSkin.new(false)
+	library.import_image("actor.human.action", folder.path_join("fixture.png"))
+	library.configure("actor.human.action", {"columns": 2})
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(1280, 720)
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(viewport)
+	var host := Node2D.new()
+	viewport.add_child(host)
+	var game = load("res://scripts/game.gd").new()
+	root.add_child(game)
+	game.set_process(false)
+	var snapshot: Dictionary = game.get_snapshot()
+	game.queue_free()
+	var view = load("res://scripts/game_view.gd").new()
+	view.skin = library
+	host.add_child(view)
+	var cell: Vector2i = snapshot.actors[&"human"].cell
+	var at := Vector2(334, 86) + (Vector2(cell) + Vector2.ONE * 0.5) * 36
+	for age in [0, 12]:
+		var expected := Color("e78dbb") if age == 0 else Color("6bdad0")
+		for tick in [5, 105]:
+			snapshot.tick = tick
+			snapshot.attacks = [{"actor_id": &"human", "kind": &"hammer", "cell": cell,
+				"direction": Vector2i.DOWN, "frame": age, "fired": true}]
+			view.present(snapshot, true, false)
+			await process_frame
+			await RenderingServer.frame_post_draw
+			var actual := viewport.get_texture().get_image().get_pixelv(Vector2i(at + Vector2(-14, -15)))
+			_expect(actual.is_equal_approx(expected), "character action frame %d follows action age at round tick %d" % [age, tick])
+	library.reset_slot("actor.human.action")
+	var sample = load("res://scripts/art/component_canvas.gd").new()
+	sample.skin = library
+	host.add_child(sample)
+	sample.set_process(false)
+	sample.sample_tick = 12
+	sample.state.tick = 12
+	for id in ["effect.bomb", "attack.hammer", "effect.invincible", "held.hammer", "actor.human.action"]:
+		library.import_image(id, folder.path_join("fixture.png"))
+		library.configure(id, {"columns": 2, "fps": 0})
+		snapshot.tick = 12
+		snapshot.actors[&"human"].position = Vector2.ZERO
+		snapshot.actors[&"human"].weapon = &"hammer" if id == "held.hammer" else &""
+		snapshot.actors[&"human"].invincible_until = 100 if id == "effect.invincible" else 0
+		snapshot.bombs = [{"cell": Vector2i.ZERO}] if id == "effect.bomb" else []
+		snapshot.attacks = [{"actor_id": &"human", "kind": &"hammer", "cell": Vector2i.ZERO,
+			"direction": Vector2i.DOWN, "frame": 12, "fired": true}] if id in ["attack.hammer", "actor.human.action"] else []
+		view.show()
+		sample.hide()
+		view.present(snapshot, true, false)
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var color := Color("6bdad0") if not snapshot.attacks.is_empty() else Color("e78dbb")
+		var in_game := _color_bounds(viewport.get_texture().get_image(), color)
+		view.hide()
+		sample.show()
+		sample.component_id = id
+		sample.queue_redraw()
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var in_inspector := _color_bounds(viewport.get_texture().get_image(), color)
+		_expect(in_game.has_area() and in_inspector == in_game,
+			"%s inspector matches game placement, size and action phase: %s / %s" % [id, in_inspector, in_game])
+		library.reset_slot(id)
+	var phases := Image.create(128, 32, false, Image.FORMAT_RGBA8)
+	for index in 4:
+		phases.fill_rect(Rect2i(index * 32, 0, 32, 32), Color(["e78dbb", "63cb74", "f5bd50", "6bdad0"][index]))
+	phases.save_png(folder.path_join("phases.png"))
+	for case in [["laser", 0], ["laser", 11], ["flamer", 0], ["flamer", 1]]:
+		var id: String = "attack." + case[0]
+		library.import_image(id, folder.path_join("phases.png"))
+		fixture_paths.append(library.entry(id).path)
+		library.configure(id, {"columns": 4, "fps": 0})
+		var fired: bool = case[1] >= (11 if case[0] == "laser" else 1)
+		snapshot.attacks = [{"actor_id": &"human", "kind": StringName(case[0]), "cell": Vector2i.ZERO,
+			"direction": Vector2i.DOWN, "frame": case[1], "fired": fired,
+			"cells": [Vector2i.ZERO] if fired else [], "started": 0, "ready": 11}]
+		view.show()
+		sample.hide()
+		view.present(snapshot, true, false)
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var color := Color("6bdad0") if case == ["laser", 11] else Color("e78dbb")
+		var in_game := _color_bounds(viewport.get_texture().get_image(), color)
+		if case == ["laser", 11]: _expect(in_game.has_area(), "laser final animation frame is reachable before recovery ends")
+		view.hide()
+		sample.show()
+		sample.component_id = id
+		sample.sample_tick = case[1]
+		sample.queue_redraw()
+		await process_frame
+		await RenderingServer.frame_post_draw
+		_expect(in_game.has_area() and _color_bounds(viewport.get_texture().get_image(), color) == in_game,
+			"%s sample matches charge/active phase at age %d" % [id, case[1]])
+		library.reset_slot(id)
+	viewport.queue_free()
+
+
+func _color_bounds(image: Image, color: Color) -> Rect2i:
+	var first := Vector2i(9999, 9999)
+	var last := Vector2i(-1, -1)
+	for y in range(20, 270):
+		for x in range(260, 500):
+			if image.get_pixel(x, y).is_equal_approx(color):
+				first = first.min(Vector2i(x, y))
+				last = last.max(Vector2i(x, y))
+	return Rect2i(first, last - first + Vector2i.ONE) if last.x >= 0 else Rect2i()
 
 
 func _text_button(prefix: String) -> Button:

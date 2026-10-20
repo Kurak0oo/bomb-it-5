@@ -25,16 +25,17 @@ static func entries() -> Array[Dictionary]:
 	for kind in ["landmine", "hammer", "flamer", "laser", "triple", "shotgun"]:
 		result.append(_entry("held." + kind, _title(kind) + " · held", "Weapons", Vector2(24, 24)))
 	for kind in ["hammer", "flamer", "laser", "triple", "shotgun"]:
-		result.append(_entry("attack." + kind, _title(kind) + " · action", "Weapons", Vector2(36, 36)))
+		result.append(_entry("attack." + kind, _title(kind) + " · action", "Weapons", Vector2(48, 48)))
 	for kind in ["triple", "shotgun"]:
 		result.append(_entry("projectile." + kind, _title(kind) + " · projectile", "Weapons", Vector2(28, 24)))
 	for item in [["bomb", "Ordinary bomb"], ["mine", "Placed mine"], ["flame", "Bomb flame"],
 		["shield", "Shield bubble"], ["invincible", "Invincibility · active aura"], ["invincible_intro", "Invincibility · introduction"], ["blink", "Protection blink overlay"],
 		["transit", "Portal transit overlay"], ["car", "Car ride"], ["moto", "Moto ride"],
 		["car_recovery", "Car · damage recovery"], ["moto_recovery", "Moto · damage recovery"]]:
-		result.append(_entry("effect." + item[0], item[1], "Effects", Vector2(44, 44)))
+		var size := Vector2(36, 36) if item[0] in ["bomb", "mine", "flame"] else Vector2(48, 48) if item[0].begins_with("invincible") else Vector2(44, 35) if item[0] in ["car", "moto", "car_recovery", "moto_recovery"] else Vector2(44, 44)
+		result.append(_entry("effect." + item[0], item[1], "Effects", size))
 	for item in [["stick_base", "Joystick base", 168], ["stick_thumb", "Joystick thumb", 54],
-		["action_normal", "Action button · idle", 128], ["action_pressed", "Action button · pressed", 120],
+		["action_normal", "Action button · idle", 128], ["action_pressed", "Action button · pressed", 128],
 		["action_disabled", "Action button · disabled", 128]]:
 		result.append(_entry("control." + item[0], item[1], "Controls", Vector2.ONE * item[2]))
 	for item in [["background", "Screen background", Vector2(1280, 720)], ["frame", "Screen frame", Vector2(1260, 700)],
@@ -54,6 +55,19 @@ static func find(id: String) -> Dictionary:
 	for entry in entries():
 		if entry.id == id: return entry
 	return {}
+
+
+static func rect(id: String, at: Vector2, tick: float = 0, beam: bool = false) -> Rect2:
+	# The same placement feeds the live renderer and the component inspector.
+	var size: Vector2 = find(id).get("size", Vector2(44, 44))
+	var offset := Vector2.ZERO
+	if beam: size = Vector2.ONE * 36
+	if id.begins_with("actor.") and id.get_slice(".", 2) in ["idle", "walk", "action"]: offset.y = -2
+	if id.begins_with("held."): offset = Vector2(15, 7)
+	if id in ["effect.car", "effect.moto", "effect.car_recovery", "effect.moto_recovery"]:
+		offset.y = 8.5
+		if id.ends_with("_recovery"): offset.x = sin(tick * 2.0) * 3.0
+	return Rect2(at + offset - size / 2, size)
 
 
 static func _entry(id: String, title: String, category: String, size: Vector2) -> Dictionary:

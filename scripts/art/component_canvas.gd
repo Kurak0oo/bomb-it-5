@@ -32,8 +32,6 @@ func _process(delta: float) -> void:
 
 
 func focus_rect() -> Rect2:
-	var definition := Catalog.find(component_id)
-	var size: Vector2 = definition.get("size", Vector2(44, 44))
 	if component_id == "board.marquee": return Rect2(ORIGIN + Vector2(7, 6) * PITCH, Vector2.ONE * 108)
 	var tiles := {"board.seat": Vector2(2, 2), "board.spotlight": Vector2(2, 4),
 		"board.clapper": Vector2(2, 3), "board.popcorn": Vector2(2, 2),
@@ -42,23 +40,26 @@ func focus_rect() -> Rect2:
 	if component_id.ends_with(".death"): return Rect2(ORIGIN + Vector2(-10, -36), Vector2(56, 80))
 	if component_id.begins_with("actor.") and not component_id.ends_with("portrait"):
 		return Rect2(ORIGIN + Vector2(-5, -12), Vector2(46, 52))
-	return Rect2(ORIGIN + Vector2.ONE * 18 - size / 2, size)
+	return Catalog.rect(component_id, ORIGIN + Vector2.ONE * 18, sample_tick)
 
 
 func _draw() -> void:
 	if state.is_empty(): return
+	state.tick = floori(sample_tick)
 	var bounds := focus_rect()
-	var definition := Catalog.find(component_id)
-	var size: Vector2 = definition.get("size", Vector2(44, 44))
-	var target := Rect2(ORIGIN + Vector2.ONE * 18 - size / 2, size)
-	if component_id.begins_with("board."): target = bounds
-	if component_id.begins_with("actor.") and not component_id.ends_with("portrait"):
-		target.position.y -= 2
-		if component_id.ends_with("death"): target.position.y -= sin(posmod(floori(sample_tick), 60) / 60.0 * PI) * 25
-	if skin.draw(self, component_id, target, sample_tick, facing, 0 if component_id.begins_with("ui.button_") else -1): return
 	var group := component_id.get_slice(".", 0)
 	var kind := component_id.get_slice(".", 1)
+	if group == "actor" and not component_id.ends_with("portrait"):
+		_sample_actor(kind, component_id.get_slice(".", 2))
+		return
+	if group == "attack":
+		_attack(_sample_attack(StringName(kind)))
+		return
 	var at := ORIGIN + Vector2.ONE * 18
+	var target := Catalog.rect(component_id, at, sample_tick)
+	if component_id.begins_with("board."): target = bounds
+	var progress := posmod(floori(sample_tick), 18) / 17.0 if component_id == "effect.flame" else 0.0 if component_id.begins_with("ui.button_") else -1.0
+	if skin.draw(self, component_id, target, sample_tick, facing, progress): return
 	match group:
 		"board":
 			match kind:
@@ -75,26 +76,13 @@ func _draw() -> void:
 				"portal_purple": _sample_tile(Vector2i(4, 7), &"portal")
 		"actor":
 			var index: int = IDS.find(StringName(kind))
-			var pose := component_id.get_slice(".", 2)
-			if pose == "portrait":
-				draw_circle(at, 19, COLORS[index].darkened(0.1))
-				_label(at + Vector2(-13, 6), "P1" if index == 0 else "AI", 17, Color("173649"))
-			else:
-				var actor: Dictionary = state.actors[IDS[index]].duplicate(true)
-				actor.facing = facing
-				actor.alive = pose != "death"
-				actor.velocity = Vector2.RIGHT if pose == "walk" else Vector2.ZERO
-				actor.death_frame = posmod(floori(sample_tick), 60)
-				_actor(actor, index)
+			draw_circle(at, 19, COLORS[index].darkened(0.1))
+			_label(at + Vector2(-13, 6), "P1" if index == 0 else "AI", 17, Color("173649"))
 		"item", "held":
 			draw_circle(at, 13, Color("d1fff0"))
 			draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
 			var caption: String = ITEM_NAMES.get(StringName(kind), "?")
 			_label(at + Vector2(-caption.length() * 4.0, 5), caption, 13, Color("173c40"))
-		"attack":
-			_attack({"kind": StringName(kind), "cell": Vector2i.ZERO, "direction": Vector2i(facing),
-				"frame": posmod(floori(sample_tick), 24), "fired": true, "cells": [Vector2i.ZERO],
-				"started": 0, "ready": 11})
 		"projectile":
 			draw_line(at - facing * 15, at, Color("ee9958"), 6, true)
 			draw_circle(at, 6 if kind == "triple" else 9, Color("ffdf8d"))
@@ -126,3 +114,27 @@ func _draw() -> void:
 
 func _sample_tile(cell: Vector2i, tile: StringName) -> void:
 	_tile(cell, tile)
+
+
+func _sample_actor(kind: String, pose: String) -> void:
+	var index: int = IDS.find(StringName(kind))
+	var actor: Dictionary = state.actors[IDS[index]].duplicate(true)
+	actor.facing = facing
+	actor.alive = pose != "death"
+	actor.velocity = facing if pose == "walk" else Vector2.ZERO
+	actor.death_frame = posmod(floori(sample_tick), 61)
+	state.commands = [{"actor_id": IDS[index], "direction": facing if pose == "walk" else Vector2.ZERO}]
+	state.attacks = [_sample_attack(&"hammer")] if pose == "action" else []
+	if not state.attacks.is_empty(): state.attacks[0].actor_id = IDS[index]
+	_actor(actor, index)
+
+
+func _sample_attack(kind: StringName) -> Dictionary:
+	# Sample the existing weapon phase contract, not a second damage simulation.
+	var cycle: int = {&"hammer": 25, &"laser": 22, &"flamer": 24, &"triple": 43, &"shotgun": 26}.get(kind, 25)
+	var age := posmod(floori(sample_tick), cycle)
+	var ready: int = {&"hammer": 24, &"laser": 11, &"shotgun": 14}.get(kind, 1)
+	var fired := age >= ready
+	return {"kind": kind, "actor_id": &"human", "cell": Vector2i.ZERO, "direction": Vector2i(facing),
+		"frame": mini(age, 11) if kind == &"laser" else age, "fired": fired,
+		"cells": [Vector2i.ZERO] if fired else [], "started": 0, "ready": ready}

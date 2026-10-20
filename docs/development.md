@@ -9,7 +9,8 @@ reopened and #21 remains open. The user now owns art selection through the
 applied/draft comparison, view-only original context, imported images and sheets,
 animation/facing/placement controls, undo/reset and preview in the actual game.
 The checked-in active manifest is empty, so normal play keeps the earlier native
-presentation. Workbench implementation/review status and verification are recorded
+presentation. The workbench passes 27 UI/rendering checks and independent Standards
+and Spec review, with no outstanding findings. Status and verification are recorded
 in [the workbench verification](verification/art-workbench-2026-10-20/README.md).
 
 Fidelity implementation #38–#55 is implemented, desktop-verified and reviewed on

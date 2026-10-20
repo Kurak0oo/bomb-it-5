@@ -7,6 +7,7 @@ signal bomb_event(event: StringName)
 const STICK := Vector2(145, 535)
 const BOMB := Vector2(1115, 535)
 const VisualSkin = preload("res://scripts/art/skin.gd")
+const ArtCatalog = preload("res://scripts/art/catalog.gd")
 const DIRECTIONS := [Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1),
 	Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1)]
 
@@ -63,16 +64,16 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	if not skin.draw(self, "control.stick_base", Rect2(STICK - Vector2.ONE * 84, Vector2.ONE * 168)):
+	if not skin.draw(self, "control.stick_base", ArtCatalog.rect("control.stick_base", STICK)):
 		draw_circle(STICK, 84, Color(0.6, 0.8, 1.0, 0.09))
 		draw_arc(STICK, 80, 0, TAU, 64, Color(0.6, 0.8, 1.0, 0.35), 2, true)
 		draw_arc(STICK, 14, 0, TAU, 32, Color(0.6, 0.8, 1.0, 0.12), 1, true)
-	if not skin.draw(self, "control.stick_thumb", Rect2(STICK + thumb - Vector2.ONE * 27, Vector2.ONE * 54)):
+	if not skin.draw(self, "control.stick_thumb", ArtCatalog.rect("control.stick_thumb", STICK + thumb)):
 		draw_circle(STICK + thumb, 27, Color(0.55, 0.83, 1.0, 0.6 if stick_contact != -1 else 0.25))
 		draw_arc(STICK + thumb, 27, 0, TAU, 32, Color("8cceea"), 2, true)
 	var mode := "disabled" if not enabled else "pressed" if bomb_contact != -1 else "normal"
-	var replaced: bool = skin.draw(self, "control.action_" + mode, Rect2(BOMB - Vector2.ONE * 64, Vector2.ONE * 128))
-	if not replaced and mode != "normal": replaced = skin.draw(self, "control.action_normal", Rect2(BOMB - Vector2.ONE * 64, Vector2.ONE * 128))
+	var replaced: bool = skin.draw(self, "control.action_" + mode, ArtCatalog.rect("control.action_" + mode, BOMB))
+	if not replaced and mode != "normal": replaced = skin.draw(self, "control.action_normal", ArtCatalog.rect("control.action_normal", BOMB))
 	if not replaced:
 		draw_circle(BOMB, 61 if bomb_contact == -1 else 56, Color(1.0, 0.72, 0.4, 0.23 if bomb_contact == -1 else 0.55))
 		draw_arc(BOMB, 64, 0, TAU, 64, Color("c29f70"), 2, true)

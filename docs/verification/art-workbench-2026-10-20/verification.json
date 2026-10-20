@@ -1,5 +1,5 @@
 {
-  "checks": 13,
+  "checks": 27,
   "components": 89,
   "failures": 0,
   "picker_completion": "public file_selected signal",
@@ -20,15 +20,15 @@
   "captures": [
     {
       "path": "docs/verification/art-workbench-2026-10-20/overview.png",
-      "sha256": "009c6353bfc986306a8d9aec178f6def89d6b6e9c9ed3e632aa60d3b3e866d10"
+      "sha256": "1086b3228968f469f7cf6ba3d9e7ad583a6e02e185326e83a56988f1676c6498"
     },
     {
       "path": "docs/verification/art-workbench-2026-10-20/bomb-inspector.png",
-      "sha256": "38d2af892a79592fa089b4307f67dfb0badd8d87494ff9ee5a97e3c51923e961"
+      "sha256": "ba4a73bcd45617cf8e3688a7706e72c24193bb04c179455f21ca167956ff1195"
     },
     {
       "path": "docs/verification/art-workbench-2026-10-20/replacement-draft.png",
-      "sha256": "92728e16da6776e42856e80a23fb43e1c5e221d07c8ee445934d69a721d734fd"
+      "sha256": "8d2cb13b939e2ec816c0a3347a99f628a733788fc088de983a13bca84bb24cd0"
     },
     {
       "path": "docs/verification/art-workbench-2026-10-20/real-game-preview.png",
@@ -42,15 +42,15 @@
   "scripts": [
     {
       "path": "scripts/art/catalog.gd",
-      "sha256": "97108f240ba3a638687044eff090601a65861b9daf47d6b4c0445f3baab8d2ba"
+      "sha256": "28f4ef81a186a19939cbad6e0ddb9a63e82d6a1af32798733a22354a6cc5d70e"
     },
     {
       "path": "scripts/art/component_canvas.gd",
-      "sha256": "6ab2724b8200dbe0ed639045ce3d927845f23bbca12db848b87a2f553cf9cf01"
+      "sha256": "3d0450dd7c148aae2e43a701d13dad33eeeb80b1772c1f8cd74c9347955a5b28"
     },
     {
       "path": "scripts/art/skin.gd",
-      "sha256": "1ab3c6822435ca8e90960b638a5cf2da414c2900ee8a538a7043a9d2bb9b87ce"
+      "sha256": "0695b94e7c974b52b49640157448b11f44c775c567d059ea9570a95958c9561e"
     },
     {
       "path": "scripts/game.gd",
@@ -58,7 +58,7 @@
     },
     {
       "path": "scripts/game_view.gd",
-      "sha256": "5a84cf5445993040044fd9e638257d42b20c73d6059440fe02ecb09fde2d7754"
+      "sha256": "a3fb5f150f0c937e353f52dedc4a2a461009e9f05cd9f4bafd5194f400b02936"
     },
     {
       "path": "scripts/simulation/ai_controller.gd",
@@ -106,7 +106,7 @@
     },
     {
       "path": "scripts/touch_controls.gd",
-      "sha256": "c4fbef431b478d4c47b36e456487b3c6f39eb12f2295efe533a80f220c6f0d50"
+      "sha256": "e09828075220ca0ecbdaa307fa928cc654b01a777d2b449701b36baa409c7bfd"
     }
   ],
   "limits": [
