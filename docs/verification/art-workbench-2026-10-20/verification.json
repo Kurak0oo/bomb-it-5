@@ -1,0 +1,118 @@
+{
+  "checks": 13,
+  "components": 89,
+  "failures": 0,
+  "picker_completion": "public file_selected signal",
+  "profiles_restored": true,
+  "baseline": "ca86801",
+  "reverts": [
+    "0f41b43",
+    "8211c82"
+  ],
+  "godot": "4.5.stable.official.876b29033",
+  "default_rgb_comparisons": {
+    "match": true,
+    "pause": true,
+    "death": true,
+    "ending": true,
+    "results": true
+  },
+  "captures": [
+    {
+      "path": "docs/verification/art-workbench-2026-10-20/overview.png",
+      "sha256": "009c6353bfc986306a8d9aec178f6def89d6b6e9c9ed3e632aa60d3b3e866d10"
+    },
+    {
+      "path": "docs/verification/art-workbench-2026-10-20/bomb-inspector.png",
+      "sha256": "38d2af892a79592fa089b4307f67dfb0badd8d87494ff9ee5a97e3c51923e961"
+    },
+    {
+      "path": "docs/verification/art-workbench-2026-10-20/replacement-draft.png",
+      "sha256": "92728e16da6776e42856e80a23fb43e1c5e221d07c8ee445934d69a721d734fd"
+    },
+    {
+      "path": "docs/verification/art-workbench-2026-10-20/real-game-preview.png",
+      "sha256": "929b00245e64e00c5fbd2690abc87222115e73d2f6b8be50fcc1624b8a7ce4fc"
+    }
+  ],
+  "active_manifest": {
+    "path": "assets/skins/active.json",
+    "sha256": "f1e77394636a05afd0847807829b5c637cdd33ea9cc8da88ad69fe2f8502ce6f"
+  },
+  "scripts": [
+    {
+      "path": "scripts/art/catalog.gd",
+      "sha256": "97108f240ba3a638687044eff090601a65861b9daf47d6b4c0445f3baab8d2ba"
+    },
+    {
+      "path": "scripts/art/component_canvas.gd",
+      "sha256": "6ab2724b8200dbe0ed639045ce3d927845f23bbca12db848b87a2f553cf9cf01"
+    },
+    {
+      "path": "scripts/art/skin.gd",
+      "sha256": "1ab3c6822435ca8e90960b638a5cf2da414c2900ee8a538a7043a9d2bb9b87ce"
+    },
+    {
+      "path": "scripts/game.gd",
+      "sha256": "ddd93c23d859bb47700af3ccdb01adc41586c7376cecc11c5f2acb1d2edcaec8"
+    },
+    {
+      "path": "scripts/game_view.gd",
+      "sha256": "5a84cf5445993040044fd9e638257d42b20c73d6059440fe02ecb09fde2d7754"
+    },
+    {
+      "path": "scripts/simulation/ai_controller.gd",
+      "sha256": "546accc7ba0ef69ec1a62c27dcf1e608d1c15f0bb410c01700c5b88fefb55bb7"
+    },
+    {
+      "path": "scripts/simulation/ai_perception.gd",
+      "sha256": "1ede9a0307725285824d7647230ee10bce3aa3ca1d9d5198ccee8c96d9b5aa95"
+    },
+    {
+      "path": "scripts/simulation/ai_search.gd",
+      "sha256": "56cde60c447d12ce95742c3c2f410f1d514c7551861b4f2ea43a91ae462f91ee"
+    },
+    {
+      "path": "scripts/simulation/bomb_event_queue.gd",
+      "sha256": "72db7318f4cabc708181a0e436356e915c2c00acab065ac7c647cf6643d39395"
+    },
+    {
+      "path": "scripts/simulation/bomb_simulation.gd",
+      "sha256": "819bbeb34a4753f2804fe818644e1ceca59321be041536edafefb50071b9e266"
+    },
+    {
+      "path": "scripts/simulation/command_boundary.gd",
+      "sha256": "d832bc552f23639767b01f13c9245704f730b63e50115e1f4340134d71bc231a"
+    },
+    {
+      "path": "scripts/simulation/movement.gd",
+      "sha256": "cd660cbf57e09ff5f90c20d45864abe921eb15ed8bd37cfce3413fcf0893f6af"
+    },
+    {
+      "path": "scripts/simulation/pickups.gd",
+      "sha256": "13e4015fb77d47aca744153eb38ef57549c855baadebd72e04a607b413cb3f3c"
+    },
+    {
+      "path": "scripts/simulation/tick_scheduler.gd",
+      "sha256": "563208336c39c1eb5fdf0845e160e927c932aca4a7c8933fda3f90cdc8958ec8"
+    },
+    {
+      "path": "scripts/simulation/weapon_geometry.gd",
+      "sha256": "b783bc5a7c95471dd452095934d955b88f5802c86cd7a11e082c47441337f3ba"
+    },
+    {
+      "path": "scripts/simulation/weapons.gd",
+      "sha256": "0fd09f956ca19ba829f4b7c8037d88138b981be4633505b4652e5679e8f2756e"
+    },
+    {
+      "path": "scripts/touch_controls.gd",
+      "sha256": "c4fbef431b478d4c47b36e456487b3c6f39eb12f2295efe533a80f220c6f0d50"
+    }
+  ],
+  "limits": [
+    "Native picker completion is exercised at its public signal, not internal mouse controls.",
+    "Two-colour verification fixture is not a proposed art direction.",
+    "References are preserved context screenshots, not a complete exported source sprite atlas.",
+    "Desktop authoring only; no phone/iOS testing or export."
+  ]
+}

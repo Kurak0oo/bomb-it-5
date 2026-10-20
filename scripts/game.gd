@@ -6,6 +6,7 @@ const Scheduler = preload("res://scripts/simulation/tick_scheduler.gd")
 const TouchControls = preload("res://scripts/touch_controls.gd")
 const GameView = preload("res://scripts/game_view.gd")
 const AIController = preload("res://scripts/simulation/ai_controller.gd")
+const VisualSkin = preload("res://scripts/art/skin.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 
 var simulation: RefCounted
@@ -21,12 +22,16 @@ var session_lives := 3
 var total_score := 0
 var result_credited := false
 var view: Node2D
+var visual_skin: RefCounted
 
 
 func _ready() -> void:
+	if visual_skin == null: visual_skin = VisualSkin.new()
 	view = GameView.new()
+	view.skin = visual_skin
 	add_child(view)
 	touch_controls = TouchControls.new()
+	touch_controls.skin = visual_skin
 	add_child(touch_controls)
 	touch_controls.direction_changed.connect(func(direction: Vector2):
 		if is_instance_valid(scheduler): scheduler.set_direction(&"human", direction))
@@ -194,6 +199,12 @@ func _make_button(key: String, caption: String, position_at: Vector2, action: Ca
 		style.set_border_width_all(1)
 		style.set_corner_radius_all(9)
 		button.add_theme_stylebox_override(state_name, style)
+		var replacement: Texture2D = visual_skin.button_texture("ui.button_" + state_name)
+		if replacement != null:
+			var texture_style := StyleBoxTexture.new()
+			texture_style.texture = replacement
+			texture_style.modulate_color = Color(visual_skin.entry("ui.button_" + state_name).get("tint", "ffffffff"))
+			button.add_theme_stylebox_override(state_name, texture_style)
 	button.pressed.connect(action)
 	add_child(button)
 	buttons[key] = button

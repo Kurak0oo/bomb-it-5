@@ -105,6 +105,26 @@ The subsequent implement instruction approves the 16 recovery tickets [#22–#37
 
 ## Decision history
 
+### User-controlled artwork workbench (2026-10-20)
+
+The user rejected the generated painted art pass and requested its rollback and
+a workbench to see and replace the game's visual components by clicking. The
+previous temporary presentation remains the default; the rejected art is not an
+approved style. Presentation #20 is reopened, and final acceptance #21 stays open.
+
+Provide a searchable catalogue, applied-versus-draft previews, image import,
+sprite-frame/facing/scale/offset controls, animation play/pause/scrubbing, reset,
+undo and a real-game preview. Changes become normal-play choices only through
+Apply to game. A shared named-slot mapping feeds both the tool and the renderer;
+missing replacements retain existing drawings. Original SWF screenshots are
+view-only research context and cannot be selected through the reference viewer
+as production replacements. The workbench does not select another art style or
+alter gameplay timing, damage, collision, inputs or the fixed board.
+
+This is a local desktop authoring workflow. Physical phone/iOS tests, export,
+store identity and release-language selection remain separate. Implementation
+details and launch instructions live in [the workbench guide](docs/art-workbench.md).
+
 ### Fidelity implementation conversions (2026-10-20)
 
 The user's implement instruction approves fidelity tickets #38–#55. Recovered

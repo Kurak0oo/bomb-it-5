@@ -2,6 +2,16 @@
 
 ## Current boundary
 
+The generated art pass was rejected by the user on 2026-10-20 and reverted in
+`0f41b43` / `8211c82`; the gameplay fidelity commits remain. Presentation #20 is
+reopened and #21 remains open. The user now owns art selection through the
+[Art Workbench](art-workbench.md): 89 visual slots, native default previews,
+applied/draft comparison, view-only original context, imported images and sheets,
+animation/facing/placement controls, undo/reset and preview in the actual game.
+The checked-in active manifest is empty, so normal play keeps the earlier native
+presentation. Workbench implementation/review status and verification are recorded
+in [the workbench verification](verification/art-workbench-2026-10-20/README.md).
+
 Fidelity implementation #38–#55 is implemented, desktop-verified and reviewed on
 2026-10-20, approved by the user's implement instruction. The graph has 18 tickets and 32 native blocker
 edges; #20 additionally waits for #55. Source-grounded regressions use the real
@@ -44,6 +54,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Original items and AI | Glove candidates demonstrated; other slots unidentified | BoxingProp uses Space punches; BombShoesProp passively kicks on contact. Choose which fills the empty glove slot; keep bouncer/carpet/heavy bomb unresolved despite broader search. The source-grounded Normal controller is implemented; exact original state-machine parity is not claimed |
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
+| Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20 | Choose and preview replacements per visual slot, then Apply to game. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
 | Co-op, then PvP | Deferred | First local slice precedes networking design |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
 

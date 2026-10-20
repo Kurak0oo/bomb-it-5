@@ -8,10 +8,12 @@ const COLORS := [Color("66d8ff"), Color("ed86c6"), Color("8ce2b5"), Color("ffd47
 const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
 	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
 	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●"}
+const VisualSkin = preload("res://scripts/art/skin.gd")
 
 var state: Dictionary = {}
 var practice := true
 var paused := false
+var skin: RefCounted = VisualSkin.new()
 
 
 func present(snapshot: Dictionary, is_practice: bool, is_paused: bool) -> void:
@@ -22,21 +24,26 @@ func present(snapshot: Dictionary, is_practice: bool, is_paused: bool) -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(-position - get_parent().position, get_viewport_rect().size + Vector2(100, 100)), Color("102c3b"))
-	_box(Rect2(10, 10, 1260, 700), Color("163e51"), Color("39798a"), 18)
+	if not skin.draw(self, "ui.background", Rect2(Vector2.ZERO, Vector2(1280, 720))):
+		draw_rect(Rect2(-position - get_parent().position, get_viewport_rect().size + Vector2(100, 100)), Color("102c3b"))
+	if not skin.draw(self, "ui.frame", Rect2(10, 10, 1260, 700)):
+		_box(Rect2(10, 10, 1260, 700), Color("163e51"), Color("39798a"), 18)
 	_label(Vector2(30, 49), "LOCAL ARCADE", 29, Color("ffd989"))
 	_label(Vector2(335, 43), "CINEMA CLUB", 27, Color("ffe6ad"))
 	_label(Vector2(336, 67), "PRACTICE" if practice else "ARCADE  /  NORMAL", 13, Color("9acbd3"))
 	if state.is_empty():
 		return
-	_box(Rect2(805, 25, 141, 42), Color("102c3b"), Color("568d98"), 10)
+	if not skin.draw(self, "ui.timer", Rect2(805, 25, 141, 42)):
+		_box(Rect2(805, 25, 141, 42), Color("102c3b"), Color("568d98"), 10)
 	_label(Vector2(818, 52), "TIME  %03d" % ceili(state.remaining / 35.0), 21, Color("ffd989"))
-	_box(Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554)), Color("164957"), Color("a7d5c5"), 9)
+	if not skin.draw(self, "ui.board_frame", Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554))):
+		_box(Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554)), Color("164957"), Color("a7d5c5"), 9)
 	for cell in state.board:
 		_tile(cell, state.board[cell])
 	_marquee()
 	for cell in state.pickups:
 		var at := _center(cell)
+		if skin.draw(self, "item." + state.pickups[cell], Rect2(at - Vector2.ONE * 14, Vector2.ONE * 28), state.tick): continue
 		draw_circle(at + Vector2(1, 2), 14, Color(0, 0, 0, 0.3))
 		draw_circle(at, 13, Color("d1fff0"))
 		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
@@ -47,6 +54,8 @@ func _draw() -> void:
 	for flame in state.flames:
 		for cell in flame.cells:
 			var at := _center(cell)
+			if skin.draw(self, "effect.flame", Rect2(at - Vector2.ONE * 18, Vector2.ONE * 36), state.tick,
+				Vector2.DOWN, minf(1, flame.get("count", 0) / 17.0)): continue
 			var size_factor := clampf((17.0 - flame.get("count", 0)) / 5.0, 0.15, 1.0)
 			draw_circle(at, 17 * size_factor, Color("ed7040"))
 			draw_circle(at + Vector2(0, -2), 12 * size_factor, Color("ffd473"))
@@ -56,6 +65,7 @@ func _draw() -> void:
 	for projectile in state.projectiles:
 		if projectile.get("phase") == &"cleanup": continue
 		var at: Vector2 = ORIGIN + (projectile.position + Vector2.ONE * 0.5) * PITCH
+		if skin.draw(self, "projectile." + projectile.kind, Rect2(at - Vector2(14, 12), Vector2(28, 24)), state.tick, projectile.direction): continue
 		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, true)
 		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
 	for index in IDS.size():
@@ -82,33 +92,40 @@ func _draw() -> void:
 
 func _tile(cell: Vector2i, kind: StringName) -> void:
 	var at := ORIGIN + Vector2(cell) * PITCH
-	draw_rect(Rect2(at, Vector2.ONE * PITCH), Color("53304d") if (cell.x + cell.y) % 2 else Color("5c3555"))
-	draw_line(at + Vector2(0, 35), at + Vector2(35, 35), Color("472942"), 1)
+	if not skin.draw(self, "board.floor_odd" if (cell.x + cell.y) % 2 else "board.floor_even", Rect2(at, Vector2.ONE * PITCH)):
+		draw_rect(Rect2(at, Vector2.ONE * PITCH), Color("53304d") if (cell.x + cell.y) % 2 else Color("5c3555"))
+		draw_line(at + Vector2(0, 35), at + Vector2(35, 35), Color("472942"), 1)
 	if kind == &"solid":
 		if cell.x == 0 or cell.y == 0 or cell.x == 16 or cell.y == 14:
+			if skin.draw(self, "board.wall", Rect2(at, Vector2.ONE * 36)): return
 			_box(Rect2(at + Vector2.ONE, Vector2.ONE * 34), Color("344c64"), Color("66899a"), 5)
 			draw_circle(at + Vector2(6, 6), 2, Color("a2bac3"))
 		elif (cell.x + cell.y) % 3 == 0:
+			if skin.draw(self, "board.spotlight", Rect2(at, Vector2.ONE * 36)): return
 			draw_circle(at + Vector2(18, 25), 10, Color("293d59"))
 			_box(Rect2(at + Vector2(12, 6), Vector2(13, 20)), Color("768eaa"), Color("b8d7d9"), 5)
 			draw_circle(at + Vector2(18, 12), 6, Color("ffe7a3"))
 		else:
+			if skin.draw(self, "board.seat", Rect2(at, Vector2.ONE * 36)): return
 			_box(Rect2(at + Vector2(5, 4), Vector2(26, 27)), Color("8a344a"), Color("c36d70"), 7)
 			_box(Rect2(at + Vector2(9, 5), Vector2(18, 19)), Color("c85060"), Color("ee9c8a"), 5)
 			draw_rect(Rect2(at + Vector2(7, 26), Vector2(23, 5)), Color("d46a6b"))
 	elif kind == &"soft":
 		if (cell.x + cell.y) % 2:
+			if skin.draw(self, "board.clapper", Rect2(at, Vector2.ONE * 36)): return
 			_box(Rect2(at + Vector2(5, 13), Vector2(27, 19)), Color("559ba8"), Color("acd6cf"), 3)
 			draw_rect(Rect2(at + Vector2(3, 7), Vector2(29, 7)), Color("253d4c"))
 			for n in 3:
 				draw_line(at + Vector2(6 + n * 9, 8), at + Vector2(10 + n * 9, 13), Color("dce9d7"), 3)
 		else:
+			if skin.draw(self, "board.popcorn", Rect2(at, Vector2.ONE * 36)): return
 			draw_colored_polygon(PackedVector2Array([at + Vector2(8, 13), at + Vector2(29, 13), at + Vector2(25, 32), at + Vector2(11, 32)]), Color("dfb676"))
 			for n in 4:
 				draw_line(at + Vector2(11 + n * 4, 15), at + Vector2(13 + n * 3, 30), Color("b75457"), 2)
 			for n in 5:
 				draw_circle(at + Vector2(10 + n * 4, 10 + (n % 2) * 3), 5, Color("ffe9b7"))
 	elif kind == &"portal":
+		if skin.draw(self, "board.portal_green" if cell.x == 8 else "board.portal_purple", Rect2(at, Vector2.ONE * 36), state.tick): return
 		var color := Color("a8e0b9") if cell.x == 8 else Color("bab2f4")
 		draw_circle(at + Vector2.ONE * 18, 16, Color(color, 0.18))
 		draw_arc(at + Vector2.ONE * 18, 13, 0, TAU, 32, color, 3, true)
@@ -117,6 +134,7 @@ func _tile(cell: Vector2i, kind: StringName) -> void:
 
 func _marquee() -> void:
 	var at := ORIGIN + Vector2(7, 6) * PITCH
+	if skin.draw(self, "board.marquee", Rect2(at, Vector2.ONE * 108), state.tick): return
 	_box(Rect2(at + Vector2(2, 2), Vector2(104, 104)), Color("74334c"), Color("e3b36f"), 12)
 	_box(Rect2(at + Vector2(9, 30), Vector2(90, 60)), Color("285d73"), Color("acc8ad"), 5)
 	_label(at + Vector2(13, 57), "CINEMA", 19, Color("ffe8b2"))
@@ -126,6 +144,7 @@ func _marquee() -> void:
 
 
 func _bomb(at: Vector2, mine: bool) -> void:
+	if skin.draw(self, "effect.mine" if mine else "effect.bomb", Rect2(at - Vector2.ONE * 18, Vector2.ONE * 36), state.tick): return
 	if mine:
 		_box(Rect2(at - Vector2(12, 7), Vector2(24, 14)), Color("bd9e74"), Color("e5d3a3"), 5)
 		draw_circle(at, 3, Color("ec7869"))
@@ -144,6 +163,8 @@ func _actor(actor: Dictionary, index: int) -> void:
 		if actor.get("removed", false): return
 		var progress := clampf(actor.get("death_frame", 1) / 60.0, 0.0, 1.0)
 		at.y -= sin(progress * PI) * 25
+		if skin.draw(self, "actor.%s.death" % IDS[index], Rect2(at - Vector2.ONE * 20, Vector2.ONE * 40), state.tick, actor.facing, progress,
+			Color(1, 1, 1, 1.0 - progress * 0.7)): return
 		var skull := Color("e4f4e8")
 		skull.a = 1.0 - progress * 0.7
 		draw_circle(at, 13 * (1.0 - progress * 0.35), skull)
@@ -152,24 +173,44 @@ func _actor(actor: Dictionary, index: int) -> void:
 		draw_line(at + Vector2(-5, 8), at + Vector2(5, 8), skull, 4, true)
 		return
 	if actor.transit_until > 0:
-		draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, true)
+		if not skin.draw(self, "effect.transit", Rect2(at - Vector2.ONE * 22, Vector2.ONE * 44), state.tick):
+			draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, true)
 		color.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
 	if actor.vehicle != &"":
 		var recovering: bool = actor.get("vehicle_recovery_until", 0) > state.tick
 		var ride_color := Color("d77f68") if recovering else Color("3c8890")
 		var shake := sin(state.tick * 2.0) * 3.0 if recovering else 0.0
-		_box(Rect2(at + Vector2(-16 + shake, 1), Vector2(32, 17)), ride_color, Color("b9dfca"), 6)
-		draw_circle(at + Vector2(-10, 15), 5, Color("203347"))
-		draw_circle(at + Vector2(10, 15), 5, Color("203347"))
+		var ride_slot: String = "effect." + actor.vehicle
+		if recovering and skin.texture(ride_slot + "_recovery") != null: ride_slot += "_recovery"
+		if not skin.draw(self, ride_slot, Rect2(at + Vector2(-22 + shake, -9), Vector2(44, 35)), state.tick, actor.facing):
+			_box(Rect2(at + Vector2(-16 + shake, 1), Vector2(32, 17)), ride_color, Color("b9dfca"), 6)
+			draw_circle(at + Vector2(-10, 15), 5, Color("203347"))
+			draw_circle(at + Vector2(10, 15), 5, Color("203347"))
 	if actor.shield > 0 or actor.protected_until > state.tick:
-		draw_arc(at, 19, 0, TAU, 32, Color("d2eeb1"), 2, true)
+		if not skin.draw(self, "effect.shield", Rect2(at - Vector2.ONE * 22, Vector2.ONE * 44), state.tick):
+			draw_arc(at, 19, 0, TAU, 32, Color("d2eeb1"), 2, true)
 	if actor.invincible_until > state.tick:
 		var introducing: bool = actor.get("protection_stage") == &"introduction"
-		draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, true)
+		var aura := "effect.invincible_intro" if introducing and skin.texture("effect.invincible_intro") != null else "effect.invincible"
+		if not skin.draw(self, aura, Rect2(at - Vector2.ONE * 24, Vector2.ONE * 48), state.tick):
+			draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, true)
 	if actor.blink_until > state.tick or actor.get("protection_stage") == &"blink":
+		skin.draw(self, "effect.blink", Rect2(at - Vector2.ONE * 22, Vector2.ONE * 44), state.tick)
 		color = color.lightened(0.35 if state.tick % 6 < 3 else 0.0)
 	var bob := sin(state.tick * 0.8) * 1.5 if actor.velocity.length() > 0.02 and not paused else 0.0
 	at.y += bob
+	var requested: bool = state.get("commands", []).any(func(command): return command.actor_id == IDS[index] and command.direction != Vector2.ZERO)
+	var pose := "action" if state.attacks.any(func(attack): return attack.actor_id == IDS[index]) else "walk" if requested and actor.velocity.length() > 0.02 else "idle"
+	var modulation := Color(1, 1, 1, color.a)
+	if actor.blink_until > state.tick and state.tick % 6 < 3: modulation = Color(1.35, 1.35, 1.35, color.a)
+	var replaced: bool = skin.draw(self, "actor.%s.%s" % [IDS[index], pose], Rect2(at + Vector2(-20, -24), Vector2(40, 44)), state.tick, actor.facing, -1, modulation)
+	if not replaced and pose != "idle":
+		replaced = skin.draw(self, "actor.%s.idle" % IDS[index], Rect2(at + Vector2(-20, -24), Vector2(40, 44)), state.tick, actor.facing, -1, modulation)
+	if replaced:
+		if actor.weapon != &"":
+			if not skin.draw(self, "held." + actor.weapon, Rect2(at + Vector2(3, -5), Vector2.ONE * 24), state.tick, actor.facing):
+				_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
+		return
 	draw_circle(at + Vector2(0, 7), 13, Color(0.05, 0.1, 0.17, 0.5))
 	_box(Rect2(at + Vector2(-10, 1), Vector2(20, 13)), color.darkened(0.25), color.lightened(0.15), 6)
 	_box(Rect2(at + Vector2(-14, -16), Vector2(28, 25)), color, color.lightened(0.35), 10)
@@ -180,14 +221,17 @@ func _actor(actor: Dictionary, index: int) -> void:
 	draw_line(at + Vector2(0, -16), at + Vector2(0, -20), color, 2)
 	draw_circle(at + Vector2(0, -21), 2, Color("fff1b6"))
 	if actor.weapon != &"":
-		_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
+		if not skin.draw(self, "held." + actor.weapon, Rect2(at + Vector2(3, -5), Vector2.ONE * 24), state.tick, actor.facing):
+			_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
 
 
 func _hud(actor: Dictionary, index: int) -> void:
 	var at := Vector2(28, 90 + index * 85)
-	_box(Rect2(at, Vector2(251, 76)), Color("234e62"), COLORS[index].darkened(0.25), 12)
-	draw_circle(at + Vector2(30, 30), 19, COLORS[index].darkened(0.1))
-	_label(at + Vector2(17, 36), "P1" if index == 0 else "AI", 17, Color("173649"))
+	if not skin.draw(self, "ui.roster", Rect2(at, Vector2(251, 76))):
+		_box(Rect2(at, Vector2(251, 76)), Color("234e62"), COLORS[index].darkened(0.25), 12)
+	if not skin.draw(self, "actor.%s.portrait" % IDS[index], Rect2(at + Vector2(11, 11), Vector2.ONE * 38)):
+		draw_circle(at + Vector2(30, 30), 19, COLORS[index].darkened(0.1))
+		_label(at + Vector2(17, 36), "P1" if index == 0 else "AI", 17, Color("173649"))
 	_label(at + Vector2(61, 23), "YOU" if index == 0 else str(IDS[index]).to_upper(), 17, COLORS[index])
 	_label(at + Vector2(177, 23), "♥%d%s" % [actor.lives, " OUT" if not actor.alive else ""], 15, Color("ffe4ad"))
 	_label(at + Vector2(61, 44), "B %d   P %d   S %d" % [actor.capacity, actor.power, roundi((actor.speed - 1.6) / 0.1) + 1], 14)
@@ -200,6 +244,13 @@ func _attack(attack: Dictionary) -> void:
 	var at := _center(attack.cell)
 	var direction: Vector2 = Vector2(attack.direction)
 	var age: int = attack.get("frame", 0)
+	var duration: float = {&"hammer": 24.0, &"laser": 22.0, &"flamer": 23.0, &"triple": 32.0, &"shotgun": 14.0}.get(attack.kind, 24.0)
+	if attack.kind == &"laser" and attack.get("fired", false) or attack.kind == &"flamer" and not attack.get("cells", []).is_empty():
+		if skin.texture("attack." + attack.kind) != null:
+			for cell in attack.get("cells", []):
+				skin.draw(self, "attack." + attack.kind, Rect2(_center(cell) - Vector2.ONE * 18, Vector2.ONE * 36), state.tick, direction, age / duration)
+			return
+	elif skin.draw(self, "attack." + attack.kind, Rect2(at - Vector2.ONE * 24, Vector2.ONE * 48), state.tick, direction, age / duration): return
 	if attack.kind == &"hammer":
 		var attachment: Vector2 = attack.get("attachment", Vector2.ZERO) * PITCH / 30.0
 		var swing := direction.rotated(lerpf(-1.5, 0.2, minf(1.0, age / 24.0)))
@@ -226,11 +277,14 @@ func _attack(attack: Dictionary) -> void:
 
 func _overlay() -> void:
 	draw_rect(Rect2(ORIGIN, Vector2(612, 540)), Color(0.04, 0.10, 0.17, 0.82))
-	_box(Rect2(418, 242, 444, 228), Color("214c60"), Color("c9c7a0"), 18)
+	if not skin.draw(self, "ui.results", Rect2(418, 242, 444, 228)):
+		_box(Rect2(418, 242, 444, 228), Color("214c60"), Color("c9c7a0"), 18)
 	var outcome: StringName = state.pending_outcome if state.get("round_stage") == &"ending" else state.outcome
 	var title := "PAUSED" if paused else "YOU WIN!" if outcome == &"won" else "TIME'S UP" if outcome == &"timeout" else "YOU LOSE"
 	if not paused and state.session.game_over:
 		title = "GAME OVER"
+	var illustration := "paused" if paused else "game_over" if state.session.game_over else str(outcome)
+	skin.draw(self, "outcome." + illustration, Rect2(782, 251, 64, 64), state.tick)
 	_label(Vector2(455, 296), title, 34, Color("ffe2a0"))
 	if paused:
 		_label(Vector2(455, 347), "Choose RESUME to continue.", 21)
