@@ -1,7 +1,7 @@
 # Painted desktop presentation
 
 Implementation of [#20](https://github.com/Kurak0oo/bomb-it-5/issues/20), starting
-from `ca86801`. Review and final verification are in progress. Final human desktop
+from `ca86801`. Implementation, verification and both review axes are complete. Final human desktop
 acceptance remains [#21](https://github.com/Kurak0oo/bomb-it-5/issues/21).
 
 ## Delivered presentation
@@ -40,17 +40,51 @@ areas, joystick direction policy, deadzone or event delivery rules change.
 
 ## Desktop verification
 
+All 408 functional checks pass; all 15 production scripts parse/typecheck. The
+real full-board outcomes are unchanged from the fidelity baseline: seed 2 wins at
+tick 1848/score 3310; seed 5 wins at tick 2195/score 3210; seed 42 loses at tick
+237/score 0. Both victories have zero human kill credit. These use legal scripted
+human commands and three production AI, not a substitute for human play assessment.
+
 Actual Compatibility-rendered images cover the production match, pause, death,
 ending, defeat/results, game over and victory; selected action phases; a labelled
 open fixture for all reachable items/rides/protection; and four desktop layouts.
 The comparison fixture is not a replacement production map or a naturally
 achieved original-game state.
 
-`capture_presentation.gd` verifies frozen pixels and state immutability.
+Thirty captures are retained with hashes. Representative production, weapon,
+item/ride/protection and layout images were visually inspected, including
+[match](desktop/match.png), [victory](desktop/victory.png),
+[item/ride/shield fixture](states/items-rides-shield.png),
+[pressed controls](layouts/controls-pressed.png) and
+[ultrawide layout](layouts/1800x720.png).
+
+`capture_presentation.gd` passes two checks for frozen pixels and state immutability.
 `capture_layout.gd` checks desktop edge clearance, non-overlap with the board,
 button containment and enabled-input state at 1280×720, 1600×900, 1280×800 and
-1800×720. Its 24-unit desktop reservation is a development check, not measured
+1800×720, plus actual press/drag/release through the production intake: 18 checks
+pass. Those synthetic contacts request a diagonal plus one down event, then idle
+plus one up event; corresponding pressed/released feedback is captured. Its
+24-unit desktop reservation is a development check, not measured
 phone notch/platform-chrome geometry. No physical phone/iOS test or export occurs.
+
+## Standards
+
+No outstanding findings. The independent reviewer inspected the diff against
+`ca86801` and governing repository instructions. Presentation consumes copied
+state, preserves scheduler/damage ownership and keeps phone/input-policy
+boundaries unchanged. No material actionable smell was found.
+
+## Spec
+
+No outstanding material findings. The independent reviewer checked issue #20,
+the implementation and representative actual production, action, state and
+desktop-layout captures. No missing implementation requirement, scope creep or
+incorrect rendering/input change was found. Human art/play-quality acceptance
+remains #21. No claim of source pixels, native Flash equivalence or device-safe
+areas is made.
+
+Review totals: Standards 0 outstanding; Spec 0 outstanding.
 
 ## Reproduction
 

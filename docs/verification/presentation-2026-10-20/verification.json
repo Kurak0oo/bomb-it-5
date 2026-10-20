@@ -134,15 +134,23 @@
     },
     {
       "path": "docs/verification/presentation-2026-10-20/layouts/1280x800.png",
-      "sha256": "f905c1a6bc99a83bd5f4a1b8af17bde46eea3e843b8528e668c9fb003525f659"
+      "sha256": "fe14c7de0d4d83bc7b518171c342c9a4abefe09aae6f272eb486624bccdb76b2"
     },
     {
       "path": "docs/verification/presentation-2026-10-20/layouts/1600x900.png",
-      "sha256": "1ea0366bf2dfc0825de85ff1b9fc731ed750a329f8ebeac82e670b3795608f43"
+      "sha256": "e3ed7990759ac70ea3e73f2b359bbc4d989fe3775cdbf626fa74deee424102e4"
     },
     {
       "path": "docs/verification/presentation-2026-10-20/layouts/1800x720.png",
-      "sha256": "cd59a7979dea560f6ad2f8d43f9740780bedf14c5b809ebe521b99c4d94804ff"
+      "sha256": "cd5f301a73fc30d8082c1099ebf9dff18267f53f37d862dc6d185960ad2b19c8"
+    },
+    {
+      "path": "docs/verification/presentation-2026-10-20/layouts/controls-pressed.png",
+      "sha256": "b9c79dda1908b934934a8c9983d19c9ca201d7afccf09199c669c331430404bc"
+    },
+    {
+      "path": "docs/verification/presentation-2026-10-20/layouts/controls-released.png",
+      "sha256": "4a2cbdf333d9f058691e7c0c2648d8cb1b7d845feec2a025e5e7e7b43c821043"
     }
   ],
   "render_checks": {
@@ -187,7 +195,7 @@
     "checks": 2
   },
   "layout_checks": {
-    "checks": 16,
+    "checks": 18,
     "desktop_only": true,
     "layouts": [
       {
