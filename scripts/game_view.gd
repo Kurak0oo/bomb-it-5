@@ -1,20 +1,31 @@
 extends Node2D
-## Original vector artwork. Receives snapshots; never owns or advances gameplay.
+## Read-only painted presentation. Every gameplay animation samples admitted state.
 
+const Art = preload("res://scripts/game_art.gd")
 const PITCH := 36.0
 const ORIGIN := Vector2(334, 86)
 const IDS := [&"human", &"ruby", &"mint", &"gold"]
-const COLORS := [Color("66d8ff"), Color("ed86c6"), Color("8ce2b5"), Color("ffd470")]
-const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
-	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
-	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●"}
+const COLORS := Art.COLORS
+const INK := Color("171c36")
+const GOLD := Color("ffe5a0")
+const CREAM := Color("f7f1dc")
 
 var state: Dictionary = {}
 var practice := true
 var paused := false
+var motion: Dictionary = {}
+
+
+func _ready() -> void:
+	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 
 
 func present(snapshot: Dictionary, is_practice: bool, is_paused: bool) -> void:
+	if state.is_empty() or snapshot.tick == 0 or snapshot.tick < state.tick:
+		motion.clear()
+	elif snapshot.tick > state.tick:
+		for id in snapshot.actors:
+			motion[id] = state.actors.has(id) and not snapshot.actors[id].position.is_equal_approx(state.actors[id].position)
 	state = snapshot
 	practice = is_practice
 	paused = is_paused
@@ -22,239 +33,283 @@ func present(snapshot: Dictionary, is_practice: bool, is_paused: bool) -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(-position - get_parent().position, get_viewport_rect().size + Vector2(100, 100)), Color("102c3b"))
-	_box(Rect2(10, 10, 1260, 700), Color("163e51"), Color("39798a"), 18)
-	_label(Vector2(30, 49), "LOCAL ARCADE", 29, Color("ffd989"))
-	_label(Vector2(335, 43), "CINEMA CLUB", 27, Color("ffe6ad"))
-	_label(Vector2(336, 67), "PRACTICE" if practice else "ARCADE  /  NORMAL", 13, Color("9acbd3"))
-	if state.is_empty():
-		return
-	_box(Rect2(805, 25, 141, 42), Color("102c3b"), Color("568d98"), 10)
-	_label(Vector2(818, 52), "TIME  %03d" % ceili(state.remaining / 35.0), 21, Color("ffd989"))
-	_box(Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554)), Color("164957"), Color("a7d5c5"), 9)
-	for cell in state.board:
-		_tile(cell, state.board[cell])
+	_shell()
+	if state.is_empty(): return
+	_panel(Rect2(790, 25, 157, 43), INK, Color("6c9da6"), 12)
+	_label(Vector2(805, 53), "TIME  %03d" % ceili(state.remaining / 35.0), 23,
+		Color("ff9788") if state.remaining <= 1050 else GOLD)
+	_board_frame()
+	for cell in state.board: _tile(cell, state.board[cell])
 	_marquee()
-	for cell in state.pickups:
-		var at := _center(cell)
-		draw_circle(at + Vector2(1, 2), 14, Color(0, 0, 0, 0.3))
-		draw_circle(at, 13, Color("d1fff0"))
-		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
-		var text: String = ITEM_NAMES.get(state.pickups[cell], "?")
-		_label(at + Vector2(-text.length() * 4.0, 5), text, 13, Color("173c40"))
+	for cell in state.pickups: _pickup(cell, state.pickups[cell])
 	for bomb in state.bombs:
-		_bomb(_center(bomb.cell), bomb.get("kind", &"bomb") == &"mine")
-	for flame in state.flames:
-		for cell in flame.cells:
-			var at := _center(cell)
-			var size_factor := clampf((17.0 - flame.get("count", 0)) / 5.0, 0.15, 1.0)
-			draw_circle(at, 17 * size_factor, Color("ed7040"))
-			draw_circle(at + Vector2(0, -2), 12 * size_factor, Color("ffd473"))
-			draw_circle(at + Vector2(-2, -4), 6 * size_factor, Color("fff1b6"))
+		var mine: bool = bomb.get("kind", &"bomb") == &"mine"
+		var at := _center(bomb.cell)
+		_shadow(at + Vector2(0, 11), 12)
+		var pulse := 1.0 + sin(state.tick * 0.7) * 0.035
+		Art.prop(self, &"landmine" if mine else &"bomb", at + Vector2(0, -3), Vector2(36, 36) * pulse)
+	_flames()
 	for attack in state.attacks:
 		if attack.get("layer") == &"behind": _attack(attack)
 	for projectile in state.projectiles:
 		if projectile.get("phase") == &"cleanup": continue
 		var at: Vector2 = ORIGIN + (projectile.position + Vector2.ONE * 0.5) * PITCH
-		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, true)
-		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
-	for index in IDS.size():
-		if state.actors.has(IDS[index]):
-			_actor(state.actors[IDS[index]], index)
-			_hud(state.actors[IDS[index]], index)
+		Art.prop(self, &"shotgun", at, Vector2(31, 26) if projectile.kind == &"triple" else Vector2(41, 35),
+			Color.WHITE, Vector2(projectile.direction).angle())
+	var visible: Array = IDS.filter(func(id): return state.actors.has(id))
+	visible.sort_custom(func(a, b): return state.actors[a].position.y < state.actors[b].position.y)
+	for id in visible: _actor(state.actors[id], IDS.find(id))
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind": _attack(attack)
-	_label(Vector2(1010, 339), "HOW TO PLAY", 17, Color("ffd989"))
-	_label(Vector2(1010, 367), "Arrows to move", 17)
-	_label(Vector2(1010, 393), "Space: bomb / item", 17)
-	_label(Vector2(1010, 419), "P: pause", 17)
-	_label(Vector2(30, 658), "MOVE", 15, Color("a9d4de"))
-	_label(Vector2(30, 681), "Eight directions · equal speed", 13, Color("8cb1bb"))
-	_label(Vector2(1020, 653), "Tap to place / use", 15, Color("b9cdd2"))
-	_label(Vector2(340, 658), "CONTROLLED ACTION PREVIEW" if state.get("comparison_fixture", false) else "RECORDED CINEMA BOARD  /  PAIRED PORTALS", 14, Color("a9d4de"))
-	var hint := "Reset restores the board. Start Match adds three rivals." if practice else "Eliminate every rival before time runs out."
-	if practice and not state.actors[&"human"].alive:
-		hint = "Actor eliminated. Choose RESET to try again."
-	_label(Vector2(340, 684), hint, 15, Color("ffd989"))
-	if paused or state.outcome != &"running" or state.get("round_stage") == &"ending":
-		_overlay()
+	for index in IDS.size():
+		if state.actors.has(IDS[index]): _hud(state.actors[IDS[index]], index)
+	_instructions()
+	if paused or state.outcome != &"running" or state.get("round_stage") == &"ending": _overlay()
+
+
+func _shell() -> void:
+	draw_rect(Rect2(-position - get_parent().position, get_viewport_rect().size + Vector2(100, 100)), Color("101c30"))
+	_panel(Rect2(12, 12, 1256, 696), Color("183e51"), Color("67a9b3"), 22)
+	_panel(Rect2(21, 21, 1238, 678), Color("163446"), Color("264e63"), 16)
+	for x in [37, 1243]:
+		for y in [37, 683]:
+			draw_circle(Vector2(x, y), 6, Color("527884"))
+			draw_line(Vector2(x - 3, y + 2), Vector2(x + 3, y - 2), INK, 2, true)
+	_label(Vector2(48, 51), "LOCAL ARCADE", 25, GOLD)
+	_label(Vector2(48, 72), "PRACTICE. THEN PLAY." if practice else "ONE ARENA. THREE RIVALS.", 11, Color("9bc4cc"))
+	_label(Vector2(334, 49), "CINEMA", 30, GOLD)
+	_label(Vector2(477, 47), "PRACTICE" if practice else "ARCADE / NORMAL", 14, Color("abd3d6"))
+	for x in [334, 984]: draw_line(Vector2(x, 30), Vector2(x, 68), Color("3d6573"), 1)
+
+
+func _board_frame() -> void:
+	_panel(Rect2(ORIGIN - Vector2(10, 10), Vector2(632, 560)), Color("ae5864"), Color("efb08b"), 9)
+	_panel(Rect2(ORIGIN - Vector2(5, 5), Vector2(622, 550)), INK, Color("542a49"), 5)
+	for x in range(343, 948, 30):
+		for y in [80, 632]: draw_circle(Vector2(x, y), 2, Color("ffdb8c"))
 
 
 func _tile(cell: Vector2i, kind: StringName) -> void:
 	var at := ORIGIN + Vector2(cell) * PITCH
-	draw_rect(Rect2(at, Vector2.ONE * PITCH), Color("53304d") if (cell.x + cell.y) % 2 else Color("5c3555"))
-	draw_line(at + Vector2(0, 35), at + Vector2(35, 35), Color("472942"), 1)
+	draw_rect(Rect2(at, Vector2.ONE * PITCH), Color("432644") if (cell.x + cell.y) % 2 else Color("48294b"))
+	# Fine carpet weave is decorative and deterministic, with no visual clock.
+	for n in 3:
+		var inset := Vector2(5 + n * 11, 8 + (cell.x * 7 + cell.y * 3 + n * 9) % 22)
+		draw_line(at + inset, at + inset + Vector2(4, 1), Color("55304f"), 1, true)
 	if kind == &"solid":
 		if cell.x == 0 or cell.y == 0 or cell.x == 16 or cell.y == 14:
-			_box(Rect2(at + Vector2.ONE, Vector2.ONE * 34), Color("344c64"), Color("66899a"), 5)
-			draw_circle(at + Vector2(6, 6), 2, Color("a2bac3"))
-		elif (cell.x + cell.y) % 3 == 0:
-			draw_circle(at + Vector2(18, 25), 10, Color("293d59"))
-			_box(Rect2(at + Vector2(12, 6), Vector2(13, 20)), Color("768eaa"), Color("b8d7d9"), 5)
-			draw_circle(at + Vector2(18, 12), 6, Color("ffe7a3"))
+			_panel(Rect2(at + Vector2.ONE, Vector2.ONE * 34), Color("22586b"), Color("508b9b"), 5)
+			draw_line(at + Vector2(5, 5), at + Vector2(31, 5), Color("6bafbd"), 2, true)
+			draw_line(at + Vector2(5, 31), at + Vector2(31, 31), Color("15354a"), 3, true)
 		else:
-			_box(Rect2(at + Vector2(5, 4), Vector2(26, 27)), Color("8a344a"), Color("c36d70"), 7)
-			_box(Rect2(at + Vector2(9, 5), Vector2(18, 19)), Color("c85060"), Color("ee9c8a"), 5)
-			draw_rect(Rect2(at + Vector2(7, 26), Vector2(23, 5)), Color("d46a6b"))
+			_shadow(at + Vector2(19, 30), 13)
+			Art.prop(self, &"spotlight" if (cell.x + cell.y) % 3 == 0 else &"seat",
+				at + Vector2(18, 16), Vector2(37, 39))
 	elif kind == &"soft":
-		if (cell.x + cell.y) % 2:
-			_box(Rect2(at + Vector2(5, 13), Vector2(27, 19)), Color("559ba8"), Color("acd6cf"), 3)
-			draw_rect(Rect2(at + Vector2(3, 7), Vector2(29, 7)), Color("253d4c"))
-			for n in 3:
-				draw_line(at + Vector2(6 + n * 9, 8), at + Vector2(10 + n * 9, 13), Color("dce9d7"), 3)
-		else:
-			draw_colored_polygon(PackedVector2Array([at + Vector2(8, 13), at + Vector2(29, 13), at + Vector2(25, 32), at + Vector2(11, 32)]), Color("dfb676"))
-			for n in 4:
-				draw_line(at + Vector2(11 + n * 4, 15), at + Vector2(13 + n * 3, 30), Color("b75457"), 2)
-			for n in 5:
-				draw_circle(at + Vector2(10 + n * 4, 10 + (n % 2) * 3), 5, Color("ffe9b7"))
+		_shadow(at + Vector2(18, 30), 12)
+		Art.prop(self, &"drink" if (cell.x + cell.y) % 2 else &"popcorn",
+			at + Vector2(18, 16), Vector2(37, 39))
 	elif kind == &"portal":
-		var color := Color("a8e0b9") if cell.x == 8 else Color("bab2f4")
-		draw_circle(at + Vector2.ONE * 18, 16, Color(color, 0.18))
-		draw_arc(at + Vector2.ONE * 18, 13, 0, TAU, 32, color, 3, true)
-		draw_arc(at + Vector2.ONE * 18, 7, 0, TAU, 24, Color(color, 0.7), 2, true)
+		var tint := Color("a6ffd8") if cell.x == 8 else Color("e1bcff")
+		draw_circle(at + Vector2.ONE * 18, 17, Color(tint, 0.12))
+		Art.prop(self, &"portal", at + Vector2.ONE * 18, Vector2(37, 33), tint)
+		for n in 3:
+			var angle: float = state.tick * 0.06 + n * TAU / 3
+			draw_circle(at + Vector2.ONE * 18 + Vector2.from_angle(angle) * 12, 1.3, Color(tint, 0.85))
 
 
 func _marquee() -> void:
 	var at := ORIGIN + Vector2(7, 6) * PITCH
-	_box(Rect2(at + Vector2(2, 2), Vector2(104, 104)), Color("74334c"), Color("e3b36f"), 12)
-	_box(Rect2(at + Vector2(9, 30), Vector2(90, 60)), Color("285d73"), Color("acc8ad"), 5)
-	_label(at + Vector2(13, 57), "CINEMA", 19, Color("ffe8b2"))
-	_label(at + Vector2(15, 77), "★  ★  ★", 18, Color("ffe8b2"))
-	for n in 8:
-		draw_circle(at + Vector2(12 + n * 12, 18), 3, Color("ffe4a3"))
+	_panel(Rect2(at + Vector2(1, 1), Vector2(106, 106)), Color("7f294a"), Color("f2be77"), 11)
+	_panel(Rect2(at + Vector2(7, 28), Vector2(94, 71)), Color("1b4150"), Color("c7836c"), 5)
+	Art.prop(self, &"projector", at + Vector2(54, 63), Vector2(67, 65))
+	_label(at + Vector2(13, 23), "★ CINEMA ★", 14, GOLD)
+	for n in 6: draw_circle(at + Vector2(10 + n * 17, 101), 2.1, GOLD)
 
 
-func _bomb(at: Vector2, mine: bool) -> void:
-	if mine:
-		_box(Rect2(at - Vector2(12, 7), Vector2(24, 14)), Color("bd9e74"), Color("e5d3a3"), 5)
-		draw_circle(at, 3, Color("ec7869"))
-	else:
-		draw_circle(at + Vector2(1, 3), 13, Color("262b3d"))
-		draw_circle(at, 11, Color("465b71"))
-		draw_circle(at + Vector2(-4, -4), 3, Color("92a7b3"))
-		draw_line(at + Vector2(3, -9), at + Vector2(8, -16), Color("e8bd78"), 3, true)
-		draw_circle(at + Vector2(8, -16), 3 + sin(state.tick * 0.8), Color("ffe49e"))
+func _pickup(cell: Vector2i, kind: StringName) -> void:
+	var at := _center(cell)
+	_shadow(at + Vector2(0, 12), 11)
+	var offset := sin((state.tick + cell.x * 3 + cell.y) * 0.12) * 1.1
+	draw_circle(at, 14, Color("97ebe1", 0.12))
+	draw_arc(at, 14, 0, TAU, 28, Color("b9f5de", 0.65), 1, true)
+	Art.prop(self, kind, at + Vector2(0, -2 + offset), Vector2.ONE * 30)
+
+
+func _flames() -> void:
+	for flame in state.flames:
+		var count: int = flame.get("count", 0)
+		var fading := clampf((17.0 - count) / 5.0, 0.12, 1.0)
+		for cell in flame.cells:
+			var at := _center(cell)
+			var lethal: bool = state.get("fire", []).has(cell)
+			var alpha := maxf(0.75, fading) if lethal else fading * 0.22
+			for direction in [Vector2i.RIGHT, Vector2i.DOWN]:
+				if flame.cells.has(cell + direction):
+					draw_line(at, _center(cell + direction), Color("ff7d39", alpha * 0.65), 20 * fading, true)
+			Art.prop(self, &"power", at + Vector2(0, -3), Vector2(36, 43) * (0.85 + fading * 0.15),
+				Color(1, 1, 1, alpha))
 
 
 func _actor(actor: Dictionary, index: int) -> void:
 	var at: Vector2 = ORIGIN + (actor.position + Vector2.ONE * 0.5) * PITCH
-	var color: Color = COLORS[index]
+	var tint: Color = COLORS[index]
 	if not actor.alive:
 		if actor.get("removed", false): return
-		var progress := clampf(actor.get("death_frame", 1) / 60.0, 0.0, 1.0)
-		at.y -= sin(progress * PI) * 25
-		var skull := Color("e4f4e8")
-		skull.a = 1.0 - progress * 0.7
-		draw_circle(at, 13 * (1.0 - progress * 0.35), skull)
-		draw_circle(at + Vector2(-4, -1), 3, color.darkened(0.8))
-		draw_circle(at + Vector2(4, -1), 3, color.darkened(0.8))
-		draw_line(at + Vector2(-5, 8), at + Vector2(5, 8), skull, 4, true)
+		var progress := clampf(actor.get("death_frame", 1) / 60.0, 0, 1)
+		Art.prop(self, &"ghost", at + Vector2(sin(progress * TAU) * 6, -8 - progress * 30),
+			Vector2.ONE * (38 + progress * 8), Color(tint, 1.0 - progress * 0.8))
 		return
-	if actor.transit_until > 0:
-		draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, true)
-		color.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
-	if actor.vehicle != &"":
-		var recovering: bool = actor.get("vehicle_recovery_until", 0) > state.tick
-		var ride_color := Color("d77f68") if recovering else Color("3c8890")
-		var shake := sin(state.tick * 2.0) * 3.0 if recovering else 0.0
-		_box(Rect2(at + Vector2(-16 + shake, 1), Vector2(32, 17)), ride_color, Color("b9dfca"), 6)
-		draw_circle(at + Vector2(-10, 15), 5, Color("203347"))
-		draw_circle(at + Vector2(10, 15), 5, Color("203347"))
+	var transferring: bool = actor.transit_until > 0
+	if transferring:
+		tint.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
+		draw_arc(at, 19, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, COLORS[index], 2, true)
+	_shadow(at + Vector2(0, 12), 13)
+	var recovering: bool = actor.get("vehicle_recovery_until", 0) > state.tick
+	var riding: bool = actor.vehicle != &""
+	if riding:
+		var shake := sin(state.tick * 2.0) * 2.5 if recovering else 0.0
+		Art.prop(self, actor.vehicle, at + Vector2(shake, 6), Vector2(45, 35),
+			Color("ffb098") if recovering else Color.WHITE)
 	if actor.shield > 0 or actor.protected_until > state.tick:
-		draw_arc(at, 19, 0, TAU, 32, Color("d2eeb1"), 2, true)
+		draw_circle(at, 21, Color("98f6ff", 0.11))
+		draw_arc(at, 21, 0, TAU, 40, Color("a3f2ff", 0.8), 1.5, true)
 	if actor.invincible_until > state.tick:
-		var introducing: bool = actor.get("protection_stage") == &"introduction"
-		draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, true)
+		var radius := 24.0 + (sin(state.tick * 0.2) * 3 if actor.get("protection_stage") == &"introduction" else 0.0)
+		for n in 3:
+			Art.prop(self, &"invincible", at + Vector2.from_angle(state.tick * 0.12 + n * TAU / 3) * radius, Vector2.ONE * 11)
 	if actor.blink_until > state.tick or actor.get("protection_stage") == &"blink":
-		color = color.lightened(0.35 if state.tick % 6 < 3 else 0.0)
-	var bob := sin(state.tick * 0.8) * 1.5 if actor.velocity.length() > 0.02 and not paused else 0.0
-	at.y += bob
-	draw_circle(at + Vector2(0, 7), 13, Color(0.05, 0.1, 0.17, 0.5))
-	_box(Rect2(at + Vector2(-10, 1), Vector2(20, 13)), color.darkened(0.25), color.lightened(0.15), 6)
-	_box(Rect2(at + Vector2(-14, -16), Vector2(28, 25)), color, color.lightened(0.35), 10)
-	_box(Rect2(at + Vector2(-10, -10), Vector2(20, 11)), Color("244357"), Color("498090"), 4)
-	var facing: Vector2 = actor.facing
-	draw_circle(at + Vector2(-5, -5) + facing * 1.5, 2.5, Color("e1fff3"))
-	draw_circle(at + Vector2(5, -5) + facing * 1.5, 2.5, Color("e1fff3"))
-	draw_line(at + Vector2(0, -16), at + Vector2(0, -20), color, 2)
-	draw_circle(at + Vector2(0, -21), 2, Color("fff1b6"))
+		tint = tint.lightened(0.45 if state.tick % 6 < 3 else 0)
+	var moving: bool = motion.get(IDS[index], false)
+	var frame: int = 1 + (state.tick / 5) % 2 if moving and not riding else 0
+	if state.attacks.any(func(attack): return attack.actor_id == IDS[index]): frame = 3
+	Art.robot(self, at + Vector2(0, -9 if riding else -7), Vector2(40, 40), actor.facing, frame, tint)
 	if actor.weapon != &"":
-		_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
+		Art.prop(self, actor.weapon, at + Vector2(actor.facing) * 12 + Vector2(1, 1), Vector2(23, 22), Color.WHITE,
+			PI if actor.facing.x < 0 else -PI / 2 if actor.facing.y < 0 else PI / 2 if actor.facing.y > 0 else 0)
+	if index == 0:
+		draw_colored_polygon(PackedVector2Array([at + Vector2(-3, -34), at + Vector2(3, -34), at + Vector2(0, -29)]), GOLD)
+	if not moving and not transferring and not recovering and actor.busy_until <= state.tick and frame != 3:
+		for command in state.get("commands", []):
+			if command.actor_id == IDS[index] and command.direction != Vector2.ZERO:
+				var impact: Vector2 = at + command.direction * 15
+				draw_line(impact + Vector2(-3, -3), impact + Vector2(3, 3), Color("ffd696"), 2, true)
+				draw_line(impact + Vector2(-3, 3), impact + Vector2(3, -3), Color("ffd696"), 2, true)
 
 
 func _hud(actor: Dictionary, index: int) -> void:
-	var at := Vector2(28, 90 + index * 85)
-	_box(Rect2(at, Vector2(251, 76)), Color("234e62"), COLORS[index].darkened(0.25), 12)
-	draw_circle(at + Vector2(30, 30), 19, COLORS[index].darkened(0.1))
-	_label(at + Vector2(17, 36), "P1" if index == 0 else "AI", 17, Color("173649"))
-	_label(at + Vector2(61, 23), "YOU" if index == 0 else str(IDS[index]).to_upper(), 17, COLORS[index])
-	_label(at + Vector2(177, 23), "♥%d%s" % [actor.lives, " OUT" if not actor.alive else ""], 15, Color("ffe4ad"))
-	_label(at + Vector2(61, 44), "B %d   P %d   S %d" % [actor.capacity, actor.power, roundi((actor.speed - 1.6) / 0.1) + 1], 14)
-	_label(at + Vector2(61, 64), "SCORE %d" % actor.score, 14, Color("b4d2d7"))
+	var at := Vector2(40, 94 + index * 85)
+	_panel(Rect2(at + Vector2(0, 3), Vector2(246, 76)), INK, INK, 12)
+	_panel(Rect2(at, Vector2(246, 75)), Color("244c5e"), COLORS[index].darkened(0.45), 12)
+	draw_line(at + Vector2(63, 12), at + Vector2(63, 62), Color("447180"), 1)
+	Art.robot(self, at + Vector2(32, 32), Vector2(54, 54), Vector2.DOWN, 0,
+		Color(COLORS[index], 0.4 if not actor.alive else 1.0))
+	_label(at + Vector2(10, 67), "P1" if index == 0 else "AI", 11, COLORS[index])
+	_label(at + Vector2(74, 21), "YOU" if index == 0 else str(IDS[index]).to_upper(), 15, COLORS[index])
+	Art.prop(self, &"life", at + Vector2(198, 15), Vector2.ONE * 19)
+	_label(at + Vector2(209, 21), str(actor.lives), 15, GOLD)
+	if not actor.alive: _label(at + Vector2(136, 21), "OUT", 12, Color("c2c2cf"))
+	for entry in [[&"capacity", actor.capacity], [&"power", actor.power], [&"speed", roundi((actor.speed - 1.6) / 0.1) + 1]]:
+		var offset: int = [&"capacity", &"power", &"speed"].find(entry[0]) * 48
+		Art.prop(self, entry[0], at + Vector2(82 + offset, 37), Vector2.ONE * 19)
+		_label(at + Vector2(94 + offset, 42), str(entry[1]), 13, CREAM)
+	_label(at + Vector2(75, 63), "%06d" % actor.score, 15, Color("c8e0dc"))
 	if actor.weapon != &"":
-		_label(at + Vector2(174, 64), "%s ×%d" % [ITEM_NAMES.get(actor.weapon, "?"), actor.ammo], 13, Color("ffd989"))
+		Art.prop(self, actor.weapon, at + Vector2(196, 58), Vector2.ONE * 24)
+		_label(at + Vector2(211, 64), "×%d" % actor.ammo, 12, GOLD)
 
 
 func _attack(attack: Dictionary) -> void:
 	var at := _center(attack.cell)
-	var direction: Vector2 = Vector2(attack.direction)
+	var direction := Vector2(attack.direction)
 	var age: int = attack.get("frame", 0)
 	if attack.kind == &"hammer":
-		var attachment: Vector2 = attack.get("attachment", Vector2.ZERO) * PITCH / 30.0
-		var swing := direction.rotated(lerpf(-1.5, 0.2, minf(1.0, age / 24.0)))
-		var hand := at + attachment * 0.4
-		var head := hand + swing * 29
-		draw_line(hand, head, Color("e5be80"), 5, true)
-		_box(Rect2(head - Vector2(10, 7), Vector2(20, 14)), Color("d5edf0"), Color("7cacba"), 3)
+		var hand: Vector2 = at + attack.get("attachment", Vector2.ZERO) * PITCH / 75.0
+		var angle := direction.angle() + lerpf(-1.4, 0.25, minf(1, age / 24.0))
+		Art.prop(self, &"hammer", hand + Vector2.from_angle(angle) * 19, Vector2.ONE * 35, Color.WHITE, angle + 0.7)
 	elif attack.kind == &"laser" and attack.fired:
 		for cell in attack.get("cells", []):
-			draw_line(_center(cell) - Vector2(attack.direction) * 18, _center(cell) + Vector2(attack.direction) * 18, Color("fff1b6"), 7, true)
+			var center := _center(cell)
+			draw_line(center - direction * 18, center + direction * 18, Color("56e9ef", 0.2), 18, true)
+			draw_line(center - direction * 18, center + direction * 18, Color("74fff6"), 7, true)
+			draw_line(center - direction * 18, center + direction * 18, Color("f4fff0"), 3, true)
 	elif attack.kind == &"flamer":
 		for cell in attack.get("cells", []):
-			draw_line(at, _center(cell), Color("ffae62"), 11 + sin(age) * 2, true)
-			draw_line(at, _center(cell), Color("ffe69e"), 5, true)
-			draw_circle(_center(cell), 8, Color("fff0b0"))
-	elif attack.kind == &"shotgun" and not attack.fired:
-		draw_circle(at + direction * 18, 3 + minf(age, 14) * 0.7, Color("ffba6e"))
-	elif attack.kind == &"triple":
-		var kick := 5.0 if age % 15 < 3 else 0.0
-		draw_line(at, at + direction * (23 - kick), Color("b7d7d4"), 8, true)
-	elif not attack.fired:
-		draw_arc(at, 22, -PI / 2, -PI / 2 + TAU * minf(1.0, float(state.tick - attack.started + 1) / maxf(1, attack.ready - attack.started)), 24, Color("ffd989"), 3, true)
+			draw_line(at, _center(cell), Color("f37235", 0.7), 15, true)
+			draw_line(at, _center(cell), Color("ffe388"), 5, true)
+			Art.prop(self, &"shotgun", _center(cell), Vector2(34, 27), Color.WHITE, direction.angle())
+	elif not attack.fired and attack.kind in [&"laser", &"shotgun"]:
+		var progress := minf(age / (14.0 if attack.kind == &"shotgun" else 11.0), 1)
+		var muzzle := at + direction * 18
+		draw_circle(muzzle, 5 + progress * 7, Color("ffe2a0", 0.2))
+		Art.prop(self, &"invincible" if attack.kind == &"laser" else &"power", muzzle,
+			Vector2.ONE * (8 + progress * 14))
+	elif attack.kind == &"triple" and age % 15 < 3:
+		Art.prop(self, &"invincible", at + direction * 23, Vector2.ONE * 17)
+
+
+func _instructions() -> void:
+	_label(Vector2(1010, 349), "HOW TO PLAY", 15, GOLD)
+	_label(Vector2(1010, 377), "Arrows  Move", 16, CREAM)
+	_label(Vector2(1010, 403), "Space    Bomb / item", 16, CREAM)
+	_label(Vector2(1010, 429), "P             Pause", 16, Color("aacdd1"))
+	_label(Vector2(88, 649), "MOVE", 13, Color("a7d4dd"))
+	_label(Vector2(57, 672), "Eight directions", 12, Color("789fae"))
+	_label(Vector2(1045, 657), "TAP TO USE", 13, Color("d5be94"))
+	var fixture: bool = state.get("comparison_fixture", false)
+	_label(Vector2(340, 663), "CONTROLLED ACTION PREVIEW" if fixture else "CINEMA  /  PAIRED PORTALS", 13, Color("b6cecd"))
+	var hint := "Move · place · escape. Start a match when you're ready." if practice else "Eliminate every rival before time runs out."
+	if practice and not state.actors[&"human"].alive: hint = "Choose RESET to return to practice."
+	_label(Vector2(340, 684), hint, 13, GOLD)
 
 
 func _overlay() -> void:
-	draw_rect(Rect2(ORIGIN, Vector2(612, 540)), Color(0.04, 0.10, 0.17, 0.82))
-	_box(Rect2(418, 242, 444, 228), Color("214c60"), Color("c9c7a0"), 18)
+	draw_rect(Rect2(ORIGIN, Vector2(612, 540)), Color("101b30", 0.78))
+	_panel(Rect2(426, 211, 428, 306), Color("0e253b"), Color("a77d61"), 20)
+	_panel(Rect2(433, 218, 414, 292), Color("204959"), Color("467887"), 15)
 	var outcome: StringName = state.pending_outcome if state.get("round_stage") == &"ending" else state.outcome
 	var title := "PAUSED" if paused else "YOU WIN!" if outcome == &"won" else "TIME'S UP" if outcome == &"timeout" else "YOU LOSE"
-	if not paused and state.session.game_over:
-		title = "GAME OVER"
-	_label(Vector2(455, 296), title, 34, Color("ffe2a0"))
+	if not paused and state.session.game_over: title = "GAME OVER"
+	Art.prop(self, &"projector" if paused else &"trophy" if outcome == &"won" else &"ghost",
+		Vector2(640, 266), Vector2(77, 77))
+	_center_label(Vector2(640, 331), title, 31, GOLD)
 	if paused:
-		_label(Vector2(455, 347), "Choose RESUME to continue.", 21)
-		_label(Vector2(455, 387), "Fresh input is required after resuming.", 17, Color("abcbd2"))
+		_center_label(Vector2(640, 383), "Choose RESUME to continue.", 20, CREAM)
+		_center_label(Vector2(640, 419), "Fresh input after resuming.", 16, Color("aed1d3"))
 	elif state.get("round_stage") == &"ending":
-		var progress: float = state.get("ending_progress", 0.0)
-		draw_arc(Vector2(640, 367), 34, -PI / 2, -PI / 2 + TAU * maxf(0.01, progress), 48, Color("ffd989"), 5, true)
-		_label(Vector2(455, 442), "ROUND COMPLETE", 20, Color("ffe2a0"))
+		var progress: float = state.get("ending_progress", 0)
+		_panel(Rect2(502, 373, 276, 9), INK, Color("395868"), 4)
+		if progress > 0: draw_rect(Rect2(504, 375, 272 * progress, 5), GOLD)
+		_center_label(Vector2(640, 424), "ROUND COMPLETE", 17, CREAM)
+		_center_label(Vector2(640, 469), "Finishing the round…", 15, Color("aed1d3"))
 	else:
-		_label(Vector2(455, 340), "ENEMIES KILLED   %d" % state.actors[&"human"].kills, 19)
-		_label(Vector2(455, 371), "ROUND SCORE      %d" % state.result_score, 19)
-		_label(Vector2(455, 402), "TOTAL SCORE       %d" % state.session.total_score, 19, Color("ffe2a0"))
-		_label(Vector2(455, 442), "Choose the next action on the right.", 17, Color("abcbd2"))
+		for entry in [["ENEMIES KILLED", state.actors[&"human"].kills], ["ROUND SCORE", state.result_score], ["TOTAL SCORE", state.session.total_score]]:
+			var row: int = ["ENEMIES KILLED", "ROUND SCORE", "TOTAL SCORE"].find(entry[0])
+			_label(Vector2(473, 376 + row * 33), entry[0], 15, Color("b9d4d4"))
+			_label(Vector2(721, 376 + row * 33), str(entry[1]), 19, GOLD)
+		_center_label(Vector2(640, 484), "Choose the next action on the right.", 15, CREAM)
 
 
 func _center(cell: Vector2i) -> Vector2:
 	return ORIGIN + (Vector2(cell) + Vector2.ONE * 0.5) * PITCH
 
 
-func _label(at: Vector2, text: String, size_px: int = 18, color: Color = Color("dfede7")) -> void:
+func _shadow(at: Vector2, width: float) -> void:
+	draw_set_transform(at, 0, Vector2(1, 0.35))
+	draw_circle(Vector2.ZERO, width, Color("14172d", 0.55))
+	draw_set_transform(Vector2.ZERO)
+
+
+func _label(at: Vector2, text: String, size_px: int, color: Color) -> void:
+	draw_string(ThemeDB.fallback_font, at + Vector2(0, 1), text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, Color("101c30", color.a * 0.8))
 	draw_string(ThemeDB.fallback_font, at, text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px, color)
 
 
-func _box(rect: Rect2, fill: Color, border: Color, radius: int) -> void:
+func _center_label(at: Vector2, text: String, size_px: int, color: Color) -> void:
+	_label(at - Vector2(ThemeDB.fallback_font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, size_px).x / 2, 0), text, size_px, color)
+
+
+func _panel(rect: Rect2, fill: Color, border: Color, radius: int) -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = fill
 	style.border_color = border

@@ -1,5 +1,5 @@
 extends Node2D
-## Scene host: one scheduler, committed state, original procedural presentation.
+## Scene host: one scheduler, committed state, original painted presentation.
 
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const Scheduler = preload("res://scripts/simulation/tick_scheduler.gd")
@@ -187,12 +187,23 @@ func _make_button(key: String, caption: String, position_at: Vector2, action: Ca
 	button.size = Vector2(210, 40)
 	button.focus_mode = Control.FOCUS_NONE
 	button.add_theme_font_size_override("font_size", 18)
+	button.add_theme_color_override("font_color", Color("f7f1dc"))
+	button.add_theme_color_override("font_hover_color", Color("fff0bc"))
+	button.add_theme_color_override("font_pressed_color", Color("fff0bc"))
+	button.add_theme_color_override("font_disabled_color", Color("77949e"))
 	for state_name in ["normal", "hover", "pressed", "disabled"]:
 		var style := StyleBoxFlat.new()
-		style.bg_color = Color("285768") if state_name == "normal" else Color("39788a") if state_name == "hover" else Color("1b4052")
-		style.border_color = Color("7fb6b7") if state_name != "disabled" else Color("3b616a")
+		style.bg_color = Color("315a6a") if state_name == "normal" else Color("427687") if state_name == "hover" else Color("1a374a")
+		style.border_color = Color("87b6b6") if state_name != "disabled" else Color("355364")
+		if key == "match" and state_name != "disabled":
+			style.bg_color = Color("b97643") if state_name == "normal" else Color("cd9656") if state_name == "hover" else Color("86532e")
+			style.border_color = Color("ffe1a0")
 		style.set_border_width_all(1)
-		style.set_corner_radius_all(9)
+		style.border_width_top = 2
+		style.shadow_color = Color("0c182b", 0.55)
+		style.shadow_size = 2
+		style.shadow_offset = Vector2(0, 3 if state_name != "pressed" else 1)
+		style.set_corner_radius_all(10)
 		button.add_theme_stylebox_override(state_name, style)
 	button.pressed.connect(action)
 	add_child(button)
@@ -203,6 +214,7 @@ func _make_button(key: String, caption: String, position_at: Vector2, action: Ca
 func _refresh() -> void:
 	if is_instance_valid(view) and not state.is_empty():
 		touch_controls.enabled = _can_control()
+		touch_controls.action_kind = state.actors[&"human"].weapon if state.actors[&"human"].weapon != &"" else &"bomb"
 		view.present(get_snapshot(), practice, paused)
 
 
