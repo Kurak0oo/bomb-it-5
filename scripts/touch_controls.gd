@@ -1,8 +1,6 @@
 extends Node2D
 ## Independent touch contacts; presentation never synthesizes held bomb repeats.
 
-const Art = preload("res://scripts/game_art.gd")
-
 signal direction_changed(direction: Vector2)
 signal bomb_event(event: StringName)
 
@@ -16,11 +14,6 @@ var stick_contact := -1
 var bomb_contact := -1
 var thumb := Vector2.ZERO
 var target := Vector2.ZERO
-var action_kind: StringName = &"bomb"
-
-
-func _ready() -> void:
-	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 
 
 func reset() -> void:
@@ -68,23 +61,11 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	var alpha := 1.0 if enabled else 0.45
-	draw_circle(STICK + Vector2(0, 4), 84, Color("101c30", 0.45 * alpha))
-	draw_circle(STICK, 82, Color("8bd8ed", 0.09 * alpha))
-	draw_arc(STICK, 80, 0, TAU, 64, Color("83b8ca", 0.5 * alpha), 2, true)
-	draw_arc(STICK, 74, 0, TAU, 64, Color("a1d3df", 0.14 * alpha), 1, true)
-	for n in 8:
-		var direction := Vector2.from_angle(n * TAU / 8)
-		draw_line(STICK + direction * 64, STICK + direction * 69, Color("a9d5da", 0.35 * alpha), 2, true)
-	draw_circle(STICK + thumb + Vector2(0, 3), 28, Color("101c30", 0.3 * alpha))
-	draw_circle(STICK + thumb, 28, Color("83d7e9", (0.6 if stick_contact != -1 else 0.23) * alpha))
-	draw_arc(STICK + thumb, 27, 0, TAU, 32, Color("b1e7ec", 0.65 * alpha), 2, true)
-	draw_arc(STICK + thumb - Vector2(0, 1), 22, PI, TAU, 24, Color("d9fff8", 0.25 * alpha), 2, true)
-	var pressed := bomb_contact != -1
-	draw_circle(BOMB + Vector2(0, 5), 64, Color("101c30", 0.55 * alpha))
-	draw_circle(BOMB, 61 if not pressed else 57, Color("dda366", (0.14 if not pressed else 0.4) * alpha))
-	draw_arc(BOMB, 64, 0, TAU, 64, Color("e4bb7e", 0.65 * alpha), 2, true)
-	draw_arc(BOMB, 58, PI * 1.12, PI * 1.88, 32, Color("ffdf9c", 0.35 * alpha), 2, true)
-	Art.prop(self, action_kind, BOMB + Vector2(0, -8 if not pressed else -3),
-		Vector2.ONE * (53 if not pressed else 47), Color(1, 1, 1, alpha))
-	draw_string(ThemeDB.fallback_font, BOMB + Vector2(-24, 34), "USE", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("ffe2a0", alpha))
+	draw_circle(STICK, 84, Color(0.6, 0.8, 1.0, 0.09))
+	draw_arc(STICK, 80, 0, TAU, 64, Color(0.6, 0.8, 1.0, 0.35), 2, true)
+	draw_arc(STICK, 14, 0, TAU, 32, Color(0.6, 0.8, 1.0, 0.12), 1, true)
+	draw_circle(STICK + thumb, 27, Color(0.55, 0.83, 1.0, 0.6 if stick_contact != -1 else 0.25))
+	draw_arc(STICK + thumb, 27, 0, TAU, 32, Color("8cceea"), 2, true)
+	draw_circle(BOMB, 61 if bomb_contact == -1 else 56, Color(1.0, 0.72, 0.4, 0.23 if bomb_contact == -1 else 0.55))
+	draw_arc(BOMB, 64, 0, TAU, 64, Color("c29f70"), 2, true)
+	draw_string(ThemeDB.fallback_font, BOMB + Vector2(-28, 7), "BOMB", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("ffdda0"))

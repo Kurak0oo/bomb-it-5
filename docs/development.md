@@ -2,14 +2,6 @@
 
 ## Current boundary
 
-The user requested the next stage on 2026-10-20 after assessing gameplay as
-promising. Finished presentation #20 is now implemented and under independent
-review: original generated painted atlases, directional actor animation, icons,
-weapons/effects, rides/protection/death, HUD, controls and outcomes. All 408
-functional checks pass; graphical fixtures additionally check frozen art/state
-and four desktop layouts. See the [presentation record](verification/presentation-2026-10-20/README.md).
-Final human desktop acceptance #21 remains open; phone/iOS testing stays deferred.
-
 Fidelity implementation #38–#55 is implemented, desktop-verified and reviewed on
 2026-10-20, approved by the user's implement instruction. The graph has 18 tickets and 32 native blocker
 edges; #20 additionally waits for #55. Source-grounded regressions use the real
