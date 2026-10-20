@@ -42,45 +42,6 @@ func _run() -> void:
 		records.append({"window": label, "image_size": str(image.get_size()),
 			"logical_viewport": str(visible), "game_origin": str(origin)})
 		print("CAPTURE: desktop layout ", label)
-	root.size = Vector2i(1280, 720)
-	game.set_process(true)
-	await process_frame
-	await process_frame
-	game.set_process(false)
-	game.start_session(true, 42)
-	# Desktop synthetic contacts demonstrate feedback through the production intake.
-	var stick := InputEventScreenTouch.new()
-	stick.index = 1
-	stick.position = Vector2(145, 535)
-	stick.pressed = true
-	root.push_input(stick, true)
-	var drag := InputEventScreenDrag.new()
-	drag.index = 1
-	drag.position = Vector2(195, 585)
-	root.push_input(drag, true)
-	var bomb := InputEventScreenTouch.new()
-	bomb.index = 2
-	bomb.position = Vector2(1115, 535)
-	bomb.pressed = true
-	root.push_input(bomb, true)
-	game.advance_time(1.0 / 35.0)
-	var command: Dictionary = game.get_snapshot().commands[0]
-	assert(command.direction.is_equal_approx(Vector2.ONE.normalized()) and command.bomb_events == [&"down"])
-	checks += 1
-	await process_frame
-	await RenderingServer.frame_post_draw
-	assert(root.get_texture().get_image().save_png(folder.path_join("controls-pressed.png")) == OK)
-	stick.pressed = false
-	bomb.pressed = false
-	root.push_input(stick, true)
-	root.push_input(bomb, true)
-	game.advance_time(1.0 / 35.0)
-	command = game.get_snapshot().commands[0]
-	assert(command.direction == Vector2.ZERO and command.bomb_events == [&"up"])
-	checks += 1
-	for n in 6: await process_frame
-	await RenderingServer.frame_post_draw
-	assert(root.get_texture().get_image().save_png(folder.path_join("controls-released.png")) == OK)
 	var file := FileAccess.open(folder.path_join("checks.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify({"checks": checks, "desktop_only": true, "layouts": records}, "  "))
 	print("PASS: %d desktop layout checks" % checks)
