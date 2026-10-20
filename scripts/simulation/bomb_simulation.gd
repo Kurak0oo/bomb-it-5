@@ -148,7 +148,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 					if _bombs.any(func(bomb: Dictionary): return bomb.cell == actor.cell):
 						continue
 					var placed := {"actor_id": command.actor_id, "cell": actor.cell,
-						"power": actor.get("power", 1), "born": _tick, "age": 0, "blasted": false}
+						"power": actor.get("power", 1), "born": _tick, "age": 0, "blasted": false, "previous_cell": Vector2i.ZERO}
 					_bombs.append(placed)
 					_countdowns.append(placed)
 					actor.bomb_count += 1
@@ -168,6 +168,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 				bomb.age += 1
 				if bomb.age >= FUSE_TICKS:
 					_detonate(bomb, blasts, broken_soft_blocks)
+				bomb.previous_cell = bomb.cell
 			countdown_index += 1
 		_late_blast = true
 		for effect in _weapons.advance(_tick, _actors, _board, _bombs):
@@ -234,43 +235,59 @@ func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector
 	bomb.blasted = not mine_contact
 	_countdowns.erase(bomb)
 	if not mine_contact: _actors[bomb.actor_id].bomb_count -= 1
-	var cells: Array[Vector2i] = [bomb.cell]
-	_pickups.erase(bomb.cell)
-	for direction in [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]:
-		for distance in range(1, bomb.power + 1):
-			var cell: Vector2i = bomb.cell + direction * distance
+	if mine_contact and _rules.get("damage", false):
+		# Landmine.hitReset awards and tries contact damage before calling inherited blast.
+		for id in _actor_ids:
+			var actor: Dictionary = _actors[id]
+			if not actor.alive or actor.cell != bomb.cell: continue
+			if id != bomb.actor_id and actor.vehicle == &"" and actor.shield == 0:
+				_actors[bomb.actor_id].score += 100
+				_actors[bomb.actor_id].kills += 1
+			_hurt(id, &"")
+	var cells: Array[Vector2i] = []
+	_add_blast_cell(cells, bomb.cell)
+	if bomb.get("previous_cell", Vector2i.ZERO) != bomb.cell:
+		_hit_cell(bomb.cell, bomb.actor_id, blasts, broken, false)
+	_deliver_blast_contact(bomb.cell, bomb.actor_id)
+	var directions := [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
+	var continuing := [true, true, true, true]
+	# Source Bomb.blast visits each distance ring before the next, delivering damage inline.
+	for distance in range(1, bomb.power + 1):
+		for ray in 4:
+			if not continuing[ray]: continue
+			var cell: Vector2i = bomb.cell + directions[ray] * distance
 			var tile: Variant = _board.get(cell)
 			if tile not in [&"floor", &"soft"]:
-				break
-			cells.append(cell)
-			_pickups.erase(cell)
-			var hit_bombs: Array[Dictionary] = _bombs.filter(
-				func(other: Dictionary): return other.cell == cell)
-			if not hit_bombs.is_empty():
-				_detonate(hit_bombs[0], blasts, broken)
-				break
+				continuing[ray] = false
+				if tile != null: _hit_cell(cell, bomb.actor_id, blasts, broken, false)
+				continue
+			if _bombs.any(func(other: Dictionary): return other.cell == cell):
+				continuing[ray] = false
+				# hitItem dispatches to every map bomb entry, not just the first one.
+				_hit_cell(cell, bomb.actor_id, blasts, broken, false)
+				continue
+			_add_blast_cell(cells, cell)
+			_hit_cell(cell, bomb.actor_id, blasts, broken, false)
 			if tile == &"soft":
-				_board[cell] = &"floor"
-				broken.append(cell)
-				_actors[bomb.actor_id].score += 10
-				_pending_drops.append({"cell": cell, "born": _tick, "frame": 0})
-				break
+				continuing[ray] = false
+			else:
+				_deliver_blast_contact(cell, bomb.actor_id)
 	blasts.append({"actor_id": bomb.actor_id, "cell": bomb.cell, "cells": cells})
 	if _rules.get("damage", false):
 		_flames.append({"cells": cells.duplicate(), "count": 0 if _late_blast else 1, "bomb": bomb,
 			"expires": _tick + 16, "actor_id": bomb.actor_id})
-		for cell in cells:
-			_fire[cell] = true
-			for actor_id in _actor_ids:
-				if _actors[actor_id].cell == cell:
-					if mine_contact and cell == bomb.cell and actor_id != bomb.actor_id:
-						var target: Dictionary = _actors[actor_id]
-						if target.alive and target.vehicle == &"" and target.shield == 0 and target.protected_until > _tick:
-							_actors[bomb.actor_id].score += 100
-							_actors[bomb.actor_id].kills += 1
-					_hurt(actor_id, bomb.actor_id)
 	else:
 		_bombs.erase(bomb)
+
+
+func _add_blast_cell(cells: Array[Vector2i], cell: Vector2i) -> void:
+	cells.append(cell)
+	if _rules.get("damage", false): _fire[cell] = true
+
+
+func _deliver_blast_contact(cell: Vector2i, owner: StringName) -> void:
+	for id in _actor_ids:
+		if _actors[id].cell == cell: _hurt(id, owner)
 
 
 func _hurt(actor_id: StringName, owner: StringName) -> void:

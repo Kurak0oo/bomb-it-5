@@ -2,22 +2,25 @@
 
 ## Current boundary
 
-Fidelity implementation #38–#55 is in progress on 2026-10-20, approved by the
-user's implement instruction. The graph has 18 tickets and 32 native blocker
+Fidelity implementation #38–#55 is implemented, desktop-verified and reviewed on
+2026-10-20, approved by the user's implement instruction. The graph has 18 tickets and 32 native blocker
 edges; #20 additionally waits for #55. Source-grounded regressions use the real
 scheduler/round with copied controller observations and focused scene checks.
 See [verification](verification/fidelity-2026-10-20/README.md) for coverage,
-conversions and review status. DESIGN.md records the implementation conversions
+conversions and completed Standards/Spec reviews. All 408 checks pass, including
+164 focused fidelity checks and three full-board playthroughs; 14 production
+scripts parse/typecheck. These counts are not a claim of complete original-runtime
+parity. DESIGN.md records the implementation conversions
 under its decision history. Finished original artwork #20, final desktop/human
 acceptance #21 and later physical phone/iOS evaluation remain separate.
 
 The 2026-10-16 repository audit found an empty main scene and project configuration, with no gameplay scripts, tests, SWF, or recovery records. Inspect the files for subsequent implementation state.
 
-The Godot 4.5 desktop game is runnable. It opens in one-actor practice and offers a local match against three AI on the recorded Cinema board. Continuous cardinal/diagonal movement, collision/corridor assistance, paired portals, ordinary bombs/chains, persistent hazards, damage/protection, conditional pickups, source-reachable weapons/rides, round time/endings, lives/score/HUD, results/retry/new-session flow and original vector presentation are integrated. The scene drives one scheduler and consumes owned round results. Desktop verification passes 244 checks, including full-board victory/defeat playthroughs, and rendered captures are inspected below; physical phone/iOS testing and export remain deferred. The four named unresolved item slots remain empty. Read [runtime evidence](evidence/edition-5-runtime-systems.md) for source mappings, explicit omissions and parity limits.
+The Godot 4.5 desktop game is runnable. It opens in one-actor practice and offers a local match against three AI on the recorded Cinema board. Continuous cardinal/diagonal movement, collision/corridor assistance, paired portals, ordinary bombs/chains, persistent hazards, damage/protection, conditional pickups, source-reachable weapons/rides, round time/endings, lives/score/HUD, results/retry/new-session flow and temporary original vector presentation are integrated. The scene drives one scheduler and consumes owned round results. The original 244-check baseline is extended to 408 passing checks by the reviewed fidelity work, with inspected rendered captures in the linked verification record; physical phone/iOS testing and export remain deferred. The four named unresolved item slots remain empty. Read [runtime evidence](evidence/edition-5-runtime-systems.md) for source mappings, explicit omissions and parity limits.
 
 The [complete runnable Godot game specification](specs/runnable-godot-game.md) consolidates the accepted delivery scope through Q28, with user-confirmed tests through the existing scheduler/real round and a small scene-test layer. It preserves practice as an intermediate milestone and physical phone/iOS testing after publication-ready Godot development. Source-recovery prerequisites are explicit rather than treated as settled behavior. GitHub Issues and the default triage vocabulary are configured; the specification is published as [issue #1](https://github.com/Kurak0oo/bomb-it-5/issues/1) with `ready-for-agent`. The approved 20-ticket implementation graph is published as issues #2–#21 with 29 native blocking edges. Gameplay functionality is implemented and desktop checks pass; presentation #20 and final acceptance #21 remain open pending source-feel parity work, the finished redraw and desktop play-quality assessment. Further joystick polish is deferred to physical phone testing by the user. Consult live issue states before claiming subsequent work.
 
-The current work is reverse engineering before further fidelity rebuilding: retain the playable baseline, reconstruct the original selected-scope structure and dynamic behavior, then replace identified approximations. The [first audit](evidence/edition-5-reverse-engineering-audit.md) is the historical static/source preparation. Independent original playback and controlled dynamic traces are now recorded in the [evidence index](evidence/README.md); paired Godot fidelity work remains unimplemented.
+The reverse-engineering-first recovery and selected fidelity port are complete. The [first audit](evidence/edition-5-reverse-engineering-audit.md) is historical static/source preparation. Independent original playback and controlled dynamic traces are recorded in the [evidence index](evidence/README.md); the [fidelity verification](verification/fidelity-2026-10-20/README.md) records which recovered behavior is now ported, comparison coverage and bounded remaining differences. Final artwork and human desktop acceptance are the next delivery gates.
 
 The user approved the 16 recovery-ticket breakdown by invoking implement. Issues [#22–#37](https://github.com/Kurak0oo/bomb-it-5/issues/22) are published with 29 verified native blocking edges. #22–#37 now meet the reviewed selected-scope recovery criteria. The [acceptance audit](evidence/edition-5-recovery-verification.md) records the evidence, review findings/fixes and checks. The [reviewed handoff](evidence/edition-5-porting-handoff.md) maps recovered behavior to current Godot differences. The [canonical tooling record](evidence/edition-5-recovery-tooling.md) preserves builds, exact patches and instrumentation limits. Parent #1 is unchanged, and presentation #20/final acceptance #21 stay open. Complete original-runtime evidence against each ticket's criteria before closure; the new-game tests do not substitute for it.
 
@@ -26,7 +29,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Branch | State | Prerequisite / next action |
 | --- | --- | --- |
 | Rules authority | Settled | Edition 5; see DESIGN.md and ADR 0001 |
-| Reverse engineering before fidelity rebuilding | Controlled original recovery recorded for #22–#37 on 2026-10-19 | Read the [porting handoff](evidence/edition-5-porting-handoff.md) and [evidence index](evidence/README.md). Review/acceptance is complete; port identified approximations through the real scheduler/round seam; 244 functional checks are not paired parity |
+| Reverse engineering before fidelity rebuilding | Recovery #22–#37 complete; fidelity #38–#55 implemented and reviewed on 2026-10-20 | Read the [porting handoff](evidence/edition-5-porting-handoff.md), [evidence index](evidence/README.md) and [port verification](verification/fidelity-2026-10-20/README.md). Finished redraw #20 precedes final human desktop acceptance #21; 408 passing checks are not complete paired parity |
 | Command calling contract | Implemented and checked on 2026-10-16 | See DESIGN.md for accepted behavior and the interface below |
 | Fidelity of clock, lives, score and endings | Settled on 2026-10-16 | Recover exact behavior before implementation |
 | Original input and timing | Static source recovered on 2026-10-16 | Read [the evidence](evidence/edition-5-input-and-timing.md); runtime cadence and lifecycle edge cases remain unmeasured |
@@ -104,7 +107,7 @@ The implement request on 2026-10-19 proceeds with the proposed first-bomb seam: 
 
 The command checks verify that a valid explicit call advances exactly one tick and consumes one command per registered actor without rendering. They verify that missing, duplicate, and unknown actors leave state unchanged, and that roster size is not hard-coded to four. Scheduler checks cover partial intervals, 35 ticks across different render rates, stall limits and discarded debt, per-actor held direction, ordered events consumed once, invalid intake, pause/resume and focus notifications. One short live SceneTree check verifies automatic Node processing; timing assertions otherwise supply elapsed time directly.
 
-Run `./tools/run_checks.ps1 -Godot 'path/to/Godot_4.5_console.exe'` from PowerShell. Without `-Godot`, the runner uses the local ignored `.scratch/godot-4.5/Godot_v4.5-stable_win64_console.exe` if present. It requires a Godot 4.5 executable, successful exits, no engine/script errors, and all seven suites' success markers.
+Run `./tools/run_checks.ps1 -Godot 'path/to/Godot_4.5_console.exe'` from PowerShell. Without `-Godot`, the runner uses the local ignored `.scratch/godot-4.5/Godot_v4.5-stable_win64_console.exe` if present. It requires a Godot 4.5 executable, successful exits, no engine/script errors, and all eight suites' success markers.
 
 ## Implemented interface
 

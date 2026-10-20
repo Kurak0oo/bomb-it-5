@@ -1,8 +1,9 @@
 # Desktop fidelity implementation
 
 Implementation of approved tickets [#38–#55](https://github.com/Kurak0oo/bomb-it-5/issues/38),
-starting from `74ab044`. Verification/review is in progress; this record does not
-close finished-redraw #20 or final desktop/human acceptance #21.
+starting from `74ab044`. Implementation, desktop verification and both review axes
+are complete. This record does not close finished-redraw #20 or final
+desktop/human acceptance #21.
 
 ## What changes in play
 
@@ -33,6 +34,54 @@ remain separate from route following; actor stop/death/transfer affects registra
 Death detaches an actor before its movie finishes. Ending judgment can be triggered
 by another completed death movie. The cartoon precedes one settlement, which
 spends a loss heart and replaces HUD awards with the final result formula.
+
+The user's roughly half-second bomb-tail observation is consistent with selected
+original recordings: detonation at frame 804 and fire cleanup at 821 span 17
+nominal frame intervals, about 0.486 seconds at 35 fps. Those were unpaced
+instrumented observations, not measured wall time or a universal hazard duration.
+The port preserves callback cleanup and contact registration rather than simply
+shortening that tail. See the [original contact probes](../../evidence/edition-5-bomb-contact-probes.md).
+Weapon feedback now follows separate windup, impact/emission and recovery states;
+the final redraw must make these readable without changing their damage timing.
+
+## Verification result
+
+All 408 checks pass on Godot 4.5: 28 command, 41 scheduler, 43 bomb, 16 round-play,
+84 regression, 164 fidelity, 29 scene and 3 full-board playthrough checks. All 14
+production scripts also pass standalone parsing/type checking. The focused
+fidelity artifact contains 44 declared fixtures, including 88 direct recorded
+original flamer endpoint comparisons; the remaining checks are source-derived
+regressions, not 76 additional paired original-runtime replays.
+
+The final full-board runs use one human desktop command driver and three
+production Normal AI. Seeds 2 and 5 reach legitimate zero-kill victories at ticks
+1848/2195 with final scores 3310/3210; seed 42 uses an ordinary self-bomb and
+reaches loss settlement at tick 237. Focused checks additionally cover timeout,
+simultaneous defeat, repeated settlement, retry/game-over/new-session flow and
+pending-work disposal. Human assessment of difficulty and feel remains #21.
+
+Fifteen rendered desktop/action captures are retained and were visually inspected.
+The refreshed [victory](desktop/victory.png) shows settled totals and enabled
+play-again; [ending](desktop/ending.png) shows the earlier loss cartoon with the
+retry action still disabled and the heart not yet spent. The labelled action
+fixtures expose the authoritative animation phases independently of map access.
+
+## Standards
+
+No outstanding documented-standard violations or material smell findings. The
+review's duplicated equipment-range cascade is now one shared `_attack_reach`
+helper; the Standards reviewer verified the fix.
+
+## Spec
+
+No outstanding material findings. The review found and verified fixes for three
+source-order differences: blast center contact now precedes recursive chains and
+rays visit distance rings before direction; external BLAST reaches every entry in
+a legal ordinary-bomb/mine stack; AI perception refreshes only at ready selected
+brain opportunities or explicit escape refreshes. New public-seam regressions
+exercise each case and pass. Both independent reviewers cleared the final fixes.
+
+Final review totals: Standards 0 outstanding; Spec 0 outstanding.
 
 ## Comparison coverage and source locators
 

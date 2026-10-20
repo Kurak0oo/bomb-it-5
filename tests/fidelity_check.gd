@@ -40,6 +40,9 @@ func _initialize() -> void:
 	_protected_mine_contact_credit()
 	_practice_death_animation()
 	_direction_and_action_share_input_phase()
+	_chain_contact_order()
+	_external_blast_hits_every_stacked_bomb()
+	_ai_perception_rotation()
 	if is_instance_valid(scheduler): scheduler.free()
 	var folder := ProjectSettings.globalize_path("res://.scratch/fidelity-port")
 	DirAccess.make_dir_recursive_absolute(folder)
@@ -454,3 +457,48 @@ func _direction_and_action_share_input_phase() -> void:
 	var state := _step(1, {&"human": Vector2.RIGHT}, {&"human": [&"down"]})
 	_expect(state.attacks[0].direction == Vector2i.RIGHT and state.actors[&"human"].position == Vector2(3, 3),
 		"admitted heading can turn and begin a locked action before physical movement for either controller")
+
+
+func _chain_contact_order() -> void:
+	# Bomb.blast sets center fire/damage before rays; rays visit distance before direction.
+	_start({&"human": {"cell": Vector2i(3, 3)}, &"ai": {"cell": Vector2i(4, 3)}}, {"damage": true})
+	_step(1, {}, {&"human": [&"down"], &"ai": [&"down"]})
+	var state := _step(72)
+	_expect(not state.actors[&"human"].alive and state.actors[&"ai"].kills == 0,
+		"initiating center self-hit occurs before a recursive neighbor can receive that kill credit")
+	_start({&"human": {"cell": Vector2i(3, 3), "power": 2, "protected_until": 1000},
+		&"upper": {"cell": Vector2i(3, 1), "protected_until": 1000},
+		&"right": {"cell": Vector2i(4, 3), "power": 2, "protected_until": 1000},
+		&"victim": {"cell": Vector2i(4, 1)}}, {"damage": true})
+	_step(1, {}, {&"human": [&"down"], &"upper": [&"down"], &"right": [&"down"]})
+	state = _step(72)
+	_expect(state.actors[&"right"].kills == 1 and state.actors[&"upper"].kills == 0,
+		"distance-one Right chain delivers damage before the initiating distance-two Up chain")
+
+
+func _external_blast_hits_every_stacked_bomb() -> void:
+	_start({&"human": {"cell": Vector2i(4, 3), "protected_until": 1000},
+		&"ai": {"cell": Vector2i(3, 3), "protected_until": 1000}},
+		{"damage": true, "drops": true, "pickups": {Vector2i(3, 3): &"landmine"}})
+	_step(1, {}, {&"human": [&"down"], &"ai": [&"down"]})
+	_step(1, {}, {&"ai": [&"down"]})
+	var state := _step(71)
+	_expect(state.bombs.is_empty() and state.actors[&"ai"].bomb_count == -1,
+		"external BLAST visits both ordinary and mine entries in a legal same-cell stack")
+
+
+func _ai_perception_rotation() -> void:
+	_start({&"human": {"cell": Vector2i(9, 5), "protected_until": 1000},
+		&"a": {"cell": Vector2i(3, 3)}, &"b": {"cell": Vector2i(4, 3)}, &"c": {"cell": Vector2i(5, 3)}}, {})
+	ai = AI.new(42)
+	for id in [&"a", &"b", &"c"]:
+		scheduler.set_controller(id, _produce_ai.bind(id))
+	_step(15)
+	_step(1, {}, {&"human": [&"down"]})
+	var state := _step()
+	_expect(state.controller_observations[&"b"].perception.danger.has(Vector2i(9, 5)) and not state.controller_observations[&"c"].perception.danger.has(Vector2i(9, 5)),
+		"new bombs enter only the selected brain's cached perception while off-turn routes retain their previous observation")
+
+
+func _produce_ai(id: StringName) -> Dictionary:
+	return ai.command(simulation.snapshot(), id)

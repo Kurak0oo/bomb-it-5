@@ -3,12 +3,12 @@
   "ruffle_revision": "45366370ed7d1a59c89aa3cf7b765c7a274407cd",
   "baseline_commit": "74ab044",
   "godot": "4.5.stable.official.876b29033",
-  "checks": 160,
+  "checks": 164,
   "failed_comparisons": 0,
-  "comparison_fixtures": 40,
+  "comparison_fixtures": 44,
   "comparison_artifact": {
     "path": "docs/verification/fidelity-2026-10-20/comparisons.json",
-    "sha256": "041a50b9002348da1fa71f2a591755187aaec7118d796e003bcca57046a9d12e"
+    "sha256": "ee0d48dc048ca6a02ffe2028c516cc8b253ec09fa96cd2f2345906e9cb44f92a"
   },
   "production_scripts": [
     {
@@ -21,7 +21,7 @@
     },
     {
       "path": "scripts/simulation/ai_controller.gd",
-      "sha256": "e11cf1e3a41d68d7b6ddb00fde46a025f4d7217c027d68eb685cf7aee64dcae7"
+      "sha256": "546accc7ba0ef69ec1a62c27dcf1e608d1c15f0bb410c01700c5b88fefb55bb7"
     },
     {
       "path": "scripts/simulation/ai_perception.gd",
@@ -37,7 +37,7 @@
     },
     {
       "path": "scripts/simulation/bomb_simulation.gd",
-      "sha256": "2c914cc8307aff5ce22409f5374a852da67b1ed51020362ebaf2143d4476f170"
+      "sha256": "819bbeb34a4753f2804fe818644e1ceca59321be041536edafefb50071b9e266"
     },
     {
       "path": "scripts/simulation/command_boundary.gd",
@@ -71,31 +71,31 @@
   "captures": [
     {
       "path": "docs/verification/fidelity-2026-10-20/desktop/death.png",
-      "sha256": "37ed70060b7d0466f6cfba56f5994d70ea6b85112e15219e877dced8e409168d"
+      "sha256": "48d904eba9e167631178874b65ac05c717f72d0d50d0d24524f0235cabb836da"
     },
     {
       "path": "docs/verification/fidelity-2026-10-20/desktop/ending.png",
-      "sha256": "31ff2b9dc1ccae457c47694a360ae1c7e59b05c40acd4418f291afcc3d34bb14"
+      "sha256": "4a05fb6385e4b4bc565753471c0faaf1d0dfe526a9563e51f30b5bad9fba2b62"
     },
     {
       "path": "docs/verification/fidelity-2026-10-20/desktop/game-over.png",
-      "sha256": "3b14273859633bd42272a7a65c389bcb9d47404d8a10c619b008cd0a61aa6410"
+      "sha256": "37e2fc0363334019045b7714afd22c7cefd9b287ed5e8bfcf3e1ae674fb3f64a"
     },
     {
       "path": "docs/verification/fidelity-2026-10-20/desktop/match.png",
-      "sha256": "22ea9a5179a660f71f128a7ccb30a49d25c72b2c3ed09458f35fa6ec241ca576"
+      "sha256": "9b55c0d197e0c86fc269407099f09b9793bdf2c187b3b40b47ee901e96cc990f"
     },
     {
       "path": "docs/verification/fidelity-2026-10-20/desktop/pause.png",
-      "sha256": "cddf443c6a40f15f10591b20d8aa0f2858cdb715a127e78c862d54c1dd05513f"
+      "sha256": "797b96645d0ea6abd7d86ee399b077618b970848ad8b4470ab3e45bfedf27376"
     },
     {
       "path": "docs/verification/fidelity-2026-10-20/desktop/results.png",
-      "sha256": "4d0957c2fc4ec81f1b561f2264aa5282c5a7b1303db70a1495f6cc6affc5d7f3"
+      "sha256": "fb0dbf5e288c9a76683c5048dc385e1be184e6d92d595198aef880c339077ad1"
     },
     {
       "path": "docs/verification/fidelity-2026-10-20/desktop/victory.png",
-      "sha256": "7f5eafc7aca8be2813d3902a01e05538d0170baac610bdd2dadc46c396d6beaf"
+      "sha256": "aae093ed12cdb1fc115d43f36393a89d53658e03fe91b8e348ede739859cc7ed"
     },
     {
       "path": "docs/verification/fidelity-2026-10-20/actions/fireball-charge.png",
@@ -1455,31 +1455,34 @@
   ],
   "desktop_playthroughs": [
     {
-      "elapsed_ms": 5318,
-      "kills": 1,
+      "elapsed_ms": 2971,
+      "human_input": "desktop command driver",
+      "kills": 0,
       "outcome": "won",
-      "remaining_soft": 17,
-      "score": 3490,
+      "remaining_soft": 25,
+      "score": 3310,
       "seed": 2,
-      "tick": 2267
+      "tick": 1848
     },
     {
-      "elapsed_ms": 5885,
-      "kills": 2,
+      "elapsed_ms": 3640,
+      "human_input": "desktop command driver",
+      "kills": 0,
       "outcome": "won",
-      "remaining_soft": 12,
-      "score": 3660,
+      "remaining_soft": 16,
+      "score": 3210,
       "seed": 5,
-      "tick": 2704
+      "tick": 2195
     },
     {
-      "elapsed_ms": 5324,
-      "kills": 1,
-      "outcome": "won",
-      "remaining_soft": 12,
-      "score": 3480,
+      "elapsed_ms": 227,
+      "human_input": "ordinary self-bomb then idle",
+      "kills": 0,
+      "outcome": "lost",
+      "remaining_soft": 65,
+      "score": 0,
       "seed": 42,
-      "tick": 2297
+      "tick": 237
     }
   ]
 }

@@ -2,6 +2,12 @@
 
 Prepared 2026-10-19 for [#37](https://github.com/Kurak0oo/bomb-it-5/issues/37). The selected Normal Arcade/Cinema structure is now explained by source, bytecode and controlled original-runtime cases. The current Godot game remains a playable reconstruction with specific approximations. These findings have **not** been ported by this research work. This report identifies differences and an ordered implementation path; it does not close a tracker gate, certify release readiness or assign a fidelity percentage.
 
+Subsequent implementation on 2026-10-20 ports the selected responsibilities through
+approved tickets #38–#55. The [desktop fidelity verification](../verification/fidelity-2026-10-20/README.md)
+records the current implementation, comparison coverage, reviewed fixes and
+remaining limits. The classifications below describe the pre-port build inspected
+for this recovery handoff; they are retained as historical findings.
+
 ## Authority and evidence strength
 
 Authority is the unchanged publisher SWF, SHA256 `718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2`. ActionScript paths below are relative to `.scratch/edition-5-research/publisher-scripts/scripts/zlong/bombit5/`. [Structure reconstruction](edition-5-structure-reconstruction.md) owns startup, ownership, phases and bytecode corroboration; [the inventory](edition-5-structure-inventory.json) pins source/timeline identities. The inspected `scripts/` implementation is native GDScript; it does not embed the original ActionScript runtime.

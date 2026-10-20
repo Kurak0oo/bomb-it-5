@@ -43,7 +43,8 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 			return a.alive and a.transit_until == 0 and a.busy_until <= state.tick)
 		_selected = active[_rotation % active.size()] if not active.is_empty() else &""
 		_rotation = (_rotation + 1) % maxi(1, active.size())
-	memory.perception = Perception.observe(state, id, _node_costs)
+	var ready_to_think: bool = id == _selected and (memory.ready or memory.answer_elapsed > 20.0)
+	if ready_to_think: memory.perception = Perception.observe(state, id, _node_costs)
 	_run_pending(state, id, memory, output)
 	if not output.bomb_events.is_empty():
 		output.observation = _observation(memory, false)
@@ -56,12 +57,12 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 		return output
 	if not memory.complete and state.tick >= memory.timer: _cancel(memory)
 	if id == _selected:
-		if memory.ready:
+		if memory.ready or memory.answer_elapsed > 20.0:
+			memory.ready = true
 			if memory.complete: _choose(state, id, memory)
 		else:
 			# Source never resets this cached accumulator after its initial threshold.
-			if memory.answer_elapsed > 20.0: memory.ready = true
-			else: memory.answer_elapsed = state.tick * 1000.0 / 35.0
+			memory.answer_elapsed = state.tick * 1000.0 / 35.0
 	_follow(state, id, memory, output)
 	output.observation = _observation(memory, id == _selected)
 	return output
@@ -161,7 +162,7 @@ func _best(state: Dictionary, start: Vector2i, candidates: Array, costs: Diction
 func _attack_position(state: Dictionary, actor: Dictionary, perception: Dictionary, targets: Array) -> Dictionary:
 	var best := {}
 	var price := 1000
-	var reach: int = actor.power if actor.weapon == &"" else 1 if actor.weapon in [&"landmine", &"hammer"] else 3 if actor.weapon == &"flamer" else 17
+	var reach := _attack_reach(actor)
 	for aim in targets:
 		if CARDINAL.any(func(direction): return state.get("bomb_occupancy", state.bombs).any(func(b): return b.cell == aim + direction)):
 			continue
@@ -281,6 +282,7 @@ func _run_pending(state: Dictionary, id: StringName, memory: Dictionary, output:
 			output.bomb_events = [&"down", &"up"]
 			memory.complete = true
 		&"escape":
+			memory.perception = Perception.observe(state, id, _node_costs)
 			var target: Variant = _best(state, state.actors[id].cell, memory.perception.free.duplicate(), memory.perception.costs, 1500)
 			if target == null:
 				memory.pending = &"escape"
@@ -303,12 +305,13 @@ func _on_step(state: Dictionary, id: StringName, memory: Dictionary, output: Dic
 			memory.due = state.tick + 11
 		return
 	var draw := _random()
-	if draw < 0.8 and (_danger(memory.perception, actor.cell, 30) or _danger(memory.perception, next, 30) or _danger(memory.perception, after, 30)):
+	var dodge_chance := 1.0 if memory.state == &"Escape" else 0.8
+	if draw < dodge_chance and (_danger(memory.perception, actor.cell, 30) or _danger(memory.perception, next, 30) or _danger(memory.perception, after, 30)):
 		_cancel(memory)
 		return
 	if draw < 0.6 and memory.state in [&"Attack", &"Box"]:
 		var human: Dictionary = state.actors[state.actors.keys()[0]]
-		var reach: int = actor.power if actor.weapon == &"" else 1 if actor.weapon in [&"landmine", &"hammer"] else 3 if actor.weapon == &"flamer" else 17
+		var reach := _attack_reach(actor)
 		var delta: Vector2i = human.cell - actor.cell
 		if human.alive and human.protected_until <= state.tick and (delta.x == 0 or delta.y == 0) and _manhattan(human.cell, actor.cell) <= reach:
 			var direction := Vector2i(signi(delta.x), signi(delta.y))
@@ -343,6 +346,10 @@ func _invincible_enemies(state: Dictionary, id: StringName) -> Array:
 
 func _manhattan(a: Vector2i, b: Vector2i) -> int:
 	return absi(a.x - b.x) + absi(a.y - b.y)
+
+
+func _attack_reach(actor: Dictionary) -> int:
+	return actor.power if actor.weapon == &"" else 1 if actor.weapon in [&"landmine", &"hammer"] else 3 if actor.weapon == &"flamer" else 17
 
 
 func _random() -> float:
