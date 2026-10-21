@@ -11,7 +11,7 @@ This file owns accepted product and architecture decisions. [Development](docs/d
 - Godot 4.5, GDScript, Compatibility renderer. Keep `config/features` at 4.5. Gameplay uses 35 logical ticks per second through an external scheduler, as accepted below. The scheduler accumulates elapsed time from a Node's `_process`; leave `physics/common/physics_ticks_per_second` unset. The logical rate does not require changing Godot's global physics setting. [Edition 5 research](docs/evidence/edition-5-input-and-timing.md) independently recovers a requested stage rate of 35 fps and frame-driven updates. Inherited platform notes live in [Douyin](docs/douyin.md).
 - Phone, landscape, locked. If the exporter forces portrait, the export waits. The game does not.
 - The board is centered. A translucent stick sits on the left of the playfield and a translucent bomb button on the right. Both are inside the game view. Touches on the grid do nothing. The notch and the Douyin capsule stay clear of both controls. Extra item buttons wait until the SWF says an item needs its own button.
-- One human against zero to three AI, chosen in Game Settings (2026-10-21, below). The first match was one human and three AI. No second human on the same phone: the original local 2-player setting is deferred.
+- One human against one to three AI, chosen in Game Settings (2026-10-21, below). The first match was one human and three AI. No second human on the same phone: the original local 2-player setting is deferred.
 - Later, in order: co-op against AI across phones, then PvP. No networking in the first slice. No accounts.
 - A round has a replaceable ending. The selected first ending is "all enemies are dead," source-supported for normal Arcade play in the [Dots evidence assessment](docs/evidence/edition-5-play-observations.md). For the new game, timeout is a loss while enemies remain, deliberately replacing the original anomalous timeout-completion path. Later modes and tasks are another ending plus extra rules on the same round. The first build implemented one ending; the complete game adds the other selectable edition 5 modes on the same round (2026-10-21, below).
 - Before the SWF is read, the only bomb behavior that may be coded is the shared match: place a bomb, a fuse, a plus-shaped blast, and soft blocks that break. The glove, the bouncer, the magic carpet, and the heavy bomb are named empty slots. Nothing fills a slot from a portal description.
@@ -124,7 +124,7 @@ list what the original offers; recovered rules still precede implementation.
   across sets, and Easy, Normal and Hard.
 - **Unlocks:** the original cloth and hat unlocks are included and saved locally
   on the device. There are no accounts.
-- **Players:** one human against zero to three AI. Local 2-player is deferred;
+- **Players:** one human against one to three AI. Local 2-player is deferred;
   co-op across phones, then PvP, remain the later multiplayer order.
 - **Extensibility:** future modes, maps, rules and enemy designs plug into the same
   admitted round and scheduler rather than forking it. A mode supplies its ending,

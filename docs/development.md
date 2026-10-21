@@ -56,7 +56,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
 | Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
-| Complete edition 5 game scope | Accepted on 2026-10-21; specification drafted, awaiting approval | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 0–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Next: draft the parent specification and tickets for approval. #21 will be blocked by them; #20 stays open |
+| Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
 
@@ -84,7 +84,15 @@ The static recovery is recorded in [modes and flow](evidence/edition-5-modes-and
 The user then accepted: 5/10/15/20 levels with the source's 5-sets-1 defect
 fixed; one to three enemies for one player, as in the source; and runtime
 observation of each mode, difficulty and stage-set map feature before porting it.
-The [draft specification](specs/complete-edition-5-game.md) awaits approval with its ticket graph before publication.
+The user approved the [specification](specs/complete-edition-5-game.md) and its
+ticket graph, deferring audio. It is published as
+[issue #56](https://github.com/Kurak0oo/bomb-it-5/issues/56) with sub-issues #57–#70,
+each `ready-for-agent`: #57 mode/board/AI-profile seams; #58 recorded layouts and
+board rolls; #59 menu, settings, character select and session; #60 Easy/Hard;
+#61 How to Play and key rebinding; #62 unlocks; #63–#66 Zoo, Birthday Party,
+Candy Factory and Magic Library; #67 Kill; #68 Green Zone; #69 Pac-Man; #70
+workbench catalogue. Blockers are recorded as `Blocked by` sections. #21 now
+verifies the complete game and is blocked by #20 and #57–#70.
 
 ### 2026-10-21 SWF-derived candidate art
 

@@ -2,8 +2,8 @@
 
 Specification drafted on 2026-10-21 from the accepted complete-game scope
 ([DESIGN.md](../../DESIGN.md), [ADR 0007](../adr/0007-complete-edition-5-game.md))
-and the [modes and flow recovery](../evidence/edition-5-modes-and-flow.md). Not yet
-published; it extends [the runnable game specification](runnable-godot-game.md),
+and the [modes and flow recovery](../evidence/edition-5-modes-and-flow.md). Published
+as [issue #56](https://github.com/Kurak0oo/bomb-it-5/issues/56) with tickets #57–#70; it extends [the runnable game specification](runnable-godot-game.md),
 whose accepted rules still apply.
 
 ## Problem Statement
