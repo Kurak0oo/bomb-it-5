@@ -3,8 +3,13 @@ extends Node2D
 
 const PITCH := 36.0
 const ORIGIN := Vector2(334, 86)
-const IDS := [&"human", &"ruby", &"mint", &"gold"]
-const COLORS := [Color("66d8ff"), Color("ed86c6"), Color("8ce2b5"), Color("ffd470")]
+## Art slots and native colours per robot r0-r7 (Session.ROBOTS order).
+const ROBOT_SLOTS := [&"human", &"ruby", &"lime", &"gold", &"violet", &"slate", &"mint", &"snow"]
+const ROBOT_TITLES := ["BLUE", "RUBY", "LIME", "GOLD", "VIOLET", "SLATE", "MINT", "SNOW"]
+const ROBOT_COLORS := [Color("66d8ff"), Color("ed86c6"), Color("b6e36a"), Color("ffd470"),
+	Color("b394f0"), Color("9aa6b4"), Color("8ce2b5"), Color("f2f4f7")]
+## Standalone seat robots when an actor carries no explicit robot.
+const SEAT_ROBOTS := {&"human": 0, &"ruby": 1, &"mint": 6, &"gold": 3}
 const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
 	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
 	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●"}
@@ -40,7 +45,7 @@ func _draw() -> void:
 		_box(Rect2(10, 10, 1260, 700), Color("163e51"), Color("39798a"), 18)
 	_label(Vector2(30, 49), "LOCAL ARCADE", 29, Color("ffd989"))
 	_label(Vector2(335, 43), _board_title(), 27, Color("ffe6ad"))
-	_label(Vector2(336, 67), "PRACTICE" if practice else "ARCADE  /  NORMAL", 13, Color("9acbd3"))
+	_label(Vector2(336, 67), "PRACTICE" if practice else _mode_caption(), 13, Color("9acbd3"))
 	if state.is_empty():
 		return
 	if not skin.draw(self, "ui.timer", Rect2(805, 25, 141, 42)):
@@ -78,10 +83,13 @@ func _draw() -> void:
 		if skin.draw(self, "projectile." + projectile.kind, ArtCatalog.rect("projectile." + projectile.kind, at), state.tick, projectile.direction): continue
 		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, true)
 		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
-	for index in IDS.size():
-		if state.actors.has(IDS[index]):
-			_actor(state.actors[IDS[index]], index)
-			_hud(state.actors[IDS[index]], index)
+	var seat := 0
+	for id in state.actors:
+		var actor: Dictionary = state.actors[id]
+		var robot: int = actor.get("robot", SEAT_ROBOTS.get(id, seat))
+		_actor(actor, robot, id)
+		_hud(actor, seat, robot)
+		seat += 1
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind": _attack(attack)
 	_label(Vector2(1010, 339), "HOW TO PLAY", 17, Color("ffd989"))
@@ -102,6 +110,13 @@ func _draw() -> void:
 
 func _board_skin() -> StringName:
 	return state.get("board_meta", {}).get("skin", &"cinema") if not state.is_empty() else &"cinema"
+
+
+func _mode_caption() -> String:
+	if state.is_empty(): return ""
+	var caption := "%s  /  %s" % [str(state.get("mode", &"arcade")).to_upper().replace("_", " "), str(state.get("difficulty", &"normal")).to_upper()]
+	var level: String = state.get("session", {}).get("level", "")
+	return caption + ("  /  LEVEL " + level if level != "" else "")
 
 
 func _board_caption() -> String:
@@ -224,14 +239,14 @@ func _bomb(at: Vector2, mine: bool) -> void:
 		draw_circle(at + Vector2(8, -16), 3 + sin(state.tick * 0.8), Color("ffe49e"))
 
 
-func _actor(actor: Dictionary, index: int) -> void:
+func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 	var at: Vector2 = ORIGIN + (actor.position + Vector2.ONE * 0.5) * PITCH
-	var color: Color = COLORS[index]
+	var color: Color = ROBOT_COLORS[robot]
 	if not actor.alive:
 		if actor.get("removed", false): return
 		var progress := clampf(actor.get("death_frame", 1) / 60.0, 0.0, 1.0)
 		at.y -= sin(progress * PI) * 25
-		if skin.draw(self, "actor.%s.death" % IDS[index], ArtCatalog.rect("actor.%s.death" % IDS[index], at), state.tick, actor.facing, progress,
+		if skin.draw(self, "actor.%s.death" % ROBOT_SLOTS[robot], ArtCatalog.rect("actor.%s.death" % ROBOT_SLOTS[robot], at), state.tick, actor.facing, progress,
 			Color(1, 1, 1, 1.0 - progress * 0.7)): return
 		var skull := Color("e4f4e8")
 		skull.a = 1.0 - progress * 0.7
@@ -267,19 +282,19 @@ func _actor(actor: Dictionary, index: int) -> void:
 		color = color.lightened(0.35 if state.tick % 6 < 3 else 0.0)
 	var bob := sin(state.tick * 0.8) * 1.5 if actor.velocity.length() > 0.02 and not paused else 0.0
 	at.y += bob
-	var requested: bool = state.get("commands", []).any(func(command): return command.actor_id == IDS[index] and command.direction != Vector2.ZERO)
+	var requested: bool = state.get("commands", []).any(func(command): return command.actor_id == id and command.direction != Vector2.ZERO)
 	var action_progress := -1.0
 	for attack in state.attacks:
-		if attack.actor_id == IDS[index]:
+		if attack.actor_id == id:
 			action_progress = _attack_progress(attack)
 			break
 	var pose := "action" if action_progress >= 0 else "walk" if requested and actor.velocity.length() > 0.02 else "idle"
 	var modulation := Color(1, 1, 1, color.a)
 	if actor.blink_until > state.tick and state.tick % 6 < 3: modulation = Color(1.35, 1.35, 1.35, color.a)
-	var slot := "actor.%s.%s" % [IDS[index], pose]
+	var slot := "actor.%s.%s" % [ROBOT_SLOTS[robot], pose]
 	var replaced: bool = skin.draw(self, slot, ArtCatalog.rect(slot, at), state.tick, actor.facing, action_progress, modulation)
 	if not replaced and pose != "idle":
-		replaced = skin.draw(self, "actor.%s.idle" % IDS[index], ArtCatalog.rect("actor.%s.idle" % IDS[index], at), state.tick, actor.facing, -1, modulation)
+		replaced = skin.draw(self, "actor.%s.idle" % ROBOT_SLOTS[robot], ArtCatalog.rect("actor.%s.idle" % ROBOT_SLOTS[robot], at), state.tick, actor.facing, -1, modulation)
 	if replaced:
 		if actor.weapon != &"":
 			if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
@@ -299,14 +314,14 @@ func _actor(actor: Dictionary, index: int) -> void:
 			_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
 
 
-func _hud(actor: Dictionary, index: int) -> void:
+func _hud(actor: Dictionary, index: int, robot: int) -> void:
 	var at := Vector2(28, 90 + index * 85)
 	if not skin.draw(self, "ui.roster", Rect2(at, Vector2(251, 76))):
-		_box(Rect2(at, Vector2(251, 76)), Color("234e62"), COLORS[index].darkened(0.25), 12)
-	if not skin.draw(self, "actor.%s.portrait" % IDS[index], Rect2(at + Vector2(11, 11), Vector2.ONE * 38)):
-		draw_circle(at + Vector2(30, 30), 19, COLORS[index].darkened(0.1))
+		_box(Rect2(at, Vector2(251, 76)), Color("234e62"), ROBOT_COLORS[robot].darkened(0.25), 12)
+	if not skin.draw(self, "actor.%s.portrait" % ROBOT_SLOTS[robot], Rect2(at + Vector2(11, 11), Vector2.ONE * 38)):
+		draw_circle(at + Vector2(30, 30), 19, ROBOT_COLORS[robot].darkened(0.1))
 		_label(at + Vector2(17, 36), "P1" if index == 0 else "AI", 17, Color("173649"))
-	_label(at + Vector2(61, 23), "YOU" if index == 0 else str(IDS[index]).to_upper(), 17, COLORS[index])
+	_label(at + Vector2(61, 23), "YOU" if index == 0 else ROBOT_TITLES[robot], 17, ROBOT_COLORS[robot])
 	_label(at + Vector2(177, 23), "♥%d%s" % [actor.lives, " OUT" if not actor.alive else ""], 15, Color("ffe4ad"))
 	_label(at + Vector2(61, 44), "B %d   P %d   S %d" % [actor.capacity, actor.power, roundi((actor.speed - 1.6) / 0.1) + 1], 14)
 	_label(at + Vector2(61, 64), "SCORE %d" % actor.score, 14, Color("b4d2d7"))

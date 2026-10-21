@@ -221,7 +221,7 @@ func snapshot() -> Dictionary:
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
 		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
-		"mode": _mode.name, "board_meta": _rules.get("board_meta", {}),
+		"mode": _mode.name, "difficulty": _mode.difficulty, "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
 		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys()}
 

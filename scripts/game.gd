@@ -12,7 +12,14 @@ const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
 const AIProfiles = preload("res://scripts/simulation/ai_profiles.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
+const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
+## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
+const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
+
+## A session-driven level finished its ending; the host shows the score screen.
+signal level_settled(snapshot: Dictionary)
+signal main_menu_requested
 
 var simulation: RefCounted
 var scheduler: Node
@@ -29,6 +36,9 @@ var result_credited := false
 var view: Node2D
 var visual_skin: RefCounted
 var stage_set: StringName = &""
+## Set before entering the tree: a session drives levels and hides development controls.
+var session: RefCounted = null
+var auto_start := true
 
 
 func _ready() -> void:
@@ -47,7 +57,19 @@ func _ready() -> void:
 	_make_button("practice", "PRACTICE", Vector2(1010, 148), func(): start_session(true))
 	_make_button("pause", "PAUSE", Vector2(1010, 220), toggle_pause)
 	_make_button("reset", "RESET", Vector2(1010, 268), retry_round)
-	start_session(true)
+	_make_button("menu", "MAIN MENU", Vector2(1010, 268), func(): main_menu_requested.emit())
+	buttons.menu.visible = false
+	if session != null:
+		for key in ["match", "practice", "reset"]: buttons[key].visible = false
+	if auto_start: start_session(true)
+
+
+## Starts the session's current level on a freshly rolled board.
+func play_level() -> void:
+	session_lives = session.lives
+	total_score = session.total_score
+	stage_set = session.current_set
+	_start_round(false, session.next_seed())
 
 
 func start_session(is_practice: bool = false, seed_value: int = -1) -> void:
@@ -74,12 +96,16 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	paused = false
 	result_credited = false
 	held.clear()
-	var profile: Dictionary = AIProfiles.for_mode(&"arcade", &"normal")
+	var mode_name: StringName = session.mode if session != null else &"arcade"
+	var difficulty: StringName = session.difficulty if session != null else &"normal"
+	var profile: Dictionary = AIProfiles.for_mode(mode_name, difficulty)
 	var roster: Array[StringName] = []
-	roster.assign([&"human"] if practice else ACTORS)
+	roster.assign([&"human"] if practice else ACTORS.slice(0, 1 + (session.enemies if session != null else 3)))
+	var robots: Array[int] = DEFAULT_ROBOTS.duplicate()
+	if session != null: robots.assign([session.robot] + session.ai_robots)
 	var actors: Dictionary = {}
 	var session_seed := Time.get_ticks_msec() if seed_value < 0 else seed_value
-	var mode := ArcadeMode.new()
+	var mode: RefCounted = Modes.create(mode_name, difficulty, &"cinema")
 	var board: Dictionary
 	if practice:
 		board = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
@@ -91,7 +117,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		mode.stage_set = stage_set
 		board = Layouts.roll_set(stage_set, false, mode.soft_chance(), rng)
 	for index in roster.size():
-		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1}
+		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1, "robot": robots[index]}
 		if index > 0:
 			actors[roster[index]].merge({"speed": profile.speed, "power": profile.power, "capacity": profile.capacity})
 	simulation = Simulation.new(roster, actors, board.cells,
@@ -112,6 +138,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	touch_controls.reset()
 	buttons.pause.text = "PAUSE"
 	buttons.pause.disabled = false
+	buttons.menu.visible = false
 	buttons.reset.text = "RESET" if practice else "TRY AGAIN"
 	buttons.reset.disabled = not practice
 	_refresh()
@@ -121,7 +148,8 @@ func get_snapshot() -> Dictionary:
 	var result := state.duplicate(true)
 	result.paused = paused
 	result.session = {"lives": session_lives if result_credited else state.actors[&"human"].lives,
-		"total_score": total_score, "game_over": not practice and session_lives <= 0}
+		"total_score": total_score, "game_over": not practice and session_lives <= 0,
+		"level": session.level_text() if session != null else ""}
 	return result
 
 
@@ -147,6 +175,9 @@ func advance_time(seconds: float) -> void:
 			buttons.pause.disabled = true
 			buttons.reset.disabled = false
 			buttons.reset.text = "NEW SESSION" if session_lives == 0 else "PLAY AGAIN" if state.outcome == &"won" else "TRY AGAIN"
+			if session != null:
+				level_settled.emit(get_snapshot())
+				return
 	_refresh()
 
 
@@ -163,6 +194,7 @@ func toggle_pause() -> void:
 	touch_controls.enabled = not paused
 	touch_controls.reset()
 	buttons.pause.text = "RESUME" if paused else "PAUSE"
+	buttons.menu.visible = paused and session != null
 	_refresh()
 
 
@@ -174,6 +206,7 @@ func _notification(what: int) -> void:
 		touch_controls.enabled = false
 		touch_controls.reset()
 		buttons.pause.text = "RESUME"
+		buttons.menu.visible = session != null
 		_refresh()
 
 

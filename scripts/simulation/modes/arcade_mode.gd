@@ -37,9 +37,10 @@ func judge(round_state: RefCounted, judgment_ready: bool, tick: int) -> StringNa
 
 func settle(round_state: RefCounted, outcome: StringName, gameplay_end_tick: int) -> int:
 	var human: Dictionary = round_state.human()
-	var score: int = human.kills * 300
+	breakdown = {"kills": human.kills * 300, "time": 0, "difficulty": 0}
 	if outcome == &"won":
-		score += DIFF_POINT.get(difficulty, 2000) + remaining_seconds(gameplay_end_tick) * 10
+		breakdown.time = remaining_seconds(gameplay_end_tick) * 10
+		breakdown.difficulty = DIFF_POINT.get(difficulty, 2000)
 	else:
 		human.lives = maxi(0, human.lives - 1)
-	return score
+	return breakdown.kills + breakdown.time + breakdown.difficulty

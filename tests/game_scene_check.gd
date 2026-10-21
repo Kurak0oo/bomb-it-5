@@ -9,10 +9,11 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var scene = load("res://scenes/main.tscn").instantiate()
+	# The round host; the main scene wraps it in the menu flow (see flow_scene_check.gd).
+	var scene = load("res://scripts/game.gd").new()
 	root.add_child(scene)
 	await process_frame
-	_expect(scene.has_method("get_snapshot"), "main scene exposes the live game")
+	_expect(scene.has_method("get_snapshot"), "the round host exposes the live game")
 	if scene.has_method("get_snapshot"):
 		_expect(scene.get_snapshot().board.size() == 255, "practice loads the recorded full board")
 		scene.set_process(false)

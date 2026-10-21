@@ -11,7 +11,7 @@ var playing := false
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	state = {"tick": 12, "attacks": [], "actors": {}, "session": {"game_over": false}}
-	for id in IDS:
+	for id in ROBOT_SLOTS:
 		state.actors[id] = {"position": Vector2.ZERO, "cell": Vector2i.ZERO, "alive": true,
 			"facing": Vector2.DOWN, "velocity": Vector2.ZERO, "vehicle": &"", "shield": 0,
 			"protected_until": 0, "invincible_until": 0, "blink_until": 0, "transit_until": 0,
@@ -75,8 +75,8 @@ func _draw() -> void:
 				"portal_green": _sample_tile(Vector2i(8, 1), &"portal")
 				"portal_purple": _sample_tile(Vector2i(4, 7), &"portal")
 		"actor":
-			var index: int = IDS.find(StringName(kind))
-			draw_circle(at, 19, COLORS[index].darkened(0.1))
+			var index: int = ROBOT_SLOTS.find(StringName(kind))
+			draw_circle(at, 19, ROBOT_COLORS[index].darkened(0.1))
 			_label(at + Vector2(-13, 6), "P1" if index == 0 else "AI", 17, Color("173649"))
 		"item", "held":
 			draw_circle(at, 13, Color("d1fff0"))
@@ -117,16 +117,16 @@ func _sample_tile(cell: Vector2i, tile: StringName) -> void:
 
 
 func _sample_actor(kind: String, pose: String) -> void:
-	var index: int = IDS.find(StringName(kind))
-	var actor: Dictionary = state.actors[IDS[index]].duplicate(true)
+	var index: int = ROBOT_SLOTS.find(StringName(kind))
+	var actor: Dictionary = state.actors[ROBOT_SLOTS[index]].duplicate(true)
 	actor.facing = facing
 	actor.alive = pose != "death"
 	actor.velocity = facing if pose == "walk" else Vector2.ZERO
 	actor.death_frame = posmod(floori(sample_tick), 61)
-	state.commands = [{"actor_id": IDS[index], "direction": facing if pose == "walk" else Vector2.ZERO}]
+	state.commands = [{"actor_id": ROBOT_SLOTS[index], "direction": facing if pose == "walk" else Vector2.ZERO}]
 	state.attacks = [_sample_attack(&"hammer")] if pose == "action" else []
-	if not state.attacks.is_empty(): state.attacks[0].actor_id = IDS[index]
-	_actor(actor, index)
+	if not state.attacks.is_empty(): state.attacks[0].actor_id = ROBOT_SLOTS[index]
+	_actor(actor, index, ROBOT_SLOTS[index])
 
 
 func _sample_attack(kind: StringName) -> Dictionary:

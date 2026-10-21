@@ -7,6 +7,8 @@ const ROUND_TICKS := 6300
 var name: StringName = &"mode"
 var difficulty: StringName = &"normal"
 var stage_set: StringName = &"cinema"
+## Level-score parts of the last settlement, for the score screen (`countScore`).
+var breakdown := {}
 
 
 func drop_weights() -> Dictionary:
