@@ -53,6 +53,16 @@ func can_collect(_is_human: bool, _kind: StringName) -> bool:
 	return true
 
 
+## Weapons picked up are kept for the death scatter (`AbstractWeapon.addWeaponProp`).
+func keeps_weapon_pickups() -> bool:
+	return false
+
+
+## A robot killed by its own attack (`AbstractPlayer.killSelfHandler`).
+func on_self_kill(_actor: Dictionary) -> void:
+	pass
+
+
 ## Called once per admitted tick while playing; returns a pending outcome or &"".
 func judge(_round: RefCounted, _judgment_ready: bool, _tick: int) -> StringName:
 	return &""
@@ -61,6 +71,11 @@ func judge(_round: RefCounted, _judgment_ready: bool, _tick: int) -> StringName:
 ## Level score settled after the ending cartoon; also spends a retry heart on loss.
 func settle(_round: RefCounted, _outcome: StringName, _gameplay_end_tick: int) -> int:
 	return 0
+
+
+## The HUD's per-player mode score (`scoreData`); -1 shows the ordinary score.
+func points(_actor: Dictionary) -> int:
+	return -1
 
 
 func remaining_seconds(gameplay_end_tick: int) -> int:

@@ -1,0 +1,96 @@
+{
+  "name": "kill-cinema-idle",
+  "origin": "Input-only path to a Kill opening on Cinema (Normal), then one minute with the player idle, observed every 10 s",
+  "actions": [
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 285 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 356"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "step 350",
+      "capture": "t10"
+    },
+    {
+      "command": "step 350",
+      "capture": "t20"
+    },
+    {
+      "command": "step 350",
+      "capture": "t30"
+    },
+    {
+      "command": "step 350",
+      "capture": "t40"
+    },
+    {
+      "command": "step 350",
+      "capture": "t50"
+    },
+    {
+      "command": "step 350",
+      "capture": "t60"
+    }
+  ]
+}

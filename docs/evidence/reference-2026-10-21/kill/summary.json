@@ -1,0 +1,1230 @@
+[
+ {
+  "run": "kill-idle-01",
+  "captures": [
+   {
+    "capture": "opening-board",
+    "past_time": 1,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       15,
+       2
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       2,
+       13
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 6,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       15,
+       12
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "t10",
+    "past_time": 3,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       15,
+       6
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       10
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 6,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "boxing",
+      "vehicle": "",
+      "cell": [
+       10,
+       7
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "t20",
+    "past_time": 4,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 800,
+      "exists": true,
+      "state": "dead",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       6,
+       6
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 300,
+      "exists": true,
+      "state": "normal",
+      "weapon": "shotgun",
+      "vehicle": "",
+      "cell": [
+       3,
+       6
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 6,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 400,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       13,
+       8
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "t30",
+    "past_time": 6,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1000,
+      "exists": true,
+      "state": "normal",
+      "weapon": "shotgun",
+      "vehicle": "",
+      "cell": [
+       10,
+       5
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 600,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       2,
+       13
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 6,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 800,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       10,
+       4
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "t40",
+    "past_time": 7,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "shotgun",
+      "vehicle": "",
+      "cell": [
+       15,
+       8
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 600,
+      "exists": false,
+      "state": "Invincible",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       6,
+       6
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 6,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       15,
+       11
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "t50",
+    "past_time": 8,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1400,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       10,
+       6
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 900,
+      "exists": true,
+      "state": "normal",
+      "weapon": "fireball",
+      "vehicle": "_Car",
+      "cell": [
+       3,
+       4
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 6,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1200,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       15,
+       12
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "t60",
+    "past_time": 10,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1500,
+      "exists": true,
+      "state": "dead",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       3,
+       6
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1000,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "_Car",
+      "cell": [
+       3,
+       7
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 6,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1300,
+      "exists": true,
+      "state": "normal",
+      "weapon": "shotgun",
+      "vehicle": "",
+      "cell": [
+       10,
+       10
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "run": "kill-long-01",
+  "captures": [
+   {
+    "capture": "opening-board",
+    "past_time": 1,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       14,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       2,
+       13
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       14,
+       13
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "m01",
+    "past_time": 5,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 700,
+      "exists": true,
+      "state": "dead",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       12,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 800,
+      "exists": true,
+      "state": "normal",
+      "weapon": "fireball",
+      "vehicle": "",
+      "cell": [
+       8,
+       12
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 600,
+      "exists": true,
+      "state": "normal",
+      "weapon": "fireball",
+      "vehicle": "",
+      "cell": [
+       12,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "m02",
+    "past_time": 9,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1500,
+      "exists": true,
+      "state": "normal",
+      "weapon": "fireball",
+      "vehicle": "",
+      "cell": [
+       10,
+       11
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       11,
+       8
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 900,
+      "exists": true,
+      "state": "dead",
+      "weapon": "fireball",
+      "vehicle": "",
+      "cell": [
+       11,
+       12
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "m03",
+    "past_time": 13,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 2100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       15,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1700,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       10,
+       7
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 1700,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       13,
+       8
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "m04",
+    "past_time": 17,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 2900,
+      "exists": true,
+      "state": "normal",
+      "weapon": "boxing",
+      "vehicle": "",
+      "cell": [
+       13,
+       8
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 2400,
+      "exists": true,
+      "state": "normal",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       7,
+       5
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 2100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "fireball",
+      "vehicle": "",
+      "cell": [
+       13,
+       8
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "m05",
+    "past_time": 20,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 3800,
+      "exists": true,
+      "state": "normal",
+      "weapon": "lasergun",
+      "vehicle": "",
+      "cell": [
+       10,
+       4
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 3100,
+      "exists": false,
+      "state": "Invincible",
+      "weapon": "boxing",
+      "vehicle": "",
+      "cell": [
+       6,
+       6
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 2600,
+      "exists": true,
+      "state": "dead",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       10,
+       3
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "m06",
+    "past_time": 21,
+    "game_over": true,
+    "ending": true,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 200,
+      "exists": false,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 3800,
+      "exists": false,
+      "state": "normal",
+      "weapon": "lasergun",
+      "vehicle": "",
+      "cell": [
+       10,
+       5
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 3200,
+      "exists": false,
+      "state": "Invincible",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       6,
+       5
+      ],
+      "base_weapon": "KillModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 2,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 2600,
+      "exists": true,
+      "state": "dead",
+      "weapon": "sinker",
+      "vehicle": "",
+      "cell": [
+       10,
+       3
+      ],
+      "base_weapon": "KillModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "m07",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m08",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m09",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m10",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m11",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m12",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m13",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m14",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m15",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m16",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m17",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m18",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m19",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   },
+   {
+    "capture": "m20",
+    "past_time": 21,
+    "game_over": true,
+    "ending": false,
+    "players": []
+   }
+  ]
+ }
+]

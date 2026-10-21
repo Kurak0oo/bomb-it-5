@@ -103,7 +103,8 @@ func _draw() -> void:
 	_label(Vector2(30, 681), "Eight directions · equal speed", 13, Color("8cb1bb"))
 	_label(Vector2(1020, 653), "Tap to place / use", 15, Color("b9cdd2"))
 	_label(Vector2(340, 658), "CONTROLLED ACTION PREVIEW" if state.get("comparison_fixture", false) else _board_caption(), 14, Color("a9d4de"))
-	var hint := "Reset restores the board. Start Match adds three rivals." if practice else "Eliminate every rival before time runs out."
+	var hint: String = "Reset restores the board. Start Match adds three rivals." if practice else {
+		&"kill": "Be the first to kill 10 enemies!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
 	if practice and not state.actors[&"human"].alive:
 		hint = "Actor eliminated. Choose RESET to try again."
 	_label(Vector2(340, 684), hint, 15, Color("ffd989"))
@@ -115,13 +116,22 @@ func _board_skin() -> StringName:
 	return state.get("board_meta", {}).get("skin", &"cinema") if not state.is_empty() else &"cinema"
 
 
+func _points_label() -> String:
+	return {&"kill": "KILLS", &"green_zone": "FLAGS", &"pac_man": "COINS"}.get(state.get("mode", &""), "SCORE")
+
+
+func _points_goal() -> int:
+	return state.get("points_goal", 10)
+
+
 func _key(keycode: int) -> String:
 	return {KEY_UP: "↑", KEY_DOWN: "↓", KEY_LEFT: "←", KEY_RIGHT: "→"}.get(keycode, OS.get_keycode_string(keycode))
 
 
 func _mode_caption() -> String:
 	if state.is_empty(): return ""
-	var caption := "%s  /  %s" % [str(state.get("mode", &"arcade")).to_upper().replace("_", " "), str(state.get("difficulty", &"normal")).to_upper()]
+	var mode_title: String = {&"kill": "BATTLE ROYALE", &"pac_man": "PAC-MAN"}.get(state.get("mode", &"arcade"), str(state.get("mode", &"arcade")).to_upper().replace("_", " "))
+	var caption := "%s  /  %s" % [mode_title, str(state.get("difficulty", &"normal")).to_upper()]
 	var level: String = state.get("session", {}).get("level", "")
 	return caption + ("  /  LEVEL " + level if level != "" else "")
 
@@ -358,9 +368,12 @@ func _hud(actor: Dictionary, index: int, robot: int) -> void:
 	_label(at + Vector2(61, 23), "YOU" if index == 0 else ROBOT_TITLES[robot], 17, ROBOT_COLORS[robot])
 	_label(at + Vector2(177, 23), "♥%d%s" % [actor.lives, " OUT" if not actor.alive else ""], 15, Color("ffe4ad"))
 	_label(at + Vector2(61, 44), "B %d   P %d   S %d" % [actor.capacity, actor.power, roundi((actor.speed - 1.6) / 0.1) + 1], 14)
-	_label(at + Vector2(61, 64), "SCORE %d" % actor.score, 14, Color("b4d2d7"))
+	var points: int = actor.get("points", -1)
+	if points < 0: _label(at + Vector2(61, 64), "SCORE %d" % actor.score, 14, Color("b4d2d7"))
+	else: _label(at + Vector2(61, 64), "%s %d/%d" % [_points_label(), points, _points_goal()], 14, Color("ffe4ad"))
 	if actor.weapon != &"":
-		_label(at + Vector2(174, 64), "%s ×%d" % [ITEM_NAMES.get(actor.weapon, "?"), actor.ammo], 13, Color("ffd989"))
+		var uses: String = " ×%d" % actor.ammo if actor.ammo >= 0 else ""
+		_label(at + Vector2(174, 64), ITEM_NAMES.get(actor.weapon, "?") + uses, 13, Color("ffd989"))
 
 
 func _attack_animation_end(kind: StringName) -> float:

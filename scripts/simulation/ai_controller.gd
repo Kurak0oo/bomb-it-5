@@ -51,7 +51,7 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 		_selected = active[_rotation % active.size()] if not active.is_empty() else &""
 		_rotation = (_rotation + 1) % maxi(1, active.size())
 	var ready_to_think: bool = id == _selected and (memory.ready or memory.answer_elapsed > profile.answer_ms)
-	if ready_to_think: memory.perception = Perception.observe(state, id, _node_costs, profile.find_range)
+	if ready_to_think: memory.perception = Perception.observe(state, id, _node_costs, profile.find_range, _attack_all())
 	_run_pending(state, id, memory, output)
 	if not output.bomb_events.is_empty():
 		output.observation = _observation(memory, false)
@@ -289,7 +289,7 @@ func _run_pending(state: Dictionary, id: StringName, memory: Dictionary, output:
 			output.bomb_events = [&"down", &"up"]
 			memory.complete = true
 		&"escape":
-			memory.perception = Perception.observe(state, id, _node_costs, profile.find_range)
+			memory.perception = Perception.observe(state, id, _node_costs, profile.find_range, _attack_all())
 			var target: Variant = _best(state, state.actors[id].cell, memory.perception.free.duplicate(), memory.perception.costs, 1500)
 			if target == null:
 				memory.pending = &"escape"
@@ -317,7 +317,7 @@ func _on_step(state: Dictionary, id: StringName, memory: Dictionary, output: Dic
 		_cancel(memory)
 		return
 	if draw < _state_value(memory.state, "advance_attack", 0.0) and memory.state in [&"Attack", &"Box"]:
-		var human: Dictionary = state.actors[state.actors.keys()[0]]
+		var human: Dictionary = state.actors[_nearest_target(state, id)]
 		var reach := _attack_reach(actor)
 		var delta: Vector2i = human.cell - actor.cell
 		if human.alive and human.protected_until <= state.tick and (delta.x == 0 or delta.y == 0) and _manhattan(human.cell, actor.cell) <= reach:
@@ -370,3 +370,19 @@ func _state_value(state_name: StringName, key: String, fallback: float) -> float
 	for entry in profile.states:
 		if entry.state == state_name and entry.has(key): return float(entry[key])
 	return fallback
+
+
+func _attack_all() -> bool:
+	return profile.mode in [&"kill", &"green_zone"]
+
+
+## The robot a passing attack considers: the human, or in Kill/Green Zone the nearest rival.
+func _nearest_target(state: Dictionary, id: StringName) -> StringName:
+	var human_id: StringName = state.actors.keys()[0]
+	if not _attack_all(): return human_id
+	var best := human_id if human_id != id else &""
+	for other in state.actors:
+		if other == id or not state.actors[other].alive: continue
+		if best == &"" or _manhattan(state.actors[other].cell, state.actors[id].cell) < _manhattan(state.actors[best].cell, state.actors[id].cell):
+			best = other
+	return best if best != &"" else human_id

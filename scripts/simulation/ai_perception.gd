@@ -3,7 +3,9 @@ extends RefCounted
 const RAYS := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.UP]
 
 
-static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary = {}, find_range: int = 6) -> Dictionary:
+## `attack_all`: Kill and Green Zone target every robot (`allAttactRobot = AbstractRobot`);
+## Arcade and Pac-Man target humans only.
+static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary = {}, find_range: int = 6, attack_all := false) -> Dictionary:
 	var result := {"bombs": [], "items": [], "boxes": [], "enemies": [], "free": [], "danger": {}, "costs": shared_costs}
 	var origin: Vector2i = state.actors[id].cell
 	var visited := {}
@@ -43,10 +45,11 @@ static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary 
 				elif state.board[cell] == &"soft":
 					result.boxes.append(cell)
 				else:
-					var human_id: StringName = state.actors.keys()[0]
-					var human: Dictionary = state.actors[human_id]
-					if human_id != id and human.alive and human.cell == cell and human.protected_until <= state.tick:
-						result.enemies.append(cell)
+					for target_id in (state.actors.keys() if attack_all else [state.actors.keys()[0]]):
+						var target: Dictionary = state.actors[target_id]
+						if target_id != id and target.alive and target.cell == cell and target.protected_until <= state.tick:
+							result.enemies.append(cell)
+							break
 					if is_open(state, cell): result.free.append(cell)
 	result.free = result.free.filter(func(cell): return not result.danger.has(cell))
 	return result

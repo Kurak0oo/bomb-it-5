@@ -97,6 +97,17 @@ func _run() -> void:
 	await process_frame
 	_expect(app.current == &"menu" and not is_instance_valid(app.game), "MAIN MENU leaves the level")
 
+	await _click(_find("Start"))
+	await _click(_find("Mode_kill"))
+	_expect(app.session.mode == &"kill" and _find_text("Be the 1st to kill 10 enemies!") != null, "Battle Royale can be chosen")
+	await _click(_find("Next"))
+	await _click(_find("StartGame"))
+	app.game.set_process(false)
+	_expect(app.game.get_snapshot().mode == &"kill" and app.game.get_snapshot().actors[&"human"].weapon == &"hammer",
+		"a Battle Royale level starts with the hammer")
+	app.game.toggle_pause()
+	await _click(app.game.buttons.menu)
+
 	app._open_practice()
 	await process_frame
 	_expect(app.game.practice and app.game.get_snapshot().board.size() == 255, "the development launch opens the practice board")

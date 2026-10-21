@@ -90,6 +90,17 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		actor.ammo = actor.get("ammo", 0)
 		actor.bomb_count = 0
 		actor.is_human = id == _actor_ids[0]
+		actor.spawn = actor.get("spawn", actor.cell)
+		actor.base_stats = {"capacity": actor.capacity, "power": actor.power, "speed": actor.speed}
+		# KillModeWeapon/PacModeWeapon: an unlimited action that replaces bomb placement.
+		actor.base_weapon = _mode.base_weapon(actor.is_human)
+		if actor.weapon == &"" and actor.base_weapon != &"":
+			actor.weapon = actor.base_weapon
+			actor.ammo = -1
+		# model.propArr / weaponPropArr: what a non-Arcade death scatters (RobotDeadCommand.spitProp).
+		actor.collected = []
+		actor.kept_weapons = []
+		actor.respawn_at = 0
 		actor.protection_stage = &"none"
 		actor.vehicle_recovery_until = 0
 		actor.movement_rearm = false
@@ -117,6 +128,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 			result.merge(snapshot(), true)
 			return result
 		_late_blast = false
+		_advance_respawns()
 		_advance_actor_states()
 		# Live registry removal deliberately skips the following cleanup callback.
 		var cleanup_index := 0
@@ -216,6 +228,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 
 
 func snapshot() -> Dictionary:
+	for id in _actor_ids: _actors[id].points = _mode.points(_actors[id])
 	return {"tick": _tick, "board": _board.duplicate(true), "actors": _actors.duplicate(true),
 		"bombs": _public_bombs(), "bomb_occupancy": _bombs.duplicate(true),
 		"blasts": [], "broken_soft_blocks": [], "flames": _flames.duplicate(true),
@@ -313,6 +326,7 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 		actor.shield -= 1
 		actor.protected_until = _tick + 81
 	else:
+		if owner == actor_id: _mode.on_self_kill(actor)
 		actor.alive = false
 		actor.model_state = &"dead"
 		actor.death_frame = 1
@@ -402,6 +416,9 @@ func _advance_death_movies() -> void:
 			if actor.death_frame >= 60:
 				actor.removed = true
 				_judgment_ready = true
+				if _mode.name != &"arcade": _scatter(actor)
+				var delay: int = _mode.respawn_ticks(actor.is_human)
+				if delay >= 0: actor.respawn_at = _tick + delay
 			else:
 				actor.death_frame += 1
 
@@ -421,13 +438,7 @@ func _advance_pickups() -> void:
 		drop_index += 1
 	var timed_count: int = _mode.timed_pickup_count(_tick)
 	if timed_count > 0:
-		var free: Array[Vector2i] = []
-		# Source enumerates x first, then y, chooses all positions before any class draw.
-		for x in range(1, _board_max.x + 1):
-			for y in range(1, _board_max.y + 1):
-				var cell := Vector2i(x, y)
-				if _board.get(cell) in [&"floor", &"portal"] and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
-					free.append(cell)
+		var free := _free_cells()
 		var selected_cells: Array[Vector2i] = []
 		for index in mini(timed_count, free.size()):
 			var selected := int(_draw_random() * free.size())
@@ -437,15 +448,67 @@ func _advance_pickups() -> void:
 	for actor in _actors.values():
 		if actor.alive and actor.transit_until == 0 and actor.action_started_tick != _tick and _pickups.has(actor.cell):
 			var kind: StringName = _pickups[actor.cell]
-			if kind in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun"]:
+			if not _mode.can_collect(actor.is_human, kind):
+				continue
+			var weapon: bool = kind in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun"]
+			if weapon:
 				_weapons.cancel(actor, _actors.find_key(actor))
+			var before := [actor.capacity, actor.power, actor.speed]
 			Pickups.apply(actor, kind, _tick)
+			if kind in [&"capacity", &"power", &"speed"] and [actor.capacity, actor.power, actor.speed] != before:
+				actor.collected.append(kind)
+			if weapon and _mode.keeps_weapon_pickups():
+				actor.kept_weapons.append(kind)
 			_pickups.erase(actor.cell)
 	for id in _actor_ids:
 		if _actors[id].alive and _actors[id].invincible_until > _tick and _actors[id].invincible_active_from <= _tick:
 			for other in _actor_ids:
 				if other != id and _actors[other].cell == _actors[id].cell:
 					_hurt(other, id)
+
+
+## Empty cells for placed pickups, x first then y as the source enumerates them.
+func _free_cells() -> Array[Vector2i]:
+	var free: Array[Vector2i] = []
+	for x in range(1, _board_max.x + 1):
+		for y in range(1, _board_max.y + 1):
+			var cell := Vector2i(x, y)
+			if _board.get(cell) in [&"floor", &"portal"] and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
+				free.append(cell)
+	return free
+
+
+## RobotDeadCommand.spitProp: every collected power-up, then up to two kept weapons,
+## each onto a random free cell.
+func _scatter(actor: Dictionary) -> void:
+	for kind in actor.collected:
+		var free := _free_cells()
+		if not free.is_empty(): _pickups[free[int(_draw_random() * free.size())]] = kind
+	for attempt in 2:
+		if actor.kept_weapons.is_empty(): break
+		var index := int(_draw_random() * actor.kept_weapons.size())
+		var free := _free_cells()
+		if free.is_empty(): continue
+		_pickups[free[int(_draw_random() * free.size())]] = actor.kept_weapons[index]
+		actor.kept_weapons.remove_at(index)
+	actor.collected = []
+
+
+## ReliveThread → robotRelive: back at the spawn with fresh stats, the base action and
+## InvincibilityCommand's 81 ticks of protection.
+func _advance_respawns() -> void:
+	for id in _actor_ids:
+		var actor: Dictionary = _actors[id]
+		if not actor.removed or actor.respawn_at <= 0 or _tick < actor.respawn_at: continue
+		actor.merge(actor.base_stats, true)
+		actor.merge({"alive": true, "removed": false, "death_frame": 0, "model_state": &"normal",
+			"registered_state": &"normal", "cell": actor.spawn, "position": Vector2(actor.spawn),
+			"velocity": Vector2.ZERO, "facing": Vector2.DOWN, "departures": [], "vehicle": &"",
+			"registered_vehicle": &"", "shield": 0, "invincible_until": 0, "busy_until": 0,
+			"transit_until": 0, "vehicle_recovery_until": 0, "protected_until": _tick + 81,
+			"blink_until": _tick + 81, "weapon": actor.base_weapon, "ammo": -1 if actor.base_weapon != &"" else 0,
+			"kept_weapons": [], "respawn_at": 0, "portal_latch": Vector2i(-99, -99), "movement_rearm": true}, true)
+		actor.drive_speed = actor.speed
 
 
 func _spawn_pickup(cell: Vector2i, quota: bool) -> void:

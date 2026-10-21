@@ -22,7 +22,7 @@ func start(id: StringName, actor: Dictionary, tick: int) -> void:
 	var kind: StringName = actor.weapon
 	if kind not in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun"]:
 		return
-	actor.ammo -= 1
+	if actor.ammo > 0: actor.ammo -= 1
 	actor.action_started_tick = tick
 	var windup := 24 if kind == &"hammer" else 11 if kind == &"laser" else 0
 	var duration := 24 if kind == &"hammer" else 22 if kind == &"laser" else 23
@@ -126,7 +126,10 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 func complete(attack: Dictionary, actor: Dictionary, tick: int) -> void:
 	attacks.erase(attack)
 	actor.busy_until = tick
-	if actor.ammo == 0: actor.weapon = &""
+	if actor.ammo == 0:
+		# A spent pickup falls back to the mode's unlimited base action, if any.
+		actor.weapon = actor.get("base_weapon", &"")
+		if actor.weapon != &"": actor.ammo = -1
 
 
 func cancel(actor: Dictionary, id: StringName) -> void:
