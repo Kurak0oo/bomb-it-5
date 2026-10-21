@@ -11,3 +11,7 @@ Thumbs.db
 .import/
 export.cfg
 export_presets.cfg
+
+# Art pipeline outputs (SWF-derived; never commit)
+candidates/
+candidates.zip

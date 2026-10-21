@@ -42,6 +42,11 @@ missing reference is labelled. Research images remain separate from replacement
 files; import from the research/evidence folders is rejected. No new art is generated
 or treated as approved by this tool.
 
+The separate [art pipeline](../tools/art_pipeline/README.md) can produce
+SWF-derived candidate images in the ignored `candidates/` folder, with a review
+page. It never applies anything. Review each candidate yourself and import the
+ones you choose with **Replace image…** ([ADR 0006](adr/0006-swf-derived-candidate-art.md)).
+
 Applied choices live in `assets/skins/active.json`; imported images are copied by
 content hash into `assets/skins/imports/`. Keep those together when sharing or
 committing your work. Original image files are left in place. The autosaved draft

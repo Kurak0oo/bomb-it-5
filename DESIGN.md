@@ -16,7 +16,7 @@ This file owns accepted product and architecture decisions. [Development](docs/d
 - A round has a replaceable ending. The selected first ending is "all enemies are dead," source-supported for normal Arcade play in the [Dots evidence assessment](docs/evidence/edition-5-play-observations.md). For the new game, timeout is a loss while enemies remain, deliberately replacing the original anomalous timeout-completion path. Later modes and tasks are another ending plus extra rules on the same round. The first build implements one ending.
 - Before the SWF is read, the only bomb behavior that may be coded is the shared match: place a bomb, a fuse, a plus-shaped blast, and soft blocks that break. The glove, the bouncer, the magic carpet, and the heavy bomb are named empty slots. Nothing fills a slot from a portal description.
 - Maps come from the original edition 5 game. Tile count, solids, soft blocks, and spawns are recovered. There is no stand-in 15×13 board and no map generator.
-- The gameplay screen's layout and the elements on it come from the original gameplay screen. Painted pixels are redrawn later in that painting style. Copied SWF sprites, music, and level art stay out of the Douyin build.
+- The gameplay screen's layout and the elements on it come from the original gameplay screen. Painted pixels are redrawn later in that painting style. Unmodified copies of SWF sprites, music, and level art stay out of the Douyin build. SWF-derived art may be modified into candidate art. Candidates are never applied automatically; the user reviews each one before Apply to game (2026-10-21, below).
 - Soft blocks drop nothing until source evidence establishes the behavior. [Conditional-drop evidence has now been supplied](docs/evidence/edition-5-play-observations.md); implementation must follow its verified conditions rather than assuming guaranteed drops.
 
 - Each tick consumes one command per actor: a direction plus an ordered list of bomb input events. The stick fills the human command; AI will fill the other three. A later phone can replace one AI command. The first tick does not draw or use sockets.
@@ -72,7 +72,7 @@ For example, with capacity one, a bomb placed on tick 1 detonates on tick 73. An
 The user accepted Q14, Q15, Q16 and Q18, and replaced Q17's recommendation:
 
 - **Practice scope:** open directly onto a clearly labelled practice board with one controllable actor, Pause/Resume and Reset. Movement, visible bombs and breaking blocks are an intermediate milestone toward the complete runnable Godot 4.5 game. Practice alone is not the final deliverable. AI, damage and match endings remain subsequent implementation work; the accepted first full match still means one human plus three AI.
-- **Temporary presentation:** use original geometric shapes and colours that distinguish floor, solids, soft blocks, actor, bombs and blasts. Preserve recovered layout relationships and the accepted phone-control placement. Finished redrawn artwork follows later; copied SWF artwork is not the preview's production art.
+- **Temporary presentation:** use original geometric shapes and colours that distinguish floor, solids, soft blocks, actor, bombs and blasts. Preserve recovered layout relationships and the accepted phone-control placement. Finished redrawn artwork follows later; unmodified SWF artwork is not the preview's production art. Reviewed SWF-derived candidate art is permitted from 2026-10-21.
 - **Desktop development input:** also support Arrow keys and Space through the same command path as touch. Preserve the recovered keyboard direction priority.
 - **Eight-direction phone control:** the stick supports up, down, left, right and the four diagonals. The proposed four-direction dominant-axis mapping is rejected. This is an intentional adaptation from the original controller, with acknowledged difficulty implications. No one-cell-per-input movement rule is accepted.
 - **Equal directional speed (Q19):** diagonal travel has the same top speed as straight travel. Normalize diagonal direction rather than combining two full-speed axes. Acceleration and stick-deflection response remain separate tuning decisions.
@@ -104,6 +104,22 @@ The user subsequently requests reverse engineering first. Reconstruct and verify
 The subsequent implement instruction approves the 16 recovery tickets [#22–#37](https://github.com/Kurak0oo/bomb-it-5/issues/22), covering controlled original playback, bomb/fire/phase edges, movement/portals, items/vehicles/weapons, Normal AI and death/results, ending in a reviewed porting handoff. These are evidence-recovery gates before further fidelity implementation. They preserve the accepted adaptations above and do not resolve the four deferred item slots, approve finished artwork or require early phone tests.
 
 ## Decision history
+
+### SWF-derived candidate art (2026-10-21)
+
+The user permits artwork extracted from the edition 5 SWF to be modified into
+candidate art for the workbench's named slots. A local batch pipeline produces
+candidates with small, configurable changes and a review page. Candidates are
+never applied automatically: the pipeline does not write the active manifest or
+the imports folder, and the user manually reviews each candidate before choosing
+it through Apply to game. A change percentage is a review aid, not approval.
+
+The SWF and all extracted or generated images stay in ignored local storage and
+are not committed. Unmodified SWF art, music and branding are not production
+assets. Original screenshots remain view-only reference context. This decision
+does not settle release rights, store identity or the finished-redraw gate #20.
+[ADR 0006](docs/adr/0006-swf-derived-candidate-art.md) records the rationale;
+[the pipeline README](tools/art_pipeline/README.md) describes the workflow.
 
 ### User-controlled artwork workbench (2026-10-20)
 
@@ -171,3 +187,5 @@ Implementation policy recorded during the user's 2026-10-19 instruction to imple
 [Make bomb batches consistent across controllers](docs/adr/0003-bomb-batch-timing.md) records the rationale for uniform newborn countdowns and fixed roster priority.
 
 [Permit eight-direction phone movement](docs/adr/0004-eight-direction-phone-movement.md) records the deliberate change from the original cardinal controller.
+
+[Permit SWF-derived candidate art under manual review](docs/adr/0006-swf-derived-candidate-art.md) records the 2026-10-21 change to the production-asset boundary.

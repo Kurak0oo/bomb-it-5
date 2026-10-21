@@ -55,13 +55,22 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Original items and AI | Glove candidates demonstrated; other slots unidentified | BoxingProp uses Space punches; BombShoesProp passively kicks on contact. Choose which fills the empty glove slot; keep bouncer/carpet/heavy bomb unresolved despite broader search. The source-grounded Normal controller is implemented; exact original state-machine parity is not claimed |
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
-| Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20 | Choose and preview replacements per visual slot, then Apply to game. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
+| Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
 | Co-op, then PvP | Deferred | First local slice precedes networking design |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
 
 The Q1–Q13 command/bomb decisions are implemented. Subsequent decisions through Q28 settle the preview/input/collision scope, including replacement Q17 (eight directions), replacement Q22 (late phone/iOS testing), and Q26's complete runnable Godot 4.5 delivery target. Practice is an intermediate integration milestone. Corridor assistance and the reconstructed CinemaStage1 board with working portals are accepted; exact acceleration tuning is implementation work grounded in the recovered source, not an approved new profile. Main Godot development uses desktop and automated verification and does not wait for a phone prototype. AI, damage, round clock, endings, score/lives, HUD and complete playable flow are now integrated and desktop-verified. Glove-slot identity and three unidentified item slots remain separate later branches. Store name and release language can remain deferred. Runtime facts still need investigation where they affect a proposed choice.
 
 ## Interview updates
+
+### 2026-10-21 SWF-derived candidate art
+
+The user decided that art extracted from the edition 5 SWF may be modified into
+candidate art for the workbench slots, with every candidate manually reviewed
+before Apply to game. DESIGN.md and [ADR 0006](adr/0006-swf-derived-candidate-art.md)
+record the boundary. The batch pipeline in `tools/art_pipeline/` writes only to
+ignored `.scratch/` and `candidates/` storage; it does not write the active
+manifest or imports. Release rights, store identity and #20 acceptance remain open.
 
 ### 2026-10-19 approved ticket publication
 

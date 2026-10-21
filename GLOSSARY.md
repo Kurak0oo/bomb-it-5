@@ -68,6 +68,10 @@ The explosion produced by a bomb, covering its cell and rays in the four cardina
 **Soft block**:
 A breakable obstacle on the board.
 
+**Candidate art**:
+An unapproved image proposed for a visual slot, awaiting the user's manual review before any Apply to game.
+_Avoid_: approved art, final art
+
 **Magic carpet**:
 One of the four named items whose behavior has yet to be recovered.
 _Avoid_: Carpet (as a separate item)

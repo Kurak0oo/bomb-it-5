@@ -1,0 +1,727 @@
+{
+ "version": 1,
+ "ffdec": {
+  "version": "26.3.0",
+  "sha256": "35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd"
+ },
+ "realesrgan": {
+  "url": "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth",
+  "sha256": "f872d837d3c90ed2e05227bed711af5671a6fd1c9f7d7e91c911a61f155e99da",
+  "tile": 192,
+  "overlap": 16
+ },
+ "skip": {
+  "min_side": 4,
+  "min_area": 48
+ },
+ "render_scale": 4,
+ "output_scale": 1,
+ "max_frames": 16,
+ "unmapped": {
+  "scale": 2,
+  "max_side": 384,
+  "max_frames": 4
+ },
+ "preview_cell": 112,
+ "flag_change_pct": 15,
+ "palette": {
+  "master_size": 64,
+  "merge_delta_e": 6,
+  "asset_max": 24,
+  "asset_merge_delta_e": 3,
+  "bitmap_colors": 24,
+  "job_colors": 48
+ },
+ "img2img": {
+  "dir": "",
+  "strength": 1.0,
+  "export_inputs": false
+ },
+ "modify": {
+  "hue_shift_deg": 12,
+  "saturation_scale": 1.15,
+  "value_scale": 1.0,
+  "outline_scale": 1.2,
+  "remap_strength": 1.0,
+  "snap": true,
+  "vectorize": true
+ },
+ "modify_by_prefix": {
+  "ui.": {
+   "outline_scale": 1.0
+  }
+ },
+ "vtracer": {
+  "colormode": "color",
+  "hierarchical": "stacked",
+  "mode": "spline",
+  "filter_speckle": 4,
+  "color_precision": 8,
+  "layer_difference": 8,
+  "corner_threshold": 60,
+  "length_threshold": 4.0,
+  "max_iterations": 10,
+  "splice_threshold": 45,
+  "path_precision": 3
+ },
+ "slots": {
+  "board.floor_even": {
+   "source": {
+    "sprite": "#888"
+   },
+   "note": "Cinema floor tile; both floor slots share it"
+  },
+  "board.floor_odd": {
+   "source": {
+    "sprite": "#888"
+   },
+   "note": "Cinema floor tile; both floor slots share it"
+  },
+  "board.wall": {
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     51
+    ]
+   },
+   "note": "outer ring uses the red seat in CinemaStage1"
+  },
+  "board.seat": {
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     51
+    ]
+   }
+  },
+  "board.spotlight": {
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     49
+    ]
+   }
+  },
+  "board.clapper": {
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     53
+    ]
+   },
+   "note": "Cinema soft block (3D glasses)"
+  },
+  "board.popcorn": {
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     55
+    ]
+   },
+   "note": "Cinema soft block (drink cup)"
+  },
+  "board.portal_green": {
+   "source": {
+    "sprite": "Art_Portal_1"
+   },
+   "note": "Portal.as uses Art_Portal_<colorId>"
+  },
+  "board.portal_purple": {
+   "source": {
+    "sprite": "Art_Portal_2"
+   },
+   "note": "Portal.as uses Art_Portal_<colorId>"
+  },
+  "board.marquee": {
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     72
+    ]
+   }
+  },
+  "actor.human.idle": {
+   "source": {
+    "rows": [
+     "_r0_Down",
+     "_r0_Right",
+     "_r0_Up",
+     "_r0_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.human.walk": {
+   "source": {
+    "rows": [
+     "_r0_Down",
+     "_r0_Right",
+     "_r0_Up",
+     "_r0_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.human.action": {
+   "source": null
+  },
+  "actor.human.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.human.death": {
+   "source": {
+    "sprite": "_r0_Dead"
+   }
+  },
+  "actor.ruby.idle": {
+   "source": {
+    "rows": [
+     "_r1_Down",
+     "_r1_Right",
+     "_r1_Up",
+     "_r1_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.ruby.walk": {
+   "source": {
+    "rows": [
+     "_r1_Down",
+     "_r1_Right",
+     "_r1_Up",
+     "_r1_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.ruby.action": {
+   "source": null
+  },
+  "actor.ruby.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     2
+    ]
+   }
+  },
+  "actor.ruby.death": {
+   "source": {
+    "sprite": "_r1_Dead"
+   }
+  },
+  "actor.mint.idle": {
+   "source": {
+    "rows": [
+     "_r6_Down",
+     "_r6_Right",
+     "_r6_Up",
+     "_r6_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.mint.walk": {
+   "source": {
+    "rows": [
+     "_r6_Down",
+     "_r6_Right",
+     "_r6_Up",
+     "_r6_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.mint.action": {
+   "source": null
+  },
+  "actor.mint.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     7
+    ]
+   }
+  },
+  "actor.mint.death": {
+   "source": {
+    "sprite": "_r6_Dead"
+   }
+  },
+  "actor.gold.idle": {
+   "source": {
+    "rows": [
+     "_r3_Down",
+     "_r3_Right",
+     "_r3_Up",
+     "_r3_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.gold.walk": {
+   "source": {
+    "rows": [
+     "_r3_Down",
+     "_r3_Right",
+     "_r3_Up",
+     "_r3_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.gold.action": {
+   "source": null
+  },
+  "actor.gold.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     4
+    ]
+   }
+  },
+  "actor.gold.death": {
+   "source": {
+    "sprite": "_r3_Dead"
+   }
+  },
+  "item.capacity": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     1
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.power": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     2
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.speed": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     3
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.life": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     4
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.shield": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     22
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.invincible": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     7
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.car": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     45
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.moto": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     48
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.landmine": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     39
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.hammer": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     15
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.flamer": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     21
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.laser": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     20
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.triple": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     50
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.shotgun": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     49
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "held.landmine": {
+   "source": {
+    "rows": [
+     "mine_Down",
+     "mine_Right",
+     "mine_Up",
+     "mine_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "held.hammer": {
+   "source": {
+    "rows": [
+     "sinker_Down",
+     "sinker_Right",
+     "sinker_Up",
+     "sinker_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "held.flamer": {
+   "source": {
+    "rows": [
+     "thrower_Down",
+     "thrower_Right",
+     "thrower_Up",
+     "thrower_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "held.laser": {
+   "source": {
+    "rows": [
+     "lasergun_Down",
+     "lasergun_Right",
+     "lasergun_Up",
+     "lasergun_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "held.triple": {
+   "source": {
+    "rows": [
+     "shotgun_Down",
+     "shotgun_Right",
+     "shotgun_Up",
+     "shotgun_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "held.shotgun": {
+   "source": {
+    "rows": [
+     "fireball_Down",
+     "fireball_Right",
+     "fireball_Up",
+     "fireball_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "attack.hammer": {
+   "source": {
+    "rows": [
+     "sinker_Down_Play",
+     "sinker_Right_Play",
+     "sinker_Up_Play",
+     "sinker_Left_Play"
+    ],
+    "frames": "all"
+   }
+  },
+  "attack.flamer": {
+   "source": {
+    "sprite": "#2212"
+   },
+   "note": "thrower_*_Play have one empty frame; the 24-frame fire is inner sprite 2212 (see weapon evidence)"
+  },
+  "attack.laser": {
+   "source": {
+    "sprite": "lasergun_Play"
+   }
+  },
+  "attack.triple": {
+   "source": {
+    "rows": [
+     "shotgun_Down_Play",
+     "shotgun_Right_Play",
+     "shotgun_Up_Play",
+     "shotgun_Left_Play"
+    ],
+    "frames": "all"
+   }
+  },
+  "attack.shotgun": {
+   "source": {
+    "rows": [
+     "fireball_Down_Play",
+     "fireball_Right_Play",
+     "fireball_Up_Play",
+     "fireball_Left_Play"
+    ],
+    "frames": "all"
+   }
+  },
+  "projectile.triple": {
+   "source": {
+    "sprite": "bullet_fire"
+   },
+   "note": "TripleShootGunBomb._bombMc"
+  },
+  "projectile.shotgun": {
+   "source": {
+    "sprite": "ninjialBomb_fire"
+   },
+   "note": "FireballBomb._bombMc"
+  },
+  "effect.bomb": {
+   "source": {
+    "sprite": "bomb0"
+   },
+   "note": "Bomb._bombMc"
+  },
+  "effect.mine": {
+   "source": {
+    "sprite": "mine_bomb"
+   }
+  },
+  "effect.flame": {
+   "source": {
+    "sprite": "exp0"
+   }
+  },
+  "effect.shield": {
+   "source": {
+    "rows": [
+     "Shield_Down",
+     "Shield_Right",
+     "Shield_Up",
+     "Shield_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "effect.invincible": {
+   "source": {
+    "sprite": "invincibityPlay"
+   },
+   "note": "guess: same clip as the introduction"
+  },
+  "effect.invincible_intro": {
+   "source": {
+    "sprite": "invincibityPlay"
+   }
+  },
+  "effect.blink": {
+   "source": null
+  },
+  "effect.transit": {
+   "source": null
+  },
+  "effect.car": {
+   "source": {
+    "rows": [
+     "_r0_Car_Down",
+     "_r0_Car_Right",
+     "_r0_Car_Up",
+     "_r0_Car_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "effect.moto": {
+   "source": {
+    "rows": [
+     "_r0_Skateboard_Down",
+     "_r0_Skateboard_Right",
+     "_r0_Skateboard_Up",
+     "_r0_Skateboard_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "effect.car_recovery": {
+   "source": {
+    "rows": [
+     "_r0_Car_Down",
+     "_r0_Car_Right",
+     "_r0_Car_Up",
+     "_r0_Car_Left"
+    ],
+    "frames": "all"
+   },
+   "note": "guess: same ride clip"
+  },
+  "effect.moto_recovery": {
+   "source": {
+    "rows": [
+     "_r0_Skateboard_Down",
+     "_r0_Skateboard_Right",
+     "_r0_Skateboard_Up",
+     "_r0_Skateboard_Left"
+    ],
+    "frames": "all"
+   },
+   "note": "guess: same ride clip"
+  },
+  "control.stick_base": {
+   "source": null
+  },
+  "control.stick_thumb": {
+   "source": null
+  },
+  "control.action_normal": {
+   "source": null
+  },
+  "control.action_pressed": {
+   "source": null
+  },
+  "control.action_disabled": {
+   "source": null
+  },
+  "ui.background": {
+   "source": {
+    "sprite": "BackGround_Cinema"
+   }
+  },
+  "ui.frame": {
+   "source": null
+  },
+  "ui.board_frame": {
+   "source": {
+    "sprite": "#4690"
+   },
+   "note": "CinemaStage1 board backing"
+  },
+  "ui.roster": {
+   "source": null
+  },
+  "ui.timer": {
+   "source": null
+  },
+  "ui.results": {
+   "source": {
+    "sprite": "UI_LEVEL_COMPLETED_ONEP"
+   }
+  },
+  "ui.button_normal": {
+   "source": null
+  },
+  "ui.button_hover": {
+   "source": null
+  },
+  "ui.button_pressed": {
+   "source": null
+  },
+  "ui.button_disabled": {
+   "source": null
+  },
+  "outcome.won": {
+   "source": {
+    "sprite": "winCartoon"
+   },
+   "note": "full-screen end cartoon; weak fit for a 64x64 slot"
+  },
+  "outcome.lost": {
+   "source": {
+    "sprite": "loseCartoon"
+   },
+   "note": "full-screen end cartoon; weak fit for a 64x64 slot"
+  },
+  "outcome.timeout": {
+   "source": {
+    "sprite": "timeUpCartoon"
+   },
+   "note": "full-screen end cartoon; weak fit for a 64x64 slot"
+  },
+  "outcome.game_over": {
+   "source": {
+    "sprite": "UI_GAMEOVERONEP"
+   }
+  },
+  "outcome.paused": {
+   "source": {
+    "sprite": "UI_pause"
+   }
+  }
+ },
+ "notes": {
+  "actors": "Character slots use robots by colour: human=_r0, ruby=_r1, mint=_r6, gold=_r3. The recorded Cinema roster is _r0 with AI _r5, _r3, _r4; edit the slot sources to use those instead.",
+  "frames": "frames: \"all\" (evenly sampled to max_frames), an integer count, or a list of 1-based frame numbers.",
+  "sources": "sprite/rows name an exported class, or #<character id> for unnamed symbols. null means the SWF has no matching source."
+ }
+}
