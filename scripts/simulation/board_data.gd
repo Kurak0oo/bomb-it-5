@@ -19,7 +19,9 @@ static func load_instance(path: String, skin: StringName = &"cinema") -> Diction
 		cells[cell] = StringName(row[2])
 		if row.size() >= 4 and row[3] != "":
 			pairs.get_or_add(row[3], []).append(cell)
-	return make(cells, _link(pairs), skin)
+	var board := make(cells, _link(pairs), skin)
+	board.portal_ids = pair_ids(pairs)
+	return board
 
 
 static func make(cells: Dictionary, portals: Dictionary = {}, skin: StringName = &"cinema",
@@ -29,6 +31,14 @@ static func make(cells: Dictionary, portals: Dictionary = {}, skin: StringName =
 		size = Vector2i(maxi(size.x, cell.x + 1), maxi(size.y, cell.y + 1))
 	return {"cells": cells, "size": size, "spawns": SPAWNS.duplicate(), "portals": portals,
 		"skin": skin, "features": features, "layout": layout}
+
+
+## Cell → portal pair number, for telling the pairs apart on screen.
+static func pair_ids(pairs: Dictionary) -> Dictionary:
+	var ids := {}
+	for key in pairs:
+		for cell in pairs[key]: ids[cell] = int(key)
+	return ids
 
 
 static func _link(pairs: Dictionary) -> Dictionary:

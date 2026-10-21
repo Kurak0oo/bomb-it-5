@@ -6,7 +6,8 @@ const RAYS := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.UP]
 ## `attack_all`: Kill and Green Zone target every robot (`allAttactRobot = AbstractRobot`);
 ## Arcade and Pac-Man target humans only.
 static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary = {}, find_range: int = 6, attack_all := false) -> Dictionary:
-	var result := {"bombs": [], "items": [], "boxes": [], "enemies": [], "free": [], "danger": {}, "costs": shared_costs}
+	var result := {"bombs": [], "items": [], "boxes": [], "enemies": [], "free": [], "flags": [], "danger": {}, "costs": shared_costs}
+	var flag: Variant = state.get("mode_state", {}).get("flag")
 	var origin: Vector2i = state.actors[id].cell
 	var visited := {}
 	var rays := [true, true, true, true]
@@ -40,7 +41,9 @@ static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary 
 								if ray != 3 or remaining < 30: result.danger[target] = remaining
 								result.costs[target] = age * 10
 								visited[target] = true
-				if state.pickups.has(cell):
+				if flag != null and cell == flag:
+					result.flags.append(cell)
+				elif state.pickups.has(cell):
 					if state.pickups[cell] not in [&"speed", &"landmine"]: result.items.append(cell)
 				elif state.board[cell] == &"soft":
 					result.boxes.append(cell)

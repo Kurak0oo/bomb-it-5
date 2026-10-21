@@ -65,6 +65,7 @@ func _draw() -> void:
 		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
 		var text: String = ITEM_NAMES.get(state.pickups[cell], "?")
 		_label(at + Vector2(-text.length() * 4.0, 5), text, 13, Color("173c40"))
+	_mode_objects()
 	for bomb in state.bombs:
 		_bomb(_center(bomb.cell), bomb.get("kind", &"bomb") == &"mine")
 	for flame in state.flames:
@@ -93,6 +94,7 @@ func _draw() -> void:
 		seat += 1
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind": _attack(attack)
+	_mode_overlays()
 	_label(Vector2(1010, 339), "HOW TO PLAY", 17, Color("ffd989"))
 	var keys: Dictionary = state.get("bindings", {})
 	var arrows: bool = keys.is_empty() or (keys.up == KEY_UP and keys.left == KEY_LEFT and keys.down == KEY_DOWN and keys.right == KEY_RIGHT)
@@ -104,12 +106,19 @@ func _draw() -> void:
 	_label(Vector2(1020, 653), "Tap to place / use", 15, Color("b9cdd2"))
 	_label(Vector2(340, 658), "CONTROLLED ACTION PREVIEW" if state.get("comparison_fixture", false) else _board_caption(), 14, Color("a9d4de"))
 	var hint: String = "Reset restores the board. Start Match adds three rivals." if practice else {
-		&"kill": "Be the first to kill 10 enemies!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
+		&"kill": "Be the first to kill 10 enemies!",
+		&"green_zone": "Stay on the green zone to occupy it. First to 10 wins!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
 	if practice and not state.actors[&"human"].alive:
 		hint = "Actor eliminated. Choose RESET to try again."
 	_label(Vector2(340, 684), hint, 15, Color("ffd989"))
 	if paused or state.outcome != &"running" or state.get("round_stage") == &"ending":
 		_overlay()
+
+
+## Pair 1 draws green and pair 2 purple; the recorded instance falls back to its columns.
+func _portal_pair(cell: Vector2i) -> int:
+	var ids: Dictionary = state.get("board_meta", {}).get("portal_ids", {})
+	return ids.get(cell, 1 if cell.x == 8 else 2)
 
 
 func _board_skin() -> StringName:
@@ -122,6 +131,34 @@ func _points_label() -> String:
 
 func _points_goal() -> int:
 	return state.get("points_goal", 10)
+
+
+## Green Zone flag with each holder's progress (`Flag`, `r<robot>_progress`).
+func _mode_objects() -> void:
+	var mode_state: Dictionary = state.get("mode_state", {})
+	var flag: Variant = mode_state.get("flag")
+	if flag != null:
+		var at := _center(flag)
+		if not skin.draw(self, "mode.flag", Rect2(at - Vector2(18, 26), Vector2(36, 44)), state.tick):
+			draw_circle(at + Vector2(0, 10), 14, Color(0.35, 0.85, 0.45, 0.35))
+			draw_line(at + Vector2(-6, 14), at + Vector2(-6, -20), Color("e8e2cf"), 3)
+			draw_colored_polygon(PackedVector2Array([at + Vector2(-5, -20), at + Vector2(14, -13), at + Vector2(-5, -6)]), Color("58c46a"))
+
+
+## Holders' progress bars over the flag, drawn above the robots.
+func _mode_overlays() -> void:
+	var mode_state: Dictionary = state.get("mode_state", {})
+	var flag: Variant = mode_state.get("flag")
+	if flag != null:
+		var at := _center(flag)
+		var row := 0
+		for id in mode_state.get("progress", {}):
+			if not state.actors.has(id): continue
+			var robot: int = state.actors[id].get("robot", SEAT_ROBOTS.get(id, 0))
+			var bar := Rect2(at + Vector2(-18, -34 - row * 7), Vector2(36, 5))
+			draw_rect(bar, Color(0, 0, 0, 0.5))
+			draw_rect(Rect2(bar.position, Vector2(36.0 * mode_state.progress[id] / mode_state.get("capture_ticks", 105), 5)), ROBOT_COLORS[robot])
+			row += 1
 
 
 func _key(keycode: int) -> String:
@@ -185,8 +222,9 @@ func _tile(cell: Vector2i, kind: StringName) -> void:
 			for n in 5:
 				draw_circle(at + Vector2(10 + n * 4, 10 + (n % 2) * 3), 5, Color("ffe9b7"))
 	elif kind == &"portal":
-		if skin.draw(self, "board.portal_green" if cell.x == 8 else "board.portal_purple", Rect2(at, Vector2.ONE * 36), state.tick): return
-		var color := Color("a8e0b9") if cell.x == 8 else Color("bab2f4")
+		var green := _portal_pair(cell) == 1
+		if skin.draw(self, "board.portal_green" if green else "board.portal_purple", Rect2(at, Vector2.ONE * 36), state.tick): return
+		var color := Color("a8e0b9") if green else Color("bab2f4")
 		draw_circle(at + Vector2.ONE * 18, 16, Color(color, 0.18))
 		draw_arc(at + Vector2.ONE * 18, 13, 0, TAU, 32, color, 3, true)
 		draw_arc(at + Vector2.ONE * 18, 7, 0, TAU, 24, Color(color, 0.7), 2, true)
@@ -366,7 +404,8 @@ func _hud(actor: Dictionary, index: int, robot: int) -> void:
 		draw_circle(at + Vector2(30, 30), 19, ROBOT_COLORS[robot].darkened(0.1))
 		_label(at + Vector2(17, 36), "P1" if index == 0 else "AI", 17, Color("173649"))
 	_label(at + Vector2(61, 23), "YOU" if index == 0 else ROBOT_TITLES[robot], 17, ROBOT_COLORS[robot])
-	_label(at + Vector2(177, 23), "♥%d%s" % [actor.lives, " OUT" if not actor.alive else ""], 15, Color("ffe4ad"))
+	var status := "" if actor.alive else " …" if actor.get("respawn_at", 0) > 0 or (actor.get("base_weapon", &"") != &"" and not actor.get("removed", false)) else " OUT"
+	_label(at + Vector2(177, 23), "♥%d%s" % [actor.lives, status], 15, Color("ffe4ad"))
 	_label(at + Vector2(61, 44), "B %d   P %d   S %d" % [actor.capacity, actor.power, roundi((actor.speed - 1.6) / 0.1) + 1], 14)
 	var points: int = actor.get("points", -1)
 	if points < 0: _label(at + Vector2(61, 64), "SCORE %d" % actor.score, 14, Color("b4d2d7"))

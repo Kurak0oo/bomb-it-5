@@ -110,6 +110,7 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		actor.registered_state = &"normal"
 		actor.registered_vehicle = actor.vehicle
 		actor.action_started_tick = -1
+	_mode.begin(self)
 
 
 func advance(commands: Array[Dictionary]) -> Dictionary:
@@ -219,6 +220,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 		if _rules.get("drops", false):
 			_advance_pickups()
 		_advance_death_movies()
+		if _round_stage != &"ending": _mode.tick(self, _tick)
 		if _rules.get("round", false):
 			_finish_round()
 	result.merge(snapshot(), true)
@@ -235,7 +237,7 @@ func snapshot() -> Dictionary:
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
 		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
-		"mode": _mode.name, "difficulty": _mode.difficulty, "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
+		"mode": _mode.name, "difficulty": _mode.difficulty, "mode_state": _mode.public_state(), "points_goal": _mode.points_goal(), "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
 		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys()}
 
@@ -437,14 +439,7 @@ func _advance_pickups() -> void:
 				_spawn_pickup(drop.cell, true)
 		drop_index += 1
 	var timed_count: int = _mode.timed_pickup_count(_tick)
-	if timed_count > 0:
-		var free := _free_cells()
-		var selected_cells: Array[Vector2i] = []
-		for index in mini(timed_count, free.size()):
-			var selected := int(_draw_random() * free.size())
-			selected_cells.append(free[selected])
-			free.remove_at(selected)
-		for cell in selected_cells: _spawn_pickup(cell, false)
+	if timed_count > 0: spawn_random_pickups(timed_count)
 	for actor in _actors.values():
 		if actor.alive and actor.transit_until == 0 and actor.action_started_tick != _tick and _pickups.has(actor.cell):
 			var kind: StringName = _pickups[actor.cell]
@@ -465,6 +460,40 @@ func _advance_pickups() -> void:
 			for other in _actor_ids:
 				if other != id and _actors[other].cell == _actors[id].cell:
 					_hurt(other, id)
+
+
+## Map.createRamdonProp: choose every cell first, then draw each pickup's class.
+func spawn_random_pickups(count: int) -> void:
+	var free := _free_cells()
+	var selected_cells: Array[Vector2i] = []
+	for index in mini(count, free.size()):
+		var selected := int(_draw_random() * free.size())
+		selected_cells.append(free[selected])
+		free.remove_at(selected)
+	for cell in selected_cells: _spawn_pickup(cell, false)
+
+
+## Mode hooks reach the live actors, the board, controlled draws and free cells here.
+func actors() -> Dictionary:
+	return _actors
+
+
+func board() -> Dictionary:
+	return _board
+
+
+func draw_random() -> float:
+	return _draw_random()
+
+
+func free_cells(margin: int = 0) -> Array[Vector2i]:
+	return _free_cells().filter(func(cell: Vector2i):
+		# containerMove(map, m, m, m, m): x in 1+m .. width-1-m, y likewise.
+		return cell.x > margin and cell.y > margin and cell.x <= _board_max.x - margin and cell.y <= _board_max.y - margin)
+
+
+func current_tick() -> int:
+	return _tick
 
 
 ## Empty cells for placed pickups, x first then y as the source enumerates them.

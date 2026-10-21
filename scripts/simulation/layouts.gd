@@ -65,6 +65,7 @@ static func roll(name: String, soft_chance: float, rng: RandomNumberGenerator) -
 			cells[cell] = tile
 	var board := BoardData.make(cells, BoardData._link(pairs), StringName(layout.set), features, name)
 	board.variants = variants
+	board.portal_ids = BoardData.pair_ids(pairs)
 	board.center = CENTER if layout.rows[CENTER.y][CENTER.x] == "centerProp" else null
 	return board
 

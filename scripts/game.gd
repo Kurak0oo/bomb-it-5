@@ -126,12 +126,15 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 			actors[roster[index]].merge({"hat": look[0], "body": look[1]})
 		if index > 0:
 			actors[roster[index]].merge({"speed": profile.speed, "power": profile.power, "capacity": profile.capacity})
+		else:
+			actors[roster[index]].speed = mode.player_speed()
 	simulation = Simulation.new(roster, actors, board.cells,
 		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
 		"drops": true, "seed": session_seed, "mode": mode,
 		"vehicles": StageSets.vehicles(board.skin),
 		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,
-			"variants": board.get("variants", {}), "center": board.get("center", Vector2i(7, 6))}})
+			"variants": board.get("variants", {}), "center": board.get("center", Vector2i(7, 6)),
+			"portal_ids": board.get("portal_ids", {})}})
 	scheduler = Scheduler.new(roster, simulation)
 	add_child(scheduler)
 	scheduler.set_process(false)

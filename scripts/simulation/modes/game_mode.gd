@@ -73,6 +73,30 @@ func settle(_round: RefCounted, _outcome: StringName, _gameplay_end_tick: int) -
 	return 0
 
 
+## Rules XML `player/<difficulty>/<mode>/model@moveSpeed` for humans.
+func player_speed() -> float:
+	return 1.6
+
+
+## Map load (`mapLoadOver`), after the board and actors exist.
+func begin(_round: RefCounted) -> void:
+	pass
+
+
+## Once per admitted tick while playing, after movement, pickups and deaths.
+func tick(_round: RefCounted, _tick: int) -> void:
+	pass
+
+
+## Mode objects the view draws (flags, coins, progress); copied into snapshots.
+func public_state() -> Dictionary:
+	return {}
+
+
+func points_goal() -> int:
+	return 10
+
+
 ## The HUD's per-player mode score (`scoreData`); -1 shows the ordinary score.
 func points(_actor: Dictionary) -> int:
 	return -1

@@ -27,6 +27,7 @@ The evidence starts with the hashed publisher build and separates static finding
 - [Stage-set openings](edition-5-stage-openings.md): 48 original Arcade openings matched exactly to the recorded templates; soft-block chance 0.6 at runtime (0.607 unseeded); Birthday Party layout 3 is an empty arena; Linux reference-player build.
 - [Difficulty](edition-5-difficulty.md): observed Easy/Normal/Hard drop chance, AI range/answer time and the Easy spawn shield; `dangePerceive` is never read.
 - [Kill mode](edition-5-kill-mode.md): observed hammer base action, 0.55 soft blocks, respawn at the spawn with protection, AI-versus-AI kill race and the ending at 10 kills.
+- [Green Zone](edition-5-green-zone.md): observed flag placement inside the two-cell margin, no soft blocks, player speed 1.8 and the AI flag race.
 - [Modes, menus, progression and unlocks](edition-5-modes-and-flow.md): static recovery of Kill, Green Zone, Pac-Man, difficulty, settings, level/stage progression, per-mode scoring, unlocks and saved data, with a soft-block probability correction (Arcade 0.6, not 0.8).
 - [Recovery-to-porting handoff](edition-5-porting-handoff.md): source-to-Godot classifications, accepted adaptations and the ordered fidelity implementation boundary.
 - [Recovery acceptance and verification](edition-5-recovery-verification.md): ticket-by-ticket evidence, independent Standards/Spec findings and fixes, integrity checks and the unchanged 244-check Godot baseline.

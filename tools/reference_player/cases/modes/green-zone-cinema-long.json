@@ -1,0 +1,192 @@
+{
+  "name": "green-zone-cinema-long",
+  "origin": "Input-only Green Zone opening on Cinema (Normal), then the player idles; observed every 525 emulated frames until the ending",
+  "actions": [
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 568 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 356"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "step 525",
+      "capture": "g01"
+    },
+    {
+      "command": "step 525",
+      "capture": "g02"
+    },
+    {
+      "command": "step 525",
+      "capture": "g03"
+    },
+    {
+      "command": "step 525",
+      "capture": "g04"
+    },
+    {
+      "command": "step 525",
+      "capture": "g05"
+    },
+    {
+      "command": "step 525",
+      "capture": "g06"
+    },
+    {
+      "command": "step 525",
+      "capture": "g07"
+    },
+    {
+      "command": "step 525",
+      "capture": "g08"
+    },
+    {
+      "command": "step 525",
+      "capture": "g09"
+    },
+    {
+      "command": "step 525",
+      "capture": "g10"
+    },
+    {
+      "command": "step 525",
+      "capture": "g11"
+    },
+    {
+      "command": "step 525",
+      "capture": "g12"
+    },
+    {
+      "command": "step 525",
+      "capture": "g13"
+    },
+    {
+      "command": "step 525",
+      "capture": "g14"
+    },
+    {
+      "command": "step 525",
+      "capture": "g15"
+    },
+    {
+      "command": "step 525",
+      "capture": "g16"
+    },
+    {
+      "command": "step 525",
+      "capture": "g17"
+    },
+    {
+      "command": "step 525",
+      "capture": "g18"
+    },
+    {
+      "command": "step 525",
+      "capture": "g19"
+    },
+    {
+      "command": "step 525",
+      "capture": "g20"
+    },
+    {
+      "command": "step 525",
+      "capture": "g21"
+    },
+    {
+      "command": "step 525",
+      "capture": "g22"
+    },
+    {
+      "command": "step 525",
+      "capture": "g23"
+    },
+    {
+      "command": "step 525",
+      "capture": "g24"
+    },
+    {
+      "command": "step 525",
+      "capture": "g25"
+    },
+    {
+      "command": "step 525",
+      "capture": "g26"
+    },
+    {
+      "command": "step 525",
+      "capture": "g27"
+    },
+    {
+      "command": "step 525",
+      "capture": "g28"
+    },
+    {
+      "command": "step 525",
+      "capture": "g29"
+    },
+    {
+      "command": "step 525",
+      "capture": "g30"
+    }
+  ]
+}

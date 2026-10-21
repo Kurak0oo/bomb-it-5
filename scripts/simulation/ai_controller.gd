@@ -70,7 +70,10 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 		else:
 			# Source never resets this cached accumulator after its initial threshold.
 			memory.answer_elapsed = state.tick * 1000.0 / 35.0
-	_follow(state, id, memory, output)
+	if memory.state == &"Defence" and not memory.complete:
+		_defend(state, id, memory, output)
+	else:
+		_follow(state, id, memory, output)
 	output.observation = _observation(memory, id == _selected)
 	return output
 
@@ -106,6 +109,21 @@ func _choose(state: Dictionary, id: StringName, memory: Dictionary) -> void:
 				if not _danger(perception, actor.cell, 40): continue
 				target = _best(state, actor.cell, perception.free.duplicate(), perception.costs, 1500)
 			&"GetItem": target = _item(state, actor.cell, perception)
+			&"Flag":
+				# StateFlag: walk to a visible flag unless already standing on it.
+				if actor.cell in perception.flags: continue
+				target = _best(state, actor.cell, perception.flags.duplicate(), perception.costs, 100)
+			&"Defence":
+				# StateDefence: hold the flag cell and strike rivals in line.
+				if actor.cell != state.get("mode_state", {}).get("flag"): continue
+				choice = kind
+				default_instance = false
+				memory.state = choice
+				memory.default = false
+				memory.complete = false
+				memory.route = []
+				memory.timer = state.tick + 70
+				return
 			&"Free": target = _best(state, actor.cell, perception.free.duplicate(), perception.costs, 100)
 			&"Escape":
 				var invincible := _invincible_enemies(state, id)
@@ -386,3 +404,27 @@ func _nearest_target(state: Dictionary, id: StringName) -> StringName:
 		if best == &"" or _manhattan(state.actors[other].cell, state.actors[id].cell) < _manhattan(state.actors[best].cell, state.actors[id].cell):
 			best = other
 	return best if best != &"" else human_id
+
+
+## StateDefence.update: stay on the flag; leave when the cell is dangerous; attack a
+## rival in line within weapon range when the line between is clear.
+func _defend(state: Dictionary, id: StringName, memory: Dictionary, output: Dictionary) -> void:
+	var actor: Dictionary = state.actors[id]
+	var flag: Variant = state.get("mode_state", {}).get("flag")
+	if flag == null or actor.cell != flag or _danger(Perception.observe(state, id, _node_costs, profile.find_range, _attack_all()), actor.cell, 30):
+		memory.complete = true
+		return
+	var reach := _attack_reach(actor)
+	for other in state.actors:
+		var rival: Dictionary = state.actors[other]
+		if other == id or not rival.alive or rival.protected_until > state.tick: continue
+		var delta: Vector2i = rival.cell - actor.cell
+		if (delta.x != 0 and delta.y != 0) or delta == Vector2i.ZERO or _manhattan(rival.cell, actor.cell) > reach: continue
+		var step := Vector2i(signi(delta.x), signi(delta.y))
+		var clear := true
+		for distance in range(1, _manhattan(rival.cell, actor.cell)):
+			clear = clear and Perception.is_open(state, actor.cell + step * distance)
+		if not clear: continue
+		output.direction = Vector2(step)
+		output.bomb_events = [&"down", &"up"]
+		return
