@@ -93,8 +93,10 @@ func _draw() -> void:
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind": _attack(attack)
 	_label(Vector2(1010, 339), "HOW TO PLAY", 17, Color("ffd989"))
-	_label(Vector2(1010, 367), "Arrows to move", 17)
-	_label(Vector2(1010, 393), "Space: bomb / item", 17)
+	var keys: Dictionary = state.get("bindings", {})
+	var arrows: bool = keys.is_empty() or (keys.up == KEY_UP and keys.left == KEY_LEFT and keys.down == KEY_DOWN and keys.right == KEY_RIGHT)
+	_label(Vector2(1010, 367), "Arrows to move" if arrows else "%s %s %s %s to move" % [_key(keys.up), _key(keys.left), _key(keys.down), _key(keys.right)], 17)
+	_label(Vector2(1010, 393), "%s: bomb / item" % ("Space" if keys.is_empty() else _key(keys.bomb)), 17)
 	_label(Vector2(1010, 419), "P: pause", 17)
 	_label(Vector2(30, 658), "MOVE", 15, Color("a9d4de"))
 	_label(Vector2(30, 681), "Eight directions · equal speed", 13, Color("8cb1bb"))
@@ -110,6 +112,10 @@ func _draw() -> void:
 
 func _board_skin() -> StringName:
 	return state.get("board_meta", {}).get("skin", &"cinema") if not state.is_empty() else &"cinema"
+
+
+func _key(keycode: int) -> String:
+	return {KEY_UP: "↑", KEY_DOWN: "↓", KEY_LEFT: "←", KEY_RIGHT: "→"}.get(keycode, OS.get_keycode_string(keycode))
 
 
 func _mode_caption() -> String:

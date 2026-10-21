@@ -60,14 +60,16 @@ static func choices(parent: Node, at: Vector2, options: Array, selected: Variant
 static func label(parent: Node, text: String, at: Vector2, font_px := 20, color := FONT_COLOR, width := -1.0,
 		align := HORIZONTAL_ALIGNMENT_LEFT) -> Label:
 	var widget := Label.new()
-	widget.text = text
-	widget.position = at
 	widget.add_theme_font_size_override("font_size", font_px)
 	widget.add_theme_color_override("font_color", color)
 	widget.horizontal_alignment = align
 	if width > 0:
-		widget.size.x = width
+		# Wrap and width before the text, or the label sizes itself to one long line.
 		widget.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		widget.custom_minimum_size.x = width
+		widget.size.x = width
+	widget.text = text
+	widget.position = at
 	parent.add_child(widget)
 	return widget
 

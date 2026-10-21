@@ -15,6 +15,8 @@ func _initialize() -> void:
 func _run() -> void:
 	root.size = Vector2i(1280, 720)
 	app = load("res://scenes/main.tscn").instantiate()
+	app.save_path = "user://flow-check-save.json"
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(app.save_path))
 	root.add_child(app)
 	await process_frame
 	_expect(app.current == &"menu", "the game opens on the main menu")

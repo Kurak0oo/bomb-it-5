@@ -41,6 +41,20 @@ confirmation before parity is claimed.
 - Portal-only features also exist (avatar upload screens, `AwardSender`
   achievements, analytics); they are not game rules.
 
+## Controls and rebinding
+
+`HowToPlayUI` defaults are arrows and Space for one player (`38,37,40,39,32`). A
+control may take a key from `_asciiMove` (letters, digits, arrows, `~ , . ; ' [ ] - +
+\ /`); the bomb key also takes `_asciiBomb`'s Space, numpad, F1–F8, Tab and Esc.
+`MyTextField` refuses a key already used by another control or P (80, pause), with
+"This key is not possible.Please choose a different key." SAVE writes the keys to
+the SharedObject ("Custom controls saved."); BACK without SAVE restores the keys
+the screen opened with (`saveDefaultData`). Power-up guide names are in the static
+texts: BOMB +1, POWER BLAST +1, SPEED +10%, LIFE +1, SHIELD, INVINCIBILITY, PUSH THE
+BOMB, BOXING GLOVE; weapons LANDMINE, FLAMETHROWER, LIGHTNING GUN, HAMMER, MACHINE
+GUN, FIREBALL LAUNCHER; vehicles SPORT CAR (`CarProp`), SKATEBOARD
+(`MotoCycleProp`), FROG (`HorseProp`), MAMMOTH (`DragonProp`, `_Elephant`).
+
 ## Settings
 
 `GameModel` defaults (`GameModel.init`): 1 player, Arcade, 3 enemies, 5 levels,

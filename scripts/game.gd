@@ -13,6 +13,7 @@ const AIProfiles = preload("res://scripts/simulation/ai_profiles.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const Modes = preload("res://scripts/simulation/modes/modes.gd")
+const SaveStore = preload("res://scripts/save_store.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -39,6 +40,8 @@ var stage_set: StringName = &""
 ## Set before entering the tree: a session drives levels and hides development controls.
 var session: RefCounted = null
 var auto_start := true
+## Desktop key per action (up/left/down/right/bomb); the app supplies saved bindings.
+var bindings: Dictionary = SaveStore.DEFAULT_KEYS.duplicate()
 
 
 func _ready() -> void:
@@ -150,6 +153,7 @@ func get_snapshot() -> Dictionary:
 	result.session = {"lives": session_lives if result_credited else state.actors[&"human"].lives,
 		"total_score": total_score, "game_over": not practice and session_lives <= 0,
 		"level": session.level_text() if session != null else ""}
+	result.bindings = bindings
 	return result
 
 
@@ -220,16 +224,16 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventKey:
 		if event.keycode == KEY_P and event.pressed and not event.echo:
 			toggle_pause()
-		elif event.keycode == KEY_SPACE and _can_control():
+		elif event.keycode == bindings.bomb and _can_control():
 			scheduler.enqueue_bomb_event(&"human", &"down" if event.pressed else &"up")
-		elif event.keycode in [KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT] and _can_control():
+		elif event.keycode in [bindings.up, bindings.down, bindings.left, bindings.right] and _can_control():
 			if event.pressed and not event.echo:
 				held.erase(event.keycode)
 				held.append(event.keycode)
 			elif not event.pressed:
 				held.erase(event.keycode)
-			var directions := {KEY_UP: Vector2.UP, KEY_DOWN: Vector2.DOWN,
-				KEY_LEFT: Vector2.LEFT, KEY_RIGHT: Vector2.RIGHT}
+			var directions := {bindings.up: Vector2.UP, bindings.down: Vector2.DOWN,
+				bindings.left: Vector2.LEFT, bindings.right: Vector2.RIGHT}
 			scheduler.set_direction(&"human", Vector2.ZERO if held.is_empty() else directions[held.back()])
 
 

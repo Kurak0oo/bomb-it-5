@@ -10,6 +10,26 @@ const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const UiKit = preload("res://scripts/ui_kit.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const GameView = preload("res://scripts/game_view.gd")
+const SaveStore = preload("res://scripts/save_store.gd")
+const ArtCatalog = preload("res://scripts/art/catalog.gd")
+## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
+## The unresolved glove slots (BOXING GLOVE, PUSH THE BOMB) are left out.
+const GUIDE := [
+	["POWER-UPS", [[&"capacity", "BOMB +1", "Place one more bomb at a time."],
+		[&"power", "POWER BLAST +1", "Your blasts reach one cell farther."],
+		[&"speed", "SPEED +10%", "Move faster."],
+		[&"life", "LIFE +1", "One more heart for this run."],
+		[&"shield", "SHIELD", "Absorbs one hit."],
+		[&"invincible", "INVINCIBILITY", "Brief immunity; touching rivals defeats them."]]],
+	["WEAPONS", [[&"hammer", "HAMMER", "Smash the cell in front. Two uses."],
+		[&"flamer", "FLAMETHROWER", "A short burst of fire ahead. Two uses."],
+		[&"laser", "LIGHTNING GUN", "A beam along the whole lane. Two uses."],
+		[&"triple", "MACHINE GUN", "Three quick shots ahead. Two uses."],
+		[&"shotgun", "FIREBALL LAUNCHER", "A fireball that flies ahead. Two uses."],
+		[&"landmine", "LANDMINE", "A hidden mine; arms when you step off. One use."]]],
+	["VEHICLES", [[&"car", "SPORT CAR", "Drive fast; a hit costs the car, not you."],
+		[&"moto", "SKATEBOARD", "Ride faster; a hit costs the board, not you."]]],
+]
 ## Edition 5 Game Settings modes in source order; unported modes show disabled.
 const MODE_ORDER: Array[StringName] = [&"arcade", &"kill", &"pac_man", &"green_zone"]
 const MODE_TITLES := {&"arcade": "ARCADE", &"kill": "BATTLE ROYALE", &"pac_man": "PAC-MAN", &"green_zone": "GREEN ZONE"}
@@ -21,11 +41,16 @@ var screen: Control
 var game: Node2D
 var skin: RefCounted
 var current := &""
+var save_path := SaveStore.DEFAULT_PATH
+var store: RefCounted
+var _rebinding: StringName = &""
+var _message: Label
 
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	skin = VisualSkin.new()
+	store = SaveStore.new(save_path)
 	if "--practice" in OS.get_cmdline_user_args():
 		_open_practice()
 	else:
@@ -53,14 +78,103 @@ func show_main_menu() -> void:
 	start.grab_focus.call_deferred()
 
 
-func show_how_to_play() -> void:
-	# Replaced by the full How to Play screen (#61).
+func show_how_to_play(page_name: StringName = &"controls") -> void:
+	if page_name == &"controls": store.load_file()
+	_show_guide(page_name)
+
+
+func _show_guide(page_name: StringName) -> void:
+	_rebinding = &""
 	var page := _page(&"how_to_play")
-	UiKit.panel(page, Rect2(240, 110, 800, 460))
-	UiKit.label(page, "HOW TO PLAY", Vector2(0, 140), 40, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
-	UiKit.label(page, "Move with the arrow keys or the left stick. Space or the right button places a bomb or uses an item. P pauses.",
-		Vector2(300, 230), 22, UiKit.FONT_COLOR, 680)
-	UiKit.button(page, "BACK", Rect2(540, 480, 200, 56), show_main_menu, skin).grab_focus.call_deferred()
+	UiKit.label(page, "HOW TO PLAY", Vector2(0, 30), 42, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
+	var tabs := UiKit.choices(page, Vector2(410, 95), [["CONTROLS", &"controls", true], ["POWER-UPS", &"power_ups", true]],
+		page_name, func(value): _show_guide(value), 220)
+	tabs[0].name = "ControlsTab"
+	tabs[1].name = "PowerUpsTab"
+	if page_name == &"controls": _controls_page(page)
+	else: _power_ups_page(page)
+	var back := UiKit.button(page, "BACK", Rect2(130, 630, 220, 60), _leave_guide, skin, 24)
+	back.name = "Back"
+	back.grab_focus.call_deferred()
+
+
+func _controls_page(page: Control) -> void:
+	UiKit.panel(page, Rect2(130, 165, 500, 445), Color("1d4557"), Color("5d96a3"))
+	UiKit.label(page, "KEYBOARD", Vector2(160, 180), 24, Color("ffc79a"))
+	var titles := {&"up": "UP", &"left": "LEFT", &"down": "DOWN", &"right": "RIGHT", &"bomb": "BOMB / ITEM"}
+	for index in SaveStore.ACTIONS.size():
+		var action: StringName = SaveStore.ACTIONS[index]
+		UiKit.label(page, titles[action], Vector2(160, 233 + index * 56), 21)
+		var key := UiKit.button(page, SaveStore.key_name(store.keys[action]), Rect2(400, 225 + index * 56, 200, 46),
+			func(): _begin_rebind(action), null, 20)
+		key.name = "Key_" + action
+	UiKit.label(page, "PAUSE", Vector2(160, 513), 21)
+	UiKit.label(page, "P", Vector2(400, 513), 21, UiKit.ACCENT, 200, HORIZONTAL_ALIGNMENT_CENTER)
+	_message = UiKit.label(page, "Click a control button to change it.", Vector2(160, 560), 18, Color("b4d2d7"), 440)
+	_message.name = "Message"
+	UiKit.button(page, "RESET", Rect2(660, 470, 220, 56), _reset_keys, skin, 22).name = "ResetKeys"
+	UiKit.button(page, "SAVE", Rect2(910, 470, 220, 56), _save_keys, skin, 22).name = "SaveKeys"
+	UiKit.panel(page, Rect2(660, 165, 470, 285), Color("1d4557"), Color("5d96a3"))
+	UiKit.label(page, "TOUCH", Vector2(690, 180), 24, Color("ffc79a"))
+	UiKit.label(page, "Drag the stick on the left to move in eight directions. Tap the button on the right to place a bomb or use your item.",
+		Vector2(690, 225), 19, UiKit.FONT_COLOR, 410)
+	var goals := ""
+	for mode in Modes.available(): goals += "%s: %s\n" % [MODE_TITLES[mode], Modes.GOALS[mode]]
+	UiKit.label(page, goals.strip_edges(), Vector2(690, 345), 18, Color("b4d2d7"), 410)
+
+
+func _power_ups_page(page: Control) -> void:
+	for column in GUIDE.size():
+		var x := 130 + column * 345
+		UiKit.panel(page, Rect2(x, 165, 330, 455), Color("1d4557"), Color("5d96a3"))
+		UiKit.label(page, GUIDE[column][0], Vector2(x + 20, 180), 24, Color("ffc79a"))
+		var entries: Array = GUIDE[column][1]
+		for row in entries.size():
+			var entry: Array = entries[row]
+			var y := 222 + row * 65
+			var icon := ItemIcon.new()
+			icon.kind = entry[0]
+			icon.skin = skin
+			icon.position = Vector2(x + 16, y)
+			icon.size = Vector2(44, 44)
+			page.add_child(icon)
+			UiKit.label(page, entry[1], Vector2(x + 70, y - 4), 17, UiKit.ACCENT)
+			var detail := UiKit.label(page, entry[2], Vector2(x + 70, y + 18), 13, UiKit.FONT_COLOR, 250)
+			detail.add_theme_constant_override("line_spacing", -3)
+
+
+func _begin_rebind(action: StringName) -> void:
+	_rebinding = action
+	_message.text = "Select a key with your keyboard"
+
+
+func _input(event: InputEvent) -> void:
+	if _rebinding == &"" or not (event is InputEventKey) or not event.pressed or event.echo: return
+	get_viewport().set_input_as_handled()
+	var keycode: int = event.keycode
+	if store.can_bind(_rebinding, keycode):
+		store.keys[_rebinding] = keycode
+		var button: Button = screen.find_child("Key_" + _rebinding, true, false)
+		button.text = SaveStore.key_name(keycode)
+		_message.text = "Click a control button to change it."
+	else:
+		_message.text = "This key is not possible. Please choose a different key."
+	_rebinding = &""
+
+
+func _reset_keys() -> void:
+	store.keys = SaveStore.DEFAULT_KEYS.duplicate()
+	_show_guide(&"controls")
+
+
+func _save_keys() -> void:
+	_message.text = "Custom controls saved." if store.save_file() else "Controls could not be saved."
+
+
+## Leaving without SAVE discards key changes, as `HowToPlayUI.backHandle` does.
+func _leave_guide() -> void:
+	store.load_file()
+	show_main_menu()
 
 
 func show_settings() -> void:
@@ -168,6 +282,7 @@ func _start_level() -> void:
 		game.session = session
 		game.auto_start = false
 		game.visual_skin = skin
+		game.bindings = store.keys.duplicate()
 		game.level_settled.connect(_on_level_settled)
 		game.main_menu_requested.connect(show_main_menu)
 		add_child(game)
@@ -321,3 +436,18 @@ class RobotBadge extends Control:
 
 	func _notification(what: int) -> void:
 		if what in [NOTIFICATION_FOCUS_ENTER, NOTIFICATION_FOCUS_EXIT]: queue_redraw()
+
+
+## A pickup icon: the workbench `item.<kind>` slot or the native badge.
+class ItemIcon extends Control:
+	var kind: StringName
+	var skin: RefCounted
+
+	func _draw() -> void:
+		var rect := Rect2(Vector2.ZERO, size)
+		if skin != null and skin.draw(self, "item." + kind, rect): return
+		draw_circle(size / 2, size.x / 2 - 2, Color("d1fff0"))
+		draw_arc(size / 2, size.x / 2 - 2, 0, TAU, 28, Color("60b4a4"), 2, true)
+		var text: String = GameView.ITEM_NAMES.get(kind, "?")
+		draw_string(ThemeDB.fallback_font, size / 2 + Vector2(-text.length() * 4.5, 6), text,
+			HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("173c40"))
