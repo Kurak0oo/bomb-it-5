@@ -171,11 +171,16 @@ the difficulty bonus, a loss adds neither. Totals carry across the session.
 
 ## Stage-set map features
 
-Only Cinema portals are implemented today. Other sets use their own tiles
-(`MapMaster`, `maps/platform/`): Zoo crocodile (blast passes through), lava organ
-(eruption delay 5–15 s), Birthday Party toy hands, Candy Factory conveyor belts and
-sliding platforms, Magic Library spellbooks. Vehicles differ per set (above
-`AbstractGameMode.initMap`). Each needs its own recovery record before porting.
+Only Cinema portals are implemented today. Recorded layout tiles
+(cell counts over the [recovered maps](observations/swf-v1.6.1/maps/INDEX.md))
+and the map-data classes give, per set: Zoo crocodiles (14 cells; blasts pass
+through), Birthday Party toy hands (9), Candy Factory conveyor belts (99) and
+sliding platforms (28), and Magic Library spellbooks, which
+`MagicLibraryMapData` creates on its center-building cells. Luxury Stores has no
+special tile. Five map-data classes can create a `LavaOrgan` from a `lavaOrgan`
+instance, but no recorded layout contains one. Vehicles differ per set
+(`AbstractGameMode.initMap`). Each feature needs its own recovery record before
+porting.
 
 ## Uncertain or unobserved
 
