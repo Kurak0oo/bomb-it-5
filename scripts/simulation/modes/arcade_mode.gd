@@ -14,6 +14,11 @@ func soft_chance() -> float:
 	return 0.6
 
 
+## Easy puts a ShieldProp on each human spawn (`ArcadeMode.mapLoadOver`).
+func opening_pickups(human_spawn: Vector2i) -> Dictionary:
+	return {human_spawn: &"shield"} if difficulty == &"easy" else {}
+
+
 func timed_pickup_count(tick: int) -> int:
 	# ArcadeMode.timePassed uses >45, so the first timed spawn is at 60 seconds.
 	if tick > 45 * 35 and tick % (15 * 35) == 0:

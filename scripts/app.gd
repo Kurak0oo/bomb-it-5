@@ -14,8 +14,7 @@ const GameView = preload("res://scripts/game_view.gd")
 const MODE_ORDER: Array[StringName] = [&"arcade", &"kill", &"pac_man", &"green_zone"]
 const MODE_TITLES := {&"arcade": "ARCADE", &"kill": "BATTLE ROYALE", &"pac_man": "PAC-MAN", &"green_zone": "GREEN ZONE"}
 const DIFFICULTIES: Array[StringName] = [&"easy", &"normal", &"hard"]
-## Difficulties the round implements; Easy and Hard arrive with #60.
-static var playable_difficulties: Array[StringName] = [&"normal"]
+static var playable_difficulties: Array[StringName] = [&"easy", &"normal", &"hard"]
 
 var session: RefCounted = Session.new()
 var screen: Control

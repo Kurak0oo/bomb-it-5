@@ -56,6 +56,7 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 	_vehicles_left = _rules.get("vehicle_budget", 4)
 	_spawned_drops = _rules.get("drop_count", 0)
 	_pickups = _rules.get("pickups", {}).duplicate(true)
+	_pickups.merge(_mode.opening_pickups(_actors[_actor_ids[0]].cell), true)
 	if _rules.get("portals", false) is Dictionary:
 		_portals = _rules.portals.duplicate()
 	elif _rules.get("portals", false):
@@ -415,7 +416,7 @@ func _advance_pickups() -> void:
 			var occupied := false
 			for actor in _actors.values():
 				occupied = occupied or (actor.alive and actor.cell == drop.cell)
-			if not occupied and _spawned_drops < 32 and _draw_random() < _rules.get("drop_chance", 0.5):
+			if not occupied and _spawned_drops < 32 and _draw_random() < _rules.get("drop_chance", _mode.drop_chance()):
 				_spawn_pickup(drop.cell, true)
 		drop_index += 1
 	var timed_count: int = _mode.timed_pickup_count(_tick)

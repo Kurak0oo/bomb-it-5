@@ -25,6 +25,7 @@ The evidence starts with the hashed publisher build and separates static finding
 - [AI trace plan](edition-5-ai-trace-plan.md) and [AI runtime probes](edition-5-ai-runtime-probes.md): profile/parser quirks, perception/search/ranking, state/route decisions, original controls and all selected weapons.
 - [Death/results runtime probes](edition-5-results-runtime-probes.md): zero-kill victory, simultaneous defeat, retry hearts, HUD versus result totals and game over.
 - [Stage-set openings](edition-5-stage-openings.md): 48 original Arcade openings matched exactly to the recorded templates; soft-block chance 0.6 at runtime (0.607 unseeded); Birthday Party layout 3 is an empty arena; Linux reference-player build.
+- [Difficulty](edition-5-difficulty.md): observed Easy/Normal/Hard drop chance, AI range/answer time and the Easy spawn shield; `dangePerceive` is never read.
 - [Modes, menus, progression and unlocks](edition-5-modes-and-flow.md): static recovery of Kill, Green Zone, Pac-Man, difficulty, settings, level/stage progression, per-mode scoring, unlocks and saved data, with a soft-block probability correction (Arcade 0.6, not 0.8).
 - [Recovery-to-porting handoff](edition-5-porting-handoff.md): source-to-Godot classifications, accepted adaptations and the ordered fidelity implementation boundary.
 - [Recovery acceptance and verification](edition-5-recovery-verification.md): ticket-by-ticket evidence, independent Standards/Spec findings and fixes, integrity checks and the unchanged 244-check Godot baseline.

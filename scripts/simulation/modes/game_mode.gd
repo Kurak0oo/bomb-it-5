@@ -15,6 +15,16 @@ func drop_weights() -> Dictionary:
 	return Pickups.WEIGHTS
 
 
+## Rules XML `propProp`: chance a broken soft block drops a pickup (`MapMaster`).
+func drop_chance() -> float:
+	return {&"easy": 0.6, &"normal": 0.5, &"hard": 0.4}.get(difficulty, 0.5)
+
+
+## Pickups placed when the map loads (`mapLoadOver`), keyed by cell.
+func opening_pickups(_human_spawn: Vector2i) -> Dictionary:
+	return {}
+
+
 ## Rules XML `box`: chance that a soft-block candidate holds a block.
 func soft_chance() -> float:
 	return 0.0
