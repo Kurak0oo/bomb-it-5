@@ -15,7 +15,7 @@ This file owns accepted product and architecture decisions. [Development](docs/d
 - Later, in order: co-op against AI across phones, then PvP. No networking in the first slice. No accounts.
 - A round has a replaceable ending. The selected first ending is "all enemies are dead," source-supported for normal Arcade play in the [Dots evidence assessment](docs/evidence/edition-5-play-observations.md). For the new game, timeout is a loss while enemies remain, deliberately replacing the original anomalous timeout-completion path. Later modes and tasks are another ending plus extra rules on the same round. The first build implemented one ending; the complete game adds the other selectable edition 5 modes on the same round (2026-10-21, below).
 - Before the SWF is read, the only bomb behavior that may be coded is the shared match: place a bomb, a fuse, a plus-shaped blast, and soft blocks that break. The glove, the bouncer, the magic carpet, and the heavy bomb are named empty slots. Nothing fills a slot from a portal description.
-- Maps come from the original edition 5 game. Tile count, solids, soft blocks, and spawns are recovered. There is no stand-in 15×13 board and no map generator.
+- Maps come from the original edition 5 game. Tile count, solids, soft blocks, and spawns are recovered. There is no stand-in 15×13 board and no map generator. The complete game rolls boards from recorded layouts as the original does; invented maps may later arrive through the same map-data seam (2026-10-21, below).
 - The gameplay screen's layout and the elements on it come from the original gameplay screen. Painted pixels are redrawn later in that painting style. Unmodified copies of SWF sprites, music, and level art stay out of the Douyin build. SWF-derived art may be modified into candidate art. Candidates are never applied automatically; the user reviews each one before Apply to game (2026-10-21, below).
 - Soft blocks drop nothing until source evidence establishes the behavior. [Conditional-drop evidence has now been supplied](docs/evidence/edition-5-play-observations.md); implementation must follow its verified conditions rather than assuming guaranteed drops.
 
@@ -132,6 +132,18 @@ list what the original offers; recovered rules still precede implementation.
   behavior and difficulty are AI profiles. The accepted adaptations (35-tick
   scheduler, pause and input lifecycle, eight-direction movement, bomb batch rules,
   bomb-overlap departure) apply in every mode.
+- **Boards:** each round picks one of the stage set's recorded layouts and rolls
+  its soft blocks with the source probability, as edition 5 does, in every mode.
+  Boards enter the round as map data, so invented maps can be added later through
+  the same seam; none are built now.
+- **Timeouts:** Kill, Green Zone and Pac-Man use each mode's recovered timeout
+  judgment. A clear source defect is fixed only by an explicit decision, as with
+  Arcade's loss-on-timeout adaptation.
+- **Practice:** the fixed practice board stays a development launch, used by the
+  workbench's Preview in game and by tests. It is not on the player menu.
+- **Art slots:** the workbench catalogue grows to cover all eight robots, the
+  unlock cosmetics, the new screens and the other stage-set skins, with native
+  defaults. Finished-art gate #20 covers the larger catalogue.
 - **Tracking:** a new parent specification and its tickets carry this work. Final
   desktop acceptance #21 is blocked by them, as well as by #20, and verifies the
   complete game. #20 stays open.

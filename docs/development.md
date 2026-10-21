@@ -56,7 +56,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
 | Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
-| Complete edition 5 game scope | Accepted on 2026-10-21; specification not yet drafted | All four selectable modes, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 0–3 AI. See DESIGN.md and ADR 0007. Next: settle the open follow-ups below, recover mode/difficulty/unlock rules, then draft a new parent specification and tickets for approval. #21 will be blocked by them; #20 stays open |
+| Complete edition 5 game scope | Accepted on 2026-10-21, follow-ups settled; specification not yet drafted | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 0–3 AI. See DESIGN.md and ADR 0007. Next: recover mode/difficulty/unlock rules, then draft a new parent specification and tickets for approval. #21 will be blocked by them; #20 stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
 
@@ -74,15 +74,13 @@ character select, How to Play with key rebinding, and cloth/hat unlocks; local
 #20 stays open. DESIGN.md and [ADR 0007](adr/0007-complete-edition-5-game.md)
 record the scope. No implementation or tracker changes were made.
 
-Open follow-ups, not yet decided:
-
-- Board generation in the full game: the source rolls each soft block at 0.8 and
-  picks one of three layouts per set, while the accepted rule is no generator and
-  the recorded instance for practice.
-- Timeout in Kill, Green Zone and Pac-Man: follow each mode's recovered judgment,
-  or extend the Arcade loss-on-timeout adaptation.
-- Whether practice stays reachable in the complete game.
-- Workbench slots for the eight robots, unlock cosmetics and the new screens.
+The follow-ups were settled in the same interview: original layout picks and
+soft-block rolls in every mode, with a map-data seam for invented maps later;
+each mode's recovered timeout judgment; practice as a development launch only;
+and a workbench catalogue extended to eight robots, cosmetics, new screens and
+stage-set skins. Next: recover the mode, difficulty, stage-set and unlock rules
+not yet in evidence, then draft the parent specification and ticket graph for
+approval.
 
 ### 2026-10-21 SWF-derived candidate art
 

@@ -25,6 +25,8 @@ Consequences:
   recovered from the SWF before implementation, as with Arcade. Arcade on Normal
   has the strongest evidence; Kill, Green Zone, Pac-Man, Easy/Hard and unlocks
   need recovery work, which delivering all four together puts up front.
+- Boards roll from recorded layouts as in edition 5. Because a board is map data
+  entering the round, invented maps can be added later without a new round.
 - Unlocks add local save data. There are still no accounts or networking.
 - Local 2-player and MORE GAMES are excluded. Co-op across phones, then PvP,
   remain the later multiplayer order.
