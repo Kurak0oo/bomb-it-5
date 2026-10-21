@@ -1,0 +1,218 @@
+[
+ {
+  "run": "cinema-1",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage3",
+  "mismatches": 0,
+  "soft": 55,
+  "candidates": 104,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 93,
+   "CinemaStage2": 71
+  }
+ },
+ {
+  "run": "cinema-2",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage3",
+  "mismatches": 0,
+  "soft": 69,
+  "candidates": 104,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 92,
+   "CinemaStage2": 72
+  }
+ },
+ {
+  "run": "cinema-3",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage3",
+  "mismatches": 0,
+  "soft": 58,
+  "candidates": 104,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 92,
+   "CinemaStage2": 70
+  }
+ },
+ {
+  "run": "cinema-4",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage1",
+  "mismatches": 0,
+  "soft": 62,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage2": 60,
+   "CinemaStage3": 96
+  }
+ },
+ {
+  "run": "cinema-5",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage2",
+  "mismatches": 0,
+  "soft": 72,
+  "candidates": 108,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 63,
+   "CinemaStage3": 80
+  }
+ },
+ {
+  "run": "cinema-6",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage2",
+  "mismatches": 0,
+  "soft": 62,
+  "candidates": 108,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 62,
+   "CinemaStage3": 79
+  }
+ },
+ {
+  "run": "luxury_stores-1",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 75,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "luxury_stores-2",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 67,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "luxury_stores-3",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage1",
+  "mismatches": 0,
+  "soft": 66,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage2": 54,
+   "LuxuryStoresStage3": 40
+  }
+ },
+ {
+  "run": "luxury_stores-4",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 63,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "luxury_stores-5",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 69,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "luxury_stores-6",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage2",
+  "mismatches": 0,
+  "soft": 71,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 54,
+   "LuxuryStoresStage3": 54
+  }
+ }
+]

@@ -188,7 +188,10 @@ def replay(executable, swf, case_path, output, observe=False, fixtures=False, co
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--player', type=Path, default=Path('.scratch/edition-5-research/ruffle-runtime/target/ci/probe.exe'))
+    default_player = Path('.scratch/edition-5-research/ruffle-runtime/target/ci/probe.exe')
+    if not default_player.exists():
+        default_player = default_player.with_suffix('')  # Linux build (build.sh)
+    parser.add_argument('--player', type=Path, default=default_player)
     parser.add_argument('--swf', type=Path, default=Path('.scratch/edition-5-research/agame-bomb-it-5-zh-fix.swf'))
     parser.add_argument('--case', type=Path, default=Path('tools/reference_player/cases/normal-arcade.json'))
     parser.add_argument('--output', type=Path, required=True)

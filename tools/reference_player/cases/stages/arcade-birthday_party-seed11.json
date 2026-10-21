@@ -1,0 +1,75 @@
+{
+  "name": "arcade-birthday_party-seed11",
+  "origin": "Input-only menu path to a chosen mode/arena/difficulty opening with original-RNG seed 11",
+  "actions": [
+    {
+      "command": "seed 11"
+    },
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 211"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    }
+  ]
+}

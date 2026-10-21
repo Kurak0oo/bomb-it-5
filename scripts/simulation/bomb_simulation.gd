@@ -52,7 +52,7 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		_board_max = Vector2i(maxi(_board_max.x, cell.x), maxi(_board_max.y, cell.y))
 	_rng.seed = _rules.get("seed", 5)
 	_random_draws = _rules.get("random_draws", []).duplicate()
-	_drop_pool = Pickups.build_pool(_draw_random, _mode.drop_weights())
+	_drop_pool = Pickups.build_pool(_draw_random, _mode.drop_weights(), _rules.get("vehicles", [&"moto", &"car"]))
 	_vehicles_left = _rules.get("vehicle_budget", 4)
 	_spawned_drops = _rules.get("drop_count", 0)
 	_pickups = _rules.get("pickups", {}).duplicate(true)
@@ -221,7 +221,7 @@ func snapshot() -> Dictionary:
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
 		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
-		"mode": _mode.name,
+		"mode": _mode.name, "board_meta": _rules.get("board_meta", {}),
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
 		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys()}
 
@@ -449,11 +449,11 @@ func _advance_pickups() -> void:
 
 func _spawn_pickup(cell: Vector2i, quota: bool) -> void:
 	var kind: StringName = _drop_pool[int(_draw_random() * _drop_pool.size())]
-	if quota and kind in [&"car", &"moto"]:
+	if quota and kind in Pickups.VEHICLES:
 		if _vehicles_left <= 0:
 			var index := 0
 			while index < _drop_pool.size():
-				if _drop_pool[index] in [&"car", &"moto"]:
+				if _drop_pool[index] in Pickups.VEHICLES:
 					_drop_pool.remove_at(index)
 				index += 1
 			return

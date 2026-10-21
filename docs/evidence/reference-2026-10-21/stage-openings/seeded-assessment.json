@@ -1,0 +1,634 @@
+[
+ {
+  "run": "arcade-birthday_party-seed11",
+  "world": "BirthdayParty",
+  "mode": "ArcadeMode",
+  "match": "BirthdayPartyStage2",
+  "mismatches": 0,
+  "soft": 70,
+  "candidates": 114,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "ToyHand"
+  ],
+  "others": {
+   "BirthdayPartyStage1": 35,
+   "BirthdayPartyStage3": 70
+  }
+ },
+ {
+  "run": "arcade-birthday_party-seed22",
+  "world": "BirthdayParty",
+  "mode": "ArcadeMode",
+  "match": "BirthdayPartyStage3",
+  "mismatches": 0,
+  "soft": 0,
+  "candidates": 0,
+  "soft_chances": [],
+  "platforms": [],
+  "others": {
+   "BirthdayPartyStage1": 61,
+   "BirthdayPartyStage2": 65
+  }
+ },
+ {
+  "run": "arcade-birthday_party-seed33",
+  "world": "BirthdayParty",
+  "mode": "ArcadeMode",
+  "match": "BirthdayPartyStage3",
+  "mismatches": 0,
+  "soft": 0,
+  "candidates": 0,
+  "soft_chances": [],
+  "platforms": [],
+  "others": {
+   "BirthdayPartyStage1": 61,
+   "BirthdayPartyStage2": 65
+  }
+ },
+ {
+  "run": "arcade-birthday_party-seed44",
+  "world": "BirthdayParty",
+  "mode": "ArcadeMode",
+  "match": "BirthdayPartyStage3",
+  "mismatches": 0,
+  "soft": 0,
+  "candidates": 0,
+  "soft_chances": [],
+  "platforms": [],
+  "others": {
+   "BirthdayPartyStage1": 61,
+   "BirthdayPartyStage2": 65
+  }
+ },
+ {
+  "run": "arcade-birthday_party-seed55",
+  "world": "BirthdayParty",
+  "mode": "ArcadeMode",
+  "match": "BirthdayPartyStage2",
+  "mismatches": 0,
+  "soft": 67,
+  "candidates": 114,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "ToyHand"
+  ],
+  "others": {
+   "BirthdayPartyStage1": 33,
+   "BirthdayPartyStage3": 67
+  }
+ },
+ {
+  "run": "arcade-birthday_party-seed66",
+  "world": "BirthdayParty",
+  "mode": "ArcadeMode",
+  "match": "BirthdayPartyStage3",
+  "mismatches": 0,
+  "soft": 0,
+  "candidates": 0,
+  "soft_chances": [],
+  "platforms": [],
+  "others": {
+   "BirthdayPartyStage1": 61,
+   "BirthdayPartyStage2": 65
+  }
+ },
+ {
+  "run": "arcade-candy_factory-seed11",
+  "world": "CandyFactory",
+  "mode": "ArcadeMode",
+  "match": "CandyFactoryStage2",
+  "mismatches": 0,
+  "soft": 50,
+  "candidates": 76,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "CandyFactoryStage1": 24,
+   "CandyFactoryStage3": 44
+  }
+ },
+ {
+  "run": "arcade-candy_factory-seed22",
+  "world": "CandyFactory",
+  "mode": "ArcadeMode",
+  "match": "CandyFactoryStage3",
+  "mismatches": 0,
+  "soft": 47,
+  "candidates": 80,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "CandyFactoryStage1": 56,
+   "CandyFactoryStage2": 44
+  }
+ },
+ {
+  "run": "arcade-candy_factory-seed33",
+  "world": "CandyFactory",
+  "mode": "ArcadeMode",
+  "match": "CandyFactoryStage3",
+  "mismatches": 0,
+  "soft": 50,
+  "candidates": 80,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "CandyFactoryStage1": 56,
+   "CandyFactoryStage2": 44
+  }
+ },
+ {
+  "run": "arcade-candy_factory-seed44",
+  "world": "CandyFactory",
+  "mode": "ArcadeMode",
+  "match": "CandyFactoryStage3",
+  "mismatches": 0,
+  "soft": 48,
+  "candidates": 80,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "CandyFactoryStage1": 56,
+   "CandyFactoryStage2": 44
+  }
+ },
+ {
+  "run": "arcade-candy_factory-seed55",
+  "world": "CandyFactory",
+  "mode": "ArcadeMode",
+  "match": "CandyFactoryStage2",
+  "mismatches": 0,
+  "soft": 41,
+  "candidates": 76,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "CandyFactoryStage1": 24,
+   "CandyFactoryStage3": 44
+  }
+ },
+ {
+  "run": "arcade-candy_factory-seed66",
+  "world": "CandyFactory",
+  "mode": "ArcadeMode",
+  "match": "CandyFactoryStage3",
+  "mismatches": 0,
+  "soft": 51,
+  "candidates": 80,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "CandyFactoryStage1": 56,
+   "CandyFactoryStage2": 44
+  }
+ },
+ {
+  "run": "arcade-cinema-seed11",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage2",
+  "mismatches": 0,
+  "soft": 61,
+  "candidates": 108,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 65,
+   "CinemaStage3": 80
+  }
+ },
+ {
+  "run": "arcade-cinema-seed22",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage3",
+  "mismatches": 0,
+  "soft": 59,
+  "candidates": 104,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 93,
+   "CinemaStage2": 72
+  }
+ },
+ {
+  "run": "arcade-cinema-seed33",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage3",
+  "mismatches": 0,
+  "soft": 58,
+  "candidates": 104,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 93,
+   "CinemaStage2": 70
+  }
+ },
+ {
+  "run": "arcade-cinema-seed44",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage3",
+  "mismatches": 0,
+  "soft": 60,
+  "candidates": 104,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 93,
+   "CinemaStage2": 72
+  }
+ },
+ {
+  "run": "arcade-cinema-seed55",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage2",
+  "mismatches": 0,
+  "soft": 61,
+  "candidates": 108,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 63,
+   "CinemaStage3": 81
+  }
+ },
+ {
+  "run": "arcade-cinema-seed66",
+  "world": "Cinema",
+  "mode": "ArcadeMode",
+  "match": "CinemaStage3",
+  "mismatches": 0,
+  "soft": 59,
+  "candidates": 104,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Portal"
+  ],
+  "others": {
+   "CinemaStage1": 93,
+   "CinemaStage2": 70
+  }
+ },
+ {
+  "run": "arcade-luxury_stores-seed11",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage2",
+  "mismatches": 0,
+  "soft": 63,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 54,
+   "LuxuryStoresStage3": 54
+  }
+ },
+ {
+  "run": "arcade-luxury_stores-seed22",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 59,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "arcade-luxury_stores-seed33",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 60,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "arcade-luxury_stores-seed44",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 60,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "arcade-luxury_stores-seed55",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage2",
+  "mismatches": 0,
+  "soft": 57,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 54,
+   "LuxuryStoresStage3": 54
+  }
+ },
+ {
+  "run": "arcade-luxury_stores-seed66",
+  "world": "LuxuryStores",
+  "mode": "ArcadeMode",
+  "match": "LuxuryStoresStage3",
+  "mismatches": 0,
+  "soft": 61,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "LuxuryStoresStage1": 40,
+   "LuxuryStoresStage2": 54
+  }
+ },
+ {
+  "run": "arcade-magic_library-seed11",
+  "world": "MagicLibrary",
+  "mode": "ArcadeMode",
+  "match": "MagicLibraryStage2",
+  "mismatches": 0,
+  "soft": 68,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "MagicLibraryStage1": 42,
+   "MagicLibraryStage3": 50
+  }
+ },
+ {
+  "run": "arcade-magic_library-seed22",
+  "world": "MagicLibrary",
+  "mode": "ArcadeMode",
+  "match": "MagicLibraryStage3",
+  "mismatches": 0,
+  "soft": 69,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "MagicLibraryStage1": 44,
+   "MagicLibraryStage2": 50
+  }
+ },
+ {
+  "run": "arcade-magic_library-seed33",
+  "world": "MagicLibrary",
+  "mode": "ArcadeMode",
+  "match": "MagicLibraryStage3",
+  "mismatches": 0,
+  "soft": 61,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "MagicLibraryStage1": 44,
+   "MagicLibraryStage2": 50
+  }
+ },
+ {
+  "run": "arcade-magic_library-seed44",
+  "world": "MagicLibrary",
+  "mode": "ArcadeMode",
+  "match": "MagicLibraryStage3",
+  "mismatches": 0,
+  "soft": 70,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "MagicLibraryStage1": 44,
+   "MagicLibraryStage2": 50
+  }
+ },
+ {
+  "run": "arcade-magic_library-seed55",
+  "world": "MagicLibrary",
+  "mode": "ArcadeMode",
+  "match": "MagicLibraryStage2",
+  "mismatches": 0,
+  "soft": 61,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "MagicLibraryStage1": 42,
+   "MagicLibraryStage3": 50
+  }
+ },
+ {
+  "run": "arcade-magic_library-seed66",
+  "world": "MagicLibrary",
+  "mode": "ArcadeMode",
+  "match": "MagicLibraryStage3",
+  "mismatches": 0,
+  "soft": 62,
+  "candidates": 110,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [],
+  "others": {
+   "MagicLibraryStage1": 44,
+   "MagicLibraryStage2": 50
+  }
+ },
+ {
+  "run": "arcade-zoo-seed11",
+  "world": "Zoo",
+  "mode": "ArcadeMode",
+  "match": "ZooStage2",
+  "mismatches": 0,
+  "soft": 61,
+  "candidates": 114,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Crocodile"
+  ],
+  "others": {
+   "ZooStage1": 95,
+   "ZooStage3": 77
+  }
+ },
+ {
+  "run": "arcade-zoo-seed22",
+  "world": "Zoo",
+  "mode": "ArcadeMode",
+  "match": "ZooStage3",
+  "mismatches": 0,
+  "soft": 65,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Crocodile"
+  ],
+  "others": {
+   "ZooStage1": 45,
+   "ZooStage2": 76
+  }
+ },
+ {
+  "run": "arcade-zoo-seed33",
+  "world": "Zoo",
+  "mode": "ArcadeMode",
+  "match": "ZooStage3",
+  "mismatches": 0,
+  "soft": 64,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Crocodile"
+  ],
+  "others": {
+   "ZooStage1": 44,
+   "ZooStage2": 76
+  }
+ },
+ {
+  "run": "arcade-zoo-seed44",
+  "world": "Zoo",
+  "mode": "ArcadeMode",
+  "match": "ZooStage3",
+  "mismatches": 0,
+  "soft": 66,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Crocodile"
+  ],
+  "others": {
+   "ZooStage1": 45,
+   "ZooStage2": 76
+  }
+ },
+ {
+  "run": "arcade-zoo-seed55",
+  "world": "Zoo",
+  "mode": "ArcadeMode",
+  "match": "ZooStage2",
+  "mismatches": 0,
+  "soft": 71,
+  "candidates": 114,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Crocodile"
+  ],
+  "others": {
+   "ZooStage1": 95,
+   "ZooStage3": 77
+  }
+ },
+ {
+  "run": "arcade-zoo-seed66",
+  "world": "Zoo",
+  "mode": "ArcadeMode",
+  "match": "ZooStage3",
+  "mismatches": 0,
+  "soft": 65,
+  "candidates": 112,
+  "soft_chances": [
+   "0.6"
+  ],
+  "platforms": [
+   "Crocodile"
+  ],
+  "others": {
+   "ZooStage1": 44,
+   "ZooStage2": 76
+  }
+ }
+]

@@ -10,6 +10,8 @@ const VisualSkin = preload("res://scripts/art/skin.gd")
 const BoardData = preload("res://scripts/simulation/board_data.gd")
 const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
 const AIProfiles = preload("res://scripts/simulation/ai_profiles.gd")
+const Layouts = preload("res://scripts/simulation/layouts.gd")
+const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 
 var simulation: RefCounted
@@ -26,6 +28,7 @@ var total_score := 0
 var result_credited := false
 var view: Node2D
 var visual_skin: RefCounted
+var stage_set: StringName = &""
 
 
 func _ready() -> void:
@@ -50,6 +53,7 @@ func _ready() -> void:
 func start_session(is_practice: bool = false, seed_value: int = -1) -> void:
 	session_lives = 3
 	total_score = 0
+	stage_set = &""
 	_start_round(is_practice, seed_value)
 
 
@@ -70,19 +74,32 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	paused = false
 	result_credited = false
 	held.clear()
-	var board: Dictionary = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
 	var profile: Dictionary = AIProfiles.for_mode(&"arcade", &"normal")
 	var roster: Array[StringName] = []
 	roster.assign([&"human"] if practice else ACTORS)
 	var actors: Dictionary = {}
 	var session_seed := Time.get_ticks_msec() if seed_value < 0 else seed_value
+	var mode := ArcadeMode.new()
+	var board: Dictionary
+	if practice:
+		board = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
+	else:
+		var rng := RandomNumberGenerator.new()
+		rng.seed = session_seed
+		var choices := StageSets.available_sets()
+		if stage_set == &"": stage_set = choices[rng.randi_range(0, choices.size() - 1)]
+		mode.stage_set = stage_set
+		board = Layouts.roll_set(stage_set, false, mode.soft_chance(), rng)
 	for index in roster.size():
 		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1}
 		if index > 0:
 			actors[roster[index]].merge({"speed": profile.speed, "power": profile.power, "capacity": profile.capacity})
 	simulation = Simulation.new(roster, actors, board.cells,
 		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
-		"drops": true, "seed": session_seed, "mode": ArcadeMode.new()})
+		"drops": true, "seed": session_seed, "mode": mode,
+		"vehicles": StageSets.vehicles(board.skin),
+		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,
+			"variants": board.get("variants", {}), "center": board.get("center", Vector2i(7, 6))}})
 	scheduler = Scheduler.new(roster, simulation)
 	add_child(scheduler)
 	scheduler.set_process(false)

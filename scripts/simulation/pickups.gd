@@ -6,11 +6,16 @@ const WEIGHTS := {&"capacity": 28, &"power": 24, &"speed": 22, &"life": 1, &"shi
 	&"flamer": 1, &"laser": 1, &"hammer": 1, &"triple": 1, &"shotgun": 1, &"vehicle": 3}
 
 
-static func build_pool(draw: Callable, weights: Dictionary = WEIGHTS) -> Array[StringName]:
+const VEHICLES: Array[StringName] = [&"car", &"moto", &"horse", &"dragon"]
+
+
+## Each vehicle entry draws its class from the stage set's list, even a one-item list
+## (`AbstractGameMode.initMap`).
+static func build_pool(draw: Callable, weights: Dictionary = WEIGHTS, vehicles: Array = [&"moto", &"car"]) -> Array[StringName]:
 	var pool: Array[StringName] = []
 	for kind in weights:
 		for index in weights[kind]:
-			pool.append((&"moto" if draw.call() < 0.5 else &"car") if kind == &"vehicle" else kind)
+			pool.append(vehicles[int(draw.call() * vehicles.size())] if kind == &"vehicle" else kind)
 	return pool
 
 
