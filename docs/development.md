@@ -56,7 +56,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
 | Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
-| Complete edition 5 game scope | Accepted on 2026-10-21, follow-ups settled; specification not yet drafted | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 0–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Next: settle the source-defect questions below, then draft a new parent specification and tickets for approval. #21 will be blocked by them; #20 stays open |
+| Complete edition 5 game scope | Accepted on 2026-10-21, follow-ups settled; specification not yet drafted | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 0–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Next: draft the parent specification and tickets for approval. #21 will be blocked by them; #20 stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
 
@@ -81,13 +81,10 @@ and a workbench catalogue extended to eight robots, cosmetics, new screens and
 stage-set skins.
 
 The static recovery is recorded in [modes and flow](evidence/edition-5-modes-and-flow.md).
-It raises questions for the user before the specification:
-
-- The Settings button labelled 5 levels sets 1 level in the source.
-- One player cannot choose zero enemies in the source; zero is a two-player option.
-- Non-Cinema stage sets need their own map features (crocodile, lava, toy hands,
-  conveyors, sliding platforms, spellbooks) recovered and ported.
-- Runtime observation of Kill, Green Zone, Pac-Man, Easy and Hard is still missing.
+The user then accepted: 5/10/15/20 levels with the source's 5-sets-1 defect
+fixed; one to three enemies for one player, as in the source; and runtime
+observation of each mode, difficulty and stage-set map feature before porting it.
+Next: draft the parent specification and ticket graph for approval.
 
 ### 2026-10-21 SWF-derived candidate art
 

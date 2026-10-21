@@ -144,6 +144,14 @@ list what the original offers; recovered rules still precede implementation.
 - **Art slots:** the workbench catalogue grows to cover all eight robots, the
   unlock cosmetics, the new screens and the other stage-set skins, with native
   defaults. Finished-art gate #20 covers the larger catalogue.
+- **Levels:** Game Settings offers 5, 10, 15 and 20 levels, defaulting to 5. The
+  source's 5 button sets one level; that defect is deliberately fixed.
+- **Enemies:** one player chooses one to three AI, as in the source. Zero enemies
+  remains a deferred two-player option.
+- **Evidence before porting:** each mode, difficulty and stage-set map feature is
+  observed in the original game with the reference player and recorded before it
+  is ported, as Normal Arcade was. Static reading alone does not certify parity.
+  Recovered facts live in [modes and flow](docs/evidence/edition-5-modes-and-flow.md).
 - **Tracking:** a new parent specification and its tickets carry this work. Final
   desktop acceptance #21 is blocked by them, as well as by #20, and verifies the
   complete game. #20 stays open.
