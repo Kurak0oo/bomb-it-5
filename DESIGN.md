@@ -152,6 +152,8 @@ list what the original offers; recovered rules still precede implementation.
   observed in the original game with the reference player and recorded before it
   is ported, as Normal Arcade was. Static reading alone does not certify parity.
   Recovered facts live in [modes and flow](docs/evidence/edition-5-modes-and-flow.md).
+- **Audio:** deferred. Unmodified SWF music stays out, and no replacement audio is
+  chosen, so the menu and pause screens omit sound and music switches for now.
 - **Tracking:** a new parent specification and its tickets carry this work. Final
   desktop acceptance #21 is blocked by them, as well as by #20, and verifies the
   complete game. #20 stays open.

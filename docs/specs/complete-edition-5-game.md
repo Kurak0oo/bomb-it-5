@@ -57,12 +57,11 @@ ported.
 27. As a player, I want the HUD to show the score that matters in each mode, so that I can follow the round.
 28. As a player, I want How to Play and a power-up reference, so that I can learn the game.
 29. As a desktop player, I want to rebind keys and keep them, so that controls suit me.
-30. As a player, I want sound and music switches that persist, so that the game respects my choice.
-31. As a player, I want Pause to offer Resume and Main Menu, so that I can leave a session.
-32. As a phone player, I want every screen usable by touch, so that the phone build needs no keyboard.
-33. As a project owner, I want the Art Workbench to cover the new robots, looks, screens and stage skins, so that I choose all presentation.
-34. As a developer, I want the practice board to stay a development launch, so that workbench preview and tests keep a fixed board.
-35. As a future designer, I want modes, maps and AI profiles to be data and modules on one round, so that I can add new ones without rewriting gameplay.
+30. As a player, I want Pause to offer Resume and Main Menu, so that I can leave a session.
+31. As a phone player, I want every screen usable by touch, so that the phone build needs no keyboard.
+32. As a project owner, I want the Art Workbench to cover the new robots, looks, screens and stage skins, so that I choose all presentation.
+33. As a developer, I want the practice board to stay a development launch, so that workbench preview and tests keep a fixed board.
+34. As a future designer, I want modes, maps and AI profiles to be data and modules on one round, so that I can add new ones without rewriting gameplay.
 
 ## Implementation Decisions
 
@@ -101,14 +100,14 @@ ported.
   Cinema portals (done), Zoo crocodiles, Birthday Party toy hands, Candy Factory
   conveyors and sliding platforms, Magic Library spellbooks; Luxury Stores has no
   special tile. No recorded layout places lava. Timed pickups follow each mode's per-set counts.
-- **Screens.** Main menu, Game Settings, character select with look choice, How to
+- **Screens.** Without sound or music switches while audio is deferred: main menu, Game Settings, character select with look choice, How to
   Play with power-ups and key rebinding, pause with Resume/Main Menu, per-level
   score, unlock tip, game win and game over. MORE GAMES, avatar upload,
   achievements and analytics are not included. Text uses readable labels.
 - **Unlocks and saving.** Eight robots with three hats and five body looks each;
   look *n* unlocks for the played robot when a score screen's session total
   reaches 2,500 / 7,200 / 12,000 / 19,200 / 24,000 / 31,200 / 36,000 / 48,000. A
-  local save file keeps unlocks, sound/music switches and key bindings. No
+  local save file keeps unlocks and key bindings. No
   accounts.
 - **Practice.** Remains a development launch on the recorded CinemaStage1
   instance, used by the workbench preview and tests; not on the player menu.
@@ -142,7 +141,8 @@ ported.
 - Local 2-player, zero enemies for one player, networking, co-op and PvP.
 - Unselectable edition 5 modes (Speed, Water, Collect, Painting) and unused map
   symbols (Basketball, BirthdayPartyStage4).
-- MORE GAMES, avatar upload, achievements, analytics, quality settings.
+- MORE GAMES, avatar upload, achievements, analytics, quality settings, and audio
+  with its sound and music switches (deferred).
 - Invented maps (the map-data seam allows them later), store name, release
   language, export and physical phone/iOS testing.
 - The four unresolved named item slots.
@@ -150,6 +150,5 @@ ported.
 ## Further Notes
 
 Final desktop acceptance #21 is blocked by this specification's tickets and by
-finished-art gate #20, and verifies the complete game. Audio is not yet decided:
-unmodified SWF music stays out of the build, so the sound and music switches need
-a source of audio or must be deferred.
+finished-art gate #20, and verifies the complete game. Audio is deferred: no
+replacement audio is chosen, so screens omit sound and music switches for now.
