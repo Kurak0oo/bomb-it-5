@@ -81,6 +81,8 @@ func _run() -> void:
 	await process_frame
 	_expect(app.current == &"score" and _find_text("LEVEL 5 / 5 COMPLETE!") != null, "winning the last level shows its score")
 	_expect(_find_text("NORMAL BONUS") != null and _find_text("2000") != null, "the score screen shows the difficulty bonus")
+	# 2,500 points also unlock the first look; its tip covers the score screen until OK.
+	if _find("TipOk") != null: await _click(_find("TipOk"))
 	await _click(_find("Continue"))
 	_expect(app.current == &"game_win" and _find_text("GAME COMPLETE!") != null, "NEXT after the last level completes the game")
 

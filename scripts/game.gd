@@ -121,6 +121,9 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		board = Layouts.roll_set(stage_set, false, mode.soft_chance(), rng)
 	for index in roster.size():
 		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1, "robot": robots[index]}
+		if session != null:
+			var look: Array = [session.hat, session.body] if index == 0 else session.ai_looks[index - 1]
+			actors[roster[index]].merge({"hat": look[0], "body": look[1]})
 		if index > 0:
 			actors[roster[index]].merge({"speed": profile.speed, "power": profile.power, "capacity": profile.capacity})
 	simulation = Simulation.new(roster, actors, board.cells,

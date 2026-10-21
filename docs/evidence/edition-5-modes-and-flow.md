@@ -175,7 +175,15 @@ the difficulty bonus, a loss adds neither. Totals carry across the session.
 ## Unlocks and saved data
 
 - Eight robots (`TOTAL_ROBOT`), each with eight unlockable looks from the unlock
-  XML: `hat1`–`hat3` and `icon1`–`icon5` (body icons).
+  XML (`sets id = robot + 1`). Most robots have `hat1`–`hat3` then `icon1`–`icon5`
+  (body outfits); robots 3 and 7 have four hats and four outfits, robot 4 two hats
+  and six outfits.
+- `ClothesPanel` wears one hat and one outfit at a time; clicking the worn one
+  removes it (id 0); locked looks cannot be chosen and show "Score [x] points to
+  unlock this outfit". AI players get a random outfit and hat 0–6 without unlocks
+  (`AbstractGameMode.createAIPlayer`); the port keeps them within the robot's set.
+- `Cookie.unlockAvatar` only unlocks for a logged-in portal user when
+  `Root.__lockContent__` is set; the port has no accounts and always unlocks.
 - On each score screen, the robot's look *n* unlocks when the session total
   reaches `UNLOCK_SCORE_n`: 2,500, 7,200, 12,000, 19,200, 24,000, 31,200, 36,000,
   48,000 (`GameConfig`, `OnePScoreUI.unlockCloth`). A tip screen announces it;

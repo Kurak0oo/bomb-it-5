@@ -3,6 +3,7 @@ extends RefCounted
 ## (`UIManager.gamePlay/gameReStart`, `AbstractGameMode.winHandler/loseHandler`).
 
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
+const Looks = preload("res://scripts/looks.gd")
 const LEVEL_CHOICES: Array[int] = [5, 10, 15, 20]
 const ROBOTS: Array[StringName] = [&"human", &"ruby", &"lime", &"gold", &"violet", &"slate", &"mint", &"snow"]
 const ROBOT_TITLES: Array[String] = ["Blue", "Ruby", "Lime", "Gold", "Violet", "Slate", "Mint", "Snow"]
@@ -25,6 +26,8 @@ var lives := START_LIVES
 var total_score := 0
 var current_set: StringName = &""
 var ai_robots: Array[int] = []
+## [hat, body] per AI seat; the original draws AI looks at random without unlocks.
+var ai_looks: Array = []
 var last_result: Result = Result.LEVEL_RESTART
 var _rotation: Array[StringName] = []
 var _rng := RandomNumberGenerator.new()
@@ -44,8 +47,11 @@ func begin() -> void:
 	for index in ROBOTS.size():
 		if index != robot: others.append(index)
 	ai_robots.clear()
+	ai_looks.clear()
 	for seat in 3:
-		ai_robots.append(others.pop_at(_rng.randi_range(0, others.size() - 1)))
+		var ai_robot: int = others.pop_at(_rng.randi_range(0, others.size() - 1))
+		ai_robots.append(ai_robot)
+		ai_looks.append([_rng.randi_range(0, Looks.count(ai_robot, &"hat")), _rng.randi_range(0, Looks.count(ai_robot, &"body"))])
 	_rotation = StageSets.available_sets()
 	current_set = stage if stage != &"random" else _draw_set()
 

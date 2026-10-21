@@ -8,6 +8,7 @@ const ROBOT_SLOTS := [&"human", &"ruby", &"lime", &"gold", &"violet", &"slate", 
 const ROBOT_TITLES := ["BLUE", "RUBY", "LIME", "GOLD", "VIOLET", "SLATE", "MINT", "SNOW"]
 const ROBOT_COLORS := [Color("66d8ff"), Color("ed86c6"), Color("b6e36a"), Color("ffd470"),
 	Color("b394f0"), Color("9aa6b4"), Color("8ce2b5"), Color("f2f4f7")]
+const LOOK_COLORS := [Color("e35d6a"), Color("4f8fe0"), Color("f2b84b"), Color("5cc48d"), Color("a66ce0"), Color("ef8a3c"), Color("3fb7c9")]
 ## Standalone seat robots when an actor carries no explicit robot.
 const SEAT_ROBOTS := {&"human": 0, &"ruby": 1, &"mint": 6, &"gold": 3}
 const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
@@ -302,6 +303,7 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 	if not replaced and pose != "idle":
 		replaced = skin.draw(self, "actor.%s.idle" % ROBOT_SLOTS[robot], ArtCatalog.rect("actor.%s.idle" % ROBOT_SLOTS[robot], at), state.tick, actor.facing, -1, modulation)
 	if replaced:
+		_looks(actor, at, robot)
 		if actor.weapon != &"":
 			if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
 				_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
@@ -315,9 +317,35 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 	draw_circle(at + Vector2(5, -5) + facing * 1.5, 2.5, Color("e1fff3"))
 	draw_line(at + Vector2(0, -16), at + Vector2(0, -20), color, 2)
 	draw_circle(at + Vector2(0, -21), 2, Color("fff1b6"))
+	_looks(actor, at, robot)
 	if actor.weapon != &"":
 		if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
 			_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
+
+
+## Unlocked hat and outfit over a robot: `look.<robot>.hat<k>`/`body<k>` slots or native shapes.
+func _looks(actor: Dictionary, at: Vector2, robot: int) -> void:
+	var body: int = actor.get("body", 0)
+	var hat: int = actor.get("hat", 0)
+	if body > 0 and not skin.draw(self, "look.%s.body%d" % [ROBOT_SLOTS[robot], body], Rect2(at + Vector2(-12, -1), Vector2(24, 17)), state.get("tick", 0), actor.facing):
+		var cloth: Color = LOOK_COLORS[(body + robot) % LOOK_COLORS.size()]
+		_box(Rect2(at + Vector2(-10, 2), Vector2(20, 11)), cloth, cloth.lightened(0.35), 4)
+		draw_line(at + Vector2(0, 3), at + Vector2(0, 12), cloth.darkened(0.3), 2)
+	if hat > 0 and not skin.draw(self, "look.%s.hat%d" % [ROBOT_SLOTS[robot], hat], Rect2(at + Vector2(-15, -33), Vector2(30, 20)), state.get("tick", 0), actor.facing):
+		var felt: Color = LOOK_COLORS[(hat * 2 + robot) % LOOK_COLORS.size()]
+		match (hat - 1) % 4:
+			0: # cap
+				_box(Rect2(at + Vector2(-13, -23), Vector2(26, 8)), felt, felt.lightened(0.3), 4)
+				draw_rect(Rect2(at + Vector2(-2, -18), Vector2(17, 3)), felt.darkened(0.25))
+			1: # top hat
+				draw_rect(Rect2(at + Vector2(-15, -19), Vector2(30, 3)), felt.darkened(0.3))
+				_box(Rect2(at + Vector2(-8, -33), Vector2(16, 15)), felt, felt.lightened(0.3), 3)
+			2: # tricorn
+				draw_colored_polygon(PackedVector2Array([at + Vector2(-16, -17), at + Vector2(16, -17), at + Vector2(0, -31)]), felt)
+				draw_circle(at + Vector2(0, -23), 3, Color("fff1b6"))
+			_: # crown
+				draw_colored_polygon(PackedVector2Array([at + Vector2(-12, -17), at + Vector2(12, -17), at + Vector2(12, -29),
+					at + Vector2(6, -23), at + Vector2(0, -31), at + Vector2(-6, -23), at + Vector2(-12, -29)]), Color("ffd470"))
 
 
 func _hud(actor: Dictionary, index: int, robot: int) -> void:

@@ -12,6 +12,7 @@ const VisualSkin = preload("res://scripts/art/skin.gd")
 const GameView = preload("res://scripts/game_view.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const ArtCatalog = preload("res://scripts/art/catalog.gd")
+const Looks = preload("res://scripts/looks.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The unresolved glove slots (BOXING GLOVE, PUSH THE BOMB) are left out.
 const GUIDE := [
@@ -44,6 +45,8 @@ var current := &""
 var save_path := SaveStore.DEFAULT_PATH
 var store: RefCounted
 var _rebinding: StringName = &""
+var _last_snapshot: Dictionary = {}
+var _new_looks: Array[int] = []
 var _message: Label
 
 
@@ -248,7 +251,10 @@ func show_character_select() -> void:
 		badge.selected = index == session.robot
 		badge.name = "Robot%d" % index
 		badge.chosen.connect(func(robot: int):
-			session.robot = robot
+			if robot != session.robot:
+				session.robot = robot
+				session.hat = 0
+				session.body = 0
 			show_character_select())
 		page.add_child(badge)
 		UiKit.label(page, Session.ROBOT_TITLES[index].to_upper(), badge.position + Vector2(0, 116), 17,
@@ -261,13 +267,46 @@ func show_character_select() -> void:
 	preview.selected = true
 	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	page.add_child(preview)
-	UiKit.panel(page, Rect2(540, 290, 480, 220), Color("1d4557"), Color("5d96a3"))
-	UiKit.label(page, "LOOKS", Vector2(570, 310), 22, Color("ffc79a"))
-	UiKit.label(page, "Hats and outfits unlock with your total score.", Vector2(570, 350), 19, Color("b4d2d7"), 420)
+	preview.hat = session.hat
+	preview.body = session.body
+	_looks_panel(page, Vector2(540, 290), show_character_select)
 	UiKit.button(page, "BACK", Rect2(130, 610, 220, 60), show_settings, skin, 24)
 	var start := UiKit.button(page, "START", Rect2(930, 610, 220, 60), start_session, skin, 24)
 	start.name = "StartGame"
 	start.grab_focus.call_deferred()
+
+
+## Eight look slots of the chosen robot (`ClothesPanel`): one hat and one outfit at a time,
+## clicking the worn one removes it; locked looks show their unlock score.
+func _looks_panel(page: Control, at: Vector2, refresh: Callable) -> void:
+	UiKit.panel(page, Rect2(at, Vector2(560, 250)), Color("1d4557"), Color("5d96a3"))
+	UiKit.label(page, "LOOKS", at + Vector2(24, 14), 22, Color("ffc79a"))
+	var unlocked: Array = store.unlocks.get(str(session.robot), [])
+	for number in range(1, 9):
+		var entry: Array = Looks.look(session.robot, number)
+		var worn: bool = (session.hat if entry[0] == &"hat" else session.body) == entry[1]
+		var cell := at + Vector2(24 + ((number - 1) % 4) * 132, 56 + ((number - 1) / 4) * 94)
+		var widget := UiKit.button(page, Looks.title(session.robot, number), Rect2(cell, Vector2(120, 50)),
+			func(): _wear(entry, refresh), null, 15)
+		widget.name = "Look%d" % number
+		widget.disabled = number not in unlocked
+		if worn:
+			var chosen := StyleBoxFlat.new()
+			chosen.bg_color = Color("c8743f")
+			chosen.border_color = UiKit.ACCENT
+			chosen.set_border_width_all(2)
+			chosen.set_corner_radius_all(10)
+			for state_name in ["normal", "hover"]: widget.add_theme_stylebox_override(state_name, chosen)
+		if widget.disabled:
+			UiKit.label(page, "%d PTS" % Looks.THRESHOLDS[number - 1], cell + Vector2(0, 52), 13, Color("8fb1ba"), 120, HORIZONTAL_ALIGNMENT_CENTER)
+	if unlocked.is_empty():
+		UiKit.label(page, "Score points to unlock outfits.", at + Vector2(170, 18), 16, Color("b4d2d7"), 360)
+
+
+func _wear(entry: Array, refresh: Callable) -> void:
+	if entry[0] == &"hat": session.hat = 0 if session.hat == entry[1] else entry[1]
+	else: session.body = 0 if session.body == entry[1] else entry[1]
+	refresh.call()
 
 
 func start_session() -> void:
@@ -295,6 +334,16 @@ func _on_level_settled(snapshot: Dictionary) -> void:
 	var outcome: StringName = snapshot.outcome
 	var result: int = session.settle(&"won" if outcome == &"won" else &"lost", snapshot.result_score,
 		snapshot.actors[&"human"].lives)
+	# Every score screen checks the session total against the unlock scores (`OnePScoreUI`).
+	var key := str(session.robot)
+	_new_looks = Looks.newly_unlocked(session.robot, session.total_score, store.unlocks.get(key, []))
+	if not _new_looks.is_empty():
+		var unlocked: Array = store.unlocks.get(key, []).duplicate()
+		unlocked.append_array(_new_looks)
+		unlocked.sort()
+		store.unlocks[key] = unlocked
+		store.save_file()
+	_last_snapshot = snapshot
 	if result == Session.Result.GAME_OVER:
 		show_end(false)
 	else:
@@ -318,10 +367,48 @@ func show_score(snapshot: Dictionary) -> void:
 		UiKit.label(page, str(rows[index][1]), Vector2(720, y), 24, UiKit.ACCENT, 200, HORIZONTAL_ALIGNMENT_RIGHT)
 	var proceed := UiKit.button(page, "NEXT" if won else "TRY AGAIN", Rect2(660, 520, 260, 64), _continue, skin, 24)
 	proceed.name = "Continue"
-	var dress := UiKit.button(page, "DRESS UP", Rect2(360, 520, 260, 64), func(): pass, skin, 24)
+	var dress := UiKit.button(page, "DRESS UP", Rect2(360, 520, 260, 64), show_dress_up, skin, 24)
 	dress.name = "DressUp"
-	dress.disabled = true
 	proceed.grab_focus.call_deferred()
+	if not _new_looks.is_empty(): _unlock_tip(page)
+
+
+func _unlock_tip(page: Control) -> void:
+	var tip := Control.new()
+	tip.name = "UnlockTip"
+	tip.size = Vector2(1280, 720)
+	page.add_child(tip)
+	tip.add_child(_shade())
+	UiKit.panel(tip, Rect2(390, 200, 500, 300))
+	UiKit.label(tip, "New outfit unlocked!", Vector2(390, 230), 32, UiKit.ACCENT, 500, HORIZONTAL_ALIGNMENT_CENTER)
+	var names := PackedStringArray()
+	for number in _new_looks: names.append(Looks.title(session.robot, number))
+	UiKit.label(tip, ", ".join(names), Vector2(420, 300), 22, UiKit.FONT_COLOR, 440, HORIZONTAL_ALIGNMENT_CENTER)
+	var ok := UiKit.button(tip, "OK", Rect2(540, 410, 200, 60), func():
+		_new_looks.clear()
+		tip.queue_free(), skin, 24)
+	ok.name = "TipOk"
+	ok.grab_focus.call_deferred()
+
+
+## DRESS UP from the score screen: change looks between levels.
+func show_dress_up() -> void:
+	var page := _page(&"dress_up", false)
+	page.add_child(_shade())
+	UiKit.label(page, "DRESS UP", Vector2(0, 90), 42, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
+	var preview := RobotBadge.new()
+	preview.robot = session.robot
+	preview.hat = session.hat
+	preview.body = session.body
+	preview.skin = skin
+	preview.position = Vector2(240, 230)
+	preview.size = Vector2(220, 220)
+	preview.selected = true
+	page.add_child(preview)
+	_looks_panel(page, Vector2(500, 215), show_dress_up)
+	var done := UiKit.button(page, "OK", Rect2(540, 560, 200, 60), func(): show_score(_last_snapshot), skin, 24)
+	done.name = "DressDone"
+	done.grab_focus.call_deferred()
 
 
 func _continue() -> void:
@@ -339,6 +426,12 @@ func show_end(won: bool) -> void:
 	UiKit.label(page, "GAME COMPLETE!" if won else "GAME OVER", Vector2(290, 170), 52, UiKit.ACCENT, 700, HORIZONTAL_ALIGNMENT_CENTER)
 	if not won:
 		UiKit.label(page, "Don't give up! Give it another bomb…", Vector2(290, 260), 22, Color("b4d2d7"), 700, HORIZONTAL_ALIGNMENT_CENTER)
+	if not _new_looks.is_empty():
+		var names := PackedStringArray()
+		for number in _new_looks: names.append(Looks.title(session.robot, number))
+		UiKit.label(page, "New outfit unlocked! " + ", ".join(names), Vector2(290, 400), 20, UiKit.ACCENT, 700,
+			HORIZONTAL_ALIGNMENT_CENTER).name = "EndUnlock"
+		_new_looks.clear()
 	UiKit.label(page, "TOTAL SCORE", Vector2(400, 340), 28, Color("ffc79a"))
 	UiKit.label(page, str(session.total_score), Vector2(680, 340), 28, UiKit.ACCENT, 200, HORIZONTAL_ALIGNMENT_RIGHT)
 	var again := UiKit.button(page, "TRY AGAIN", Rect2(510, 460, 260, 64), show_settings, skin, 24)
@@ -400,6 +493,8 @@ func _shade() -> ColorRect:
 class RobotBadge extends Control:
 	signal chosen(robot: int)
 	var robot := 0
+	var hat := 0
+	var body := 0
 	var skin: RefCounted
 	var selected := false
 
@@ -433,6 +528,13 @@ class RobotBadge extends Control:
 		draw_circle(center + Vector2(-10, -8) * unit, 5 * unit, Color("e1fff3"))
 		draw_circle(center + Vector2(10, -8) * unit, 5 * unit, Color("e1fff3"))
 		draw_line(center - Vector2(0, 38) * unit, center - Vector2(0, 48) * unit, color, 3 * unit)
+		if body > 0:
+			var cloth: Color = GameView.LOOK_COLORS[(body + robot) % GameView.LOOK_COLORS.size()]
+			draw_rect(Rect2(center + Vector2(-24, 14) * unit, Vector2(48, 14) * unit), cloth)
+		if hat > 0:
+			var felt: Color = GameView.LOOK_COLORS[(hat * 2 + robot) % GameView.LOOK_COLORS.size()]
+			draw_colored_polygon(PackedVector2Array([center + Vector2(-28, -34) * unit, center + Vector2(28, -34) * unit,
+				center + Vector2(0, -58) * unit]), felt)
 
 	func _notification(what: int) -> void:
 		if what in [NOTIFICATION_FOCUS_ENTER, NOTIFICATION_FOCUS_EXIT]: queue_redraw()
