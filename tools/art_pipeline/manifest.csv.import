@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://brwxryoi45hvy"
+
+[deps]
+
+files=["res://tools/art_pipeline/manifest.type.translation", "res://tools/art_pipeline/manifest.source.translation", "res://tools/art_pipeline/manifest.name.translation", "res://tools/art_pipeline/manifest.width.translation", "res://tools/art_pipeline/manifest.height.translation", "res://tools/art_pipeline/manifest.frames.translation", "res://tools/art_pipeline/manifest.content.translation", "res://tools/art_pipeline/manifest.slot.translation", "res://tools/art_pipeline/manifest.slot.translation", "res://tools/art_pipeline/manifest.duplicate.translation"]
+
+source_file="res://tools/art_pipeline/manifest.csv"
+dest_files=["res://tools/art_pipeline/manifest.type.translation", "res://tools/art_pipeline/manifest.source.translation", "res://tools/art_pipeline/manifest.name.translation", "res://tools/art_pipeline/manifest.width.translation", "res://tools/art_pipeline/manifest.height.translation", "res://tools/art_pipeline/manifest.frames.translation", "res://tools/art_pipeline/manifest.content.translation", "res://tools/art_pipeline/manifest.slot.translation", "res://tools/art_pipeline/manifest.slot.translation", "res://tools/art_pipeline/manifest.duplicate.translation"]
+
+[params]
+
+compress=true
+delimiter=0

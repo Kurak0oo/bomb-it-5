@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bq58e5dl0sbbs"
+
+[deps]
+
+files=["res://assets/maps/cinema-stage1.y.translation", "res://assets/maps/cinema-stage1.tile.translation", "res://assets/maps/cinema-stage1.portal.translation"]
+
+source_file="res://assets/maps/cinema-stage1.csv"
+dest_files=["res://assets/maps/cinema-stage1.y.translation", "res://assets/maps/cinema-stage1.tile.translation", "res://assets/maps/cinema-stage1.portal.translation"]
+
+[params]
+
+compress=true
+delimiter=0
