@@ -11,9 +11,9 @@ This file owns accepted product and architecture decisions. [Development](docs/d
 - Godot 4.5, GDScript, Compatibility renderer. Keep `config/features` at 4.5. Gameplay uses 35 logical ticks per second through an external scheduler, as accepted below. The scheduler accumulates elapsed time from a Node's `_process`; leave `physics/common/physics_ticks_per_second` unset. The logical rate does not require changing Godot's global physics setting. [Edition 5 research](docs/evidence/edition-5-input-and-timing.md) independently recovers a requested stage rate of 35 fps and frame-driven updates. Inherited platform notes live in [Douyin](docs/douyin.md).
 - Phone, landscape, locked. If the exporter forces portrait, the export waits. The game does not.
 - The board is centered. A translucent stick sits on the left of the playfield and a translucent bomb button on the right. Both are inside the game view. Touches on the grid do nothing. The notch and the Douyin capsule stay clear of both controls. Extra item buttons wait until the SWF says an item needs its own button.
-- One human and three AI on the first match. No second human on the same phone.
+- One human against zero to three AI, chosen in Game Settings (2026-10-21, below). The first match was one human and three AI. No second human on the same phone: the original local 2-player setting is deferred.
 - Later, in order: co-op against AI across phones, then PvP. No networking in the first slice. No accounts.
-- A round has a replaceable ending. The selected first ending is "all enemies are dead," source-supported for normal Arcade play in the [Dots evidence assessment](docs/evidence/edition-5-play-observations.md). For the new game, timeout is a loss while enemies remain, deliberately replacing the original anomalous timeout-completion path. Later modes and tasks are another ending plus extra rules on the same round. The first build implements one ending.
+- A round has a replaceable ending. The selected first ending is "all enemies are dead," source-supported for normal Arcade play in the [Dots evidence assessment](docs/evidence/edition-5-play-observations.md). For the new game, timeout is a loss while enemies remain, deliberately replacing the original anomalous timeout-completion path. Later modes and tasks are another ending plus extra rules on the same round. The first build implemented one ending; the complete game adds the other selectable edition 5 modes on the same round (2026-10-21, below).
 - Before the SWF is read, the only bomb behavior that may be coded is the shared match: place a bomb, a fuse, a plus-shaped blast, and soft blocks that break. The glove, the bouncer, the magic carpet, and the heavy bomb are named empty slots. Nothing fills a slot from a portal description.
 - Maps come from the original edition 5 game. Tile count, solids, soft blocks, and spawns are recovered. There is no stand-in 15×13 board and no map generator.
 - The gameplay screen's layout and the elements on it come from the original gameplay screen. Painted pixels are redrawn later in that painting style. Unmodified copies of SWF sprites, music, and level art stay out of the Douyin build. SWF-derived art may be modified into candidate art. Candidates are never applied automatically; the user reviews each one before Apply to game (2026-10-21, below).
@@ -105,6 +105,42 @@ The subsequent implement instruction approves the 16 recovery tickets [#22–#37
 
 ## Decision history
 
+### Complete original game scope (2026-10-21)
+
+The user widened delivery from the playable arena to the complete edition 5 game.
+The [source findings](docs/evidence/observations/swf-v1.6.1/source-findings.md)
+list what the original offers; recovered rules still precede implementation.
+
+- **Modes:** all four modes selectable in edition 5 ship together: Arcade, Kill
+  (Battle Royale), Green Zone and Pac-Man. Each mode's ending, lives, respawn,
+  pickups and drop table come from the recovered source. Mode classes that edition 5
+  cannot select (Speed, Water, Collect, Painting) stay out.
+- **Screens:** main menu, Game Settings (mode, enemies, levels, stage, difficulty),
+  character select of the eight robots, How to Play with the power-up reference,
+  desktop key rebinding, pause with Main Menu, per-level score, game-win and
+  game-over screens. The publisher's MORE GAMES link is not included. Touch
+  controls keep the accepted fixed layout.
+- **Content:** all six stage sets and their recorded layouts, level progression
+  across sets, and Easy, Normal and Hard.
+- **Unlocks:** the original cloth and hat unlocks are included and saved locally
+  on the device. There are no accounts.
+- **Players:** one human against zero to three AI. Local 2-player is deferred;
+  co-op across phones, then PvP, remain the later multiplayer order.
+- **Extensibility:** future modes, maps, rules and enemy designs plug into the same
+  admitted round and scheduler rather than forking it. A mode supplies its ending,
+  settings, permitted pickups, drop table and respawn rules; a map is data; enemy
+  behavior and difficulty are AI profiles. The accepted adaptations (35-tick
+  scheduler, pause and input lifecycle, eight-direction movement, bomb batch rules,
+  bomb-overlap departure) apply in every mode.
+- **Tracking:** a new parent specification and its tickets carry this work. Final
+  desktop acceptance #21 is blocked by them, as well as by #20, and verifies the
+  complete game. #20 stays open.
+
+This supersedes the first build's single-map Normal Arcade scope recorded below.
+The recorded CinemaStage1 instance remains the practice layout.
+[ADR 0007](docs/adr/0007-complete-edition-5-game.md) records the rationale; open
+follow-up decisions are on the [frontier](docs/development.md).
+
 ### SWF-derived candidate art (2026-10-21)
 
 The user permits artwork extracted from the edition 5 SWF to be modified into
@@ -189,3 +225,5 @@ Implementation policy recorded during the user's 2026-10-19 instruction to imple
 [Permit eight-direction phone movement](docs/adr/0004-eight-direction-phone-movement.md) records the deliberate change from the original cardinal controller.
 
 [Permit SWF-derived candidate art under manual review](docs/adr/0006-swf-derived-candidate-art.md) records the 2026-10-21 change to the production-asset boundary.
+
+[Expand delivery to the complete edition 5 game](docs/adr/0007-complete-edition-5-game.md) records the 2026-10-21 widening of scope to every selectable mode, screen and stage set.

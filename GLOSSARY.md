@@ -44,6 +44,26 @@ A delivered down or up input for an actor's bomb/action control. Repeated down e
 **Round**:
 A unit of play governed by an ending condition and the rules of its mode.
 
+**Mode**:
+A selectable rule set that gives rounds their ending, lives, respawn and pickups, such as Arcade or Kill.
+_Avoid_: game type
+
+**Stage set**:
+A themed group of recorded board layouts sharing one skin, such as Cinema.
+
+**Level**:
+One position in a session's sequence of rounds, played on a layout from a stage set.
+
+**Difficulty**:
+The Easy, Normal or Hard setting that selects AI profiles and the source tuning for a session.
+
+**AI profile**:
+The behavior and tuning that an AI-controlled actor uses.
+_Avoid_: enemy type
+
+**Unlock**:
+A cosmetic cloth or hat that play earns, kept on the device.
+
 **Session**:
 A sequence of rounds sharing retry hearts and a cumulative result score.
 

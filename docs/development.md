@@ -56,12 +56,33 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
 | Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
-| Co-op, then PvP | Deferred | First local slice precedes networking design |
+| Complete edition 5 game scope | Accepted on 2026-10-21; specification not yet drafted | All four selectable modes, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 0–3 AI. See DESIGN.md and ADR 0007. Next: settle the open follow-ups below, recover mode/difficulty/unlock rules, then draft a new parent specification and tickets for approval. #21 will be blocked by them; #20 stays open |
+| Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
 
 The Q1–Q13 command/bomb decisions are implemented. Subsequent decisions through Q28 settle the preview/input/collision scope, including replacement Q17 (eight directions), replacement Q22 (late phone/iOS testing), and Q26's complete runnable Godot 4.5 delivery target. Practice is an intermediate integration milestone. Corridor assistance and the reconstructed CinemaStage1 board with working portals are accepted; exact acceleration tuning is implementation work grounded in the recovered source, not an approved new profile. Main Godot development uses desktop and automated verification and does not wait for a phone prototype. AI, damage, round clock, endings, score/lives, HUD and complete playable flow are now integrated and desktop-verified. Glove-slot identity and three unidentified item slots remain separate later branches. Store name and release language can remain deferred. Runtime facts still need investigation where they affect a proposed choice.
 
 ## Interview updates
+
+### 2026-10-21 complete edition 5 game scope
+
+The user asked to turn the playable arena into the complete game, with the
+original menus and modes. Accepted answers: all four selectable modes together,
+with future modes, maps, rules and enemy designs kept easy to add; menu, settings,
+character select, How to Play with key rebinding, and cloth/hat unlocks; local
+2-player deferred; a new specification whose tickets block final acceptance #21.
+#20 stays open. DESIGN.md and [ADR 0007](adr/0007-complete-edition-5-game.md)
+record the scope. No implementation or tracker changes were made.
+
+Open follow-ups, not yet decided:
+
+- Board generation in the full game: the source rolls each soft block at 0.8 and
+  picks one of three layouts per set, while the accepted rule is no generator and
+  the recorded instance for practice.
+- Timeout in Kill, Green Zone and Pac-Man: follow each mode's recovered judgment,
+  or extend the Arcade loss-on-timeout adaptation.
+- Whether practice stays reachable in the complete game.
+- Workbench slots for the eight robots, unlock cosmetics and the new screens.
 
 ### 2026-10-21 SWF-derived candidate art
 
