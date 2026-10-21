@@ -63,7 +63,8 @@ are downloaded from their GitHub releases into `.scratch/tools/` and hash-checke
    `diff.png`, traced `vectors/`, `palette.json` and `meta.json` (change %, frames
    across/rows for the workbench). `candidates/review.html` shows original,
    candidate and difference with slot/type filters and the over-15% flag.
-   `candidates.zip` packs the folder.
+   `candidates.zip` packs the folder; `candidates-slots.zip` holds only the slot
+   candidates and their review page, a much smaller download.
 
 Change % is the mean premultiplied RGB-or-alpha difference over visible pixels of
 the preview. Defaults (hue 12°, saturation ×1.15, outline ×1.2) put characters
@@ -87,4 +88,4 @@ through palette snapping and vectorisation.
 - 18 slots have no SWF source: action poses, protection blink and portal transit
   overlays, the five touch controls, and the screen frame, HUD panels and menu
   buttons. The end cartoons are full-screen clips squeezed into 64x64 outcome slots.
-- Never commit the SWF, `.scratch/`, `candidates/` or `candidates.zip`.
+- Never commit the SWF, `.scratch/`, `candidates/` or the zips.

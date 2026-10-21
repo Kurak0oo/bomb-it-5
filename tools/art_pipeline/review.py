@@ -1,9 +1,10 @@
 """candidates/review.html: original vs candidate vs diff for every job, with filters."""
 import html
 import json
+import zipfile
 
 import slots
-from common import CANDIDATES, write_text
+from common import CANDIDATES, ROOT, write_text
 
 PAGE = r'''<!doctype html>
 <html lang="en">
@@ -157,3 +158,21 @@ def build(metas, flag_pct):
             .replace('__FLAG__', html.escape(f'{flag_pct:g}')))
     write_text(CANDIDATES / 'review.html', page)
     return CANDIDATES / 'review.html'
+
+
+def slots_zip(metas, flag_pct):
+    """A small download: slot candidates and a review page listing only them."""
+    target = ROOT / 'candidates-slots.zip'
+    slot_metas = [m for m in metas if m['kind'] == 'slot']
+    build(slot_metas, flag_pct)
+    page = (CANDIDATES / 'review.html').read_text(encoding='utf-8')
+    with zipfile.ZipFile(target, 'w', zipfile.ZIP_DEFLATED) as bundle:
+        for path in sorted((CANDIDATES / 'slots').rglob('*')):
+            if path.is_file():
+                bundle.write(path, path.relative_to(ROOT).as_posix())
+        for name in ('summary.json', 'failures.json', '.gdignore'):
+            if (CANDIDATES / name).is_file():
+                bundle.write(CANDIDATES / name, f'candidates/{name}')
+        bundle.writestr('candidates/review.html', page)
+    build(metas, flag_pct)
+    return target

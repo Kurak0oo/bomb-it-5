@@ -202,6 +202,8 @@ def main(argv=None):
     if not args.no_zip:
         archive = shutil.make_archive(str(ROOT / 'candidates'), 'zip', root_dir=ROOT, base_dir='candidates')
         log.info('Zipped %s (%.1f MB)', os.path.relpath(archive, ROOT), os.path.getsize(archive) / 1e6)
+        small = review.slots_zip(metas, config['flag_change_pct'])
+        log.info('Zipped %s (%.1f MB)', os.path.relpath(small, ROOT), os.path.getsize(small) / 1e6)
     log.info('Done in %.0fs: %d succeeded (%d reused), %d empty, %d failed. Review: %s', time.time() - started,
              done, reused, empty, len(failures), os.path.relpath(page, ROOT))
     return 0
