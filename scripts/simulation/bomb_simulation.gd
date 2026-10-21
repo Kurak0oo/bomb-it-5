@@ -5,6 +5,7 @@ const CommandModule = preload("res://scripts/simulation/command_boundary.gd")
 const Movement = preload("res://scripts/simulation/movement.gd")
 const Pickups = preload("res://scripts/simulation/pickups.gd")
 const Weapons = preload("res://scripts/simulation/weapons.gd")
+const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
 const FUSE_TICKS: int = 72
 
 var _commands: CommandModule
@@ -35,6 +36,8 @@ var _pending_outcome: StringName = &""
 var _ending_started := 0
 var _gameplay_end_tick := 0
 var _judgment_ready := false
+var _mode: RefCounted
+var _board_max := Vector2i(16, 14)
 
 
 func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, rules: Dictionary = {}) -> void:
@@ -43,9 +46,13 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 	_board = board.duplicate(true)
 	_commands = CommandModule.new(_actor_ids)
 	_rules = rules.duplicate(true)
+	_mode = _rules.get("mode") if _rules.get("mode") is RefCounted else ArcadeMode.new()
+	# Timed pickups scan the recorded 17x15 interior; larger boards extend it.
+	for cell in _board:
+		_board_max = Vector2i(maxi(_board_max.x, cell.x), maxi(_board_max.y, cell.y))
 	_rng.seed = _rules.get("seed", 5)
 	_random_draws = _rules.get("random_draws", []).duplicate()
-	_drop_pool = Pickups.build_pool(_draw_random)
+	_drop_pool = Pickups.build_pool(_draw_random, _mode.drop_weights())
 	_vehicles_left = _rules.get("vehicle_budget", 4)
 	_spawned_drops = _rules.get("drop_count", 0)
 	_pickups = _rules.get("pickups", {}).duplicate(true)
@@ -213,7 +220,8 @@ func snapshot() -> Dictionary:
 		"blasts": [], "broken_soft_blocks": [], "flames": _flames.duplicate(true),
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
-		"remaining": maxi(0, 6300 - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
+		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
+		"mode": _mode.name,
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
 		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys()}
 
@@ -354,30 +362,27 @@ func _advance_actor_states() -> void:
 			actor.protection_stage = &"recovery" if actor.vehicle_recovery_until > 0 else &"blink"
 
 
+func human() -> Dictionary:
+	return _actors[_actor_ids[0]]
+
+
+func enemies() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for id in _actor_ids.slice(1):
+		result.append(_actors[id])
+	return result
+
+
 func _finish_round() -> void:
-	var human: Dictionary = _actors[_actor_ids[0]]
 	if _round_stage == &"ending":
 		# Source GameEndCartoon uses a three-second host Tween; accepted conversion freezes on pause.
 		if _tick - _ending_started >= 105:
 			_outcome = _pending_outcome
 			_round_stage = &"settled"
-			_result_score = human.kills * 300
-			if _outcome == &"won":
-				_result_score += 2000 + ceili(maxi(0, 6300 - _gameplay_end_tick) / 35.0) * 10
-			else:
-				human.lives = maxi(0, human.lives - 1)
-			human.score = _result_score
+			_result_score = _mode.settle(self, _outcome, _gameplay_end_tick)
+			human().score = _result_score
 		return
-	var enemy_alive := false
-	for id in _actor_ids.slice(1):
-		enemy_alive = enemy_alive or _actors[id].alive
-	# ArcadeMode.end checks surviving humans before checking surviving AI.
-	if _judgment_ready and not human.alive:
-		_pending_outcome = &"lost"
-	elif _judgment_ready and not enemy_alive:
-		_pending_outcome = &"won"
-	elif _tick >= 6300:
-		_pending_outcome = &"lost" if not human.alive else &"won" if not enemy_alive else &"timeout"
+	_pending_outcome = _mode.judge(self, _judgment_ready, _tick)
 	if _pending_outcome != &"":
 		_round_stage = &"ending"
 		_ending_started = _tick
@@ -410,20 +415,20 @@ func _advance_pickups() -> void:
 			var occupied := false
 			for actor in _actors.values():
 				occupied = occupied or (actor.alive and actor.cell == drop.cell)
-			if not occupied and _spawned_drops < 32 and _draw_random() < 0.5:
+			if not occupied and _spawned_drops < 32 and _draw_random() < _rules.get("drop_chance", 0.5):
 				_spawn_pickup(drop.cell, true)
 		drop_index += 1
-	# ArcadeMode.timePassed uses >45, so the first timed spawn is at 60 seconds.
-	if _tick > 45 * 35 and _tick % (15 * 35) == 0:
+	var timed_count: int = _mode.timed_pickup_count(_tick)
+	if timed_count > 0:
 		var free: Array[Vector2i] = []
 		# Source enumerates x first, then y, chooses all positions before any class draw.
-		for x in range(1, 17):
-			for y in range(1, 15):
+		for x in range(1, _board_max.x + 1):
+			for y in range(1, _board_max.y + 1):
 				var cell := Vector2i(x, y)
 				if _board.get(cell) in [&"floor", &"portal"] and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
 					free.append(cell)
 		var selected_cells: Array[Vector2i] = []
-		for index in mini(2, free.size()):
+		for index in mini(timed_count, free.size()):
 			var selected := int(_draw_random() * free.size())
 			selected_cells.append(free[selected])
 			free.remove_at(selected)

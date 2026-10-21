@@ -7,6 +7,9 @@ const TouchControls = preload("res://scripts/touch_controls.gd")
 const GameView = preload("res://scripts/game_view.gd")
 const AIController = preload("res://scripts/simulation/ai_controller.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
+const BoardData = preload("res://scripts/simulation/board_data.gd")
+const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
+const AIProfiles = preload("res://scripts/simulation/ai_profiles.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 
 var simulation: RefCounted
@@ -67,27 +70,23 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	paused = false
 	result_credited = false
 	held.clear()
-	var board: Dictionary = {}
-	var csv := FileAccess.open("res://assets/maps/cinema-stage1.csv", FileAccess.READ)
-	csv.get_csv_line()
-	while not csv.eof_reached():
-		var row := csv.get_csv_line()
-		if row.size() >= 3:
-			board[Vector2i(int(row[0]), int(row[1]))] = StringName(row[2])
+	var board: Dictionary = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
+	var profile: Dictionary = AIProfiles.for_mode(&"arcade", &"normal")
 	var roster: Array[StringName] = []
 	roster.assign([&"human"] if practice else ACTORS)
 	var actors: Dictionary = {}
 	var session_seed := Time.get_ticks_msec() if seed_value < 0 else seed_value
-	var spawns := [Vector2i(1, 1), Vector2i(15, 1), Vector2i(1, 13), Vector2i(15, 13)]
 	for index in roster.size():
-		actors[roster[index]] = {"cell": spawns[index], "lives": session_lives if index == 0 else 1}
-	simulation = Simulation.new(roster, actors, board,
-		{"movement": true, "damage": true, "portals": true, "round": not practice,
-		"drops": true, "seed": session_seed})
+		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1}
+		if index > 0:
+			actors[roster[index]].merge({"speed": profile.speed, "power": profile.power, "capacity": profile.capacity})
+	simulation = Simulation.new(roster, actors, board.cells,
+		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
+		"drops": true, "seed": session_seed, "mode": ArcadeMode.new()})
 	scheduler = Scheduler.new(roster, simulation)
 	add_child(scheduler)
 	scheduler.set_process(false)
-	ai = AIController.new(session_seed)
+	ai = AIController.new(session_seed, [], profile)
 	if not practice:
 		for id in roster.slice(1):
 			scheduler.set_controller(id, _ai_command.bind(id))

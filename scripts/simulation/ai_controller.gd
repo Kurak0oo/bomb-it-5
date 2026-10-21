@@ -1,10 +1,13 @@
 extends RefCounted
-## Normal 010201 state/action responsibilities on the admitted simulation clock.
+## GameAI state/action responsibilities on the admitted simulation clock; profile
+## fields come from the rules XML (default Normal Arcade 010201).
 const Perception = preload("res://scripts/simulation/ai_perception.gd")
 const Search = preload("res://scripts/simulation/ai_search.gd")
+const Profiles = preload("res://scripts/simulation/ai_profiles.gd")
 const CARDINAL := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.UP, Vector2i.DOWN]
-const ORDER := [&"Attack", &"Evade", &"GetItem", &"Box", &"Free", &"Escape"]
-const CHANCE := [0.6, 0.8, 0.8, 0.7, 0.8, 1.0]
+var profile: Dictionary
+var _order: Array[StringName] = []
+var _chance: Array[float] = []
 var _rng := RandomNumberGenerator.new()
 var _memory := {}
 var _last_tick := -1
@@ -16,9 +19,13 @@ var _node_costs := {}
 var _previous_fire: Array = []
 
 
-func _init(seed_value: int = 5, random_draws: Array = []) -> void:
+func _init(seed_value: int = 5, random_draws: Array = [], ai_profile: Dictionary = {}) -> void:
 	_rng.seed = seed_value
 	_draws = random_draws.duplicate()
+	profile = ai_profile if not ai_profile.is_empty() else Profiles.for_mode(&"arcade", &"normal")
+	for entry in profile.states:
+		_order.append(entry.state)
+		_chance.append(float(entry.chance))
 
 
 func command(state: Dictionary, id: StringName) -> Dictionary:
@@ -43,8 +50,8 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 			return a.alive and a.transit_until == 0 and a.busy_until <= state.tick)
 		_selected = active[_rotation % active.size()] if not active.is_empty() else &""
 		_rotation = (_rotation + 1) % maxi(1, active.size())
-	var ready_to_think: bool = id == _selected and (memory.ready or memory.answer_elapsed > 20.0)
-	if ready_to_think: memory.perception = Perception.observe(state, id, _node_costs)
+	var ready_to_think: bool = id == _selected and (memory.ready or memory.answer_elapsed > profile.answer_ms)
+	if ready_to_think: memory.perception = Perception.observe(state, id, _node_costs, profile.find_range)
 	_run_pending(state, id, memory, output)
 	if not output.bomb_events.is_empty():
 		output.observation = _observation(memory, false)
@@ -57,7 +64,7 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 		return output
 	if not memory.complete and state.tick >= memory.timer: _cancel(memory)
 	if id == _selected:
-		if memory.ready or memory.answer_elapsed > 20.0:
+		if memory.ready or memory.answer_elapsed > profile.answer_ms:
 			memory.ready = true
 			if memory.complete: _choose(state, id, memory)
 		else:
@@ -82,11 +89,11 @@ func _choose(state: Dictionary, id: StringName, memory: Dictionary) -> void:
 	var target: Variant = null
 	var aim: Variant = null
 	var default_instance := true
-	for index in ORDER.size():
-		if _random() > CHANCE[index]: continue
+	for index in _order.size():
+		if _random() > _chance[index]: continue
 		target = null
 		aim = null
-		var kind: StringName = ORDER[index]
+		var kind: StringName = _order[index]
 		match kind:
 			&"Attack", &"Box":
 				if actor.get("bomb_count", 0) >= actor.capacity: continue
@@ -267,7 +274,7 @@ func _arrive(state: Dictionary, id: StringName, memory: Dictionary, output: Dict
 			_cancel(memory)
 			return
 		memory.pending = &"attack"
-		memory.due = state.tick + 6
+		memory.due = state.tick + ceili(_state_value(memory.state, "weapon_delay_ms", 150) * 35.0 / 1000.0)
 
 
 func _run_pending(state: Dictionary, id: StringName, memory: Dictionary, output: Dictionary) -> void:
@@ -282,7 +289,7 @@ func _run_pending(state: Dictionary, id: StringName, memory: Dictionary, output:
 			output.bomb_events = [&"down", &"up"]
 			memory.complete = true
 		&"escape":
-			memory.perception = Perception.observe(state, id, _node_costs)
+			memory.perception = Perception.observe(state, id, _node_costs, profile.find_range)
 			var target: Variant = _best(state, state.actors[id].cell, memory.perception.free.duplicate(), memory.perception.costs, 1500)
 			if target == null:
 				memory.pending = &"escape"
@@ -305,11 +312,11 @@ func _on_step(state: Dictionary, id: StringName, memory: Dictionary, output: Dic
 			memory.due = state.tick + 11
 		return
 	var draw := _random()
-	var dodge_chance := 1.0 if memory.state == &"Escape" else 0.8
+	var dodge_chance: float = _state_value(memory.state, "advance_dodge", 1.0)
 	if draw < dodge_chance and (_danger(memory.perception, actor.cell, 30) or _danger(memory.perception, next, 30) or _danger(memory.perception, after, 30)):
 		_cancel(memory)
 		return
-	if draw < 0.6 and memory.state in [&"Attack", &"Box"]:
+	if draw < _state_value(memory.state, "advance_attack", 0.0) and memory.state in [&"Attack", &"Box"]:
 		var human: Dictionary = state.actors[state.actors.keys()[0]]
 		var reach := _attack_reach(actor)
 		var delta: Vector2i = human.cell - actor.cell
@@ -356,3 +363,10 @@ func _random() -> float:
 	var value: float = _draws[_draw_index] if _draw_index < _draws.size() else _rng.randf()
 	_draw_index += 1
 	return clampf(value, 0.0, 0.9999999999999999)
+
+
+## A profile field of the action entry for `state`, as AIControl reads it per action.
+func _state_value(state_name: StringName, key: String, fallback: float) -> float:
+	for entry in profile.states:
+		if entry.state == state_name and entry.has(key): return float(entry[key])
+	return fallback

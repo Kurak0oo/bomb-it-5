@@ -6,10 +6,10 @@ const WEIGHTS := {&"capacity": 28, &"power": 24, &"speed": 22, &"life": 1, &"shi
 	&"flamer": 1, &"laser": 1, &"hammer": 1, &"triple": 1, &"shotgun": 1, &"vehicle": 3}
 
 
-static func build_pool(draw: Callable) -> Array[StringName]:
+static func build_pool(draw: Callable, weights: Dictionary = WEIGHTS) -> Array[StringName]:
 	var pool: Array[StringName] = []
-	for kind in WEIGHTS:
-		for index in WEIGHTS[kind]:
+	for kind in weights:
+		for index in weights[kind]:
 			pool.append((&"moto" if draw.call() < 0.5 else &"car") if kind == &"vehicle" else kind)
 	return pool
 

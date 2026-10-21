@@ -3,7 +3,7 @@ extends RefCounted
 const RAYS := [Vector2i.LEFT, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.UP]
 
 
-static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary = {}) -> Dictionary:
+static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary = {}, find_range: int = 6) -> Dictionary:
 	var result := {"bombs": [], "items": [], "boxes": [], "enemies": [], "free": [], "danger": {}, "costs": shared_costs}
 	var origin: Vector2i = state.actors[id].cell
 	var visited := {}
@@ -11,7 +11,7 @@ static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary 
 	for cell in state.board:
 		if not result.costs.has(cell): result.costs[cell] = 30 if state.board[cell] == &"portal" else 1
 		if cell in state.fire: result.costs[cell] = 1000
-	for radius in range(1, 7):
+	for radius in range(1, find_range + 1):
 		for dx in range(radius, -radius - 1, -1):
 			for dy in range(radius, -radius - 1, -1):
 				var cell := origin + Vector2i(dx, dy)
