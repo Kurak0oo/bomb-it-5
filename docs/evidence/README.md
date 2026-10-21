@@ -24,6 +24,7 @@ The evidence starts with the hashed publisher build and separates static finding
 - [Laser portal rays](edition-5-laser-portal-probes.md): empty, occupied and shielded portal traversal, first blocker, single damage pass, beam removal and restored movement.
 - [AI trace plan](edition-5-ai-trace-plan.md) and [AI runtime probes](edition-5-ai-runtime-probes.md): profile/parser quirks, perception/search/ranking, state/route decisions, original controls and all selected weapons.
 - [Death/results runtime probes](edition-5-results-runtime-probes.md): zero-kill victory, simultaneous defeat, retry hearts, HUD versus result totals and game over.
+- [Modes, menus, progression and unlocks](edition-5-modes-and-flow.md): static recovery of Kill, Green Zone, Pac-Man, difficulty, settings, level/stage progression, per-mode scoring, unlocks and saved data, with a soft-block probability correction (Arcade 0.6, not 0.8).
 - [Recovery-to-porting handoff](edition-5-porting-handoff.md): source-to-Godot classifications, accepted adaptations and the ordered fidelity implementation boundary.
 - [Recovery acceptance and verification](edition-5-recovery-verification.md): ticket-by-ticket evidence, independent Standards/Spec findings and fixes, integrity checks and the unchanged 244-check Godot baseline.
 - [First-bomb test excerpt](first-bomb-test-excerpt.md): source-verified CinemaStage1 cells, controlled actor setup and worked blast expectations for the headless slice; not a certified complete map.
