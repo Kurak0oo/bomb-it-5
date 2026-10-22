@@ -314,9 +314,10 @@ func _features() -> void:
 			&"spellbook":
 				var at := ORIGIN + Vector2(feature.cell) * PITCH
 				if not skin.draw(self, prefix + "spellbook", Rect2(at + Vector2(18, 18), Vector2(72, 72)), state.tick):
-					var open_by := 18.0 if feature.flipping else 4.0
-					_box(Rect2(at + Vector2(54 - 26 - open_by, 34), Vector2(26 + open_by, 40)), Color("6b3f8f"), Color("e8c86b"), 4)
-					_box(Rect2(at + Vector2(54, 34), Vector2(26 + open_by, 40)), Color("7d4ca6"), Color("e8c86b"), 4)
+					# Below the centrepiece title, opening wider while it flips.
+					var open_by := 14.0 if feature.flipping else 2.0
+					_box(Rect2(at + Vector2(54 - 20 - open_by, 70), Vector2(20 + open_by, 28)), Color("6b3f8f"), Color("e8c86b"), 4)
+					_box(Rect2(at + Vector2(54, 70), Vector2(20 + open_by, 28)), Color("7d4ca6"), Color("e8c86b"), 4)
 				for sign in feature.signs:
 					var mark := _center(sign.cell)
 					if skin.draw(self, prefix + ("sign_bomb" if sign.kind == &"bomb" else "sign_pickup"), Rect2(mark - Vector2.ONE * 18, Vector2.ONE * 36), state.tick): continue
@@ -332,7 +333,7 @@ func _marquee() -> void:
 		_box(Rect2(at + Vector2(2, 2), Vector2(104, 104)), theme[3].darkened(0.2), theme[4], 12)
 		var words := StageSets.title(_board_skin()).split(" ")
 		for line in words.size():
-			_label(at + Vector2(12, 50 + line * 22), words[line], 17, theme[4].lightened(0.5))
+			_label(at + Vector2(12, 30 + line * 20), words[line], 17, theme[4].lightened(0.5))
 		return
 	if skin.draw(self, "board.marquee", Rect2(at, Vector2.ONE * 108), state.tick): return
 	_box(Rect2(at + Vector2(2, 2), Vector2(104, 104)), Color("74334c"), Color("e3b36f"), 12)

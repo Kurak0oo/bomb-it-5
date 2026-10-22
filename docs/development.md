@@ -2,10 +2,24 @@
 
 ## Current boundary
 
+The complete edition 5 game ([specification #56](specs/complete-edition-5-game.md)) is
+implemented on 2026-10-21/22: tickets #57–#70 are closed. The game opens on the main
+menu; Game Settings, character select with unlockable looks, How to Play with key
+rebinding, pause to Main Menu, per-level score, game win and game over screens drive a
+multi-level session. All four modes (Arcade, Battle Royale, Pac-Man, Green Zone), all
+six stage sets with their map features and rides, and Easy/Normal/Hard are playable
+against one to three AI. Practice is a development launch (`-- --practice`, the
+workbench preview default). Each mode, difficulty and stage-set feature was observed on
+the reference player before porting; see the evidence index. 667 headless checks in 20
+suites and 38 workbench UI checks pass; see the
+[implementation verification](verification/complete-game-2026-10-21/README.md) for
+captures, corrections and limits. Finished art #20 and final human desktop acceptance
+#21 remain open.
+
 The generated art pass was rejected by the user on 2026-10-20 and reverted in
 `0f41b43` / `8211c82`; the gameplay fidelity commits remain. Presentation #20 is
 reopened and #21 remains open. The user now owns art selection through the
-[Art Workbench](art-workbench.md): 89 visual slots, native default previews,
+[Art Workbench](art-workbench.md): now 262 visual slots (89 before #70), native default previews,
 applied/draft comparison, view-only original context, imported images and sheets,
 animation/facing/placement controls, undo/reset and preview in the actual game.
 The checked-in active manifest is empty, so normal play keeps the earlier native
@@ -56,7 +70,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
 | Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
-| Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
+| Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published; #57–#70 implemented and closed on 2026-10-22 ([verification](verification/complete-game-2026-10-21/README.md)) | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
 
@@ -159,7 +173,7 @@ The implement request on 2026-10-19 proceeds with the proposed first-bomb seam: 
 
 The command checks verify that a valid explicit call advances exactly one tick and consumes one command per registered actor without rendering. They verify that missing, duplicate, and unknown actors leave state unchanged, and that roster size is not hard-coded to four. Scheduler checks cover partial intervals, 35 ticks across different render rates, stall limits and discarded debt, per-actor held direction, ordered events consumed once, invalid intake, pause/resume and focus notifications. One short live SceneTree check verifies automatic Node processing; timing assertions otherwise supply elapsed time directly.
 
-Run `./tools/run_checks.ps1 -Godot 'path/to/Godot_4.5_console.exe'` from PowerShell. Without `-Godot`, the runner uses the local ignored `.scratch/godot-4.5/Godot_v4.5-stable_win64_console.exe` if present. It requires a Godot 4.5 executable, successful exits, no engine/script errors, and all eight suites' success markers.
+Run `./tools/run_checks.ps1 -Godot 'path/to/Godot_4.5_console.exe'` from PowerShell. Without `-Godot`, the runner uses the local ignored `.scratch/godot-4.5/Godot_v4.5-stable_win64_console.exe` if present. It requires a Godot 4.5 executable, successful exits, no engine/script errors, and every listed suite's success marker. On Linux, `tools/run_checks.sh` runs the same 20 suites; graphical suites need a display (Xvfb works). The workbench UI check runs separately with `--script res://tools/check_art_workbench.gd`.
 
 ## Implemented interface
 

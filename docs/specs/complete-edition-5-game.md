@@ -98,7 +98,8 @@ ported.
 - **Stage sets.** All six sets with three normal and three Pac-Man layouts each.
   Each set's features and vehicle pairs are recovered and ported per set:
   Cinema portals (done), Zoo crocodiles, Birthday Party toy hands, Candy Factory
-  conveyors and sliding platforms, Magic Library spellbooks; Luxury Stores has no
+  conveyors and sliding platforms (correction 2026-10-22: Candy layouts have no
+  sliding platforms; see the [Candy Factory record](../evidence/edition-5-candy-factory.md)), Magic Library spellbooks; Luxury Stores has no
   special tile. No recorded layout places lava. Timed pickups follow each mode's per-set counts.
 - **Screens.** Without sound or music switches while audio is deferred: main menu, Game Settings, character select with look choice, How to
   Play with power-ups and key rebinding, pause with Resume/Main Menu, per-level
