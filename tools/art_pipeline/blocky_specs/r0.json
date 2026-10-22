@@ -1,0 +1,801 @@
+{
+ "robot": "_r0",
+ "note": "Blue robot as a blocky avatar. Colours come from its model-sheet swatches. Two antennae with ball tips become stalk + cube-tip blocks; the round ear pieces become earmuff blocks.",
+ "pitch": 12,
+ "outline": "#1d2a38",
+ "stroke_width": 0.3,
+ "walk_frames": 8,
+ "walk_swing": 32,
+ "walk_bob": 0.6,
+ "pivots": {
+  "arm_l": [
+   6,
+   23,
+   0
+  ],
+  "arm_r": [
+   -6,
+   23,
+   0
+  ],
+  "leg_l": [
+   2,
+   12,
+   0
+  ],
+  "leg_r": [
+   -2,
+   12,
+   0
+  ]
+ },
+ "boxes": [
+  {
+   "name": "leg_r",
+   "group": "leg_r",
+   "pos": [
+    -4,
+    3,
+    -2
+   ],
+   "size": [
+    4,
+    9,
+    4
+   ],
+   "color": "#236997"
+  },
+  {
+   "name": "boot_r",
+   "group": "leg_r",
+   "pos": [
+    -4.1,
+    0,
+    -2.1
+   ],
+   "size": [
+    4.2,
+    3,
+    4.4
+   ],
+   "color": "#3ebbeb",
+   "decals": [
+    {
+     "face": "front",
+     "rect": [
+      0,
+      2.3,
+      4.2,
+      0.7
+     ],
+     "color": "#ddf2ff"
+    }
+   ]
+  },
+  {
+   "name": "leg_l",
+   "group": "leg_l",
+   "pos": [
+    0,
+    3,
+    -2
+   ],
+   "size": [
+    4,
+    9,
+    4
+   ],
+   "color": "#236997"
+  },
+  {
+   "name": "boot_l",
+   "group": "leg_l",
+   "pos": [
+    -0.1,
+    0,
+    -2.1
+   ],
+   "size": [
+    4.2,
+    3,
+    4.4
+   ],
+   "color": "#3ebbeb",
+   "decals": [
+    {
+     "face": "front",
+     "rect": [
+      0,
+      2.3,
+      4.2,
+      0.7
+     ],
+     "color": "#ddf2ff"
+    }
+   ]
+  },
+  {
+   "name": "waist",
+   "group": "torso",
+   "pos": [
+    -4,
+    12,
+    -2
+   ],
+   "size": [
+    8,
+    4,
+    4
+   ],
+   "color": "#236997"
+  },
+  {
+   "name": "chest",
+   "group": "torso",
+   "pos": [
+    -4,
+    16,
+    -2
+   ],
+   "size": [
+    8,
+    8,
+    4
+   ],
+   "color": "#f7fde3",
+   "decals": [
+    {
+     "face": "front",
+     "rect": [
+      1,
+      4,
+      6,
+      4
+     ],
+     "color": "#236997"
+    },
+    {
+     "face": "front",
+     "rect": [
+      1,
+      0,
+      1.2,
+      4
+     ],
+     "color": "#236997"
+    },
+    {
+     "face": "front",
+     "rect": [
+      5.8,
+      0,
+      1.2,
+      4
+     ],
+     "color": "#236997"
+    },
+    {
+     "face": "front",
+     "rect": [
+      1.1,
+      3.7,
+      1,
+      1
+     ],
+     "color": "#ddf2ff"
+    },
+    {
+     "face": "front",
+     "rect": [
+      5.9,
+      3.7,
+      1,
+      1
+     ],
+     "color": "#ddf2ff"
+    },
+    {
+     "face": "back",
+     "rect": [
+      1,
+      0,
+      1.2,
+      8
+     ],
+     "color": "#236997"
+    },
+    {
+     "face": "back",
+     "rect": [
+      5.8,
+      0,
+      1.2,
+      8
+     ],
+     "color": "#236997"
+    }
+   ]
+  },
+  {
+   "name": "arm_r",
+   "group": "arm_r",
+   "pos": [
+    -7.5,
+    15,
+    -1.5
+   ],
+   "size": [
+    3,
+    9,
+    3
+   ],
+   "color": "#c8d3d8"
+  },
+  {
+   "name": "hand_r",
+   "group": "arm_r",
+   "pos": [
+    -7.7,
+    12,
+    -1.7
+   ],
+   "size": [
+    3.4,
+    3,
+    3.4
+   ],
+   "color": "#3ebbeb"
+  },
+  {
+   "name": "arm_l",
+   "group": "arm_l",
+   "pos": [
+    4.5,
+    15,
+    -1.5
+   ],
+   "size": [
+    3,
+    9,
+    3
+   ],
+   "color": "#c8d3d8"
+  },
+  {
+   "name": "hand_l",
+   "group": "arm_l",
+   "pos": [
+    4.3,
+    12,
+    -1.7
+   ],
+   "size": [
+    3.4,
+    3,
+    3.4
+   ],
+   "color": "#3ebbeb"
+  },
+  {
+   "name": "head",
+   "group": "head",
+   "pos": [
+    -4.5,
+    24,
+    -4.5
+   ],
+   "size": [
+    9,
+    9,
+    9
+   ],
+   "color": "#3ebbeb",
+   "faces": {
+    "top": "#41bbea"
+   },
+   "decals": [
+    {
+     "face": "front",
+     "rect": [
+      1,
+      2.5,
+      7,
+      5.5
+     ],
+     "color": "#ddf2ff"
+    },
+    {
+     "face": "front",
+     "rect": [
+      1.8,
+      3.4,
+      2.2,
+      2.2
+     ],
+     "color": "#1cc1e4"
+    },
+    {
+     "face": "front",
+     "rect": [
+      5,
+      3.4,
+      2.2,
+      2.2
+     ],
+     "color": "#1cc1e4"
+    },
+    {
+     "face": "front",
+     "rect": [
+      2.5,
+      4.1,
+      1.1,
+      1.1
+     ],
+     "color": "#24344f"
+    },
+    {
+     "face": "front",
+     "rect": [
+      5.7,
+      4.1,
+      1.1,
+      1.1
+     ],
+     "color": "#24344f"
+    },
+    {
+     "face": "front",
+     "rect": [
+      2.1,
+      3.7,
+      0.6,
+      0.6
+     ],
+     "color": "#ffffff"
+    },
+    {
+     "face": "front",
+     "rect": [
+      5.3,
+      3.7,
+      0.6,
+      0.6
+     ],
+     "color": "#ffffff"
+    },
+    {
+     "face": "front",
+     "rect": [
+      3.6,
+      6.6,
+      1.8,
+      0.6
+     ],
+     "color": "#24344f"
+    },
+    {
+     "face": "back",
+     "rect": [
+      0,
+      0,
+      9,
+      9
+     ],
+     "color": "#2a9ae2"
+    }
+   ]
+  },
+  {
+   "name": "ear_r",
+   "group": "head",
+   "pos": [
+    -5.8,
+    26,
+    -2
+   ],
+   "size": [
+    1.3,
+    4.5,
+    4
+   ],
+   "color": "#6fa5d1",
+   "decals": [
+    {
+     "face": "left",
+     "rect": [
+      1,
+      1,
+      2,
+      2.5
+     ],
+     "color": "#2a9ae2"
+    }
+   ]
+  },
+  {
+   "name": "ear_l",
+   "group": "head",
+   "pos": [
+    4.5,
+    26,
+    -2
+   ],
+   "size": [
+    1.3,
+    4.5,
+    4
+   ],
+   "color": "#6fa5d1",
+   "decals": [
+    {
+     "face": "right",
+     "rect": [
+      1,
+      1,
+      2,
+      2.5
+     ],
+     "color": "#2a9ae2"
+    }
+   ]
+  },
+  {
+   "name": "antenna_r",
+   "group": "head",
+   "pos": [
+    -3,
+    33,
+    -0.5
+   ],
+   "size": [
+    1,
+    3,
+    1
+   ],
+   "color": "#3499df"
+  },
+  {
+   "name": "antenna_tip_r",
+   "group": "head",
+   "pos": [
+    -3.5,
+    36,
+    -1
+   ],
+   "size": [
+    2,
+    2,
+    2
+   ],
+   "color": "#6fa5d1",
+   "decals": [
+    {
+     "face": "front",
+     "rect": [
+      0.3,
+      0.3,
+      0.6,
+      0.6
+     ],
+     "color": "#ddf2ff"
+    }
+   ]
+  },
+  {
+   "name": "antenna_l",
+   "group": "head",
+   "pos": [
+    2,
+    33,
+    -0.5
+   ],
+   "size": [
+    1,
+    3,
+    1
+   ],
+   "color": "#3499df"
+  },
+  {
+   "name": "antenna_tip_l",
+   "group": "head",
+   "pos": [
+    1.5,
+    36,
+    -1
+   ],
+   "size": [
+    2,
+    2,
+    2
+   ],
+   "color": "#6fa5d1",
+   "decals": [
+    {
+     "face": "front",
+     "rect": [
+      0.3,
+      0.3,
+      0.6,
+      0.6
+     ],
+     "color": "#ddf2ff"
+    }
+   ]
+  }
+ ],
+ "outfits": {
+  "sailor": {
+   "note": "outfit 1: white sailor suit with navy collar",
+   "parts": {
+    "chest": {
+     "color": "#ffffff",
+     "decals": [
+      {
+       "face": "front",
+       "rect": [
+        0,
+        0,
+        8,
+        2
+       ],
+       "color": "#24344f"
+      },
+      {
+       "face": "front",
+       "rect": [
+        3,
+        2,
+        2,
+        2
+       ],
+       "color": "#24344f"
+      },
+      {
+       "face": "front",
+       "rect": [
+        3.5,
+        4.2,
+        1,
+        1
+       ],
+       "color": "#d9534f"
+      },
+      {
+       "face": "back",
+       "rect": [
+        0,
+        0,
+        8,
+        3.5
+       ],
+       "color": "#24344f"
+      }
+     ]
+    },
+    "waist": {
+     "color": "#ffffff"
+    },
+    "leg_r": {
+     "color": "#f2f6f8"
+    },
+    "leg_l": {
+     "color": "#f2f6f8"
+    }
+   }
+  },
+  "hero": {
+   "note": "outfit 5: blue shirt, red shorts, yellow B badge",
+   "parts": {
+    "chest": {
+     "color": "#2a6fd6",
+     "decals": [
+      {
+       "face": "front",
+       "rect": [
+        2.5,
+        1.5,
+        3,
+        3
+       ],
+       "color": "#f2c230"
+      },
+      {
+       "face": "front",
+       "rect": [
+        3.5,
+        2,
+        1,
+        2
+       ],
+       "color": "#d9534f"
+      }
+     ]
+    },
+    "waist": {
+     "color": "#d9534f"
+    },
+    "leg_r": {
+     "color": "#d9534f"
+    },
+    "leg_l": {
+     "color": "#d9534f"
+    }
+   }
+  }
+ },
+ "hats": {
+  "police_cap": {
+   "note": "hat 1",
+   "boxes": [
+    {
+     "name": "cap",
+     "group": "head",
+     "pos": [
+      -4.8,
+      33,
+      -4.8
+     ],
+     "size": [
+      9.6,
+      2,
+      9.6
+     ],
+     "color": "#1f4e79",
+     "decals": [
+      {
+       "face": "front",
+       "rect": [
+        3.8,
+        0.4,
+        2,
+        1.2
+       ],
+       "color": "#f2c230"
+      }
+     ]
+    },
+    {
+     "name": "cap_brim",
+     "group": "head",
+     "pos": [
+      -4.8,
+      32.6,
+      4.8
+     ],
+     "size": [
+      9.6,
+      0.6,
+      2.4
+     ],
+     "color": "#14324f"
+    }
+   ]
+  },
+  "top_hat": {
+   "note": "hat 2",
+   "boxes": [
+    {
+     "name": "hat_brim",
+     "group": "head",
+     "pos": [
+      -4.5,
+      33,
+      -4.5
+     ],
+     "size": [
+      9,
+      0.8,
+      9
+     ],
+     "color": "#2a6fd6"
+    },
+    {
+     "name": "hat_crown",
+     "group": "head",
+     "pos": [
+      -3,
+      33.8,
+      -3
+     ],
+     "size": [
+      6,
+      5,
+      6
+     ],
+     "color": "#3499df",
+     "decals": [
+      {
+       "face": "front",
+       "rect": [
+        0,
+        3.6,
+        6,
+        1
+       ],
+       "color": "#f2c230"
+      },
+      {
+       "face": "front",
+       "rect": [
+        1,
+        0,
+        1,
+        3.6
+       ],
+       "color": "#2a6fd6"
+      },
+      {
+       "face": "front",
+       "rect": [
+        3,
+        0,
+        1,
+        3.6
+       ],
+       "color": "#2a6fd6"
+      }
+     ]
+    }
+   ]
+  },
+  "pirate": {
+   "note": "hat 3",
+   "boxes": [
+    {
+     "name": "tricorn",
+     "group": "head",
+     "pos": [
+      -5.5,
+      33,
+      -4
+     ],
+     "size": [
+      11,
+      2.5,
+      8
+     ],
+     "color": "#1f6f8b",
+     "decals": [
+      {
+       "face": "front",
+       "rect": [
+        0,
+        0,
+        11,
+        0.6
+       ],
+       "color": "#f2c230"
+      },
+      {
+       "face": "front",
+       "rect": [
+        4.5,
+        0.8,
+        2,
+        1.4
+       ],
+       "color": "#ffffff"
+      }
+     ]
+    },
+    {
+     "name": "tricorn_top",
+     "group": "head",
+     "pos": [
+      -3.5,
+      35.5,
+      -2.5
+     ],
+     "size": [
+      7,
+      1.5,
+      5
+     ],
+     "color": "#1f6f8b"
+    }
+   ]
+  }
+ }
+}

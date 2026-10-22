@@ -108,6 +108,27 @@ walk frames change clothes every few frames. `clips.py` pins both to frame 1 (th
 default outfit) for the sheet and for every pipeline render. Pipeline version 2
 includes the pin, so `--resume` regenerates candidates made before it.
 
+## Blocky redesign
+
+```
+python tools/art_pipeline/blocky_sheet.py --robot 0
+```
+
+A deterministic redraw path for geometric styles (Roblox R6 / Minecraft-like):
+`blocky_specs/r<N>.json` describes the robot as boxes (head, torso, limbs,
+antennae, face and clothing decals, outfit colour overrides, hat block sets) in
+Minecraft-pixel units. `blocky.py` poses that one model (four facings, walk swing,
+charred defeat with scattering blocks) and draws flat-shaded, outlined SVG, so
+proportions and colours cannot drift between frames. Output in the ignored
+`candidates/blocky/r<N>/`: `sheet.png` beside the original, and workbench sheets
+`walk.png` (8 across x 4 rows Down, Right, Up, Left), `idle.png` (1 x 4) and
+`death.png` (strip) at 4x the 40x44 actor slot, plus SVG frames.
+
+Image models suit only the concept step (one approved look per robot from the key
+art and a prompt). They redraw every frame independently, so they are not used for
+production frames. Draft or edit a spec from the approved concept and the model
+sheet, then render.
+
 ## Notes
 
 - Character slots use robots by colour (human `_r0`, ruby `_r1`, mint `_r6`, gold
