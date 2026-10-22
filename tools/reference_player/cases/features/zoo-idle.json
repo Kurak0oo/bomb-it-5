@@ -1,0 +1,552 @@
+{
+  "name": "zoo-idle",
+  "origin": "Input-only menu path to a chosen mode/arena/difficulty opening; then idle, capturing every 7 frames",
+  "actions": [
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 269"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "step 7",
+      "capture": "f001"
+    },
+    {
+      "command": "step 7",
+      "capture": "f002"
+    },
+    {
+      "command": "step 7",
+      "capture": "f003"
+    },
+    {
+      "command": "step 7",
+      "capture": "f004"
+    },
+    {
+      "command": "step 7",
+      "capture": "f005"
+    },
+    {
+      "command": "step 7",
+      "capture": "f006"
+    },
+    {
+      "command": "step 7",
+      "capture": "f007"
+    },
+    {
+      "command": "step 7",
+      "capture": "f008"
+    },
+    {
+      "command": "step 7",
+      "capture": "f009"
+    },
+    {
+      "command": "step 7",
+      "capture": "f010"
+    },
+    {
+      "command": "step 7",
+      "capture": "f011"
+    },
+    {
+      "command": "step 7",
+      "capture": "f012"
+    },
+    {
+      "command": "step 7",
+      "capture": "f013"
+    },
+    {
+      "command": "step 7",
+      "capture": "f014"
+    },
+    {
+      "command": "step 7",
+      "capture": "f015"
+    },
+    {
+      "command": "step 7",
+      "capture": "f016"
+    },
+    {
+      "command": "step 7",
+      "capture": "f017"
+    },
+    {
+      "command": "step 7",
+      "capture": "f018"
+    },
+    {
+      "command": "step 7",
+      "capture": "f019"
+    },
+    {
+      "command": "step 7",
+      "capture": "f020"
+    },
+    {
+      "command": "step 7",
+      "capture": "f021"
+    },
+    {
+      "command": "step 7",
+      "capture": "f022"
+    },
+    {
+      "command": "step 7",
+      "capture": "f023"
+    },
+    {
+      "command": "step 7",
+      "capture": "f024"
+    },
+    {
+      "command": "step 7",
+      "capture": "f025"
+    },
+    {
+      "command": "step 7",
+      "capture": "f026"
+    },
+    {
+      "command": "step 7",
+      "capture": "f027"
+    },
+    {
+      "command": "step 7",
+      "capture": "f028"
+    },
+    {
+      "command": "step 7",
+      "capture": "f029"
+    },
+    {
+      "command": "step 7",
+      "capture": "f030"
+    },
+    {
+      "command": "step 7",
+      "capture": "f031"
+    },
+    {
+      "command": "step 7",
+      "capture": "f032"
+    },
+    {
+      "command": "step 7",
+      "capture": "f033"
+    },
+    {
+      "command": "step 7",
+      "capture": "f034"
+    },
+    {
+      "command": "step 7",
+      "capture": "f035"
+    },
+    {
+      "command": "step 7",
+      "capture": "f036"
+    },
+    {
+      "command": "step 7",
+      "capture": "f037"
+    },
+    {
+      "command": "step 7",
+      "capture": "f038"
+    },
+    {
+      "command": "step 7",
+      "capture": "f039"
+    },
+    {
+      "command": "step 7",
+      "capture": "f040"
+    },
+    {
+      "command": "step 7",
+      "capture": "f041"
+    },
+    {
+      "command": "step 7",
+      "capture": "f042"
+    },
+    {
+      "command": "step 7",
+      "capture": "f043"
+    },
+    {
+      "command": "step 7",
+      "capture": "f044"
+    },
+    {
+      "command": "step 7",
+      "capture": "f045"
+    },
+    {
+      "command": "step 7",
+      "capture": "f046"
+    },
+    {
+      "command": "step 7",
+      "capture": "f047"
+    },
+    {
+      "command": "step 7",
+      "capture": "f048"
+    },
+    {
+      "command": "step 7",
+      "capture": "f049"
+    },
+    {
+      "command": "step 7",
+      "capture": "f050"
+    },
+    {
+      "command": "step 7",
+      "capture": "f051"
+    },
+    {
+      "command": "step 7",
+      "capture": "f052"
+    },
+    {
+      "command": "step 7",
+      "capture": "f053"
+    },
+    {
+      "command": "step 7",
+      "capture": "f054"
+    },
+    {
+      "command": "step 7",
+      "capture": "f055"
+    },
+    {
+      "command": "step 7",
+      "capture": "f056"
+    },
+    {
+      "command": "step 7",
+      "capture": "f057"
+    },
+    {
+      "command": "step 7",
+      "capture": "f058"
+    },
+    {
+      "command": "step 7",
+      "capture": "f059"
+    },
+    {
+      "command": "step 7",
+      "capture": "f060"
+    },
+    {
+      "command": "step 7",
+      "capture": "f061"
+    },
+    {
+      "command": "step 7",
+      "capture": "f062"
+    },
+    {
+      "command": "step 7",
+      "capture": "f063"
+    },
+    {
+      "command": "step 7",
+      "capture": "f064"
+    },
+    {
+      "command": "step 7",
+      "capture": "f065"
+    },
+    {
+      "command": "step 7",
+      "capture": "f066"
+    },
+    {
+      "command": "step 7",
+      "capture": "f067"
+    },
+    {
+      "command": "step 7",
+      "capture": "f068"
+    },
+    {
+      "command": "step 7",
+      "capture": "f069"
+    },
+    {
+      "command": "step 7",
+      "capture": "f070"
+    },
+    {
+      "command": "step 7",
+      "capture": "f071"
+    },
+    {
+      "command": "step 7",
+      "capture": "f072"
+    },
+    {
+      "command": "step 7",
+      "capture": "f073"
+    },
+    {
+      "command": "step 7",
+      "capture": "f074"
+    },
+    {
+      "command": "step 7",
+      "capture": "f075"
+    },
+    {
+      "command": "step 7",
+      "capture": "f076"
+    },
+    {
+      "command": "step 7",
+      "capture": "f077"
+    },
+    {
+      "command": "step 7",
+      "capture": "f078"
+    },
+    {
+      "command": "step 7",
+      "capture": "f079"
+    },
+    {
+      "command": "step 7",
+      "capture": "f080"
+    },
+    {
+      "command": "step 7",
+      "capture": "f081"
+    },
+    {
+      "command": "step 7",
+      "capture": "f082"
+    },
+    {
+      "command": "step 7",
+      "capture": "f083"
+    },
+    {
+      "command": "step 7",
+      "capture": "f084"
+    },
+    {
+      "command": "step 7",
+      "capture": "f085"
+    },
+    {
+      "command": "step 7",
+      "capture": "f086"
+    },
+    {
+      "command": "step 7",
+      "capture": "f087"
+    },
+    {
+      "command": "step 7",
+      "capture": "f088"
+    },
+    {
+      "command": "step 7",
+      "capture": "f089"
+    },
+    {
+      "command": "step 7",
+      "capture": "f090"
+    },
+    {
+      "command": "step 7",
+      "capture": "f091"
+    },
+    {
+      "command": "step 7",
+      "capture": "f092"
+    },
+    {
+      "command": "step 7",
+      "capture": "f093"
+    },
+    {
+      "command": "step 7",
+      "capture": "f094"
+    },
+    {
+      "command": "step 7",
+      "capture": "f095"
+    },
+    {
+      "command": "step 7",
+      "capture": "f096"
+    },
+    {
+      "command": "step 7",
+      "capture": "f097"
+    },
+    {
+      "command": "step 7",
+      "capture": "f098"
+    },
+    {
+      "command": "step 7",
+      "capture": "f099"
+    },
+    {
+      "command": "step 7",
+      "capture": "f100"
+    },
+    {
+      "command": "step 7",
+      "capture": "f101"
+    },
+    {
+      "command": "step 7",
+      "capture": "f102"
+    },
+    {
+      "command": "step 7",
+      "capture": "f103"
+    },
+    {
+      "command": "step 7",
+      "capture": "f104"
+    },
+    {
+      "command": "step 7",
+      "capture": "f105"
+    },
+    {
+      "command": "step 7",
+      "capture": "f106"
+    },
+    {
+      "command": "step 7",
+      "capture": "f107"
+    },
+    {
+      "command": "step 7",
+      "capture": "f108"
+    },
+    {
+      "command": "step 7",
+      "capture": "f109"
+    },
+    {
+      "command": "step 7",
+      "capture": "f110"
+    },
+    {
+      "command": "step 7",
+      "capture": "f111"
+    },
+    {
+      "command": "step 7",
+      "capture": "f112"
+    },
+    {
+      "command": "step 7",
+      "capture": "f113"
+    },
+    {
+      "command": "step 7",
+      "capture": "f114"
+    },
+    {
+      "command": "step 7",
+      "capture": "f115"
+    },
+    {
+      "command": "step 7",
+      "capture": "f116"
+    },
+    {
+      "command": "step 7",
+      "capture": "f117"
+    },
+    {
+      "command": "step 7",
+      "capture": "f118"
+    },
+    {
+      "command": "step 7",
+      "capture": "f119"
+    },
+    {
+      "command": "step 7",
+      "capture": "f120"
+    }
+  ]
+}

@@ -1,0 +1,312 @@
+{
+  "name": "magic-pac-idle",
+  "origin": "Input-only menu path to a chosen mode/arena/difficulty opening; then idle, capturing every 35 frames",
+  "actions": [
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 430 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 327"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "step 35",
+      "capture": "f001"
+    },
+    {
+      "command": "step 35",
+      "capture": "f002"
+    },
+    {
+      "command": "step 35",
+      "capture": "f003"
+    },
+    {
+      "command": "step 35",
+      "capture": "f004"
+    },
+    {
+      "command": "step 35",
+      "capture": "f005"
+    },
+    {
+      "command": "step 35",
+      "capture": "f006"
+    },
+    {
+      "command": "step 35",
+      "capture": "f007"
+    },
+    {
+      "command": "step 35",
+      "capture": "f008"
+    },
+    {
+      "command": "step 35",
+      "capture": "f009"
+    },
+    {
+      "command": "step 35",
+      "capture": "f010"
+    },
+    {
+      "command": "step 35",
+      "capture": "f011"
+    },
+    {
+      "command": "step 35",
+      "capture": "f012"
+    },
+    {
+      "command": "step 35",
+      "capture": "f013"
+    },
+    {
+      "command": "step 35",
+      "capture": "f014"
+    },
+    {
+      "command": "step 35",
+      "capture": "f015"
+    },
+    {
+      "command": "step 35",
+      "capture": "f016"
+    },
+    {
+      "command": "step 35",
+      "capture": "f017"
+    },
+    {
+      "command": "step 35",
+      "capture": "f018"
+    },
+    {
+      "command": "step 35",
+      "capture": "f019"
+    },
+    {
+      "command": "step 35",
+      "capture": "f020"
+    },
+    {
+      "command": "step 35",
+      "capture": "f021"
+    },
+    {
+      "command": "step 35",
+      "capture": "f022"
+    },
+    {
+      "command": "step 35",
+      "capture": "f023"
+    },
+    {
+      "command": "step 35",
+      "capture": "f024"
+    },
+    {
+      "command": "step 35",
+      "capture": "f025"
+    },
+    {
+      "command": "step 35",
+      "capture": "f026"
+    },
+    {
+      "command": "step 35",
+      "capture": "f027"
+    },
+    {
+      "command": "step 35",
+      "capture": "f028"
+    },
+    {
+      "command": "step 35",
+      "capture": "f029"
+    },
+    {
+      "command": "step 35",
+      "capture": "f030"
+    },
+    {
+      "command": "step 35",
+      "capture": "f031"
+    },
+    {
+      "command": "step 35",
+      "capture": "f032"
+    },
+    {
+      "command": "step 35",
+      "capture": "f033"
+    },
+    {
+      "command": "step 35",
+      "capture": "f034"
+    },
+    {
+      "command": "step 35",
+      "capture": "f035"
+    },
+    {
+      "command": "step 35",
+      "capture": "f036"
+    },
+    {
+      "command": "step 35",
+      "capture": "f037"
+    },
+    {
+      "command": "step 35",
+      "capture": "f038"
+    },
+    {
+      "command": "step 35",
+      "capture": "f039"
+    },
+    {
+      "command": "step 35",
+      "capture": "f040"
+    },
+    {
+      "command": "step 35",
+      "capture": "f041"
+    },
+    {
+      "command": "step 35",
+      "capture": "f042"
+    },
+    {
+      "command": "step 35",
+      "capture": "f043"
+    },
+    {
+      "command": "step 35",
+      "capture": "f044"
+    },
+    {
+      "command": "step 35",
+      "capture": "f045"
+    },
+    {
+      "command": "step 35",
+      "capture": "f046"
+    },
+    {
+      "command": "step 35",
+      "capture": "f047"
+    },
+    {
+      "command": "step 35",
+      "capture": "f048"
+    },
+    {
+      "command": "step 35",
+      "capture": "f049"
+    },
+    {
+      "command": "step 35",
+      "capture": "f050"
+    },
+    {
+      "command": "step 35",
+      "capture": "f051"
+    },
+    {
+      "command": "step 35",
+      "capture": "f052"
+    },
+    {
+      "command": "step 35",
+      "capture": "f053"
+    },
+    {
+      "command": "step 35",
+      "capture": "f054"
+    },
+    {
+      "command": "step 35",
+      "capture": "f055"
+    },
+    {
+      "command": "step 35",
+      "capture": "f056"
+    },
+    {
+      "command": "step 35",
+      "capture": "f057"
+    },
+    {
+      "command": "step 35",
+      "capture": "f058"
+    },
+    {
+      "command": "step 35",
+      "capture": "f059"
+    },
+    {
+      "command": "step 35",
+      "capture": "f060"
+    }
+  ]
+}

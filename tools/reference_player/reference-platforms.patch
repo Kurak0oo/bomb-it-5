@@ -1,0 +1,38 @@
+diff --git a/core/src/avm2/reference_focus.rs b/core/src/avm2/reference_focus.rs
+--- a/core/src/avm2/reference_focus.rs
++++ b/core/src/avm2/reference_focus.rs
+@@ -219,13 +219,24 @@
+     for robot in elements(slot(game,"robots")).into_iter().filter_map(|v|v.as_object()) {robots.insert(oid(robot),robot);}
+     let robots=robots.values().map(|r|focus.robot(*r)).collect::<Vec<_>>();
+     let engine=focus.named_child(game,"gameEngine",&[]);
+-    let mut cells=Vec::new();let mut nodes=Vec::new();
++    let mut cells=Vec::new();let mut nodes=Vec::new();let mut platforms=BTreeMap::new();
+     if let Some(map)=child(game,"map") {
+         for (x,column) in elements(slot(map,"mapArr")).into_iter().enumerate() {
+             for (y,cell) in elements(Some(column)).into_iter().enumerate() {
+                 if let Some(cell)=cell.as_object() {
+                     if cells.len()>=ARRAY_LIMIT*2 {focus.truncated=true;break;}
+                     cells.push(json!({"x":x,"y":y,"grid":focus.record(cell,&[])}));
++                    // Map features (crocodiles, toy hands, belts, spellbooks) referenced by a
++                    // Grid slot are recorded once each, keyed by object id.
++                    let slots=focus.slot_layouts[&focus.class(cell)].iter().map(|(id,_)|*id).collect::<Vec<_>>();
++                    for id in slots {
++                        if let Some(feature)=cell.get_slot(id).as_object() {
++                            if focus.class(feature).starts_with("zlong.bombit5.maps.platform::") && !platforms.contains_key(&oid(feature)) {
++                                let record=focus.record(feature,&[]);
++                                platforms.insert(oid(feature),json!({"x":x,"y":y,"record":record}));
++                            }
++                        }
++                    }
+                 }
+             }
+         }
+@@ -251,7 +262,7 @@
+         for (id,bomb) in pending {bombs.insert(id,focus.record(bomb,&["_hitMove"]));}
+     }
+     json!({"schema":"bombit5-reference-focus-v1","available":true,"game":game_record,"mode":mode,
+-        "players":players,"robots":robots,"engine":engine,"cells":cells,"nodes":nodes,"bombs":bombs,"ai":ais,
++        "players":players,"robots":robots,"engine":engine,"cells":cells,"nodes":nodes,"bombs":bombs,"ai":ais,"platforms":platforms,
+         "map_master":map_master,"world_set":world_set,"ending":ending,
+         "layouts":focus.layouts,"record_count":focus.records,"truncated":focus.truncated,
+         "limits":{"array_elements":ARRAY_LIMIT,"array_depth":ARRAY_DEPTH,"records":RECORD_LIMIT},

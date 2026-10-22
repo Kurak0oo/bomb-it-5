@@ -15,7 +15,7 @@ python tools/replay_reference.py --observe --output .scratch/edition-5-research/
 The build script uses a task-owned Ruffle checkout under ignored storage. It copies
 this package into that workspace and applies the recorded research patch chain:
 observer → fixtures → events → compact → focus → actors → geometry → drops →
-session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups.
+session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups → platforms.
 It first reverses exact matching installed
 patches in reverse order and rejects other core changes. The default probe exposes
 full observation; fixture commands require `-Fixtures`, event/seed commands require
@@ -67,7 +67,7 @@ Protocol (one command per line):
 - `state FILE.json`: bounded native slot graph, available with the observer feature.
 - `trace DIR` / `trace off`: save a state graph after each stepped frame.
 - `compact FILE.json`, `trace-compact DIR` / `trace-compact off`: omit native painting trees, retaining logical objects and directly referenced animation frame numbers. `--observe --compact` selects compact snapshots in the driver.
-- `focus FILE.json`, `trace-focus DIR` / `trace-focus off`: explicit game/actor/AI/callback/cell/bomb projection with physical-slot layouts, available with `-Focus`. `--observe --focus` selects this mode. An expensive initial full-graph bootstrap is explicitly marked.
+- `focus FILE.json`, `trace-focus DIR` / `trace-focus off`: explicit game/actor/AI/callback/cell/bomb/map-feature projection (`platforms`: each `maps.platform` object a Grid slot references) with physical-slot layouts, available with `-Focus`. `--observe --focus` selects this mode. An expensive initial full-graph bootstrap is explicitly marked.
 - `fixture FILE.json`: explicit original-method fixture; saves `FILE-result.json` beside it.
 - `events DIR [CAPACITY] [PREFIX...]`: collect selected method/RNG events and drain them after each frame. Defaults: capacity 20,000 and game-package methods. `events on` keeps events buffered for manual draining; `events-dump FILE.json` drains them. `events off` writes a final tail and disables capture. Overflow is explicit.
 - `seed N`: explicit nonzero original-RNG initial seed, only before any frame/RNG use. This is a controlled fixture, not unseeded baseline playback.
