@@ -11,6 +11,7 @@ import shutil
 import numpy as np
 from PIL import Image
 
+import clips
 import palette
 import render
 from common import (CANDIDATES, PIPELINE_VERSION, WORK, guard_output, rgb_to_hex, save_png, shift_colours,
@@ -115,7 +116,7 @@ class Frame:
     @property
     def text(self):
         if self._text is None:
-            self._text = open(self.path, encoding='utf-8').read()
+            self._text = clips.pin(open(self.path, encoding='utf-8').read())
         return self._text
 
     @property

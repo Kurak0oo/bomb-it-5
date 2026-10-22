@@ -8,7 +8,7 @@ import re
 
 import numpy as np
 
-PIPELINE_VERSION = 1
+PIPELINE_VERSION = 2  # 2: outfit/hat clips pinned to the default frame
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 SCRATCH = ROOT / '.scratch'

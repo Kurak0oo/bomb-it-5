@@ -79,6 +79,24 @@ under the folder named by `img2img.dir`, and run again. Results are resized onto
 the frame, blended by `img2img.strength`, keep the original alpha and still pass
 through palette snapping and vectorisation.
 
+## Character model sheet
+
+```
+python tools/art_pipeline/character_sheet.py --robot 0
+```
+
+Composes one robot (0 is the blue default human) into a single model sheet:
+character-select key art, front/right/back/left turnaround, HUD portrait, outfit
+variants, walk and defeat keyframes, the four rides, colour swatches and an
+in-game size reference. Output: `candidates/character_sheets/r<N>/sheet.png`
+(ignored). It needs the export from a previous `run.py`.
+
+Outfits: `RobotView.as` stops the innermost `bodyMc` on clothID + 1 and `hatMc` on
+hatID + 1, but FFDec lets them advance with the parent timeline, so raw exported
+walk frames change clothes every few frames. `clips.py` pins both to frame 1 (the
+default outfit) for the sheet and for every pipeline render. Pipeline version 2
+includes the pin, so `--resume` regenerates candidates made before it.
+
 ## Notes
 
 - Character slots use robots by colour (human `_r0`, ruby `_r1`, mint `_r6`, gold
