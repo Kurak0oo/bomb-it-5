@@ -8,6 +8,7 @@ from PIL import Image
 SVG_TAG = re.compile(r'<svg\b[^>]*>', re.S)
 SIZE_ATTRIBUTE = re.compile(r'\s(?:width|height|viewBox)="[^"]*"')
 PROBE_SIDE = 1024
+ORIGIN = re.compile(r'<g transform="matrix\(1\.0, 0\.0, 0\.0, 1\.0, (-?[\d.]+), (-?[\d.]+)\)">')
 
 
 def _decode(png):
@@ -48,13 +49,18 @@ def _bounds(svg, box):
     if not alpha.any():
         return None, zoom
     gap = max(2, round(256 * zoom))
-    y0, y1 = _main_run(alpha.sum(1), gap)
-    x0, x1 = _main_run(alpha[y0:y1].sum(0), gap)
+    origin = ORIGIN.search(svg)
+    ox, oy = (float(origin.group(1)), float(origin.group(2))) if origin else (box[0], box[1])
+    y0, y1 = _main_run(alpha.sum(1), gap, (oy - box[1]) * zoom)
+    x0, x1 = _main_run(alpha[y0:y1].sum(0), gap, (ox - box[0]) * zoom)
     return (box[0] + x0 / zoom, box[1] + y0 / zoom, box[0] + x1 / zoom, box[1] + y1 / zoom), zoom
 
 
-def _main_run(profile, gap):
-    """Span of the heaviest group of occupied rows/columns; drops fragments beyond a wide empty gap."""
+def _main_run(profile, gap, anchor):
+    """Occupied run nearest the registration point; drops fragments beyond a wide empty gap.
+
+    Off-stage leftovers sit far from the registration point and are never shown in game.
+    """
     occupied = np.nonzero(profile > 0)[0]
     groups, start = [], occupied[0]
     for previous, current in zip(occupied[:-1], occupied[1:]):
@@ -62,7 +68,8 @@ def _main_run(profile, gap):
             groups.append((start, previous + 1))
             start = current
     groups.append((start, occupied[-1] + 1))
-    return max(groups, key=lambda g: profile[g[0]:g[1]].sum())
+    distance = lambda g: 0 if g[0] <= anchor <= g[1] else min(abs(anchor - g[0]), abs(anchor - g[1]))
+    return min(groups, key=lambda g: (distance(g), -profile[g[0]:g[1]].sum()))
 
 
 def content_box(svg, size, pad=1.0):

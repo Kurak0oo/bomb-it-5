@@ -75,6 +75,22 @@ def distinct_frames(sprite, limit, threshold=0.08):
     return [n for n, _ in chosen][:limit]
 
 
+def same_drawing(sprite, a, b):
+    box = sprite.box([a, b])
+    zoom = 64 / max(box[2] - box[0], box[3] - box[1])
+    return np.abs(sprite.draw(a, box, zoom).astype(float) - sprite.draw(b, box, zoom)).mean() < 2
+
+
+def key_frame(sprite):
+    """The select-illustration frame with the most solid area (skips entrance effects)."""
+    numbers = range(1, len(sprite.frames) + 1)
+    box = sprite.box(list(numbers)[::max(1, len(sprite.frames) // 12)])
+    zoom = 96 / max(box[2] - box[0], box[3] - box[1])
+    solid = {n: int((sprite.draw(n, box, zoom)[..., 3] > 230).sum()) for n in numbers}
+    best = max(numbers, key=lambda n: (solid[n], -n))
+    return 1 if solid[1] >= 0.25 * solid[best] else best  # Frame 1 is the default outfit unless empty.
+
+
 def palette(images, count=14):
     pixels = np.concatenate([i.reshape(-1, 4) for i in images])
     opaque = pixels[pixels[:, 3] > 200][:, :3]
@@ -146,9 +162,11 @@ def build(robot, out):
     area = sheet.panel(40, 130, 820, 1010, 'Key art', 'character-select illustration')
     hero_images = []
     if special:
-        box = special.box([1])
+        key = key_frame(special)
+        sheet.label((area[0] + area[2] - 90, area[1] - 34), f'frame {key}', 16, fill=MUTED)
+        box = special.box([key])
         zoom = min(area[2] / (box[2] - box[0]), (area[3] - 10) / (box[3] - box[1]))
-        hero = special.draw(1, box, zoom)
+        hero = special.draw(key, box, zoom)
         hero_images.append(hero)
         sheet.paste(hero, area[0] + (area[2] - hero.shape[1]) / 2, area[1])
     # Turnaround.
@@ -169,13 +187,21 @@ def build(robot, out):
         tw = sheet.pen.textlength(caption, font=font(20, True))
         sheet.label((area[0] + i * cell + (cell - tw) / 2, bottom + 10), caption, 20, True, fill=MUTED)
     sheet.ground(area[0], area[1] + tallest * zoom, area[2])
-    # Portrait.
-    area = sheet.panel(880, 710, 400, 430, 'Portrait', 'HUD head')
-    if head:
-        box = head.box([robot + 1])
-        pz = min(area[2] / (box[2] - box[0]), area[3] / (box[3] - box[1]))
-        portrait = head.draw(robot + 1, box, pz)
-        sheet.paste(portrait, area[0] + (area[2] - portrait.shape[1]) / 2, area[1])
+    # Portrait: roleHead frame robot + 1, unless the SWF reuses another robot's head there.
+    own_head = head and robot < len(head.frames) and not any(
+        same_drawing(head, robot + 1, n) for n in range(1, robot + 1))
+    area = sheet.panel(880, 710, 400, 430, 'Portrait',
+                       f'HUD head, frame {robot + 1}' if own_head else 'cropped from front idle')
+    if own_head:
+        source, number, box = head, robot + 1, head.box([robot + 1])
+    else:
+        # No head of its own in roleHead: take the top of the front idle pose.
+        source, number, box = walk['Down'], 1, boxes['Down']
+        box = (box[0], box[1], box[2], box[1] + (box[3] - box[1]) * 0.56)
+        sheet.label((area[0], area[1] + area[3] - 20), 'roleHead has no head for this robot', 15, fill=MUTED)
+    pz = min(area[2] / (box[2] - box[0]), (area[3] - 26) / (box[3] - box[1]))
+    portrait = source.draw(number, box, pz)
+    sheet.paste(portrait, area[0] + (area[2] - portrait.shape[1]) / 2, area[1])
     # Outfits.
     area = sheet.panel(1300, 710, 1260, 430, 'Outfits and poses', 'distinct frames of the select illustration')
     if special:
