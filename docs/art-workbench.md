@@ -14,7 +14,8 @@ you do not need to use the Godot editor. The normal game still starts through
    Down, Right, Up, Left. Adjust scale, offsets and tint. Play/pause or scrub the
    preview. Source action timing remains authoritative in the game.
 5. Click **Preview in game** to try the draft in the actual game. It starts in
-   practice; **Start Match** adds the three real AI. Close that preview to return.
+   practice by default; **Start Match** adds the three real AI. Pick a mode and stage
+   set beside the button to preview a real level instead. Close that preview to return.
 6. Click **Apply to game** when ready. Future normal game launches use the choices.
 
 **Use default** removes the selected draft replacement. **Undo** restores the
@@ -23,11 +24,17 @@ image does not immediately change normal play. Draft choices persist between
 workbench sessions. Reopening **Preview in game** starts a fresh preview with all
 current settings, including menu-button styles.
 
-The catalogue has 89 visual slots: 10 board pieces, 20 character poses/portraits,
-14 pickup icons, 13 held weapons/actions/projectiles, 12 effects/ride states,
-5 control graphics, 10 interface backgrounds/button states and 5 optional outcome
-illustrations. Dynamic text, layout and hit areas remain native. The four unresolved
-gameplay item slots remain disabled and are not invented as new effects.
+The catalogue has 262 visual slots: 10 Cinema board pieces, 72 stage-set pieces
+(floors, walls, seven solid and two soft blocks and a centrepiece for each of the
+other five sets, plus crocodiles, toy hands, the belt, the spellbook and its signs),
+40 character poses/portraits for all eight robots, 64 hat and outfit looks,
+17 pickup icons (including horse, dragon and the Pac-Man coin), 13 held
+weapons/actions/projectiles, 16 effects/ride states, 2 mode elements (Green Zone flag
+and capture bar), 5 control graphics, 10 interface backgrounds/button states,
+8 screen backgrounds and 5 optional outcome illustrations. Every slot has native
+drawing, so an empty manifest still plays. Dynamic text, layout and hit areas remain
+native. The four unresolved gameplay item slots remain disabled and are not invented
+as new effects.
 
 Character sheets are selected by facing. Idle is the fallback for an unassigned
 walk/action pose. Action sheets follow the recovered action phase; changing a

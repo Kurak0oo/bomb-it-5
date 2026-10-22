@@ -10,7 +10,7 @@ var playing := false
 
 func _ready() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	state = {"tick": 12, "attacks": [], "actors": {}, "session": {"game_over": false}}
+	state = {"tick": 12, "attacks": [], "actors": {}, "session": {"game_over": false}, "features": [], "mode_state": {}}
 	for id in ROBOT_SLOTS:
 		state.actors[id] = {"position": Vector2.ZERO, "cell": Vector2i.ZERO, "alive": true,
 			"facing": Vector2.DOWN, "velocity": Vector2.ZERO, "vehicle": &"", "shield": 0,
@@ -33,6 +33,15 @@ func _process(delta: float) -> void:
 
 func focus_rect() -> Rect2:
 	if component_id == "board.marquee": return Rect2(ORIGIN + Vector2(7, 6) * PITCH, Vector2.ONE * 108)
+	if component_id.begins_with("screen."): return Rect2(Vector2.ZERO, Vector2(1280, 720))
+	if component_id == "mode.flag": return Rect2(ORIGIN + Vector2.ONE * 18 - Vector2(18, 26), Vector2(36, 44))
+	if component_id == "mode.progress": return Rect2(ORIGIN + Vector2.ONE * 18 + Vector2(-18, -34), Vector2(36, 5))
+	if component_id.begins_with("look."): return Rect2(ORIGIN + Vector2(-5, -18), Vector2(46, 58))
+	if component_id.begins_with("board.") and component_id.count(".") == 2:
+		var part := component_id.get_slice(".", 2)
+		if part == "center": return Rect2(ORIGIN + Vector2(7, 6) * PITCH, Vector2.ONE * 108)
+		if part == "spellbook": return Rect2(ORIGIN + Vector2(7, 6) * PITCH + Vector2.ONE * 18, Vector2.ONE * 72)
+		return Rect2(ORIGIN + Vector2(_set_cell(part)) * PITCH, Vector2.ONE * PITCH)
 	var tiles := {"board.seat": Vector2(2, 2), "board.spotlight": Vector2(2, 4),
 		"board.clapper": Vector2(2, 3), "board.popcorn": Vector2(2, 2),
 		"board.portal_green": Vector2(8, 1), "board.portal_purple": Vector2(4, 7)}
@@ -55,9 +64,22 @@ func _draw() -> void:
 	if group == "attack":
 		_attack(_sample_attack(StringName(kind)))
 		return
+	if group == "look":
+		_sample_look(kind, component_id.get_slice(".", 2))
+		return
+	if group == "board" and component_id.count(".") == 2:
+		_sample_set(kind, component_id.get_slice(".", 2))
+		return
+	if group == "mode":
+		if kind == "flag": state.mode_state = {"flag": Vector2i.ZERO}
+		else: state.mode_state = {"flag": Vector2i.ZERO, "progress": {&"human": 105}, "capture_ticks": 105}
+		state.actors[&"human"].robot = 0
+		if kind == "flag": _mode_objects()
+		else: _mode_overlays()
+		return
 	var at := ORIGIN + Vector2.ONE * 18
 	var target := Catalog.rect(component_id, at, sample_tick)
-	if component_id.begins_with("board."): target = bounds
+	if component_id.begins_with("board.") or component_id.begins_with("screen."): target = bounds
 	var progress := posmod(floori(sample_tick), 18) / 17.0 if component_id == "effect.flame" else 0.0 if component_id.begins_with("ui.button_") else -1.0
 	if skin.draw(self, component_id, target, sample_tick, facing, progress): return
 	match group:
@@ -79,6 +101,10 @@ func _draw() -> void:
 			draw_circle(at, 19, ROBOT_COLORS[index].darkened(0.1))
 			_label(at + Vector2(-13, 6), "P1" if index == 0 else "AI", 17, Color("173649"))
 		"item", "held":
+			if kind == "coin":
+				draw_circle(at, 6, Color("f6c94a"))
+				draw_arc(at, 6, 0, TAU, 16, Color("a8741c"), 1.5, true)
+				return
 			draw_circle(at, 13, Color("d1fff0"))
 			draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
 			var caption: String = ITEM_NAMES.get(StringName(kind), "?")
@@ -93,7 +119,7 @@ func _draw() -> void:
 					draw_circle(at, 17, Color("ed7040"))
 					draw_circle(at + Vector2(0, -2), 12, Color("ffd473"))
 					draw_circle(at + Vector2(-2, -4), 6, Color("fff1b6"))
-				"car", "moto", "car_recovery", "moto_recovery":
+				"car", "moto", "horse", "dragon", "car_recovery", "moto_recovery", "horse_recovery", "dragon_recovery":
 					_box(Rect2(at + Vector2(-16, 1), Vector2(32, 17)), Color("d77f68") if kind.ends_with("recovery") else Color("3c8890"), Color("b9dfca"), 6)
 					draw_circle(at + Vector2(-10, 15), 5, Color("203347"))
 					draw_circle(at + Vector2(10, 15), 5, Color("203347"))
@@ -110,6 +136,52 @@ func _draw() -> void:
 			if kind.begins_with("button"): _label(at + Vector2(-34, 6), "BUTTON", 18)
 		"outcome":
 			_label(at + Vector2(-28, 7), "WIN" if kind == "won" else "END", 18, Color("ffd989"))
+		"screen":
+			draw_rect(bounds, Color("102c3b"))
+			_label(Vector2(520, 360), kind.replace("_", " ").to_upper(), 40, Color("ffd989"))
+
+
+## Sample cell per stage-set slot: parity picks the light/dark floor and A/B soft art.
+func _set_cell(part: String) -> Vector2i:
+	if part == "wall": return Vector2i(0, 2)
+	if part in ["floor_odd", "soft_a"]: return Vector2i(2, 3)
+	return Vector2i(2, 2)
+
+
+func _sample_set(set_id: String, part: String) -> void:
+	var cell := _set_cell(part)
+	state.board_meta = {"skin": StringName(set_id), "center": Vector2i(7, 6), "size": Vector2i(17, 15),
+		"variants": {cell: part.get_slice("_", 1).to_int()} if part.begins_with("solid_") else {}}
+	state.features = []
+	match part:
+		"floor_even", "floor_odd": _themed_tile(cell, &"floor", StringName(set_id))
+		"wall": _themed_tile(cell, &"solid", StringName(set_id))
+		"soft_a", "soft_b": _themed_tile(cell, &"soft", StringName(set_id))
+		"center": _marquee()
+		"crocodile", "crocodile_open":
+			_themed_tile(cell, &"floor", StringName(set_id))
+			state.features = [{"kind": &"crocodile", "cell": cell, "phase": &"open" if part == "crocodile_open" else &"closed",
+				"danger": part == "crocodile_open"}]
+		"toy_hand":
+			state.features = [{"kind": &"toy_hand", "cell": cell, "direction": Vector2i(facing), "open": false, "reach": 0}]
+		"belt":
+			state.features = [{"kind": &"belt", "track": [cell, cell + Vector2i(0, 9)], "flow": [Vector2i(facing), Vector2i(facing)]}]
+		"spellbook", "sign_bomb", "sign_pickup":
+			var signs := [] if part == "spellbook" else [{"cell": cell, "kind": &"bomb" if part == "sign_bomb" else &"pickup"}]
+			state.features = [{"kind": &"spellbook", "cell": Vector2i(7, 6), "flipping": part != "spellbook", "signs": signs}]
+		_: if part.begins_with("solid_"): _themed_tile(cell, &"solid", StringName(set_id))
+	if not state.features.is_empty(): _features()
+
+
+func _sample_look(robot_slot: String, part: String) -> void:
+	var index: int = ROBOT_SLOTS.find(StringName(robot_slot))
+	var actor: Dictionary = state.actors[ROBOT_SLOTS[index]].duplicate(true)
+	actor.facing = facing
+	actor.hat = part.trim_prefix("hat").to_int() if part.begins_with("hat") else 0
+	actor.body = part.trim_prefix("body").to_int() if part.begins_with("body") else 0
+	state.commands = []
+	state.attacks = []
+	_actor(actor, index, ROBOT_SLOTS[index])
 
 
 func _sample_tile(cell: Vector2i, tile: StringName) -> void:

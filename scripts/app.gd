@@ -471,6 +471,16 @@ func _page(id: StringName, solid := true) -> Control:
 	screen.size = Vector2(1280, 720)
 	screen.position = (get_viewport_rect().size - Vector2(1280, 720)) * 0.5
 	add_child(screen)
+	# Optional workbench art behind the page (`screen.<page>`); native drawing otherwise.
+	var art: Texture2D = skin.texture("screen." + id) if skin != null else null
+	if art != null:
+		var backdrop := TextureRect.new()
+		backdrop.name = "ScreenArt"
+		backdrop.texture = art
+		backdrop.size = screen.size
+		backdrop.stretch_mode = TextureRect.STRETCH_SCALE
+		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		screen.add_child(backdrop)
 	return screen
 
 

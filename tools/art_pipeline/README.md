@@ -1,7 +1,7 @@
 # Art pipeline
 
 Batch tool that turns artwork from the edition 5 SWF into lightly modified
-**candidate art** for the Art Workbench's 89 named slots. It never applies
+**candidate art** for the Art Workbench's 262 named slots. It never applies
 anything: it does not write `assets/skins/active.json` or `assets/skins/imports/`.
 Review every candidate yourself, then import the ones you choose in the workbench
 with **Replace image…** ([ADR 0006](../../docs/adr/0006-swf-derived-candidate-art.md)).
@@ -89,3 +89,29 @@ through palette snapping and vectorisation.
   overlays, the five touch controls, and the screen frame, HUD panels and menu
   buttons. The end cartoons are full-screen clips squeezed into 64x64 outcome slots.
 - Never commit the SWF, `.scratch/`, `candidates/` or the zips.
+
+## Slots and sources
+
+`catalog.json` lists every workbench slot (id, category, size). It mirrors
+`scripts/art/catalog.gd`; `tests/art_catalog_check.gd` fails when they differ and
+rewrites it with `WRITE_CATALOG=1`. `config.json` holds one source decision per slot;
+`run.py` refuses to start while a catalogue slot has none.
+
+Sources for the complete game: all eight robots (`_r0`–`_r7`), the horse
+(`_r0_forg_*`) and dragon (`_r0_Elephant_*`) rides and their `prop` frames (46, 47),
+the coin (`prop` frame 36), crocodile (`Art_Crocodile` frames 1 and 25), toy hand
+(`Art_ToyHand_Down`), belt (`Art_ConveyorBelt_1`), candy machine (`Art_CandyMachine`),
+spellbook (`Art_Spellbook`) and its signs (`Art_Sign_Red`/`Art_Sign_Blue`), the Green
+Zone ground tile (`_brick5` frame 160) and progress bar (`r0_progress`), and the screen
+backgrounds (`UI_MainMenu`, `UI_SETTING`, `UI_SELECTCHARACTER`, `UI_CONTROLS`,
+`UI_LEVEL_COMPLETED_ONEP`, `UI_Dress Up`, `UI_GAMEOVERONEP`, `UI_CONGRATULATIONSONEP`).
+
+Slots with no SWF source (`source: null`, 150 of 262; they keep native drawing):
+
+- Stage-set floors, walls, solid and soft blocks, and the Birthday Party, Zoo, Luxury
+  Shop and Magic Library centrepieces (64): the set art lives in unnamed brick clips
+  whose per-set frames were not recovered.
+- Every hat and outfit look (64): drawn inside the robot clips, no separate symbol.
+- Character action poses (8), protection blink and portal transit overlays (2),
+  touch controls (5) and seven interface panels and button states.
+

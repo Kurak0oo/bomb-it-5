@@ -140,6 +140,318 @@
     ]
    }
   },
+  "board.birthday_party.floor_even": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.floor_odd": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.wall": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.soft_a": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.soft_b": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.solid_1": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.solid_2": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.solid_3": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.solid_4": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.solid_5": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.solid_6": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.solid_7": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.center": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.birthday_party.toy_hand": {
+   "source": {
+    "sprite": "Art_ToyHand_Down",
+    "frames": [
+     1
+    ]
+   },
+   "note": "ToyHand uses Art_ToyHand_<Direction>; the game rotates the down art"
+  },
+  "board.candy_factory.floor_even": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.floor_odd": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.wall": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.soft_a": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.soft_b": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.solid_1": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.solid_2": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.solid_3": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.solid_4": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.solid_5": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.solid_6": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.solid_7": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.candy_factory.center": {
+   "source": {
+    "sprite": "Art_CandyMachine"
+   },
+   "note": "ConveyorBelt draws Art_CandyMachine on centerProp"
+  },
+  "board.candy_factory.belt": {
+   "source": {
+    "sprite": "Art_ConveyorBelt_1"
+   },
+   "note": "one clip for the whole track; trim to a cell when importing"
+  },
+  "board.zoo.floor_even": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.floor_odd": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.wall": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.soft_a": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.soft_b": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.solid_1": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.solid_2": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.solid_3": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.solid_4": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.solid_5": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.solid_6": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.solid_7": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.center": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.zoo.crocodile": {
+   "source": {
+    "sprite": "Art_Crocodile",
+    "frames": [
+     1
+    ]
+   },
+   "note": "Crocodile._mc; closed mouth"
+  },
+  "board.zoo.crocodile_open": {
+   "source": {
+    "sprite": "Art_Crocodile",
+    "frames": [
+     25
+    ]
+   },
+   "note": "mouth clip label openComplete is frame 25"
+  },
+  "board.luxury_stores.floor_even": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.floor_odd": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.wall": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.soft_a": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.soft_b": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.solid_1": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.solid_2": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.solid_3": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.solid_4": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.solid_5": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.solid_6": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.solid_7": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.luxury_stores.center": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.floor_even": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.floor_odd": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.wall": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.soft_a": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.soft_b": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.solid_1": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.solid_2": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.solid_3": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.solid_4": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.solid_5": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.solid_6": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.solid_7": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.center": {
+   "source": null,
+   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+  },
+  "board.magic_library.spellbook": {
+   "source": {
+    "sprite": "Art_Spellbook",
+    "frames": "all"
+   },
+   "note": "69-frame flip"
+  },
+  "board.magic_library.sign_bomb": {
+   "source": {
+    "sprite": "Art_Sign_Red"
+   }
+  },
+  "board.magic_library.sign_pickup": {
+   "source": {
+    "sprite": "Art_Sign_Blue"
+   }
+  },
   "actor.human.idle": {
    "source": {
     "rows": [
@@ -220,44 +532,44 @@
     "sprite": "_r1_Dead"
    }
   },
-  "actor.mint.idle": {
+  "actor.lime.idle": {
    "source": {
     "rows": [
-     "_r6_Down",
-     "_r6_Right",
-     "_r6_Up",
-     "_r6_Left"
+     "_r2_Down",
+     "_r2_Right",
+     "_r2_Up",
+     "_r2_Left"
     ],
     "frames": [
      1
     ]
    }
   },
-  "actor.mint.walk": {
+  "actor.lime.walk": {
    "source": {
     "rows": [
-     "_r6_Down",
-     "_r6_Right",
-     "_r6_Up",
-     "_r6_Left"
+     "_r2_Down",
+     "_r2_Right",
+     "_r2_Up",
+     "_r2_Left"
     ],
     "frames": "all"
    }
   },
-  "actor.mint.action": {
+  "actor.lime.action": {
    "source": null
   },
-  "actor.mint.portrait": {
+  "actor.lime.portrait": {
    "source": {
     "sprite": "BOMBIT5UI_fla.roleHead_263",
     "frames": [
-     7
+     3
     ]
    }
   },
-  "actor.mint.death": {
+  "actor.lime.death": {
    "source": {
-    "sprite": "_r6_Dead"
+    "sprite": "_r2_Dead"
    }
   },
   "actor.gold.idle": {
@@ -299,6 +611,422 @@
    "source": {
     "sprite": "_r3_Dead"
    }
+  },
+  "actor.violet.idle": {
+   "source": {
+    "rows": [
+     "_r4_Down",
+     "_r4_Right",
+     "_r4_Up",
+     "_r4_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.violet.walk": {
+   "source": {
+    "rows": [
+     "_r4_Down",
+     "_r4_Right",
+     "_r4_Up",
+     "_r4_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.violet.action": {
+   "source": null
+  },
+  "actor.violet.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     5
+    ]
+   }
+  },
+  "actor.violet.death": {
+   "source": {
+    "sprite": "_r4_Dead"
+   }
+  },
+  "actor.slate.idle": {
+   "source": {
+    "rows": [
+     "_r5_Down",
+     "_r5_Right",
+     "_r5_Up",
+     "_r5_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.slate.walk": {
+   "source": {
+    "rows": [
+     "_r5_Down",
+     "_r5_Right",
+     "_r5_Up",
+     "_r5_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.slate.action": {
+   "source": null
+  },
+  "actor.slate.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     6
+    ]
+   }
+  },
+  "actor.slate.death": {
+   "source": {
+    "sprite": "_r5_Dead"
+   }
+  },
+  "actor.mint.idle": {
+   "source": {
+    "rows": [
+     "_r6_Down",
+     "_r6_Right",
+     "_r6_Up",
+     "_r6_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.mint.walk": {
+   "source": {
+    "rows": [
+     "_r6_Down",
+     "_r6_Right",
+     "_r6_Up",
+     "_r6_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.mint.action": {
+   "source": null
+  },
+  "actor.mint.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     7
+    ]
+   }
+  },
+  "actor.mint.death": {
+   "source": {
+    "sprite": "_r6_Dead"
+   }
+  },
+  "actor.snow.idle": {
+   "source": {
+    "rows": [
+     "_r7_Down",
+     "_r7_Right",
+     "_r7_Up",
+     "_r7_Left"
+    ],
+    "frames": [
+     1
+    ]
+   }
+  },
+  "actor.snow.walk": {
+   "source": {
+    "rows": [
+     "_r7_Down",
+     "_r7_Right",
+     "_r7_Up",
+     "_r7_Left"
+    ],
+    "frames": "all"
+   }
+  },
+  "actor.snow.action": {
+   "source": null
+  },
+  "actor.snow.portrait": {
+   "source": {
+    "sprite": "BOMBIT5UI_fla.roleHead_263",
+    "frames": [
+     8
+    ]
+   }
+  },
+  "actor.snow.death": {
+   "source": {
+    "sprite": "_r7_Dead"
+   }
+  },
+  "look.human.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.human.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.human.hat3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.human.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.human.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.human.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.human.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.human.body5": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.hat3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.ruby.body5": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.hat3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.lime.body5": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.hat3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.hat4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.gold.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.body5": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.violet.body6": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.hat3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.slate.body5": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.hat3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.mint.body5": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.hat1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.hat2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.hat3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.hat4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.body1": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.body2": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.body3": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
+  },
+  "look.snow.body4": {
+   "source": null,
+   "note": "No separate SWF symbol: hats and outfits are drawn inside the robot clips (Art_clothPanel<n> shows them only as UI panels)."
   },
   "item.capacity": {
    "source": {
@@ -371,6 +1099,33 @@
     ]
    },
    "note": "frame = AS3 _propNum"
+  },
+  "item.horse": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     46
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.dragon": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     47
+    ]
+   },
+   "note": "frame = AS3 _propNum"
+  },
+  "item.coin": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     36
+    ]
+   },
+   "note": "CoinProp _propNum"
   },
   "item.landmine": {
    "source": {
@@ -614,6 +1369,30 @@
     "frames": "all"
    }
   },
+  "effect.horse": {
+   "source": {
+    "rows": [
+     "_r0_forg_Down",
+     "_r0_forg_Right",
+     "_r0_forg_Up",
+     "_r0_forg_Left"
+    ],
+    "frames": "all"
+   },
+   "note": "HorseProp vehicle \"_forg\""
+  },
+  "effect.dragon": {
+   "source": {
+    "rows": [
+     "_r0_Elephant_Down",
+     "_r0_Elephant_Right",
+     "_r0_Elephant_Up",
+     "_r0_Elephant_Left"
+    ],
+    "frames": "all"
+   },
+   "note": "DragonProp vehicle \"_Elephant\""
+  },
   "effect.car_recovery": {
    "source": {
     "rows": [
@@ -633,6 +1412,30 @@
      "_r0_Skateboard_Right",
      "_r0_Skateboard_Up",
      "_r0_Skateboard_Left"
+    ],
+    "frames": "all"
+   },
+   "note": "guess: same ride clip"
+  },
+  "effect.horse_recovery": {
+   "source": {
+    "rows": [
+     "_r0_forg_Down",
+     "_r0_forg_Right",
+     "_r0_forg_Up",
+     "_r0_forg_Left"
+    ],
+    "frames": "all"
+   },
+   "note": "guess: same ride clip"
+  },
+  "effect.dragon_recovery": {
+   "source": {
+    "rows": [
+     "_r0_Elephant_Down",
+     "_r0_Elephant_Right",
+     "_r0_Elephant_Up",
+     "_r0_Elephant_Left"
     ],
     "frames": "all"
    },
@@ -690,6 +1493,62 @@
   "ui.button_disabled": {
    "source": null
   },
+  "mode.flag": {
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     160
+    ]
+   },
+   "note": "Flag.setMc: _brick5 frame 160 is the flag cell's ground tile; the waving flag itself is not a separate symbol"
+  },
+  "mode.progress": {
+   "source": {
+    "sprite": "r0_progress"
+   },
+   "note": "Flag uses r<robot>_progress per robot; r0 is the player"
+  },
+  "screen.menu": {
+   "source": {
+    "sprite": "UI_MainMenu"
+   }
+  },
+  "screen.settings": {
+   "source": {
+    "sprite": "UI_SETTING"
+   }
+  },
+  "screen.character": {
+   "source": {
+    "sprite": "UI_SELECTCHARACTER"
+   }
+  },
+  "screen.how_to_play": {
+   "source": {
+    "sprite": "UI_CONTROLS"
+   },
+   "note": "UI_POWER_UPS is the second page"
+  },
+  "screen.score": {
+   "source": {
+    "sprite": "UI_LEVEL_COMPLETED_ONEP"
+   }
+  },
+  "screen.dress_up": {
+   "source": {
+    "sprite": "UI_Dress Up"
+   }
+  },
+  "screen.game_over": {
+   "source": {
+    "sprite": "UI_GAMEOVERONEP"
+   }
+  },
+  "screen.game_win": {
+   "source": {
+    "sprite": "UI_CONGRATULATIONSONEP"
+   }
+  },
   "outcome.won": {
    "source": {
     "sprite": "winCartoon"
@@ -720,7 +1579,7 @@
   }
  },
  "notes": {
-  "actors": "Character slots use robots by colour: human=_r0, ruby=_r1, mint=_r6, gold=_r3. The recorded Cinema roster is _r0 with AI _r5, _r3, _r4; edit the slot sources to use those instead.",
+  "actors": "Character slots use robot n of the roster for _r<n>: human _r0, ruby _r1, lime _r2, gold _r3, violet _r4, slate _r5, mint _r6, snow _r7. Rides use the player robot (_r0).",
   "frames": "frames: \"all\" (evenly sampled to max_frames), an integer count, or a list of 1-based frame numbers.",
   "sources": "sprite/rows name an exported class, or #<character id> for unnamed symbols. null means the SWF has no matching source."
  }

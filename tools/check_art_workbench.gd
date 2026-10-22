@@ -25,7 +25,13 @@ func _run() -> void:
 	await process_frame
 	await _capture("overview")
 	await _click(_text_button("Effects"))
-	_expect(bench.cards.size() == 12, "category click displays every effect and recovery slot")
+	_expect(bench.cards.size() == bench.definitions.filter(func(entry): return entry.category == "Effects").size(),
+		"category click displays every effect and recovery slot")
+	for name in ["Stage sets", "Looks", "Modes", "Screens"]:
+		await _click(_text_button(name))
+		_expect(bench.cards.size() > 0 and bench.cards.keys().all(func(id): return bench.definitions.any(func(entry): return entry.id == id and entry.category == name)),
+			"the %s category lists its new slots" % name)
+	await _click(_text_button("Effects"))
 	await _click(bench.cards["effect.bomb"].button)
 	_expect(bench.selected == "effect.bomb", "component card click selects its inspector")
 	await _capture("bomb-inspector")
@@ -66,6 +72,20 @@ func _run() -> void:
 		await RenderingServer.frame_post_draw
 		bench.preview_window.get_texture().get_image().save_png(folder.path_join("real-game-preview.png"))
 		bench.preview_window.queue_free()
+	await process_frame
+	_expect(bench.preview_mode.selected == 0, "practice stays the default preview")
+	bench.preview_mode.select(3)
+	bench.preview_set.select(1 + bench.StageSets.ORDER.find(&"zoo"))
+	await _click(bench.find_child("PreviewGame", true, false))
+	if is_instance_valid(bench.preview_window):
+		var level = bench.preview_window.get_child(0)
+		level.set_process(false)
+		var shown: Dictionary = level.get_snapshot()
+		_expect(shown.mode == &"pac_man" and shown.board_meta.skin == &"zoo" and String(shown.board_meta.layout).contains("_PacMan_"),
+			"Preview in game can start a chosen mode on a chosen stage set")
+		bench.preview_window.queue_free()
+	bench.preview_mode.select(0)
+	bench.preview_set.select(0)
 	await process_frame
 	await _click(bench.find_child("Apply", true, false))
 	var loaded = VisualSkin.new()
@@ -139,7 +159,8 @@ func _check_rendering(folder: String) -> void:
 	sample.set_process(false)
 	sample.sample_tick = 12
 	sample.state.tick = 12
-	for id in ["effect.bomb", "attack.hammer", "effect.invincible", "held.hammer", "actor.human.action"]:
+	for id in ["effect.bomb", "attack.hammer", "effect.invincible", "held.hammer", "actor.human.action",
+		"item.coin", "effect.horse", "board.zoo.crocodile", "look.human.hat1", "actor.snow.idle"]:
 		library.import_image(id, folder.path_join("fixture.png"))
 		library.configure(id, {"columns": 2, "fps": 0})
 		snapshot.tick = 12
@@ -147,6 +168,12 @@ func _check_rendering(folder: String) -> void:
 		snapshot.actors[&"human"].weapon = &"hammer" if id == "held.hammer" else &""
 		snapshot.actors[&"human"].invincible_until = 100 if id == "effect.invincible" else 0
 		snapshot.bombs = [{"cell": Vector2i.ZERO}] if id == "effect.bomb" else []
+		snapshot.pickups = {Vector2i.ZERO: &"coin"} if id == "item.coin" else {}
+		snapshot.actors[&"human"].vehicle = &"horse" if id == "effect.horse" else &""
+		snapshot.actors[&"human"].hat = 1 if id == "look.human.hat1" else 0
+		snapshot.actors[&"human"].robot = 7 if id == "actor.snow.idle" else 0
+		snapshot.features = [{"kind": &"crocodile", "cell": Vector2i(2, 2), "phase": &"closed", "danger": false}] if id == "board.zoo.crocodile" else []
+		snapshot.board_meta = {"skin": &"zoo", "size": Vector2i(17, 15)} if id == "board.zoo.crocodile" else {"skin": &"cinema"}
 		snapshot.attacks = [{"actor_id": &"human", "kind": &"hammer", "cell": Vector2i.ZERO,
 			"direction": Vector2i.DOWN, "frame": 12, "fired": true}] if id in ["attack.hammer", "actor.human.action"] else []
 		view.show()

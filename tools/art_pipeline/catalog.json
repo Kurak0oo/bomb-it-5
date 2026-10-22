@@ -1,0 +1,2098 @@
+[
+  {
+    "category": "Board",
+    "id": "board.floor_even",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.floor_odd",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.wall",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.seat",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.spotlight",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.clapper",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.popcorn",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.portal_green",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.portal_purple",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.marquee",
+    "size": [
+      108,
+      108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.floor_even",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.floor_odd",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.wall",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_a",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_b",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.solid_1",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.solid_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.solid_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.solid_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.solid_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.solid_6",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.solid_7",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.center",
+    "size": [
+      108,
+      108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.toy_hand",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.floor_even",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.floor_odd",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.wall",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.soft_a",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.soft_b",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.solid_1",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.solid_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.solid_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.solid_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.solid_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.solid_6",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.solid_7",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.center",
+    "size": [
+      108,
+      108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.belt",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.floor_even",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.floor_odd",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.wall",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.soft_a",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.soft_b",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.solid_1",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.solid_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.solid_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.solid_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.solid_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.solid_6",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.solid_7",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.center",
+    "size": [
+      108,
+      108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.crocodile",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.crocodile_open",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.floor_even",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.floor_odd",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.wall",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.soft_a",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.soft_b",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.solid_1",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.solid_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.solid_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.solid_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.solid_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.solid_6",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.solid_7",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.center",
+    "size": [
+      108,
+      108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.floor_even",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.floor_odd",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.wall",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.soft_a",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.soft_b",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.solid_1",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.solid_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.solid_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.solid_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.solid_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.solid_6",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.solid_7",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.center",
+    "size": [
+      108,
+      108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.spellbook",
+    "size": [
+      72,
+      72
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.sign_bomb",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.sign_pickup",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.human.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.human.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.human.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.human.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.human.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.ruby.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.ruby.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.ruby.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.ruby.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.ruby.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.lime.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.lime.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.lime.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.lime.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.lime.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.gold.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.gold.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.gold.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.gold.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.gold.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.violet.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.violet.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.violet.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.violet.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.violet.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.slate.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.slate.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.slate.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.slate.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.slate.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.mint.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.mint.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.mint.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.mint.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.mint.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.snow.idle",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.snow.walk",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.snow.action",
+    "size": [
+      40,
+      44
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.snow.portrait",
+    "size": [
+      38,
+      38
+    ]
+  },
+  {
+    "category": "Characters",
+    "id": "actor.snow.death",
+    "size": [
+      40,
+      40
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.hat3",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.human.body5",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.hat3",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.ruby.body5",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.hat3",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.lime.body5",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.hat3",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.hat4",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.gold.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.body5",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.violet.body6",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.hat3",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.slate.body5",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.hat3",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.mint.body5",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.hat1",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.hat2",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.hat3",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.hat4",
+    "size": [
+      30,
+      20
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.body1",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.body2",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.body3",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Looks",
+    "id": "look.snow.body4",
+    "size": [
+      24,
+      17
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.capacity",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.power",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.speed",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.life",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.shield",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.invincible",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.car",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.moto",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.horse",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.dragon",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.coin",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.landmine",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.hammer",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.flamer",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.laser",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.triple",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.shotgun",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "held.landmine",
+    "size": [
+      24,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "held.hammer",
+    "size": [
+      24,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "held.flamer",
+    "size": [
+      24,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "held.laser",
+    "size": [
+      24,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "held.triple",
+    "size": [
+      24,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "held.shotgun",
+    "size": [
+      24,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "attack.hammer",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "attack.flamer",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "attack.laser",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "attack.triple",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "attack.shotgun",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "projectile.triple",
+    "size": [
+      28,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "projectile.shotgun",
+    "size": [
+      28,
+      24
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.bomb",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.mine",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.flame",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.shield",
+    "size": [
+      44,
+      44
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.invincible",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.invincible_intro",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.blink",
+    "size": [
+      44,
+      44
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.transit",
+    "size": [
+      44,
+      44
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.car",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.moto",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.horse",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.dragon",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.car_recovery",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.moto_recovery",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.horse_recovery",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Effects",
+    "id": "effect.dragon_recovery",
+    "size": [
+      44,
+      35
+    ]
+  },
+  {
+    "category": "Controls",
+    "id": "control.stick_base",
+    "size": [
+      168,
+      168
+    ]
+  },
+  {
+    "category": "Controls",
+    "id": "control.stick_thumb",
+    "size": [
+      54,
+      54
+    ]
+  },
+  {
+    "category": "Controls",
+    "id": "control.action_normal",
+    "size": [
+      128,
+      128
+    ]
+  },
+  {
+    "category": "Controls",
+    "id": "control.action_pressed",
+    "size": [
+      128,
+      128
+    ]
+  },
+  {
+    "category": "Controls",
+    "id": "control.action_disabled",
+    "size": [
+      128,
+      128
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.background",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.frame",
+    "size": [
+      1260,
+      700
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.board_frame",
+    "size": [
+      626,
+      554
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.roster",
+    "size": [
+      251,
+      76
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.timer",
+    "size": [
+      141,
+      42
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.results",
+    "size": [
+      444,
+      228
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.button_normal",
+    "size": [
+      210,
+      40
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.button_hover",
+    "size": [
+      210,
+      40
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.button_pressed",
+    "size": [
+      210,
+      40
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.button_disabled",
+    "size": [
+      210,
+      40
+    ]
+  },
+  {
+    "category": "Modes",
+    "id": "mode.flag",
+    "size": [
+      36,
+      44
+    ]
+  },
+  {
+    "category": "Modes",
+    "id": "mode.progress",
+    "size": [
+      36,
+      5
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.menu",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.settings",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.character",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.how_to_play",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.score",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.dress_up",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.game_over",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
+    "id": "screen.game_win",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "outcome.won",
+    "size": [
+      64,
+      64
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "outcome.lost",
+    "size": [
+      64,
+      64
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "outcome.timeout",
+    "size": [
+      64,
+      64
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "outcome.game_over",
+    "size": [
+      64,
+      64
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "outcome.paused",
+    "size": [
+      64,
+      64
+    ]
+  }
+]

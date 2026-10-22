@@ -164,8 +164,9 @@ func _mode_overlays() -> void:
 			if not state.actors.has(id): continue
 			var robot: int = state.actors[id].get("robot", SEAT_ROBOTS.get(id, 0))
 			var bar := Rect2(at + Vector2(-18, -34 - row * 7), Vector2(36, 5))
+			var filled := Rect2(bar.position, Vector2(36.0 * mode_state.progress[id] / mode_state.get("capture_ticks", 105), 5))
 			draw_rect(bar, Color(0, 0, 0, 0.5))
-			draw_rect(Rect2(bar.position, Vector2(36.0 * mode_state.progress[id] / mode_state.get("capture_ticks", 105), 5)), ROBOT_COLORS[robot])
+			if not skin.draw(self, "mode.progress", filled, state.tick): draw_rect(filled, ROBOT_COLORS[robot])
 			row += 1
 
 
@@ -318,6 +319,7 @@ func _features() -> void:
 					_box(Rect2(at + Vector2(54, 34), Vector2(26 + open_by, 40)), Color("7d4ca6"), Color("e8c86b"), 4)
 				for sign in feature.signs:
 					var mark := _center(sign.cell)
+					if skin.draw(self, prefix + ("sign_bomb" if sign.kind == &"bomb" else "sign_pickup"), Rect2(mark - Vector2.ONE * 18, Vector2.ONE * 36), state.tick): continue
 					draw_arc(mark, 14, 0, TAU, 24, Color("e0473c") if sign.kind == &"bomb" else Color("3f8ce0"), 3, true)
 
 

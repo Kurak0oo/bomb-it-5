@@ -5,6 +5,13 @@ const Catalog = preload("res://scripts/art/catalog.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const ComponentCanvas = preload("res://scripts/art/component_canvas.gd")
 const Game = preload("res://scripts/game.gd")
+const Session = preload("res://scripts/session.gd")
+const StageSets = preload("res://scripts/simulation/stage_sets.gd")
+const CATEGORIES := ["All", "Board", "Stage sets", "Characters", "Looks", "Pickups", "Weapons", "Effects", "Modes",
+	"Controls", "Interface", "Screens", "Outcomes"]
+## Preview launches: practice stays first (the default); the rest start a real level.
+const PREVIEW_MODES := [[&"practice", "Practice"], [&"arcade", "Arcade"], [&"kill", "Battle Royale"],
+	[&"pac_man", "Pac-Man"], [&"green_zone", "Green Zone"]]
 const ACCENT := Color("85d5c8")
 var draft: RefCounted
 var applied: RefCounted
@@ -31,6 +38,8 @@ var preview_window: Window
 var inspector_title: Label
 var settings_note: Label
 var play_button: Button
+var preview_mode: OptionButton
+var preview_set: OptionButton
 
 
 func _ready() -> void:
@@ -64,6 +73,17 @@ func _ready() -> void:
 	changes = _label("Choose a component. Preview a change. Apply when ready.", 14, Color("8ba6b8"))
 	title.add_child(changes)
 	_button(toolbar, "Undo", _undo, "Undo")
+	preview_mode = OptionButton.new()
+	preview_mode.name = "PreviewMode"
+	for entry in PREVIEW_MODES: preview_mode.add_item(entry[1])
+	preview_mode.tooltip_text = "Practice is the default preview; other modes start a real level."
+	toolbar.add_child(preview_mode)
+	preview_set = OptionButton.new()
+	preview_set.name = "PreviewSet"
+	preview_set.add_item("Random set")
+	for set_id in StageSets.ORDER: preview_set.add_item(StageSets.title(set_id).capitalize())
+	preview_set.tooltip_text = "Stage set for a mode preview."
+	toolbar.add_child(preview_set)
 	_button(toolbar, "Preview in game", _play_preview, "PreviewGame")
 	apply_button = _button(toolbar, "Apply to game", _apply, "Apply")
 	apply_button.add_theme_color_override("font_color", ACCENT)
@@ -125,7 +145,7 @@ func _build_categories(parent: Control) -> void:
 	nav.add_theme_constant_override("separation", 8)
 	parent.add_child(nav)
 	nav.add_child(_label("LIBRARY", 13, Color("7893a7")))
-	for name in ["All", "Board", "Characters", "Pickups", "Weapons", "Effects", "Controls", "Interface", "Outcomes"]:
+	for name in CATEGORIES:
 		var count := definitions.filter(func(entry): return name == "All" or entry.category == name).size()
 		var button := _button(nav, "%s   %d" % [name, count], func():
 			category = name
@@ -407,7 +427,16 @@ func _play_preview() -> void:
 	add_child(preview_window)
 	var game := Game.new()
 	game.visual_skin = draft
+	var mode: StringName = PREVIEW_MODES[maxi(0, preview_mode.selected)][0]
+	if mode != &"practice":
+		var session := Session.new(3)
+		session.mode = mode
+		if preview_set.selected > 0: session.stage = StageSets.ORDER[preview_set.selected - 1]
+		session.begin()
+		game.session = session
+		game.auto_start = false
 	preview_window.add_child(game)
+	if mode != &"practice": game.play_level()
 	preview_window.popup_centered()
 
 

@@ -24,6 +24,7 @@ suites=(
 	"res://tests/green_zone_check.gd|^PASS: [0-9]+ green zone checks$"
 	"res://tests/pac_man_check.gd|^PASS: [0-9]+ pac-man checks$"
 	"res://tests/stage_features_check.gd|^PASS: [0-9]+ stage feature checks$"
+	"res://tests/art_catalog_check.gd|^PASS: [0-9]+ art catalogue checks"
 	"res://tools/playthrough_check.gd|^PASS: 3 full-board playthrough checks "
 )
 for suite in "${suites[@]}"; do
