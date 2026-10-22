@@ -53,6 +53,26 @@ func can_collect(_is_human: bool, _kind: StringName) -> bool:
 	return true
 
 
+## Invincibility pickup length (29-tick introduction excluded): 351 ticks, 175 in Pac-Man.
+func invincibility_ticks() -> int:
+	return 351
+
+
+## Whether ordinary bombs, blasts and mines hurt this robot.
+func bomb_hits(_is_human: bool) -> bool:
+	return true
+
+
+## Whether attacks and blasts destroy pickups they reach (`AbstractBomb.destroyProp`).
+func destroys_pickups() -> bool:
+	return true
+
+
+## A pickup left the board, eaten (`by` is the actor) or destroyed (`by` empty).
+func pickup_removed(_round: RefCounted, _kind: StringName, _by: StringName) -> void:
+	pass
+
+
 ## Weapons picked up are kept for the death scatter (`AbstractWeapon.addWeaponProp`).
 func keeps_weapon_pickups() -> bool:
 	return false

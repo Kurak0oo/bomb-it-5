@@ -206,7 +206,9 @@ porting.
 
 ## Uncertain or unobserved
 
-- No runtime observation of Kill, Green Zone, Pac-Man, Easy or Hard yet.
+- Kill, Green Zone, Pac-Man and the difficulties were later observed at runtime: see
+  [Kill](edition-5-kill-mode.md), [Green Zone](edition-5-green-zone.md),
+  [Pac-Man](edition-5-pac-man.md) and [difficulty](edition-5-difficulty.md).
 - How a Pac-Man human removes an AI (invincibility contact is the likely path) is
   not traced.
 - The 1-second respawn relies on the same attribute lookup that runtime confirms

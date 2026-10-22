@@ -1,0 +1,2007 @@
+[
+ {
+  "run": "pac-idle-01",
+  "captures": [
+   {
+    "capture": "opening-board",
+    "past_time": 1,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       15,
+       3
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": false,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       15,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p01",
+    "past_time": 3,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       9,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       12,
+       12
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p02",
+    "past_time": 4,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       8,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p03",
+    "past_time": 5,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       13,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       4
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p04",
+    "past_time": 6,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       8
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       4,
+       12
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       8,
+       1
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p05",
+    "past_time": 7,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       13,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       4,
+       1
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       9,
+       13
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p06",
+    "past_time": 8,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       14,
+       6
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       11,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p07",
+    "past_time": 9,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       13,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       8,
+       2
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p08",
+    "past_time": 10,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       4
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       4,
+       3
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       7,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p09",
+    "past_time": 11,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       3,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       9,
+       3
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       7,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p10",
+    "past_time": 11,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       7,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       12,
+       7
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p11",
+    "past_time": 12,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       3,
+       13
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       7,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p12",
+    "past_time": 13,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       12,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       15,
+       8
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       8
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p13",
+    "past_time": 14,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       13,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       11,
+       3
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       14,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p14",
+    "past_time": 15,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       6
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       13,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p15",
+    "past_time": 16,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       7,
+       1
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       4,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       4,
+       12
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p16",
+    "past_time": 17,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       12,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       5,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p17",
+    "past_time": 18,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       9,
+       1
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       8,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       11
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p18",
+    "past_time": 19,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       12,
+       1
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       5,
+       1
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p19",
+    "past_time": 20,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       9,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       8,
+       12
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p20",
+    "past_time": 21,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       10,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       7,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p21",
+    "past_time": 22,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       9,
+       1
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       1,
+       8
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       14,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p22",
+    "past_time": 23,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       4,
+       9
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       4,
+       8
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       8,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p23",
+    "past_time": 24,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       2,
+       6
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       2,
+       4
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       6,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   },
+   {
+    "capture": "p24",
+    "past_time": 25,
+    "game_over": false,
+    "ending": false,
+    "players": [
+     {
+      "name": "player1",
+      "robot": 0,
+      "life": 3,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "speedgun",
+      "vehicle": "",
+      "cell": [
+       1,
+       1
+      ],
+      "base_weapon": "NullWeapon"
+     },
+     {
+      "name": null,
+      "robot": 4,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       11,
+       3
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 7,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       13,
+       5
+      ],
+      "base_weapon": "PacModeWeapon"
+     },
+     {
+      "name": null,
+      "robot": 3,
+      "life": 1,
+      "kills": 0,
+      "level_point": 0,
+      "coins": 0,
+      "item_point": 100,
+      "exists": true,
+      "state": "normal",
+      "weapon": "thrower",
+      "vehicle": "",
+      "cell": [
+       14,
+       8
+      ],
+      "base_weapon": "PacModeWeapon"
+     }
+    ]
+   }
+  ]
+ }
+]

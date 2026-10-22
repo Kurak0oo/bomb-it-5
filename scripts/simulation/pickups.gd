@@ -19,7 +19,7 @@ static func build_pool(draw: Callable, weights: Dictionary = WEIGHTS, vehicles: 
 	return pool
 
 
-static func apply(actor: Dictionary, kind: StringName, tick: int) -> void:
+static func apply(actor: Dictionary, kind: StringName, tick: int, invincible_ticks := 351) -> void:
 	match kind:
 		&"capacity": actor.capacity = mini(9, actor.capacity + 1)
 		&"power": actor.power = mini(5, actor.power + 1)
@@ -29,7 +29,7 @@ static func apply(actor: Dictionary, kind: StringName, tick: int) -> void:
 		&"shield": actor.shield = 1
 		&"invincible":
 			actor.invincible_active_from = tick + 29
-			actor.invincible_until = tick + 29 + 351
+			actor.invincible_until = tick + 29 + invincible_ticks
 			actor.protected_until = actor.invincible_until
 			actor.protection_stage = &"introduction"
 		&"car", &"moto":
@@ -41,4 +41,4 @@ static func apply(actor: Dictionary, kind: StringName, tick: int) -> void:
 		&"hammer", &"flamer", &"laser", &"triple", &"shotgun":
 			actor.weapon = kind
 			actor.ammo = 2
-	if kind != &"invincible": actor.score += 100
+	if kind not in [&"invincible", &"coin"]: actor.score += 100

@@ -118,7 +118,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		var choices := StageSets.available_sets()
 		if stage_set == &"": stage_set = choices[rng.randi_range(0, choices.size() - 1)]
 		mode.stage_set = stage_set
-		board = Layouts.roll_set(stage_set, false, mode.soft_chance(), rng)
+		board = Layouts.roll_set(stage_set, mode_name == &"pac_man", mode.soft_chance(), rng)
 	for index in roster.size():
 		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1, "robot": robots[index]}
 		if session != null:

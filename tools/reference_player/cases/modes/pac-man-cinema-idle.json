@@ -1,0 +1,168 @@
+{
+  "name": "pac-man-cinema-idle",
+  "origin": "Input-only Pac-Man opening on Cinema (Normal), then the player idles; observed every 175 emulated frames",
+  "actions": [
+    {
+      "command": "step 301"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30"
+    },
+    {
+      "command": "click 430 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "click 335 356"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "command": "step 175",
+      "capture": "p01"
+    },
+    {
+      "command": "step 175",
+      "capture": "p02"
+    },
+    {
+      "command": "step 175",
+      "capture": "p03"
+    },
+    {
+      "command": "step 175",
+      "capture": "p04"
+    },
+    {
+      "command": "step 175",
+      "capture": "p05"
+    },
+    {
+      "command": "step 175",
+      "capture": "p06"
+    },
+    {
+      "command": "step 175",
+      "capture": "p07"
+    },
+    {
+      "command": "step 175",
+      "capture": "p08"
+    },
+    {
+      "command": "step 175",
+      "capture": "p09"
+    },
+    {
+      "command": "step 175",
+      "capture": "p10"
+    },
+    {
+      "command": "step 175",
+      "capture": "p11"
+    },
+    {
+      "command": "step 175",
+      "capture": "p12"
+    },
+    {
+      "command": "step 175",
+      "capture": "p13"
+    },
+    {
+      "command": "step 175",
+      "capture": "p14"
+    },
+    {
+      "command": "step 175",
+      "capture": "p15"
+    },
+    {
+      "command": "step 175",
+      "capture": "p16"
+    },
+    {
+      "command": "step 175",
+      "capture": "p17"
+    },
+    {
+      "command": "step 175",
+      "capture": "p18"
+    },
+    {
+      "command": "step 175",
+      "capture": "p19"
+    },
+    {
+      "command": "step 175",
+      "capture": "p20"
+    },
+    {
+      "command": "step 175",
+      "capture": "p21"
+    },
+    {
+      "command": "step 175",
+      "capture": "p22"
+    },
+    {
+      "command": "step 175",
+      "capture": "p23"
+    },
+    {
+      "command": "step 175",
+      "capture": "p24"
+    }
+  ]
+}

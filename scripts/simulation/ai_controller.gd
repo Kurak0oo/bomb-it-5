@@ -17,6 +17,9 @@ var _draws: Array = []
 var _draw_index := 0
 var _node_costs := {}
 var _previous_fire: Array = []
+## Pac-Man manager areas: the RegionDivide areas of each ghost's spawn cell.
+var _areas := {}
+const REGIONS := {&"A": [0, 10, 0, 9], &"B": [0, 10, 5, 14], &"C": [6, 16, 0, 9], &"D": [6, 16, 5, 14]}
 
 
 func _init(seed_value: int = 5, random_draws: Array = [], ai_profile: Dictionary = {}) -> void:
@@ -40,6 +43,7 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 			"pending": &"", "due": 0, "orientations": 0, "ready": false, "answer_elapsed": 0.0,
 			"perception": {}, "path_cost": -1, "step_callbacks": 0, "escaping_bomb": false}
 	var memory: Dictionary = _memory[id]
+	if not _areas.has(id): _areas[id] = regions(actor.cell)
 	if state.tick != _last_tick:
 		_last_tick = state.tick
 		for cell in _previous_fire:
@@ -124,11 +128,21 @@ func _choose(state: Dictionary, id: StringName, memory: Dictionary) -> void:
 				memory.route = []
 				memory.timer = state.tick + 70
 				return
-			&"Free": target = _best(state, actor.cell, perception.free.duplicate(), perception.costs, 100)
+			&"Follow":
+				# StateFollow: chase a human inside this ghost's manager areas.
+				if actor.get("bomb_count", 0) >= actor.capacity: continue
+				var followed := _followed(state, id)
+				if followed == &"": continue
+				var selected := _attack_position(state, actor, perception, [state.actors[followed].cell])
+				if selected.is_empty(): continue
+				target = selected.cell
+				aim = selected.aim
+				memory.follow = followed
+			&"Free": target = _best(state, actor.cell, _roam(perception), perception.costs, 100)
 			&"Escape":
 				var invincible := _invincible_enemies(state, id)
 				if not _danger(perception, actor.cell, 40) and invincible.is_empty(): continue
-				var safe: Array = perception.free.filter(func(cell):
+				var safe: Array = _roam(perception).filter(func(cell):
 					return not invincible.any(func(other): return _manhattan(cell, other) <= 4))
 				target = _best(state, actor.cell, safe, perception.costs, 1500)
 		if target != null:
@@ -276,7 +290,7 @@ func _follow(state: Dictionary, id: StringName, memory: Dictionary, output: Dict
 
 
 func _arrive(state: Dictionary, id: StringName, memory: Dictionary, output: Dictionary) -> void:
-	if memory.state not in [&"Attack", &"Box"]:
+	if memory.state not in [&"Attack", &"Box", &"Follow"]:
 		memory.complete = true
 		return
 	if state.actors[id].weapon == &"":
@@ -334,6 +348,9 @@ func _on_step(state: Dictionary, id: StringName, memory: Dictionary, output: Dic
 	if draw < dodge_chance and (_danger(memory.perception, actor.cell, 30) or _danger(memory.perception, next, 30) or _danger(memory.perception, after, 30)):
 		_cancel(memory)
 		return
+	if memory.state == &"Follow" and not _still_following(state, id, memory):
+		_cancel(memory)
+		return
 	if draw < _state_value(memory.state, "advance_attack", 0.0) and memory.state in [&"Attack", &"Box"]:
 		var human: Dictionary = state.actors[_nearest_target(state, id)]
 		var reach := _attack_reach(actor)
@@ -388,6 +405,49 @@ func _state_value(state_name: StringName, key: String, fallback: float) -> float
 	for entry in profile.states:
 		if entry.state == state_name and entry.has(key): return float(entry[key])
 	return fallback
+
+
+## RegionDivide.areaJudge: the overlapping board regions holding `cell`.
+static func regions(cell: Vector2i) -> Array:
+	return REGIONS.keys().filter(func(key):
+		var r: Array = REGIONS[key]
+		return cell.x >= r[0] and cell.x <= r[1] and cell.y >= r[2] and cell.y <= r[3])
+
+
+func _shares_area(id: StringName, cell: Vector2i) -> bool:
+	return regions(cell).any(func(key): return key in _areas.get(id, []))
+
+
+## Spawn protection and pickup invincibility both show RobotState.INVINCIBLE.
+func _invincible_state(state: Dictionary, other: StringName) -> bool:
+	var actor: Dictionary = state.actors[other]
+	return actor.alive and (actor.invincible_until > state.tick or actor.get("protected_until", 0) > state.tick)
+
+
+## StateFollow.initRobotsFollow: humans in the manager areas, none while a robot there is invincible.
+func _followed(state: Dictionary, id: StringName) -> StringName:
+	var humans: Array[StringName] = []
+	for other in state.actors:
+		if other == id or not state.actors[other].alive or not _shares_area(id, state.actors[other].cell): continue
+		if _invincible_state(state, other): return &""
+		if state.actors[other].get("is_human", other == state.actors.keys()[0]): humans.append(other)
+	return humans[int(_random() * humans.size())] if not humans.is_empty() else &""
+
+
+## StateFollow.onStep: stop when any robot turns invincible, the target leaves the
+## manager areas, or the planned cell no longer lines up with it within flamer range.
+func _still_following(state: Dictionary, id: StringName, memory: Dictionary) -> bool:
+	if state.actors.keys().any(func(other): return other != id and _invincible_state(state, other)): return false
+	var followed: Dictionary = state.actors.get(memory.get("follow", &""), {})
+	if followed.is_empty() or not followed.alive or not _shares_area(id, followed.cell): return false
+	var spot: Vector2i = memory.target
+	var distance := _manhattan(spot, followed.cell)
+	return (spot.x == followed.cell.x or spot.y == followed.cell.y) and distance >= 1 and distance <= _attack_reach(state.actors[id])
+
+
+## StateFree/StateEscape candidates: free cells, plus coin cells in Pac-Man.
+func _roam(perception: Dictionary) -> Array:
+	return perception.free + perception.get("coins", [])
 
 
 func _attack_all() -> bool:

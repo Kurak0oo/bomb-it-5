@@ -311,7 +311,7 @@ func _add_blast_cell(cells: Array[Vector2i], cell: Vector2i) -> void:
 
 func _deliver_blast_contact(cell: Vector2i, owner: StringName) -> void:
 	for id in _actor_ids:
-		if _actors[id].cell == cell: _hurt(id, owner)
+		if _actors[id].cell == cell and _mode.bomb_hits(_actors[id].is_human): _hurt(id, owner)
 
 
 func _hurt(actor_id: StringName, owner: StringName) -> void:
@@ -449,12 +449,13 @@ func _advance_pickups() -> void:
 			if weapon:
 				_weapons.cancel(actor, _actors.find_key(actor))
 			var before := [actor.capacity, actor.power, actor.speed]
-			Pickups.apply(actor, kind, _tick)
+			Pickups.apply(actor, kind, _tick, _mode.invincibility_ticks())
 			if kind in [&"capacity", &"power", &"speed"] and [actor.capacity, actor.power, actor.speed] != before:
 				actor.collected.append(kind)
 			if weapon and _mode.keeps_weapon_pickups():
 				actor.kept_weapons.append(kind)
 			_pickups.erase(actor.cell)
+			_mode.pickup_removed(self, kind, _actors.find_key(actor))
 	for id in _actor_ids:
 		if _actors[id].alive and _actors[id].invincible_until > _tick and _actors[id].invincible_active_from <= _tick:
 			for other in _actor_ids:
@@ -490,6 +491,15 @@ func free_cells(margin: int = 0) -> Array[Vector2i]:
 	return _free_cells().filter(func(cell: Vector2i):
 		# containerMove(map, m, m, m, m): x in 1+m .. width-1-m, y likewise.
 		return cell.x > margin and cell.y > margin and cell.x <= _board_max.x - margin and cell.y <= _board_max.y - margin)
+
+
+func pickups() -> Dictionary:
+	return _pickups
+
+
+## A pickup drawn from the mode's pool onto a cell (Pac-Man's quadrant items).
+func place_drawn_pickup(cell: Vector2i) -> void:
+	_spawn_pickup(cell, false)
 
 
 func current_tick() -> int:
@@ -606,7 +616,10 @@ func _hit_cell(target: Vector2i, owner: StringName, blasts: Array[Dictionary], b
 		for bomb in _bombs.duplicate():
 			if bomb.cell == target and _bombs.has(bomb):
 				_detonate(bomb, blasts, broken)
-		_pickups.erase(target)
+		if _pickups.has(target) and _mode.destroys_pickups():
+			var removed: StringName = _pickups[target]
+			_pickups.erase(target)
+			_mode.pickup_removed(self, removed, &"")
 	for id in _actor_ids:
-		if damage and id != owner and _actors[id].cell == target:
+		if damage and id != owner and _actors[id].cell == target and _mode.bomb_hits(_actors[id].is_human):
 			_hurt(id, owner)

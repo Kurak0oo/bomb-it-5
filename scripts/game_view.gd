@@ -60,6 +60,10 @@ func _draw() -> void:
 	for cell in state.pickups:
 		var at := _center(cell)
 		if skin.draw(self, "item." + state.pickups[cell], ArtCatalog.rect("item." + state.pickups[cell], at), state.tick): continue
+		if state.pickups[cell] == &"coin":
+			draw_circle(at, 6, Color("f6c94a"))
+			draw_arc(at, 6, 0, TAU, 16, Color("a8741c"), 1.5, true)
+			continue
 		draw_circle(at + Vector2(1, 2), 14, Color(0, 0, 0, 0.3))
 		draw_circle(at, 13, Color("d1fff0"))
 		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
@@ -107,7 +111,8 @@ func _draw() -> void:
 	_label(Vector2(340, 658), "CONTROLLED ACTION PREVIEW" if state.get("comparison_fixture", false) else _board_caption(), 14, Color("a9d4de"))
 	var hint: String = "Reset restores the board. Start Match adds three rivals." if practice else {
 		&"kill": "Be the first to kill 10 enemies!",
-		&"green_zone": "Stay on the green zone to occupy it. First to 10 wins!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
+		&"green_zone": "Stay on the green zone to occupy it. First to 10 wins!",
+		&"pac_man": "Avoid the enemies and collect all of the coins!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
 	if practice and not state.actors[&"human"].alive:
 		hint = "Actor eliminated. Choose RESET to try again."
 	_label(Vector2(340, 684), hint, 15, Color("ffd989"))
@@ -352,7 +357,7 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 		replaced = skin.draw(self, "actor.%s.idle" % ROBOT_SLOTS[robot], ArtCatalog.rect("actor.%s.idle" % ROBOT_SLOTS[robot], at), state.tick, actor.facing, -1, modulation)
 	if replaced:
 		_looks(actor, at, robot)
-		if actor.weapon != &"":
+		if actor.weapon not in [&"", &"none"]:
 			if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
 				_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
 		return
@@ -366,7 +371,7 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 	draw_line(at + Vector2(0, -16), at + Vector2(0, -20), color, 2)
 	draw_circle(at + Vector2(0, -21), 2, Color("fff1b6"))
 	_looks(actor, at, robot)
-	if actor.weapon != &"":
+	if actor.weapon not in [&"", &"none"]:
 		if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
 			_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
 
@@ -410,7 +415,7 @@ func _hud(actor: Dictionary, index: int, robot: int) -> void:
 	var points: int = actor.get("points", -1)
 	if points < 0: _label(at + Vector2(61, 64), "SCORE %d" % actor.score, 14, Color("b4d2d7"))
 	else: _label(at + Vector2(61, 64), "%s %d/%d" % [_points_label(), points, _points_goal()], 14, Color("ffe4ad"))
-	if actor.weapon != &"":
+	if actor.weapon not in [&"", &"none"]:
 		var uses: String = " ×%d" % actor.ammo if actor.ammo >= 0 else ""
 		_label(at + Vector2(174, 64), ITEM_NAMES.get(actor.weapon, "?") + uses, 13, Color("ffd989"))
 

@@ -1,0 +1,18 @@
+{
+ "layout_world": "Cinema",
+ "mode": "PacManMode",
+ "prop_counts": {
+  "NullWeapon": 1,
+  "CoinProp": 121,
+  "SpeedProp": 3,
+  "ShieldProp": 1
+ },
+ "non_coin_props": {
+  "1,1": "NullWeapon",
+  "4,7": "SpeedProp",
+  "6,1": "SpeedProp",
+  "11,9": "SpeedProp",
+  "13,3": "ShieldProp"
+ },
+ "empty_floor_cells": 126
+}
