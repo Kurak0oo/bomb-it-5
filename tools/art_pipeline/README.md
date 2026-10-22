@@ -129,6 +129,22 @@ art and a prompt). They redraw every frame independently, so they are not used f
 production frames. Draft or edit a spec from the approved concept and the model
 sheet, then render.
 
+## Emotion-spirit redesign
+
+```
+pip install bpy==5.2.3   # Blender as a Python module (CPU Cycles)
+python tools/art_pipeline/spirit.py --robot 0 [--samples 48]
+```
+
+For soft, rounded, glowing styles: `spirit.py` builds one parametric 3D rig from
+`spirit_specs/r<N>.json` (body/accent/glow colours, eye and antenna layout) and
+renders it with Cycles: subsurface skin, sheen for soft edges, emissive antenna
+orbs, and a blurred aura added afterwards. Every facing, the floating walk cycle
+and the fading defeat come from the same rig. Output in the ignored
+`candidates/spirit/r<N>/`: `sheet.png` beside the original, workbench sheets
+`walk.png` / `idle.png` / `death.png` at 4x the 40x44 slot, and raw frames. About
+80 seconds for one robot at 32 samples on 4 CPU cores.
+
 ## Notes
 
 - Character slots use robots by colour (human `_r0`, ruby `_r1`, mint `_r6`, gold

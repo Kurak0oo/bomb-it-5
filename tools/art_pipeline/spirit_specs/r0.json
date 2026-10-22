@@ -1,0 +1,20 @@
+{
+ "robot": "_r0",
+ "note": "Blue robot as an emotion spirit. Two ball-tipped antennae become two curling tufts with glowing orbs; the round ear pieces become soft side puffs; the overalls echo as a deeper blue lower body.",
+ "body": "#3ebbeb",
+ "lower": "#2a8fd0",
+ "accent": "#6fa5d1",
+ "glow": "#8fdcff",
+ "inner_glow": 0.12,
+ "iris": "#1cc1e4",
+ "pupil": "#1b2a3d",
+ "mouth": "#1f4f7a",
+ "orb": "#bff0ff",
+ "orb_glow": 4.0,
+ "eye_spread": 0.22,
+ "antennae": [[-0.2, -1], [0.2, 1]],
+ "drained": "#9aa7b4",
+ "backdrop_top": "#f3f8ff",
+ "backdrop_bottom": "#d6ecfb",
+ "walk_frames": 8
+}
