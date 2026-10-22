@@ -85,11 +85,22 @@ through palette snapping and vectorisation.
 python tools/art_pipeline/character_sheet.py --robot 0
 ```
 
-Composes one robot (0 is the blue default human) into a single model sheet:
-character-select key art, front/right/back/left turnaround, HUD portrait, outfit
-variants, walk and defeat keyframes, the four rides, colour swatches and an
-in-game size reference. Output: `candidates/character_sheets/r<N>/sheet.png`
-(ignored). It needs the export from a previous `run.py`.
+Writes two images per robot (0 is the blue default human) into the ignored
+`candidates/character_sheets/r<N>/` folder. It needs the export from a previous
+`run.py`.
+
+- `sheet.png`: character-select key art, front/right/back/left turnaround, HUD
+  portrait, in-game faces, every outfit (`bodyMc` frame) and every hat or
+  accessory (`hatMc` frame), walk and defeat keyframes, the four rides, colour
+  swatches and an in-game size reference.
+- `wardrobe.png`: one row per outfit and per hat, each worn in all four facings
+  and on all four rides at one scale.
+
+The robots have no expression clips; faces change only within animations (the
+walk blink, the select clip, the charred defeat), so the faces panel shows those.
+`roleHead` has no head for some robots; the portrait then crops the front pose.
+The blue robot's front sprite has no hat clip, so its hats show only on the other
+facings and rides, as in the game.
 
 Outfits: `RobotView.as` stops the innermost `bodyMc` on clothID + 1 and `hatMc` on
 hatID + 1, but FFDec lets them advance with the parent timeline, so raw exported

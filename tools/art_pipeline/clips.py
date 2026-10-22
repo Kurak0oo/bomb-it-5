@@ -91,3 +91,20 @@ def pin(svg, pins=None, depth=0):
         addition = ''.join(extra_defs)
         svg = svg[:at] + addition + svg[at:] if at != -1 else svg.replace('</svg>', f'<defs>{addition}</defs></svg>')
     return svg
+
+
+def frame_count(svg, name):
+    """Frames of the innermost clip called name (as RobotView.as resolves it), or 0 if absent."""
+    count = 0
+    for _ in range(6):
+        use = next((u for u in USE.findall(svg) if re.search(rf'\bid="{name}"', u)), None)
+        character = re.search(r'ffdec:characterId="(\d+)"', use) if use else None
+        if not character:
+            return count
+        folders = glob.glob(str(EXPORT / 'sprites' / f'DefineSprite_{character.group(1)}')) + \
+            glob.glob(str(EXPORT / 'sprites' / f'DefineSprite_{character.group(1)}_*'))
+        if not folders:
+            return count
+        count = len(glob.glob(os.path.join(folders[0], '*.svg')))
+        svg = _standalone(character.group(1), 1)
+    return count
