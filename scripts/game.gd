@@ -132,6 +132,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
 		"drops": true, "seed": session_seed, "mode": mode,
 		"vehicles": StageSets.vehicles(board.skin),
+		"features": board.get("features", {}), "center": board.get("center"), "skin": board.skin,
 		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,
 			"variants": board.get("variants", {}), "center": board.get("center", Vector2i(7, 6)),
 			"portal_ids": board.get("portal_ids", {})}})

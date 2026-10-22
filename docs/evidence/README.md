@@ -29,6 +29,10 @@ The evidence starts with the hashed publisher build and separates static finding
 - [Kill mode](edition-5-kill-mode.md): observed hammer base action, 0.55 soft blocks, respawn at the spawn with protection, AI-versus-AI kill race and the ending at 10 kills.
 - [Green Zone](edition-5-green-zone.md): observed flag placement inside the two-cell margin, no soft blocks, player speed 1.8 and the AI flag race.
 - [Pac-Man](edition-5-pac-man.md): observed opening (four quadrant items, 121 coins), NullWeapon player, flamer ghosts that neither eat nor burn coins, and manager-area follow recovered from source.
+- [Zoo](edition-5-zoo.md): lockstep crocodiles (observed 345-tick cycle), horse jump and dragon crash recovered from source.
+- [Birthday Party](edition-5-birthday-party.md): toy hands (observed first open at 105 and drawn delays), reach, throws and pushes.
+- [Candy Factory](edition-5-candy-factory.md): candy machine every 210 ticks (observed) and the 33-cell belt; no sliding platforms in Candy layouts.
+- [Magic Library](edition-5-magic-library.md): spellbook drops at 481 + 518k (observed two ownerless bombs), quadrant targets, no timed pickups.
 - [Modes, menus, progression and unlocks](edition-5-modes-and-flow.md): static recovery of Kill, Green Zone, Pac-Man, difficulty, settings, level/stage progression, per-mode scoring, unlocks and saved data, with a soft-block probability correction (Arcade 0.6, not 0.8).
 - [Recovery-to-porting handoff](edition-5-porting-handoff.md): source-to-Godot classifications, accepted adaptations and the ordered fidelity implementation boundary.
 - [Recovery acceptance and verification](edition-5-recovery-verification.md): ticket-by-ticket evidence, independent Standards/Spec findings and fixes, integrity checks and the unchanged 244-check Godot baseline.

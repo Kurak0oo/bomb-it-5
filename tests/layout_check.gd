@@ -57,9 +57,9 @@ func _initialize() -> void:
 	_expect(empty_arena.cells.values().count(&"solid") == 60 and empty_arena.center == null,
 		"Birthday Party layout 3 is the recorded empty arena")
 	var zoo: Dictionary = Layouts.roll("ZooStage1", 0.6, _rng(4))
-	_expect(zoo.features.values().any(func(f): return f.kind == &"crocodile"), "unported tiles are kept as marked features")
+	_expect(zoo.features.values().any(func(f): return f.kind == &"crocodile"), "set tiles are kept as board features")
 
-	_expect(StageSets.available_sets() == [&"cinema", &"luxury_stores"], "only fully ported sets are offered")
+	_expect(StageSets.available_sets() == StageSets.ORDER, "every stage set is offered once its features are ported (#63-#66)")
 
 	var luxury: Dictionary = Layouts.roll("LuxuryStoresStage2", 0.6, _rng(9))
 	var game := Simulation.new([&"human"], {&"human": {"cell": Vector2i(1, 1)}}, luxury.cells,

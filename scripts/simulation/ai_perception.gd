@@ -11,6 +11,10 @@ static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary 
 	var origin: Vector2i = state.actors[id].cell
 	var visited := {}
 	var rays := [true, true, true, true]
+	# Crocodiles (`isDanger`) read as danger time 0 and are never roam cells.
+	var crocodiles := {}
+	for feature in state.get("features", []):
+		if feature.kind == &"crocodile": crocodiles[feature.cell] = feature.danger
 	for cell in state.board:
 		if not result.costs.has(cell): result.costs[cell] = 30 if state.board[cell] == &"portal" else 1
 		if cell in state.fire: result.costs[cell] = 1000
@@ -20,13 +24,14 @@ static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary 
 				var cell := origin + Vector2i(dx, dy)
 				if not state.board.has(cell) or visited.has(cell): continue
 				visited[cell] = true
-				if cell in state.fire:
+				if cell in state.fire or crocodiles.get(cell, false):
 					result.danger[cell] = 0
 					continue
 				for bomb in state.get("bomb_occupancy", state.bombs):
 					if bomb.cell != cell: continue
-					var age: int = mini(71, bomb.get("age", 0))
-					var remaining: int = 0 if bomb.get("kind") == &"mine" else 70 - age
+					var fuse: int = bomb.get("fuse", 72)
+					var age: int = mini(fuse - 1, bomb.get("age", 0))
+					var remaining: int = 0 if bomb.get("kind") == &"mine" else fuse - 2 - age
 					result.bombs.append({"cell": cell, "remaining": remaining})
 					result.danger[cell] = remaining
 					result.costs[cell] = age * 10
@@ -55,13 +60,16 @@ static func observe(state: Dictionary, id: StringName, shared_costs: Dictionary 
 						if target_id != id and target.alive and target.cell == cell and target.protected_until <= state.tick:
 							result.enemies.append(cell)
 							break
-					if is_open(state, cell): result.free.append(cell)
+					if is_open(state, cell) and not crocodiles.has(cell): result.free.append(cell)
 	result.free = result.free.filter(func(cell): return not result.danger.has(cell))
 	return result
 
 
+## Walkable and free of bombs; a toy-hand arm blocks its A* nodes while marked.
 static func is_open(state: Dictionary, cell: Vector2i) -> bool:
-	return state.board.get(cell) in [&"floor", &"portal"] and not state.get("bomb_occupancy", state.bombs).any(func(b): return b.cell == cell)
+	if state.board.get(cell) not in [&"floor", &"portal", &"belt", &"crocodile"]: return false
+	if state.get("features", []).any(func(f): return f.kind == &"toy_hand" and cell in f.touched): return false
+	return not state.get("bomb_occupancy", state.bombs).any(func(b): return b.cell == cell)
 
 
 static func is_empty(state: Dictionary, cell: Vector2i) -> bool:

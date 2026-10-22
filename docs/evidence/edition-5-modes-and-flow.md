@@ -145,7 +145,8 @@ Mode details:
 
 Timed pickups (`timePassed`): Arcade after 45 s, Kill after 45 s, Green Zone and
 Pac-Man after 10 s, then every 15 s: two pickups, one in Candy Factory, none in
-Magic Library (Arcade gives Magic Library one; Pac-Man gives Candy Factory two).
+Magic Library (Pac-Man gives Candy Factory two). Correction 2026-10-21: an earlier
+version said Arcade gives Magic Library one; `ArcadeMode.timePassed` gives it none.
 Drop tables per mode are in the rules XML `prop` blocks: Kill and Green Zone
 favour weapons, Pac-Man only speed, life, shield and invincibility.
 
@@ -193,16 +194,17 @@ the difficulty bonus, a loss adds neither. Totals carry across the session.
 
 ## Stage-set map features
 
-Only Cinema portals are implemented today. Recorded layout tiles
-(cell counts over the [recovered maps](observations/swf-v1.6.1/maps/INDEX.md))
-and the map-data classes give, per set: Zoo crocodiles (14 cells; blasts pass
-through), Birthday Party toy hands (9), Candy Factory conveyor belts (99) and
-sliding platforms (28), and Magic Library spellbooks, which
-`MagicLibraryMapData` creates on its center-building cells. Luxury Stores has no
-special tile. Five map-data classes can create a `LavaOrgan` from a `lavaOrgan`
-instance, but no recorded layout contains one. Vehicles differ per set
-(`AbstractGameMode.initMap`). Each feature needs its own recovery record before
-porting.
+Recorded layout tiles (cell counts over the
+[recovered maps](observations/swf-v1.6.1/maps/INDEX.md)) and the map-data classes
+give, per set: Zoo crocodiles (12 cells, four per normal layout; an earlier count of
+14 was wrong), Birthday Party toy hands (8, in layouts 1 and 2), Candy Factory
+conveyor belts (99: one 33-cell track per normal layout) and Magic Library
+spellbooks on the center building. The 28 `slidePlat_*` cells belong to unused
+Basketball layouts, not Candy Factory. Luxury Stores has no special tile. Five
+map-data classes can create a `LavaOrgan` from a `lavaOrgan` instance, but no
+recorded layout contains one. Vehicles differ per set (`AbstractGameMode.initMap`).
+Per-set records: [Zoo](edition-5-zoo.md), [Birthday Party](edition-5-birthday-party.md),
+[Candy Factory](edition-5-candy-factory.md), [Magic Library](edition-5-magic-library.md).
 
 ## Uncertain or unobserved
 

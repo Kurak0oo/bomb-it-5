@@ -1,7 +1,10 @@
 {
   "name": "birthday-idle",
-  "origin": "Input-only menu path to a chosen mode/arena/difficulty opening; then idle, capturing every 7 frames",
+  "origin": "Input-only menu path to a chosen mode/arena/difficulty opening with original-RNG seed 11; then idle, capturing every 7 frames",
   "actions": [
+    {
+      "command": "seed 11"
+    },
     {
       "command": "step 301"
     },

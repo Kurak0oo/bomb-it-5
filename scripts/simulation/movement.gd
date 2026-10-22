@@ -43,7 +43,7 @@ static func overlaps(position_at: Vector2, cell: Vector2i) -> bool:
 static func can_stand(position_at: Vector2, actor: Dictionary, board: Dictionary, bombs: Array) -> bool:
 	for y in range(floori(position_at.y + 0.00001), floori(position_at.y + 0.99999) + 1):
 		for x in range(floori(position_at.x + 0.00001), floori(position_at.x + 0.99999) + 1):
-			if board.get(Vector2i(x, y)) not in [&"floor", &"portal"]:
+			if board.get(Vector2i(x, y)) not in [&"floor", &"portal", &"belt", &"crocodile"]:
 				return false
 	for bomb in bombs:
 		if bomb.get("kind", &"bomb") != &"mine" and bomb.cell not in actor.departures and overlaps(position_at, bomb.cell):

@@ -32,9 +32,10 @@ static func apply(actor: Dictionary, kind: StringName, tick: int, invincible_tic
 			actor.invincible_until = tick + 29 + invincible_ticks
 			actor.protected_until = actor.invincible_until
 			actor.protection_stage = &"introduction"
-		&"car", &"moto":
+		&"car", &"moto", &"horse", &"dragon":
+			# Rules XML `rides`: base move speed times car 1.6, moto 1.3, horse 1, dragon 0.8.
 			actor.vehicle = kind
-			actor.drive_speed = 1.6 * (1.6 if kind == &"car" else 1.3)
+			actor.drive_speed = 1.6 * {&"car": 1.6, &"moto": 1.3, &"horse": 1.0, &"dragon": 0.8}[kind]
 		&"landmine":
 			actor.weapon = kind
 			actor.ammo = 1

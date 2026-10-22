@@ -58,9 +58,9 @@ static func roll(name: String, soft_chance: float, rng: RandomNumberGenerator) -
 				tile = &"portal"
 				pairs.get_or_add(instance.get_slice("_", 1), []).append(cell)
 			elif instance != "":
-				# Set-specific tiles stay blocking until their own ports (#63-#66).
 				var kind := _feature_kind(instance)
-				tile = kind
+				# A toy hand stands on an invisible indestructible box (`setMidBox`).
+				tile = &"solid" if kind == &"toy_hand" else kind
 				features[cell] = {"kind": kind, "detail": instance.get_slice("_", 1)}
 			cells[cell] = tile
 	var board := BoardData.make(cells, BoardData._link(pairs), StringName(layout.set), features, name)

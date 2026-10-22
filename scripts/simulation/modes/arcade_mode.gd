@@ -22,7 +22,8 @@ func opening_pickups(human_spawn: Vector2i) -> Dictionary:
 func timed_pickup_count(tick: int) -> int:
 	# ArcadeMode.timePassed uses >45, so the first timed spawn is at 60 seconds.
 	if tick > 45 * 35 and tick % (15 * 35) == 0:
-		return 1 if stage_set in [&"candy_factory", &"magic_library"] else 2
+		# Candy Factory gets one, Magic Library none (its spellbook drops items instead).
+		return 1 if stage_set == &"candy_factory" else 0 if stage_set == &"magic_library" else 2
 	return 0
 
 

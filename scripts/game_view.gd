@@ -13,7 +13,8 @@ const LOOK_COLORS := [Color("e35d6a"), Color("4f8fe0"), Color("f2b84b"), Color("
 const SEAT_ROBOTS := {&"human": 0, &"ruby": 1, &"mint": 6, &"gold": 3}
 const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
 	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
-	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●"}
+	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●",
+	&"horse": "HRS", &"dragon": "DRG"}
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 ## Native board palettes per stage set: floor pair, wall, solid fill/edge, soft fill/edge.
@@ -57,6 +58,7 @@ func _draw() -> void:
 	for cell in state.board:
 		_tile(cell, state.board[cell])
 	_marquee()
+	_features()
 	for cell in state.pickups:
 		var at := _center(cell)
 		if skin.draw(self, "item." + state.pickups[cell], ArtCatalog.rect("item." + state.pickups[cell], at), state.tick): continue
@@ -71,7 +73,8 @@ func _draw() -> void:
 		_label(at + Vector2(-text.length() * 4.0, 5), text, 13, Color("173c40"))
 	_mode_objects()
 	for bomb in state.bombs:
-		_bomb(_center(bomb.cell), bomb.get("kind", &"bomb") == &"mine")
+		var bomb_at: Vector2 = ORIGIN + (bomb.position + Vector2.ONE * 0.5) * PITCH if bomb.has("position") else _center(bomb.cell)
+		_bomb(bomb_at, bomb.get("kind", &"bomb") == &"mine")
 	for flame in state.flames:
 		for cell in flame.cells:
 			var at := _center(cell)
@@ -260,9 +263,62 @@ func _themed_tile(cell: Vector2i, kind: StringName, set_id: StringName) -> void:
 		if skin.draw(self, prefix + ("soft_a" if (cell.x + cell.y) % 2 else "soft_b"), rect): return
 		_box(Rect2(at + Vector2(7, 9), Vector2(22, 22)), theme[5], theme[6], 4)
 		draw_line(at + Vector2(9, 14), at + Vector2(27, 14), theme[6], 2)
+	elif kind in [&"belt", &"crocodile"]:
+		return
 	elif kind != &"floor":
 		_box(Rect2(at + Vector2(6, 6), Vector2(24, 24)), Color("e9e2d0"), Color("6d6a60"), 4)
 		_label(at + Vector2(8, 23), str(kind).substr(0, 3).to_upper(), 11, Color("3a3a3a"))
+
+
+## Stage-set map features: belt track, crocodiles, toy hands and the spellbook.
+func _features() -> void:
+	var prefix := "board.%s." % _board_skin()
+	for feature in state.get("features", []):
+		match feature.kind:
+			&"belt":
+				for index in feature.track.size():
+					var cell: Vector2i = feature.track[index]
+					var at := ORIGIN + Vector2(cell) * PITCH
+					if skin.draw(self, prefix + "belt", Rect2(at, Vector2.ONE * PITCH), state.tick, Vector2(feature.flow[index])): continue
+					draw_rect(Rect2(at + Vector2(3, 3), Vector2.ONE * (PITCH - 6)), Color("f3d98c"))
+					var mid := at + Vector2.ONE * PITCH * 0.5
+					var along := Vector2(feature.flow[index])
+					var shift := fmod(state.tick / 30.0, 1.0) * 8.0 - 4.0
+					draw_line(mid - along * 9 + along * shift, mid + along * 5 + along * shift, Color("d49a3a"), 3)
+					draw_colored_polygon(PackedVector2Array([mid + along * (11 + shift), mid + along * (3 + shift) + along.orthogonal() * 6,
+						mid + along * (3 + shift) - along.orthogonal() * 6]), Color("d49a3a"))
+				var last: Vector2i = feature.track[-1]
+				draw_circle(_center(last), 11, Color("2c2233"))
+			&"crocodile":
+				var at := ORIGIN + Vector2(feature.cell) * PITCH
+				var slot: String = prefix + ("crocodile_open" if feature.phase in [&"opening", &"open"] else "crocodile")
+				if skin.draw(self, slot, Rect2(at, Vector2.ONE * PITCH), state.tick): continue
+				var body := Color("4f9a4a") if not feature.danger else Color("6aa640")
+				_box(Rect2(at + Vector2(4, 8), Vector2(28, 22)), body, Color("2f5e2c"), 9)
+				draw_circle(at + Vector2(12, 12), 3, Color("fff6c8"))
+				draw_circle(at + Vector2(24, 12), 3, Color("fff6c8"))
+				if feature.phase in [&"opening", &"open"]:
+					_box(Rect2(at + Vector2(8, 17), Vector2(20, 10)), Color("a3263b"), Color("fff6c8"), 3)
+			&"toy_hand":
+				var at := ORIGIN + Vector2(feature.cell) * PITCH
+				var direction := Vector2(feature.direction)
+				if not skin.draw(self, prefix + "toy_hand", Rect2(at, Vector2.ONE * PITCH), state.tick, direction):
+					_box(Rect2(at + Vector2(4, 4), Vector2(28, 28)), Color("f2b8c6"), Color("b0566e"), 9)
+					draw_circle(_center(feature.cell) + direction * 8, 6, Color("fbe3a4"))
+				if feature.open and feature.reach > 0:
+					var start := _center(feature.cell) + direction * PITCH * 0.5
+					var tip: Vector2 = _center(feature.cell) + direction * PITCH * (feature.reach + 0.2)
+					draw_line(start, tip, Color("e88aa5"), 10)
+					draw_circle(tip, 12, Color("fbe3a4"))
+			&"spellbook":
+				var at := ORIGIN + Vector2(feature.cell) * PITCH
+				if not skin.draw(self, prefix + "spellbook", Rect2(at + Vector2(18, 18), Vector2(72, 72)), state.tick):
+					var open_by := 18.0 if feature.flipping else 4.0
+					_box(Rect2(at + Vector2(54 - 26 - open_by, 34), Vector2(26 + open_by, 40)), Color("6b3f8f"), Color("e8c86b"), 4)
+					_box(Rect2(at + Vector2(54, 34), Vector2(26 + open_by, 40)), Color("7d4ca6"), Color("e8c86b"), 4)
+				for sign in feature.signs:
+					var mark := _center(sign.cell)
+					draw_arc(mark, 14, 0, TAU, 24, Color("e0473c") if sign.kind == &"bomb" else Color("3f8ce0"), 3, true)
 
 
 func _marquee() -> void:

@@ -6,6 +6,10 @@ const Movement = preload("res://scripts/simulation/movement.gd")
 const Pickups = preload("res://scripts/simulation/pickups.gd")
 const Weapons = preload("res://scripts/simulation/weapons.gd")
 const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
+const Features = preload("res://scripts/simulation/features/features.gd")
+## Rides that boxes may drop at most four of (`Box.as`); the dragon is uncapped.
+const CAPPED_VEHICLES: Array[StringName] = [&"car", &"moto", &"horse"]
+const HORSE_JUMP_SPEED := 4.0 / 30.0
 const FUSE_TICKS: int = 72
 
 var _commands: CommandModule
@@ -38,6 +42,9 @@ var _gameplay_end_tick := 0
 var _judgment_ready := false
 var _mode: RefCounted
 var _board_max := Vector2i(16, 14)
+var _features: Array = []
+var _current_blasts: Array[Dictionary] = []
+var _current_broken: Array[Vector2i] = []
 
 
 func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, rules: Dictionary = {}) -> void:
@@ -57,6 +64,7 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 	_spawned_drops = _rules.get("drop_count", 0)
 	_pickups = _rules.get("pickups", {}).duplicate(true)
 	_pickups.merge(_mode.opening_pickups(_actors[_actor_ids[0]].cell), true)
+	_features = Features.create(_rules.get("features", {}), _mode, _rules.get("center"), _rules.get("skin", &""))
 	if _rules.get("portals", false) is Dictionary:
 		_portals = _rules.portals.duplicate()
 	elif _rules.get("portals", false):
@@ -76,6 +84,8 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		actor.transit_until = 0
 		actor.portal_latch = Vector2i(-99, -99)
 		actor.portal_target = actor.cell
+		actor.pushed = {}
+		actor.jump = {}
 		actor.blink_until = 0
 		actor.capacity = actor.get("capacity", 1)
 		actor.power = actor.get("power", 1)
@@ -123,6 +133,8 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 	_tick = result.tick
 	var blasts: Array[Dictionary] = []
 	var broken_soft_blocks: Array[Vector2i] = []
+	_current_blasts = blasts
+	_current_broken = broken_soft_blocks
 	if result.accepted:
 		if _round_stage == &"ending":
 			_finish_round()
@@ -149,6 +161,9 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 			var command: Dictionary = by_actor[actor_id]
 			if not _actors[actor_id].alive or _actors[actor_id].transit_until > 0 or _actors[actor_id].busy_until > _tick or _weapons.is_active(actor_id):
 				continue
+			# Toy-hand pushes and horse jumps take the controls away.
+			if not _actors[actor_id].get("pushed", {}).is_empty() or not _actors[actor_id].get("jump", {}).is_empty():
+				continue
 			if command.direction != Vector2.ZERO:
 				_actors[actor_id].facing = command.direction.normalized()
 			for event in command.bomb_events:
@@ -162,7 +177,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 					if actor.weapon != &"":
 						_weapons.start(actor_id, actor, _tick)
 						continue
-					if _board.get(actor.cell) != &"floor":
+					if _board.get(actor.cell) not in [&"floor", &"belt"]:
 						continue
 					if actor.bomb_count >= actor.get("capacity", 1):
 						continue
@@ -183,17 +198,24 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 				if bomb.armed:
 					if _actors.values().any(func(a): return a.alive and a.cell == bomb.cell):
 						_detonate(bomb, blasts, broken_soft_blocks, true)
-				elif _actors[bomb.actor_id].cell != bomb.cell:
+				elif not _actors.has(bomb.actor_id) or _actors[bomb.actor_id].cell != bomb.cell:
 					bomb.armed = true
-			elif bomb.born < _tick:
+			elif bomb.born < _tick and not bomb.get("flying", false):
+				# Belt bombs carry their own fuse; toy-hand throws pause it in flight.
 				bomb.age += 1
-				if bomb.age >= FUSE_TICKS:
+				if bomb.age >= bomb.get("fuse", FUSE_TICKS):
 					_detonate(bomb, blasts, broken_soft_blocks)
 				bomb.previous_cell = bomb.cell
 			countdown_index += 1
+		_advance_flying()
 		_late_blast = true
 		for effect in _weapons.advance(_tick, _actors, _board, _bombs):
 			_resolve_attack(effect, blasts, broken_soft_blocks)
+		var held := {}
+		for command in commands:
+			held[command.actor_id] = command.direction if _actors[command.actor_id].alive else Vector2.ZERO
+		for feature in _features:
+			feature.advance(self, held)
 		var previous_cells := {}
 		var registered_cells := {}
 		for id in _actor_ids:
@@ -206,8 +228,13 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 				var actor: Dictionary = _actors[command.actor_id]
 				if actor.movement_rearm and command.direction == Vector2.ZERO:
 					actor.movement_rearm = false
-				if actor.alive and actor.transit_until == 0 and actor.busy_until <= _tick and not actor.movement_rearm:
+				if actor.alive and not actor.get("pushed", {}).is_empty():
+					_advance_push(actor)
+				elif actor.alive and actor.get("jump", {}).size() > 0:
+					_advance_jump(actor)
+				elif actor.alive and actor.transit_until == 0 and actor.busy_until <= _tick and not actor.movement_rearm:
 					Movement.step(actor, command.direction, _board, _bombs)
+					if actor.vehicle in [&"horse", &"dragon"]: _ride_contact(actor, command.direction)
 		for actor_id in _actor_ids:
 			var actor: Dictionary = _actors[actor_id]
 			var changed: bool = previous_cells[actor_id] != registered_cells[actor_id] or actor.model_state != actor.registered_state or actor.vehicle != actor.registered_vehicle
@@ -238,6 +265,7 @@ func snapshot() -> Dictionary:
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
 		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
 		"mode": _mode.name, "difficulty": _mode.difficulty, "mode_state": _mode.public_state(), "points_goal": _mode.points_goal(), "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
+		"features": _features.map(func(feature): return feature.public_state()),
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
 		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys()}
 
@@ -247,6 +275,9 @@ func _public_bombs() -> Array[Dictionary]:
 	for bomb in _bombs:
 		if bomb.get("detonated", false): continue
 		var item := {"actor_id": bomb.actor_id, "cell": bomb.cell, "power": bomb.power}
+		# Thrown and belt-carried bombs sit between cells.
+		if bomb.has("fly_position") or bomb.has("belt_position"):
+			item.position = bomb.get("fly_position", bomb.get("belt_position"))
 		if bomb.get("kind", &"bomb") == &"mine":
 			item.kind = &"mine"
 		result.append(item)
@@ -258,13 +289,13 @@ func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector
 	bomb.detonated = true
 	bomb.blasted = not mine_contact
 	_countdowns.erase(bomb)
-	if not mine_contact: _actors[bomb.actor_id].bomb_count -= 1
+	if not mine_contact and _actors.has(bomb.actor_id): _actors[bomb.actor_id].bomb_count -= 1
 	if mine_contact and _rules.get("damage", false):
 		# Landmine.hitReset awards and tries contact damage before calling inherited blast.
 		for id in _actor_ids:
 			var actor: Dictionary = _actors[id]
 			if not actor.alive or actor.cell != bomb.cell: continue
-			if id != bomb.actor_id and actor.vehicle == &"" and actor.shield == 0:
+			if id != bomb.actor_id and actor.vehicle == &"" and actor.shield == 0 and _actors.has(bomb.actor_id):
 				_actors[bomb.actor_id].score += 100
 				_actors[bomb.actor_id].kills += 1
 			_hurt(id, &"")
@@ -281,6 +312,7 @@ func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector
 			if not continuing[ray]: continue
 			var cell: Vector2i = bomb.cell + directions[ray] * distance
 			var tile: Variant = _board.get(cell)
+			if tile != null and tile in Features.WALKABLE: tile = &"floor"
 			if tile not in [&"floor", &"soft"]:
 				continuing[ray] = false
 				if tile != null: _hit_cell(cell, bomb.actor_id, blasts, broken, false)
@@ -319,6 +351,8 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 	if not _rules.get("damage", false) or not actor.alive or actor.protected_until > _tick:
 		return
 	if actor.vehicle != &"":
+		# A horse hit mid-jump stays where it was.
+		actor.jump = {}
 		actor.busy_until = _tick + 35
 		actor.vehicle_recovery_until = _tick + 35
 		actor.protected_until = _tick + 35
@@ -502,6 +536,151 @@ func place_drawn_pickup(cell: Vector2i) -> void:
 	_spawn_pickup(cell, false)
 
 
+func bombs() -> Array[Dictionary]:
+	return _bombs
+
+
+func mode() -> RefCounted:
+	return _mode
+
+
+## An ownerless or feature-made bomb enters the map with its fuse running.
+func add_bomb(bomb: Dictionary) -> void:
+	bomb.merge({"born": _tick, "age": 0, "blasted": false, "previous_cell": Vector2i.ZERO}, false)
+	_bombs.append(bomb)
+	_countdowns.append(bomb)
+
+
+## `Bomb.disappear`: removed without exploding; a robot owner gets its bomb back.
+func vanish_bomb(bomb: Dictionary) -> void:
+	_bombs.erase(bomb)
+	_countdowns.erase(bomb)
+	if _actors.has(bomb.actor_id): _actors[bomb.actor_id].bomb_count -= 1
+
+
+## `Bomb.startFly`: off the map with its fuse paused until it lands.
+func throw_bomb(bomb: Dictionary, direction: Vector2i, speed: float) -> void:
+	bomb.flying = true
+	bomb.fly_direction = direction
+	bomb.fly_speed = speed
+	bomb.fly_position = Vector2(bomb.cell)
+	bomb.erase("belt_position")
+
+
+## A random class from the mode's pickup pool (`game.mapPropArr`), vehicles uncapped.
+func random_pool_kind() -> StringName:
+	var kind: StringName = &"reserved_boxing"
+	while kind in [&"reserved_kick", &"reserved_boxing"]:
+		kind = _drop_pool[int(_draw_random() * _drop_pool.size())]
+	return kind
+
+
+func can_stand(position_at: Vector2, actor: Dictionary) -> bool:
+	return Movement.can_stand(position_at, actor, _board, _bombs)
+
+
+## Crocodile `eat`: bombs on the cell detonate, its pickup goes, robots on it are hurt.
+func eat_cell(cell: Vector2i) -> void:
+	for bomb in _bombs.duplicate():
+		if bomb.cell == cell and not bomb.get("detonated", false): _detonate(bomb, _current_blasts, _current_broken)
+	if _pickups.has(cell):
+		var kind: StringName = _pickups[cell]
+		_pickups.erase(cell)
+		_mode.pickup_removed(self, kind, &"")
+	for id in _actor_ids:
+		if _actors[id].alive and _actors[id].cell == cell: _hurt(id, &"")
+
+
+## `Map.getAllEmptyPosition`: no box, bomb, belt, arm, pickup or robot.
+func empty_cells() -> Array[Vector2i]:
+	var result: Array[Vector2i] = []
+	for x in range(1, _board_max.x + 1):
+		for y in range(1, _board_max.y + 1):
+			var cell := Vector2i(x, y)
+			if _board.get(cell) not in [&"floor", &"portal", &"crocodile"] or _feature_blocked(cell) or _pickups.has(cell): continue
+			if _bombs.any(func(b): return b.cell == cell): continue
+			if _actors.values().any(func(a): return a.alive and a.cell == cell): continue
+			result.append(cell)
+	return result
+
+
+func _feature_blocked(cell: Vector2i) -> bool:
+	return _board.get(cell) == &"belt" or _features.any(func(feature): return cell in feature.blocked_cells())
+
+
+func _advance_flying() -> void:
+	for bomb in _bombs:
+		if not bomb.get("flying", false): continue
+		var at: Vector2 = bomb.fly_position
+		var aligned := at.is_equal_approx(at.round())
+		var ahead: Vector2i = Vector2i(at.round()) + bomb.fly_direction
+		if aligned and (not _board.has(ahead) or _board[ahead] not in [&"floor", &"portal", &"belt", &"crocodile"] \
+				or _bombs.any(func(other): return other != bomb and other.cell == ahead and other.get("kind") != &"mine" and not other.get("flying", false))):
+			bomb.flying = false
+			bomb.cell = Vector2i(at.round())
+			bomb.erase("fly_position")
+			continue
+		bomb.fly_position = at + Vector2(bomb.fly_direction) * bomb.fly_speed
+		bomb.cell = Vector2i(-100, -100)
+
+
+## PushRobotCommand: no control; on entering a cell holding a box or bomb, stop and snap
+## back to the previous cell along the push axis.
+func _advance_push(actor: Dictionary) -> void:
+	var direction: Vector2i = actor.pushed.direction
+	var before := Vector2i(floori(actor.position.x + 0.5), floori(actor.position.y + 0.5))
+	var moved: Vector2 = (actor.position + Vector2(direction) * actor.pushed.speed).clamp(Vector2.ZERO, Vector2(_board_max))
+	var cell := Vector2i(floori(moved.x + 0.5), floori(moved.y + 0.5))
+	actor.velocity = Vector2.ZERO
+	if cell != before and (_board.get(cell) in [&"solid", &"soft"] or _bombs.any(func(b): return b.cell == cell and b.get("kind") != &"mine")):
+		if direction.x != 0: moved.x = before.x
+		else: moved.y = before.y
+		actor.pushed = {}
+	actor.position = moved
+
+
+## HorseProp/DragonProp `hitHandleArr`: fires while pushing flush into a blocked cell ahead.
+func _ride_contact(actor: Dictionary, direction: Vector2) -> void:
+	if direction == Vector2.ZERO or (direction.x != 0 and direction.y != 0): return
+	var step := Vector2i(int(signf(direction.x)), int(signf(direction.y)))
+	var here := Vector2i(floori(actor.position.x + 0.5), floori(actor.position.y + 0.5))
+	var ahead := here + step
+	var flush := absf(actor.position.x - here.x) < 0.01 if step.x != 0 else absf(actor.position.y - here.y) < 0.01
+	if not flush or Movement.can_stand(Vector2(ahead), actor, _board, _bombs): return
+	var bomb_ahead := _bombs.any(func(b): return b.cell == ahead and b.get("kind") != &"mine")
+	if not bomb_ahead and _board.get(ahead) in [&"floor", &"portal", &"belt", &"crocodile"]: return
+	if actor.vehicle == &"horse":
+		var landing := ahead + step
+		if not _board.has(landing) or _board[landing] in [&"solid", &"soft"] or landing.x < 0 or landing.y < 0 \
+				or landing.x > 16 or landing.y > 14 or _bombs.any(func(b): return b.cell == landing):
+			return
+		actor.jump = {"target": Vector2(landing), "step": step}
+		actor.velocity = Vector2.ZERO
+	elif not bomb_ahead and _board.get(ahead) == &"soft":
+		# Dragon crash: break the box, score it, stop 17 ticks.
+		_board[ahead] = &"floor"
+		_current_broken.append(ahead)
+		actor.score += 10
+		_pending_drops.append({"cell": ahead, "born": _tick, "frame": 0})
+		actor.busy_until = _tick + 18
+		actor.velocity = Vector2.ZERO
+
+
+## The horse jump: 60 px at 4 px per tick along the push axis, 1 px per tick across.
+func _advance_jump(actor: Dictionary) -> void:
+	var target: Vector2 = actor.jump.target
+	var step: Vector2i = actor.jump.step
+	var at: Vector2 = actor.position
+	if step.x != 0:
+		at.x = move_toward(at.x, target.x, HORSE_JUMP_SPEED)
+		if absf(at.y - target.y) > 1.0 / 30.0: at.y += signf(target.y - at.y) / 30.0
+	else:
+		at.y = move_toward(at.y, target.y, HORSE_JUMP_SPEED)
+		if absf(at.x - target.x) > 1.0 / 30.0: at.x += signf(target.x - at.x) / 30.0
+	actor.position = at
+	if (step.x != 0 and at.x == target.x) or (step.y != 0 and at.y == target.y): actor.jump = {}
+
+
 func current_tick() -> int:
 	return _tick
 
@@ -512,7 +691,7 @@ func _free_cells() -> Array[Vector2i]:
 	for x in range(1, _board_max.x + 1):
 		for y in range(1, _board_max.y + 1):
 			var cell := Vector2i(x, y)
-			if _board.get(cell) in [&"floor", &"portal"] and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
+			if _board.get(cell) in [&"floor", &"portal", &"crocodile"] and not _feature_blocked(cell) and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
 				free.append(cell)
 	return free
 
@@ -542,7 +721,7 @@ func _advance_respawns() -> void:
 		actor.merge(actor.base_stats, true)
 		actor.merge({"alive": true, "removed": false, "death_frame": 0, "model_state": &"normal",
 			"registered_state": &"normal", "cell": actor.spawn, "position": Vector2(actor.spawn),
-			"velocity": Vector2.ZERO, "facing": Vector2.DOWN, "departures": [], "vehicle": &"",
+			"velocity": Vector2.ZERO, "facing": Vector2.DOWN, "departures": [], "vehicle": &"", "pushed": {}, "jump": {},
 			"registered_vehicle": &"", "shield": 0, "invincible_until": 0, "busy_until": 0,
 			"transit_until": 0, "vehicle_recovery_until": 0, "protected_until": _tick + 81,
 			"blink_until": _tick + 81, "weapon": actor.base_weapon, "ammo": -1 if actor.base_weapon != &"" else 0,
@@ -552,11 +731,11 @@ func _advance_respawns() -> void:
 
 func _spawn_pickup(cell: Vector2i, quota: bool) -> void:
 	var kind: StringName = _drop_pool[int(_draw_random() * _drop_pool.size())]
-	if quota and kind in Pickups.VEHICLES:
+	if quota and kind in CAPPED_VEHICLES:
 		if _vehicles_left <= 0:
 			var index := 0
 			while index < _drop_pool.size():
-				if _drop_pool[index] in Pickups.VEHICLES:
+				if _drop_pool[index] in CAPPED_VEHICLES:
 					_drop_pool.remove_at(index)
 				index += 1
 			return
@@ -610,7 +789,7 @@ func _hit_cell(target: Vector2i, owner: StringName, blasts: Array[Dictionary], b
 	if hit_items and _board.get(target) == &"soft":
 		_board[target] = &"floor"
 		broken.append(target)
-		_actors[owner].score += 10
+		if _actors.has(owner): _actors[owner].score += 10
 		_pending_drops.append({"cell": target, "born": _tick, "frame": 0})
 	elif hit_items:
 		for bomb in _bombs.duplicate():

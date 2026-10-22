@@ -7,9 +7,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "stages"))
 from make_cases import opening  # noqa: E402
 
 CASES = {
-    # name: (mode, arena, captures, every)
+    # name: (mode, arena, captures, every[, seed]); seed 11 rolls BirthdayPartyStage1
     "zoo-idle": ("arcade", "zoo", 120, 7),
-    "birthday-idle": ("arcade", "birthday_party", 120, 7),
+    "birthday-idle": ("arcade", "birthday_party", 120, 7, 11),
     "candy-idle": ("arcade", "candy_factory", 120, 7),
     "magic-idle": ("arcade", "magic_library", 120, 7),
     "magic-pac-idle": ("pac_man", "magic_library", 60, 35),
@@ -23,7 +23,7 @@ def periodic(captures, every):
 
 if __name__ == "__main__":
     out = Path(sys.argv[1]) if len(sys.argv) > 1 else Path(__file__).parent
-    for name, (mode, arena, captures, every) in CASES.items():
-        case = opening(name, mode=mode, arena=arena, after=periodic(captures, every))
+    for name, (mode, arena, captures, every, *seed) in CASES.items():
+        case = opening(name, mode=mode, arena=arena, seed=seed[0] if seed else None, after=periodic(captures, every))
         case["origin"] += f"; then idle, capturing every {every} frames"
         (out / f"{name}.json").write_text(json.dumps(case, indent=2) + "\n")
