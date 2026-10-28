@@ -25,7 +25,7 @@ import process
 import review
 import slots
 import upscale
-from common import CANDIDATES, ROOT, load_config, log, modify_params, setup_logging, write_json
+from common import CANDIDATES, ORIGINAL_MODE, ROOT, load_config, log, modify_params, setup_logging, write_json
 
 _STATE = {}
 
@@ -161,7 +161,8 @@ def main(argv=None):
     selected = [j for j in jobs if matches(j, tokens)]
     bitmaps = [a for a in assets if a['type'] == 'bitmap'
                and any(ref['asset']['key'] == a['key'] for j in selected for row in j['rows'] for ref in row)]
-    upscaled, failures = upscale.upscale_all(bitmaps, config, args.jobs)
+    # The original pack keeps bitmaps at their own resolution.
+    upscaled, failures = ({}, []) if ORIGINAL_MODE else upscale.upscale_all(bitmaps, config, args.jobs)
     log.info('Processing %d of %d jobs with %d workers%s', len(selected), len(jobs), args.jobs,
              ' (resume)' if args.resume else '')
     done = reused = empty = 0
@@ -199,7 +200,7 @@ def main(argv=None):
         'failures': failures, 'seconds': round(time.time() - started, 1)}
     write_json(CANDIDATES / 'summary.json', summary)
     write_json(CANDIDATES / 'failures.json', failures)
-    if not args.no_zip:
+    if not args.no_zip and not ORIGINAL_MODE:
         archive = shutil.make_archive(str(ROOT / 'candidates'), 'zip', root_dir=ROOT, base_dir='candidates')
         log.info('Zipped %s (%.1f MB)', os.path.relpath(archive, ROOT), os.path.getsize(archive) / 1e6)
         small = review.slots_zip(metas, config['flag_change_pct'])

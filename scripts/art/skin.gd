@@ -3,16 +3,23 @@ extends RefCounted
 
 signal changed
 const Catalog = preload("res://scripts/art/catalog.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
 const ACTIVE := "res://assets/skins/active.json"
 const IMPORTS := "res://assets/skins/imports/"
 const DRAFT := "user://art_workbench_draft.json"
+## Ignored local pack of original art built by tools/art_pipeline/original_pack.py (ADR 0008).
+const ORIGINAL := "res://original/"
+const ORIGINAL_PACK := "res://original/active.json"
 var _records: Dictionary = {}
+## Original-pack art shown beneath the records under the original profile; never applied or saved.
+var _pack: Dictionary = {}
 var _history: Array[Dictionary] = []
 var _textures: Dictionary = {}
 
 
 func _init(saved: bool = true) -> void:
 	if saved: _records = _read(ACTIVE)
+	if Fidelity.original: _pack = _read(ORIGINAL_PACK, ORIGINAL)
 
 
 func records() -> Dictionary:
@@ -87,9 +94,9 @@ func apply() -> String:
 
 
 func texture(id: String) -> Texture2D:
-	var record := entry(id)
+	var record := _shown(id)
 	var path: String = record.get("path", "")
-	if not path.begins_with(IMPORTS): return null
+	if not path.begins_with(IMPORTS) and not path.begins_with(ORIGINAL): return null
 	if _textures.has(path): return _textures[path]
 	if not FileAccess.file_exists(path): return null
 	var image := Image.new()
@@ -102,7 +109,7 @@ func texture(id: String) -> Texture2D:
 func button_texture(id: String) -> Texture2D:
 	var image := texture(id)
 	if image == null: return null
-	var record := entry(id)
+	var record := _shown(id)
 	var first := AtlasTexture.new()
 	first.atlas = image
 	first.region = Rect2(Vector2.ZERO, Vector2(image.get_size()) / Vector2(record.get("columns", 1), record.get("rows", 1)))
@@ -113,7 +120,7 @@ func draw(canvas: CanvasItem, id: String, rect: Rect2, tick: float = 0,
 		facing: Vector2 = Vector2.DOWN, progress: float = -1.0, modulation: Color = Color.WHITE) -> bool:
 	var image := texture(id)
 	if image == null: return false
-	var record := entry(id)
+	var record := _shown(id)
 	var columns: int = record.get("columns", 1)
 	var rows: int = record.get("rows", 1)
 	var frame := mini(columns - 1, floori(clampf(progress, 0, 1) * columns)) if progress >= 0 else posmod(floori(tick * float(record.get("fps", 8)) / 35.0), columns)
@@ -127,6 +134,11 @@ func draw(canvas: CanvasItem, id: String, rect: Rect2, tick: float = 0,
 	canvas.draw_texture_rect_region(image, Rect2(rect.get_center() - size / 2 + offset, size),
 		Rect2(Vector2(frame, row) * pitch, pitch), Color(record.get("tint", "ffffffff")) * modulation)
 	return true
+
+
+## A chosen replacement, else the original pack's art for the slot.
+func _shown(id: String) -> Dictionary:
+	return _records.get(id, _pack.get(id, {})).duplicate(true)
 
 
 func _remember() -> void:
@@ -150,7 +162,7 @@ func _write(path: String) -> Error:
 	return DirAccess.rename_absolute(ProjectSettings.globalize_path(path + ".tmp"), absolute)
 
 
-func _read(path: String) -> Dictionary:
+func _read(path: String, folder: String = IMPORTS) -> Dictionary:
 	if not FileAccess.file_exists(path): return {}
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 	if not parsed is Dictionary or parsed.get("version") != 1: return {}
@@ -160,7 +172,7 @@ func _read(path: String) -> Dictionary:
 	for id in stored:
 		if not id is String or Catalog.find(id).is_empty() or not stored[id] is Dictionary: continue
 		var record: Dictionary = stored[id].duplicate(true)
-		if not record.get("path", "") is String or not record.get("path", "").begins_with(IMPORTS): continue
+		if not record.get("path", "") is String or not record.get("path", "").begins_with(folder): continue
 		valid[id] = _normalize(record)
 	return valid
 

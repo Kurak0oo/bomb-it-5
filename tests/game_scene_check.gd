@@ -1,5 +1,6 @@
 extends SceneTree
 
+const Fidelity = preload("res://scripts/fidelity.gd")
 var failures := 0
 var checks := 0
 
@@ -22,13 +23,14 @@ func _run() -> void:
 		touch.position = Vector2(145, 535)
 		touch.pressed = true
 		root.push_input(touch, true)
+		Fidelity.original = false
 		var drag := InputEventScreenDrag.new()
 		drag.index = 0
 		drag.position = Vector2(200, 590)
 		root.push_input(drag, true)
 		scene.advance_time(1.0 / 35.0)
 		var direction: Vector2 = scene.get_snapshot().commands[0].direction
-		_expect(direction.x > 0.6 and direction.y > 0.6, "stick produces a normalized diagonal through the real command path")
+		_expect(direction.x > 0.6 and direction.y > 0.6, "adapted: stick produces a normalized diagonal through the real command path")
 		touch.pressed = false
 		root.push_input(touch, true)
 		for sector in [Vector2.RIGHT, Vector2(1, 1), Vector2.DOWN, Vector2(-1, 1),
@@ -39,7 +41,19 @@ func _run() -> void:
 			root.push_input(drag, true)
 			scene.advance_time(1.0 / 35.0)
 			_expect(scene.get_snapshot().commands[0].direction.is_equal_approx(sector.normalized()),
-				"each stick sector requests its normal-speed direction")
+				"adapted: each stick sector requests its normal-speed direction")
+			touch.pressed = false
+			root.push_input(touch, true)
+		Fidelity.original = true
+		# Original profile: the stick keeps the dominant axis, as the original's single cardinal direction.
+		for row in [[Vector2(1, 0.3), Vector2.RIGHT], [Vector2(0.3, 1), Vector2.DOWN], [Vector2(-1, -0.4), Vector2.LEFT],
+			[Vector2(0.2, -1), Vector2.UP]]:
+			touch.pressed = true
+			root.push_input(touch, true)
+			drag.position = touch.position + row[0].normalized() * 100
+			root.push_input(drag, true)
+			scene.advance_time(1.0 / 35.0)
+			_expect(scene.get_snapshot().commands[0].direction == row[1], "original: the stick requests one cardinal direction")
 			touch.pressed = false
 			root.push_input(touch, true)
 		touch.pressed = true

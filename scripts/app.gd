@@ -13,6 +13,7 @@ const GameView = preload("res://scripts/game_view.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const ArtCatalog = preload("res://scripts/art/catalog.gd")
 const Looks = preload("res://scripts/looks.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The unresolved glove slots (BOXING GLOVE, PUSH THE BOMB) are left out.
 const GUIDE := [
@@ -206,7 +207,7 @@ func show_settings() -> void:
 	UiKit.choices(page, Vector2(400, 300), [["3", 3, true], ["2", 2, true], ["1", 1, true]], session.enemies,
 		func(value): session.enemies = value)
 	var level_options: Array = []
-	for count in Session.LEVEL_CHOICES: level_options.append([str(count), count, true])
+	for count in Session.LEVEL_CHOICES: level_options.append([str(count), Fidelity.levels_for_button(count), true])
 	UiKit.choices(page, Vector2(400, 370), level_options, session.levels, func(value): session.levels = value)
 	var arena := OptionButton.new()
 	arena.name = "Arena"
@@ -332,7 +333,8 @@ func _start_level() -> void:
 
 func _on_level_settled(snapshot: Dictionary) -> void:
 	var outcome: StringName = snapshot.outcome
-	var result: int = session.settle(&"won" if outcome == &"won" else &"lost", snapshot.result_score,
+	var won: bool = outcome == &"won" or (outcome == &"timeout" and session.mode == &"arcade" and Fidelity.timeout_wins())
+	var result: int = session.settle(&"won" if won else &"lost", snapshot.result_score,
 		snapshot.actors[&"human"].lives)
 	# Every score screen checks the session total against the unlock scores (`OnePScoreUI`).
 	var key := str(session.robot)

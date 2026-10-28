@@ -29,6 +29,22 @@ Requirements: Python 3.11+, `numpy pillow resvg-py vtracer spandrel torch`
 Temurin JRE from GitHub). JPEXS FFDec 26.3.0 and the Real-ESRGAN anime 6B weights
 are downloaded from their GitHub releases into `.scratch/tools/` and hash-checked.
 
+## Original pack (replica build)
+
+On the `original-replica` branch the game shows the original art itself
+([ADR 0008](../../docs/adr/0008-original-replica-build.md)):
+
+```
+python tools/art_pipeline/original_pack.py [--swf PATH] [--resume] [--jobs N]
+```
+
+It runs the same extraction and slot layout with no modification and no upscaling,
+writes each slot sheet to `original/art/slots/<slot>/candidate.png` and the pack
+manifest to `original/active.json`. Under the `original` fidelity profile the game
+draws that pack beneath any workbench replacement; slots with no SWF source keep
+the native drawing. `original/` is ignored by git: the repository is public, so the
+pack never leaves your machine. Sheets animate at the workbench default of 8 fps.
+
 ## Stages
 
 1. **Extract**: FFDec exports shapes and sprite frames as SVG, bitmaps as PNG and
@@ -88,7 +104,7 @@ through palette snapping and vectorisation.
 - 18 slots have no SWF source: action poses, protection blink and portal transit
   overlays, the five touch controls, and the screen frame, HUD panels and menu
   buttons. The end cartoons are full-screen clips squeezed into 64x64 outcome slots.
-- Never commit the SWF, `.scratch/`, `candidates/` or the zips.
+- Never commit the SWF, `.scratch/`, `candidates/`, `original/` or the zips.
 
 ## Slots and sources
 

@@ -8,6 +8,7 @@ const STICK := Vector2(145, 535)
 const BOMB := Vector2(1115, 535)
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const ArtCatalog = preload("res://scripts/art/catalog.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
 const DIRECTIONS := [Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1),
 	Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1)]
 
@@ -53,7 +54,8 @@ func _input(event: InputEvent) -> void:
 
 func _drag(at: Vector2) -> void:
 	target = (at - STICK).limit_length(64)
-	var sector := posmod(roundi(target.angle() / (PI / 4.0)), 8)
+	# Original profile: four quarter sectors around the dominant axis (no diagonals).
+	var sector := posmod(roundi(target.angle() / (PI / 2.0)), 4) * 2 if Fidelity.original else posmod(roundi(target.angle() / (PI / 4.0)), 8)
 	direction_changed.emit(Vector2.ZERO if target.length() < 14 else DIRECTIONS[sector].normalized())
 	queue_redraw()
 

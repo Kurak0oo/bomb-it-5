@@ -3,6 +3,7 @@ extends SceneTree
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const Scheduler = preload("res://scripts/simulation/tick_scheduler.gd")
 const AI = preload("res://scripts/simulation/ai_controller.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
 var failures := 0
 var checks := 0
 
@@ -36,7 +37,15 @@ func _initialize() -> void:
 	game = Simulation.new([&"human", &"ai"], {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(7, 5)}}, _board(), {"round": true})
 	for index in 6405:
 		state = game.advance([_command(), {"actor_id": &"ai", "direction": Vector2.ZERO, "bomb_events": []}])
-	_expect(state.get("outcome", &"running") == &"timeout", "6300 accepted ticks end a round with enemies in timeout defeat")
+	_expect(state.get("outcome", &"running") == &"timeout", "6300 accepted ticks end a round with enemies in TIME'S UP")
+	_expect(state.actors[&"human"].lives == 3 and state.result_breakdown.get("difficulty", 0) == 2000,
+		"original: Arcade timeout completes the level (ArcadeMode.timeOut), keeping the heart")
+	Fidelity.original = false
+	game = Simulation.new([&"human", &"ai"], {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(7, 5)}}, _board(), {"round": true})
+	for index in 6405:
+		state = game.advance([_command(), {"actor_id": &"ai", "direction": Vector2.ZERO, "bomb_events": []}])
+	_expect(state.actors[&"human"].lives == 2, "adapted: Arcade timeout with enemies remaining is a loss")
+	Fidelity.original = true
 	game = Simulation.new([&"human"], {&"human": {"cell": Vector2i(1, 1)}}, _board(),
 		{"drops": true, "pickups": {Vector2i(1, 1): &"capacity"}})
 	state = game.advance([_command()])

@@ -2,6 +2,8 @@
 
 Landscape phone game. The match rules come from the original Q版泡泡堂5 (edition 5) SWF. The pictures, names, and audio in a Douyin build are original. This is not the [bomb-it-1](https://github.com/Kurak0oo/bomb-it-1) repo, and that repo stays parked.
 
+**This is the `original-replica` branch:** a faithful reproduction of edition 5, run under the `original` fidelity profile ([ADR 0008](docs/adr/0008-original-replica-build.md)). To see the original art, build the local pack from your own SWF with `python tools/art_pipeline/original_pack.py`; it stays out of git.
+
 Open `project.godot` in **Godot 4.5** with the Compatibility renderer.
 
 The desktop game is playable: open the project and press **F6/F5**, or run `./tools/play.ps1` with the local Godot 4.5 executable. It opens on the main menu: **START** leads to Game Settings (Arcade, Battle Royale, Pac-Man or Green Zone; one to three enemies; 5–20 levels; a random or chosen stage set; Easy, Normal or Hard) and character select, then a multi-level session across the six stage sets. **HOW TO PLAY** shows the controls, key rebinding and power-ups; looks unlock as your session total grows and are saved locally. Default keys are **Arrow keys** and **Space**, with **P** or the pause button to pause. The visible stick and bomb button also accept desktop-emulated touch. The fixed practice board is a development launch: `./tools/play.ps1 -Practice` (or `-- --practice`).

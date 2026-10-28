@@ -4,6 +4,7 @@ extends RefCounted
 
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const Looks = preload("res://scripts/looks.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
 const LEVEL_CHOICES: Array[int] = [5, 10, 15, 20]
 const ROBOTS: Array[StringName] = [&"human", &"ruby", &"lime", &"gold", &"violet", &"slate", &"mint", &"snow"]
 const ROBOT_TITLES: Array[String] = ["Blue", "Ruby", "Lime", "Gold", "Violet", "Slate", "Mint", "Snow"]
@@ -16,7 +17,7 @@ var enemies := 3
 var levels := 5
 ## &"random" or a stage-set id.
 var stage: StringName = &"random"
-var difficulty: StringName = &"normal"
+var difficulty: StringName = Fidelity.default_difficulty()
 var robot := 0
 var hat := 0
 var body := 0

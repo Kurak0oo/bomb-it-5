@@ -1,6 +1,8 @@
 extends "res://scripts/simulation/modes/game_mode.gd"
 ## ArcadeMode: eliminate every AI; see runtime systems and modes-and-flow evidence.
 
+const Fidelity = preload("res://scripts/fidelity.gd")
+
 const DIFF_POINT := {&"easy": 1000, &"normal": 2000, &"hard": 3000}
 
 
@@ -36,7 +38,7 @@ func judge(round_state: RefCounted, judgment_ready: bool, tick: int) -> StringNa
 	if judgment_ready and not enemy_alive:
 		return &"won"
 	if tick >= round_ticks():
-		# Accepted adaptation: timeout with enemies remaining is a loss (DESIGN.md).
+		# Enemies remaining: TIME'S UP, settled as a win (original) or a loss (adapted).
 		return &"lost" if not human.alive else &"won" if not enemy_alive else &"timeout"
 	return &""
 
@@ -44,7 +46,7 @@ func judge(round_state: RefCounted, judgment_ready: bool, tick: int) -> StringNa
 func settle(round_state: RefCounted, outcome: StringName, gameplay_end_tick: int) -> int:
 	var human: Dictionary = round_state.human()
 	breakdown = {"kills": human.kills * 300, "time": 0, "difficulty": 0}
-	if outcome == &"won":
+	if outcome == &"won" or (outcome == &"timeout" and Fidelity.timeout_wins()):
 		breakdown.time = remaining_seconds(gameplay_end_tick) * 10
 		breakdown.difficulty = DIFF_POINT.get(difficulty, 2000)
 	else:

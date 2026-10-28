@@ -1,0 +1,29 @@
+extends RefCounted
+## Fidelity profile (ADR 0008). `original` follows the edition 5 design exactly;
+## `adapted` keeps the accepted new-game adaptations in DESIGN.md.
+## The original-replica branch runs `original`; checks of an adaptation switch it off.
+
+static var original := true
+
+
+## Original controllers send one cardinal direction (`InteractiveController`, `HitMove`);
+## a diagonal request keeps its dominant axis, horizontal on a tie.
+static func direction(requested: Vector2) -> Vector2:
+	if not original or requested.x == 0 or requested.y == 0:
+		return requested
+	return Vector2(signf(requested.x), 0) if absf(requested.x) >= absf(requested.y) else Vector2(0, signf(requested.y))
+
+
+## `ArcadeMode.timeOut` completes the level even with enemies alive; adapted play loses.
+static func timeout_wins() -> bool:
+	return original
+
+
+## `GameSettingsUI.levelsHandle` sets 1 for the button named five.
+static func levels_for_button(count: int) -> int:
+	return 1 if original and count == 5 else count
+
+
+## `GameModel.init` starts on Easy; adapted play starts on Normal.
+static func default_difficulty() -> StringName:
+	return &"easy" if original else &"normal"

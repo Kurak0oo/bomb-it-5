@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
 const Scheduler = preload("res://scripts/simulation/tick_scheduler.gd")
 const AI = preload("res://scripts/simulation/ai_controller.gd")
 var checks := 0
@@ -59,6 +60,11 @@ func _expect(condition: bool, label: String) -> void:
 
 
 func _movement() -> void:
+	Fidelity.original = true
+	var cardinal := _game({"movement": true}, {&"human": {"cell": Vector2i(3, 3)}})
+	var dominant := _ticks(cardinal, 10, Vector2(1, 0.5)).actors[&"human"].position as Vector2
+	_expect(dominant.x > 3.5 and dominant.y == 3.0, "original: a diagonal request moves along its dominant axis only")
+	Fidelity.original = false
 	var straight := _game({"movement": true}, {&"human": {"cell": Vector2i(3, 3)}})
 	var diagonal := _game({"movement": true}, {&"human": {"cell": Vector2i(3, 3)}})
 	var a := _ticks(straight, 20, Vector2.RIGHT)
@@ -76,6 +82,7 @@ func _movement() -> void:
 	var sliding := _game({"movement": true}, {&"human": {"cell": Vector2i(1, 1)}}, blockers)
 	var slide := _ticks(sliding, 4, Vector2(1, 1)).actors[&"human"].position as Vector2
 	_expect(is_equal_approx(slide.x, 1) and slide.y > 1, "a blocked axis slides along the free axis")
+	Fidelity.original = true
 	var depart := _game({"movement": true})
 	depart.advance([_command(&"human", Vector2.RIGHT, [&"down"])])
 	_ticks(depart, 20, Vector2.RIGHT)

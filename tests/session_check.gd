@@ -10,6 +10,7 @@ var checks := 0
 func _initialize() -> void:
 	var session := Session.new(5)
 	_expect(session.levels == 5 and session.enemies == 3 and session.stage == &"random", "defaults: 5 levels, 3 enemies, random arena")
+	_expect(session.difficulty == &"easy", "original: a session starts on Easy (GameModel.init)")
 	session.robot = 4
 	session.begin()
 	_expect(session.ai_robots.size() == 3 and 4 not in session.ai_robots, "AI robots exclude the player's robot")

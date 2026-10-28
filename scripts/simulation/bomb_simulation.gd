@@ -3,6 +3,7 @@ extends RefCounted
 
 const CommandModule = preload("res://scripts/simulation/command_boundary.gd")
 const Movement = preload("res://scripts/simulation/movement.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
 const Pickups = preload("res://scripts/simulation/pickups.gd")
 const Weapons = preload("res://scripts/simulation/weapons.gd")
 const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
@@ -165,7 +166,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 			if not _actors[actor_id].get("pushed", {}).is_empty() or not _actors[actor_id].get("jump", {}).is_empty():
 				continue
 			if command.direction != Vector2.ZERO:
-				_actors[actor_id].facing = command.direction.normalized()
+				_actors[actor_id].facing = Fidelity.direction(command.direction).normalized()
 			for event in command.bomb_events:
 				if event == &"down":
 					var actor: Dictionary = _actors[command.actor_id]

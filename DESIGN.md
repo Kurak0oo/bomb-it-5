@@ -103,6 +103,43 @@ The user subsequently requests reverse engineering first. Reconstruct and verify
 
 The subsequent implement instruction approves the 16 recovery tickets [#22–#37](https://github.com/Kurak0oo/bomb-it-5/issues/22), covering controlled original playback, bomb/fire/phase edges, movement/portals, items/vehicles/weapons, Normal AI and death/results, ending in a reviewed porting handoff. These are evidence-recovery gates before further fidelity implementation. They preserve the accepted adaptations above and do not resolve the four deferred item slots, approve finished artwork or require early phone tests.
 
+## Original replica build (2026-10-28)
+
+The user accepted R1–R3 for the `original-replica` branch. This branch delivers a
+faithful reproduction of edition 5 as a final product and as the project's in-game
+reference; original art is made on other branches. On this branch the original game
+design is the authority for every rule below, and it overrides the accepted
+adaptations elsewhere in this file. [ADR 0008](docs/adr/0008-original-replica-build.md)
+records the trade-off.
+
+- **Assets (R1):** the repository is public, so original art and audio are never
+  committed. The game loads them at runtime from an ignored local pack the user
+  builds from their own SWF (`original/`), and falls back to the native presentation
+  when the pack is absent. The production asset boundary above still governs the
+  Douyin build.
+- **Rules (R2):** one gameplay codebase with a fidelity profile
+  (`scripts/fidelity.gd`). This branch runs the `original` profile. The `adapted`
+  profile keeps the accepted adaptations so the art branches and tests that cover
+  them share the same code. Under `original`:
+  - Movement is cardinal only. The touch stick selects the dominant axis; there are
+    no diagonals, so diagonal speed, wall sliding and diagonal corner rules do not
+    arise. Keyboard keeps the recovered last-pressed priority.
+  - Arcade timeout completes the level, as `ArcadeMode.timeOut` does: TIME'S UP, then
+    LEVEL COMPLETE, settled as a win with no time bonus.
+  - The levels buttons follow `GameSettingsUI.levelsHandle`: the button labelled 5
+    sets one level; 5 levels is reached only by leaving the default.
+  - The default difficulty is Easy (`GameModel.init`).
+  - Still to port, each from recovered source rather than approximation: the
+    Date-based round clock that can miss seconds during stalls, the exposed
+    localization keys on original screens (with the original screen art), the exact
+    `HitMove` lane assistance and geometric bomb-overlap bypass, and original timing
+    quirks such as pending recovery while paused.
+- **Scope (R3):** the replica includes original audio and closes the recorded limits
+  of the complete game: runtime observation of pushes, belts, crocodile bites, horse
+  and dragon rides and Pac-Man ghost catching; call-level AI traces in the new modes;
+  belt positions in twips; and the four unresolved item slots. Unselectable modes
+  stay out.
+
 ## Decision history
 
 ### Complete original game scope (2026-10-21)

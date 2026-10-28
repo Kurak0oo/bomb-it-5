@@ -17,7 +17,9 @@ RECORDED_SWF_SHA256 = '718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157
 EXPORT = SCRATCH / 'swf-export'
 TOOLS = SCRATCH / 'tools'
 WORK = SCRATCH / 'art_pipeline'
-CANDIDATES = ROOT / 'candidates'
+# original_pack.py reuses the stages for the replica's unmodified art (ADR 0008).
+ORIGINAL_MODE = os.environ.get('ART_PIPELINE_ORIGINAL') == '1'
+CANDIDATES = ROOT / 'original' / 'art' if ORIGINAL_MODE else ROOT / 'candidates'
 CONFIG = HERE / 'config.json'
 MANIFEST = HERE / 'manifest.csv'
 PALETTE = HERE / 'palette.json'
@@ -45,6 +47,9 @@ def load_config():
 
 def modify_params(config, slot):
     """Defaults, then every matching slot-prefix override, then the slot's own entry."""
+    if ORIGINAL_MODE:
+        return {'original': True, 'hue_shift_deg': 0, 'saturation_scale': 1.0, 'value_scale': 1.0,
+                'outline_scale': 1.0, 'remap_strength': 0.0, 'snap': False, 'vectorize': False}
     params = dict(config['modify'])
     for prefix, values in sorted(config.get('modify_by_prefix', {}).items(), key=lambda item: len(item[0])):
         if slot and slot.startswith(prefix):

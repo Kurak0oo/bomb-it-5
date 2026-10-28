@@ -266,7 +266,7 @@ def run(job, config, mapping, upscaled, resume):
     results = {}
     for frame in unique:
         img2img = None
-        if img2img_dir:
+        if img2img_dir and not params.get('original'):
             from pathlib import Path
             img2img = Path(img2img_dir) / job['folder'] / f'{frame.asset["key"]}__f{frame.number}.png'
         results[(frame.asset['key'], frame.number)] = candidate_frame(
@@ -274,7 +274,8 @@ def run(job, config, mapping, upscaled, resume):
             target, mapping, config, img2img)
     rows, columns = len(grid), max(len(row) for row in grid)
     pick = lambda name: [[results[(f.asset['key'], f.number)][name] for f in row] for row in grid]
-    candidate = sheet(pick('after_final'), cell, rows, columns)
+    # The original pack keeps the SWF rendering itself, laid out for the slot.
+    candidate = sheet(pick('before_final' if params.get('original') else 'after_final'), cell, rows, columns)
     before = sheet(pick('before_preview'), preview_cell, rows, columns)
     after = sheet(pick('after_preview'), preview_cell, rows, columns)
     percent, pixels_changed, delta, mask = change(before, after)
