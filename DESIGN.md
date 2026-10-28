@@ -172,6 +172,11 @@ records the trade-off.
     levels, starting at the original default.
   - **Controls look (Q17):** the stick and bomb button are drawn in the original
     interface style; art branches may replace them later.
+  - **iOS install (Q18–Q21):** the user builds on their own Mac with Xcode and
+    installs with a free Apple ID, reinstalling about weekly. Support iOS 16 or later
+    (iPhone 8 / XR onwards), tuned for 60 fps on the oldest and 120 fps on ProMotion.
+    Both landscape directions are allowed. Game audio respects the silent switch and
+    mixes with other apps' audio; the original sound and music switches still apply.
   - **Item slots (Q10):** an item edition 5 cannot reach stays out, recorded as such.
 - **Scope (R3):** the replica includes original audio and closes the recorded limits
   of the complete game: runtime observation of pushes, belts, crocodile bites, horse

@@ -121,8 +121,9 @@ Q1 (phone game, stick present), Q2 (smooth on mainstream landscape phones), Q3
 (single player, original sound/music/quality, MORE GAMES removed) and Q7 (copy the
 original engine but present at 60 or 120 fps without hitches). DESIGN.md records
 the result. Q11–Q17 were accepted the same day, with Q12 changed to iOS
-first. Open next: the Apple signing setup, supported iPhones and iOS versions,
-landscape orientations and the silent switch.
+first. Q18–Q21 were accepted the same day, with Q18 choosing a free
+Apple ID. The replica decision frontier is empty pending the user's confirmation of
+the shared understanding.
 
 ### 2026-10-21 complete edition 5 game scope
 
