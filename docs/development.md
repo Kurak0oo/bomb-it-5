@@ -458,3 +458,12 @@ the original art's style. DESIGN.md records the gameplay layout; the mockups are
 `docs/design/` (they show original-art crops, kept like the verification captures).
 #77 is updated to this layout. The layout frontier is empty.
 
+On 2026-10-29 #77 was split into #89 (page fit and full board), #90 (eight-way
+stick and bomb button on the scenery), #91 (play HUD and pause icon) and #92
+(original background extended into the side scenery), each blocked by #89 except
+#89 itself; #77 is closed as split. #93 polishes the surrounds (blocked by #92).
+#78 now follows the mockup style and waits on #90; #76 covers only full-screen
+pages (in-play HUD and pause icon moved to #91) and asks for the missing
+screen-hook ADR; #87 and #88 blockers were updated. Spec #71's text still
+describes the superseded 700×510 layout and cardinal stick; DESIGN.md is current.
+
