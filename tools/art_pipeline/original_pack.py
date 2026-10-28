@@ -16,7 +16,7 @@ os.environ['ART_PIPELINE_ORIGINAL'] = '1'  # Before the pipeline modules read it
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import run
-from common import CANDIDATES, ROOT, log, write_json
+from common import CANDIDATES, ROOT, load_config, log, write_json
 
 PACK = ROOT / 'original' / 'active.json'
 
@@ -24,10 +24,14 @@ PACK = ROOT / 'original' / 'active.json'
 def manifest():
     """Skin manifest records (scripts/art/skin.gd) for every slot sheet that was built."""
     records = {}
+    slots = load_config()['slots']
     for path in sorted((CANDIDATES / 'slots').glob('*/meta.json')):
         meta = json.loads(path.read_text(encoding='utf-8'))
         sheet = path.parent / 'candidate.png'
         if meta.get('kind') != 'slot' or not sheet.is_file():
+            continue
+        # A slot whose source was removed keeps its old folder; never ship that art.
+        if not slots.get(meta['id'], {}).get('source'):
             continue
         records[meta['id']] = {'path': 'res://' + sheet.relative_to(ROOT).as_posix(), 'label': 'original SWF',
                                'columns': meta['columns'], 'rows': meta['rows'], 'fps': 8.0, 'scale': 1.0,

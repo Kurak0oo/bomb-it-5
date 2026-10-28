@@ -251,6 +251,9 @@ def run(job, config, mapping, upscaled, resume):
     # apart on a huge canvas is cropped per frame instead, at one shared scale.
     separate = job['kind'] == 'asset' and union[2] * union[3] > 4 * largest
     frame_box = own if separate else {k: union for k in own}
+    crop = job.get('crop')
+    if crop:  # A declared source region (e.g. one board tile cut from a set background).
+        frame_box = {k: tuple(crop) for k in own}
     span = (max(b[2] for b in frame_box.values()), max(b[3] for b in frame_box.values()))
     if job['cell'] is None:  # Unmapped asset: natural size, scaled and capped.
         scale = min(config['unmapped']['scale'], config['unmapped']['max_side'] / max(span))

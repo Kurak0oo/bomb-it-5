@@ -64,7 +64,7 @@ def plan(assets, config):
         columns = max(len(r) for r in rows)
         rows = [[r[int(i * len(r) / columns)] for i in range(columns)] for r in rows]
         jobs.append(job('slot', entry['id'], 'slots/' + entry['id'], rows, entry['size'], [entry['id']],
-                        modify_params(config, entry['id']), config))
+                        modify_params(config, entry['id']), config, source.get('crop')))
     for asset in assets:
         frames = pick_frames(len(asset['frames']), 'all', config['unmapped']['max_frames'])
         params = modify_params(config, asset['slots'][0] if asset['slots'] else 'unmapped')
@@ -73,12 +73,13 @@ def plan(assets, config):
     return jobs
 
 
-def job(kind, ident, folder, rows, cell, slot_ids, params, config):
+def job(kind, ident, folder, rows, cell, slot_ids, params, config, crop=None):
     sources = list(dict.fromkeys(ref['asset']['key'] for row in rows for ref in row))
     types = sorted({ref['asset']['type'] for row in rows for ref in row})
-    stamp_input = [cell, [[(ref['asset']['hash'], ref['frame']) for ref in row] for row in rows]]
+    stamp_input = [cell, [[(ref['asset']['hash'], ref['frame']) for ref in row] for row in rows], crop]
     return {'kind': kind, 'id': ident, 'folder': folder, 'rows': rows, 'cell': cell, 'slots': slot_ids,
-            'params': params, 'sources': sources, 'type': ' + '.join(types), 'stamp_input': stamp_input}
+            'params': params, 'sources': sources, 'type': ' + '.join(types), 'stamp_input': stamp_input,
+            'crop': crop}
 
 
 def matches(job_entry, tokens):

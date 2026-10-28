@@ -141,56 +141,139 @@
    }
   },
   "board.birthday_party.floor_even": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_BirthdayParty",
+    "frames": [
+     1
+    ],
+    "crop": [
+     32,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "One 32px board tile cut from BackGround_BirthdayParty; the floor is drawn by the set background, not a brick frame"
   },
   "board.birthday_party.floor_odd": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_BirthdayParty",
+    "frames": [
+     1
+    ],
+    "crop": [
+     64,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "Second 32px board tile from BackGround_BirthdayParty"
   },
   "board.birthday_party.wall": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_BirthdayParty",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     32,
+     32
+    ]
+   },
+   "note": "Border tile of BackGround_BirthdayParty; the original board border is part of the background"
   },
   "board.birthday_party.soft_a": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     5
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+1: birthday_partyMapData unfixed choice 1"
   },
   "board.birthday_party.soft_b": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     6
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+2: birthday_partyMapData unfixed choice 2"
   },
   "board.birthday_party.solid_1": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     1
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 1 is _brick5 frame beginNum-1+1 (BirthdayParty layouts choose their own subset)"
   },
   "board.birthday_party.solid_2": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     2
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 2 is _brick5 frame beginNum-1+2 (BirthdayParty layouts choose their own subset)"
   },
   "board.birthday_party.solid_3": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     3
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 3 is _brick5 frame beginNum-1+3 (BirthdayParty layouts choose their own subset)"
   },
   "board.birthday_party.solid_4": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     4
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 4 is _brick5 frame beginNum-1+4 (BirthdayParty layouts choose their own subset)"
   },
   "board.birthday_party.solid_5": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     5
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 5 is _brick5 frame beginNum-1+5 (BirthdayParty layouts choose their own subset)"
   },
   "board.birthday_party.solid_6": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     6
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 6 is _brick5 frame beginNum-1+6 (BirthdayParty layouts choose their own subset)"
   },
   "board.birthday_party.solid_7": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     7
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 7 is _brick5 frame beginNum-1+7 (BirthdayParty layouts choose their own subset)"
   },
   "board.birthday_party.center": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     24
+    ]
+   },
+   "note": "_brick5 frame beginNum+23: the set centrepiece"
   },
   "board.birthday_party.toy_hand": {
    "source": {
@@ -202,58 +285,139 @@
    "note": "ToyHand uses Art_ToyHand_<Direction>; the game rotates the down art"
   },
   "board.candy_factory.floor_even": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_CandyFactory",
+    "frames": [
+     1
+    ],
+    "crop": [
+     32,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "One 32px board tile cut from BackGround_CandyFactory; the floor is drawn by the set background, not a brick frame"
   },
   "board.candy_factory.floor_odd": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_CandyFactory",
+    "frames": [
+     1
+    ],
+    "crop": [
+     64,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "Second 32px board tile from BackGround_CandyFactory"
   },
   "board.candy_factory.wall": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_CandyFactory",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     32,
+     32
+    ]
+   },
+   "note": "Border tile of BackGround_CandyFactory; the original board border is part of the background"
   },
   "board.candy_factory.soft_a": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     29
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+1: candy_factoryMapData unfixed choice 1"
   },
   "board.candy_factory.soft_b": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     30
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+2: candy_factoryMapData unfixed choice 2"
   },
   "board.candy_factory.solid_1": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     25
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 1 is _brick5 frame beginNum-1+1 (CandyFactory layouts choose their own subset)"
   },
   "board.candy_factory.solid_2": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     26
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 2 is _brick5 frame beginNum-1+2 (CandyFactory layouts choose their own subset)"
   },
   "board.candy_factory.solid_3": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     27
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 3 is _brick5 frame beginNum-1+3 (CandyFactory layouts choose their own subset)"
   },
   "board.candy_factory.solid_4": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     28
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 4 is _brick5 frame beginNum-1+4 (CandyFactory layouts choose their own subset)"
   },
   "board.candy_factory.solid_5": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     29
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 5 is _brick5 frame beginNum-1+5 (CandyFactory layouts choose their own subset)"
   },
   "board.candy_factory.solid_6": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     30
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 6 is _brick5 frame beginNum-1+6 (CandyFactory layouts choose their own subset)"
   },
   "board.candy_factory.solid_7": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     31
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 7 is _brick5 frame beginNum-1+7 (CandyFactory layouts choose their own subset)"
   },
   "board.candy_factory.center": {
    "source": {
-    "sprite": "Art_CandyMachine"
+    "sprite": "_brick5",
+    "frames": [
+     48
+    ]
    },
-   "note": "ConveyorBelt draws Art_CandyMachine on centerProp"
+   "note": "_brick5 frame beginNum+23: the set centrepiece"
   },
   "board.candy_factory.belt": {
    "source": {
@@ -262,56 +426,139 @@
    "note": "one clip for the whole track; trim to a cell when importing"
   },
   "board.zoo.floor_even": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_Zoo",
+    "frames": [
+     1
+    ],
+    "crop": [
+     32,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "One 32px board tile cut from BackGround_Zoo; the floor is drawn by the set background, not a brick frame"
   },
   "board.zoo.floor_odd": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_Zoo",
+    "frames": [
+     1
+    ],
+    "crop": [
+     64,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "Second 32px board tile from BackGround_Zoo"
   },
   "board.zoo.wall": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_Zoo",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     32,
+     32
+    ]
+   },
+   "note": "Border tile of BackGround_Zoo; the original board border is part of the background"
   },
   "board.zoo.soft_a": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     80
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+1: zooMapData unfixed choice 1"
   },
   "board.zoo.soft_b": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     81
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+2: zooMapData unfixed choice 2"
   },
   "board.zoo.solid_1": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     73
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 1 is _brick5 frame beginNum-1+1 (Zoo layouts choose their own subset)"
   },
   "board.zoo.solid_2": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     74
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 2 is _brick5 frame beginNum-1+2 (Zoo layouts choose their own subset)"
   },
   "board.zoo.solid_3": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     75
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 3 is _brick5 frame beginNum-1+3 (Zoo layouts choose their own subset)"
   },
   "board.zoo.solid_4": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     76
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 4 is _brick5 frame beginNum-1+4 (Zoo layouts choose their own subset)"
   },
   "board.zoo.solid_5": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     77
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 5 is _brick5 frame beginNum-1+5 (Zoo layouts choose their own subset)"
   },
   "board.zoo.solid_6": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     78
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 6 is _brick5 frame beginNum-1+6 (Zoo layouts choose their own subset)"
   },
   "board.zoo.solid_7": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     79
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 7 is _brick5 frame beginNum-1+7 (Zoo layouts choose their own subset)"
   },
   "board.zoo.center": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     96
+    ]
+   },
+   "note": "_brick5 frame beginNum+23: the set centrepiece"
   },
   "board.zoo.crocodile": {
    "source": {
@@ -332,108 +579,274 @@
    "note": "mouth clip label openComplete is frame 25"
   },
   "board.luxury_stores.floor_even": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_LuxuryStores",
+    "frames": [
+     1
+    ],
+    "crop": [
+     32,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "One 32px board tile cut from BackGround_LuxuryStores; the floor is drawn by the set background, not a brick frame"
   },
   "board.luxury_stores.floor_odd": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_LuxuryStores",
+    "frames": [
+     1
+    ],
+    "crop": [
+     64,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "Second 32px board tile from BackGround_LuxuryStores"
   },
   "board.luxury_stores.wall": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_LuxuryStores",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     32,
+     32
+    ]
+   },
+   "note": "Border tile of BackGround_LuxuryStores; the original board border is part of the background"
   },
   "board.luxury_stores.soft_a": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     101
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+1: luxury_storesMapData unfixed choice 1"
   },
   "board.luxury_stores.soft_b": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     102
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+2: luxury_storesMapData unfixed choice 2"
   },
   "board.luxury_stores.solid_1": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     97
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 1 is _brick5 frame beginNum-1+1 (LuxuryStores layouts choose their own subset)"
   },
   "board.luxury_stores.solid_2": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     98
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 2 is _brick5 frame beginNum-1+2 (LuxuryStores layouts choose their own subset)"
   },
   "board.luxury_stores.solid_3": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     99
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 3 is _brick5 frame beginNum-1+3 (LuxuryStores layouts choose their own subset)"
   },
   "board.luxury_stores.solid_4": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     100
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 4 is _brick5 frame beginNum-1+4 (LuxuryStores layouts choose their own subset)"
   },
   "board.luxury_stores.solid_5": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     101
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 5 is _brick5 frame beginNum-1+5 (LuxuryStores layouts choose their own subset)"
   },
   "board.luxury_stores.solid_6": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     102
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 6 is _brick5 frame beginNum-1+6 (LuxuryStores layouts choose their own subset)"
   },
   "board.luxury_stores.solid_7": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     103
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 7 is _brick5 frame beginNum-1+7 (LuxuryStores layouts choose their own subset)"
   },
   "board.luxury_stores.center": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     120
+    ]
+   },
+   "note": "_brick5 frame beginNum+23: the set centrepiece"
   },
   "board.magic_library.floor_even": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_MagicLibrary",
+    "frames": [
+     1
+    ],
+    "crop": [
+     32,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "One 32px board tile cut from BackGround_MagicLibrary; the floor is drawn by the set background, not a brick frame"
   },
   "board.magic_library.floor_odd": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_MagicLibrary",
+    "frames": [
+     1
+    ],
+    "crop": [
+     64,
+     32,
+     32,
+     32
+    ]
+   },
+   "note": "Second 32px board tile from BackGround_MagicLibrary"
   },
   "board.magic_library.wall": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "BackGround_MagicLibrary",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     32,
+     32
+    ]
+   },
+   "note": "Border tile of BackGround_MagicLibrary; the original board border is part of the background"
   },
   "board.magic_library.soft_a": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     126
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+1: magic_libraryMapData unfixed choice 1"
   },
   "board.magic_library.soft_b": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     127
+    ]
+   },
+   "note": "_brick5 frame beginNum+fixedNum-1+2: magic_libraryMapData unfixed choice 2"
   },
   "board.magic_library.solid_1": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     121
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 1 is _brick5 frame beginNum-1+1 (MagicLibrary layouts choose their own subset)"
   },
   "board.magic_library.solid_2": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     122
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 2 is _brick5 frame beginNum-1+2 (MagicLibrary layouts choose their own subset)"
   },
   "board.magic_library.solid_3": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     123
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 3 is _brick5 frame beginNum-1+3 (MagicLibrary layouts choose their own subset)"
   },
   "board.magic_library.solid_4": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     124
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 4 is _brick5 frame beginNum-1+4 (MagicLibrary layouts choose their own subset)"
   },
   "board.magic_library.solid_5": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     125
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 5 is _brick5 frame beginNum-1+5 (MagicLibrary layouts choose their own subset)"
   },
   "board.magic_library.solid_6": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     126
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 6 is _brick5 frame beginNum-1+6 (MagicLibrary layouts choose their own subset)"
   },
   "board.magic_library.solid_7": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     127
+    ]
+   },
+   "note": "Box.gotoAndStop(cell): variant 7 is _brick5 frame beginNum-1+7 (MagicLibrary layouts choose their own subset)"
   },
   "board.magic_library.center": {
-   "source": null,
-   "note": "Set floor, wall and box art lives in unnamed brick clips; per-set frames were not recovered."
+   "source": {
+    "sprite": "_brick5",
+    "frames": [
+     144
+    ]
+   },
+   "note": "_brick5 frame beginNum+23: the set centrepiece"
   },
   "board.magic_library.spellbook": {
    "source": {

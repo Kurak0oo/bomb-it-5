@@ -429,10 +429,9 @@ directly, so the desktop capture path works again.
 
 Still missing or approximate, for #74:
 
-- 150 of 262 slots have no source and draw natively: every stage set's floors, walls,
-  solid and soft blocks and four centrepieces; all 64 hats and outfits; action poses,
-  protection blink and portal transit; the five touch controls; seven interface panels.
-- Stage-set board tiles are the most visible gap: a Magic Library session mixes original
-  actors and features with native floor, wall and block art.
+- 86 of 262 slots still have no source and draw natively: all 64 hats and outfits,
+  action poses, protection blink and portal transit, the five touch controls and seven
+  interface panels. Stage-set floors, walls, solid and soft blocks and centrepieces are
+  now original (see the tile evidence record).
 - The original profile still shows the adapted control hint "Eight directions · equal
   speed" in the HUD, which is wrong under the original profile.

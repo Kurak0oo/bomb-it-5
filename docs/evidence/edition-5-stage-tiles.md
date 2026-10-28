@@ -49,14 +49,39 @@ So the per-set tile art is: 2 floor tones hidden in the background bitmap, one w
 frame, `fixedPropNum` solid/decoration frames, and up to eight soft-block frames in
 four area pairs.
 
-## Open questions for #74
+## Variant lists per set
 
-- The `_brick5` frames exported by FFDec are nested `<use>` graphs that render as
-  near-empty images through plain resvg; the pipeline's own renderer flattens them.
-  Rendering the frames for mapping needs that path, not a quick `resvg` call.
-- `_SKIP_FRAMES` and `unfixedFrameArr` need to be read per set before the soft-block
-  pairs can be named `soft_a`/`soft_b` with confidence.
-- The two floor tones must be cut from the background bitmap; the Cinema slot currently
-  uses a flat `#888` source, which is why floors look native in a session.
-- Hats and outfits (64 slots) live in the robot clips' `hatMc`/`bodyMc` frames, not in
-  separate symbols.
+Each `<Set>MapData.init` declares the choices: `_loc1_` feeds `_unfixedArr` (soft
+blocks), `_loc2_` feeds `_fixedArr` (fixed props).
+
+| Set | fixed choices | soft choices |
+| --- | --- | --- |
+| BirthdayParty | 1, 2, 3 | 1–8 |
+| CandyFactory | 1, 2, 4 | 1–6 |
+| Cinema | 1, 3 | 1–4 |
+| Zoo | 1, 5 | 1–4 |
+| LuxuryStores | 1, 3 | 1–6 |
+| MagicLibrary | 1, 2, 4 | 1, 3 |
+
+`MapMaster` reads those as `frame = beginNum - 1 + fixedChoice` and
+`frame = beginNum + fixedPropNum - 1 + softChoice`. The recorded layouts store their
+own variant numbers, so the pack maps `solid_N` to the consecutive frame
+`beginNum - 1 + N` (what `Box.gotoAndStop` would draw) and the two soft slots to the
+set's first two soft choices.
+
+## Floors and walls
+
+The floor and the board border are the 576×544 `BackGround_<Set>` image, tiled at 32px.
+The pack cuts 32×32 tiles from it: `floor_even` at (32,32), `floor_odd` at (64,32),
+`wall` at (0,0). Cinema's background is uniform, which is why its floor slot previously
+used a flat `#888` stand-in.
+
+The pipeline's config gained a `source.crop` region for this: it renders one declared
+box of a source asset instead of the asset's content bounds.
+
+## Still open for #74
+
+- 64 hat/outfit slots: the art is drawn inside the robot clips (`hatMc`/`bodyMc`), not
+  in separate symbols.
+- Character action poses, protection blink, portal transit, the five touch controls and
+  seven interface panels.
