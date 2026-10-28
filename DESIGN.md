@@ -134,6 +134,27 @@ records the trade-off.
     localization keys on original screens (with the original screen art), the exact
     `HitMove` lane assistance and geometric bomb-overlap bypass, and original timing
     quirks such as pending recovery while paused.
+- **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:
+  - **Phone game (Q1):** the replica is a landscape phone game; the fixed touch stick
+    and bomb button stay, with keyboard for desktop development. The stick requests
+    one cardinal direction.
+  - **Screen (Q2):** the original layout scales smoothly to mainstream phones in
+    landscape, whatever their size.
+  - **Original features (Q3):** single player only (no two players on one phone, so
+    no zero-enemy option). Sound, music and quality switches follow the original.
+    MORE GAMES is removed. Avatar upload and achievements appear as inert buttons;
+    analytics are not included.
+  - **Text (Q4):** screens show what the original showed, exposed keys included.
+  - **Branding (Q5):** the original title, logo and publisher screens appear from the
+    original pack only; the repository never shows the original name to players.
+  - **Private build (Q6):** the replica is never exported to a store or Douyin. The
+    Douyin release comes from the art branches.
+  - **Timing (Q7):** copy the original frame-driven engine, the Date-based round clock
+    and pause, while presenting smoothly at the phone's 60 or 120 fps.
+  - **Verification (Q9):** each mode, stage set and difficulty is compared against
+    reference-player recordings with differences recorded, then the user plays and
+    signs off.
+  - **Item slots (Q10):** an item edition 5 cannot reach stays out, recorded as such.
 - **Scope (R3):** the replica includes original audio and closes the recorded limits
   of the complete game: runtime observation of pushes, belts, crocodile bites, horse
   and dragon rides and Pac-Man ghost catching; call-level AI traces in the new modes;

@@ -8,6 +8,21 @@ Language for the edition 5 game and the new game's design.
 The retail original game whose SWF is the rules authority for this project.
 _Avoid_: Bomb It 1, the cheat build, a portal description
 
+**Original replica**:
+The Godot build that reproduces edition 5 exactly, delivered as a phone game.
+_Avoid_: reference, clone
+
+**Reference player**:
+The instrumented player that runs the actual edition 5 SWF for research and comparison.
+_Avoid_: replica, emulator build
+
+**Fidelity profile**:
+The choice between following edition 5 exactly (original) and the accepted new-game adaptations (adapted).
+
+**Original pack**:
+The art and audio taken from the user's own SWF, kept on their machine and never committed.
+_Avoid_: assets, candidate art
+
 **Actor**:
 A participant in the round, controlled by a human or AI.
 
