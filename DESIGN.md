@@ -165,11 +165,23 @@ records the trade-off.
   - **Page on phones (L2, 2026-10-29):** the 1280×720 page keeps 16:9 and centres; any
     extra width or height shows the scenery extended, and everything important stays
     inside the page.
-  - **Wide screens (Q11, revised 2026-10-29):** the replica keeps the 1280×720 page
-    that #76's screen hook measures in. How the original 700×510 layout, the controls
-    and the margins sit on that page is being decided in the layout interview
-    (development frontier); the earlier "stage at full height, controls in the
-    margins" answer is on hold until then.
+  - **Gameplay layout (L1, M1–M6, 2026-10-29):** mobile-first, replacing the original
+    Flash layout; see the [phone mockup](docs/design/replica-layout-phone.png) and
+    [zones](docs/design/replica-layout-zones.png). On the 1280×720 page:
+    - The whole board fits the page height (48 px cells), cropped at its edges as
+      the original crops it, with no text on the map. No follow camera.
+    - Stage-set scenery fills both sides so the screen reads as one place, in the
+      immersive style of Hearthstone's board surrounds. It starts from the set's
+      original background extended, polished to match the original art's style.
+    - The stick (eight-way) sits bottom-left and the bomb/item button bottom-right,
+      both on the scenery, never over playable cells.
+    - Top-left: one compact pill with your portrait, score, lives and bomb, power and
+      speed counts. Top-centre: time with a small level badge. Top-right: rival
+      portrait badges with score and a heart count, then a themed pause icon.
+    - Kill and Green Zone show kills or flags out of 10 in those score slots.
+    - Outcomes use the original end animations over the centre of the map; no extra
+      banners. Titles, captions and explanations do not appear in play.
+    - The original 700×510 gameplay layout and its left stats column are not used.
   - **Phone build (Q12):** iOS first, installed privately on the user's devices;
     Android follows.
   - **Smooth presentation (Q13):** the logic stays at 35 original steps per second;

@@ -451,3 +451,10 @@ mobile-first direction instead of the original Flash layout: the map fills most 
 the screen with the stick as part of the map area, no titles or explanations on
 screen, no stats column on the left, and a themed pause icon top right. A mockup
 following that direction is under review; L1 stays open until the user accepts it.
+
+The user accepted the mockup and M1–M6 on 2026-10-29 ("all yes"), asking that the
+side scenery, which they likened to Hearthstone's board surrounds, be polished to
+the original art's style. DESIGN.md records the gameplay layout; the mockups are in
+`docs/design/` (they show original-art crops, kept like the verification captures).
+#77 is updated to this layout. The layout frontier is empty.
+
