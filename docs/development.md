@@ -73,7 +73,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published; #57–#70 implemented and closed on 2026-10-22 ([verification](verification/complete-game-2026-10-21/README.md)) | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
-| Original replica build | R1–R3 and Q1–Q21 accepted on 2026-10-28; spec #71 and tickets #72–#88 published; #72 baseline confirmed on 2026-10-28 | DESIGN.md and [ADR 0008](adr/0008-original-replica-build.md) own the rules. The `original` profile is the branch default and all 20 suites pass under it (677 checks, Godot 4.5 stable, macOS universal build); adaptations still run with the profile switched off inside their own checks. The original asset pack is built locally from the user's SWF; remaining ports are listed in DESIGN.md |
+| Original replica build | R1–R3 and Q1–Q21 accepted on 2026-10-28; spec #71 and tickets #72–#88 published; #72 baseline and #73 pack confirmed on 2026-10-28 | DESIGN.md and [ADR 0008](adr/0008-original-replica-build.md) own the rules. The `original` profile is the branch default and all 20 suites pass under it (677 checks, Godot 4.5 stable, macOS universal build); adaptations still run with the profile switched off inside their own checks. The original asset pack is built locally from the user's SWF (112 slot sheets from the recorded hash); slots with no source yet are listed under #74. Remaining ports are listed in DESIGN.md |
 
 The Q1–Q13 command/bomb decisions are implemented. Subsequent decisions through Q28 settle the preview/input/collision scope, including replacement Q17 (eight directions), replacement Q22 (late phone/iOS testing), and Q26's complete runnable Godot 4.5 delivery target. Practice is an intermediate integration milestone. Corridor assistance and the reconstructed CinemaStage1 board with working portals are accepted; exact acceleration tuning is implementation work grounded in the recovered source, not an approved new profile. Main Godot development uses desktop and automated verification and does not wait for a phone prototype. AI, damage, round clock, endings, score/lives, HUD and complete playable flow are now integrated and desktop-verified. Glove-slot identity and three unidentified item slots remain separate later branches. Store name and release language can remain deferred. Runtime facts still need investigation where they affect a proposed choice.
 
@@ -409,5 +409,30 @@ from the per-asset `before.png` sheets using `tools/art_pipeline/config.json` so
 Both keep only original rendering, never the modified `candidate.png`. A script loading
 the pack through `scripts/art/skin.gd` finds every sampled slot, and a rebuilt-slot spot
 check (violet/slate robots, Zoo crocodile, Magic Library spellbook, horse, Green Zone
-flag, main menu) renders the original art. #73 and #74 stay open: regenerating the pack
-from the SWF and recovering the art missing from these exports is still unverified work.
+flag, main menu) renders the original art. That path is superseded by the SWF build below.
+
+### 2026-10-28 original art pack from the SWF (#73)
+
+With the publisher SWF supplied at `~/Downloads/agame-bomb-it-5-zh-fix.swf`
+(sha256 `718c04c7…0408a2`, the recorded authority), `original_pack.py` ran end to end:
+FFDec 26.3.0 extracted the symbols, the manifest resolved every configured source
+(`unresolved_sources: []`, 5056 assets kept), and 112 slot sheets were written in 108 s
+with 0 failures to `original/art/slots/` plus `original/active.json`. Nothing under
+`original/` is tracked (`.gitignore`); the tracked `manifest.csv` was left at its
+committed bytes because a local rerun only rewrites content hashes.
+
+A session renders the pack: [match capture](../.scratch/game-captures/match.png) shows the
+original robots and portraits, Magic Library spellbook, pickups, bombs and HUD chrome.
+`tools/capture_game.gd` had rotted against the #59 menu refactor (`main.tscn` now returns
+`app.gd`, whose `start_session()` takes no seed) and is fixed to drive the round host
+directly, so the desktop capture path works again.
+
+Still missing or approximate, for #74:
+
+- 150 of 262 slots have no source and draw natively: every stage set's floors, walls,
+  solid and soft blocks and four centrepieces; all 64 hats and outfits; action poses,
+  protection blink and portal transit; the five touch controls; seven interface panels.
+- Stage-set board tiles are the most visible gap: a Magic Library session mixes original
+  actors and features with native floor, wall and block art.
+- The original profile still shows the adapted control hint "Eight directions · equal
+  speed" in the HUD, which is wrong under the original profile.

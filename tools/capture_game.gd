@@ -7,7 +7,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var game = load("res://scenes/main.tscn").instantiate()
+	# The round host itself: the main scene now wraps it in a menu flow (app.gd), which takes no seed.
+	var game = load("res://scripts/game.gd").new()
 	root.add_child(game)
 	await process_frame
 	game.set_process(false)
