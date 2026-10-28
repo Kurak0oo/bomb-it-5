@@ -444,3 +444,10 @@ user kept the original-pack verification captures as evidence, chose to keep the
 continues. They also said "eight directions are fine", which conflicts with the
 accepted cardinal-only stick; it is an open question in this interview.
 
+The user answered L2 (a: centred 16:9 page) and E (c: eight directions on the
+stick, cardinal keyboard), recorded in DESIGN.md; the code still collapses stick
+diagonals under the `original` profile and must follow E. For L1 the user set a
+mobile-first direction instead of the original Flash layout: the map fills most of
+the screen with the stick as part of the map area, no titles or explanations on
+screen, no stats column on the left, and a themed pause icon top right. A mockup
+following that direction is under review; L1 stays open until the user accepts it.

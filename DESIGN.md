@@ -157,6 +157,14 @@ records the trade-off.
   - **Verification (Q9):** each mode, stage set and difficulty is compared against
     reference-player recordings with differences recorded, then the user plays and
     signs off.
+  - **Stick directions (E, 2026-10-29):** the touch stick moves in eight directions,
+    the one deliberate exception to "every rule follows the original", chosen for phone
+    feel. Keyboard keeps the original single cardinal direction. Diagonal movement on
+    the stick uses the accepted eight-direction rules (equal speed, full footprint,
+    sliding, corner safety); the exact `HitMove` port (#82) applies to cardinal moves.
+  - **Page on phones (L2, 2026-10-29):** the 1280×720 page keeps 16:9 and centres; any
+    extra width or height shows the scenery extended, and everything important stays
+    inside the page.
   - **Wide screens (Q11, revised 2026-10-29):** the replica keeps the 1280×720 page
     that #76's screen hook measures in. How the original 700×510 layout, the controls
     and the margins sit on that page is being decided in the layout interview
