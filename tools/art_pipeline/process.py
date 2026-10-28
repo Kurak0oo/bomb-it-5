@@ -101,6 +101,16 @@ def sheet(frames, cell, rows, columns):
 
 # ---------------------------------------------------------------- frames
 
+_HIDDEN_USE = re.compile(r'<use\b[^>]*\bid="([^"]*)"[^>]*/>')
+
+
+def hide_elements(svg, ids):
+    """Drop named instances the captured frame shows in a state the game never opens with."""
+    if not ids:
+        return svg
+    return _HIDDEN_USE.sub(lambda m: '' if m.group(1) in ids else m.group(0), svg)
+
+
 class Frame:
     """One source frame: an SVG file, or a bitmap with its 4x upscale."""
 
@@ -115,7 +125,7 @@ class Frame:
     @property
     def text(self):
         if self._text is None:
-            self._text = open(self.path, encoding='utf-8').read()
+            self._text = hide_elements(open(self.path, encoding='utf-8').read(), self.hide)
         return self._text
 
     @property
@@ -239,6 +249,8 @@ def run(job, config, mapping, upscaled, resume):
             return previous, True
     grid = [[Frame(ref['asset'], ref['frame'], upscaled) for ref in row] for row in job['rows']]
     unique = list({(f.asset['key'], f.number): f for row in grid for f in row}.values())
+    for frame in unique:
+        frame.hide = job.get('hide') or []
     found = {(f.asset['key'], f.number): f.box() for f in unique}
     boxes = [b for b in found.values() if b]
     if not boxes:

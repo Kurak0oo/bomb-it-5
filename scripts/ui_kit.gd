@@ -34,14 +34,20 @@ static func button(parent: Node, text: String, rect: Rect2, action: Callable, sk
 
 
 ## A row of mutually exclusive choices; `options` holds [label, value, enabled] entries.
-static func choices(parent: Node, at: Vector2, options: Array, selected: Variant, on_select: Callable, width := 116.0) -> Array[Button]:
+## `names` and `place` let a page put each choice on its painted hotspot (#76).
+static func choices(parent: Node, at: Vector2, options: Array, selected: Variant, on_select: Callable, width := 116.0,
+		names: Array = [], place := Callable()) -> Array[Button]:
 	var group := ButtonGroup.new()
 	var result: Array[Button] = []
 	for index in options.size():
 		var option: Array = options[index]
 		var value: Variant = option[1]
-		var widget := button(parent, option[0], Rect2(at + Vector2(index * (width + 10), 0), Vector2(width, 44)),
-			func(): on_select.call(value), null, 19)
+		var rect := Rect2(at + Vector2(index * (width + 10), 0), Vector2(width, 44))
+		if place.is_valid() and index < names.size():
+			var placed: Variant = place.call(StringName(names[index]), rect)
+			if placed is Rect2: rect = placed
+		var widget := button(parent, option[0], rect, func(): on_select.call(value), null, 19)
+		if index < names.size(): widget.name = names[index]
 		widget.toggle_mode = true
 		widget.button_group = group
 		widget.disabled = not option[2]
@@ -57,8 +63,60 @@ static func choices(parent: Node, at: Vector2, options: Array, selected: Variant
 	return result
 
 
+## A transparent widget whose pixels the screen art already paints: real text, rect, hit
+## test and focus, no visible face. Pressed (a toggle's selected state) keeps a tint and
+## focus keeps a ring, so selection and keyboard focus stay visible over the art (#76).
+static func ghost(control: Control) -> void:
+	for state_name in ["normal", "hover", "disabled"]:
+		var clear := StyleBoxFlat.new()
+		clear.bg_color = Color(0, 0, 0, 0)
+		clear.draw_center = false
+		control.add_theme_stylebox_override(state_name, clear)
+	var chosen := StyleBoxFlat.new()
+	chosen.bg_color = Color(1.0, 0.85, 0.54, 0.28)
+	chosen.border_color = ACCENT
+	chosen.set_border_width_all(2)
+	chosen.set_corner_radius_all(8)
+	control.add_theme_stylebox_override("pressed", chosen)
+	var focus := StyleBoxFlat.new()
+	focus.bg_color = Color(0, 0, 0, 0)
+	focus.border_color = ACCENT
+	focus.set_border_width_all(3)
+	focus.set_corner_radius_all(8)
+	focus.draw_center = false
+	control.add_theme_stylebox_override("focus", focus)
+	for colour in ["font_color", "font_pressed_color", "font_hover_color", "font_disabled_color",
+		"font_hover_pressed_color", "font_focus_color"]:
+		control.add_theme_color_override(colour, Color(0, 0, 0, 0))
+
+
+## A ghost whose popup arrow the art already paints.
+static func ghost_option(widget: OptionButton) -> void:
+	ghost(widget)
+	var blank := ImageTexture.create_from_image(Image.create(1, 1, false, Image.FORMAT_RGBA8))
+	widget.add_theme_icon_override("arrow", blank)
+
+
+## A label whose pixels the art paints; its text stays for checks and accessibility.
+static func ghost_label(widget: Label) -> void:
+	for colour in ["font_color", "font_shadow_color", "font_outline_color"]:
+		widget.add_theme_color_override(colour, Color(0, 0, 0, 0))
+
+
+## An opaque rectangle that hides art a live widget replaces (`ScreenLayout.plate`).
+static func plate(parent: Node, rect: Rect2, colour: Color) -> ColorRect:
+	var widget := ColorRect.new()
+	widget.position = rect.position
+	widget.size = rect.size
+	widget.color = colour
+	widget.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	widget.z_index = -1
+	parent.add_child(widget)
+	return widget
+
+
 static func label(parent: Node, text: String, at: Vector2, font_px := 20, color := FONT_COLOR, width := -1.0,
-		align := HORIZONTAL_ALIGNMENT_LEFT) -> Label:
+		align := HORIZONTAL_ALIGNMENT_LEFT, carrier := false) -> Label:
 	var widget := Label.new()
 	widget.add_theme_font_size_override("font_size", font_px)
 	widget.add_theme_color_override("font_color", color)
@@ -70,6 +128,8 @@ static func label(parent: Node, text: String, at: Vector2, font_px := 20, color 
 		widget.size.x = width
 	widget.text = text
 	widget.position = at
+	# A carrier paints its own text on a plate, so gating must never ghost it.
+	if carrier: widget.set_meta("carrier", true)
 	parent.add_child(widget)
 	return widget
 

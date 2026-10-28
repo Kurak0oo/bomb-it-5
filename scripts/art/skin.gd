@@ -15,6 +15,8 @@ var _records: Dictionary = {}
 var _pack: Dictionary = {}
 var _history: Array[Dictionary] = []
 var _textures: Dictionary = {}
+## Visible-pixel boxes per plate region, keyed by "path|region" (see `screen_frame`).
+var _boxes: Dictionary = {}
 
 
 func _init(saved: bool = true) -> void:
@@ -134,6 +136,84 @@ func draw(canvas: CanvasItem, id: String, rect: Rect2, tick: float = 0,
 	canvas.draw_texture_rect_region(image, Rect2(rect.get_center() - size / 2 + offset, size),
 		Rect2(Vector2(frame, row) * pitch, pitch), Color(record.get("tint", "ffffffff")) * modulation)
 	return true
+
+
+## A screen sheet, ready to draw: the record's first frame, or `crop` in sheet pixels.
+## Crops exist only where the captured sheet needs one; see `scripts/art/screen_layout.gd`.
+func screen_plate(id: String, crop := Rect2()) -> Texture2D:
+	var image := texture(id)
+	if image == null: return null
+	var record := _shown(id)
+	var region := crop if crop.size.x > 0 and crop.size.y > 0 else Rect2(Vector2.ZERO, _pitch(image, record))
+	if region.size.x <= 0 or region.size.y <= 0: return null
+	var plate := AtlasTexture.new()
+	plate.atlas = image
+	plate.region = region
+	return plate
+
+
+## Whether `id` has a usable screen sheet: a resolved record whose image loads.
+func has_screen(id: String) -> bool:
+	return screen_plate(id) != null
+
+
+## The page rectangle the whole plate draws into: its visible pixels fitted to the page
+## height and centred, never cropped. Transparent plate margins show `screen_fill`.
+func screen_frame(id: String, crop := Rect2()) -> Rect2:
+	var plate := screen_plate(id, crop)
+	if plate == null: return Rect2()
+	var box := _alpha_box(id, plate.region)
+	if box.size.y <= 0: return Rect2()
+	var scale := 720.0 / box.size.y
+	return Rect2(Vector2(640, 360) - (box.position + box.size / 2) * scale, plate.region.size * scale)
+
+
+## Most common opaque pixel on the visible plate's edge: the colour behind its margins.
+func screen_fill(id: String, crop := Rect2()) -> Color:
+	var plate := screen_plate(id, crop)
+	if plate == null: return Color("102c3b")
+	var box := _alpha_box(id, plate.region)
+	var image: Image = plate.atlas.get_image()
+	var counts := {}
+	for colour in _edge_pixels(image, Rect2(box.position + plate.region.position, box.size)):
+		var key := colour.to_html(false)
+		counts[key] = counts.get(key, 0) + 1
+	if counts.is_empty(): return Color("102c3b")
+	var best := ""
+	for key in counts:
+		if best == "" or counts[key] > counts[best]: best = key
+	return Color(best)
+
+
+func _pitch(image: Texture2D, record: Dictionary) -> Vector2:
+	return Vector2(image.get_size()) / Vector2(int(record.get("columns", 1)), int(record.get("rows", 1)))
+
+
+## The region's visible pixels, cached by path and region (Alpha boxes never change).
+func _alpha_box(id: String, region: Rect2) -> Rect2:
+	var path: String = _shown(id).get("path", "")
+	var key := "%s|%s" % [path, region]
+	if not _boxes.has(key):
+		var image: Image = texture(id).get_image() if texture(id) != null else null
+		_boxes[key] = image.get_region(Rect2i(region)).get_used_rect() if image != null else Rect2i()
+	return Rect2(_boxes[key])
+
+
+func _edge_pixels(image: Image, box: Rect2) -> Array[Color]:
+	var pixels: Array[Color] = []
+	var x0 := int(box.position.x)
+	var y0 := int(box.position.y)
+	var x1 := x0 + int(box.size.x) - 1
+	var y1 := y0 + int(box.size.y) - 1
+	for x in range(x0, x1 + 1):
+		for y in [y0, y1]:
+			var colour := image.get_pixel(x, y)
+			if colour.a > 0.5: pixels.append(colour)
+	for y in range(y0, y1 + 1):
+		for x in [x0, x1]:
+			var colour := image.get_pixel(x, y)
+			if colour.a > 0.5: pixels.append(colour)
+	return pixels
 
 
 ## A chosen replacement, else the original pack's art for the slot.

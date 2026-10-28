@@ -12,6 +12,7 @@ const VisualSkin = preload("res://scripts/art/skin.gd")
 const GameView = preload("res://scripts/game_view.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const ArtCatalog = preload("res://scripts/art/catalog.gd")
+const ScreenLayout = preload("res://scripts/art/screen_layout.gd")
 const Looks = preload("res://scripts/looks.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
@@ -49,6 +50,11 @@ var _rebinding: StringName = &""
 var _last_snapshot: Dictionary = {}
 var _new_looks: Array[int] = []
 var _message: Label
+## Art layout control (#76): -1 native, 0 follow the pack, 1 art hotspots (checks).
+var screen_layout_override := 0
+var _layout: StringName = &""
+var _art := false
+var _page_fill := Color("214c60")
 
 
 func _ready() -> void:
@@ -73,12 +79,12 @@ func _draw() -> void:
 func show_main_menu() -> void:
 	_end_game()
 	var page := _page(&"menu")
-	UiKit.label(page, "BOMB IT 5", Vector2(0, 120), 76, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
-	UiKit.label(page, "LOCAL ARCADE", Vector2(0, 215), 22, Color("9acbd3"), 1280, HORIZONTAL_ALIGNMENT_CENTER)
-	var start := UiKit.button(page, "START", Rect2(490, 330, 300, 62), show_settings, skin, 26)
-	var help := UiKit.button(page, "HOW TO PLAY", Rect2(490, 410, 300, 62), show_how_to_play, skin, 26)
-	help.name = "HowToPlay"
-	start.name = "Start"
+	_plate(&"dropdown", Color("2b7fbf"))
+	_label(page, &"title", "BOMB IT 5", Rect2(0, 120, 1280, 0), 76, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
+	_label(page, &"local_arcade", "LOCAL ARCADE", Rect2(0, 215, 1280, 0), 22, Color("9acbd3"), HORIZONTAL_ALIGNMENT_CENTER)
+	_plate(&"more_games")
+	var start := _button(page, &"Start", "START", Rect2(490, 330, 300, 62), show_settings, 26)
+	_button(page, &"HowToPlay", "HOW TO PLAY", Rect2(490, 410, 300, 62), show_how_to_play, 26)
 	start.grab_focus.call_deferred()
 
 
@@ -89,42 +95,46 @@ func show_how_to_play(page_name: StringName = &"controls") -> void:
 
 func _show_guide(page_name: StringName) -> void:
 	_rebinding = &""
-	var page := _page(&"how_to_play")
-	UiKit.label(page, "HOW TO PLAY", Vector2(0, 30), 42, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
+	# The power-ups sheet has no source yet; without it the page keeps the native layout.
+	var page := _page(&"power_ups" if page_name == &"power_ups" else &"how_to_play")
+	_label(page, &"title", "HOW TO PLAY", Rect2(0, 30, 1280, 0), 42, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
 	var tabs := UiKit.choices(page, Vector2(410, 95), [["CONTROLS", &"controls", true], ["POWER-UPS", &"power_ups", true]],
-		page_name, func(value): _show_guide(value), 220)
-	tabs[0].name = "ControlsTab"
-	tabs[1].name = "PowerUpsTab"
+		page_name, func(value): _show_guide(value), 220, [&"ControlsTab", &"PowerUpsTab"], _placer)
+	for widget in tabs: _gate(widget, widget.name)
 	if page_name == &"controls": _controls_page(page)
 	else: _power_ups_page(page)
-	var back := UiKit.button(page, "BACK", Rect2(130, 630, 220, 60), _leave_guide, skin, 24)
-	back.name = "Back"
-	back.grab_focus.call_deferred()
+	_button(page, &"Back", "BACK", Rect2(130, 630, 220, 60), _leave_guide, 24).grab_focus.call_deferred()
 
 
 func _controls_page(page: Control) -> void:
-	UiKit.panel(page, Rect2(130, 165, 500, 445), Color("1d4557"), Color("5d96a3"))
-	UiKit.label(page, "KEYBOARD", Vector2(160, 180), 24, Color("ffc79a"))
+	if not _art:
+		UiKit.panel(page, Rect2(130, 165, 500, 445), Color("1d4557"), Color("5d96a3"))
+		UiKit.panel(page, Rect2(660, 165, 470, 285), Color("1d4557"), Color("5d96a3"))
+	_label(page, &"keyboard_label", "KEYBOARD", Rect2(160, 180, 0, 0), 24, Color("ffc79a"))
 	var titles := {&"up": "UP", &"left": "LEFT", &"down": "DOWN", &"right": "RIGHT", &"bomb": "BOMB / ITEM"}
 	for index in SaveStore.ACTIONS.size():
 		var action: StringName = SaveStore.ACTIONS[index]
-		UiKit.label(page, titles[action], Vector2(160, 233 + index * 56), 21)
-		var key := UiKit.button(page, SaveStore.key_name(store.keys[action]), Rect2(400, 225 + index * 56, 200, 46),
-			func(): _begin_rebind(action), null, 20)
-		key.name = "Key_" + action
-	UiKit.label(page, "PAUSE", Vector2(160, 513), 21)
-	UiKit.label(page, "P", Vector2(400, 513), 21, UiKit.ACCENT, 200, HORIZONTAL_ALIGNMENT_CENTER)
-	_message = UiKit.label(page, "Click a control button to change it.", Vector2(160, 560), 18, Color("b4d2d7"), 440)
-	_message.name = "Message"
-	UiKit.button(page, "RESET", Rect2(660, 470, 220, 56), _reset_keys, skin, 22).name = "ResetKeys"
-	UiKit.button(page, "SAVE", Rect2(910, 470, 220, 56), _save_keys, skin, 22).name = "SaveKeys"
-	UiKit.panel(page, Rect2(660, 165, 470, 285), Color("1d4557"), Color("5d96a3"))
-	UiKit.label(page, "TOUCH", Vector2(690, 180), 24, Color("ffc79a"))
-	UiKit.label(page, "Drag the stick on the left to move in eight directions. Tap the button on the right to place a bomb or use your item.",
-		Vector2(690, 225), 19, UiKit.FONT_COLOR, 410)
+		_plate(&"keys_%d" % index)
+		_label(page, &"action_" + action, titles[action], Rect2(160, 233 + index * 56, 0, 0), 21)
+		_button(page, StringName("Key_" + str(action)), SaveStore.key_name(store.keys[action]), Rect2(400, 225 + index * 56, 200, 46),
+			func(): _begin_rebind(action), 20)
+	_plate(&"keys_extra_a")
+	_plate(&"keys_extra_b")
+	_plate(&"pause_label")
+	_plate(&"pause_value")
+	_label(page, &"pause_label", "PAUSE", Rect2(160, 513, 0, 0), 21, UiKit.FONT_COLOR, HORIZONTAL_ALIGNMENT_LEFT, true)
+	_label(page, &"pause_value", "P", Rect2(400, 513, 200, 0), 21, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER, true)
+	_plate(&"message")
+	_message = _label(page, &"Message", "Click a control button to change it.", Rect2(160, 560, 440, 0), 18,
+		Color("b4d2d7"), HORIZONTAL_ALIGNMENT_LEFT, true)
+	_button(page, &"reset_keys", "RESET", Rect2(660, 470, 220, 56), _reset_keys, 22)
+	_button(page, &"SaveKeys", "SAVE", Rect2(910, 470, 220, 56), _save_keys, 22)
+	_label(page, &"touch_label", "TOUCH", Rect2(690, 180, 0, 0), 24, Color("ffc79a"))
+	_label(page, &"touch_text", "Drag the stick on the left to move in eight directions. Tap the button on the right to place a bomb or use your item.",
+		Rect2(690, 225, 410, 0), 19)
 	var goals := ""
 	for mode in Modes.available(): goals += "%s: %s\n" % [MODE_TITLES[mode], Modes.GOALS[mode]]
-	UiKit.label(page, goals.strip_edges(), Vector2(690, 345), 18, Color("b4d2d7"), 410)
+	_label(page, &"goals_label", goals.strip_edges(), Rect2(690, 345, 410, 0), 18, Color("b4d2d7"))
 
 
 func _power_ups_page(page: Control) -> void:
@@ -183,36 +193,47 @@ func _leave_guide() -> void:
 
 func show_settings() -> void:
 	var page := _page(&"settings")
-	UiKit.label(page, "GAME SETTINGS", Vector2(0, 40), 42, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
+	_label(page, &"Title", "GAME SETTINGS", Rect2(0, 40, 1280, 0), 42, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
+	_plate(&"players_row")
 	var modes := Modes.available()
 	for index in MODE_ORDER.size():
 		var mode: StringName = MODE_ORDER[index]
-		var card := UiKit.button(page, MODE_TITLES[mode], Rect2(130 + index * 260, 110, 240, 120),
-			func(): _set_mode(mode), skin, 22)
-		card.name = "Mode_" + mode
+		var card := _button(page, StringName("Mode_" + mode), MODE_TITLES[mode], Rect2(130 + index * 260, 110, 240, 120),
+			func(): _set_mode(mode), 22)
 		card.toggle_mode = true
 		card.button_pressed = session.mode == mode
 		card.disabled = mode not in modes
-		var chosen := StyleBoxFlat.new()
-		chosen.bg_color = Color("c8743f")
-		chosen.border_color = UiKit.ACCENT
-		chosen.set_border_width_all(3)
-		chosen.set_corner_radius_all(12)
-		card.add_theme_stylebox_override("pressed", chosen)
+		if not (_art and ScreenLayout.is_baked(_layout, card.name)):
+			var chosen := StyleBoxFlat.new()
+			chosen.bg_color = Color("c8743f")
+			chosen.border_color = UiKit.ACCENT
+			chosen.set_border_width_all(3)
+			chosen.set_corner_radius_all(12)
+			card.add_theme_stylebox_override("pressed", chosen)
 		card.tooltip_text = Modes.GOALS.get(mode, "Not available yet")
-	UiKit.label(page, Modes.GOALS.get(session.mode, ""), Vector2(0, 245), 19, Color("b4d2d7"), 1280, HORIZONTAL_ALIGNMENT_CENTER)
-	var rows := [["ENEMIES", 300], ["LEVELS", 370], ["ARENA", 440], ["DIFFICULTY", 510]]
+	_plate(&"goals")
+	_label(page, &"Goals", Modes.GOALS.get(session.mode, ""), Rect2(0, 245, 1280, 0), 19, Color("b4d2d7"),
+		HORIZONTAL_ALIGNMENT_CENTER, true)
+	var rows := [["ENEMIES", 300, &"LabelEnemies"], ["LEVELS", 370, &"LabelLevels"], ["ARENA", 440, &"LabelArena"],
+		["DIFFICULTY", 510, &"LabelDifficulty"]]
 	for row in rows:
-		UiKit.label(page, row[0], Vector2(180, row[1] + 8), 22, Color("ffc79a"))
-	UiKit.choices(page, Vector2(400, 300), [["3", 3, true], ["2", 2, true], ["1", 1, true]], session.enemies,
-		func(value): session.enemies = value)
+		_label(page, row[2], row[0], Rect2(180, row[1] + 8, 0, 0), 22, Color("ffc79a"))
+	var enemies := UiKit.choices(page, Vector2(400, 300), [["3", 3, true], ["2", 2, true], ["1", 1, true]], session.enemies,
+		func(value): session.enemies = value, 116, [&"Enemies3", &"Enemies2", &"Enemies1"], _placer)
+	for widget in enemies: _gate(widget, widget.name)
 	var level_options: Array = []
-	for count in Session.LEVEL_CHOICES: level_options.append([str(count), Fidelity.levels_for_button(count), true])
-	UiKit.choices(page, Vector2(400, 370), level_options, session.levels, func(value): session.levels = value)
+	var level_names: Array = []
+	for count in Session.LEVEL_CHOICES:
+		level_options.append([str(count), Fidelity.levels_for_button(count), true])
+		level_names.append(&"Levels%d" % count)
+	var levels := UiKit.choices(page, Vector2(400, 370), level_options, session.levels, func(value): session.levels = value,
+		116, level_names, _placer)
+	for widget in levels: _gate(widget, widget.name)
 	var arena := OptionButton.new()
 	arena.name = "Arena"
-	arena.position = Vector2(400, 440)
-	arena.size = Vector2(500, 44)
+	var arena_rect := _rect(&"Arena", Rect2(400, 440, 500, 44))
+	arena.position = arena_rect.position
+	arena.size = arena_rect.size
 	arena.add_theme_font_size_override("font_size", 19)
 	arena.add_item("RANDOM")
 	arena.set_item_metadata(0, &"random")
@@ -223,16 +244,16 @@ func show_settings() -> void:
 		if arena.get_item_metadata(index) == session.stage: arena.select(index)
 	arena.item_selected.connect(func(index: int): session.stage = arena.get_item_metadata(index))
 	page.add_child(arena)
+	_gate(arena, &"Arena")
 	var difficulty_options: Array = []
 	for difficulty in DIFFICULTIES:
 		difficulty_options.append([str(difficulty).to_upper(), difficulty, difficulty in playable_difficulties])
 	if session.difficulty not in playable_difficulties: session.difficulty = &"normal"
-	UiKit.choices(page, Vector2(400, 510), difficulty_options, session.difficulty,
-		func(value): session.difficulty = value, 160)
-	UiKit.button(page, "BACK", Rect2(130, 610, 220, 60), show_main_menu, skin, 24)
-	var next := UiKit.button(page, "NEXT", Rect2(930, 610, 220, 60), show_character_select, skin, 24)
-	next.name = "Next"
-	next.grab_focus.call_deferred()
+	var difficulties := UiKit.choices(page, Vector2(400, 510), difficulty_options, session.difficulty,
+		func(value): session.difficulty = value, 160, [&"Difficulty_easy", &"Difficulty_normal", &"Difficulty_hard"], _placer)
+	for widget in difficulties: _gate(widget, widget.name)
+	_button(page, &"Back", "BACK", Rect2(130, 610, 220, 60), show_main_menu, 24)
+	_button(page, &"Next", "NEXT", Rect2(930, 610, 220, 60), show_character_select, 24).grab_focus.call_deferred()
 
 
 func _set_mode(mode: StringName) -> void:
@@ -468,22 +489,93 @@ func _page(id: StringName, solid := true) -> Control:
 	_clear_screen()
 	if solid: _end_game()
 	current = id
+	_layout = id
+	# Art layout control: -1 forces the native fallback, 0 uses the pack when it has a sheet.
+	var sheet: bool = skin != null and skin.has_screen("screen." + id)
+	_art = sheet and screen_layout_override >= 0
 	screen = Control.new()
 	screen.name = "Screen_" + id
 	screen.size = Vector2(1280, 720)
 	screen.position = (get_viewport_rect().size - Vector2(1280, 720)) * 0.5
 	add_child(screen)
-	# Optional workbench art behind the page (`screen.<page>`); native drawing otherwise.
-	var art: Texture2D = skin.texture("screen." + id) if skin != null else null
-	if art != null:
-		var backdrop := TextureRect.new()
-		backdrop.name = "ScreenArt"
-		backdrop.texture = art
-		backdrop.size = screen.size
-		backdrop.stretch_mode = TextureRect.STRETCH_SCALE
-		backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		screen.add_child(backdrop)
+	if _art:
+		var crop := ScreenLayout.crop_from_id(String(id))
+		var fill := ColorRect.new()
+		fill.name = "ScreenFill"
+		fill.color = skin.screen_fill("screen." + id, crop)
+		fill.size = screen.size
+		fill.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		screen.add_child(fill)
+		var plate := TextureRect.new()
+		plate.name = "ScreenArt"
+		plate.texture = skin.screen_plate("screen." + id, crop)
+		var frame: Rect2 = ScreenLayout.frame(id)
+		if frame.size.x > 0 and frame.size.y > 0:
+			plate.position = frame.position
+			plate.size = frame.size
+		else:
+			plate.position = skin.screen_frame("screen." + id, crop).position
+			plate.size = skin.screen_frame("screen." + id, crop).size
+		plate.stretch_mode = TextureRect.STRETCH_SCALE
+		plate.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		screen.add_child(plate)
+	else:
+		# Optional workbench art behind the page (`screen.<page>`); native drawing otherwise.
+		var texture: Texture2D = skin.texture("screen." + id) if skin != null else null
+		if texture != null:
+			var backdrop := TextureRect.new()
+			backdrop.name = "ScreenArt"
+			backdrop.texture = texture
+			backdrop.size = screen.size
+			backdrop.stretch_mode = TextureRect.STRETCH_SCALE
+			backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			screen.add_child(backdrop)
 	return screen
+
+
+## Where a widget goes: its painted hotspot on an art page, else the native rectangle.
+func _rect(name: StringName, native_rect: Rect2) -> Rect2:
+	return ScreenLayout.slot(_layout, name, native_rect, _art)
+
+
+## Callable for `UiKit.choices`, so each option can sit on its painted hotspot.
+func _placer(name: StringName, native_rect: Rect2) -> Rect2:
+	return _rect(name, native_rect)
+
+
+## Hide art a live widget replaces, so the widget's own pixels stay readable.
+func _plate(name: StringName, colour := Color("214c60")) -> ColorRect:
+	if not _art: return null
+	var rect: Rect2 = ScreenLayout.plate(_layout, name)
+	if rect.size.x <= 0 or rect.size.y <= 0: return null
+	return UiKit.plate(screen, rect, colour)
+
+
+## A text label on its hotspot; ghosted when the sheet already paints that text.
+func _label(page: Control, name: StringName, text: String, native_rect: Rect2, font_px := 20,
+		colour := UiKit.FONT_COLOR, align := HORIZONTAL_ALIGNMENT_LEFT, carrier := false) -> Label:
+	var rect := _rect(name, native_rect)
+	var width := rect.size.x if rect.size.x > 0 else -1.0
+	var widget := UiKit.label(page, text, rect.position, font_px, colour, width, align, carrier)
+	widget.name = name
+	if _art and not carrier and ScreenLayout.is_baked(_layout, name): UiKit.ghost_label(widget)
+	return widget
+
+
+## A button on its hotspot; ghosted when the sheet already paints that button.
+func _button(page: Control, name: StringName, text: String, native_rect: Rect2, action: Callable,
+		font_px := 22) -> Button:
+	var widget := UiKit.button(page, text, _rect(name, native_rect), action, skin, font_px)
+	widget.name = name
+	_gate(widget, name)
+	return widget
+
+
+## Transparent art-backed control: real text and hit test over painted pixels.
+func _gate(widget: Control, name: StringName) -> void:
+	if not _art or not ScreenLayout.is_baked(_layout, name): return
+	if widget is OptionButton: UiKit.ghost_option(widget)
+	else: UiKit.ghost(widget)
 
 
 func _clear_screen() -> void:

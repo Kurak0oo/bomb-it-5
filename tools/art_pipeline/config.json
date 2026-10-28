@@ -1923,13 +1923,21 @@
   },
   "screen.menu": {
    "source": {
-    "sprite": "UI_MainMenu"
-   }
+    "sprite": "UI_MainMenu",
+    "hide": [
+     "mc"
+    ]
+   },
+   "note": "Hides `mc`, the level-map instance the captured frame left on screen (#76)."
   },
   "screen.settings": {
    "source": {
-    "sprite": "UI_SETTING"
-   }
+    "sprite": "UI_SETTING",
+    "hide": [
+     "showMenu"
+    ]
+   },
+   "note": "Hides `showMenu`, the stage dropdown the captured frame left open (#76)."
   },
   "screen.character": {
    "source": {
