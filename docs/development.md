@@ -73,7 +73,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published; #57–#70 implemented and closed on 2026-10-22 ([verification](verification/complete-game-2026-10-21/README.md)) | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
-| Original replica build | R1–R3 accepted on 2026-10-28; `original` fidelity profile started | DESIGN.md and [ADR 0008](adr/0008-original-replica-build.md) own the rules. Remaining ports are listed in DESIGN.md; the original asset pack is built locally from the user's SWF |
+| Original replica build | R1–R3 and Q1–Q21 accepted on 2026-10-28; spec #71 and tickets #72–#88 published | DESIGN.md and [ADR 0008](adr/0008-original-replica-build.md) own the rules. Remaining ports are listed in DESIGN.md; the original asset pack is built locally from the user's SWF |
 
 The Q1–Q13 command/bomb decisions are implemented. Subsequent decisions through Q28 settle the preview/input/collision scope, including replacement Q17 (eight directions), replacement Q22 (late phone/iOS testing), and Q26's complete runnable Godot 4.5 delivery target. Practice is an intermediate integration milestone. Corridor assistance and the reconstructed CinemaStage1 board with working portals are accepted; exact acceleration tuning is implementation work grounded in the recovered source, not an approved new profile. Main Godot development uses desktop and automated verification and does not wait for a phone prototype. AI, damage, round clock, endings, score/lives, HUD and complete playable flow are now integrated and desktop-verified. Glove-slot identity and three unidentified item slots remain separate later branches. Store name and release language can remain deferred. Runtime facts still need investigation where they affect a proposed choice.
 
@@ -122,8 +122,13 @@ Q1 (phone game, stick present), Q2 (smooth on mainstream landscape phones), Q3
 original engine but present at 60 or 120 fps without hitches). DESIGN.md records
 the result. Q11–Q17 were accepted the same day, with Q12 changed to iOS
 first. Q18–Q21 were accepted the same day, with Q18 choosing a free
-Apple ID. The replica decision frontier is empty pending the user's confirmation of
-the shared understanding.
+Apple ID. The user confirmed the shared understanding and approved the
+17-ticket breakdown. The specification is [issue #71](https://github.com/Kurak0oo/bomb-it-5/issues/71);
+tickets #72–#88 are its sub-issues, with `Blocked by:` lines because the tracker
+tools available could not write native dependencies. Agent tickets carry
+`ready-for-agent`; #73, #87 and #88 run on the user's machine and are unlabelled
+because the repository has no `ready-for-human` label yet. #72 (baseline checks)
+is the only unblocked ticket.
 
 ### 2026-10-21 complete edition 5 game scope
 
