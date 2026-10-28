@@ -73,10 +73,46 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published; #57–#70 implemented and closed on 2026-10-22 ([verification](verification/complete-game-2026-10-21/README.md)) | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
+| Original replica build | Branch `original-replica` opened on 2026-10-28 from the complete game; decisions open | A faithful edition 5 reproduction kept as the in-project reference while original art is made on other branches. Before implementation, settle R1–R3 under [the replica proposal](#open-proposal-original-replica-build-2026-10-28) |
 
 The Q1–Q13 command/bomb decisions are implemented. Subsequent decisions through Q28 settle the preview/input/collision scope, including replacement Q17 (eight directions), replacement Q22 (late phone/iOS testing), and Q26's complete runnable Godot 4.5 delivery target. Practice is an intermediate integration milestone. Corridor assistance and the reconstructed CinemaStage1 board with working portals are accepted; exact acceleration tuning is implementation work grounded in the recovered source, not an approved new profile. Main Godot development uses desktop and automated verification and does not wait for a phone prototype. AI, damage, round clock, endings, score/lives, HUD and complete playable flow are now integrated and desktop-verified. Glove-slot identity and three unidentified item slots remain separate later branches. Store name and release language can remain deferred. Runtime facts still need investigation where they affect a proposed choice.
 
 ## Interview updates
+
+### Open proposal: original replica build (2026-10-28)
+
+The user wants two delivery lines. The original art pieces are made on separate
+branches. The `original-replica` branch delivers a faithful reproduction of edition 5
+as a final product, so the project always has the original game, running in Godot,
+to compare against. It starts from `claude/adoring-gates-9eckgx` (complete game, #56
+and #57–#70), not `main`. Nothing below is accepted yet; DESIGN.md is unchanged.
+
+Constraints found:
+
+- The repository is public. ADR 0006 and the `.gitignore` keep the SWF and everything
+  extracted from it out of git, and #20/#21 require no source assets in the product.
+- The authority SWF is not in this repository or the cloud container. Extraction and
+  visual checks of original assets run only on the user's machine.
+- The current gameplay carries accepted adaptations (eight directions, equal diagonal
+  speed, collision sliding and corner safety, corridor assistance, bomb-overlap
+  departure, 35-tick simulation clock, Arcade loss on timeout, the 5-level default
+  fixing the 5-sets-1 defect, readable labels).
+
+Proposed decisions (recommendation first):
+
+- **R1 Asset delivery.** Commit only a loader and the art pipeline's extraction; the
+  game reads original art and audio from an ignored local pack built from the user's
+  SWF, falling back to the native presentation when absent. Alternative: commit the
+  extracted assets, which publishes the original artwork in a public repository.
+- **R2 Behaviour.** One gameplay codebase with an `original` fidelity profile that turns
+  off each accepted adaptation where the source behaviour is recovered, and an
+  `adapted` profile for the new game. Alternative: change the rules directly on this
+  branch, which forks gameplay from the art branches and makes later merges costly.
+- **R3 Scope of "finish".** The replica includes original audio and closes the
+  recorded limits: runtime observation of pushes, belts, crocodile bites, horse and
+  dragon rides and Pac-Man ghost catching; call-level AI traces in the new modes; belt
+  twip positions instead of floats; and the four unresolved item slots. Unselectable
+  modes (Speed, Water, Collect, Painting) stay out unless the user adds them.
 
 ### 2026-10-21 complete edition 5 game scope
 
