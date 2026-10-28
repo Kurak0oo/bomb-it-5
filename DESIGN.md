@@ -116,7 +116,10 @@ records the trade-off.
   committed. The game loads them at runtime from an ignored local pack the user
   builds from their own SWF (`original/`), and falls back to the native presentation
   when the pack is absent. The production asset boundary above still governs the
-  Douyin build.
+  Douyin build. On 2026-10-29 the user chose to keep verification captures that show
+  original-pack art (for example `docs/verification/original-replica-2026-10-28/`) as
+  evidence, like the existing original screenshots; the pack files themselves are
+  never committed.
 - **Rules (R2):** one gameplay codebase with a fidelity profile
   (`scripts/fidelity.gd`). This branch runs the `original` profile. The `adapted`
   profile keeps the accepted adaptations so the art branches and tests that cover
@@ -154,10 +157,11 @@ records the trade-off.
   - **Verification (Q9):** each mode, stage set and difficulty is compared against
     reference-player recordings with differences recorded, then the user plays and
     signs off.
-  - **Wide screens (Q11):** the 700×510 original stage scales to full height and
-    centres; the stick sits in the left margin and the bomb button in the right, so
-    neither covers the board. On narrow screens they overlap the stage edges,
-    translucent. The original background extends into the margins.
+  - **Wide screens (Q11, revised 2026-10-29):** the replica keeps the 1280×720 page
+    that #76's screen hook measures in. How the original 700×510 layout, the controls
+    and the margins sit on that page is being decided in the layout interview
+    (development frontier); the earlier "stage at full height, controls in the
+    margins" answer is on hold until then.
   - **Phone build (Q12):** iOS first, installed privately on the user's devices;
     Android follows.
   - **Smooth presentation (Q13):** the logic stays at 35 original steps per second;

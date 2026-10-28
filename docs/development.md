@@ -435,3 +435,12 @@ Still missing or approximate, for #74:
   now original (see the tile evidence record).
 - The original profile still shows the adapted control hint "Eight directions · equal
   speed" in the HUD, which is wrong under the original profile.
+
+### Layout interview (2026-10-29)
+
+After comparing the replica capture with the original Magic Library opening, the
+user kept the original-pack verification captures as evidence, chose to keep the
+1280×720 page for the replica, and asked to settle the layout design before #77
+continues. They also said "eight directions are fine", which conflicts with the
+accepted cardinal-only stick; it is an open question in this interview.
+
