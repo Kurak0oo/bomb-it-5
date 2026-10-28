@@ -421,7 +421,7 @@ with 0 failures to `original/art/slots/` plus `original/active.json`. Nothing un
 `original/` is tracked (`.gitignore`); the tracked `manifest.csv` was left at its
 committed bytes because a local rerun only rewrites content hashes.
 
-A session renders the pack: [match capture](../.scratch/game-captures/match.png) shows the
+A session renders the pack: the [match capture](verification/original-replica-2026-10-28/match.png) shows the
 original robots and portraits, Magic Library spellbook, pickups, bombs and HUD chrome.
 `tools/capture_game.gd` had rotted against the #59 menu refactor (`main.tscn` now returns
 `app.gd`, whose `start_session()` takes no seed) and is fixed to drive the round host
