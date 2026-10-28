@@ -10,8 +10,8 @@ multi-level session. All four modes (Arcade, Battle Royale, Pac-Man, Green Zone)
 six stage sets with their map features and rides, and Easy/Normal/Hard are playable
 against one to three AI. Practice is a development launch (`-- --practice`, the
 workbench preview default). Each mode, difficulty and stage-set feature was observed on
-the reference player before porting; see the evidence index. 667 headless checks in 20
-suites and 38 workbench UI checks pass; see the
+the reference player before porting; see the evidence index. 677 headless checks in 20
+suites and 27 workbench UI checks pass; see the
 [implementation verification](verification/complete-game-2026-10-21/README.md) for
 captures, corrections and limits. Finished art #20 and final human desktop acceptance
 #21 remain open.
@@ -73,7 +73,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published; #57–#70 implemented and closed on 2026-10-22 ([verification](verification/complete-game-2026-10-21/README.md)) | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
 | Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
 | Douyin export | Deferred | Consult douyin.md when export work is requested |
-| Original replica build | R1–R3 and Q1–Q21 accepted on 2026-10-28; spec #71 and tickets #72–#88 published | DESIGN.md and [ADR 0008](adr/0008-original-replica-build.md) own the rules. Remaining ports are listed in DESIGN.md; the original asset pack is built locally from the user's SWF |
+| Original replica build | R1–R3 and Q1–Q21 accepted on 2026-10-28; spec #71 and tickets #72–#88 published; #72 baseline confirmed on 2026-10-28 | DESIGN.md and [ADR 0008](adr/0008-original-replica-build.md) own the rules. The `original` profile is the branch default and all 20 suites pass under it (677 checks, Godot 4.5 stable, macOS universal build); adaptations still run with the profile switched off inside their own checks. The original asset pack is built locally from the user's SWF; remaining ports are listed in DESIGN.md |
 
 The Q1–Q13 command/bomb decisions are implemented. Subsequent decisions through Q28 settle the preview/input/collision scope, including replacement Q17 (eight directions), replacement Q22 (late phone/iOS testing), and Q26's complete runnable Godot 4.5 delivery target. Practice is an intermediate integration milestone. Corridor assistance and the reconstructed CinemaStage1 board with working portals are accepted; exact acceleration tuning is implementation work grounded in the recovered source, not an approved new profile. Main Godot development uses desktop and automated verification and does not wait for a phone prototype. AI, damage, round clock, endings, score/lives, HUD and complete playable flow are now integrated and desktop-verified. Glove-slot identity and three unidentified item slots remain separate later branches. Store name and release language can remain deferred. Runtime facts still need investigation where they affect a proposed choice.
 
@@ -390,3 +390,24 @@ The [evidence index](evidence/README.md) links ordinary bombs, both-owner chains
 The [source-to-Godot map](evidence/edition-5-porting-handoff.md) classifies current behavior and orders later faithful porting. It preserves accepted scheduling/batching, eight directions/full footprint, simulation clock/timeout, fresh-input pause, the fixed recorded board and readable labels. No new original rules or artwork were ported during recovery. Final redraw #20, desktop publication acceptance #21, physical phone/iOS testing and the four unresolved slots remain separate. The full unchanged Godot 4.5 runner passes all 244 functional checks; these are not relabeled as SWF parity.
 
 Final independent Standards/Spec review found one material issue on each axis: staged-core provenance and missing laser/portal measurement. Both are fixed and verified; the final [acceptance record](evidence/edition-5-recovery-verification.md) reports zero outstanding material findings. A derived actor-registration projection was corrected separately and rechecked against raw Game.robots. Authority bytes and production gameplay remain unchanged.
+
+### 2026-10-28 original-profile baseline (#72)
+
+Ran the complete suite on Godot 4.5 (`4.5.stable.official.876b29033`, macOS universal
+build) with `tools/run_checks.sh` under the branch default `original` profile:
+20 suites, 677 checks, every success marker reached, no engine or script errors. The
+adaptations still run with the profile switched off inside `game_scene_check`,
+`round_play_check` and `round_regression_check`, so both profiles are exercised. No
+gameplay code needed a fix, so nothing in `scripts/` changed. The art workbench check
+was not run this session: it needs a windowed display and hangs headless.
+
+The local original pack for the replica exists on this machine and is ignored by git
+(`original/`, 112 slot sheets, 7 MB). The SWF was not available here, so the pack was
+assembled from the art pipeline's already exported review output: the 71 exported slot
+sheets kept their unmodified `before.png`, and the 41 slots added by #70 were rebuilt
+from the per-asset `before.png` sheets using `tools/art_pipeline/config.json` sources.
+Both keep only original rendering, never the modified `candidate.png`. A script loading
+the pack through `scripts/art/skin.gd` finds every sampled slot, and a rebuilt-slot spot
+check (violet/slate robots, Zoo crocodile, Magic Library spellbook, horse, Green Zone
+flag, main menu) renders the original art. #73 and #74 stay open: regenerating the pack
+from the SWF and recovering the art missing from these exports is still unverified work.
