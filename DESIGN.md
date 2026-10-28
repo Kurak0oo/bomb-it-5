@@ -154,6 +154,24 @@ records the trade-off.
   - **Verification (Q9):** each mode, stage set and difficulty is compared against
     reference-player recordings with differences recorded, then the user plays and
     signs off.
+  - **Wide screens (Q11):** the 700×510 original stage scales to full height and
+    centres; the stick sits in the left margin and the bomb button in the right, so
+    neither covers the board. On narrow screens they overlap the stage edges,
+    translucent. The original background extends into the margins.
+  - **Phone build (Q12):** iOS first, installed privately on the user's devices;
+    Android follows.
+  - **Smooth presentation (Q13):** the logic stays at 35 original steps per second;
+    drawing runs at the device rate and interpolates positions between steps without
+    changing rules. Sprite animations keep the original frame timing.
+  - **Stalls (Q14):** at most one step per drawn frame, and lost time is dropped, so a
+    stall slows the game as in the original instead of jumping ahead.
+  - **Backgrounding (Q15):** leaving the app always pauses on the original pause
+    screen; play resumes only on RESUME. The original focus behaviour is traced and
+    any difference recorded.
+  - **Quality (Q16):** the original quality switch maps to the same edge-smoothing
+    levels, starting at the original default.
+  - **Controls look (Q17):** the stick and bomb button are drawn in the original
+    interface style; art branches may replace them later.
   - **Item slots (Q10):** an item edition 5 cannot reach stays out, recorded as such.
 - **Scope (R3):** the replica includes original audio and closes the recorded limits
   of the complete game: runtime observation of pushes, belts, crocodile bites, horse

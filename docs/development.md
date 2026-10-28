@@ -120,9 +120,9 @@ On 2026-10-28 the user answered "all yes" to replica interview Q1–Q10, clarify
 Q1 (phone game, stick present), Q2 (smooth on mainstream landscape phones), Q3
 (single player, original sound/music/quality, MORE GAMES removed) and Q7 (copy the
 original engine but present at 60 or 120 fps without hitches). DESIGN.md records
-the result. Open next: wide-screen layout and control placement, the phone build
-target, smooth presentation of a 35-step engine, stall behaviour, backgrounding,
-the quality switch and the stick's appearance.
+the result. Q11–Q17 were accepted the same day, with Q12 changed to iOS
+first. Open next: the Apple signing setup, supported iPhones and iOS versions,
+landscape orientations and the silent switch.
 
 ### 2026-10-21 complete edition 5 game scope
 
