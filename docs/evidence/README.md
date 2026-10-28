@@ -33,6 +33,7 @@ The evidence starts with the hashed publisher build and separates static finding
 - [Birthday Party](edition-5-birthday-party.md): toy hands (observed first open at 105 and drawn delays), reach, throws and pushes.
 - [Candy Factory](edition-5-candy-factory.md): candy machine every 210 ticks (observed) and the 33-cell belt; no sliding platforms in Candy layouts.
 - [Magic Library](edition-5-magic-library.md): spellbook drops at 481 + 518k (observed two ownerless bombs), quadrant targets, no timed pickups.
+- [Stage-set tiles](edition-5-stage-tiles.md): `_brick5` holds every set's tiles; each set starts at its own `beginNum` (1, 25, 49, 73, 97, 121) and `MapMaster` picks wall, fixed-prop and soft-block frames from that run. Floor tones come from the `BackGround_<Set>` bitmap.
 - [Modes, menus, progression and unlocks](edition-5-modes-and-flow.md): static recovery of Kill, Green Zone, Pac-Man, difficulty, settings, level/stage progression, per-mode scoring, unlocks and saved data, with a soft-block probability correction (Arcade 0.6, not 0.8).
 - [Recovery-to-porting handoff](edition-5-porting-handoff.md): source-to-Godot classifications, accepted adaptations and the ordered fidelity implementation boundary.
 - [Recovery acceptance and verification](edition-5-recovery-verification.md): ticket-by-ticket evidence, independent Standards/Spec findings and fixes, integrity checks and the unchanged 244-check Godot baseline.
