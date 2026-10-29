@@ -612,3 +612,13 @@ at the points the source calls `createSound`. `scripts/original_audio.gd` ports
 the classes that are silent in the original are recorded in
 [audio](evidence/edition-5-audio.md).
 
+### 2026-10-29 original screens (#76)
+
+The screen sheets are cropped to the 700×510 stage that `UIManager` clips to, so every page
+draws into one frame. `tools/measure_screen_art.py` measures the named instances from the SVG
+export. `ScreenLayout.PAGES` holds the slots, plates with sampled colours, and the baked and
+live names for the menu, Game Settings, character select, Controls, Power-ups, score, game
+over, game complete and pause pages. Art the replica removes is hidden in the pipeline. The
+power-ups page gained a slot (296 slots). The record is
+[original screens](evidence/edition-5-screens.md).
+

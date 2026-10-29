@@ -41,3 +41,18 @@ Consequences:
   committed.
 - A page whose sheet is not yet measured has no table entry and uses the native
   coordinates even in art mode.
+
+## Amendment (2026-10-29, #76)
+
+Fitting each sheet's visible pixels to the page height was wrong whenever a capture left an
+instance outside the stage, as the main menu's level dropdown did. `UIManager` clips every
+page to its 700×510 stage (`scrollRect`), so the pipeline now crops each screen sheet to
+that stage (`source.crop`). Every page then draws into the same rectangle,
+`ScreenLayout.STAGE_FRAME` (the stage at 720/510, centred), and a stage coordinate maps to
+the page as `145.9 + x · 720/510`.
+
+Widget slots come from the named instances in the SVG export
+(`tools/measure_screen_art.py`), not from pixels. Art the replica removes (MORE GAMES, the
+P2 card, the 2-player and zero-enemy options) is dropped from the sheet before rendering
+(`source.hide`), so no plate is needed for it. Plates remain only under live values. Their
+colours are sampled from the sheet beside the hidden art and are stored in the table.

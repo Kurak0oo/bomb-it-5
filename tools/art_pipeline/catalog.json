@@ -2257,6 +2257,14 @@
   },
   {
     "category": "Screens",
+    "id": "screen.power_ups",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
+    "category": "Screens",
     "id": "screen.score",
     "size": [
       1280,

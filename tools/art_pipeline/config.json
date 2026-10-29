@@ -2678,36 +2678,89 @@
   "screen.menu": {
    "source": {
     "sprite": "UI_MainMenu",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ],
     "hide": [
-     "mc"
+     "moregames"
     ]
    },
-   "note": "Hides `mc`, the level-map instance the captured frame left on screen (#76)."
+   "note": "Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76). Hides MORE GAMES (removed in the replica, Q3)."
   },
   "screen.settings": {
    "source": {
     "sprite": "UI_SETTING",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ],
     "hide": [
-     "showMenu"
+     "showMenu",
+     "playersTwo",
+     "enemiesZero"
     ]
    },
-   "note": "Hides `showMenu`, the stage dropdown the captured frame left open (#76)."
+   "note": "Hides `showMenu`, the stage dropdown the captured frame left open, and the 2-player and zero-enemy options (single player, Q3). Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76)."
   },
   "screen.character": {
    "source": {
-    "sprite": "UI_SELECTCHARACTER"
-   }
+    "sprite": "UI_SELECTCHARACTER",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ],
+    "hide": [
+     "robotStage2",
+     "tagP2"
+    ]
+   },
+   "note": "Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76). Hides the P2 card and tag, as `CharacterSelectUI` does with one player."
   },
   "screen.how_to_play": {
    "source": {
-    "sprite": "UI_CONTROLS"
+    "sprite": "UI_CONTROLS",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ]
    },
-   "note": "UI_POWER_UPS is the second page"
+   "note": "UI_POWER_UPS is the second page. Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76)."
+  },
+  "screen.power_ups": {
+   "source": {
+    "sprite": "UI_POWER_UPS",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ]
+   },
+   "note": "How to Play's second page (`PowerUpsUI`). Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76)."
   },
   "screen.score": {
    "source": {
-    "sprite": "UI_LEVEL_COMPLETED_ONEP"
-   }
+    "sprite": "UI_LEVEL_COMPLETED_ONEP",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ],
+    "hide": [
+     "moregames"
+    ]
+   },
+   "note": "Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76). Hides MORE GAMES (removed in the replica, Q3)."
   },
   "screen.dress_up": {
    "source": {
@@ -2716,13 +2769,33 @@
   },
   "screen.game_over": {
    "source": {
-    "sprite": "UI_GAMEOVERONEP"
-   }
+    "sprite": "UI_GAMEOVERONEP",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ],
+    "hide": [
+     "moregames"
+    ]
+   },
+   "note": "Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76). Hides MORE GAMES (removed in the replica, Q3)."
   },
   "screen.game_win": {
    "source": {
-    "sprite": "UI_CONGRATULATIONSONEP"
-   }
+    "sprite": "UI_CONGRATULATIONSONEP",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ],
+    "hide": [
+     "moregames"
+    ]
+   },
+   "note": "Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76). Hides MORE GAMES (removed in the replica, Q3)."
   },
   "outcome.won": {
    "source": {
@@ -2853,9 +2926,15 @@
   },
   "screen.pause": {
    "source": {
-    "sprite": "UI_pause"
+    "sprite": "UI_pause",
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ]
    },
-   "note": "Pause page (`PauseUI`), opened from the replica pause icon"
+   "note": "Pause page (`PauseUI`), opened from the replica pause icon. Cropped to the 700x510 stage the UI shows (`UIManager` scrollRect), so the sheet is the stage at 720/510 (#76)."
   },
   "scenery.birthday_party": {
    "source": {

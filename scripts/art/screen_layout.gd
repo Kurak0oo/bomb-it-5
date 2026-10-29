@@ -21,17 +21,119 @@ extends RefCounted
 
 const PAGE := Rect2(0, 0, 1280, 720)
 
-## Page tables. `slots` are the painted hotspots; `plates` occlude art a live widget
-## replaces; `baked` names are ghosted; `live` names paint over a plate.
+## Every UI page is the 700x510 stage `UIManager` clips to (`scrollRect`), drawn at 720/510
+## and centred: the sheets are cropped to it (`source.crop`), so a page's `frame` is this.
+const STAGE_FRAME := Rect2(145.9, 0, 988.2, 720)
+
+## Page tables, in page coordinates. `slots` are the painted hotspots (named instances
+## measured by `tools/measure_screen_art.py`, which maps stage x to 145.9 + x * 720 / 510);
+## `plates` occlude art a live widget replaces, with `colors` sampled from the sheet beside
+## it; `baked` names are ghosted; `live` names paint over a plate. Painted labels with no
+## instance name (row captions, titles) are placed on their painted text; ghosts there only
+## carry the text for tests and accessibility.
 const PAGES := {
-	&"menu": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
-	&"settings": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
-	&"character": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
-	&"how_to_play": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
-	&"score": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
-	&"dress_up": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
-	&"game_over": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
-	&"game_win": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "baked": [], "live": []},
+	&"menu": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"title": Rect2(232, 20, 750, 190), &"local_arcade": Rect2(232, 20, 750, 190),
+			&"Start": Rect2(778.5, 242.2, 317.1, 87.9), &"HowToPlay": Rect2(776.8, 345, 319.5, 86.3),
+			&"quality": Rect2(1060.4, 38.8, 55.3, 55.3), &"sound": Rect2(1060.4, 104.9, 55.3, 55.3),
+			&"music": Rect2(1060.4, 171, 55.3, 55.3), &"version": Rect2(1063.6, 7, 70, 20)},
+		"plates": {}, "colors": {},
+		"baked": [&"title", &"local_arcade", &"Start", &"HowToPlay", &"quality", &"sound", &"music"],
+		"live": [&"version"]},
+	&"settings": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"Title": Rect2(448, 50, 392, 72), &"Goals": Rect2(448, 50, 392, 72),
+			&"Mode_arcade": Rect2(228.3, 137.7, 212, 216.9), &"Mode_kill": Rect2(431.4, 140.4, 209.1, 216.5),
+			&"Mode_pac_man": Rect2(621.7, 136.5, 229.9, 220.5), &"Mode_green_zone": Rect2(831, 137.4, 213, 219.5),
+			&"LabelEnemies": Rect2(252, 420, 190, 45), &"LabelLevels": Rect2(252, 472, 190, 45),
+			&"LabelArena": Rect2(252, 526, 190, 45), &"LabelDifficulty": Rect2(252, 580, 190, 45),
+			&"Enemies3": Rect2(462.6, 417.3, 94.8, 47.2), &"Enemies2": Rect2(554.9, 417.4, 94.8, 47.2),
+			&"Enemies1": Rect2(646, 417.3, 94.8, 47.2),
+			&"Levels5": Rect2(462.6, 469.2, 94.8, 47.2), &"Levels10": Rect2(555, 469.2, 94.8, 47.2),
+			&"Levels15": Rect2(646.1, 469.2, 94.8, 47.2), &"Levels20": Rect2(738.6, 469.2, 94.8, 47.2),
+			&"Arena": Rect2(463, 520.5, 375.7, 55.1),
+			&"Difficulty_easy": Rect2(463, 580.2, 180.9, 47.7), &"Difficulty_normal": Rect2(643.7, 580.2, 180.9, 47.7),
+			&"Difficulty_hard": Rect2(825.4, 580.2, 180.9, 47.7),
+			&"Back": Rect2(266.4, 643.5, 237.5, 58), &"Next": Rect2(778.4, 643.5, 237.5, 58)},
+		"plates": {&"Arena": Rect2(468, 529, 308, 39)}, "colors": {&"Arena": Color("fefefe")},
+		"baked": [&"Title", &"Goals", &"Mode_arcade", &"Mode_kill", &"Mode_pac_man", &"Mode_green_zone",
+			&"LabelEnemies", &"LabelLevels", &"LabelArena", &"LabelDifficulty", &"Enemies3", &"Enemies2", &"Enemies1",
+			&"Levels5", &"Levels10", &"Levels15", &"Levels20", &"Difficulty_easy", &"Difficulty_normal",
+			&"Difficulty_hard", &"Back", &"Next"],
+		"live": [&"Arena"]},
+	&"character": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"Title": Rect2(470, 30, 350, 120),
+			&"Robot0": Rect2(236, 153.1, 116.5, 113.6), &"Robot1": Rect2(334.4, 154.6, 116.5, 113.6),
+			&"Robot2": Rect2(433.8, 157.2, 116.5, 113.6), &"Robot3": Rect2(533.8, 156, 116.5, 113.6),
+			&"Robot4": Rect2(633.2, 155.2, 116.5, 113.6), &"Robot5": Rect2(731.9, 156.3, 116.5, 113.6),
+			&"Robot6": Rect2(830, 156.7, 116.5, 117), &"Robot7": Rect2(930.1, 156.4, 116.5, 113.6),
+			&"preview": Rect2(240, 335, 175, 235), &"looks_panel": Rect2(436, 318, 412, 252),
+			&"Back": Rect2(266.4, 640.5, 237.5, 58), &"SetAvatar": Rect2(521.5, 640.5, 237.5, 58),
+			&"StartGame": Rect2(774.8, 640.5, 237.6, 58)},
+		"plates": {&"preview": Rect2(240, 335, 175, 235)}, "colors": {&"preview": Color("e7fff8")},
+		"baked": [&"Title", &"Robot0", &"Robot1", &"Robot2", &"Robot3", &"Robot4", &"Robot5", &"Robot6",
+			&"Robot7", &"Back", &"SetAvatar", &"StartGame"],
+		"live": [&"preview", &"looks_panel"]},
+	&"how_to_play": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"title": Rect2(414, 60.9, 451.8, 74.5), &"ControlsTab": Rect2(414, 60.9, 451.8, 74.5),
+			&"PowerUpsTab": Rect2(788.8, 585.5, 237.6, 58), &"Back": Rect2(251.2, 585.5, 237.6, 58),
+			&"SaveKeys": Rect2(451.5, 504.8, 165, 40.8), &"reset_keys": Rect2(679, 504.8, 165, 40.8),
+			&"Message": Rect2(287.2, 174.8, 705.9, 40.1),
+			&"Key_up": Rect2(472.1, 331.1, 35.8, 35.8), &"Key_left": Rect2(433, 364.4, 35.9, 35.9),
+			&"Key_down": Rect2(472.1, 368.3, 35.9, 35.9), &"Key_right": Rect2(511.6, 364.4, 35.9, 35.9),
+			&"Key_bomb": Rect2(418, 439.9, 153, 35.1),
+			&"keyboard_label": Rect2(252, 320, 135, 170), &"action_up": Rect2(252, 340, 135, 60),
+			&"action_left": Rect2(252, 340, 135, 60), &"action_down": Rect2(252, 340, 135, 60),
+			&"action_right": Rect2(252, 340, 135, 60), &"action_bomb": Rect2(252, 420, 135, 60),
+			&"pause_label": Rect2(252, 420, 135, 60), &"pause_value": Rect2(252, 420, 135, 60),
+			&"touch_label": Rect2(612, 310, 395, 185), &"touch_text": Rect2(612, 310, 395, 185),
+			&"goals_label": Rect2(612, 310, 395, 185)},
+		"plates": {&"Message": Rect2(292, 176, 696, 40), &"Key_up": Rect2(477.2, 334.6, 25.7, 30),
+			&"Key_left": Rect2(436.7, 371, 25.7, 30), &"Key_down": Rect2(478.3, 371, 25.7, 30),
+			&"Key_right": Rect2(515.9, 371, 25.7, 30), &"Key_bomb": Rect2(425, 444, 138, 27)},
+		"colors": {&"Message": Color("12ecff"), &"Key_up": Color("f4f4f4"), &"Key_left": Color("f4f4f4"),
+			&"Key_down": Color("f4f4f4"), &"Key_right": Color("f4f4f4"), &"Key_bomb": Color("e6e6e6")},
+		"baked": [&"title", &"ControlsTab", &"PowerUpsTab", &"Back", &"SaveKeys", &"reset_keys", &"keyboard_label",
+			&"action_up", &"action_left", &"action_down", &"action_right", &"action_bomb", &"pause_label",
+			&"pause_value", &"touch_label", &"touch_text", &"goals_label"],
+		"live": [&"Message", &"Key_up", &"Key_left", &"Key_down", &"Key_right", &"Key_bomb"]},
+	&"power_ups": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"title": Rect2(440, 40, 400, 90), &"PowerUpsTab": Rect2(440, 40, 400, 90),
+			&"ControlsTab": Rect2(773.4, 641.9, 237.6, 58), &"Back": Rect2(266.4, 641.9, 237.6, 58)},
+		"plates": {}, "colors": {},
+		"baked": [&"title", &"PowerUpsTab", &"ControlsTab", &"Back", &"guide"], "live": []},
+	&"score": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"title": Rect2(396.8, 41.9, 494.1, 80.2),
+			&"row_label_0": Rect2(414.1, 200.3, 254.1, 40.1), &"row_label_1": Rect2(414.1, 272, 254.1, 40.1),
+			&"row_label_2": Rect2(414.1, 343.7, 254.1, 40.1), &"row_label_3": Rect2(414.1, 407, 254.1, 40.1),
+			&"row_label_4": Rect2(414.1, 471, 254.1, 40.1),
+			&"row_value_0": Rect2(796.9, 204.8, 146.8, 42.4), &"row_value_1": Rect2(796.9, 275.2, 146.8, 42.4),
+			&"row_value_2": Rect2(796.9, 345.5, 146.8, 42.4), &"row_value_3": Rect2(796.9, 408.7, 146.8, 42.4),
+			&"row_value_4": Rect2(796.9, 472, 146.8, 42.4),
+			&"Continue": Rect2(793, 566.5, 237.5, 58), &"DressUp": Rect2(523, 566.5, 237.6, 58)},
+		"plates": {&"title": Rect2(366, 46, 556, 74), &"row_label_0": Rect2(412, 202, 258, 37),
+			&"row_label_2": Rect2(412, 345, 258, 37),
+			&"row_value_0": Rect2(798, 207, 146, 36), &"row_value_1": Rect2(798, 277, 146, 36),
+			&"row_value_2": Rect2(798, 347, 146, 36), &"row_value_3": Rect2(798, 411, 146, 36),
+			&"row_value_4": Rect2(798, 474, 146, 36)},
+		"colors": {&"title": Color("2edfff"), &"row_label_0": Color("e7fff8"), &"row_label_2": Color("e7fff8"),
+			&"row_value_0": Color("ffffcd"), &"row_value_1": Color("ffffcd"), &"row_value_2": Color("ffffcd"),
+			&"row_value_3": Color("ffffcd"), &"row_value_4": Color("ffffcd")},
+		"baked": [&"row_label_1", &"row_label_3", &"row_label_4", &"Continue", &"DressUp"],
+		"live": [&"title", &"row_label_0", &"row_label_2", &"row_value_0", &"row_value_1", &"row_value_2",
+			&"row_value_3", &"row_value_4"]},
+	&"dress_up": {"crop": Rect2(), "frame": Rect2(), "slots": {}, "plates": {}, "colors": {}, "baked": [], "live": []},
+	&"game_over": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"title": Rect2(440, 50, 400, 100), &"retry_hint": Rect2(380, 362, 520, 40),
+			&"total_label": Rect2(420, 495, 190, 90), &"total_value": Rect2(678.8, 527.6, 146.8, 38.1),
+			&"end_unlock": Rect2(380, 410, 520, 30), &"TryAgain": Rect2(779.2, 601.8, 237.6, 58)},
+		"plates": {&"total_value": Rect2(680, 530, 145, 32)}, "colors": {&"total_value": Color("f3ffe6")},
+		"baked": [&"title", &"retry_hint", &"total_label", &"TryAgain"], "live": [&"total_value", &"end_unlock"]},
+	&"game_win": {"crop": Rect2(), "frame": STAGE_FRAME,
+		"slots": {&"title": Rect2(420, 50, 440, 100), &"total_label": Rect2(360, 490, 200, 95),
+			&"total_value": Rect2(792.8, 528.4, 146.8, 38.1), &"end_unlock": Rect2(300, 455, 680, 30),
+			&"TryAgain": Rect2(772.8, 594.1, 237.6, 58)},
+		"plates": {&"total_value": Rect2(794, 531, 145, 32)}, "colors": {&"total_value": Color("ffffcd")},
+		"baked": [&"title", &"total_label", &"TryAgain"], "live": [&"total_value", &"end_unlock"]},
 }
 
 ## The pinned native fallback: today's coordinates, unchanged when no screen sheet is used.
@@ -160,6 +262,11 @@ static func slot(page: StringName, name: StringName, native_rect: Rect2, art: bo
 ## The opaque rectangle that hides art a live widget replaces.
 static func plate(page: StringName, name: StringName) -> Rect2:
 	return table(page).get("plates", {}).get(name, Rect2())
+
+
+## The plate's colour, sampled from the sheet beside the art it hides.
+static func plate_color(page: StringName, name: StringName, fallback: Color) -> Color:
+	return table(page).get("colors", {}).get(name, fallback)
 
 
 ## Whether the sheet already paints this widget's text and frame.

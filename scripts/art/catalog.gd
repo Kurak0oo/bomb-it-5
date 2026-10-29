@@ -14,7 +14,7 @@ const SET_FEATURES := {"zoo": [["crocodile", "Crocodile · closed"], ["crocodile
 	"birthday_party": [["toy_hand", "Toy hand"]], "candy_factory": [["belt", "Conveyor belt cell"]],
 	"magic_library": [["spellbook", "Spellbook"], ["sign_bomb", "Spellbook sign · bomb"], ["sign_pickup", "Spellbook sign · pickup"]]}
 const SCREENS := [["menu", "Main menu"], ["settings", "Game settings"], ["character", "Character select"],
-	["how_to_play", "How to play"], ["score", "Level score"], ["dress_up", "Dress up"], ["game_over", "Game over"],
+	["how_to_play", "How to play"], ["power_ups", "How to play · power-ups"], ["score", "Level score"], ["dress_up", "Dress up"], ["game_over", "Game over"],
 	["game_win", "Game complete"], ["pause", "Pause"]]
 const RIDES: Array[String] = ["car", "moto", "horse", "dragon"]
 static var _cache: Array[Dictionary] = []

@@ -16,6 +16,7 @@ The evidence starts with the hashed publisher build and separates static finding
 - [Ordinary bomb/contact probes](edition-5-bomb-contact-probes.md): legal placement, last lethal/first safe entry, capacity and soft-block changes.
 - [Chain/overlap probes](edition-5-chain-overlap-probes.md): both owner orders, shared Boolean fire cleanup, late laser phase and command replacement.
 - [Pause, resume and focus loss](edition-5-pause-and-focus.md): the 100 ms pause timeout, cleared movement and kept speed, host timers that run while paused, and the static focus path (#81).
+- [Original screens](edition-5-screens.md): the 700×510 stage crop, instance positions measured from the SVG export, exposed keys as rendered, and what the replica hides, keeps inert or draws live (#76).
 - [Sound and music](edition-5-audio.md): the class-linked sounds, `SoundManger`'s music rules and switches, the event-to-sound map and the names that are silent in the original (#75).
 - [Item slots](edition-5-item-slots.md): reachability of the glove, bouncer, magic carpet and heavy bomb; PUSH THE BOMB and BOXING GLOVE ported, the other three unreachable (#85).
 - [Robot interactions](edition-5-interactions.md): belt rides in twips, toy-hand pushes with the stale checked cell, crocodile bites, horse jumps, dragon crashes and the Pac-Man catch, each recorded in the reference player (#83).

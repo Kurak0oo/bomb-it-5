@@ -5,6 +5,7 @@ extends SceneTree
 const ReplicaLayout = preload("res://scripts/replica_layout.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 const TouchControls = preload("res://scripts/touch_controls.gd")
+const ScreenLayout = preload("res://scripts/art/screen_layout.gd")
 ## Logical viewports under `canvas_items` + `expand` at 720 px height, with safe areas.
 ## 2532×1170 (iPhone 13/14) has a 47 pt sensor housing on one side and a 21 pt home indicator.
 const PHONE := Vector2(2532.0 * 720 / 1170, 720)
@@ -24,6 +25,7 @@ func _run() -> void:
 	await _hud()
 	await _scenery()
 	await _pause()
+	_screen_tables()
 	print("%s: %d replica page checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -283,6 +285,25 @@ func _pause() -> void:
 
 ## Everything a player must see or touch: HUD strip, map and both control areas, without the
 ## one ring row each at the top and bottom edge.
+## #76: every art page is the 700x510 stage at 720/510, and its table is self-consistent.
+func _screen_tables() -> void:
+	var stage := ScreenLayout.STAGE_FRAME
+	_expect(is_equal_approx(stage.size.y / 510.0, 720.0 / 510.0) and absf(stage.size.x - 700.0 * 720.0 / 510.0) < 0.1
+		and absf(stage.get_center().x - 640.0) < 0.1, "the screen frame is the original stage at 720/510, centred")
+	var problems: Array[String] = []
+	for page in ScreenLayout.pages():
+		var table := ScreenLayout.table(page)
+		if table.frame.size.x == 0: continue
+		for name in table.baked + table.live:
+			if not table.slots.has(name) and name != &"guide": problems.append("%s.%s has no slot" % [page, name])
+		for name in table.slots:
+			if not _inside(table.slots[name], stage.grow(2)): problems.append("%s.%s leaves the stage" % [page, name])
+		for name in table.plates:
+			if not table.live.has(name): problems.append("%s.%s plate hides art no live widget replaces" % [page, name])
+			if not table.colors.has(name): problems.append("%s.%s plate has no sampled colour" % [page, name])
+	_expect(problems.is_empty(), "screen tables are consistent: %s" % [problems])
+
+
 func _important(page: Rect2) -> Rect2:
 	return Rect2(page.position + Vector2(0, ReplicaLayout.CELL), Vector2(page.size.x, page.size.y - ReplicaLayout.CELL * 2))
 

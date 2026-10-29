@@ -160,8 +160,12 @@ records the trade-off.
     drawn once. Endings play the win or lose jingle. The sound and music switches are on
     the main menu and the pause screen and persist in the save file. The pause screen's
     music switch only sets the flag. Without the pack the game is silent.
-  - Still to port, each from recovered source rather than approximation: the exposed
-    localization keys on original screens (with the original screen art).
+  - Full-screen pages show the original screen art (#76, [evidence](docs/evidence/edition-5-screens.md),
+    [ADR 0009](docs/adr/0009-screen-art-ghosts-and-plates.md)): each page is the 700×510 stage at
+    720/510, with widgets on the measured instance positions and the exposed localization
+    keys as the original renders them. MORE GAMES, the P2 card and the 2-player and
+    zero-enemy options are removed from the art; SET AS AVATAR is inert; live values draw
+    over sampled plates.
 - **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:
   - **Phone game (Q1):** the replica is a landscape phone game; the fixed touch stick
     and bomb button stay, with keyboard for desktop development. The stick's single

@@ -106,10 +106,10 @@ func _draw() -> void:
 func show_main_menu() -> void:
 	_end_game()
 	var page := _page(&"menu")
-	_plate(&"dropdown", Color("2b7fbf"))
 	_label(page, &"title", "BOMB IT 5", Rect2(0, 120, 1280, 0), 76, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
 	_label(page, &"local_arcade", "LOCAL ARCADE", Rect2(0, 215, 1280, 0), 22, Color("9acbd3"), HORIZONTAL_ALIGNMENT_CENTER)
-	_plate(&"more_games")
+	# `MainMenuUI` prints `Root.VERSION_NUM` at (650, 5) in black Tahoma 11 bold over the sheet.
+	if _art: _label(page, &"version", "v.1.6.1", Rect2(), 15, Color.BLACK, HORIZONTAL_ALIGNMENT_LEFT, true)
 	var start := _button(page, &"Start", "START", Rect2(490, 330, 300, 62), show_settings, 26)
 	_button(page, &"HowToPlay", "HOW TO PLAY", Rect2(490, 410, 300, 62), show_how_to_play, 26)
 	# `UI_MainMenu`'s sound and music switches; the music switch also stops or starts the menu music.
@@ -152,19 +152,21 @@ func _controls_page(page: Control) -> void:
 	var titles := {&"up": "UP", &"left": "LEFT", &"down": "DOWN", &"right": "RIGHT", &"bomb": "BOMB / ITEM"}
 	for index in SaveStore.ACTIONS.size():
 		var action: StringName = SaveStore.ACTIONS[index]
-		_plate(&"keys_%d" % index)
 		_label(page, &"action_" + action, titles[action], Rect2(160, 233 + index * 56, 0, 0), 21)
-		_button(page, StringName("Key_" + str(action)), SaveStore.key_name(store.keys[action]), Rect2(400, 225 + index * 56, 200, 46),
+		# On the sheet each key is the first column's cap (`onePOne<Action>Mc`); its name is live.
+		var key := _button(page, StringName("Key_" + str(action)), SaveStore.key_name(store.keys[action]), Rect2(400, 225 + index * 56, 200, 46),
 			func(): _begin_rebind(action), 20)
-	_plate(&"keys_extra_a")
-	_plate(&"keys_extra_b")
-	_plate(&"pause_label")
-	_plate(&"pause_value")
-	_label(page, &"pause_label", "PAUSE", Rect2(160, 513, 0, 0), 21, UiKit.FONT_COLOR, HORIZONTAL_ALIGNMENT_LEFT, true)
-	_label(page, &"pause_value", "P", Rect2(400, 513, 200, 0), 21, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER, true)
-	_plate(&"message")
+		if _art: key.add_theme_font_size_override("font_size", 16 if action == &"bomb" else 14)
+		_live(key, key.name, Color.BLACK)
+	_label(page, &"pause_label", "PAUSE", Rect2(160, 513, 0, 0), 21, UiKit.FONT_COLOR)
+	_label(page, &"pause_value", "P", Rect2(400, 513, 200, 0), 21, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
 	_message = _label(page, &"Message", "Click a control button to change it.", Rect2(160, 560, 440, 0), 18,
 		Color("b4d2d7"), HORIZONTAL_ALIGNMENT_LEFT, true)
+	if _art:
+		_message.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		_message.add_theme_font_size_override("font_size", 24)
+		_live(_message, &"Message", Color("0f2f6b"))
+		_message.add_theme_color_override("font_color", Color("0f2f6b"))
 	_button(page, &"reset_keys", "RESET", Rect2(660, 470, 220, 56), _reset_keys, 22)
 	_button(page, &"SaveKeys", "SAVE", Rect2(910, 470, 220, 56), _save_keys, 22)
 	_label(page, &"touch_label", "TOUCH", Rect2(690, 180, 0, 0), 24, Color("ffc79a"))
@@ -175,7 +177,15 @@ func _controls_page(page: Control) -> void:
 	_label(page, &"goals_label", goals.strip_edges(), Rect2(690, 345, 410, 0), 18, Color("b4d2d7"))
 
 
-func _power_ups_page(page: Control) -> void:
+func _power_ups_page(screen_page: Control) -> void:
+	# The `UI_POWER_UPS` sheet paints the whole guide; the native entries stay as transparent
+	# text for tests and accessibility.
+	var page := Control.new()
+	page.name = "Guide"
+	page.size = Vector2(1280, 720)
+	page.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	if _art and ScreenLayout.is_baked(_layout, &"guide"): page.modulate = Color.TRANSPARENT
+	screen_page.add_child(page)
 	var columns := guide()
 	for column in columns.size():
 		var x := 130 + column * 345
@@ -233,7 +243,6 @@ func _leave_guide() -> void:
 func show_settings() -> void:
 	var page := _page(&"settings")
 	_label(page, &"Title", "GAME SETTINGS", Rect2(0, 40, 1280, 0), 42, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
-	_plate(&"players_row")
 	var modes := Modes.available()
 	for index in MODE_ORDER.size():
 		var mode: StringName = MODE_ORDER[index]
@@ -250,9 +259,8 @@ func show_settings() -> void:
 			chosen.set_corner_radius_all(12)
 			card.add_theme_stylebox_override("pressed", chosen)
 		card.tooltip_text = Modes.GOALS.get(mode, "Not available yet")
-	_plate(&"goals")
 	_label(page, &"Goals", Modes.GOALS.get(session.mode, ""), Rect2(0, 245, 1280, 0), 19, Color("b4d2d7"),
-		HORIZONTAL_ALIGNMENT_CENTER, true)
+		HORIZONTAL_ALIGNMENT_CENTER)
 	var rows := [["ENEMIES", 300, &"LabelEnemies"], ["LEVELS", 370, &"LabelLevels"], ["ARENA", 440, &"LabelArena"],
 		["DIFFICULTY", 510, &"LabelDifficulty"]]
 	for row in rows:
@@ -283,7 +291,10 @@ func show_settings() -> void:
 		if arena.get_item_metadata(index) == session.stage: arena.select(index)
 	arena.item_selected.connect(func(index: int): session.stage = arena.get_item_metadata(index))
 	page.add_child(arena)
-	_gate(arena, &"Arena")
+	if _art:
+		arena.alignment = HORIZONTAL_ALIGNMENT_CENTER
+		arena.add_theme_font_size_override("font_size", 28)
+	_live(arena, &"Arena", Color("13848c"))
 	var difficulty_options: Array = []
 	for difficulty in DIFFICULTIES:
 		difficulty_options.append([str(difficulty).to_upper(), difficulty, difficulty in playable_difficulties])
@@ -302,15 +313,18 @@ func _set_mode(mode: StringName) -> void:
 
 func show_character_select() -> void:
 	var page := _page(&"character")
-	UiKit.label(page, "CHOOSE YOUR ROBOT", Vector2(0, 40), 42, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
+	_label(page, &"Title", "CHOOSE YOUR ROBOT", Rect2(0, 40, 1280, 0), 42, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
 	for index in Session.ROBOTS.size():
 		var badge := RobotBadge.new()
+		badge.name = "Robot%d" % index
+		var at := _rect(badge.name, Rect2(150 + index * 125, 120, 110, 110))
 		badge.robot = index
 		badge.skin = skin
-		badge.position = Vector2(150 + index * 125, 120)
-		badge.size = Vector2(110, 110)
+		badge.position = at.position
+		badge.size = at.size
 		badge.selected = index == session.robot
-		badge.name = "Robot%d" % index
+		# The sheet paints the eight `robotIcon` heads; a badge there only marks the choice.
+		badge.ghost = _art and ScreenLayout.is_baked(_layout, badge.name)
 		badge.chosen.connect(func(robot: int):
 			if robot != session.robot:
 				session.robot = robot
@@ -318,36 +332,47 @@ func show_character_select() -> void:
 				session.body = 0
 			show_character_select())
 		page.add_child(badge)
-		UiKit.label(page, Session.ROBOT_TITLES[index].to_upper(), badge.position + Vector2(0, 116), 17,
-			GameView.ROBOT_COLORS[index], 110, HORIZONTAL_ALIGNMENT_CENTER)
+		if not badge.ghost:
+			UiKit.label(page, Session.ROBOT_TITLES[index].to_upper(), badge.position + Vector2(0, 116), 17,
+				GameView.ROBOT_COLORS[index], 110, HORIZONTAL_ALIGNMENT_CENTER)
 	var preview := RobotBadge.new()
+	preview.name = "Preview"
+	var shown := _rect(&"preview", Rect2(260, 290, 220, 220))
 	preview.robot = session.robot
 	preview.skin = skin
-	preview.position = Vector2(260, 290)
-	preview.size = Vector2(220, 220)
+	preview.position = shown.position
+	preview.size = shown.size
 	preview.selected = true
+	preview.bare = _art
 	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# `robotStage1` shows the chosen robot; the sheet's frame shows robot 0.
+	_plate(&"preview")
 	page.add_child(preview)
 	preview.hat = session.hat
 	preview.body = session.body
-	_looks_panel(page, Vector2(540, 290), show_character_select)
-	UiKit.button(page, "BACK", Rect2(130, 610, 220, 60), show_settings, skin, 24)
-	var start := UiKit.button(page, "START", Rect2(930, 610, 220, 60), start_session, skin, 24)
-	start.name = "StartGame"
+	var looks := _rect(&"looks_panel", Rect2(540, 290, 560, 250))
+	_looks_panel(page, looks.position, show_character_select, looks.size)
+	_button(page, &"Back", "BACK", Rect2(130, 610, 220, 60), show_settings, 24)
+	# SET AS AVATAR uploaded to the portal (`GamatarSender`); the replica keeps it inert (Q3).
+	var avatar := _button(page, &"SetAvatar", "SET AS AVATAR", Rect2(520, 610, 240, 60), func(): pass, 22)
+	avatar.tooltip_text = "Not available in this edition"
+	var start := _button(page, &"StartGame", "START", Rect2(930, 610, 220, 60), start_session, 24)
 	start.grab_focus.call_deferred()
 
 
 ## Eight look slots of the chosen robot (`ClothesPanel`): one hat and one outfit at a time,
 ## clicking the worn one removes it; locked looks show their unlock score.
-func _looks_panel(page: Control, at: Vector2, refresh: Callable) -> void:
-	UiKit.panel(page, Rect2(at, Vector2(560, 250)), Color("1d4557"), Color("5d96a3"))
+func _looks_panel(page: Control, at: Vector2, refresh: Callable, area := Vector2(560, 250)) -> void:
+	UiKit.panel(page, Rect2(at, area), Color("1d4557"), Color("5d96a3"))
 	UiKit.label(page, "LOOKS", at + Vector2(24, 14), 22, Color("ffc79a"))
+	var pitch := Vector2((area.x - 48) / 4.0, 94 * area.y / 250.0)
+	var cell_size := Vector2(pitch.x - 12, 50)
 	var unlocked: Array = store.unlocks.get(str(session.robot), [])
 	for number in range(1, 9):
 		var entry: Array = Looks.look(session.robot, number)
 		var worn: bool = (session.hat if entry[0] == &"hat" else session.body) == entry[1]
-		var cell := at + Vector2(24 + ((number - 1) % 4) * 132, 56 + ((number - 1) / 4) * 94)
-		var widget := UiKit.button(page, Looks.title(session.robot, number), Rect2(cell, Vector2(120, 50)),
+		var cell := at + Vector2(24 + ((number - 1) % 4) * pitch.x, 56 + ((number - 1) / 4) * pitch.y)
+		var widget := UiKit.button(page, Looks.title(session.robot, number), Rect2(cell, cell_size),
 			func(): _wear(entry, refresh), null, 15)
 		widget.name = "Look%d" % number
 		widget.disabled = number not in unlocked
@@ -359,9 +384,9 @@ func _looks_panel(page: Control, at: Vector2, refresh: Callable) -> void:
 			chosen.set_corner_radius_all(10)
 			for state_name in ["normal", "hover"]: widget.add_theme_stylebox_override(state_name, chosen)
 		if widget.disabled:
-			UiKit.label(page, "%d PTS" % Looks.THRESHOLDS[number - 1], cell + Vector2(0, 52), 13, Color("8fb1ba"), 120, HORIZONTAL_ALIGNMENT_CENTER)
+			UiKit.label(page, "%d PTS" % Looks.THRESHOLDS[number - 1], cell + Vector2(0, 52), 13, Color("8fb1ba"), cell_size.x, HORIZONTAL_ALIGNMENT_CENTER)
 	if unlocked.is_empty():
-		UiKit.label(page, "Score points to unlock outfits.", at + Vector2(170, 18), 16, Color("b4d2d7"), 360)
+		UiKit.label(page, "Score points to unlock outfits.", at + Vector2(130, 18), 16, Color("b4d2d7"), area.x - 150)
 
 
 func _wear(entry: Array, refresh: Callable) -> void:
@@ -417,22 +442,40 @@ func _on_level_settled(snapshot: Dictionary) -> void:
 func show_score(snapshot: Dictionary) -> void:
 	var page := _page(&"score", false)
 	var won: bool = session.last_result in [Session.Result.LEVEL_WIN, Session.Result.GAME_WIN]
-	page.add_child(_shade())
-	UiKit.panel(page, Rect2(290, 100, 700, 520))
+	if not _art:
+		page.add_child(_shade())
+		UiKit.panel(page, Rect2(290, 100, 700, 520))
+	# `PlayerScoreUI.setdata` fills the title's `[X]/[X]`; the title clip's second frame is the loss.
 	var title := "LEVEL %s COMPLETE!" % session.level_text() if won else "LEVEL %s FAILED…" % session.level_text()
-	UiKit.label(page, title, Vector2(290, 130), 38, UiKit.ACCENT, 700, HORIZONTAL_ALIGNMENT_CENTER)
+	var heading := _label(page, &"title", title, Rect2(290, 130, 700, 0), 38, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
+	_live(heading, &"title", Color("ffd23c"))
+	if _art:
+		heading.add_theme_font_size_override("font_size", 44)
+		heading.add_theme_constant_override("outline_size", 10)
+		heading.add_theme_color_override("font_outline_color", Color("7a1d00"))
 	var parts: Dictionary = snapshot.get("result_breakdown", {})
 	var rows := [["ENEMIES KILLED", parts.get("kills", 0)], ["TIME BONUS", parts.get("time", 0)],
 		["%s BONUS" % str(session.difficulty).to_upper(), parts.get("difficulty", 0)],
 		["LEVEL SCORE", snapshot.result_score], ["TOTAL SCORE", session.total_score]]
 	for index in rows.size():
 		var y := 210 + index * 56
-		UiKit.label(page, rows[index][0], Vector2(360, y), 24, Color("ffc79a") if index >= 3 else UiKit.FONT_COLOR)
-		UiKit.label(page, str(rows[index][1]), Vector2(720, y), 24, UiKit.ACCENT, 200, HORIZONTAL_ALIGNMENT_RIGHT)
-	var proceed := UiKit.button(page, "NEXT" if won else "TRY AGAIN", Rect2(660, 520, 260, 64), _continue, skin, 24)
-	proceed.name = "Continue"
-	var dress := UiKit.button(page, "DRESS UP", Rect2(360, 520, 260, 64), show_dress_up, skin, 24)
-	dress.name = "DressUp"
+		var caption := _label(page, StringName("row_label_%d" % index), rows[index][0], Rect2(360, y, 0, 0), 24,
+			Color("ffc79a") if index >= 3 else UiKit.FONT_COLOR)
+		# The mode caption (`text_mode`) and the difficulty bonus (`bonus_txt`) change; the rest is painted.
+		_live(caption, caption.name, Color("12306e"))
+		var value := _label(page, StringName("row_value_%d" % index), str(rows[index][1]), Rect2(720, y, 200, 0), 24,
+			UiKit.ACCENT, HORIZONTAL_ALIGNMENT_RIGHT)
+		_live(value, value.name, Color("12306e"))
+		if _art:
+			caption.add_theme_font_size_override("font_size", 26)
+			value.add_theme_font_size_override("font_size", 28)
+	var proceed := _button(page, &"Continue", "NEXT" if won else "TRY AGAIN", Rect2(660, 520, 260, 64), _continue, 24)
+	if _art and not won:
+		# The sheet paints `nextLevel`; after a loss the original shows `restartBtn` there instead.
+		UiKit.ghost_text(proceed, Color.WHITE)
+		UiKit.plate(screen, Rect2(proceed.position + Vector2(24, 12), proceed.size - Vector2(48, 24)), Color("ff9419"))
+		screen.move_child(screen.get_child(-1), proceed.get_index())
+	_button(page, &"DressUp", "DRESS UP", Rect2(360, 520, 260, 64), show_dress_up, 24)
 	proceed.grab_focus.call_deferred()
 	if not _new_looks.is_empty(): _unlock_tip(page)
 
@@ -488,21 +531,23 @@ func show_end(won: bool) -> void:
 	# `OnePGameOverUI`: menu music, after the win or lose jingle if it is still playing.
 	audio.create_over_ui_music()
 	var page := _page(&"game_win" if won else &"game_over")
-	UiKit.panel(page, Rect2(290, 130, 700, 440))
-	UiKit.label(page, "GAME COMPLETE!" if won else "GAME OVER", Vector2(290, 170), 52, UiKit.ACCENT, 700, HORIZONTAL_ALIGNMENT_CENTER)
+	if not _art: UiKit.panel(page, Rect2(290, 130, 700, 440))
+	_label(page, &"title", "GAME COMPLETE!" if won else "GAME OVER", Rect2(290, 170, 700, 0), 52, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
 	if not won:
-		UiKit.label(page, "Don't give up! Give it another bomb…", Vector2(290, 260), 22, Color("b4d2d7"), 700, HORIZONTAL_ALIGNMENT_CENTER)
+		_label(page, &"retry_hint", "Don't give up! Give it another bomb…", Rect2(290, 260, 700, 0), 22, Color("b4d2d7"), HORIZONTAL_ALIGNMENT_CENTER)
 	if not _new_looks.is_empty():
 		var names := PackedStringArray()
 		for number in _new_looks: names.append(Looks.title(session.robot, number))
-		UiKit.label(page, "New outfit unlocked! " + ", ".join(names), Vector2(290, 400), 20, UiKit.ACCENT, 700,
-			HORIZONTAL_ALIGNMENT_CENTER).name = "EndUnlock"
+		var unlock := _label(page, &"end_unlock", "New outfit unlocked! " + ", ".join(names), Rect2(290, 400, 700, 0), 20,
+			UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
+		unlock.name = "EndUnlock"
+		if _art: unlock.add_theme_color_override("font_color", Color("12306e"))
 		_new_looks.clear()
-	UiKit.label(page, "TOTAL SCORE", Vector2(400, 340), 28, Color("ffc79a"))
-	UiKit.label(page, str(session.total_score), Vector2(680, 340), 28, UiKit.ACCENT, 200, HORIZONTAL_ALIGNMENT_RIGHT)
-	var again := UiKit.button(page, "TRY AGAIN", Rect2(510, 460, 260, 64), show_settings, skin, 24)
-	again.name = "TryAgain"
-	again.grab_focus.call_deferred()
+	_label(page, &"total_label", "TOTAL SCORE", Rect2(400, 340, 0, 0), 28, Color("ffc79a"))
+	var total := _label(page, &"total_value", str(session.total_score), Rect2(680, 340, 200, 0), 28, UiKit.ACCENT,
+		HORIZONTAL_ALIGNMENT_RIGHT)
+	_live(total, &"total_value", Color("12306e"))
+	_button(page, &"TryAgain", "TRY AGAIN", Rect2(510, 460, 260, 64), show_settings, 24).grab_focus.call_deferred()
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -591,7 +636,7 @@ func _plate(name: StringName, colour := Color("214c60")) -> ColorRect:
 	if not _art: return null
 	var rect: Rect2 = ScreenLayout.plate(_layout, name)
 	if rect.size.x <= 0 or rect.size.y <= 0: return null
-	return UiKit.plate(screen, rect, colour)
+	return UiKit.plate(screen, rect, ScreenLayout.plate_color(_layout, name, colour))
 
 
 ## A text label on its hotspot; ghosted when the sheet already paints that text.
@@ -601,6 +646,9 @@ func _label(page: Control, name: StringName, text: String, native_rect: Rect2, f
 	var width := rect.size.x if rect.size.x > 0 else -1.0
 	var widget := UiKit.label(page, text, rect.position, font_px, colour, width, align, carrier)
 	widget.name = name
+	if _art and rect.size.y > 0:
+		widget.size.y = rect.size.y
+		widget.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	if _art and not carrier and ScreenLayout.is_baked(_layout, name): UiKit.ghost_label(widget)
 	return widget
 
@@ -612,6 +660,15 @@ func _button(page: Control, name: StringName, text: String, native_rect: Rect2, 
 	widget.name = name
 	_gate(widget, name)
 	return widget
+
+
+## A live widget on an art page: a plate hides the painted value, the widget draws its own
+## text in the sheet's colour over it.
+func _live(widget: Control, name: StringName, colour: Color) -> void:
+	if not _art or not ScreenLayout.is_live(_layout, name): return
+	var cover := _plate(name)
+	if cover != null: screen.move_child(cover, widget.get_index() if widget.get_parent() == screen else screen.get_child_count() - 1)
+	UiKit.ghost_text(widget, colour)
 
 
 ## Transparent art-backed control: real text and hit test over painted pixels.
@@ -644,6 +701,10 @@ class RobotBadge extends Control:
 	var body := 0
 	var skin: RefCounted
 	var selected := false
+	## Over a painted head: only the choice ring is drawn.
+	var ghost := false
+	## Over a plate on an art page: the robot without the badge box.
+	var bare := false
 
 	func _ready() -> void:
 		focus_mode = Control.FOCUS_ALL
@@ -664,7 +725,11 @@ class RobotBadge extends Control:
 		style.border_color = Color("ffd989") if selected or has_focus() else color.darkened(0.3)
 		style.set_border_width_all(4 if selected else 2)
 		style.set_corner_radius_all(16)
-		draw_style_box(style, rect)
+		if ghost:
+			style.draw_center = false
+			if selected or has_focus(): draw_style_box(style, rect.grow(-6))
+			return
+		if not bare: draw_style_box(style, rect)
 		if skin != null and skin.draw(self, "actor.%s.portrait" % GameView.ROBOT_SLOTS[robot], rect.grow(-size.x * 0.12)):
 			return
 		var center := size * 0.5

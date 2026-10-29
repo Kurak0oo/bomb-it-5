@@ -131,6 +131,14 @@ static func ghost(control: Control) -> void:
 		control.add_theme_color_override(colour, Color(0, 0, 0, 0))
 
 
+## A ghost that keeps its own text: the sheet paints the frame, the widget its live value.
+static func ghost_text(control: Control, colour: Color) -> void:
+	ghost(control)
+	if control is OptionButton: ghost_option(control)
+	for name in ["font_color", "font_pressed_color", "font_hover_color", "font_hover_pressed_color", "font_focus_color"]:
+		control.add_theme_color_override(name, colour)
+
+
 ## A ghost whose popup arrow the art already paints.
 static func ghost_option(widget: OptionButton) -> void:
 	ghost(widget)
@@ -151,7 +159,6 @@ static func plate(parent: Node, rect: Rect2, colour: Color) -> ColorRect:
 	widget.size = rect.size
 	widget.color = colour
 	widget.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	widget.z_index = -1
 	parent.add_child(widget)
 	return widget
 
