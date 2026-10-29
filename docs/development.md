@@ -648,3 +648,11 @@ Flag and Defence drawing no number, Defence's shared-cell bomb, Follow entered w
 position or no bomb, and spawn protection not being invincible. `tests/ai_trace_check.gd`
 covers them. The record is [AI modes](evidence/edition-5-ai-modes.md).
 
+### 2026-10-29 iPhone build steps (#87)
+
+[iOS install](ios.md) gives the steps for a private Xcode install with a free Apple ID. They
+were checked against Godot 4.5-stable's source and Apple's pages. The project now allows
+both landscape directions (sensor landscape) and uses the Ambient audio session, and the
+game also pauses on `NOTIFICATION_APPLICATION_PAUSED`. Building and installing on the
+user's Mac and iPhone remains the user's step.
+

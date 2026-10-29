@@ -349,7 +349,8 @@ func _now_msec() -> int:
 
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and is_instance_valid(scheduler) and state.get("outcome", &"running") == &"running":
+	# iOS sends PAUSED when the app goes to the background as well as FOCUS_OUT on resign.
+	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED] and is_instance_valid(scheduler) and state.get("outcome", &"running") == &"running":
 		# Leaving the app pauses at once (Q15); no frames run in the background to wait 100 ms.
 		if replica and not paused:
 			_begin_original_pause()
