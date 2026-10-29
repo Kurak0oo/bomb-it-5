@@ -78,7 +78,8 @@ static func entries() -> Array[Dictionary]:
 		["roster", "Player HUD panel", Vector2(251, 76)], ["timer", "Timer panel", Vector2(141, 42)],
 		["results", "Result panel", Vector2(444, 228)], ["button_normal", "Menu button · idle", Vector2(210, 40)],
 		["button_hover", "Menu button · hover", Vector2(210, 40)], ["button_pressed", "Menu button · pressed", Vector2(210, 40)],
-		["button_disabled", "Menu button · disabled", Vector2(210, 40)]]:
+		["button_disabled", "Menu button · disabled", Vector2(210, 40)], ["quality_switch", "Quality switch · high, medium, low", Vector2(49, 49)],
+		["sound_switch", "Sound switch · on, off", Vector2(49, 49)], ["music_switch", "Music switch · on, off", Vector2(49, 49)]]:
 		result.append(_entry("ui." + item[0], item[1], "Interface", item[2]))
 	result.append(_entry("mode.flag", "Green Zone flag", "Modes", Vector2(36, 44)))
 	result.append(_entry("mode.progress", "Capture progress bar", "Modes", Vector2(36, 5)))

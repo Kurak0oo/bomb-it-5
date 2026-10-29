@@ -622,3 +622,12 @@ over, game complete and pause pages. Art the replica removes is hidden in the pi
 power-ups page gained a slot (296 slots). The record is
 [original screens](evidence/edition-5-screens.md).
 
+### 2026-10-29 quality switch (#86)
+
+`scripts/quality.gd` ports `qualityCtlHandle`: HIGH, MEDIUM and LOW cycle from the main
+menu and pause switches, start at HIGH and last for the session only. The Compatibility
+renderer has no 2D MSAA, so the levels map to the canvas texture filter (bitmap smoothing)
+and the antialiased flag of procedural lines and arcs (shape anti-aliasing). The switches
+draw their original frames (three new slots, 299 in all). The record is
+[quality](evidence/edition-5-quality.md), with a capture.
+

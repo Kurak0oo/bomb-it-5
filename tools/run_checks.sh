@@ -28,6 +28,7 @@ suites=(
 	"res://tests/replica_page_check.gd|^PASS: [0-9]+ replica page checks$"
 	"res://tests/hitmove_check.gd|^PASS: [0-9]+ hitmove checks$"
 	"res://tests/audio_check.gd|^PASS: [0-9]+ audio checks$"
+	"res://tests/quality_check.gd|^PASS: [0-9]+ quality checks$"
 	"res://tools/playthrough_check.gd|^PASS: 3 full-board playthrough checks "
 )
 for suite in "${suites[@]}"; do

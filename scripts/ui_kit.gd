@@ -1,6 +1,7 @@
 extends RefCounted
 ## Native menu widgets in the game's panel style; workbench `ui.button_*` replacements apply.
 
+const Quality = preload("res://scripts/quality.gd")
 const Audio = preload("res://scripts/original_audio.gd")
 const FONT_COLOR := Color("dfede7")
 const ACCENT := Color("ffd989")
@@ -41,37 +42,50 @@ static func menu_sounds(widget: BaseButton) -> void:
 	widget.button_down.connect(func(): if Audio.current != null: Audio.current.menu_press())
 
 
-## A two-frame switch (`sound`, `music`): frame 1 on, frame 2 off. Off draws a slash over the
-## icon, which the sheets paint only in the on state.
-static func switch(parent: Node, name: StringName, caption: String, rect: Rect2, on: bool, toggled: Callable) -> Switch:
+## An original frame switch (`sound`, `music`: frame 1 on, 2 off; `quality`: frames 1-3 for
+## high, medium, low). Each press moves to the next frame. With the pack the switch draws its
+## frame from `art` (`ui.<name>_switch`); without it, its caption and state, and a slash
+## when a two-frame switch is off.
+static func switch(parent: Node, name: StringName, caption: String, rect: Rect2, frame: int, states: Array,
+		changed: Callable, skin: RefCounted = null, art := "") -> Switch:
 	var widget := Switch.new()
 	widget.name = name
 	widget.caption = caption
-	widget.on = on
+	widget.states = states
+	widget.frame = frame
+	widget.skin = skin
+	widget.art = art
 	widget.position = rect.position
 	widget.size = rect.size
 	widget.focus_mode = Control.FOCUS_NONE
 	widget.add_theme_font_size_override("font_size", 13)
 	widget.pressed.connect(func():
-		widget.on = not widget.on
+		widget.frame = (widget.frame + 1) % widget.states.size()
 		widget.refresh()
-		toggled.call(widget.on))
+		changed.call(widget.frame))
+	menu_sounds(widget)
 	widget.refresh()
 	parent.add_child(widget)
 	return widget
 
 
 class Switch extends Button:
-	var on := true
+	var frame := 0
+	var states: Array = ["ON", "OFF"]
 	var caption := ""
+	var skin: RefCounted
+	var art := ""
 
 	func refresh() -> void:
-		text = "%s %s" % [caption, "ON" if on else "OFF"]
+		text = "%s %s" % [caption, states[frame]]
 		queue_redraw()
 
 	func _draw() -> void:
-		if on: return
-		draw_line(Vector2(size.x * 0.2, size.y * 0.8), Vector2(size.x * 0.8, size.y * 0.2), Color("e8584f"), 4, true)
+		if skin != null and art != "" and skin.draw(self, art, Rect2(Vector2.ZERO, size), 0, Vector2.DOWN,
+				(frame + 0.5) / states.size()):
+			return
+		if states.size() == 2 and frame == 1:
+			draw_line(Vector2(size.x * 0.2, size.y * 0.8), Vector2(size.x * 0.8, size.y * 0.2), Color("e8584f"), 4, Quality.edges)
 
 
 ## A row of mutually exclusive choices; `options` holds [label, value, enabled] entries.

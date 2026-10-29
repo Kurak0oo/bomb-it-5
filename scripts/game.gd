@@ -20,6 +20,7 @@ const ReplicaScenery = preload("res://scripts/replica_scenery.gd")
 const ReplicaHud = preload("res://scripts/replica_hud.gd")
 const Audio = preload("res://scripts/original_audio.gd")
 const UiKit = preload("res://scripts/ui_kit.gd")
+const Quality = preload("res://scripts/quality.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -112,11 +113,15 @@ func _ready() -> void:
 		# The pause screen's own sound and music switches (`PauseUI`); its music switch only
 		# sets the flag, so a resumed round stays silent until music is on again.
 		var audio := Audio.current
-		buttons.sound = UiKit.switch(self, &"PauseSound", "SOUND", hud.pause_to_page(hud.PAUSE_SOUND), audio == null or audio.sound_on,
-			func(on: bool): if Audio.current != null: Audio.current.set_sound(on))
-		buttons.music = UiKit.switch(self, &"PauseMusic", "MUSIC", hud.pause_to_page(hud.PAUSE_MUSIC), audio == null or audio.music_on,
-			func(on: bool): if Audio.current != null: Audio.current.set_music(on, false))
-		for key in ["sound", "music"]:
+		buttons.quality = UiKit.switch(self, &"PauseQuality", "QUALITY", hud.pause_to_page(hud.PAUSE_QUALITY), Quality.index(),
+			Quality.TITLES.values(), func(_frame: int):
+				Quality.cycle()
+				Quality.apply(get_viewport()), visual_skin, "ui.quality_switch")
+		buttons.sound = UiKit.switch(self, &"PauseSound", "SOUND", hud.pause_to_page(hud.PAUSE_SOUND), 0 if audio == null or audio.sound_on else 1,
+			["ON", "OFF"], func(frame: int): if Audio.current != null: Audio.current.set_sound(frame == 0), visual_skin, "ui.sound_switch")
+		buttons.music = UiKit.switch(self, &"PauseMusic", "MUSIC", hud.pause_to_page(hud.PAUSE_MUSIC), 0 if audio == null or audio.music_on else 1,
+			["ON", "OFF"], func(frame: int): if Audio.current != null: Audio.current.set_music(frame == 0, false), visual_skin, "ui.music_switch")
+		for key in ["quality", "sound", "music"]:
 			if hud.pause_art(): UiKit.ghost(buttons[key])
 			buttons[key].visible = false
 	if auto_start: start_session(true)
@@ -436,7 +441,7 @@ func _place_pause_button(button: Button, rect: Rect2) -> void:
 
 
 func _refresh() -> void:
-	for key in ["sound", "music"]:
+	for key in ["quality", "sound", "music"]:
 		if buttons.has(key): buttons[key].visible = paused
 	if is_instance_valid(view) and not state.is_empty():
 		touch_controls.enabled = _can_control()

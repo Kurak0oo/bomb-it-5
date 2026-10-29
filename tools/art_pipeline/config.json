@@ -2660,6 +2660,37 @@
   "ui.button_disabled": {
    "source": null
   },
+  "ui.quality_switch": {
+   "source": {
+    "sprite": "#3797",
+    "frames": [
+     1,
+     2,
+     3
+    ]
+   },
+   "note": "`quality` switch frames: high, medium, low (`qualityCtlHandle`, #86)"
+  },
+  "ui.sound_switch": {
+   "source": {
+    "sprite": "#3802",
+    "frames": [
+     1,
+     2
+    ]
+   },
+   "note": "`sound` switch frames: on, off (`soundCtlHandle`)"
+  },
+  "ui.music_switch": {
+   "source": {
+    "sprite": "#3807",
+    "frames": [
+     1,
+     2
+    ]
+   },
+   "note": "`music` switch frames: on, off (`musicCtlHandle`)"
+  },
   "mode.flag": {
    "source": {
     "sprite": "_brick5",

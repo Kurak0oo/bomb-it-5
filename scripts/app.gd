@@ -16,6 +16,7 @@ const ScreenLayout = preload("res://scripts/art/screen_layout.gd")
 const Looks = preload("res://scripts/looks.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 const Audio = preload("res://scripts/original_audio.gd")
+const Quality = preload("res://scripts/quality.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -88,6 +89,7 @@ func _ready() -> void:
 		store.sound_on = sound
 		store.music_on = music
 	add_child(audio)
+	Quality.apply(get_viewport())
 	if "--practice" in OS.get_cmdline_user_args():
 		_open_practice()
 	else:
@@ -112,13 +114,15 @@ func show_main_menu() -> void:
 	if _art: _label(page, &"version", "v.1.6.1", Rect2(), 15, Color.BLACK, HORIZONTAL_ALIGNMENT_LEFT, true)
 	var start := _button(page, &"Start", "START", Rect2(490, 330, 300, 62), show_settings, 26)
 	_button(page, &"HowToPlay", "HOW TO PLAY", Rect2(490, 410, 300, 62), show_how_to_play, 26)
-	# `UI_MainMenu`'s sound and music switches; the music switch also stops or starts the menu music.
-	var sound := UiKit.switch(page, &"SoundSwitch", "SOUND", _rect(&"sound", Rect2(1110, 24, 150, 40)), audio.sound_on,
-		func(on: bool): audio.set_sound(on))
-	var music := UiKit.switch(page, &"MusicSwitch", "MUSIC", _rect(&"music", Rect2(1110, 72, 150, 40)), audio.music_on,
-		func(on: bool): audio.set_music(on))
-	_gate(sound, &"sound")
-	_gate(music, &"music")
+	# `UI_MainMenu`'s quality, sound and music switches; the music switch also stops or starts
+	# the menu music.
+	var quality := UiKit.switch(page, &"QualitySwitch", "QUALITY", _rect(&"quality", Rect2(1110, 24, 150, 40)), Quality.index(),
+		Quality.TITLES.values(), func(_frame: int): _set_quality(), skin, "ui.quality_switch")
+	var sound := UiKit.switch(page, &"SoundSwitch", "SOUND", _rect(&"sound", Rect2(1110, 72, 150, 40)), 0 if audio.sound_on else 1,
+		["ON", "OFF"], func(frame: int): audio.set_sound(frame == 0), skin, "ui.sound_switch")
+	var music := UiKit.switch(page, &"MusicSwitch", "MUSIC", _rect(&"music", Rect2(1110, 120, 150, 40)), 0 if audio.music_on else 1,
+		["ON", "OFF"], func(frame: int): audio.set_music(frame == 0), skin, "ui.music_switch")
+	for widget in [quality, sound, music]: _gate(widget, {&"QualitySwitch": &"quality", &"SoundSwitch": &"sound", &"MusicSwitch": &"music"}[widget.name])
 	# `UIManager` starts the menu music on the first menu, and again on returning to it
 	# (`mainMenu` drops the round's music first).
 	audio.null_game_music()
@@ -662,6 +666,12 @@ func _button(page: Control, name: StringName, text: String, native_rect: Rect2, 
 	return widget
 
 
+## `qualityCtlHandle`: the next stage quality, for this session only.
+func _set_quality() -> void:
+	Quality.cycle()
+	Quality.apply(get_viewport())
+
+
 ## A live widget on an art page: a plate hides the painted value, the widget draws its own
 ## text in the sheet's colour over it.
 func _live(widget: Control, name: StringName, colour: Color) -> void:
@@ -761,7 +771,7 @@ class ItemIcon extends Control:
 		var rect := Rect2(Vector2.ZERO, size)
 		if skin != null and skin.draw(self, "item." + kind, rect): return
 		draw_circle(size / 2, size.x / 2 - 2, Color("d1fff0"))
-		draw_arc(size / 2, size.x / 2 - 2, 0, TAU, 28, Color("60b4a4"), 2, true)
+		draw_arc(size / 2, size.x / 2 - 2, 0, TAU, 28, Color("60b4a4"), 2, Quality.edges)
 		var text: String = GameView.ITEM_NAMES.get(kind, "?")
 		draw_string(ThemeDB.fallback_font, size / 2 + Vector2(-text.length() * 4.5, 6), text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("173c40"))

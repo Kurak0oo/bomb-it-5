@@ -10,6 +10,7 @@ const STICK := Vector2(150, 560)
 const BOMB := Vector2(1130, 560)
 const STICK_REACH := 92.0
 const BOMB_REACH := 80.0
+const Quality = preload("res://scripts/quality.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const ArtCatalog = preload("res://scripts/art/catalog.gd")
 const DIRECTIONS := [Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1),
@@ -80,17 +81,17 @@ func _draw() -> void:
 		return
 	if not skin.draw(self, "control.stick_base", ArtCatalog.rect("control.stick_base", STICK)):
 		draw_circle(STICK, 84, Color(0.6, 0.8, 1.0, 0.09))
-		draw_arc(STICK, 80, 0, TAU, 64, Color(0.6, 0.8, 1.0, 0.35), 2, true)
-		draw_arc(STICK, 14, 0, TAU, 32, Color(0.6, 0.8, 1.0, 0.12), 1, true)
+		draw_arc(STICK, 80, 0, TAU, 64, Color(0.6, 0.8, 1.0, 0.35), 2, Quality.edges)
+		draw_arc(STICK, 14, 0, TAU, 32, Color(0.6, 0.8, 1.0, 0.12), 1, Quality.edges)
 	if not skin.draw(self, "control.stick_thumb", ArtCatalog.rect("control.stick_thumb", STICK + thumb)):
 		draw_circle(STICK + thumb, 27, Color(0.55, 0.83, 1.0, 0.6 if stick_contact != -1 else 0.25))
-		draw_arc(STICK + thumb, 27, 0, TAU, 32, Color("8cceea"), 2, true)
+		draw_arc(STICK + thumb, 27, 0, TAU, 32, Color("8cceea"), 2, Quality.edges)
 	var mode := "disabled" if not enabled else "pressed" if bomb_contact != -1 else "normal"
 	var replaced: bool = skin.draw(self, "control.action_" + mode, ArtCatalog.rect("control.action_" + mode, BOMB))
 	if not replaced and mode != "normal": replaced = skin.draw(self, "control.action_normal", ArtCatalog.rect("control.action_normal", BOMB))
 	if not replaced:
 		draw_circle(BOMB, 61 if bomb_contact == -1 else 56, Color(1.0, 0.72, 0.4, 0.23 if bomb_contact == -1 else 0.55))
-		draw_arc(BOMB, 64, 0, TAU, 64, Color("c29f70"), 2, true)
+		draw_arc(BOMB, 64, 0, TAU, 64, Color("c29f70"), 2, Quality.edges)
 		draw_string(ThemeDB.fallback_font, BOMB + Vector2(-28, 7), "BOMB", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color("ffdda0"))
 
 
@@ -99,7 +100,7 @@ func _draw_replica() -> void:
 	var held := stick_contact != -1
 	if not skin.draw(self, "control.stick_base", ArtCatalog.rect("control.stick_base", STICK)):
 		draw_circle(STICK, 84, Color(0.1, 0.05, 0.12, 0.30))
-		draw_arc(STICK, 84, 0, TAU, 72, Color(1, 0.93, 0.78, 0.55), 3, true)
+		draw_arc(STICK, 84, 0, TAU, 72, Color(1, 0.93, 0.78, 0.55), 3, Quality.edges)
 		for index in 4:
 			var axis := Vector2.RIGHT.rotated(index * PI / 2)
 			var tip := STICK + axis * 70
@@ -110,7 +111,7 @@ func _draw_replica() -> void:
 		draw_circle(at + Vector2(0, 3), 30, Color(0, 0, 0, 0.25))
 		draw_circle(at, 30, GOLD.darkened(0.25))
 		draw_circle(at + Vector2(-2, -3), 26, GOLD.lightened(0.15 if held else 0.0))
-		draw_arc(at, 30, 0, TAU, 48, Color("8a5a1c"), 2, true)
+		draw_arc(at, 30, 0, TAU, 48, Color("8a5a1c"), 2, Quality.edges)
 	var mode := "disabled" if not enabled else "pressed" if bomb_contact != -1 else "normal"
 	var replaced: bool = skin.draw(self, "control.action_" + mode, ArtCatalog.rect("control.action_" + mode, BOMB))
 	if not replaced and mode != "normal": replaced = skin.draw(self, "control.action_normal", ArtCatalog.rect("control.action_normal", BOMB))
@@ -120,7 +121,7 @@ func _draw_replica() -> void:
 		draw_circle(BOMB + Vector2(0, 4), radius, Color(0, 0, 0, 0.3 * alpha))
 		draw_circle(BOMB, radius, Color(GOLD, alpha))
 		draw_circle(BOMB, radius - 5, Color(Color("e0582f").darkened(0.15 if mode == "pressed" else 0.0), alpha))
-		draw_arc(BOMB + Vector2(-8, -10), radius - 18, PI * 1.05, PI * 1.55, 24, Color(1, 1, 1, 0.35 * alpha), 6, true)
+		draw_arc(BOMB + Vector2(-8, -10), radius - 18, PI * 1.05, PI * 1.55, 24, Color(1, 1, 1, 0.35 * alpha), 6, Quality.edges)
 	# The equipped item replaces the bomb icon, as the bomb button now uses it.
 	var icon := Rect2(BOMB - Vector2.ONE * 32, Vector2.ONE * 64)
 	if item != &"" and skin.draw(self, "item." + item, icon): return

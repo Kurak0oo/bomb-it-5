@@ -2208,6 +2208,30 @@
     ]
   },
   {
+    "category": "Interface",
+    "id": "ui.quality_switch",
+    "size": [
+      49,
+      49
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.sound_switch",
+    "size": [
+      49,
+      49
+    ]
+  },
+  {
+    "category": "Interface",
+    "id": "ui.music_switch",
+    "size": [
+      49,
+      49
+    ]
+  },
+  {
     "category": "Modes",
     "id": "mode.flag",
     "size": [

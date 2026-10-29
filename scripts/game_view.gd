@@ -17,6 +17,7 @@ const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life":
 	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
 	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●",
 	&"horse": "HRS", &"dragon": "DRG", &"kick": "K", &"boxing": "G"}
+const Quality = preload("res://scripts/quality.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 ## Native board palettes per stage set: floor pair, wall, solid fill/edge, soft fill/edge.
@@ -108,11 +109,11 @@ func _board_layer() -> void:
 		if skin.draw(self, "item." + state.pickups[cell], ArtCatalog.rect("item." + state.pickups[cell], at), state.tick): continue
 		if state.pickups[cell] == &"coin":
 			draw_circle(at, 6, Color("f6c94a"))
-			draw_arc(at, 6, 0, TAU, 16, Color("a8741c"), 1.5, true)
+			draw_arc(at, 6, 0, TAU, 16, Color("a8741c"), 1.5, Quality.edges)
 			continue
 		draw_circle(at + Vector2(1, 2), 14, Color(0, 0, 0, 0.3))
 		draw_circle(at, 13, Color("d1fff0"))
-		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, true)
+		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, Quality.edges)
 		var text: String = ITEM_NAMES.get(state.pickups[cell], "?")
 		_label(at + Vector2(-text.length() * 4.0, 5), text, 13, Color("173c40"))
 	_mode_objects()
@@ -134,7 +135,7 @@ func _board_layer() -> void:
 		if projectile.get("phase") == &"cleanup": continue
 		var at: Vector2 = ORIGIN + (_blend(_was_projectile(projectile), projectile.position) + Vector2.ONE * 0.5) * PITCH
 		if skin.draw(self, "projectile." + projectile.kind, ArtCatalog.rect("projectile." + projectile.kind, at), state.tick, projectile.direction): continue
-		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, true)
+		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, Quality.edges)
 		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
 	var seat := 0
 	for id in state.actors:
@@ -291,8 +292,8 @@ func _tile(cell: Vector2i, kind: StringName, floor := true) -> void:
 		if skin.draw(self, "board.portal_green" if green else "board.portal_purple", Rect2(at, Vector2.ONE * 36), state.tick): return
 		var color := Color("a8e0b9") if green else Color("bab2f4")
 		draw_circle(at + Vector2.ONE * 18, 16, Color(color, 0.18))
-		draw_arc(at + Vector2.ONE * 18, 13, 0, TAU, 32, color, 3, true)
-		draw_arc(at + Vector2.ONE * 18, 7, 0, TAU, 24, Color(color, 0.7), 2, true)
+		draw_arc(at + Vector2.ONE * 18, 13, 0, TAU, 32, color, 3, Quality.edges)
+		draw_arc(at + Vector2.ONE * 18, 7, 0, TAU, 24, Color(color, 0.7), 2, Quality.edges)
 
 
 ## Native drawing for stage sets other than Cinema; `board.<set>.<piece>` slots replace it.
@@ -383,7 +384,7 @@ func _features() -> void:
 				for sign in feature.signs:
 					var mark := _center(sign.cell)
 					if skin.draw(self, prefix + ("sign_bomb" if sign.kind == &"bomb" else "sign_pickup"), Rect2(mark - Vector2.ONE * 18, Vector2.ONE * 36), state.tick): continue
-					draw_arc(mark, 14, 0, TAU, 24, Color("e0473c") if sign.kind == &"bomb" else Color("3f8ce0"), 3, true)
+					draw_arc(mark, 14, 0, TAU, 24, Color("e0473c") if sign.kind == &"bomb" else Color("3f8ce0"), 3, Quality.edges)
 
 
 ## A `_brick5` box at `cell`: pack art keeps the clip's registration, so tall props overhang
@@ -426,7 +427,7 @@ func _bomb(at: Vector2, mine: bool) -> void:
 		draw_circle(at + Vector2(1, 3), 13, Color("262b3d"))
 		draw_circle(at, 11, Color("465b71"))
 		draw_circle(at + Vector2(-4, -4), 3, Color("92a7b3"))
-		draw_line(at + Vector2(3, -9), at + Vector2(8, -16), Color("e8bd78"), 3, true)
+		draw_line(at + Vector2(3, -9), at + Vector2(8, -16), Color("e8bd78"), 3, Quality.edges)
 		draw_circle(at + Vector2(8, -16), 3 + sin(state.tick * 0.8), Color("ffe49e"))
 
 
@@ -444,11 +445,11 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 		draw_circle(at, 13 * (1.0 - progress * 0.35), skull)
 		draw_circle(at + Vector2(-4, -1), 3, color.darkened(0.8))
 		draw_circle(at + Vector2(4, -1), 3, color.darkened(0.8))
-		draw_line(at + Vector2(-5, 8), at + Vector2(5, 8), skull, 4, true)
+		draw_line(at + Vector2(-5, 8), at + Vector2(5, 8), skull, 4, Quality.edges)
 		return
 	if actor.transit_until > 0:
 		if not skin.draw(self, "effect.transit", ArtCatalog.rect("effect.transit", at), state.tick):
-			draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, true)
+			draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, Quality.edges)
 		color.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
 	if actor.vehicle != &"":
 		var recovering: bool = actor.get("vehicle_recovery_until", 0) > state.tick
@@ -462,12 +463,12 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 			draw_circle(at + Vector2(10, 15), 5, Color("203347"))
 	if actor.shield > 0 or actor.protected_until > state.tick:
 		if not skin.draw(self, "effect.shield", ArtCatalog.rect("effect.shield", at), state.tick):
-			draw_arc(at, 19, 0, TAU, 32, Color("d2eeb1"), 2, true)
+			draw_arc(at, 19, 0, TAU, 32, Color("d2eeb1"), 2, Quality.edges)
 	if actor.invincible_until > state.tick:
 		var introducing: bool = actor.get("protection_stage") == &"introduction"
 		var aura := "effect.invincible_intro" if introducing and skin.texture("effect.invincible_intro") != null else "effect.invincible"
 		if not skin.draw(self, aura, ArtCatalog.rect(aura, at), state.tick):
-			draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, true)
+			draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, Quality.edges)
 	if actor.blink_until > state.tick or actor.get("protection_stage") == &"blink":
 		skin.draw(self, "effect.blink", ArtCatalog.rect("effect.blink", at), state.tick)
 		color = color.lightened(0.35 if state.tick % 6 < 3 else 0.0)
@@ -577,27 +578,27 @@ func _attack(attack: Dictionary) -> void:
 		var swing := direction.rotated(lerpf(-1.5, 0.2, minf(1.0, age / 24.0)))
 		var hand := at + attachment * 0.4
 		var head := hand + swing * 29
-		draw_line(hand, head, Color("e5be80"), 5, true)
+		draw_line(hand, head, Color("e5be80"), 5, Quality.edges)
 		_box(Rect2(head - Vector2(10, 7), Vector2(20, 14)), Color("d5edf0"), Color("7cacba"), 3)
 	elif attack.kind == &"boxing":
 		var reach: float = sin(progress * PI) * PITCH * 1.2
-		draw_line(at, at + direction * reach, Color("e5be80"), 5, true)
+		draw_line(at, at + direction * reach, Color("e5be80"), 5, Quality.edges)
 		draw_circle(at + direction * reach, 9, Color("e8584f"))
 	elif attack.kind == &"laser" and attack.fired:
 		for cell in attack.get("cells", []):
-			draw_line(_center(cell) - Vector2(attack.direction) * 18, _center(cell) + Vector2(attack.direction) * 18, Color("fff1b6"), 7, true)
+			draw_line(_center(cell) - Vector2(attack.direction) * 18, _center(cell) + Vector2(attack.direction) * 18, Color("fff1b6"), 7, Quality.edges)
 	elif attack.kind == &"flamer":
 		for cell in attack.get("cells", []):
-			draw_line(at, _center(cell), Color("ffae62"), 11 + sin(age) * 2, true)
-			draw_line(at, _center(cell), Color("ffe69e"), 5, true)
+			draw_line(at, _center(cell), Color("ffae62"), 11 + sin(age) * 2, Quality.edges)
+			draw_line(at, _center(cell), Color("ffe69e"), 5, Quality.edges)
 			draw_circle(_center(cell), 8, Color("fff0b0"))
 	elif attack.kind == &"shotgun" and not attack.fired:
 		draw_circle(at + direction * 18, 3 + minf(age, 14) * 0.7, Color("ffba6e"))
 	elif attack.kind == &"triple":
 		var kick := 5.0 if age % 15 < 3 else 0.0
-		draw_line(at, at + direction * (23 - kick), Color("b7d7d4"), 8, true)
+		draw_line(at, at + direction * (23 - kick), Color("b7d7d4"), 8, Quality.edges)
 	elif not attack.fired:
-		draw_arc(at, 22, -PI / 2, -PI / 2 + TAU * minf(1.0, float(state.tick - attack.started + 1) / maxf(1, attack.ready - attack.started)), 24, Color("ffd989"), 3, true)
+		draw_arc(at, 22, -PI / 2, -PI / 2 + TAU * minf(1.0, float(state.tick - attack.started + 1) / maxf(1, attack.ready - attack.started)), 24, Color("ffd989"), 3, Quality.edges)
 
 
 func _overlay() -> void:
@@ -616,7 +617,7 @@ func _overlay() -> void:
 		_label(Vector2(455, 387), "Fresh input is required after resuming.", 17, Color("abcbd2"))
 	elif state.get("round_stage") == &"ending":
 		var progress: float = state.get("ending_progress", 0.0)
-		draw_arc(Vector2(640, 367), 34, -PI / 2, -PI / 2 + TAU * maxf(0.01, progress), 48, Color("ffd989"), 5, true)
+		draw_arc(Vector2(640, 367), 34, -PI / 2, -PI / 2 + TAU * maxf(0.01, progress), 48, Color("ffd989"), 5, Quality.edges)
 		_label(Vector2(455, 442), "ROUND COMPLETE", 20, Color("ffe2a0"))
 	else:
 		_label(Vector2(455, 340), "ENEMIES KILLED   %d" % state.actors[&"human"].kills, 19)

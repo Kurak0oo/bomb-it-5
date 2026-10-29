@@ -6,6 +6,7 @@ extends Node2D
 
 signal pause_pressed
 
+const Quality = preload("res://scripts/quality.gd")
 const ReplicaLayout = preload("res://scripts/replica_layout.gd")
 const ArtCatalog = preload("res://scripts/art/catalog.gd")
 ## Same slots and colours as the view (GameView.ROBOT_SLOTS / ROBOT_COLORS).
@@ -225,7 +226,7 @@ func _glyph(kind: String, at: Vector2) -> void:
 	match kind:
 		"bomb":
 			draw_circle(at, 7, Color("1d1a2a"))
-			draw_arc(at, 7, 0, TAU, 16, INK, 1.5, true)
+			draw_arc(at, 7, 0, TAU, 16, INK, 1.5, Quality.edges)
 			draw_line(at + Vector2(4, -5), at + Vector2(7, -9), GOLD, 2)
 		"flame":
 			draw_colored_polygon(PackedVector2Array([at + Vector2(0, -9), at + Vector2(6, 2), at + Vector2(0, 8), at + Vector2(-6, 2)]), Color("ff8a3d"))
