@@ -20,6 +20,7 @@ func _run() -> void:
 		game.advance_time(1.0 / 35.0)
 	await _capture("match")
 	game.toggle_pause()
+	for step in game.PAUSE_DELAY_STEPS: game.advance_time(1.0 / 35.0)
 	await _capture("pause")
 	game.start_session(false, 42)
 	var key := InputEventKey.new()

@@ -488,3 +488,9 @@ func _defend(state: Dictionary, id: StringName, memory: Dictionary, output: Dict
 		output.direction = Vector2(step)
 		output.bomb_events = [&"down", &"up"]
 		return
+
+
+## AI delays are `TweenMax.delayedCall` / `setTimeout`, so paused wall time counts down too.
+func pass_host_time(steps: int, tick_now: int) -> void:
+	for memory in _memory.values():
+		if memory.get("due", 0) > tick_now: memory.due = maxi(tick_now, memory.due - steps)

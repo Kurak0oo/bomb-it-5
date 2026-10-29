@@ -56,6 +56,13 @@ var safe_area_override := Rect2()
 var previous_state: Dictionary = {}
 ## The replica round clock's second source (#80): the wall clock unless checks inject one.
 static var seconds_source: Callable
+## Original pause (#81, `Game.gamePause`): the request takes effect `PAUSE_DELAY_STEPS` steps
+## later (`setTimeout(doGamePause, 100)`); -1 when none is pending.
+const PAUSE_DELAY_STEPS := 4
+var pause_after := -1
+## Wall clock in milliseconds for paused time; checks inject one.
+static var msec_source: Callable
+var _paused_at_msec := 0
 
 
 func _ready() -> void:
@@ -133,6 +140,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		scheduler.free()
 	practice = is_practice
 	paused = false
+	pause_after = -1
 	result_credited = false
 	held.clear()
 	var mode_name: StringName = session.mode if session != null else &"arcade"
@@ -219,6 +227,11 @@ func advance_time(seconds: float) -> void:
 	for tick in update.ticks:
 		previous_state = state
 		state = tick
+		if pause_after > 0:
+			pause_after -= 1
+			if pause_after == 0 and state.outcome == &"running":
+				_begin_original_pause()
+				return
 		if state.get("round_stage") == &"ending":
 			touch_controls.enabled = false
 			touch_controls.reset()
@@ -242,9 +255,15 @@ func advance_time(seconds: float) -> void:
 func toggle_pause() -> void:
 	if not state.is_empty() and state.outcome != &"running":
 		return
+	if replica and not paused:
+		# `gamePause` waits 100 ms; a second press inside that window cancels it (`gameResume`
+		# with `gamePaused` still false clears the timeout).
+		pause_after = PAUSE_DELAY_STEPS if pause_after < 0 else -1
+		return
 	if paused:
 		if scheduler.resume():
 			paused = false
+			if replica: _credit_paused_time()
 	else:
 		scheduler.pause()
 		paused = true
@@ -257,8 +276,39 @@ func toggle_pause() -> void:
 	_refresh()
 
 
+## The pause takes effect: the engine stops and every robot's movement stage is cleared.
+func _begin_original_pause() -> void:
+	pause_after = -1
+	scheduler.pause()
+	paused = true
+	simulation.hold_movement()
+	_paused_at_msec = _now_msec()
+	held.clear()
+	touch_controls.enabled = false
+	touch_controls.reset()
+	buttons.pause.text = "RESUME"
+	buttons.pause.visible = true
+	buttons.menu.visible = session != null
+	_refresh()
+
+
+## TweenMax timers kept running while the engine was stopped.
+func _credit_paused_time() -> void:
+	var steps := roundi((_now_msec() - _paused_at_msec) * Scheduler.TICKS_PER_SECOND / 1000.0)
+	simulation.pass_host_time(steps)
+	if ai != null: ai.pass_host_time(steps, state.get("tick", 0))
+
+
+func _now_msec() -> int:
+	return msec_source.call() if msec_source.is_valid() else Time.get_ticks_msec()
+
+
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_APPLICATION_FOCUS_OUT and is_instance_valid(scheduler) and state.get("outcome", &"running") == &"running":
+		# Leaving the app pauses at once (Q15); no frames run in the background to wait 100 ms.
+		if replica and not paused:
+			_begin_original_pause()
+			return
 		scheduler.pause()
 		paused = true
 		held.clear()

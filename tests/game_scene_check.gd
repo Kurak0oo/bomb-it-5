@@ -121,6 +121,8 @@ func _run() -> void:
 		scene.advance_time(1.0 / 35)
 		_expect(scene.get_snapshot().commands[0].direction == Vector2.RIGHT, "releasing the latest key restores the older held direction")
 		scene.toggle_pause()
+		# The original pause takes effect four steps after the request (`gamePause`, #81).
+		for step in scene.PAUSE_DELAY_STEPS: scene.advance_time(1.0 / 35)
 		var paused_at: int = scene.get_snapshot().tick
 		root.push_input(bomb_key, true)
 		scene.advance_time(60)

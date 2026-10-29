@@ -1,0 +1,158 @@
+{
+  "name": "original-pause-resume",
+  "origin": "Normal Arcade, generated Cinema seed 42, AI stopped. Down pressed and PAUSE clicked before the first step; the key stays held through the pause; RESUME clicked; then the key is released and re-pressed. Records the pause delay, frozen state and held input after resume (#81).",
+  "actions": [
+    {
+      "command": "seed 42"
+    },
+    {
+      "command": "step 301",
+      "capture": "title"
+    },
+    {
+      "command": "click 349 440"
+    },
+    {
+      "command": "step 240",
+      "capture": "menu"
+    },
+    {
+      "command": "click 569 203"
+    },
+    {
+      "command": "step 30",
+      "capture": "settings-default"
+    },
+    {
+      "command": "click 140 180"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 275"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 255 312"
+    },
+    {
+      "command": "step 5"
+    },
+    {
+      "command": "click 415 428"
+    },
+    {
+      "command": "step 10",
+      "capture": "settings-normal"
+    },
+    {
+      "command": "click 470 389"
+    },
+    {
+      "command": "step 2",
+      "capture": "arena-dropdown"
+    },
+    {
+      "command": "click 335 355"
+    },
+    {
+      "command": "step 2",
+      "capture": "settings-cinema"
+    },
+    {
+      "command": "click 533 477"
+    },
+    {
+      "command": "step 40",
+      "capture": "character"
+    },
+    {
+      "command": "click 528 475"
+    },
+    {
+      "command": "step 81",
+      "capture": "opening-board"
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 1,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 2,
+        "mode": "stop"
+      }
+    },
+    {
+      "fixture": {
+        "op": "ai-control",
+        "actor": 3,
+        "mode": "stop"
+      }
+    },
+    {
+      "observe_command": "events pause-events 20000 zlong.bombit5.gameengine::Game zlong.bombit5.gameengine.robot"
+    },
+    {
+      "observe_command": "trace-focus pause-trace"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "click 98 467"
+    },
+    {
+      "command": "step 1",
+      "capture": "pause-clicked"
+    },
+    {
+      "command": "step 9",
+      "capture": "paused"
+    },
+    {
+      "command": "step 40",
+      "capture": "paused-later"
+    },
+    {
+      "command": "click 436 415"
+    },
+    {
+      "command": "step 1",
+      "capture": "resume-clicked"
+    },
+    {
+      "command": "step 10",
+      "capture": "resumed-key-still-held"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "command": "step 2"
+    },
+    {
+      "command": "kd down"
+    },
+    {
+      "command": "step 6",
+      "capture": "re-pressed"
+    },
+    {
+      "command": "ku down"
+    },
+    {
+      "observe_command": "trace-focus off"
+    },
+    {
+      "observe_command": "events off"
+    }
+  ]
+}

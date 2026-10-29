@@ -23,6 +23,7 @@ func _run() -> void:
 	await _scene()
 	await _hud()
 	await _scenery()
+	await _pause()
 	print("%s: %d replica page checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -86,6 +87,7 @@ func _scene() -> void:
 	await process_frame
 	_expect(game.get_snapshot() == before, "interpolation never changes the round state")
 	game.toggle_pause()
+	for step in game.PAUSE_DELAY_STEPS: game.advance_time(1.0 / 35)
 	_expect(game.buttons.pause.visible and ReplicaLayout.MAP.encloses(Rect2(game.buttons.pause.position, game.buttons.pause.size)),
 		"pause shows RESUME over the map centre")
 	game.toggle_pause()
@@ -191,6 +193,7 @@ func _hud() -> void:
 		elif mode == &"arcade":
 			_expect(game.touch_controls.item == &"", "arcade: the bomb button shows the bomb")
 		hud.pause_button.pressed.emit()
+		for step in game.PAUSE_DELAY_STEPS: game.advance_time(1.0 / 35)
 		_expect(game.paused and hud.paused, "%s: the pause icon opens the pause screen" % mode)
 		hud.pause_button.pressed.emit()
 		_expect(not game.paused, "%s: the pause icon resumes" % mode)
@@ -223,6 +226,57 @@ func _scenery() -> void:
 	var bare = load("res://scripts/replica_scenery.gd").new()
 	_expect(bare.background() == null, "without the original pack the plain extension remains")
 	bare.free()
+	game.queue_free()
+	await process_frame
+
+
+## #81 (docs/evidence/edition-5-pause-and-focus.md): the pause request runs four more steps,
+## a second press inside them cancels it, held movement waits for a new press with its speed
+## kept, and paused wall time reaches the TweenMax timers.
+func _pause() -> void:
+	var game = load("res://scripts/game.gd").new()
+	var clock := {"ms": 1000}
+	game.msec_source = func() -> int: return clock.ms
+	root.add_child(game)
+	await process_frame
+	game.set_process(false)
+	game.start_session(false, 42)
+	var right := InputEventKey.new()
+	right.keycode = KEY_RIGHT
+	right.pressed = true
+	root.push_input(right, true)
+	for step in 3: game.advance_time(1.0 / 35.0)
+	var asked: int = game.get_snapshot().tick
+	game.toggle_pause()
+	for step in game.PAUSE_DELAY_STEPS - 1: game.advance_time(1.0 / 35.0)
+	_expect(not game.paused, "the original pause has not taken effect three steps after the request")
+	game.advance_time(1.0 / 35.0)
+	_expect(game.paused and game.get_snapshot().tick == asked + 4, "the pause takes effect four steps (100 ms) after the request")
+	var held_speed: Vector2 = game.get_snapshot().actors[&"human"].velocity
+	var held_at: Vector2 = game.get_snapshot().actors[&"human"].position
+	clock.ms += 5000
+	game.toggle_pause()
+	for step in 6: game.advance_time(1.0 / 35.0)
+	var after: Dictionary = game.get_snapshot().actors[&"human"]
+	_expect(after.position == held_at and after.velocity == held_speed and held_speed.x > 0,
+		"a key held through the pause moves nothing after resume, and the speed is kept")
+	right.pressed = false
+	root.push_input(right, true)
+	right.pressed = true
+	root.push_input(right, true)
+	game.advance_time(1.0 / 35.0)
+	_expect(game.get_snapshot().actors[&"human"].position.x > held_at.x, "a new press moves again")
+	game.toggle_pause()
+	game.advance_time(1.0 / 35.0)
+	game.toggle_pause()
+	for step in 6: game.advance_time(1.0 / 35.0)
+	_expect(not game.paused, "a second press within the 100 ms window cancels the pause")
+	game.simulation._weapons.attacks.append({"actor_id": &"human", "kind": &"triple", "recover_at": game.get_snapshot().tick + 11})
+	game.simulation.pass_host_time(35)
+	_expect(game.simulation._weapons.attacks.back().recover_at == game.get_snapshot().tick,
+		"paused wall time counts down the TweenMax recovery timers")
+	game.simulation._weapons.attacks.pop_back()
+	game.msec_source = Callable()
 	game.queue_free()
 	await process_frame
 

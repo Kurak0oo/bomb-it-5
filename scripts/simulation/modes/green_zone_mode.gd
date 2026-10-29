@@ -119,3 +119,9 @@ func public_state() -> Dictionary:
 func _place(round_state: RefCounted) -> void:
 	var free: Array[Vector2i] = round_state.free_cells(2).filter(func(cell): return round_state.board().get(cell) == &"floor")
 	flag = free[int(round_state.draw_random() * free.size())] if not free.is_empty() else null
+
+
+## `Flag` schedules its move with `TweenMax.delayedCall(3, move)`, which keeps running while the
+## engine is paused.
+func pass_host_time(steps: int, tick_now: int) -> void:
+	if moving_until > tick_now: moving_until = maxi(tick_now, moving_until - steps)

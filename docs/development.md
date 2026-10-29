@@ -574,3 +574,12 @@ stage uses them.
 
 The reference player now also builds on this Linux container (`tools/reference_player/build.sh`
 with Mesa lavapipe) and replays the corridor case.
+
+### 2026-10-29 pause and focus (#81)
+
+Traced with the reference player on Linux (`tools/reference_player/cases/pause/`) and recorded
+in [pause and focus](evidence/edition-5-pause-and-focus.md). The replica now waits the
+original's 100 ms (four steps) before pausing, cancels on a second press, holds each robot's
+speed and ignores held movement until a new press, and credits paused wall time to
+weapon recovery, the Green Zone flag move and AI delays. Focus loss still pauses at once
+(Q15). `Game.msec_source` lets checks inject the wall clock.

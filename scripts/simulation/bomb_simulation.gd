@@ -236,6 +236,11 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 				var actor: Dictionary = _actors[command.actor_id]
 				if actor.movement_rearm and command.direction == Vector2.ZERO:
 					actor.movement_rearm = false
+				# After an original pause (`robotPause` clears the movement stage) a robot keeps
+				# its speed and ignores held movement until a new press.
+				if actor.get("pause_hold", false):
+					if command.direction == Vector2.ZERO: continue
+					actor.pause_hold = false
 				if actor.alive and not actor.get("pushed", {}).is_empty():
 					_advance_push(actor)
 				elif actor.alive and actor.get("jump", {}).size() > 0:
@@ -436,6 +441,20 @@ func enemies() -> Array[Dictionary]:
 	for id in _actor_ids.slice(1):
 		result.append(_actors[id])
 	return result
+
+
+## The original pause took effect (`Game.doGamePause` → `RobotController.robotPause`).
+func hold_movement() -> void:
+	for id in _actor_ids: _actors[id].pause_hold = true
+
+
+## Wall time spent paused, in steps, reaches the timers TweenMax drives rather than the
+## stopped `GameEngine`: weapon recovery (`delayedCall(0.3)`) and mode timers such as the
+## Green Zone flag move (`Flag.delayMax`).
+func pass_host_time(steps: int) -> void:
+	for attack in _weapons.attacks:
+		if attack.recover_at > _tick: attack.recover_at = maxi(_tick, attack.recover_at - steps)
+	if _mode.has_method("pass_host_time"): _mode.pass_host_time(steps, _tick)
 
 
 ## The round clock in steps: elapsed steps, or under the original clock its counted seconds

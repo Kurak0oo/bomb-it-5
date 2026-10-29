@@ -143,9 +143,12 @@ records the trade-off.
     frame, per-axis collision with `itemWid`/`itemHei` and `-1` edges, lane assistance,
     the current/leading-cell bomb bypass (landmines passable) and positions truncated to
     twips. Stick diagonals use the accepted eight-direction rules (E).
+  - Pause follows the traced original (#81, [evidence](docs/evidence/edition-5-pause-and-focus.md)):
+    the request takes effect four steps later and a second press cancels it; robots keep
+    their speed and wait for a new press; TweenMax timers (weapon recovery, AI delays, the
+    Green Zone flag move) keep counting paused wall time.
   - Still to port, each from recovered source rather than approximation: the exposed
-    localization keys on original screens (with the original screen art) and original
-    timing quirks such as pending recovery while paused.
+    localization keys on original screens (with the original screen art).
 - **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:
   - **Phone game (Q1):** the replica is a landscape phone game; the fixed touch stick
     and bomb button stay, with keyboard for desktop development. The stick's single

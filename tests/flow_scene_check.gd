@@ -96,6 +96,7 @@ func _run() -> void:
 	game = app.game
 	game.set_process(false)
 	game.toggle_pause()
+	for step in game.PAUSE_DELAY_STEPS: game.advance_time(1.0 / 35)
 	_expect(game.buttons.menu.visible, "pause offers MAIN MENU")
 	await _click(game.buttons.menu)
 	await process_frame
@@ -110,6 +111,7 @@ func _run() -> void:
 	_expect(app.game.get_snapshot().mode == &"kill" and app.game.get_snapshot().actors[&"human"].weapon == &"hammer",
 		"a Battle Royale level starts with the hammer")
 	app.game.toggle_pause()
+	for step in app.game.PAUSE_DELAY_STEPS: app.game.advance_time(1.0 / 35)
 	await _click(app.game.buttons.menu)
 
 	app._open_practice()
