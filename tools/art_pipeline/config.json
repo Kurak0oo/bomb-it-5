@@ -67,15 +67,33 @@
  "slots": {
   "board.floor_even": {
    "source": {
-    "sprite": "#888"
+    "sprite": "BackGround_Cinema",
+    "frames": [
+     1
+    ],
+    "crop": [
+     32,
+     32,
+     32,
+     32
+    ]
    },
-   "note": "Cinema floor tile; both floor slots share it"
+   "note": "Cinema floor: one 32px board tile cut from BackGround_Cinema, as for the other sets (#74)"
   },
   "board.floor_odd": {
    "source": {
-    "sprite": "#888"
+    "sprite": "BackGround_Cinema",
+    "frames": [
+     1
+    ],
+    "crop": [
+     64,
+     32,
+     32,
+     32
+    ]
    },
-   "note": "Cinema floor tile; both floor slots share it"
+   "note": "Second 32px Cinema board tile from BackGround_Cinema (#74)"
   },
   "board.wall": {
    "source": {
