@@ -1,0 +1,6831 @@
+[
+ {
+  "run": "ai-arcade-easy-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 439
+   },
+   "perception_updates": 635,
+   "checks": {
+    "StateAttack": 85,
+    "StateEvade": 85,
+    "StateGetItem": 85,
+    "StateBox": 79,
+    "StateFree": 67,
+    "StateEscape": 11
+   },
+   "passed": {
+    "StateBox": 12,
+    "StateFree": 56,
+    "StateGetItem": 6
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     741,
+     0,
+     "StateFree"
+    ],
+    [
+     742,
+     1,
+     "StateFree"
+    ],
+    [
+     747,
+     0,
+     "StateFree"
+    ],
+    [
+     750,
+     0,
+     "StateFree"
+    ],
+    [
+     752,
+     2,
+     "StateFree"
+    ],
+    [
+     753,
+     0,
+     "StateFree"
+    ],
+    [
+     756,
+     0,
+     "StateFree"
+    ],
+    [
+     762,
+     0,
+     "StateFree"
+    ],
+    [
+     765,
+     0,
+     "StateFree"
+    ],
+    [
+     771,
+     0,
+     "StateFree"
+    ],
+    [
+     776,
+     2,
+     "StateFree"
+    ],
+    [
+     777,
+     0,
+     "StateFree"
+    ],
+    [
+     779,
+     2,
+     "StateFree"
+    ],
+    [
+     780,
+     0,
+     "StateFree"
+    ],
+    [
+     783,
+     0,
+     "StateFree"
+    ],
+    [
+     788,
+     0,
+     "StateFree"
+    ],
+    [
+     790,
+     0,
+     "StateFree"
+    ],
+    [
+     791,
+     2,
+     "StateFree"
+    ],
+    [
+     793,
+     2,
+     "StateFree"
+    ],
+    [
+     794,
+     0,
+     "StateFree"
+    ],
+    [
+     795,
+     2,
+     "StateFree"
+    ],
+    [
+     796,
+     0,
+     "StateFree"
+    ],
+    [
+     797,
+     2,
+     "StateBox"
+    ],
+    [
+     797,
+     2,
+     "StateBox"
+    ],
+    [
+     800,
+     0,
+     "StateFree"
+    ],
+    [
+     802,
+     0,
+     "StateBox"
+    ],
+    [
+     802,
+     0,
+     "StateBox"
+    ],
+    [
+     816,
+     1,
+     "StateFree"
+    ],
+    [
+     819,
+     1,
+     "StateFree"
+    ],
+    [
+     833,
+     2,
+     "StateFree"
+    ],
+    [
+     835,
+     0,
+     "StateFree"
+    ],
+    [
+     863,
+     0,
+     "StateFree"
+    ],
+    [
+     865,
+     0,
+     "StateFree"
+    ],
+    [
+     867,
+     1,
+     "StateFree"
+    ],
+    [
+     870,
+     1,
+     "StateFree"
+    ],
+    [
+     884,
+     2,
+     "StateBox"
+    ],
+    [
+     884,
+     2,
+     "StateBox"
+    ],
+    [
+     892,
+     0,
+     "StateBox"
+    ],
+    [
+     892,
+     0,
+     "StateBox"
+    ],
+    [
+     912,
+     1,
+     "StateGetItem"
+    ],
+    [
+     914,
+     2,
+     "StateFree"
+    ],
+    [
+     917,
+     2,
+     "StateFree"
+    ],
+    [
+     928,
+     0,
+     "StateGetItem"
+    ],
+    [
+     929,
+     2,
+     "StateFree"
+    ],
+    [
+     932,
+     2,
+     "StateFree"
+    ],
+    [
+     935,
+     2,
+     "StateFree"
+    ],
+    [
+     939,
+     1,
+     "StateFree"
+    ],
+    [
+     942,
+     1,
+     "StateFree"
+    ],
+    [
+     948,
+     1,
+     "StateFree"
+    ],
+    [
+     961,
+     0,
+     "StateFree"
+    ],
+    [
+     966,
+     1,
+     "StateBox"
+    ],
+    [
+     966,
+     1,
+     "StateBox"
+    ],
+    [
+     971,
+     2,
+     "StateBox"
+    ],
+    [
+     971,
+     2,
+     "StateBox"
+    ],
+    [
+     979,
+     0,
+     "StateBox"
+    ],
+    [
+     979,
+     0,
+     "StateBox"
+    ],
+    [
+     1008,
+     1,
+     "StateFree"
+    ],
+    [
+     1013,
+     2,
+     "StateFree"
+    ],
+    [
+     1021,
+     0,
+     "StateGetItem"
+    ],
+    [
+     1062,
+     0,
+     "StateFree"
+    ],
+    [
+     1067,
+     2,
+     "StateFree"
+    ],
+    [
+     1069,
+     2,
+     "StateFree"
+    ],
+    [
+     1071,
+     2,
+     "StateBox"
+    ],
+    [
+     1071,
+     2,
+     "StateBox"
+    ],
+    [
+     1080,
+     0,
+     "StateFree"
+    ],
+    [
+     1082,
+     0,
+     "StateFree"
+    ],
+    [
+     1086,
+     1,
+     "StateFree"
+    ],
+    [
+     1092,
+     1,
+     "StateGetItem"
+    ],
+    [
+     1117,
+     0,
+     "StateGetItem"
+    ],
+    [
+     1133,
+     2,
+     "StateFree"
+    ],
+    [
+     1135,
+     0,
+     "StateBox"
+    ],
+    [
+     1135,
+     0,
+     "StateBox"
+    ],
+    [
+     1136,
+     2,
+     "StateGetItem"
+    ]
+   ],
+   "path_searches": 605
+  }
+ },
+ {
+  "run": "ai-arcade-normal-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 439
+   },
+   "perception_updates": 684,
+   "checks": {
+    "StateAttack": 93,
+    "StateEvade": 93,
+    "StateGetItem": 93,
+    "StateBox": 91,
+    "StateFree": 78,
+    "StateEscape": 14
+   },
+   "passed": {
+    "StateBox": 13,
+    "StateFree": 64,
+    "StateGetItem": 2
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     741,
+     0,
+     "StateFree"
+    ],
+    [
+     742,
+     1,
+     "StateFree"
+    ],
+    [
+     747,
+     0,
+     "StateFree"
+    ],
+    [
+     750,
+     0,
+     "StateFree"
+    ],
+    [
+     752,
+     2,
+     "StateFree"
+    ],
+    [
+     755,
+     2,
+     "StateFree"
+    ],
+    [
+     756,
+     0,
+     "StateFree"
+    ],
+    [
+     759,
+     0,
+     "StateFree"
+    ],
+    [
+     765,
+     0,
+     "StateFree"
+    ],
+    [
+     768,
+     0,
+     "StateFree"
+    ],
+    [
+     771,
+     0,
+     "StateFree"
+    ],
+    [
+     774,
+     0,
+     "StateFree"
+    ],
+    [
+     776,
+     2,
+     "StateFree"
+    ],
+    [
+     777,
+     0,
+     "StateFree"
+    ],
+    [
+     779,
+     2,
+     "StateFree"
+    ],
+    [
+     780,
+     0,
+     "StateFree"
+    ],
+    [
+     786,
+     0,
+     "StateFree"
+    ],
+    [
+     788,
+     0,
+     "StateFree"
+    ],
+    [
+     792,
+     0,
+     "StateFree"
+    ],
+    [
+     796,
+     0,
+     "StateFree"
+    ],
+    [
+     797,
+     2,
+     "StateBox"
+    ],
+    [
+     797,
+     2,
+     "StateBox"
+    ],
+    [
+     798,
+     0,
+     "StateFree"
+    ],
+    [
+     802,
+     0,
+     "StateBox"
+    ],
+    [
+     802,
+     0,
+     "StateBox"
+    ],
+    [
+     816,
+     1,
+     "StateFree"
+    ],
+    [
+     822,
+     1,
+     "StateFree"
+    ],
+    [
+     831,
+     1,
+     "StateFree"
+    ],
+    [
+     832,
+     0,
+     "StateFree"
+    ],
+    [
+     834,
+     1,
+     "StateFree"
+    ],
+    [
+     835,
+     0,
+     "StateFree"
+    ],
+    [
+     839,
+     2,
+     "StateFree"
+    ],
+    [
+     840,
+     1,
+     "StateFree"
+    ],
+    [
+     843,
+     1,
+     "StateFree"
+    ],
+    [
+     846,
+     1,
+     "StateFree"
+    ],
+    [
+     852,
+     1,
+     "StateFree"
+    ],
+    [
+     853,
+     0,
+     "StateFree"
+    ],
+    [
+     856,
+     0,
+     "StateFree"
+    ],
+    [
+     880,
+     2,
+     "StateFree"
+    ],
+    [
+     884,
+     2,
+     "StateFree"
+    ],
+    [
+     886,
+     2,
+     "StateBox"
+    ],
+    [
+     886,
+     2,
+     "StateBox"
+    ],
+    [
+     889,
+     1,
+     "StateFree"
+    ],
+    [
+     892,
+     1,
+     "StateFree"
+    ],
+    [
+     893,
+     0,
+     "StateBox"
+    ],
+    [
+     893,
+     0,
+     "StateBox"
+    ],
+    [
+     921,
+     2,
+     "StateFree"
+    ],
+    [
+     947,
+     0,
+     "StateFree"
+    ],
+    [
+     958,
+     1,
+     "StateBox"
+    ],
+    [
+     958,
+     1,
+     "StateBox"
+    ],
+    [
+     971,
+     0,
+     "StateFree"
+    ],
+    [
+     974,
+     0,
+     "StateFree"
+    ],
+    [
+     981,
+     2,
+     "StateFree"
+    ],
+    [
+     984,
+     2,
+     "StateBox"
+    ],
+    [
+     984,
+     2,
+     "StateBox"
+    ],
+    [
+     988,
+     1,
+     "StateFree"
+    ],
+    [
+     995,
+     0,
+     "StateBox"
+    ],
+    [
+     995,
+     0,
+     "StateBox"
+    ],
+    [
+     1024,
+     1,
+     "StateFree"
+    ],
+    [
+     1027,
+     1,
+     "StateFree"
+    ],
+    [
+     1029,
+     2,
+     "StateGetItem"
+    ],
+    [
+     1043,
+     0,
+     "StateFree"
+    ],
+    [
+     1051,
+     1,
+     "StateBox"
+    ],
+    [
+     1051,
+     1,
+     "StateBox"
+    ],
+    [
+     1077,
+     2,
+     "StateBox"
+    ],
+    [
+     1077,
+     2,
+     "StateBox"
+    ],
+    [
+     1085,
+     0,
+     "StateFree"
+    ],
+    [
+     1091,
+     0,
+     "StateBox"
+    ],
+    [
+     1091,
+     0,
+     "StateBox"
+    ],
+    [
+     1116,
+     2,
+     "StateFree"
+    ],
+    [
+     1119,
+     2,
+     "StateFree"
+    ],
+    [
+     1121,
+     0,
+     "StateGetItem"
+    ],
+    [
+     1125,
+     2,
+     "StateFree"
+    ],
+    [
+     1126,
+     1,
+     "StateFree"
+    ],
+    [
+     1128,
+     2,
+     "StateFree"
+    ],
+    [
+     1129,
+     1,
+     "StateFree"
+    ],
+    [
+     1134,
+     2,
+     "StateFree"
+    ],
+    [
+     1137,
+     2,
+     "StateFree"
+    ]
+   ],
+   "path_searches": 765
+  }
+ },
+ {
+  "run": "ai-arcade-hard-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 20,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 20,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 20,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 439
+   },
+   "perception_updates": 719,
+   "checks": {
+    "StateAttack": 99,
+    "StateEvade": 99,
+    "StateGetItem": 99,
+    "StateBox": 99,
+    "StateFree": 88,
+    "StateIdel": 18,
+    "StateEscape": 18
+   },
+   "passed": {
+    "StateBox": 11,
+    "StateFree": 70
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     741,
+     0,
+     "StateFree"
+    ],
+    [
+     742,
+     1,
+     "StateFree"
+    ],
+    [
+     747,
+     0,
+     "StateFree"
+    ],
+    [
+     752,
+     2,
+     "StateFree"
+    ],
+    [
+     753,
+     0,
+     "StateFree"
+    ],
+    [
+     756,
+     0,
+     "StateFree"
+    ],
+    [
+     759,
+     0,
+     "StateFree"
+    ],
+    [
+     765,
+     0,
+     "StateFree"
+    ],
+    [
+     768,
+     0,
+     "StateFree"
+    ],
+    [
+     771,
+     0,
+     "StateFree"
+    ],
+    [
+     773,
+     2,
+     "StateFree"
+    ],
+    [
+     776,
+     2,
+     "StateFree"
+    ],
+    [
+     777,
+     0,
+     "StateFree"
+    ],
+    [
+     780,
+     0,
+     "StateFree"
+    ],
+    [
+     782,
+     0,
+     "StateFree"
+    ],
+    [
+     784,
+     0,
+     "StateFree"
+    ],
+    [
+     786,
+     0,
+     "StateFree"
+    ],
+    [
+     790,
+     0,
+     "StateFree"
+    ],
+    [
+     792,
+     0,
+     "StateFree"
+    ],
+    [
+     795,
+     2,
+     "StateFree"
+    ],
+    [
+     796,
+     0,
+     "StateFree"
+    ],
+    [
+     797,
+     2,
+     "StateBox"
+    ],
+    [
+     797,
+     2,
+     "StateBox"
+    ],
+    [
+     798,
+     0,
+     "StateFree"
+    ],
+    [
+     800,
+     0,
+     "StateFree"
+    ],
+    [
+     804,
+     0,
+     "StateBox"
+    ],
+    [
+     804,
+     0,
+     "StateBox"
+    ],
+    [
+     815,
+     1,
+     "StateFree"
+    ],
+    [
+     818,
+     1,
+     "StateFree"
+    ],
+    [
+     821,
+     1,
+     "StateFree"
+    ],
+    [
+     824,
+     1,
+     "StateFree"
+    ],
+    [
+     826,
+     2,
+     "StateFree"
+    ],
+    [
+     834,
+     0,
+     "StateFree"
+    ],
+    [
+     836,
+     1,
+     "StateFree"
+    ],
+    [
+     839,
+     1,
+     "StateFree"
+    ],
+    [
+     859,
+     0,
+     "StateFree"
+    ],
+    [
+     860,
+     2,
+     "StateFree"
+    ],
+    [
+     861,
+     0,
+     "StateFree"
+    ],
+    [
+     864,
+     2,
+     "StateFree"
+    ],
+    [
+     866,
+     2,
+     "StateFree"
+    ],
+    [
+     876,
+     2,
+     "StateBox"
+    ],
+    [
+     876,
+     2,
+     "StateBox"
+    ],
+    [
+     877,
+     0,
+     "StateBox"
+    ],
+    [
+     877,
+     0,
+     "StateBox"
+    ],
+    [
+     879,
+     1,
+     "StateFree"
+    ],
+    [
+     882,
+     1,
+     "StateFree"
+    ],
+    [
+     903,
+     1,
+     "StateFree"
+    ],
+    [
+     905,
+     2,
+     "StateFree"
+    ],
+    [
+     906,
+     1,
+     "StateFree"
+    ],
+    [
+     918,
+     1,
+     "StateFree"
+    ],
+    [
+     922,
+     0,
+     "StateFree"
+    ],
+    [
+     924,
+     1,
+     "StateFree"
+    ],
+    [
+     927,
+     1,
+     "StateFree"
+    ],
+    [
+     941,
+     2,
+     "StateFree"
+    ],
+    [
+     944,
+     2,
+     "StateFree"
+    ],
+    [
+     963,
+     2,
+     "StateBox"
+    ],
+    [
+     963,
+     2,
+     "StateBox"
+    ],
+    [
+     985,
+     1,
+     "StateFree"
+    ],
+    [
+     988,
+     1,
+     "StateFree"
+    ],
+    [
+     993,
+     2,
+     "StateFree"
+    ],
+    [
+     998,
+     0,
+     "StateFree"
+    ],
+    [
+     1001,
+     0,
+     "StateBox"
+    ],
+    [
+     1001,
+     0,
+     "StateBox"
+    ],
+    [
+     1005,
+     2,
+     "StateFree"
+    ],
+    [
+     1008,
+     2,
+     "StateFree"
+    ],
+    [
+     1035,
+     2,
+     "StateFree"
+    ],
+    [
+     1038,
+     2,
+     "StateBox"
+    ],
+    [
+     1038,
+     2,
+     "StateBox"
+    ],
+    [
+     1048,
+     1,
+     "StateFree"
+    ],
+    [
+     1051,
+     1,
+     "StateFree"
+    ],
+    [
+     1052,
+     0,
+     "StateFree"
+    ],
+    [
+     1068,
+     2,
+     "StateFree"
+    ],
+    [
+     1078,
+     1,
+     "StateFree"
+    ],
+    [
+     1079,
+     0,
+     "StateFree"
+    ],
+    [
+     1081,
+     1,
+     "StateFree"
+    ],
+    [
+     1082,
+     0,
+     "StateFree"
+    ],
+    [
+     1098,
+     2,
+     "StateFree"
+    ],
+    [
+     1100,
+     2,
+     "StateFree"
+    ],
+    [
+     1105,
+     0,
+     "StateFree"
+    ],
+    [
+     1107,
+     0,
+     "StateFree"
+    ],
+    [
+     1116,
+     2,
+     "StateBox"
+    ],
+    [
+     1116,
+     2,
+     "StateBox"
+    ]
+   ],
+   "path_searches": 1369
+  }
+ },
+ {
+  "run": "ai-kill-easy-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 396
+   },
+   "perception_updates": 469,
+   "checks": {
+    "StateAttack": 42,
+    "StateEvade": 40,
+    "StateGetItem": 40,
+    "StateBox": 37,
+    "StateFree": 17,
+    "StateIdel": 3,
+    "StateEscape": 3
+   },
+   "passed": {
+    "StateFree": 14,
+    "StateBox": 20,
+    "StateAttack": 2,
+    "StateEscape": 1,
+    "StateGetItem": 3
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     708,
+     0,
+     "StateFree"
+    ],
+    [
+     709,
+     1,
+     "StateBox"
+    ],
+    [
+     709,
+     1,
+     "StateBox"
+    ],
+    [
+     751,
+     0,
+     "StateBox"
+    ],
+    [
+     751,
+     0,
+     "StateBox"
+    ],
+    [
+     787,
+     0,
+     "StateFree"
+    ],
+    [
+     792,
+     1,
+     "StateFree"
+    ],
+    [
+     799,
+     2,
+     "StateFree"
+    ],
+    [
+     802,
+     2,
+     "StateBox"
+    ],
+    [
+     802,
+     2,
+     "StateBox"
+    ],
+    [
+     813,
+     0,
+     "StateBox"
+    ],
+    [
+     813,
+     0,
+     "StateBox"
+    ],
+    [
+     831,
+     1,
+     "StateAttack"
+    ],
+    [
+     831,
+     1,
+     "StateAttack"
+    ],
+    [
+     836,
+     2,
+     "StateFree"
+    ],
+    [
+     855,
+     0,
+     "StateAttack"
+    ],
+    [
+     855,
+     0,
+     "StateAttack"
+    ],
+    [
+     885,
+     2,
+     "StateBox"
+    ],
+    [
+     885,
+     2,
+     "StateBox"
+    ],
+    [
+     890,
+     0,
+     "StateBox"
+    ],
+    [
+     890,
+     0,
+     "StateBox"
+    ],
+    [
+     925,
+     2,
+     "StateFree"
+    ],
+    [
+     926,
+     2,
+     "StateEscape"
+    ],
+    [
+     932,
+     0,
+     "StateFree"
+    ],
+    [
+     933,
+     0,
+     "StateGetItem"
+    ],
+    [
+     963,
+     2,
+     "StateFree"
+    ],
+    [
+     966,
+     0,
+     "StateBox"
+    ],
+    [
+     966,
+     0,
+     "StateBox"
+    ],
+    [
+     978,
+     1,
+     "StateBox"
+    ],
+    [
+     978,
+     1,
+     "StateBox"
+    ],
+    [
+     989,
+     0,
+     "StateGetItem"
+    ],
+    [
+     1005,
+     2,
+     "StateGetItem"
+    ],
+    [
+     1019,
+     1,
+     "StateFree"
+    ],
+    [
+     1022,
+     1,
+     "StateBox"
+    ],
+    [
+     1022,
+     1,
+     "StateBox"
+    ],
+    [
+     1030,
+     0,
+     "StateBox"
+    ],
+    [
+     1030,
+     0,
+     "StateBox"
+    ],
+    [
+     1038,
+     2,
+     "StateFree"
+    ],
+    [
+     1054,
+     0,
+     "StateFree"
+    ],
+    [
+     1056,
+     0,
+     "StateFree"
+    ],
+    [
+     1066,
+     0,
+     "StateBox"
+    ],
+    [
+     1066,
+     0,
+     "StateBox"
+    ],
+    [
+     1109,
+     2,
+     "StateBox"
+    ],
+    [
+     1109,
+     2,
+     "StateBox"
+    ],
+    [
+     1115,
+     1,
+     "StateFree"
+    ],
+    [
+     1117,
+     1,
+     "StateFree"
+    ],
+    [
+     1127,
+     1,
+     "StateBox"
+    ],
+    [
+     1127,
+     1,
+     "StateBox"
+    ],
+    [
+     1130,
+     0,
+     "StateFree"
+    ]
+   ],
+   "path_searches": 336
+  }
+ },
+ {
+  "run": "ai-kill-normal-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 398
+   },
+   "perception_updates": 481,
+   "checks": {
+    "StateAttack": 49,
+    "StateEvade": 48,
+    "StateGetItem": 48,
+    "StateBox": 42,
+    "StateFree": 12,
+    "StateIdel": 3,
+    "StateEscape": 3
+   },
+   "passed": {
+    "StateFree": 9,
+    "StateBox": 30,
+    "StateGetItem": 6,
+    "StateAttack": 1
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     708,
+     0,
+     "StateBox"
+    ],
+    [
+     708,
+     0,
+     "StateBox"
+    ],
+    [
+     709,
+     1,
+     "StateBox"
+    ],
+    [
+     709,
+     1,
+     "StateBox"
+    ],
+    [
+     747,
+     0,
+     "StateFree"
+    ],
+    [
+     748,
+     1,
+     "StateFree"
+    ],
+    [
+     750,
+     0,
+     "StateBox"
+    ],
+    [
+     750,
+     0,
+     "StateBox"
+    ],
+    [
+     759,
+     1,
+     "StateBox"
+    ],
+    [
+     759,
+     1,
+     "StateBox"
+    ],
+    [
+     812,
+     0,
+     "StateGetItem"
+    ],
+    [
+     818,
+     2,
+     "StateFree"
+    ],
+    [
+     820,
+     2,
+     "StateFree"
+    ],
+    [
+     831,
+     1,
+     "StateFree"
+    ],
+    [
+     836,
+     2,
+     "StateBox"
+    ],
+    [
+     836,
+     2,
+     "StateBox"
+    ],
+    [
+     840,
+     1,
+     "StateGetItem"
+    ],
+    [
+     853,
+     0,
+     "StateBox"
+    ],
+    [
+     853,
+     0,
+     "StateBox"
+    ],
+    [
+     858,
+     1,
+     "StateBox"
+    ],
+    [
+     858,
+     1,
+     "StateBox"
+    ],
+    [
+     889,
+     1,
+     "StateFree"
+    ],
+    [
+     892,
+     2,
+     "StateFree"
+    ],
+    [
+     894,
+     2,
+     "StateBox"
+    ],
+    [
+     894,
+     2,
+     "StateBox"
+    ],
+    [
+     906,
+     1,
+     "StateBox"
+    ],
+    [
+     906,
+     1,
+     "StateBox"
+    ],
+    [
+     928,
+     0,
+     "StateGetItem"
+    ],
+    [
+     938,
+     0,
+     "StateFree"
+    ],
+    [
+     940,
+     0,
+     "StateBox"
+    ],
+    [
+     940,
+     0,
+     "StateBox"
+    ],
+    [
+     961,
+     1,
+     "StateFree"
+    ],
+    [
+     975,
+     2,
+     "StateFree"
+    ],
+    [
+     979,
+     2,
+     "StateFree"
+    ],
+    [
+     1000,
+     0,
+     "StateGetItem"
+    ],
+    [
+     1004,
+     1,
+     "StateBox"
+    ],
+    [
+     1004,
+     1,
+     "StateBox"
+    ],
+    [
+     1020,
+     2,
+     "StateFree"
+    ],
+    [
+     1022,
+     2,
+     "StateBox"
+    ],
+    [
+     1022,
+     2,
+     "StateBox"
+    ],
+    [
+     1027,
+     0,
+     "StateFree"
+    ],
+    [
+     1036,
+     1,
+     "StateFree"
+    ],
+    [
+     1039,
+     1,
+     "StateBox"
+    ],
+    [
+     1039,
+     1,
+     "StateBox"
+    ],
+    [
+     1093,
+     2,
+     "StateFree"
+    ],
+    [
+     1096,
+     2,
+     "StateBox"
+    ],
+    [
+     1096,
+     2,
+     "StateBox"
+    ],
+    [
+     1098,
+     0,
+     "StateBox"
+    ],
+    [
+     1098,
+     0,
+     "StateBox"
+    ],
+    [
+     1119,
+     0,
+     "StateAttack"
+    ],
+    [
+     1119,
+     0,
+     "StateAttack"
+    ],
+    [
+     1127,
+     1,
+     "StateGetItem"
+    ],
+    [
+     1137,
+     1,
+     "StateBox"
+    ],
+    [
+     1137,
+     1,
+     "StateBox"
+    ]
+   ],
+   "path_searches": 660
+  }
+ },
+ {
+  "run": "ai-kill-hard-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 10,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.9,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 10,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.9,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 10,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.9,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateIdel",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 353
+   },
+   "perception_updates": 426,
+   "checks": {
+    "StateAttack": 47,
+    "StateEvade": 43,
+    "StateGetItem": 43,
+    "StateBox": 36,
+    "StateFree": 4,
+    "StateIdel": 3,
+    "StateEscape": 3
+   },
+   "passed": {
+    "StateBox": 32,
+    "StateGetItem": 7,
+    "StateAttack": 4,
+    "StateFree": 1
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     705,
+     0,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     706,
+     1,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     707,
+     2,
+     "StateBox"
+    ],
+    [
+     777,
+     0,
+     "StateFree"
+    ],
+    [
+     778,
+     2,
+     "StateFree"
+    ],
+    [
+     779,
+     0,
+     "StateBox"
+    ],
+    [
+     779,
+     0,
+     "StateBox"
+    ],
+    [
+     780,
+     2,
+     "StateBox"
+    ],
+    [
+     780,
+     2,
+     "StateBox"
+    ],
+    [
+     781,
+     1,
+     "StateFree"
+    ],
+    [
+     784,
+     1,
+     "StateBox"
+    ],
+    [
+     784,
+     1,
+     "StateBox"
+    ],
+    [
+     809,
+     0,
+     "StateGetItem"
+    ],
+    [
+     825,
+     2,
+     "StateGetItem"
+    ],
+    [
+     844,
+     2,
+     "StateBox"
+    ],
+    [
+     844,
+     2,
+     "StateBox"
+    ],
+    [
+     849,
+     0,
+     "StateFree"
+    ],
+    [
+     850,
+     0,
+     "StateBox"
+    ],
+    [
+     850,
+     0,
+     "StateBox"
+    ],
+    [
+     860,
+     1,
+     "StateFree"
+    ],
+    [
+     862,
+     1,
+     "StateBox"
+    ],
+    [
+     862,
+     1,
+     "StateBox"
+    ],
+    [
+     919,
+     0,
+     "StateAttack"
+    ],
+    [
+     919,
+     0,
+     "StateAttack"
+    ],
+    [
+     939,
+     1,
+     "StateFree"
+    ],
+    [
+     940,
+     2,
+     "StateAttack"
+    ],
+    [
+     940,
+     2,
+     "StateAttack"
+    ],
+    [
+     945,
+     1,
+     "StateBox"
+    ],
+    [
+     945,
+     1,
+     "StateBox"
+    ],
+    [
+     960,
+     0,
+     "StateFree"
+    ],
+    [
+     961,
+     0,
+     "StateAttack"
+    ],
+    [
+     961,
+     0,
+     "StateAttack"
+    ],
+    [
+     974,
+     1,
+     "StateGetItem"
+    ],
+    [
+     978,
+     2,
+     "StateGetItem"
+    ],
+    [
+     985,
+     1,
+     "StateBox"
+    ],
+    [
+     985,
+     1,
+     "StateBox"
+    ],
+    [
+     996,
+     2,
+     "StateBox"
+    ],
+    [
+     996,
+     2,
+     "StateBox"
+    ],
+    [
+     1032,
+     2,
+     "StateFree"
+    ],
+    [
+     1033,
+     2,
+     "StateBox"
+    ],
+    [
+     1033,
+     2,
+     "StateBox"
+    ],
+    [
+     1034,
+     1,
+     "StateFree"
+    ],
+    [
+     1038,
+     1,
+     "StateBox"
+    ],
+    [
+     1038,
+     1,
+     "StateBox"
+    ],
+    [
+     1066,
+     0,
+     "StateBox"
+    ],
+    [
+     1066,
+     0,
+     "StateBox"
+    ],
+    [
+     1080,
+     1,
+     "StateFree"
+    ],
+    [
+     1103,
+     2,
+     "StateFree"
+    ],
+    [
+     1105,
+     2,
+     "StateGetItem"
+    ],
+    [
+     1115,
+     2,
+     "StateBox"
+    ],
+    [
+     1115,
+     2,
+     "StateBox"
+    ],
+    [
+     1126,
+     0,
+     "StateGetItem"
+    ],
+    [
+     1141,
+     2,
+     "StateGetItem"
+    ]
+   ],
+   "path_searches": 865
+  }
+ },
+ {
+  "run": "ai-pac-man-easy-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 2,
+    "find_range": 8,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 0.8,
+      "target": "player1|player2",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.9,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 2,
+    "find_range": 8,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 0.8,
+      "target": "player1|player2",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.9,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 2,
+    "find_range": 8,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 0.8,
+      "target": "player1|player2",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.9,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 440
+   },
+   "perception_updates": 541,
+   "checks": {
+    "StateFollow": 47,
+    "StateEscape": 47,
+    "StateFree": 47
+   },
+   "passed": {
+    "StateFree": 36
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFollow"
+    ],
+    [
+     705,
+     0,
+     "StateFollow"
+    ],
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFollow"
+    ],
+    [
+     706,
+     1,
+     "StateFollow"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFollow"
+    ],
+    [
+     707,
+     2,
+     "StateFollow"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     753,
+     0,
+     "StateFollow"
+    ],
+    [
+     753,
+     0,
+     "StateFollow"
+    ],
+    [
+     756,
+     0,
+     "StateFree"
+    ],
+    [
+     781,
+     1,
+     "StateFollow"
+    ],
+    [
+     781,
+     1,
+     "StateFollow"
+    ],
+    [
+     784,
+     1,
+     "StateFree"
+    ],
+    [
+     791,
+     2,
+     "StateFollow"
+    ],
+    [
+     791,
+     2,
+     "StateFollow"
+    ],
+    [
+     794,
+     2,
+     "StateFree"
+    ],
+    [
+     816,
+     0,
+     "StateFollow"
+    ],
+    [
+     816,
+     0,
+     "StateFollow"
+    ],
+    [
+     822,
+     0,
+     "StateFree"
+    ],
+    [
+     848,
+     2,
+     "StateFollow"
+    ],
+    [
+     848,
+     2,
+     "StateFollow"
+    ],
+    [
+     851,
+     2,
+     "StateFree"
+    ],
+    [
+     880,
+     1,
+     "StateFollow"
+    ],
+    [
+     880,
+     1,
+     "StateFollow"
+    ],
+    [
+     882,
+     0,
+     "StateFollow"
+    ],
+    [
+     882,
+     0,
+     "StateFollow"
+    ],
+    [
+     883,
+     1,
+     "StateFree"
+    ],
+    [
+     885,
+     0,
+     "StateFree"
+    ],
+    [
+     898,
+     1,
+     "StateFollow"
+    ],
+    [
+     898,
+     1,
+     "StateFollow"
+    ],
+    [
+     901,
+     1,
+     "StateFree"
+    ],
+    [
+     928,
+     1,
+     "StateFollow"
+    ],
+    [
+     928,
+     1,
+     "StateFollow"
+    ],
+    [
+     931,
+     1,
+     "StateFree"
+    ],
+    [
+     957,
+     0,
+     "StateFollow"
+    ],
+    [
+     957,
+     0,
+     "StateFollow"
+    ],
+    [
+     960,
+     0,
+     "StateFree"
+    ],
+    [
+     983,
+     2,
+     "StateFollow"
+    ],
+    [
+     983,
+     2,
+     "StateFollow"
+    ],
+    [
+     986,
+     2,
+     "StateFree"
+    ],
+    [
+     996,
+     0,
+     "StateFollow"
+    ],
+    [
+     996,
+     0,
+     "StateFollow"
+    ],
+    [
+     999,
+     0,
+     "StateFree"
+    ],
+    [
+     1031,
+     2,
+     "StateFollow"
+    ],
+    [
+     1031,
+     2,
+     "StateFollow"
+    ],
+    [
+     1034,
+     2,
+     "StateFollow"
+    ],
+    [
+     1034,
+     2,
+     "StateFollow"
+    ],
+    [
+     1037,
+     2,
+     "StateFree"
+    ],
+    [
+     1045,
+     1,
+     "StateFollow"
+    ],
+    [
+     1045,
+     1,
+     "StateFollow"
+    ],
+    [
+     1048,
+     1,
+     "StateFree"
+    ],
+    [
+     1096,
+     1,
+     "StateFollow"
+    ],
+    [
+     1096,
+     1,
+     "StateFollow"
+    ],
+    [
+     1099,
+     1,
+     "StateFree"
+    ],
+    [
+     1113,
+     0,
+     "StateFollow"
+    ],
+    [
+     1113,
+     0,
+     "StateFollow"
+    ],
+    [
+     1116,
+     0,
+     "StateFree"
+    ],
+    [
+     1124,
+     2,
+     "StateFollow"
+    ],
+    [
+     1124,
+     2,
+     "StateFollow"
+    ],
+    [
+     1127,
+     2,
+     "StateFree"
+    ]
+   ],
+   "path_searches": 93
+  }
+ },
+ {
+  "run": "ai-pac-man-normal-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 1,
+    "find_range": 9,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 0.9,
+      "target": "player1|player2",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.95,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 1,
+    "find_range": 9,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 0.9,
+      "target": "player1|player2",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.95,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 1,
+    "find_range": 9,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 0.9,
+      "target": "player1|player2",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.95,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 440
+   },
+   "perception_updates": 543,
+   "checks": {
+    "StateFollow": 49,
+    "StateEscape": 49,
+    "StateFree": 49
+   },
+   "passed": {
+    "StateFree": 35
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFollow"
+    ],
+    [
+     705,
+     0,
+     "StateFollow"
+    ],
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFollow"
+    ],
+    [
+     706,
+     1,
+     "StateFollow"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFollow"
+    ],
+    [
+     707,
+     2,
+     "StateFollow"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     733,
+     1,
+     "StateFollow"
+    ],
+    [
+     733,
+     1,
+     "StateFollow"
+    ],
+    [
+     739,
+     1,
+     "StateFollow"
+    ],
+    [
+     739,
+     1,
+     "StateFollow"
+    ],
+    [
+     742,
+     1,
+     "StateFree"
+    ],
+    [
+     786,
+     0,
+     "StateFollow"
+    ],
+    [
+     786,
+     0,
+     "StateFollow"
+    ],
+    [
+     789,
+     0,
+     "StateFree"
+    ],
+    [
+     803,
+     2,
+     "StateFollow"
+    ],
+    [
+     803,
+     2,
+     "StateFollow"
+    ],
+    [
+     806,
+     2,
+     "StateFollow"
+    ],
+    [
+     806,
+     2,
+     "StateFollow"
+    ],
+    [
+     812,
+     2,
+     "StateFollow"
+    ],
+    [
+     812,
+     2,
+     "StateFollow"
+    ],
+    [
+     815,
+     2,
+     "StateFree"
+    ],
+    [
+     849,
+     0,
+     "StateFollow"
+    ],
+    [
+     849,
+     0,
+     "StateFollow"
+    ],
+    [
+     855,
+     0,
+     "StateFree"
+    ],
+    [
+     874,
+     1,
+     "StateFollow"
+    ],
+    [
+     874,
+     1,
+     "StateFollow"
+    ],
+    [
+     877,
+     1,
+     "StateFree"
+    ],
+    [
+     897,
+     0,
+     "StateFollow"
+    ],
+    [
+     897,
+     0,
+     "StateFollow"
+    ],
+    [
+     900,
+     0,
+     "StateFree"
+    ],
+    [
+     909,
+     0,
+     "StateFollow"
+    ],
+    [
+     909,
+     0,
+     "StateFollow"
+    ],
+    [
+     912,
+     0,
+     "StateFree"
+    ],
+    [
+     953,
+     2,
+     "StateFollow"
+    ],
+    [
+     953,
+     2,
+     "StateFollow"
+    ],
+    [
+     959,
+     2,
+     "StateFree"
+    ],
+    [
+     984,
+     0,
+     "StateFollow"
+    ],
+    [
+     984,
+     0,
+     "StateFollow"
+    ],
+    [
+     987,
+     0,
+     "StateFree"
+    ],
+    [
+     991,
+     1,
+     "StateFollow"
+    ],
+    [
+     991,
+     1,
+     "StateFollow"
+    ],
+    [
+     997,
+     1,
+     "StateFree"
+    ],
+    [
+     1031,
+     2,
+     "StateFollow"
+    ],
+    [
+     1031,
+     2,
+     "StateFollow"
+    ],
+    [
+     1034,
+     2,
+     "StateFree"
+    ],
+    [
+     1041,
+     0,
+     "StateFollow"
+    ],
+    [
+     1041,
+     0,
+     "StateFollow"
+    ],
+    [
+     1044,
+     0,
+     "StateFree"
+    ],
+    [
+     1048,
+     1,
+     "StateFollow"
+    ],
+    [
+     1048,
+     1,
+     "StateFollow"
+    ],
+    [
+     1051,
+     1,
+     "StateFree"
+    ],
+    [
+     1127,
+     2,
+     "StateFollow"
+    ],
+    [
+     1127,
+     2,
+     "StateFollow"
+    ],
+    [
+     1130,
+     2,
+     "StateFree"
+    ],
+    [
+     1140,
+     0,
+     "StateFollow"
+    ],
+    [
+     1140,
+     0,
+     "StateFollow"
+    ]
+   ],
+   "path_searches": 101
+  }
+ },
+ {
+  "run": "ai-pac-man-hard-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 0,
+    "find_range": 10,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 1.0,
+      "target": "player1|player2",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 1.0,
+      "advanceAttack": 1.0,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 0,
+    "find_range": 10,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 1.0,
+      "target": "player1|player2",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 1.0,
+      "advanceAttack": 1.0,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 0,
+    "find_range": 10,
+    "default": "StateFollow",
+    "states": [
+     {
+      "class": "StateFollow",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": true,
+      "precentage": 1.0,
+      "target": "player1|player2",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 1.0,
+      "advanceAttack": 1.0,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 440
+   },
+   "perception_updates": 549,
+   "checks": {
+    "StateFollow": 47,
+    "StateEscape": 47,
+    "StateFree": 47
+   },
+   "passed": {
+    "StateFree": 37
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFollow"
+    ],
+    [
+     705,
+     0,
+     "StateFollow"
+    ],
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFollow"
+    ],
+    [
+     706,
+     1,
+     "StateFollow"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFollow"
+    ],
+    [
+     707,
+     2,
+     "StateFollow"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     752,
+     2,
+     "StateFollow"
+    ],
+    [
+     752,
+     2,
+     "StateFollow"
+    ],
+    [
+     755,
+     2,
+     "StateFree"
+    ],
+    [
+     798,
+     0,
+     "StateFollow"
+    ],
+    [
+     798,
+     0,
+     "StateFollow"
+    ],
+    [
+     804,
+     0,
+     "StateFollow"
+    ],
+    [
+     804,
+     0,
+     "StateFollow"
+    ],
+    [
+     807,
+     0,
+     "StateFree"
+    ],
+    [
+     814,
+     1,
+     "StateFollow"
+    ],
+    [
+     814,
+     1,
+     "StateFollow"
+    ],
+    [
+     817,
+     1,
+     "StateFree"
+    ],
+    [
+     857,
+     2,
+     "StateFollow"
+    ],
+    [
+     857,
+     2,
+     "StateFollow"
+    ],
+    [
+     860,
+     2,
+     "StateFree"
+    ],
+    [
+     911,
+     2,
+     "StateFollow"
+    ],
+    [
+     911,
+     2,
+     "StateFollow"
+    ],
+    [
+     915,
+     0,
+     "StateFollow"
+    ],
+    [
+     915,
+     0,
+     "StateFollow"
+    ],
+    [
+     917,
+     2,
+     "StateFree"
+    ],
+    [
+     921,
+     0,
+     "StateFollow"
+    ],
+    [
+     921,
+     0,
+     "StateFollow"
+    ],
+    [
+     924,
+     0,
+     "StateFree"
+    ],
+    [
+     940,
+     1,
+     "StateFollow"
+    ],
+    [
+     940,
+     1,
+     "StateFollow"
+    ],
+    [
+     943,
+     1,
+     "StateFree"
+    ],
+    [
+     970,
+     1,
+     "StateFollow"
+    ],
+    [
+     970,
+     1,
+     "StateFollow"
+    ],
+    [
+     973,
+     1,
+     "StateFree"
+    ],
+    [
+     974,
+     2,
+     "StateFollow"
+    ],
+    [
+     974,
+     2,
+     "StateFollow"
+    ],
+    [
+     977,
+     2,
+     "StateFree"
+    ],
+    [
+     1026,
+     0,
+     "StateFollow"
+    ],
+    [
+     1026,
+     0,
+     "StateFollow"
+    ],
+    [
+     1029,
+     0,
+     "StateFree"
+    ],
+    [
+     1051,
+     1,
+     "StateFollow"
+    ],
+    [
+     1051,
+     1,
+     "StateFollow"
+    ],
+    [
+     1054,
+     1,
+     "StateFree"
+    ],
+    [
+     1081,
+     1,
+     "StateFollow"
+    ],
+    [
+     1081,
+     1,
+     "StateFollow"
+    ],
+    [
+     1084,
+     1,
+     "StateFree"
+    ],
+    [
+     1088,
+     2,
+     "StateFollow"
+    ],
+    [
+     1088,
+     2,
+     "StateFollow"
+    ],
+    [
+     1091,
+     2,
+     "StateFree"
+    ],
+    [
+     1123,
+     1,
+     "StateFollow"
+    ],
+    [
+     1123,
+     1,
+     "StateFollow"
+    ],
+    [
+     1126,
+     1,
+     "StateFree"
+    ],
+    [
+     1140,
+     0,
+     "StateFollow"
+    ],
+    [
+     1140,
+     0,
+     "StateFollow"
+    ]
+   ],
+   "path_searches": 105
+  }
+ },
+ {
+  "run": "ai-green-zone-easy-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 30,
+    "find_range": 5,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.4,
+      "target": "player1|phip",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.5,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.6,
+      "advanceAttack": 0.4,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 200.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 431
+   },
+   "perception_updates": 455,
+   "checks": {
+    "StateFlag": 26,
+    "StateDefence": 19,
+    "StateAttack": 10,
+    "StateEvade": 9,
+    "StateGetItem": 9,
+    "StateBox": 7,
+    "StateFree": 7,
+    "StateEscape": 2
+   },
+   "passed": {
+    "StateFlag": 7,
+    "StateFree": 5,
+    "StateDefence": 9,
+    "StateAttack": 1,
+    "StateEscape": 2,
+    "StateGetItem": 2
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     705,
+     0,
+     "StateFlag"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     779,
+     2,
+     "StateFlag"
+    ],
+    [
+     786,
+     0,
+     "StateDefence"
+    ],
+    [
+     786,
+     0,
+     "StateDefence"
+    ],
+    [
+     793,
+     1,
+     "StateFlag"
+    ],
+    [
+     803,
+     2,
+     "StateDefence"
+    ],
+    [
+     803,
+     2,
+     "StateDefence"
+    ],
+    [
+     830,
+     1,
+     "StateDefence"
+    ],
+    [
+     830,
+     1,
+     "StateDefence"
+    ],
+    [
+     846,
+     2,
+     "StateFree"
+    ],
+    [
+     847,
+     2,
+     "StateDefence"
+    ],
+    [
+     847,
+     2,
+     "StateDefence"
+    ],
+    [
+     917,
+     0,
+     "StateAttack"
+    ],
+    [
+     917,
+     0,
+     "StateAttack"
+    ],
+    [
+     918,
+     2,
+     "StateEscape"
+    ],
+    [
+     940,
+     1,
+     "StateEscape"
+    ],
+    [
+     988,
+     0,
+     "StateFree"
+    ],
+    [
+     1005,
+     1,
+     "StateFree"
+    ],
+    [
+     1025,
+     1,
+     "StateFlag"
+    ],
+    [
+     1036,
+     0,
+     "StateFlag"
+    ],
+    [
+     1046,
+     2,
+     "StateGetItem"
+    ],
+    [
+     1056,
+     0,
+     "StateDefence"
+    ],
+    [
+     1056,
+     0,
+     "StateDefence"
+    ],
+    [
+     1125,
+     2,
+     "StateFlag"
+    ],
+    [
+     1128,
+     0,
+     "StateFree"
+    ],
+    [
+     1130,
+     0,
+     "StateDefence"
+    ],
+    [
+     1130,
+     0,
+     "StateDefence"
+    ]
+   ],
+   "path_searches": 38
+  }
+ },
+ {
+  "run": "ai-green-zone-normal-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 20,
+    "find_range": 6,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.6,
+      "target": "player1|phip",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.7,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.8,
+      "advanceAttack": 0.6,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 150.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 425
+   },
+   "perception_updates": 447,
+   "checks": {
+    "StateFlag": 26,
+    "StateDefence": 18,
+    "StateAttack": 8,
+    "StateEvade": 8,
+    "StateGetItem": 8,
+    "StateBox": 5,
+    "StateFree": 5
+   },
+   "passed": {
+    "StateFlag": 8,
+    "StateFree": 5,
+    "StateDefence": 10,
+    "StateGetItem": 3
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     705,
+     0,
+     "StateFlag"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     761,
+     2,
+     "StateFlag"
+    ],
+    [
+     777,
+     0,
+     "StateDefence"
+    ],
+    [
+     777,
+     0,
+     "StateDefence"
+    ],
+    [
+     808,
+     1,
+     "StateFlag"
+    ],
+    [
+     815,
+     2,
+     "StateDefence"
+    ],
+    [
+     815,
+     2,
+     "StateDefence"
+    ],
+    [
+     886,
+     2,
+     "StateFree"
+    ],
+    [
+     887,
+     2,
+     "StateDefence"
+    ],
+    [
+     887,
+     2,
+     "StateDefence"
+    ],
+    [
+     937,
+     1,
+     "StateFree"
+    ],
+    [
+     938,
+     0,
+     "StateGetItem"
+    ],
+    [
+     960,
+     2,
+     "StateFlag"
+    ],
+    [
+     962,
+     0,
+     "StateFlag"
+    ],
+    [
+     984,
+     2,
+     "StateDefence"
+    ],
+    [
+     984,
+     2,
+     "StateDefence"
+    ],
+    [
+     998,
+     0,
+     "StateDefence"
+    ],
+    [
+     998,
+     0,
+     "StateDefence"
+    ],
+    [
+     1005,
+     1,
+     "StateFlag"
+    ],
+    [
+     1070,
+     0,
+     "StateFree"
+    ],
+    [
+     1072,
+     0,
+     "StateDefence"
+    ],
+    [
+     1072,
+     0,
+     "StateDefence"
+    ],
+    [
+     1077,
+     1,
+     "StateFree"
+    ],
+    [
+     1079,
+     1,
+     "StateFlag"
+    ],
+    [
+     1094,
+     2,
+     "StateGetItem"
+    ],
+    [
+     1102,
+     0,
+     "StateGetItem"
+    ],
+    [
+     1125,
+     2,
+     "StateFree"
+    ]
+   ],
+   "path_searches": 34
+  }
+ },
+ {
+  "run": "ai-green-zone-hard-01",
+  "ai": [
+   {
+    "robot": 5,
+    "answer_time": 10,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.9,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 3,
+    "answer_time": 10,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.9,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   },
+   {
+    "robot": 7,
+    "answer_time": 10,
+    "find_range": 7,
+    "default": "StateFree",
+    "states": [
+     {
+      "class": "StateFlag",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateDefence",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateAttack",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "-bricker|-throw",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "player1|phip",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEvade",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateGetItem",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": true,
+      "hasInvisiblity": false,
+      "precentage": 0.9,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateBox",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "false",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateFree",
+      "advanceDodge": 0.9,
+      "advanceAttack": 0.8,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 0.8,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     },
+     {
+      "class": "StateEscape",
+      "advanceDodge": 1,
+      "advanceAttack": 1,
+      "hasWeapon": "",
+      "isDanger": true,
+      "hasItem": false,
+      "hasInvisiblity": false,
+      "precentage": 1.0,
+      "target": "",
+      "weaponAttackDelay": 100.0
+     }
+    ]
+   }
+  ],
+  "trace": {
+   "frames": [
+    702,
+    1141
+   ],
+   "updates_per_frame": {
+    "1": 438
+   },
+   "perception_updates": 454,
+   "checks": {
+    "StateFlag": 25,
+    "StateDefence": 17,
+    "StateAttack": 2,
+    "StateEvade": 1,
+    "StateGetItem": 1,
+    "StateBox": 1,
+    "StateFree": 1
+   },
+   "passed": {
+    "StateFlag": 8,
+    "StateFree": 1,
+    "StateDefence": 15,
+    "StateAttack": 1
+   },
+   "entered": [
+    [
+     705,
+     0,
+     "StateFree"
+    ],
+    [
+     705,
+     0,
+     "StateFlag"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     706,
+     1,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFree"
+    ],
+    [
+     707,
+     2,
+     "StateFlag"
+    ],
+    [
+     777,
+     0,
+     "StateDefence"
+    ],
+    [
+     777,
+     0,
+     "StateDefence"
+    ],
+    [
+     778,
+     1,
+     "StateFlag"
+    ],
+    [
+     794,
+     2,
+     "StateDefence"
+    ],
+    [
+     794,
+     2,
+     "StateDefence"
+    ],
+    [
+     823,
+     2,
+     "StateFree"
+    ],
+    [
+     825,
+     2,
+     "StateDefence"
+    ],
+    [
+     825,
+     2,
+     "StateDefence"
+    ],
+    [
+     838,
+     1,
+     "StateDefence"
+    ],
+    [
+     838,
+     1,
+     "StateDefence"
+    ],
+    [
+     909,
+     1,
+     "StateFree"
+    ],
+    [
+     910,
+     1,
+     "StateDefence"
+    ],
+    [
+     910,
+     1,
+     "StateDefence"
+    ],
+    [
+     914,
+     0,
+     "StateFlag"
+    ],
+    [
+     957,
+     2,
+     "StateAttack"
+    ],
+    [
+     957,
+     2,
+     "StateAttack"
+    ],
+    [
+     982,
+     1,
+     "StateFlag"
+    ],
+    [
+     1029,
+     2,
+     "StateFlag"
+    ],
+    [
+     1051,
+     1,
+     "StateDefence"
+    ],
+    [
+     1051,
+     1,
+     "StateDefence"
+    ],
+    [
+     1056,
+     0,
+     "StateDefence"
+    ],
+    [
+     1056,
+     0,
+     "StateDefence"
+    ],
+    [
+     1101,
+     2,
+     "StateDefence"
+    ],
+    [
+     1101,
+     2,
+     "StateDefence"
+    ],
+    [
+     1122,
+     1,
+     "StateFree"
+    ],
+    [
+     1123,
+     1,
+     "StateDefence"
+    ],
+    [
+     1123,
+     1,
+     "StateDefence"
+    ]
+   ],
+   "path_searches": 25
+  }
+ }
+]

@@ -72,8 +72,11 @@ func command(state: Dictionary, id: StringName) -> Dictionary:
 			memory.ready = true
 			if memory.complete: _choose(state, id, memory)
 		else:
-			# Source never resets this cached accumulator after its initial threshold.
-			memory.answer_elapsed = state.tick * 1000.0 / 35.0
+			# `AIControl.update`: `_time = getTimer() - _lastTime` with `_lastTime` still 0, so the
+			# first selected opportunity caches the player's whole running time (always past
+			# every `aiAnswerTime`, menus included) and thinks on every later one; the cached
+			# value is never reset (traced in every mode and difficulty, #84).
+			memory.answer_elapsed = INF
 	if memory.state == &"Defence" and not memory.complete:
 		_defend(state, id, memory, output)
 	else:
@@ -97,10 +100,11 @@ func _choose(state: Dictionary, id: StringName, memory: Dictionary) -> void:
 	var aim: Variant = null
 	var default_instance := true
 	for index in _order.size():
-		if _random() > _chance[index]: continue
+		var kind: StringName = _order[index]
+		# StateFlag and StateDefence decide without a draw; their percentage is unused.
+		if kind not in [&"Flag", &"Defence"] and _random() > _chance[index]: continue
 		target = null
 		aim = null
-		var kind: StringName = _order[index]
 		match kind:
 			&"Attack", &"Box":
 				if actor.get("bomb_count", 0) >= actor.capacity: continue
@@ -129,15 +133,19 @@ func _choose(state: Dictionary, id: StringName, memory: Dictionary) -> void:
 				memory.timer = state.tick + 70
 				return
 			&"Follow":
-				# StateFollow: chase a human inside this ghost's manager areas.
-				if actor.get("bomb_count", 0) >= actor.capacity: continue
+				# StateFollow: chase a human inside this ghost's manager areas. It is chosen
+				# whenever there is one, even with no attack position; `update` then finishes
+				# at once without a position or with every bomb out.
 				var followed := _followed(state, id)
 				if followed == &"": continue
 				var selected := _attack_position(state, actor, perception, [state.actors[followed].cell])
-				if selected.is_empty(): continue
-				target = selected.cell
-				aim = selected.aim
 				memory.follow = followed
+				choice = kind
+				default_instance = false
+				if not selected.is_empty() and actor.get("bomb_count", 0) < actor.capacity:
+					target = selected.cell
+					aim = selected.aim
+				break
 			&"Free": target = _best(state, actor.cell, _roam(perception), perception.costs, 100)
 			&"Escape":
 				var invincible := _invincible_enemies(state, id)
@@ -418,10 +426,11 @@ func _shares_area(id: StringName, cell: Vector2i) -> bool:
 	return regions(cell).any(func(key): return key in _areas.get(id, []))
 
 
-## Spawn protection and pickup invincibility both show RobotState.INVINCIBLE.
+## Only the invincibility pickup sets RobotState.INVINCIBLE (`InvincibilityProp.changeStage`);
+## spawn protection (`InvincibilityCommand`) leaves the state alone.
 func _invincible_state(state: Dictionary, other: StringName) -> bool:
 	var actor: Dictionary = state.actors[other]
-	return actor.alive and (actor.invincible_until > state.tick or actor.get("protected_until", 0) > state.tick)
+	return actor.alive and actor.invincible_until > state.tick
 
 
 ## StateFollow.initRobotsFollow: humans in the manager areas, none while a robot there is invincible.
@@ -473,6 +482,10 @@ func _defend(state: Dictionary, id: StringName, memory: Dictionary, output: Dict
 	var flag: Variant = state.get("mode_state", {}).get("flag")
 	if flag == null or actor.cell != flag or _danger(Perception.observe(state, id, _node_costs, profile.find_range, _attack_all()), actor.cell, 30):
 		memory.complete = true
+		return
+	# A rival sharing the flag cell: bomb in place (`map.getRobot` has more than one robot).
+	if state.actors.keys().any(func(other): return other != id and state.actors[other].alive and state.actors[other].cell == actor.cell):
+		output.bomb_events = [&"down", &"up"]
 		return
 	var reach := _attack_reach(actor)
 	for other in state.actors:

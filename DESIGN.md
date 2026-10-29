@@ -154,6 +154,10 @@ records the trade-off.
   - The two glove-slot items drop with their XML weights (#85): PUSH THE BOMB kicks a touched
     bomb at 7 px per step with its fuse paused; BOXING GLOVE punches up to two cells after
     13 steps, two uses.
+  - The AI follows the traced original in every mode and difficulty (#84, [evidence](docs/evidence/edition-5-ai-modes.md)):
+    live profiles, the `getTimer` answer gate (first opportunity waits, every later one
+    thinks), Flag and Defence decided without a draw, Follow entered with no position or no
+    bomb left, and only the invincibility pickup counting as invincible.
   - All original art comes from the pack (#74, [evidence](docs/evidence/edition-5-robot-looks.md)):
     hats and outfits are frames of the robot clips' innermost `hatMc`/`bodyMc`; the
     protection blink and portal transit are the original colour flash and fade, not

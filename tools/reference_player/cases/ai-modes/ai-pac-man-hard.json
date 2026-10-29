@@ -1,0 +1,103 @@
+{
+ "name": "ai-pac-man-hard",
+ "actions": [
+  {
+   "command": "seed 2"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 418 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 545 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 356"
+  },
+  {
+   "command": "step 2",
+   "capture": "settings"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "observe_command": "events events 200000 zlong.bombit5.gameengine.ai"
+  },
+  {
+   "command": "step 81",
+   "capture": "opening-board"
+  },
+  {
+   "command": "step 70",
+   "capture": "play-01"
+  },
+  {
+   "command": "step 70",
+   "capture": "play-02"
+  },
+  {
+   "command": "step 70",
+   "capture": "play-03"
+  },
+  {
+   "command": "step 70",
+   "capture": "play-04"
+  },
+  {
+   "command": "step 70",
+   "capture": "play-05"
+  },
+  {
+   "command": "step 70",
+   "capture": "play-06"
+  },
+  {
+   "observe_command": "events off"
+  }
+ ]
+}

@@ -639,3 +639,12 @@ each robot direction clip, found from the SWF timelines. The 22 slots with no SW
 Under the replica, the blink and transit are drawn as the original colour flash and fade.
 The record is [robot looks](evidence/edition-5-robot-looks.md).
 
+### 2026-10-29 AI in every mode and difficulty (#84)
+
+Twelve reference traces (`tools/reference_player/cases/ai-modes/`) record each mode and
+difficulty's live AI profile and call-level decisions. All twelve profiles match
+`ai_profiles.gd`. The traces and source fixed five differences: the `getTimer` answer gate,
+Flag and Defence drawing no number, Defence's shared-cell bomb, Follow entered with no
+position or no bomb, and spawn protection not being invincible. `tests/ai_trace_check.gd`
+covers them. The record is [AI modes](evidence/edition-5-ai-modes.md).
+
