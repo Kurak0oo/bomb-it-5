@@ -154,6 +154,10 @@ records the trade-off.
   - The two glove-slot items drop with their XML weights (#85): PUSH THE BOMB kicks a touched
     bomb at 7 px per step with its fuse paused; BOXING GLOVE punches up to two cells after
     13 steps, two uses.
+  - All original art comes from the pack (#74, [evidence](docs/evidence/edition-5-robot-looks.md)):
+    hats and outfits are frames of the robot clips' innermost `hatMc`/`bodyMc`; the
+    protection blink and portal transit are the original colour flash and fade, not
+    overlays; the action pose, touch controls and desktop panels have no original art.
   - The quality switch follows `qualityCtlHandle` (#86, [evidence](docs/evidence/edition-5-quality.md)):
     HIGH → MEDIUM → LOW from the main menu or pause screen, HIGH by default, kept for the
     session only. HIGH smooths bitmaps and anti-aliases shapes, MEDIUM anti-aliases shapes

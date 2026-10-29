@@ -2,6 +2,8 @@ extends Node2D
 ## Original vector artwork. Receives snapshots; never owns or advances gameplay.
 
 const PITCH := 36.0
+## Portal transit length in steps (`BombSimulation`, `SendRobotCommand` totalFrame).
+const TRANSIT_TICKS := 29
 const ORIGIN := Vector2(334, 86)
 ## Art slots and native colours per robot r0-r7 (Session.ROBOTS order).
 const ROBOT_SLOTS := [&"human", &"ruby", &"lime", &"gold", &"violet", &"slate", &"mint", &"snow"]
@@ -448,9 +450,13 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 		draw_line(at + Vector2(-5, 8), at + Vector2(5, 8), skull, 4, Quality.edges)
 		return
 	if actor.transit_until > 0:
-		if not skin.draw(self, "effect.transit", ArtCatalog.rect("effect.transit", at), state.tick):
-			draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, Quality.edges)
-		color.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
+		if compact:
+			# `SendRobotCommand` only fades the robot: alpha = 1 - frame / 35, no overlay art.
+			color.a = clampf(1.0 - float(state.tick - (actor.transit_until - TRANSIT_TICKS)) / 35.0, 0.0, 1.0)
+		else:
+			if not skin.draw(self, "effect.transit", ArtCatalog.rect("effect.transit", at), state.tick):
+				draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, Quality.edges)
+			color.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
 	if actor.vehicle != &"":
 		var recovering: bool = actor.get("vehicle_recovery_until", 0) > state.tick
 		var ride_color := Color("d77f68") if recovering else Color("3c8890")
@@ -469,7 +475,7 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 		var aura := "effect.invincible_intro" if introducing and skin.texture("effect.invincible_intro") != null else "effect.invincible"
 		if not skin.draw(self, aura, ArtCatalog.rect(aura, at), state.tick):
 			draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, Quality.edges)
-	if actor.blink_until > state.tick or actor.get("protection_stage") == &"blink":
+	if (actor.blink_until > state.tick or actor.get("protection_stage") == &"blink") and not compact:
 		skin.draw(self, "effect.blink", ArtCatalog.rect("effect.blink", at), state.tick)
 		color = color.lightened(0.35 if state.tick % 6 < 3 else 0.0)
 	var bob := sin(state.tick * 0.8) * 1.5 if actor.velocity.length() > 0.02 and not paused else 0.0
@@ -482,7 +488,7 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 			break
 	var pose := "action" if action_progress >= 0 else "walk" if requested and actor.velocity.length() > 0.02 else "idle"
 	var modulation := Color(1, 1, 1, color.a)
-	if actor.blink_until > state.tick and state.tick % 6 < 3: modulation = Color(1.35, 1.35, 1.35, color.a)
+	if actor.blink_until > state.tick and _blink_bright(actor): modulation = Color(1.35, 1.35, 1.35, color.a)
 	var slot := "actor.%s.%s" % [ROBOT_SLOTS[robot], pose]
 	var replaced: bool = skin.draw(self, slot, ArtCatalog.rect(slot, at), state.tick, actor.facing, action_progress, modulation)
 	if not replaced and pose != "idle":
@@ -506,6 +512,14 @@ func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
 	if actor.weapon not in [&"", &"none"]:
 		if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
 			_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
+
+
+## Protection blink. The replica follows `InvincibilityCommand`: every 4th frame toggles a
+## +50 colour offset (drawn as a 1.35 brightness), with no overlay art. Otherwise it is a 3-on,
+## 3-off flash.
+func _blink_bright(actor: Dictionary) -> bool:
+	if compact: return int(floor(float(actor.blink_until - state.tick) / 4.0)) % 2 == 0
+	return state.tick % 6 < 3
 
 
 ## Unlocked hat and outfit over a robot: `look.<robot>.hat<k>`/`body<k>` slots or native shapes.

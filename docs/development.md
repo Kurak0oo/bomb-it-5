@@ -631,3 +631,11 @@ and the antialiased flag of procedural lines and arcs (shape anti-aliasing). The
 draw their original frames (three new slots, 299 in all). The record is
 [quality](evidence/edition-5-quality.md), with a capture.
 
+### 2026-10-29 robot looks and remaining art (#74)
+
+The 64 hat and outfit slots are mapped to frames of the innermost `hatMc`/`bodyMc` clip in
+each robot direction clip, found from the SWF timelines. The 22 slots with no SWF art
+(action pose, blink, transit, touch controls, desktop panels) are marked `no_original`.
+Under the replica, the blink and transit are drawn as the original colour flash and fade.
+The record is [robot looks](evidence/edition-5-robot-looks.md).
+
