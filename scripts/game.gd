@@ -18,6 +18,8 @@ const Fidelity = preload("res://scripts/fidelity.gd")
 const ReplicaLayout = preload("res://scripts/replica_layout.gd")
 const ReplicaScenery = preload("res://scripts/replica_scenery.gd")
 const ReplicaHud = preload("res://scripts/replica_hud.gd")
+const Audio = preload("res://scripts/original_audio.gd")
+const UiKit = preload("res://scripts/ui_kit.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -107,6 +109,16 @@ func _ready() -> void:
 		buttons.pause.visible = false
 		_place_pause_button(buttons.pause, hud.pause_to_page(hud.PAUSE_RESUME))
 		_place_pause_button(buttons.menu, hud.pause_to_page(hud.PAUSE_MENU))
+		# The pause screen's own sound and music switches (`PauseUI`); its music switch only
+		# sets the flag, so a resumed round stays silent until music is on again.
+		var audio := Audio.current
+		buttons.sound = UiKit.switch(self, &"PauseSound", "SOUND", hud.pause_to_page(hud.PAUSE_SOUND), audio == null or audio.sound_on,
+			func(on: bool): if Audio.current != null: Audio.current.set_sound(on))
+		buttons.music = UiKit.switch(self, &"PauseMusic", "MUSIC", hud.pause_to_page(hud.PAUSE_MUSIC), audio == null or audio.music_on,
+			func(on: bool): if Audio.current != null: Audio.current.set_music(on, false))
+		for key in ["sound", "music"]:
+			if hud.pause_art(): UiKit.ghost(buttons[key])
+			buttons[key].visible = false
 	if auto_start: start_session(true)
 
 
@@ -116,6 +128,8 @@ func play_level() -> void:
 	total_score = session.total_score
 	stage_set = session.current_set
 	_start_round(false, session.next_seed())
+	# `gameStartHandler` starts the round's music once the board is up.
+	if Audio.current != null: Audio.current.create_game_music()
 
 
 func start_session(is_practice: bool = false, seed_value: int = -1) -> void:
@@ -225,8 +239,10 @@ func _ai_command(id: StringName) -> Dictionary:
 func advance_time(seconds: float) -> void:
 	var update: Dictionary = scheduler.advance_time(seconds)
 	for tick in update.ticks:
+		var was_ending: bool = state.get("round_stage") == &"ending"
 		previous_state = state
 		state = tick
+		_play_audio(was_ending)
 		if pause_after > 0:
 			pause_after -= 1
 			if pause_after == 0 and state.outcome == &"running":
@@ -258,12 +274,20 @@ func toggle_pause() -> void:
 	if replica and not paused:
 		# `gamePause` waits 100 ms; a second press inside that window cancels it (`gameResume`
 		# with `gamePaused` still false clears the timeout).
-		pause_after = PAUSE_DELAY_STEPS if pause_after < 0 else -1
+		if pause_after < 0:
+			pause_after = PAUSE_DELAY_STEPS
+		else:
+			pause_after = -1
+			# The cancelling `gameResume` calls `createGameMusic`: the round's track starts
+			# again and the next round's choice moves on.
+			if Audio.current != null: Audio.current.create_game_music()
 		return
 	if paused:
 		if scheduler.resume():
 			paused = false
 			if replica: _credit_paused_time()
+			# `doGameResume` restarts the music 100 ms later, from the start of the track.
+			if Audio.current != null: Audio.current.restart_game_music()
 	else:
 		scheduler.pause()
 		paused = true
@@ -276,11 +300,27 @@ func toggle_pause() -> void:
 	_refresh()
 
 
+## The step's sounds, and the win or lose jingle when the ending begins (`win`/`lose`:
+## `stopPause` stops the round music, then `playWinMusic`/`playLoseMusic`).
+func _play_audio(was_ending: bool) -> void:
+	var audio := Audio.current
+	if audio == null: return
+	audio.play_sounds(state.get("sounds", []))
+	if was_ending or state.get("round_stage") != &"ending": return
+	audio.pause_game_music()
+	audio.null_game_music()
+	var outcome: StringName = state.get("pending_outcome", &"")
+	var won: bool = outcome == &"won" or (outcome == &"timeout" and state.get("mode") == &"arcade" and Fidelity.timeout_wins())
+	if won: audio.create_level_complete_music()
+	else: audio.create_level_failed_music()
+
+
 ## The pause takes effect: the engine stops and every robot's movement stage is cleared.
 func _begin_original_pause() -> void:
 	pause_after = -1
 	scheduler.pause()
 	paused = true
+	if Audio.current != null: Audio.current.pause_game_music()
 	simulation.hold_movement()
 	_paused_at_msec = _now_msec()
 	held.clear()
@@ -396,6 +436,8 @@ func _place_pause_button(button: Button, rect: Rect2) -> void:
 
 
 func _refresh() -> void:
+	for key in ["sound", "music"]:
+		if buttons.has(key): buttons[key].visible = paused
 	if is_instance_valid(view) and not state.is_empty():
 		touch_controls.enabled = _can_control()
 		var snapshot := get_snapshot()

@@ -51,6 +51,7 @@ var _mode: RefCounted
 var _board_max := Vector2i(16, 14)
 var _features: Array = []
 var _current_blasts: Array[Dictionary] = []
+var _sounds: Array[StringName] = []
 var _current_broken: Array[Vector2i] = []
 
 
@@ -139,11 +140,13 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 		var stopped := snapshot()
 		stopped.accepted = false
 		stopped.commands = []
+		stopped.sounds = []
 		return stopped
 	var result: Dictionary = _commands.advance(commands)
 	_tick = result.tick
 	var blasts: Array[Dictionary] = []
 	var broken_soft_blocks: Array[Vector2i] = []
+	_sounds = []
 	_current_blasts = blasts
 	_current_broken = broken_soft_blocks
 	if result.accepted:
@@ -198,6 +201,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 						"power": actor.get("power", 1), "born": _tick, "age": 0, "blasted": false, "previous_cell": Vector2i.ZERO}
 					_bombs.append(placed)
 					_countdowns.append(placed)
+					play_sound(&"addBomb")
 					actor.bomb_count += 1
 					for other in _actors.values():
 						if Movement.overlaps(other.position, actor.cell) and actor.cell not in other.departures:
@@ -278,6 +282,8 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 		if _round_stage != &"ending": _mode.tick(self, _tick)
 		if _rules.get("round", false):
 			_finish_round()
+	for sound in _weapons.sounds: play_sound(sound)
+	_weapons.sounds.clear()
 	result.merge(snapshot(), true)
 	result.blasts = blasts
 	result.broken_soft_blocks = broken_soft_blocks
@@ -295,7 +301,20 @@ func snapshot() -> Dictionary:
 		"mode": _mode.name, "difficulty": _mode.difficulty, "mode_state": _mode.public_state(), "points_goal": _mode.points_goal(), "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
 		"features": _features.map(func(feature): return feature.public_state()),
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
-		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys()}
+		"projectiles": _weapons.projectiles.duplicate(true), "fire": _fire.keys(), "sounds": _sounds.duplicate()}
+
+
+## `SoundManger.createSound`: each class plays at most once per step, whatever raised it.
+func play_sound(sound: StringName) -> void:
+	if sound not in _sounds: _sounds.append(sound)
+
+
+## The sounds `GetItemCommand` and the item's own `changeStage` raise for a pickup.
+func _pickup_sounds(kind: StringName, eaten := true) -> void:
+	var own: StringName = {&"car": &"getCar", &"moto": &"getPlane", &"horse": &"getFog", &"dragon": &"getDragon",
+		&"invincible": &"InvincibilitySound"}.get(kind, &"")
+	if own != &"": play_sound(own)
+	if eaten: play_sound(&"eatProp")
 
 
 func _public_bombs() -> Array[Dictionary]:
@@ -315,6 +334,7 @@ func _public_bombs() -> Array[Dictionary]:
 func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2i], mine_contact: bool = false) -> void:
 	if bomb.get("detonated", false): return
 	bomb.detonated = true
+	play_sound(&"bomb")
 	bomb.blasted = not mine_contact
 	_countdowns.erase(bomb)
 	if not mine_contact and _actors.has(bomb.actor_id): _actors[bomb.actor_id].bomb_count -= 1
@@ -388,10 +408,12 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 		actor.velocity = Vector2.ZERO
 	elif actor.shield > 0:
 		actor.shield -= 1
+		play_sound(&"useNombril")
 		actor.protected_until = _tick + 81
 	else:
 		if owner == actor_id: _mode.on_self_kill(actor)
 		actor.alive = false
+		play_sound(&"dead")
 		actor.model_state = &"dead"
 		actor.death_frame = 1
 		actor.velocity = Vector2.ZERO
@@ -548,6 +570,7 @@ func _advance_pickups() -> void:
 				_weapons.cancel(actor, _actors.find_key(actor))
 			var before := [actor.capacity, actor.power, actor.speed]
 			Pickups.apply(actor, kind, _tick, _mode.invincibility_ticks())
+			_pickup_sounds(kind)
 			if kind in [&"capacity", &"power", &"speed"] and [actor.capacity, actor.power, actor.speed] != before:
 				actor.collected.append(kind)
 			if weapon and _mode.keeps_weapon_pickups():
@@ -932,6 +955,7 @@ func _resolve_attack(effect: Dictionary, blasts: Array[Dictionary], broken: Arra
 			"power": 2, "kind": &"mine", "armed": false, "blasted": false, "detonated": false}
 		_bombs.append(mine)
 		_countdowns.append(mine)
+		play_sound(&"addBomb")
 		return
 	if effect.kind == &"laser":
 		var beam: Array[Vector2i] = []
@@ -992,6 +1016,7 @@ func _punch(effect: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2
 		var kind: StringName = _pickups[eaten]
 		_pickups.erase(eaten)
 		Pickups.apply(actor, kind, _tick, _mode.invincibility_ticks())
+		_pickup_sounds(kind, false)
 		_mode.pickup_removed(self, kind, owner)
 		# The spent glove then calls `initWeapon`, which also drops a weapon it just collected.
 		if spent:

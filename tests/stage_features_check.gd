@@ -288,6 +288,9 @@ class FakeRound extends RefCounted:
 	func draw_random() -> float:
 		return _rng.randf()
 
+	func play_sound(_sound: StringName) -> void:
+		pass
+
 	func board() -> Dictionary:
 		return {}
 

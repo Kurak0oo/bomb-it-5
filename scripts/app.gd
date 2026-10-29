@@ -15,6 +15,7 @@ const ArtCatalog = preload("res://scripts/art/catalog.gd")
 const ScreenLayout = preload("res://scripts/art/screen_layout.gd")
 const Looks = preload("res://scripts/looks.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
+const Audio = preload("res://scripts/original_audio.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -58,6 +59,7 @@ var skin: RefCounted
 var current := &""
 var save_path := SaveStore.DEFAULT_PATH
 var store: RefCounted
+var audio: Node
 var _rebinding: StringName = &""
 var _last_snapshot: Dictionary = {}
 var _new_looks: Array[int] = []
@@ -73,6 +75,19 @@ func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	skin = VisualSkin.new()
 	store = SaveStore.new(save_path)
+	audio = Audio.new()
+	audio.name = "Audio"
+	audio.sound_on = store.sound_on
+	audio.music_on = store.music_on
+	audio.persist = func(sound: bool, music: bool):
+		# Only the switches change; keys and unlocks are saved as they stand on disk.
+		var saved := SaveStore.new(save_path)
+		saved.sound_on = sound
+		saved.music_on = music
+		saved.save_file()
+		store.sound_on = sound
+		store.music_on = music
+	add_child(audio)
 	if "--practice" in OS.get_cmdline_user_args():
 		_open_practice()
 	else:
@@ -97,6 +112,17 @@ func show_main_menu() -> void:
 	_plate(&"more_games")
 	var start := _button(page, &"Start", "START", Rect2(490, 330, 300, 62), show_settings, 26)
 	_button(page, &"HowToPlay", "HOW TO PLAY", Rect2(490, 410, 300, 62), show_how_to_play, 26)
+	# `UI_MainMenu`'s sound and music switches; the music switch also stops or starts the menu music.
+	var sound := UiKit.switch(page, &"SoundSwitch", "SOUND", _rect(&"sound", Rect2(1110, 24, 150, 40)), audio.sound_on,
+		func(on: bool): audio.set_sound(on))
+	var music := UiKit.switch(page, &"MusicSwitch", "MUSIC", _rect(&"music", Rect2(1110, 72, 150, 40)), audio.music_on,
+		func(on: bool): audio.set_music(on))
+	_gate(sound, &"sound")
+	_gate(music, &"music")
+	# `UIManager` starts the menu music on the first menu, and again on returning to it
+	# (`mainMenu` drops the round's music first).
+	audio.null_game_music()
+	audio.create_ui_music()
 	start.grab_focus.call_deferred()
 
 
@@ -351,6 +377,8 @@ func start_session() -> void:
 
 func _start_level() -> void:
 	_clear_screen()
+	# `gameStart` stops the menu music before the board loads.
+	audio.null_ui_music()
 	if not is_instance_valid(game):
 		game = Game.new()
 		game.session = session
@@ -457,6 +485,8 @@ func _continue() -> void:
 
 func show_end(won: bool) -> void:
 	_end_game()
+	# `OnePGameOverUI`: menu music, after the win or lose jingle if it is still playing.
+	audio.create_over_ui_music()
 	var page := _page(&"game_win" if won else &"game_over")
 	UiKit.panel(page, Rect2(290, 130, 700, 440))
 	UiKit.label(page, "GAME COMPLETE!" if won else "GAME OVER", Vector2(290, 170), 52, UiKit.ACCENT, 700, HORIZONTAL_ALIGNMENT_CENTER)

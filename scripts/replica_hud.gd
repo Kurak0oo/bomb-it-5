@@ -27,6 +27,10 @@ const PAUSE_RADIUS := 27.0
 const PAUSE_PAGE := Rect2(145.9, 0, 988.2, 720)
 const PAUSE_MENU := Rect2(158, 395, 152, 40)
 const PAUSE_RESUME := Rect2(360, 395, 153, 40)
+## The pause screen's switches (`UI_pause` instances `quality`, `sound`, `music`).
+const PAUSE_QUALITY := Rect2(632, 32, 33, 33)
+const PAUSE_SOUND := Rect2(632, 79, 33, 33)
+const PAUSE_MUSIC := Rect2(632, 126, 33, 33)
 ## Rival badges right of the map, leftmost first.
 const RIVAL_X := [1062.0, 1118.0, 1174.0]
 const RIVAL_Y := 34.0

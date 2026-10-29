@@ -1,5 +1,6 @@
 extends RefCounted
-## Local save file: key bindings and unlocks (`Cookie`, `HowToPlayUI.saveKeys`). No accounts.
+## Local save file: key bindings, unlocks and the sound and music switches (`Cookie`,
+## `HowToPlayUI.saveKeys`). No accounts.
 ## A missing or unreadable file starts from defaults.
 
 const DEFAULT_PATH := "user://bomb_it_5_save.json"
@@ -12,6 +13,9 @@ var path := DEFAULT_PATH
 var keys: Dictionary = DEFAULT_KEYS.duplicate()
 ## robot index (String) → array of unlocked look numbers 1-8.
 var unlocks: Dictionary = {}
+## `Cookie.soundEnable` / `musicEnable`, true until switched off.
+var sound_on := true
+var music_on := true
 
 
 func _init(file_path: String = DEFAULT_PATH) -> void:
@@ -22,6 +26,8 @@ func _init(file_path: String = DEFAULT_PATH) -> void:
 func load_file() -> void:
 	keys = DEFAULT_KEYS.duplicate()
 	unlocks = {}
+	sound_on = true
+	music_on = true
 	if not FileAccess.file_exists(path): return
 	var json := JSON.new()
 	if json.parse(FileAccess.get_file_as_string(path)) != OK or not json.data is Dictionary: return
@@ -32,6 +38,8 @@ func load_file() -> void:
 		for action in ACTIONS:
 			if saved_keys.get(action) is float: candidate[action] = int(saved_keys[action])
 		if valid_bindings(candidate): keys = candidate
+	if data.get("sound") is bool: sound_on = data.sound
+	if data.get("music") is bool: music_on = data.music
 	var saved_unlocks: Variant = data.get("unlocks", {})
 	if saved_unlocks is Dictionary:
 		for robot in saved_unlocks:
@@ -42,7 +50,7 @@ func load_file() -> void:
 func save_file() -> bool:
 	var file := FileAccess.open(path, FileAccess.WRITE)
 	if file == null: return false
-	file.store_string(JSON.stringify({"keys": keys, "unlocks": unlocks}, "\t"))
+	file.store_string(JSON.stringify({"keys": keys, "unlocks": unlocks, "sound": sound_on, "music": music_on}, "\t"))
 	return true
 
 

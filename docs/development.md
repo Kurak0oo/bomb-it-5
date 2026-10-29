@@ -603,3 +603,12 @@ Arcade 10) and `BoxingProp` (BOXING GLOVE, Arcade 1, Battle Royale and Green Zon
 reachable. The replica drops them through `glove_items` and ports the kick and the punch.
 Edition 5 has no bouncer, magic carpet or heavy bomb. Four art slots were added (295 in all).
 
+### 2026-10-29 audio (#75)
+
+`tools/art_pipeline/original_audio.py` exports the SWF's 37 class-linked sounds
+unmodified to the ignored `original/audio/`. The simulation raises sound classes per step
+at the points the source calls `createSound`. `scripts/original_audio.gd` ports
+`SoundManger`'s music rules, and the switches persist in the save file. The event map and
+the classes that are silent in the original are recorded in
+[audio](evidence/edition-5-audio.md).
+

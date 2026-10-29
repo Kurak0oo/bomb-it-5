@@ -3,6 +3,11 @@ extends RefCounted
 
 var attacks: Array[Dictionary] = []
 var projectiles: Array[Dictionary] = []
+## Sound class names raised since the round last drained them (`SoundManger.createSound`).
+var sounds: Array[StringName] = []
+## `_weaponSound` per action; `useBowling` (fireball) names no class in the SWF, so it is silent.
+const USE_SOUNDS := {&"hammer": &"useSinker", &"landmine": &"useSinker", &"flamer": &"useThrower",
+	&"laser": &"useLaserReady", &"triple": &"useShotgun", &"shotgun": &"useBowling", &"boxing": &"useBoxing"}
 const Geometry = preload("res://scripts/simulation/weapon_geometry.gd")
 
 
@@ -24,6 +29,7 @@ func start(id: StringName, actor: Dictionary, tick: int) -> void:
 		return
 	if actor.ammo > 0: actor.ammo -= 1
 	actor.action_started_tick = tick
+	sounds.append(USE_SOUNDS[kind])
 	var windup := 24 if kind == &"hammer" else 11 if kind == &"laser" else 0
 	var duration := 24 if kind == &"hammer" else 22 if kind == &"laser" else 23
 	if kind == &"triple":
@@ -87,6 +93,8 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			var age: int = tick - attack.started
 			if (attack.kind == &"triple" and age in [1, 16, 31]) or (attack.kind == &"shotgun" and tick == attack.ready):
 				attack.direction = cardinal(actors[attack.actor_id].facing)
+				# Each projectile is a `Bomb` subclass, so its constructor plays `addBomb`.
+				sounds.append(&"addBomb")
 				projectiles.append({"actor_id": attack.actor_id, "kind": attack.kind,
 					"position": Vector2(actors[attack.actor_id].cell), "direction": attack.direction,
 					"previous_cell": actors[attack.actor_id].cell, "phase": &"travel", "cleanup_count": 0,
@@ -105,6 +113,7 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			effects.append(effect)
 			attack.fired = true
 			attack.phase = &"beam" if attack.kind == &"laser" else &"impact"
+			if attack.kind == &"laser": sounds.append(&"useLaserShoot")
 			if attack.kind in [&"hammer", &"boxing"]: complete(attack, actors[attack.actor_id], tick)
 	for projectile in projectiles.duplicate():
 		if projectile.born == tick:
@@ -126,6 +135,7 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			effects.append({"kind": &"projectile", "actor_id": projectile.actor_id,
 				"cell": target + projectile.direction, "direction": Vector2i.ZERO, "damage": false})
 			projectile.phase = &"cleanup"
+			sounds.append(&"bomb")
 	return effects
 
 

@@ -154,6 +154,12 @@ records the trade-off.
   - The two glove-slot items drop with their XML weights (#85): PUSH THE BOMB kicks a touched
     bomb at 7 px per step with its fuse paused; BOXING GLOVE punches up to two cells after
     13 steps, two uses.
+  - Audio follows `SoundManger` (#75, [evidence](docs/evidence/edition-5-audio.md)). Each
+    sound class plays at most once per step, on the event the source raises it from. The
+    menu music loops on menus. Rounds cycle `gameMusic_1` and then the other two in an order
+    drawn once. Endings play the win or lose jingle. The sound and music switches are on
+    the main menu and the pause screen and persist in the save file. The pause screen's
+    music switch only sets the flag. Without the pack the game is silent.
   - Still to port, each from recovered source rather than approximation: the exposed
     localization keys on original screens (with the original screen art).
 - **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:
@@ -281,8 +287,9 @@ list what the original offers; recovered rules still precede implementation.
   observed in the original game with the reference player and recorded before it
   is ported, as Normal Arcade was. Static reading alone does not certify parity.
   Recovered facts live in [modes and flow](docs/evidence/edition-5-modes-and-flow.md).
-- **Audio:** deferred. Unmodified SWF music stays out, and no replacement audio is
-  chosen, so the menu and pause screens omit sound and music switches for now.
+- **Audio:** in the desktop adaptation, unmodified SWF music stays out and no replacement
+  audio is chosen. The original replica plays the original audio from the ignored local
+  pack (#75, below).
 - **Tracking:** a new parent specification and its tickets carry this work. Final
   desktop acceptance #21 is blocked by them, as well as by #20, and verifies the
   complete game. #20 stays open.

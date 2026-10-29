@@ -35,6 +35,7 @@ func advance(round_state: RefCounted, _inputs: Dictionary) -> void:
 			current_frame = 0
 			flipping = true
 			flip_frame = 1
+			round_state.play_sound(&"spellOpen")
 		return
 	flip_frame += 1
 	if flip_frame == SIGN_FRAME: _choose(round_state)

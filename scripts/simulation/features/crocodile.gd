@@ -18,6 +18,7 @@ func _init(at: Vector2i) -> void:
 
 func advance(round_state: RefCounted, _inputs: Dictionary) -> void:
 	frame = frame % CYCLE + 1
+	if frame == CLOSED + OPENING: round_state.play_sound(&"lavaOpen")
 	if is_eating(): round_state.eat_cell(cell)
 
 

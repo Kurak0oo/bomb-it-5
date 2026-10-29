@@ -34,6 +34,7 @@ func advance(round_state: RefCounted, _inputs: Dictionary) -> void:
 			current_frame = 0
 			total_frame = 35 * (2 + int(round_state.draw_random() * 2 * 10))
 			is_open = true
+			round_state.play_sound(&"toyHandOpen")
 			_push_setting(round_state)
 			hand_frame = 1
 		return

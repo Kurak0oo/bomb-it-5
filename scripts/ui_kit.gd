@@ -1,6 +1,7 @@
 extends RefCounted
 ## Native menu widgets in the game's panel style; workbench `ui.button_*` replacements apply.
 
+const Audio = preload("res://scripts/original_audio.gd")
 const FONT_COLOR := Color("dfede7")
 const ACCENT := Color("ffd989")
 
@@ -29,8 +30,48 @@ static func button(parent: Node, text: String, rect: Rect2, action: Callable, sk
 				widget.add_theme_stylebox_override(state_name, texture_style)
 	widget.add_theme_color_override("font_disabled_color", Color("6f8c94"))
 	widget.pressed.connect(action)
+	menu_sounds(widget)
 	parent.add_child(widget)
 	return widget
+
+
+## Original buttons play `menuTouch` on roll-over and `menuPress` on mouse-down.
+static func menu_sounds(widget: BaseButton) -> void:
+	widget.mouse_entered.connect(func(): if Audio.current != null: Audio.current.menu_touch())
+	widget.button_down.connect(func(): if Audio.current != null: Audio.current.menu_press())
+
+
+## A two-frame switch (`sound`, `music`): frame 1 on, frame 2 off. Off draws a slash over the
+## icon, which the sheets paint only in the on state.
+static func switch(parent: Node, name: StringName, caption: String, rect: Rect2, on: bool, toggled: Callable) -> Switch:
+	var widget := Switch.new()
+	widget.name = name
+	widget.caption = caption
+	widget.on = on
+	widget.position = rect.position
+	widget.size = rect.size
+	widget.focus_mode = Control.FOCUS_NONE
+	widget.add_theme_font_size_override("font_size", 13)
+	widget.pressed.connect(func():
+		widget.on = not widget.on
+		widget.refresh()
+		toggled.call(widget.on))
+	widget.refresh()
+	parent.add_child(widget)
+	return widget
+
+
+class Switch extends Button:
+	var on := true
+	var caption := ""
+
+	func refresh() -> void:
+		text = "%s %s" % [caption, "ON" if on else "OFF"]
+		queue_redraw()
+
+	func _draw() -> void:
+		if on: return
+		draw_line(Vector2(size.x * 0.2, size.y * 0.8), Vector2(size.x * 0.8, size.y * 0.2), Color("e8584f"), 4, true)
 
 
 ## A row of mutually exclusive choices; `options` holds [label, value, enabled] entries.
