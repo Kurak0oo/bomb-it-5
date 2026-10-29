@@ -491,3 +491,23 @@ their registration, not fitted to the cell) and whole-background floors remain o
 
 ADR 0009, cited by `scripts/art/screen_layout.gd` but never committed, is
 [reconstructed](adr/0009-screen-art-ghosts-and-plates.md) from that file's header.
+
+### 2026-10-29 replica page and original box size (#89, #74)
+
+Under the `original` profile a match is now drawn on the mobile-first page
+(`scripts/replica_layout.gd`): the 17×15 board at 48 px cells fills the 1280×720 page
+height, centred, with the outer ring columns cropped to half a cell by the scenery layer
+(`scripts/replica_scenery.gd`, a plain per-set extension until #92). The view's compact mode
+draws only the board; titles, captions, hints, the roster column and the development
+buttons are gone, and RESUME/MAIN MENU appear only over the map while paused. The page
+keeps 1:1 and stays inside the display safe area, re-read every frame; it may run one cell
+into a top or bottom inset (the home indicator), because that band holds only the board's
+cropped ring row. `tests/replica_page_check.gd` covers 2532×1170 with the sensor housing on
+either side, 1920×1080, 2048×1536 and a cramped safe area.
+
+`_brick5` boxes are now drawn at the original size: the clip's frames sit in a 32-unit cell
+from its top-left and tall props rise up to 20 units above it (`Box.setItem` scales the
+clip to the 30 px cell). Brick slots carry a registered crop and the pack records it, so
+props overhang the row above as in the original; floors draw before all boxes. Magic
+Library no longer draws centre frame 144 under its spellbook (the source hides that box),
+and the spellbook keeps its registered 3×3 size, closed on frame 1 until it flips.

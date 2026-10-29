@@ -272,6 +272,8 @@ def run(job, config, mapping, upscaled, resume):
         cell = (max(1, round(span[0] * scale)), max(1, round(span[1] * scale)))
     else:
         cell = tuple(int(v * config['output_scale']) for v in job['cell'])
+        if crop:  # A declared region keeps its own aspect, at the slot's height.
+            cell = (max(1, round(cell[1] * span[0] / span[1])), cell[1])
     final_zoom = min(cell[0] / span[0], cell[1] / span[1])
     preview_long = min(max(max(cell), config['preview_cell']), PREVIEW_MAX)
     preview_cell = tuple(max(1, round(v * preview_long / max(cell))) for v in cell)

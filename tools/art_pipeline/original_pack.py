@@ -36,6 +36,9 @@ def manifest():
         records[meta['id']] = {'path': 'res://' + sheet.relative_to(ROOT).as_posix(), 'label': 'original SWF',
                                'columns': meta['columns'], 'rows': meta['rows'], 'fps': 8.0, 'scale': 1.0,
                                'x': 0.0, 'y': 0.0, 'tint': 'ffffffff'}
+        registration = slots[meta['id']]['source'].get('registration')
+        if registration:  # Box around the clip's origin, in 32-unit cells (`Box.setItem`).
+            records[meta['id']]['registration'] = registration
     return records
 
 

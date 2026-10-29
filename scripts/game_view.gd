@@ -33,6 +33,9 @@ var state: Dictionary = {}
 var practice := true
 var paused := false
 var skin: RefCounted = VisualSkin.new()
+## Replica page (ReplicaLayout): only the board and its sprites; the HUD, scenery and
+## controls are separate nodes, and no titles, captions or hints are drawn.
+var compact := false
 
 
 func present(snapshot: Dictionary, is_practice: bool, is_paused: bool) -> void:
@@ -43,6 +46,9 @@ func present(snapshot: Dictionary, is_practice: bool, is_paused: bool) -> void:
 
 
 func _draw() -> void:
+	if compact:
+		_board_layer()
+		return
 	if not skin.draw(self, "ui.background", Rect2(Vector2.ZERO, Vector2(1280, 720))):
 		draw_rect(Rect2(-position - get_parent().position, get_viewport_rect().size + Vector2(100, 100)), Color("102c3b"))
 	if not skin.draw(self, "ui.frame", Rect2(10, 10, 1260, 700)):
@@ -57,8 +63,36 @@ func _draw() -> void:
 	_label(Vector2(818, 52), "TIME  %03d" % ceili(state.remaining / 35.0), 21, Color("ffd989"))
 	if not skin.draw(self, "ui.board_frame", Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554))):
 		_box(Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554)), Color("164957"), Color("a7d5c5"), 9)
+	_board_layer()
+	_label(Vector2(1010, 339), "HOW TO PLAY", 17, Color("ffd989"))
+	var keys: Dictionary = state.get("bindings", {})
+	var arrows: bool = keys.is_empty() or (keys.up == KEY_UP and keys.left == KEY_LEFT and keys.down == KEY_DOWN and keys.right == KEY_RIGHT)
+	_label(Vector2(1010, 367), "Arrows to move" if arrows else "%s %s %s %s to move" % [_key(keys.up), _key(keys.left), _key(keys.down), _key(keys.right)], 17)
+	_label(Vector2(1010, 393), "%s: bomb / item" % ("Space" if keys.is_empty() else _key(keys.bomb)), 17)
+	_label(Vector2(1010, 419), "P: pause", 17)
+	_label(Vector2(30, 658), "MOVE", 15, Color("a9d4de"))
+	_label(Vector2(30, 681), "Eight directions · equal speed", 13, Color("8cb1bb"))
+	_label(Vector2(1020, 653), "Tap to place / use", 15, Color("b9cdd2"))
+	_label(Vector2(340, 658), "CONTROLLED ACTION PREVIEW" if state.get("comparison_fixture", false) else _board_caption(), 14, Color("a9d4de"))
+	var hint: String = "Reset restores the board. Start Match adds three rivals." if practice else {
+		&"kill": "Be the first to kill 10 enemies!",
+		&"green_zone": "Stay on the green zone to occupy it. First to 10 wins!",
+		&"pac_man": "Avoid the enemies and collect all of the coins!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
+	if practice and not state.actors[&"human"].alive:
+		hint = "Actor eliminated. Choose RESET to try again."
+	_label(Vector2(340, 684), hint, 15, Color("ffd989"))
+	if paused or state.outcome != &"running" or state.get("round_stage") == &"ending":
+		_overlay()
+
+
+## The board, its sprites and the outcome/pause overlay over the board.
+func _board_layer() -> void:
+	if state.is_empty(): return
 	for cell in state.board:
-		_tile(cell, state.board[cell])
+		_tile(cell, &"floor")
+	# Boxes after every floor, row by row, so overhanging props cover the row above.
+	for cell in state.board:
+		if state.board[cell] != &"floor": _tile(cell, state.board[cell], false)
 	_marquee()
 	_features()
 	for cell in state.pickups:
@@ -99,29 +133,12 @@ func _draw() -> void:
 		var actor: Dictionary = state.actors[id]
 		var robot: int = actor.get("robot", SEAT_ROBOTS.get(id, seat))
 		_actor(actor, robot, id)
-		_hud(actor, seat, robot)
+		if not compact: _hud(actor, seat, robot)
 		seat += 1
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind": _attack(attack)
 	_mode_overlays()
-	_label(Vector2(1010, 339), "HOW TO PLAY", 17, Color("ffd989"))
-	var keys: Dictionary = state.get("bindings", {})
-	var arrows: bool = keys.is_empty() or (keys.up == KEY_UP and keys.left == KEY_LEFT and keys.down == KEY_DOWN and keys.right == KEY_RIGHT)
-	_label(Vector2(1010, 367), "Arrows to move" if arrows else "%s %s %s %s to move" % [_key(keys.up), _key(keys.left), _key(keys.down), _key(keys.right)], 17)
-	_label(Vector2(1010, 393), "%s: bomb / item" % ("Space" if keys.is_empty() else _key(keys.bomb)), 17)
-	_label(Vector2(1010, 419), "P: pause", 17)
-	_label(Vector2(30, 658), "MOVE", 15, Color("a9d4de"))
-	_label(Vector2(30, 681), "Eight directions · equal speed", 13, Color("8cb1bb"))
-	_label(Vector2(1020, 653), "Tap to place / use", 15, Color("b9cdd2"))
-	_label(Vector2(340, 658), "CONTROLLED ACTION PREVIEW" if state.get("comparison_fixture", false) else _board_caption(), 14, Color("a9d4de"))
-	var hint: String = "Reset restores the board. Start Match adds three rivals." if practice else {
-		&"kill": "Be the first to kill 10 enemies!",
-		&"green_zone": "Stay on the green zone to occupy it. First to 10 wins!",
-		&"pac_man": "Avoid the enemies and collect all of the coins!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
-	if practice and not state.actors[&"human"].alive:
-		hint = "Actor eliminated. Choose RESET to try again."
-	_label(Vector2(340, 684), hint, 15, Color("ffd989"))
-	if paused or state.outcome != &"running" or state.get("round_stage") == &"ending":
+	if compact and (paused or state.outcome != &"running" or state.get("round_stage") == &"ending"):
 		_overlay()
 
 
@@ -195,33 +212,33 @@ func _board_title() -> String:
 	return "CINEMA CLUB" if set_id == &"cinema" else StageSets.title(set_id)
 
 
-func _tile(cell: Vector2i, kind: StringName) -> void:
+func _tile(cell: Vector2i, kind: StringName, floor := true) -> void:
 	if _board_skin() != &"cinema":
-		_themed_tile(cell, kind, _board_skin())
+		_themed_tile(cell, kind, _board_skin(), floor)
 		return
 	var at := ORIGIN + Vector2(cell) * PITCH
-	if not skin.draw(self, "board.floor_odd" if (cell.x + cell.y) % 2 else "board.floor_even", Rect2(at, Vector2.ONE * PITCH)):
+	if floor and not skin.draw(self, "board.floor_odd" if (cell.x + cell.y) % 2 else "board.floor_even", Rect2(at, Vector2.ONE * PITCH)):
 		draw_rect(Rect2(at, Vector2.ONE * PITCH), Color("53304d") if (cell.x + cell.y) % 2 else Color("5c3555"))
 		draw_line(at + Vector2(0, 35), at + Vector2(35, 35), Color("472942"), 1)
 	# A rolled board names each box's art choice (`StageSets.SETS`); the recorded practice
 	# board has none and keeps the parity rule.
 	var variant = state.get("board_meta", {}).get("variants", {}).get(cell)
 	if kind == &"solid" and variant != null:
-		if skin.draw(self, "board.spotlight" if variant == 1 else "board.seat", Rect2(at, Vector2.ONE * 36)): return
+		if _brick("board.spotlight" if variant == 1 else "board.seat", cell): return
 	elif kind == &"soft" and variant != null:
 		if skin.draw(self, CINEMA_SOFT[variant - 1], Rect2(at, Vector2.ONE * 36)): return
 	if kind == &"solid":
 		if cell.x == 0 or cell.y == 0 or cell.x == 16 or cell.y == 14:
-			if skin.draw(self, "board.wall", Rect2(at, Vector2.ONE * 36)): return
+			if _brick("board.wall", cell): return
 			_box(Rect2(at + Vector2.ONE, Vector2.ONE * 34), Color("344c64"), Color("66899a"), 5)
 			draw_circle(at + Vector2(6, 6), 2, Color("a2bac3"))
 		elif (cell.x + cell.y) % 3 == 0:
-			if skin.draw(self, "board.spotlight", Rect2(at, Vector2.ONE * 36)): return
+			if _brick("board.spotlight", cell): return
 			draw_circle(at + Vector2(18, 25), 10, Color("293d59"))
 			_box(Rect2(at + Vector2(12, 6), Vector2(13, 20)), Color("768eaa"), Color("b8d7d9"), 5)
 			draw_circle(at + Vector2(18, 12), 6, Color("ffe7a3"))
 		else:
-			if skin.draw(self, "board.seat", Rect2(at, Vector2.ONE * 36)): return
+			if _brick("board.seat", cell): return
 			_box(Rect2(at + Vector2(5, 4), Vector2(26, 27)), Color("8a344a"), Color("c36d70"), 7)
 			_box(Rect2(at + Vector2(9, 5), Vector2(18, 19)), Color("c85060"), Color("ee9c8a"), 5)
 			draw_rect(Rect2(at + Vector2(7, 26), Vector2(23, 5)), Color("d46a6b"))
@@ -249,20 +266,20 @@ func _tile(cell: Vector2i, kind: StringName) -> void:
 
 
 ## Native drawing for stage sets other than Cinema; `board.<set>.<piece>` slots replace it.
-func _themed_tile(cell: Vector2i, kind: StringName, set_id: StringName) -> void:
+func _themed_tile(cell: Vector2i, kind: StringName, set_id: StringName, floor := true) -> void:
 	var at := ORIGIN + Vector2(cell) * PITCH
 	var theme: Array = THEMES.get(set_id, THEMES[&"luxury_stores"])
 	var prefix := "board.%s." % set_id
 	var rect := Rect2(at, Vector2.ONE * PITCH)
-	if not skin.draw(self, prefix + ("floor_odd" if (cell.x + cell.y) % 2 else "floor_even"), rect):
+	if floor and not skin.draw(self, prefix + ("floor_odd" if (cell.x + cell.y) % 2 else "floor_even"), rect):
 		draw_rect(rect, theme[1] if (cell.x + cell.y) % 2 else theme[0])
 	var size: Vector2i = state.get("board_meta", {}).get("size", Vector2i(17, 15))
 	var variants: Dictionary = state.get("board_meta", {}).get("variants", {})
 	if kind == &"solid":
 		# The outer ring is ordinary fixed props in the source; it draws their art when rolled.
-		if variants.has(cell) and skin.draw(self, prefix + "solid_%d" % variants[cell], rect): return
+		if variants.has(cell) and _brick(prefix + "solid_%d" % variants[cell], cell): return
 		if cell.x == 0 or cell.y == 0 or cell.x == size.x - 1 or cell.y == size.y - 1:
-			if skin.draw(self, prefix + "wall", rect): return
+			if _brick(prefix + "wall", cell): return
 			_box(Rect2(at + Vector2.ONE, Vector2.ONE * 34), theme[2], theme[2].lightened(0.4), 5)
 			return
 		var center = state.get("board_meta", {}).get("center")
@@ -324,7 +341,11 @@ func _features() -> void:
 					draw_circle(tip, 12, Color("fbe3a4"))
 			&"spellbook":
 				var at := ORIGIN + Vector2(feature.cell) * PITCH
-				if not skin.draw(self, prefix + "spellbook", Rect2(at + Vector2(18, 18), Vector2(72, 72)), state.tick):
+				var book: Rect2 = skin.registration(prefix + "spellbook")
+				var book_rect := Rect2(at + book.position / 32.0 * PITCH, book.size / 32.0 * PITCH) if book.has_area() else Rect2(at + Vector2(18, 18), Vector2(72, 72))
+				# Closed on frame 1; while flipping the clip steps one frame per tick (`Spellbook`).
+				var page: float = clampf((feature.get("frame", 1) - 1) / 69.0, 0, 1) if feature.flipping else 0.0
+				if not skin.draw(self, prefix + "spellbook", book_rect, state.tick, Vector2.DOWN, page):
 					# Below the centrepiece title, opening wider while it flips.
 					var open_by := 14.0 if feature.flipping else 2.0
 					_box(Rect2(at + Vector2(54 - 20 - open_by, 70), Vector2(20 + open_by, 28)), Color("6b3f8f"), Color("e8c86b"), 4)
@@ -335,18 +356,28 @@ func _features() -> void:
 					draw_arc(mark, 14, 0, TAU, 24, Color("e0473c") if sign.kind == &"bomb" else Color("3f8ce0"), 3, true)
 
 
+## A `_brick5` box at `cell`: pack art keeps the clip's registration, so tall props overhang
+## the row above as in the original; anything else fits the `cells`-wide square.
+func _brick(slot: String, cell: Vector2i, cells: int = 1) -> bool:
+	var box: Rect2 = skin.registration(slot)
+	if not box.has_area(): return skin.draw(self, slot, Rect2(ORIGIN + Vector2(cell) * PITCH, Vector2.ONE * PITCH * cells), state.get("tick", 0))
+	return skin.draw(self, slot, Rect2(ORIGIN + (Vector2(cell) + box.position / 32.0) * PITCH, box.size / 32.0 * PITCH), state.get("tick", 0))
+
+
 func _marquee() -> void:
 	var at := ORIGIN + Vector2(7, 6) * PITCH
 	if _board_skin() != &"cinema":
 		if state.get("board_meta", {}).get("center") == null: return
+		# MagicLibraryMapData hides the centre box (`setMidBox(x, y, false)`); its spellbook stands there.
+		if _board_skin() == &"magic_library" and skin.texture("board.magic_library.spellbook") != null: return
 		var theme: Array = THEMES.get(_board_skin(), THEMES[&"luxury_stores"])
-		if skin.draw(self, "board.%s.center" % _board_skin(), Rect2(at, Vector2.ONE * 108), state.tick): return
+		if _brick("board.%s.center" % _board_skin(), Vector2i(7, 6), 3): return
 		_box(Rect2(at + Vector2(2, 2), Vector2(104, 104)), theme[3].darkened(0.2), theme[4], 12)
 		var words := StageSets.title(_board_skin()).split(" ")
 		for line in words.size():
 			_label(at + Vector2(12, 30 + line * 20), words[line], 17, theme[4].lightened(0.5))
 		return
-	if skin.draw(self, "board.marquee", Rect2(at, Vector2.ONE * 108), state.tick): return
+	if _brick("board.marquee", Vector2i(7, 6), 3): return
 	_box(Rect2(at + Vector2(2, 2), Vector2(104, 104)), Color("74334c"), Color("e3b36f"), 12)
 	_box(Rect2(at + Vector2(9, 30), Vector2(90, 60)), Color("285d73"), Color("acc8ad"), 5)
 	_label(at + Vector2(13, 57), "CINEMA", 19, Color("ffe8b2"))

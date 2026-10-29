@@ -29,6 +29,7 @@ $suites = @(
     @{ Script = 'res://tests/pac_man_check.gd'; Success = '^PASS: \d+ pac-man checks$' }
     @{ Script = 'res://tests/stage_features_check.gd'; Success = '^PASS: \d+ stage feature checks$' }
     @{ Script = 'res://tests/art_catalog_check.gd'; Success = '^PASS: \d+ art catalogue checks' }
+    @{ Script = 'res://tests/replica_page_check.gd'; Success = '^PASS: \d+ replica page checks$' }
     @{ Script = 'res://tools/playthrough_check.gd'; Success = '^PASS: 3 full-board playthrough checks ' }
 )
 foreach ($suite in $suites) {

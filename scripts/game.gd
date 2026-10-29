@@ -14,6 +14,9 @@ const Layouts = preload("res://scripts/simulation/layouts.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
+const Fidelity = preload("res://scripts/fidelity.gd")
+const ReplicaLayout = preload("res://scripts/replica_layout.gd")
+const ReplicaScenery = preload("res://scripts/replica_scenery.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -42,6 +45,11 @@ var session: RefCounted = null
 var auto_start := true
 ## Desktop key per action (up/left/down/right/bomb); the app supplies saved bindings.
 var bindings: Dictionary = SaveStore.DEFAULT_KEYS.duplicate()
+## The replica page (ReplicaLayout) under the `original` profile, fixed when the node is ready.
+var replica := false
+var scenery: Node2D
+## Tests pin the safe area; otherwise it is read from the display every frame.
+var safe_area_override := Rect2()
 
 
 func _ready() -> void:
@@ -49,6 +57,15 @@ func _ready() -> void:
 	view = GameView.new()
 	view.skin = visual_skin
 	add_child(view)
+	replica = Fidelity.original
+	if replica:
+		view.compact = true
+		view.scale = Vector2.ONE * ReplicaLayout.view_scale()
+		view.position = ReplicaLayout.view_position()
+		scenery = ReplicaScenery.new()
+		scenery.name = "Scenery"
+		scenery.skin = visual_skin
+		add_child(scenery)
 	touch_controls = TouchControls.new()
 	touch_controls.skin = visual_skin
 	add_child(touch_controls)
@@ -62,8 +79,14 @@ func _ready() -> void:
 	_make_button("reset", "RESET", Vector2(1010, 268), retry_round)
 	_make_button("menu", "MAIN MENU", Vector2(1010, 268), func(): main_menu_requested.emit())
 	buttons.menu.visible = false
-	if session != null:
+	if session != null or replica:
 		for key in ["match", "practice", "reset"]: buttons[key].visible = false
+	if replica:
+		# Development and caption-free page: pause comes from the pause icon (#91) and P;
+		# RESUME and MAIN MENU appear only on the pause overlay over the map centre.
+		buttons.pause.visible = false
+		buttons.pause.position = Vector2(535, 330)
+		buttons.menu.position = Vector2(535, 384)
 	if auto_start: start_session(true)
 
 
@@ -144,10 +167,12 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		for id in roster.slice(1):
 			scheduler.set_controller(id, _ai_command.bind(id))
 	state = simulation.snapshot()
+	if replica: scenery.set_stage(board.skin)
 	touch_controls.enabled = true
 	touch_controls.reset()
 	buttons.pause.text = "PAUSE"
 	buttons.pause.disabled = false
+	if replica: buttons.pause.visible = false
 	buttons.menu.visible = false
 	buttons.reset.text = "RESET" if practice else "TRY AGAIN"
 	buttons.reset.disabled = not practice
@@ -206,6 +231,7 @@ func toggle_pause() -> void:
 	touch_controls.reset()
 	buttons.pause.text = "RESUME" if paused else "PAUSE"
 	buttons.menu.visible = paused and session != null
+	if replica: buttons.pause.visible = paused
 	_refresh()
 
 
@@ -218,13 +244,26 @@ func _notification(what: int) -> void:
 		touch_controls.reset()
 		buttons.pause.text = "RESUME"
 		buttons.menu.visible = session != null
+		if replica: buttons.pause.visible = true
 		_refresh()
 
 
 func _process(delta: float) -> void:
-	position = (get_viewport_rect().size - Vector2(1280, 720)) * 0.5
+	fit_page()
 	if is_instance_valid(scheduler):
 		advance_time(delta)
+
+
+## Centres the 1280×720 page on the screen; the replica also keeps it inside the safe area,
+## re-read every frame so rotation re-lays it out.
+func fit_page(viewport: Vector2 = get_viewport_rect().size) -> void:
+	if not replica:
+		position = (viewport - ReplicaLayout.PAGE) * 0.5
+		return
+	var safe := safe_area_override if safe_area_override.has_area() else ReplicaLayout.safe_area(viewport)
+	var placement := ReplicaLayout.fit(viewport, safe)
+	position = placement.offset
+	scale = Vector2.ONE * placement.scale
 
 
 func _input(event: InputEvent) -> void:

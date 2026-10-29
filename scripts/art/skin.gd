@@ -217,6 +217,14 @@ func _edge_pixels(image: Image, box: Rect2) -> Array[Color]:
 
 
 ## A chosen replacement, else the original pack's art for the slot.
+## The original clip's box around its registration point, in the clip's 32-unit cell
+## (`Box.setItem`): a pack record draws at the original size and may overhang its cell.
+## Workbench replacements carry none and fit their slot rectangle.
+func registration(id: String) -> Rect2:
+	var box: Array = _shown(id).get("registration", [])
+	return Rect2(box[0], box[1], box[2], box[3]) if box.size() == 4 else Rect2()
+
+
 func _shown(id: String) -> Dictionary:
 	return _records.get(id, _pack.get(id, {})).duplicate(true)
 
