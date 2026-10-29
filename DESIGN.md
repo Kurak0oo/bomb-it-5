@@ -139,10 +139,13 @@ records the trade-off.
     `Game.countTime` (#80): a second is counted whenever the polled Date second
     changes, at most one per step, the first step included; modes' timeouts, timed
     pickups and time bonuses read those counted seconds.
+  - Cardinal movement is the original `HitMove` (#82): `v = 0.6v ± speed` per held
+    frame, per-axis collision with `itemWid`/`itemHei` and `-1` edges, lane assistance,
+    the current/leading-cell bomb bypass (landmines passable) and positions truncated to
+    twips. Stick diagonals use the accepted eight-direction rules (E).
   - Still to port, each from recovered source rather than approximation: the exposed
-    localization keys on original screens (with the original screen art), the exact
-    `HitMove` lane assistance and geometric bomb-overlap bypass, and original timing
-    quirks such as pending recovery while paused.
+    localization keys on original screens (with the original screen art) and original
+    timing quirks such as pending recovery while paused.
 - **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:
   - **Phone game (Q1):** the replica is a landscape phone game; the fixed touch stick
     and bomb button stay, with keyboard for desktop development. The stick's single

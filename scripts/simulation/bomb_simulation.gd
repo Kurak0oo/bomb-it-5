@@ -241,7 +241,12 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 				elif actor.alive and actor.get("jump", {}).size() > 0:
 					_advance_jump(actor)
 				elif actor.alive and actor.transit_until == 0 and actor.busy_until <= _tick and not actor.movement_rearm:
-					Movement.step(actor, command.direction, _board, _bombs)
+					# Original rounds port `HitMove` for single-axis requests; stick diagonals keep the
+					# accepted eight-direction rules (decision E).
+					if _rules.get("hit_move", false) and (command.direction.x == 0 or command.direction.y == 0):
+						Movement.step_hit_move(actor, command.direction, _board, _bombs)
+					else:
+						Movement.step(actor, command.direction, _board, _bombs)
 					if actor.vehicle in [&"horse", &"dragon"]: _ride_contact(actor, command.direction)
 		for actor_id in _actor_ids:
 			var actor: Dictionary = _actors[actor_id]

@@ -551,3 +551,26 @@ and the spellbook keeps its registered 3×3 size, closed on frame 1 until it fli
 - Handoff gap 8 is verified from source: for one player `ArcadeMode.timeOut` →
   `judgeHandler` → `winHandler` → `countScore(true)`, which pays `DIFF_POINT` and a time
   bonus of `(gameTime − pastTime) × 10` (0 at timeout). The replica's settlement matches.
+
+### 2026-10-29 original `HitMove` (#82)
+
+`Movement.step_hit_move` ports `RobotModel.move*` (`v = 0.6v ± speed`, the other axis
+zeroed, `moveStop` decays without moving), `RobotController.move*` (the `view.xN` edge
+guard) and `HitMove.*Afoul` literally: the own-cell shortcut, `fixedHitTest` (boxes and
+ordinary bombs block, landmines and platforms pass), lane assistance with the `-1` edge,
+moving up to a blocker's edge, and the signed residual speed that briefly reverses through
+a wall. `AbstractObject.xPos` lives on the display container, so every position write is
+truncated to twips; that quantization is what makes 32.59 read 32.55. The round uses it
+for single-axis requests when the replica host sets `hit_move`; stick diagonals keep the
+eight-direction rules (E). The departure ledger is not consulted: leaving a bomb works
+because the robot's middle cell equals its leading cell until it is clear.
+
+`tools/extract_hitmove_fixtures.py` turns the recorded seed-42 movement probes into
+`tests/fixtures/hitmove-probes.json` (numbers only), and `tests/hitmove_check.gd` replays
+all eight (motion with reversal, corridor turns in four directions, three cardinal runs:
+392 frames) to within 1e-4 px of the recorded position and speed on every frame. `Tractor`
+objects in `game.hitArr` and the platform `transSpeed` term are not ported; no selectable
+stage uses them.
+
+The reference player now also builds on this Linux container (`tools/reference_player/build.sh`
+with Mesa lavapipe) and replays the corridor case.
