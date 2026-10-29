@@ -16,7 +16,7 @@ const SEAT_ROBOTS := {&"human": 0, &"ruby": 1, &"mint": 6, &"gold": 3}
 const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
 	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
 	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●",
-	&"horse": "HRS", &"dragon": "DRG"}
+	&"horse": "HRS", &"dragon": "DRG", &"kick": "K", &"boxing": "G"}
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 ## Native board palettes per stage set: floor pair, wall, solid fill/edge, soft fill/edge.
@@ -554,7 +554,7 @@ func _hud(actor: Dictionary, index: int, robot: int) -> void:
 func _attack_animation_end(kind: StringName) -> float:
 	# Laser stops on animation frame 11 while its separate recovery lock continues.
 	# See docs/evidence/edition-5-weapon-action-recovery.md and Weapons.advance.
-	return {&"hammer": 24.0, &"laser": 11.0, &"flamer": 23.0, &"triple": 32.0, &"shotgun": 14.0}.get(kind, 24.0)
+	return {&"hammer": 24.0, &"laser": 11.0, &"flamer": 23.0, &"triple": 32.0, &"shotgun": 14.0, &"boxing": 13.0}.get(kind, 24.0)
 
 
 func _attack_progress(attack: Dictionary) -> float:
@@ -579,6 +579,10 @@ func _attack(attack: Dictionary) -> void:
 		var head := hand + swing * 29
 		draw_line(hand, head, Color("e5be80"), 5, true)
 		_box(Rect2(head - Vector2(10, 7), Vector2(20, 14)), Color("d5edf0"), Color("7cacba"), 3)
+	elif attack.kind == &"boxing":
+		var reach: float = sin(progress * PI) * PITCH * 1.2
+		draw_line(at, at + direction * reach, Color("e5be80"), 5, true)
+		draw_circle(at + direction * reach, 9, Color("e8584f"))
 	elif attack.kind == &"laser" and attack.fired:
 		for cell in attack.get("cells", []):
 			draw_line(_center(cell) - Vector2(attack.direction) * 18, _center(cell) + Vector2(attack.direction) * 18, Color("fff1b6"), 7, true)

@@ -391,7 +391,7 @@ func _manhattan(a: Vector2i, b: Vector2i) -> int:
 
 
 func _attack_reach(actor: Dictionary) -> int:
-	return actor.power if actor.weapon == &"" else 1 if actor.weapon in [&"landmine", &"hammer"] else 3 if actor.weapon == &"flamer" else 17
+	return actor.power if actor.weapon == &"" else 1 if actor.weapon in [&"landmine", &"hammer"] else 2 if actor.weapon == &"boxing" else 3 if actor.weapon == &"flamer" else 17
 
 
 func _random() -> float:

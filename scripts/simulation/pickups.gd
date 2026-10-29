@@ -1,5 +1,6 @@
 extends RefCounted
-## Arcade XML integer weights (round(value*100)); reserved glove candidates stay empty.
+## Arcade XML integer weights (round(value*100)). The two glove slots stay empty draws unless
+## the round enables `glove_items` (#85): `BombShoesProp` (kick) and `BoxingProp` (boxing).
 
 const WEIGHTS := {&"capacity": 28, &"power": 24, &"speed": 22, &"life": 1, &"shield": 1,
 	&"reserved_kick": 10, &"invincible": 1, &"reserved_boxing": 1, &"landmine": 1,
@@ -35,11 +36,16 @@ static func apply(actor: Dictionary, kind: StringName, tick: int, invincible_tic
 		&"car", &"moto", &"horse", &"dragon":
 			# Rules XML `rides`: base move speed times car 1.6, moto 1.3, horse 1, dragon 0.8.
 			actor.vehicle = kind
+			actor.kick = false
 			actor.drive_speed = 1.6 * {&"car": 1.6, &"moto": 1.3, &"horse": 1.0, &"dragon": 0.8}[kind]
+		&"kick":
+			# `BombShoesProp.changeStage`: the kick handler is set only off a vehicle; a later
+			# vehicle, a vehicle loss or a respawn clears it (`resetStage`, `initStage`).
+			if actor.get("vehicle", &"") == &"": actor.kick = true
 		&"landmine":
 			actor.weapon = kind
 			actor.ammo = 1
-		&"hammer", &"flamer", &"laser", &"triple", &"shotgun":
+		&"hammer", &"flamer", &"laser", &"triple", &"shotgun", &"boxing":
 			actor.weapon = kind
 			actor.ammo = 2
 	if kind not in [&"invincible", &"coin"]: actor.score += 100

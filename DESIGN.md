@@ -14,7 +14,7 @@ This file owns accepted product and architecture decisions. [Development](docs/d
 - One human against one to three AI, chosen in Game Settings (2026-10-21, below). The first match was one human and three AI. No second human on the same phone: the original local 2-player setting is deferred.
 - Later, in order: co-op against AI across phones, then PvP. No networking in the first slice. No accounts.
 - A round has a replaceable ending. The selected first ending is "all enemies are dead," source-supported for normal Arcade play in the [Dots evidence assessment](docs/evidence/edition-5-play-observations.md). For the new game, timeout is a loss while enemies remain, deliberately replacing the original anomalous timeout-completion path. Later modes and tasks are another ending plus extra rules on the same round. The first build implemented one ending; the complete game adds the other selectable edition 5 modes on the same round (2026-10-21, below).
-- Before the SWF is read, the only bomb behavior that may be coded is the shared match: place a bomb, a fuse, a plus-shaped blast, and soft blocks that break. The glove, the bouncer, the magic carpet, and the heavy bomb are named empty slots. Nothing fills a slot from a portal description.
+- Before the SWF is read, the only bomb behavior that may be coded is the shared match: place a bomb, a fuse, a plus-shaped blast, and soft blocks that break. The glove, the bouncer, the magic carpet, and the heavy bomb were named empty slots. Nothing fills a slot from a portal description. #85 resolved them from the SWF ([evidence](docs/evidence/edition-5-item-slots.md)). The glove was two edition 5 items, PUSH THE BOMB (`BombShoesProp`) and BOXING GLOVE (`BoxingProp`), and the replica ports both. Edition 5 has no bouncer, magic carpet or heavy bomb, so they are unreachable and stay out.
 - Maps come from the original edition 5 game. Tile count, solids, soft blocks, and spawns are recovered. There is no stand-in 15×13 board and no map generator. The complete game rolls boards from recorded layouts as the original does; invented maps may later arrive through the same map-data seam (2026-10-21, below).
 - The gameplay screen's layout and the elements on it come from the original gameplay screen. Painted pixels are redrawn later in that painting style. Unmodified copies of SWF sprites, music, and level art stay out of the Douyin build. SWF-derived art may be modified into candidate art. Candidates are never applied automatically; the user reviews each one before Apply to game (2026-10-21, below).
 - Soft blocks drop nothing until source evidence establishes the behavior. [Conditional-drop evidence has now been supplied](docs/evidence/edition-5-play-observations.md); implementation must follow its verified conditions rather than assuming guaranteed drops.
@@ -151,6 +151,9 @@ records the trade-off.
     belt rides use the `HitMove` edges and twips, toy-hand pushes keep the stale checked
     cell, horse jumps aim past the box at `drive_speed / 0.4`, and a dragon crash keeps
     the robot's speed through its 19-step stop.
+  - The two glove-slot items drop with their XML weights (#85): PUSH THE BOMB kicks a touched
+    bomb at 7 px per step with its fuse paused; BOXING GLOVE punches up to two cells after
+    13 steps, two uses.
   - Still to port, each from recovered source rather than approximation: the exposed
     localization keys on original screens (with the original screen art).
 - **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:
@@ -360,7 +363,7 @@ Implementation policy recorded during the user's 2026-10-19 instruction to imple
 - The playable first build uses Normal Arcade settings and the recorded Cinema board. Retry/play-again reuses that board within the selected single-map scope; it does not add a campaign or a generator. Session hearts and result totals carry across permitted retries/play-again; a new session starts fresh.
 - Admitted directions must be finite vectors. After admission, expire old hazards, apply bomb/action input, resolve existing bombs/chains, advance weapon callbacks and portal transfers, move actors, evaluate ongoing fire contact, process delayed drops/collections and invincibility contact, then evaluate the ending. Human defeat has priority over simultaneous enemy elimination; elimination has priority over timeout when no enemies remain.
 - Human and AI movement remains eight-direction capable. Recovered cardinal weapon effects aim on the dominant facing axis, with vertical ties. New vector animation durations and tick conversions are documented with their source; original pixel-level attack bounds and exact AI-state-machine parity are not asserted.
-- Keep both unresolved glove candidates disabled under the existing named-slot deferral. A reserved candidate draw produces no item rather than changing the remaining drop weights. This explicit first-build omission does not mean those items are absent from edition 5.
+- Keep both glove items disabled in the desktop adaptation (the replica drops them, #85). A reserved candidate draw produces no item rather than changing the remaining drop weights. This explicit first-build omission does not mean those items are absent from edition 5.
 
 [Runtime evidence](docs/evidence/edition-5-runtime-systems.md) and [round integration rationale](docs/adr/0005-integrate-gameplay-through-the-round.md) distinguish recovered rules from these implementation policies. Physical phone/iOS evaluation and export remain deferred.
 

@@ -20,7 +20,7 @@ static func cardinal(facing: Vector2) -> Vector2i:
 
 func start(id: StringName, actor: Dictionary, tick: int) -> void:
 	var kind: StringName = actor.weapon
-	if kind not in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun"]:
+	if kind not in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun", &"boxing"]:
 		return
 	if actor.ammo > 0: actor.ammo -= 1
 	actor.action_started_tick = tick
@@ -40,6 +40,11 @@ func start(id: StringName, actor: Dictionary, tick: int) -> void:
 	if kind == &"hammer":
 		attacks[-1].expires = tick + 25
 		actor.busy_until = tick + 24
+	elif kind == &"boxing":
+		# `BoxingPlayCommand` resolves at `totalFrames-1` of the 14-frame `boxing*_Play` clips.
+		attacks[-1].ready = tick + 13
+		attacks[-1].expires = tick + 14
+		actor.busy_until = tick + 13
 
 
 func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> Array[Dictionary]:
@@ -72,10 +77,11 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 		if attack.kind == &"laser" and attack.frame >= 11:
 			attack.frame = 11
 			attack.phase = &"beam"
-		if attack.kind == &"hammer":
+		if attack.kind in [&"hammer", &"boxing"]:
 			attack.direction = cardinal(actors[attack.actor_id].facing)
-			attack.attachment = Geometry.HAMMER_OFFSET[attack.direction]
-			if attack.frame >= 12 and attack.direction == Vector2i.UP:
+			if attack.kind == &"hammer": attack.attachment = Geometry.HAMMER_OFFSET[attack.direction]
+			# Both re-insert the Up clip behind the robot on `floor(totalFrames / 2)`.
+			if attack.frame >= (12 if attack.kind == &"hammer" else 7) and attack.direction == Vector2i.UP:
 				attack.layer = &"behind"
 		if attack.kind in [&"triple", &"shotgun"]:
 			var age: int = tick - attack.started
@@ -99,7 +105,7 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			effects.append(effect)
 			attack.fired = true
 			attack.phase = &"beam" if attack.kind == &"laser" else &"impact"
-			if attack.kind == &"hammer": complete(attack, actors[attack.actor_id], tick)
+			if attack.kind in [&"hammer", &"boxing"]: complete(attack, actors[attack.actor_id], tick)
 	for projectile in projectiles.duplicate():
 		if projectile.born == tick:
 			continue

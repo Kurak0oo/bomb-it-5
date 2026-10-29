@@ -25,6 +25,8 @@ func _initialize() -> void:
 	_toy_hand_pushes()
 	_rides()
 	_pac_man_catch()
+	_kick()
+	_punch()
 	print("%s: %d hitmove checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -173,6 +175,88 @@ func _pac_man_catch() -> void:
 		if entered < 0 and floori(state.actors[&"human"].position.x + 0.5) == 15: entered = frame
 		if caught < 0 and not state.actors[&"ruby"].alive: caught = frame
 	_expect(entered >= 0 and caught == entered + 1, "an invincible player catches a ghost one step after entering its cell (entered %d, caught %d)" % [entered, caught])
+
+
+## #85: `BombShoesProp` (task1_gloves session A): a robot above its bomb at (1,9) walks down
+## into it; the bomb slides 7 px per step until it touches the wall at (1,13) and its fuse
+## stops while it flies (blast at N+92 instead of N+72).
+func _kick() -> void:
+	var Simulation = load("res://scripts/simulation/bomb_simulation.gd")
+	var board := {}
+	for y in 15:
+		for x in 17: board[Vector2i(x, y)] = &"solid" if x == 0 or y == 0 or x == 16 or y == 14 else &"floor"
+	board[Vector2i(1, 13)] = &"solid"
+	var round = Simulation.new([&"human"] as Array[StringName], {&"human": {"cell": Vector2i(1, 7)}}, board,
+		{"movement": true, "hit_move": true, "drops": true, "drop_chance": 0.0, "pickups": {Vector2i(1, 6): &"kick"}})
+	var step := func(direction: Vector2, bomb := false) -> Dictionary:
+		return round.advance([{"actor_id": &"human", "direction": direction, "bomb_events": [&"down", &"up"] if bomb else []}] as Array[Dictionary])
+	for frame in 30: step.call(Vector2.UP)
+	var shod: bool = round.actors()[&"human"].get("kick", false)
+	for frame in 30: step.call(Vector2.DOWN)
+	step.call(Vector2.ZERO, true)
+	var placed: int = round.bombs()[0].born
+	for frame in 20: step.call(Vector2.UP)
+	var flew := -1
+	var landed := -1
+	var landed_cell := Vector2i.ZERO
+	var blast := -1
+	var trail: Array = []
+	for frame in 140:
+		var state: Dictionary = step.call(Vector2.DOWN if frame < 30 else Vector2.ZERO)
+		var bombs: Array = round.bombs()
+		if bombs.is_empty():
+			if blast < 0: blast = state.tick
+			continue
+		if bombs[0].has("kick"):
+			if flew < 0: flew = state.tick
+			trail.append(bombs[0].kick.pixels[1])
+		elif flew >= 0 and landed < 0:
+			landed = state.tick
+			landed_cell = bombs[0].cell
+	var steps: Array = []
+	for index in range(1, trail.size()): steps.append(trail[index] - trail[index - 1])
+	_expect(shod, "the push-the-bomb pickup gives the kick")
+	_expect(landed_cell == Vector2i(1, 12) and steps.slice(0, -1).all(func(d): return is_equal_approx(d, 7.0)),
+		"a kicked bomb slides 7 px per step and stops against the wall (%s, %s)" % [landed_cell, steps])
+	_expect(blast - placed == 72 + (landed - flew),
+		"the fuse stops while the bomb flies (placed %d, flew %d-%d, blast %d)" % [placed, flew, landed, blast])
+
+
+## #85: `BoxingProp`: Space punches up to two cells ahead after 13 steps. A box in the first
+## cell stops the reach; a robot two cells away is hit; a pickup in reach is collected.
+func _punch() -> void:
+	var Simulation = load("res://scripts/simulation/bomb_simulation.gd")
+	var make := func(extra: Dictionary) -> RefCounted:
+		var board := {}
+		for y in 15:
+			for x in 17: board[Vector2i(x, y)] = &"solid" if x == 0 or y == 0 or x == 16 or y == 14 else &"floor"
+		for cell in extra.get("soft", []): board[cell] = &"soft"
+		var round = Simulation.new([&"human", &"ruby"] as Array[StringName], {&"human": {"cell": Vector2i(3, 5)}, &"ruby": {"cell": extra.ruby}},
+			board, {"movement": true, "hit_move": true, "damage": true, "drops": true, "drop_chance": 0.0, "pickups": extra.get("pickups", {})})
+		round.actors()[&"human"].weapon = &"boxing"
+		round.actors()[&"human"].ammo = 2
+		round.actors()[&"human"].facing = Vector2.RIGHT
+		return round
+	var punch := func(round: RefCounted) -> int:
+		var commands: Array[Dictionary] = [{"actor_id": &"human", "direction": Vector2.ZERO, "bomb_events": [&"down", &"up"]},
+			{"actor_id": &"ruby", "direction": Vector2.ZERO, "bomb_events": []}]
+		round.advance(commands)
+		commands[0].bomb_events = []
+		for frame in 20:
+			round.advance(commands)
+			if not round.actors()[&"ruby"].alive: return frame + 1
+		return -1
+	var far = make.call({"ruby": Vector2i(5, 5)})
+	_expect(punch.call(far) == 13, "a punch lands 13 steps after Space and reaches two cells")
+	var blocked = make.call({"ruby": Vector2i(5, 5), "soft": [Vector2i(4, 5)]})
+	var killed: int = punch.call(blocked)
+	_expect(killed == -1 and blocked.board()[Vector2i(4, 5)] == &"floor", "a box in the first cell breaks and stops the punch")
+	var reach = make.call({"ruby": Vector2i(9, 9), "pickups": {Vector2i(5, 5): &"power"}})
+	var power: int = reach.actors()[&"human"].power
+	punch.call(reach)
+	_expect(reach.actors()[&"human"].power == power + 1 and not reach.pickups().has(Vector2i(5, 5)), "a pickup in reach is collected by the puncher")
+	punch.call(reach)
+	_expect(reach.actors()[&"human"].weapon == &"", "two punches spend the glove")
 
 
 func _expect(condition: bool, label: String) -> void:

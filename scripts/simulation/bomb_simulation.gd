@@ -68,6 +68,9 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 	if _rules.get("seconds") is Callable: _seconds = _rules.seconds
 	_random_draws = _rules.get("random_draws", []).duplicate()
 	_drop_pool = Pickups.build_pool(_draw_random, _mode.drop_weights(), _rules.get("vehicles", [&"moto", &"car"]))
+	if _rules.get("glove_items", false):
+		for index in _drop_pool.size():
+			_drop_pool[index] = {&"reserved_kick": &"kick", &"reserved_boxing": &"boxing"}.get(_drop_pool[index], _drop_pool[index])
 	_vehicles_left = _rules.get("vehicle_budget", 4)
 	_spawned_drops = _rules.get("drop_count", 0)
 	_pickups = _rules.get("pickups", {}).duplicate(true)
@@ -253,6 +256,8 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 						Movement.step_hit_move(actor, command.direction, _board, _bombs)
 						if actor.vehicle in [&"horse", &"dragon"] and not actor.hit_cells.is_empty():
 							_ride_hit_original(actor, actor.hit_cells[0])
+						elif actor.get("kick", false) and not actor.hit_cells.is_empty():
+							_kick(actor, actor.hit_cells[0])
 						continue
 					else:
 						Movement.step(actor, command.direction, _board, _bombs)
@@ -425,6 +430,7 @@ func _advance_actor_states() -> void:
 		if actor.vehicle_recovery_until > 0 and _tick >= actor.vehicle_recovery_until:
 			actor.vehicle_recovery_until = 0
 			actor.vehicle = &""
+			actor.kick = false
 			actor.protected_until = _tick + 81
 			actor.movement_rearm = true
 		actor.protection_stage = &"none"
@@ -537,7 +543,7 @@ func _advance_pickups() -> void:
 			var kind: StringName = _pickups[actor.cell]
 			if not _mode.can_collect(actor.is_human, kind):
 				continue
-			var weapon: bool = kind in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun"]
+			var weapon: bool = kind in [&"landmine", &"hammer", &"flamer", &"laser", &"triple", &"shotgun", &"boxing"]
 			if weapon:
 				_weapons.cancel(actor, _actors.find_key(actor))
 			var before := [actor.capacity, actor.power, actor.speed]
@@ -666,9 +672,42 @@ func _feature_blocked(cell: Vector2i) -> bool:
 	return _board.get(cell) == &"belt" or _features.any(func(feature): return cell in feature.blocked_cells())
 
 
+## `BombShoesProp.kickBomb`: every bomb in the hit cell leaves the map and flies at 7 px per
+## step in the robot's direction; its fuse stops until it lands (`engineArr.splice(0)`).
+func _kick(actor: Dictionary, cell: Vector2i) -> void:
+	var direction := Vector2i(actor.facing.round())
+	for bomb in _bombs:
+		if bomb.cell != cell or bomb.get("flying", false) or bomb.get("kind", &"bomb") == &"mine": continue
+		bomb.flying = true
+		bomb.kick = {"pixels": [bomb.cell.x * 30.0, bomb.cell.y * 30.0], "direction": direction, "speed": 7.0}
+		bomb.fly_direction = direction
+		bomb.fly_position = Vector2(bomb.cell)
+		bomb.erase("belt_position")
+		bomb.cell = Vector2i(-100, -100)
+
+
+## `Bomb.kickedFly`: the bomb's own `HitMove` runs each bomb step until it touches a box or bomb
+## (`hasHit`), then the fuse resumes where it stopped.
+func _advance_kick(bomb: Dictionary) -> void:
+	var flight: Dictionary = bomb.kick
+	var axis := 0 if flight.direction.x != 0 else 1
+	var forward: bool = flight.direction[axis] > 0
+	var hits: Array = []
+	flight.pixels = Movement._afoul(flight.pixels, axis, forward, flight.speed * (1 if forward else -1), _board, _bombs, hits)
+	bomb.fly_position = Vector2(flight.pixels[0], flight.pixels[1]) / 30.0
+	if hits.is_empty(): return
+	bomb.flying = false
+	bomb.cell = Vector2i(floori((flight.pixels[0] + 15) / 30.0), floori((flight.pixels[1] + 15) / 30.0))
+	bomb.erase("kick")
+	bomb.erase("fly_position")
+
+
 func _advance_flying() -> void:
 	for bomb in _bombs:
 		if not bomb.get("flying", false): continue
+		if bomb.has("kick"):
+			_advance_kick(bomb)
+			continue
 		var at: Vector2 = bomb.fly_position
 		var aligned := at.is_equal_approx(at.round())
 		var ahead: Vector2i = Vector2i(at.round()) + bomb.fly_direction
@@ -860,7 +899,7 @@ func _advance_respawns() -> void:
 			"registered_vehicle": &"", "shield": 0, "invincible_until": 0, "busy_until": 0,
 			"transit_until": 0, "vehicle_recovery_until": 0, "protected_until": _tick + 81,
 			"blink_until": _tick + 81, "weapon": actor.base_weapon, "ammo": -1 if actor.base_weapon != &"" else 0,
-			"kept_weapons": [], "respawn_at": 0, "portal_latch": Vector2i(-99, -99), "movement_rearm": true}, true)
+			"kept_weapons": [], "kick": false, "respawn_at": 0, "portal_latch": Vector2i(-99, -99), "movement_rearm": true}, true)
 		actor.drive_speed = actor.speed
 
 
@@ -908,6 +947,9 @@ func _resolve_attack(effect: Dictionary, blasts: Array[Dictionary], broken: Arra
 				break
 		_weapons.record_cells(effect, beam)
 		return
+	if effect.kind == &"boxing":
+		_punch(effect, blasts, broken)
+		return
 	var target: Vector2i = effect.cell + effect.direction
 	if effect.kind == &"flamer":
 		target = effect.endpoint
@@ -918,6 +960,43 @@ func _resolve_attack(effect: Dictionary, blasts: Array[Dictionary], broken: Arra
 		for id in _actor_ids:
 			if id != effect.actor_id and _actors[id].cell == effect.cell:
 				_hurt(id, effect.actor_id)
+
+
+## `BoxingPlayCommand.tryToDestory` on the first cell ahead, then the second unless the first
+## held a box, bomb or switch. Robots on the wielder's cell and on each tried cell are hit; a
+## pickup in reach is collected by the wielder instead of destroyed.
+func _punch(effect: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2i]) -> void:
+	var owner: StringName = effect.actor_id
+	var eaten := Vector2i(-100, -100)
+	var cells: Array[Vector2i] = []
+	for reach in [1, 2]:
+		var target: Vector2i = effect.cell + effect.direction * reach
+		cells.append(target)
+		for id in _actor_ids:
+			if id != owner and _actors[id].cell in [effect.cell, target]: _hurt(id, owner)
+		if _board.get(target, &"solid") == &"solid": break
+		if _board.get(target) == &"soft":
+			_hit_cell(target, owner, blasts, broken, false)
+			break
+		var struck := false
+		for bomb in _bombs.duplicate():
+			if bomb.cell == target and _bombs.has(bomb):
+				_detonate(bomb, blasts, broken)
+				struck = true
+		if struck: break
+		if _pickups.has(target): eaten = target
+	_weapons.record_cells(effect, cells)
+	if _pickups.has(eaten) and _actors[owner].alive:
+		var actor: Dictionary = _actors[owner]
+		var spent: bool = actor.ammo == 0
+		var kind: StringName = _pickups[eaten]
+		_pickups.erase(eaten)
+		Pickups.apply(actor, kind, _tick, _mode.invincibility_ticks())
+		_mode.pickup_removed(self, kind, owner)
+		# The spent glove then calls `initWeapon`, which also drops a weapon it just collected.
+		if spent:
+			actor.weapon = actor.get("base_weapon", &"")
+			actor.ammo = -1 if actor.weapon != &"" else 0
 
 
 func _hit_cell(target: Vector2i, owner: StringName, blasts: Array[Dictionary], broken: Array[Vector2i], damage: bool = true, hit_items: bool = true) -> void:

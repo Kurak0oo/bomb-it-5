@@ -16,7 +16,7 @@ const ScreenLayout = preload("res://scripts/art/screen_layout.gd")
 const Looks = preload("res://scripts/looks.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
-## The unresolved glove slots (BOXING GLOVE, PUSH THE BOMB) are left out.
+## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
 	["POWER-UPS", [[&"capacity", "BOMB +1", "Place one more bomb at a time."],
 		[&"power", "POWER BLAST +1", "Your blasts reach one cell farther."],
@@ -33,6 +33,18 @@ const GUIDE := [
 	["VEHICLES", [[&"car", "SPORT CAR", "Drive fast; a hit costs the car, not you."],
 		[&"moto", "SKATEBOARD", "Ride faster; a hit costs the board, not you."]]],
 ]
+const GLOVES := {"POWER-UPS": [&"kick", "PUSH THE BOMB", "Walk into a bomb to kick it along the lane."],
+	"WEAPONS": [&"boxing", "BOXING GLOVE", "Punch up to two cells ahead. Two uses."]}
+
+
+static func guide() -> Array:
+	if not Fidelity.original: return GUIDE
+	var columns: Array = GUIDE.duplicate(true)
+	for column in columns:
+		if GLOVES.has(column[0]): column[1].append(GLOVES[column[0]])
+	return columns
+
+
 ## Edition 5 Game Settings modes in source order; unported modes show disabled.
 const MODE_ORDER: Array[StringName] = [&"arcade", &"kill", &"pac_man", &"green_zone"]
 const MODE_TITLES := {&"arcade": "ARCADE", &"kill": "BATTLE ROYALE", &"pac_man": "PAC-MAN", &"green_zone": "GREEN ZONE"}
@@ -138,14 +150,15 @@ func _controls_page(page: Control) -> void:
 
 
 func _power_ups_page(page: Control) -> void:
-	for column in GUIDE.size():
+	var columns := guide()
+	for column in columns.size():
 		var x := 130 + column * 345
 		UiKit.panel(page, Rect2(x, 165, 330, 455), Color("1d4557"), Color("5d96a3"))
-		UiKit.label(page, GUIDE[column][0], Vector2(x + 20, 180), 24, Color("ffc79a"))
-		var entries: Array = GUIDE[column][1]
+		UiKit.label(page, columns[column][0], Vector2(x + 20, 180), 24, Color("ffc79a"))
+		var entries: Array = columns[column][1]
 		for row in entries.size():
 			var entry: Array = entries[row]
-			var y := 222 + row * 65
+			var y := 222 + row * (65 if entries.size() < 7 else 56)
 			var icon := ItemIcon.new()
 			icon.kind = entry[0]
 			icon.skin = skin

@@ -108,5 +108,13 @@ An unapproved image proposed for a visual slot, awaiting the user's manual revie
 _Avoid_: approved art, final art
 
 **Magic carpet**:
-One of the four named items whose behavior has yet to be recovered.
+One of the four item names from the portal description. Edition 5 has no such item, and likewise no bouncer or heavy bomb.
 _Avoid_: Carpet (as a separate item)
+
+**Push the bomb**:
+The edition 5 pickup (`BombShoesProp`) that lets a robot kick a bomb by walking into it.
+_Avoid_: Bomb shoes, glove
+
+**Boxing glove**:
+The edition 5 weapon pickup (`BoxingProp`) that punches up to two cells ahead.
+_Avoid_: Fist, glove

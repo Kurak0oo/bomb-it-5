@@ -174,7 +174,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 			actors[roster[index]].speed = mode.player_speed()
 	simulation = Simulation.new(roster, actors, board.cells,
 		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
-		"drops": true, "seed": session_seed, "mode": mode, "seconds": _seconds_source() if replica else null, "hit_move": replica,
+		"drops": true, "seed": session_seed, "mode": mode, "seconds": _seconds_source() if replica else null, "hit_move": replica, "glove_items": replica,
 		"vehicles": StageSets.vehicles(board.skin),
 		"features": board.get("features", {}), "center": board.get("center"), "skin": board.skin,
 		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,

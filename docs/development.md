@@ -66,7 +66,7 @@ The user approved the 16 recovery-ticket breakdown by invoking implement. Issues
 | Complete game implementation graph | 20 tickets and 29 native blocking edges verified on 2026-10-19 | Gameplay tickets #2–#19 are complete; presentation #20 and final acceptance #21 remain open. Passing functional checks does not accept the finished artwork or release readiness. [Issue #21](https://github.com/Kurak0oo/bomb-it-5/issues/21) is the complete desktop Godot acceptance gate before deferred physical phone/iOS testing |
 | First board and gameplay screen | Rendered CinemaStage1 audited and selected for practice on 2026-10-19 | [Canonical 255-cell reconstruction](evidence/cinema-stage1-recorded-board.md): all 110 soft candidates resolved, (14,10) corrected. Paired portals are in practice scope. This is image evidence, not a runtime collision dump |
 | Bomb, soft block, damage, clock, lives and score | Static findings, logged probes and repeats imported | Read the assessment: 72 countdown callbacks; distinguish input-counter and first-visible-frame timing. Quantized/sampled probes and no independent replay limit generalization |
-| Original items and AI | Glove candidates demonstrated; other slots unidentified | BoxingProp uses Space punches; BombShoesProp passively kicks on contact. Choose which fills the empty glove slot; keep bouncer/carpet/heavy bomb unresolved despite broader search. The source-grounded Normal controller is implemented; exact original state-machine parity is not claimed |
+| Original items and AI | Slots resolved by reachability (#85) | Both glove classes are reachable and ported in the replica ([item slots](evidence/edition-5-item-slots.md)). Edition 5 has no bouncer, carpet or heavy bomb. The source-grounded Normal controller is implemented; exact original state-machine parity is not claimed |
 | Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
 | Store name | Open, independent | Decide before publishing; does not block the first slice |
 | Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
@@ -594,3 +594,12 @@ robots through the `HitMove` edges with twip positions, the toy hand ports the s
 `_preCheck` cell, horse and dragon rides follow `HorseProp.frog` and `DragonProp.crash`, and
 positions and speeds are kept as doubles. Crocodile timing and the Pac-Man catch already
 matched. `tests/hitmove_check.gd` covers each.
+
+### 2026-10-29 item slots (#85)
+
+The drop tables (`AbstractGameMode.initMap`), the rules XML and the class tree settle the four
+named slots ([item slots](evidence/edition-5-item-slots.md)). `BombShoesProp` (PUSH THE BOMB,
+Arcade 10) and `BoxingProp` (BOXING GLOVE, Arcade 1, Battle Royale and Green Zone 15) are
+reachable. The replica drops them through `glove_items` and ports the kick and the punch.
+Edition 5 has no bouncer, magic carpet or heavy bomb. Four art slots were added (295 in all).
+

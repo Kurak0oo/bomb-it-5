@@ -2307,6 +2307,24 @@
    },
    "note": "frame = AS3 _propNum"
   },
+  "item.kick": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     6
+    ]
+   },
+   "note": "frame = AS3 _propNum (BombShoesProp)"
+  },
+  "item.boxing": {
+   "source": {
+    "sprite": "prop",
+    "frames": [
+     38
+    ]
+   },
+   "note": "frame = AS3 _propNum (BoxingProp)"
+  },
   "held.landmine": {
    "source": {
     "rows": [
@@ -2373,6 +2391,17 @@
     "frames": "all"
    }
   },
+  "held.boxing": {
+   "source": {
+    "rows": [
+     "boxing_Down",
+     "boxing_Right",
+     "boxing_Up",
+     "boxing_Left"
+    ],
+    "frames": "all"
+   }
+  },
   "attack.hammer": {
    "source": {
     "rows": [
@@ -2383,6 +2412,18 @@
     ],
     "frames": "all"
    }
+  },
+  "attack.boxing": {
+   "source": {
+    "rows": [
+     "boxing_Down_Play",
+     "boxing_Right_Play",
+     "boxing_Up_Play",
+     "boxing_Left_Play"
+    ],
+    "frames": "all"
+   },
+   "note": "the _2/_3 clips for a blocked first or second cell are not separate slots"
   },
   "attack.flamer": {
    "source": {

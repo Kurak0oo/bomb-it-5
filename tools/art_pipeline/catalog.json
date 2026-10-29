@@ -1824,6 +1824,22 @@
     ]
   },
   {
+    "category": "Pickups",
+    "id": "item.kick",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
+    "category": "Pickups",
+    "id": "item.boxing",
+    "size": [
+      28,
+      28
+    ]
+  },
+  {
     "category": "Weapons",
     "id": "held.landmine",
     "size": [
@@ -1873,6 +1889,14 @@
   },
   {
     "category": "Weapons",
+    "id": "held.boxing",
+    "size": [
+      24,
+      24
+    ]
+  },
+  {
+    "category": "Weapons",
     "id": "attack.hammer",
     "size": [
       48,
@@ -1906,6 +1930,14 @@
   {
     "category": "Weapons",
     "id": "attack.shotgun",
+    "size": [
+      48,
+      48
+    ]
+  },
+  {
+    "category": "Weapons",
+    "id": "attack.boxing",
     "size": [
       48,
       48

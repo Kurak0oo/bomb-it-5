@@ -1,6 +1,8 @@
 extends SceneTree
 ## How to Play, power-up guide and saved key rebinding (#61) through the main scene.
 
+const Fidelity = preload("res://scripts/fidelity.gd")
+
 const SaveStore = preload("res://scripts/save_store.gd")
 const SAVE := "user://controls-check-save.json"
 var failures := 0
@@ -62,7 +64,8 @@ func _run() -> void:
 	await _click(_find("PowerUpsTab"))
 	_expect(_find_text("SPORT CAR") != null and _find_text("LIGHTNING GUN") != null and _find_text("INVINCIBILITY") != null,
 		"the power-up guide lists pickups, weapons and vehicles")
-	_expect(_find_text("BOXING GLOVE") == null and _find_text("PUSH THE BOMB") == null, "unresolved glove slots are not described")
+	var gloves: bool = _find_text("BOXING GLOVE") != null and _find_text("PUSH THE BOMB") != null
+	_expect(gloves == Fidelity.original, "the glove items are described exactly where rounds drop them (#85)")
 	await _click(_find("Back"))
 
 	await _click(_find("Start"))

@@ -54,11 +54,11 @@ static func entries() -> Array[Dictionary]:
 				result.append(_entry("look.%s.%s%d" % [ROBOTS[robot], kind, number], "%s · %s %d" % [ROBOTS[robot].capitalize(), "Hat" if kind == "hat" else "Outfit", number],
 					"Looks", Vector2(30, 20) if kind == "hat" else Vector2(24, 17)))
 	for item in ["capacity", "power", "speed", "life", "shield", "invincible", "car", "moto", "horse", "dragon", "coin",
-		"landmine", "hammer", "flamer", "laser", "triple", "shotgun"]:
+		"landmine", "hammer", "flamer", "laser", "triple", "shotgun", "kick", "boxing"]:
 		result.append(_entry("item." + item, _title(item) + " pickup", "Pickups", Vector2(28, 28)))
-	for kind in ["landmine", "hammer", "flamer", "laser", "triple", "shotgun"]:
+	for kind in ["landmine", "hammer", "flamer", "laser", "triple", "shotgun", "boxing"]:
 		result.append(_entry("held." + kind, _title(kind) + " · held", "Weapons", Vector2(24, 24)))
-	for kind in ["hammer", "flamer", "laser", "triple", "shotgun"]:
+	for kind in ["hammer", "flamer", "laser", "triple", "shotgun", "boxing"]:
 		result.append(_entry("attack." + kind, _title(kind) + " · action", "Weapons", Vector2(48, 48)))
 	for kind in ["triple", "shotgun"]:
 		result.append(_entry("projectile." + kind, _title(kind) + " · projectile", "Weapons", Vector2(28, 24)))
@@ -119,6 +119,7 @@ static func _entry(id: String, title: String, category: String, size: Vector2) -
 		var family := "fireball" if kind == "shotgun" else kind
 		reference = REFERENCE + "weapon-survey/weapon-survey-%s-right-01/first-frame.png" % family
 		if kind == "flamer": reference = REFERENCE + "weapon-survey/flamer-geometry-right-01/input.png"
+		if kind == "boxing": reference = ""
 	elif id.begins_with("outcome.") or id.begins_with("cartoon.") or id == "ui.results":
 		reference = REFERENCE + "results/zero-kill-win/win-results.png"
 	elif id.begins_with("board.zoo."): reference = FEATURES + "zoo-crocodiles-open.png"
@@ -134,4 +135,4 @@ static func _entry(id: String, title: String, category: String, size: Vector2) -
 
 static func _title(kind: String) -> String:
 	return {"shotgun": "Fireball", "triple": "Triple-shot", "invincible": "Invincibility", "landmine": "Mine",
-		"coin": "Pac-Man coin"}.get(kind, kind.capitalize())
+		"coin": "Pac-Man coin", "kick": "Push the bomb", "boxing": "Boxing glove"}.get(kind, kind.capitalize())
