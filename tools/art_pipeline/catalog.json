@@ -49,7 +49,23 @@
   },
   {
     "category": "Board",
+    "id": "board.popcorn_box",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
     "id": "board.popcorn",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Board",
+    "id": "board.clapperboard",
     "size": [
       36,
       36
@@ -105,7 +121,7 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.birthday_party.soft_a",
+    "id": "board.birthday_party.soft_1",
     "size": [
       36,
       36
@@ -113,7 +129,55 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.birthday_party.soft_b",
+    "id": "board.birthday_party.soft_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_6",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_7",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.birthday_party.soft_8",
     "size": [
       36,
       36
@@ -217,7 +281,7 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.candy_factory.soft_a",
+    "id": "board.candy_factory.soft_1",
     "size": [
       36,
       36
@@ -225,7 +289,39 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.candy_factory.soft_b",
+    "id": "board.candy_factory.soft_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.soft_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.soft_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.soft_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.candy_factory.soft_6",
     "size": [
       36,
       36
@@ -329,7 +425,7 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.zoo.soft_a",
+    "id": "board.zoo.soft_1",
     "size": [
       36,
       36
@@ -337,7 +433,23 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.zoo.soft_b",
+    "id": "board.zoo.soft_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.soft_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.zoo.soft_4",
     "size": [
       36,
       36
@@ -449,7 +561,7 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.luxury_stores.soft_a",
+    "id": "board.luxury_stores.soft_1",
     "size": [
       36,
       36
@@ -457,7 +569,39 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.luxury_stores.soft_b",
+    "id": "board.luxury_stores.soft_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.soft_3",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.soft_4",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.soft_5",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.luxury_stores.soft_6",
     "size": [
       36,
       36
@@ -553,7 +697,7 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.magic_library.soft_a",
+    "id": "board.magic_library.soft_1",
     "size": [
       36,
       36
@@ -561,7 +705,15 @@
   },
   {
     "category": "Stage sets",
-    "id": "board.magic_library.soft_b",
+    "id": "board.magic_library.soft_2",
+    "size": [
+      36,
+      36
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "board.magic_library.soft_3",
     "size": [
       36,
       36

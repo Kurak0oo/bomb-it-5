@@ -7,7 +7,6 @@ const GameView = preload("res://scripts/game_view.gd")
 const Looks = preload("res://scripts/looks.gd")
 const Pickups = preload("res://scripts/simulation/pickups.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
-const Layouts = preload("res://scripts/simulation/layouts.gd")
 const MIRROR := "res://tools/art_pipeline/catalog.json"
 var failures := 0
 var checks := 0
@@ -33,17 +32,13 @@ func _initialize() -> void:
 		_need(ids, missing, "effect." + ride)
 		_need(ids, missing, "effect.%s_recovery" % ride)
 	_need(ids, missing, "item.coin")
-	var variant_max := 1
-	for name in Layouts.all():
-		for row in Layouts.all()[name].rows:
-			for instance in row:
-				if String(instance).begins_with("fixedProp_") and String(instance).get_slice("_", 1).is_valid_int():
-					variant_max = maxi(variant_max, String(instance).get_slice("_", 1).to_int())
-	_expect(variant_max <= 7, "recorded solid variants fit the seven solid slots (max %d)" % variant_max)
 	for set_id in StageSets.ORDER:
+		_expect(StageSets.SETS[set_id].fixed_choices.all(func(n): return n <= 7), "%s fixed choices fit the seven solid slots" % set_id)
 		if set_id == &"cinema": continue
-		for part in ["floor_even", "floor_odd", "wall", "soft_a", "soft_b", "center"]: _need(ids, missing, "board.%s.%s" % [set_id, part])
+		for part in ["floor_even", "floor_odd", "wall", "center"]: _need(ids, missing, "board.%s.%s" % [set_id, part])
 		for variant in range(1, 8): _need(ids, missing, "board.%s.solid_%d" % [set_id, variant])
+		for variant in StageSets.SETS[set_id].soft_choices: _need(ids, missing, "board.%s.soft_%d" % [set_id, variant])
+	for id in GameView.CINEMA_SOFT: _need(ids, missing, id)
 	for part in ["zoo.crocodile", "zoo.crocodile_open", "birthday_party.toy_hand", "candy_factory.belt",
 		"magic_library.spellbook", "magic_library.sign_bomb", "magic_library.sign_pickup"]:
 		_need(ids, missing, "board." + part)

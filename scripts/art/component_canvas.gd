@@ -44,6 +44,7 @@ func focus_rect() -> Rect2:
 		return Rect2(ORIGIN + Vector2(_set_cell(part)) * PITCH, Vector2.ONE * PITCH)
 	var tiles := {"board.seat": Vector2(2, 2), "board.spotlight": Vector2(2, 4),
 		"board.clapper": Vector2(2, 3), "board.popcorn": Vector2(2, 2),
+		"board.popcorn_box": Vector2(2, 2), "board.clapperboard": Vector2(2, 2),
 		"board.portal_green": Vector2(8, 1), "board.portal_purple": Vector2(4, 7)}
 	if tiles.has(component_id): return Rect2(ORIGIN + tiles[component_id] * PITCH, Vector2.ONE * PITCH)
 	if component_id.ends_with(".death"): return Rect2(ORIGIN + Vector2(-10, -36), Vector2(56, 80))
@@ -94,6 +95,7 @@ func _draw() -> void:
 				"spotlight": _sample_tile(Vector2i(2, 4), &"solid")
 				"clapper": _sample_tile(Vector2i(2, 3), &"soft")
 				"popcorn": _sample_tile(Vector2i(2, 2), &"soft")
+				"popcorn_box", "clapperboard": _sample_soft(Vector2i(2, 2), 2 if kind == "popcorn_box" else 4)
 				"portal_green": _sample_tile(Vector2i(8, 1), &"portal")
 				"portal_purple": _sample_tile(Vector2i(4, 7), &"portal")
 		"actor":
@@ -141,22 +143,21 @@ func _draw() -> void:
 			_label(Vector2(520, 360), kind.replace("_", " ").to_upper(), 40, Color("ffd989"))
 
 
-## Sample cell per stage-set slot: parity picks the light/dark floor and A/B soft art.
+## Sample cell per stage-set slot: parity picks the light/dark floor.
 func _set_cell(part: String) -> Vector2i:
 	if part == "wall": return Vector2i(0, 2)
-	if part in ["floor_odd", "soft_a"]: return Vector2i(2, 3)
+	if part == "floor_odd": return Vector2i(2, 3)
 	return Vector2i(2, 2)
 
 
 func _sample_set(set_id: String, part: String) -> void:
 	var cell := _set_cell(part)
 	state.board_meta = {"skin": StringName(set_id), "center": Vector2i(7, 6), "size": Vector2i(17, 15),
-		"variants": {cell: part.get_slice("_", 1).to_int()} if part.begins_with("solid_") else {}}
+		"variants": {cell: part.get_slice("_", 1).to_int()} if part.begins_with("solid_") or part.begins_with("soft_") else {}}
 	state.features = []
 	match part:
 		"floor_even", "floor_odd": _themed_tile(cell, &"floor", StringName(set_id))
 		"wall": _themed_tile(cell, &"solid", StringName(set_id))
-		"soft_a", "soft_b": _themed_tile(cell, &"soft", StringName(set_id))
 		"center": _marquee()
 		"crocodile", "crocodile_open":
 			_themed_tile(cell, &"floor", StringName(set_id))
@@ -169,7 +170,9 @@ func _sample_set(set_id: String, part: String) -> void:
 		"spellbook", "sign_bomb", "sign_pickup":
 			var signs := [] if part == "spellbook" else [{"cell": cell, "kind": &"bomb" if part == "sign_bomb" else &"pickup"}]
 			state.features = [{"kind": &"spellbook", "cell": Vector2i(7, 6), "flipping": part != "spellbook", "signs": signs}]
-		_: if part.begins_with("solid_"): _themed_tile(cell, &"solid", StringName(set_id))
+		_:
+			if part.begins_with("solid_"): _themed_tile(cell, &"solid", StringName(set_id))
+			elif part.begins_with("soft_"): _themed_tile(cell, &"soft", StringName(set_id))
 	if not state.features.is_empty(): _features()
 
 
@@ -186,6 +189,14 @@ func _sample_look(robot_slot: String, part: String) -> void:
 
 func _sample_tile(cell: Vector2i, tile: StringName) -> void:
 	_tile(cell, tile)
+
+
+## A rolled Cinema soft block showing one art choice (`GameView.CINEMA_SOFT`).
+func _sample_soft(cell: Vector2i, choice: int) -> void:
+	var meta: Dictionary = state.get("board_meta", {}).duplicate()
+	meta.variants = {cell: choice}
+	state.board_meta = meta
+	_tile(cell, &"soft")
 
 
 func _sample_actor(kind: String, pose: String) -> void:

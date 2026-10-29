@@ -2,6 +2,7 @@ extends RefCounted
 ## Stable visual slots shared by the workbench and the real renderer.
 
 const Looks = preload("res://scripts/looks.gd")
+const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const REFERENCE := "res://docs/evidence/reference-2026-10-19/"
 const OPENING := REFERENCE + "cinema-observed-01/opening-board.png"
 const FEATURES := "res://docs/evidence/reference-2026-10-21/features/"
@@ -24,15 +25,17 @@ static func entries() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for item in [["floor_even", "Floor · light"], ["floor_odd", "Floor · dark"],
 		["wall", "Outer wall"], ["seat", "Cinema seat"], ["spotlight", "Spotlight"],
-		["clapper", "Soft block · clapper"], ["popcorn", "Soft block · popcorn"],
+		["clapper", "Soft block · 3D glasses"], ["popcorn_box", "Soft block · popcorn"],
+		["popcorn", "Soft block · drink"], ["clapperboard", "Soft block · clapperboard"],
 		["portal_green", "Portal · green"], ["portal_purple", "Portal · purple"],
 		["marquee", "Cinema centrepiece"]]:
 		result.append(_entry("board." + item[0], item[1], "Board", Vector2(108, 108) if item[0] == "marquee" else Vector2(36, 36)))
 	for set_id in SETS:
 		var set_title := set_id.replace("_", " ").capitalize()
-		for item in [["floor_even", "Floor · light"], ["floor_odd", "Floor · dark"], ["wall", "Outer wall"],
-			["soft_a", "Soft block · A"], ["soft_b", "Soft block · B"]]:
+		for item in [["floor_even", "Floor · light"], ["floor_odd", "Floor · dark"], ["wall", "Outer wall"]]:
 			result.append(_entry("board.%s.%s" % [set_id, item[0]], "%s · %s" % [set_title, item[1]], "Stage sets", Vector2(36, 36)))
+		for variant in StageSets.SETS[StringName(set_id)].soft_choices:
+			result.append(_entry("board.%s.soft_%d" % [set_id, variant], "%s · Soft block %d" % [set_title, variant], "Stage sets", Vector2(36, 36)))
 		for variant in range(1, 8):
 			result.append(_entry("board.%s.solid_%d" % [set_id, variant], "%s · Solid block %d" % [set_title, variant], "Stage sets", Vector2(36, 36)))
 		result.append(_entry("board.%s.center" % set_id, set_title + " · Centrepiece", "Stage sets", Vector2(108, 108)))

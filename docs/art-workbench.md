@@ -24,9 +24,9 @@ image does not immediately change normal play. Draft choices persist between
 workbench sessions. Reopening **Preview in game** starts a fresh preview with all
 current settings, including menu-button styles.
 
-The catalogue has 262 visual slots: 10 Cinema board pieces, 72 stage-set pieces
-(floors, walls, seven solid and two soft blocks and a centrepiece for each of the
-other five sets, plus crocodiles, toy hands, the belt, the spellbook and its signs),
+The catalogue has 281 visual slots: 12 Cinema board pieces, 89 stage-set pieces
+(floors, walls, seven solid blocks, one soft block per soft art choice and a
+centrepiece for each of the other five sets, plus crocodiles, toy hands, the belt, the spellbook and its signs),
 40 character poses/portraits for all eight robots, 64 hat and outfit looks,
 17 pickup icons (including horse, dragon and the Pac-Man coin), 13 held
 weapons/actions/projectiles, 16 effects/ride states, 2 mode elements (Green Zone flag

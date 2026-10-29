@@ -1,7 +1,7 @@
 # Art pipeline
 
 Batch tool that turns artwork from the edition 5 SWF into lightly modified
-**candidate art** for the Art Workbench's 262 named slots. It never applies
+**candidate art** for the Art Workbench's 281 named slots. It never applies
 anything: it does not write `assets/skins/active.json` or `assets/skins/imports/`.
 Review every candidate yourself, then import the ones you choose in the workbench
 with **Replace image…** ([ADR 0006](../../docs/adr/0006-swf-derived-candidate-art.md)).
@@ -122,11 +122,12 @@ Zone ground tile (`_brick5` frame 160) and progress bar (`r0_progress`), and the
 backgrounds (`UI_MainMenu`, `UI_SETTING`, `UI_SELECTCHARACTER`, `UI_CONTROLS`,
 `UI_LEVEL_COMPLETED_ONEP`, `UI_Dress Up`, `UI_GAMEOVERONEP`, `UI_CONGRATULATIONSONEP`).
 
-Slots with no SWF source (`source: null`, 150 of 262; they keep native drawing):
+Stage-set boxes come from `_brick5` frames as each set's map data selects them
+([tile evidence](../../docs/evidence/edition-5-stage-tiles.md)): `solid_N` and
+`soft_N` are the set's fixed and soft art choices, of which each round draws two.
 
-- Stage-set floors, walls, solid and soft blocks, and the Birthday Party, Zoo, Luxury
-  Shop and Magic Library centrepieces (64): the set art lives in unnamed brick clips
-  whose per-set frames were not recovered.
+Slots with no SWF source (`source: null`, 86 of 281; they keep native drawing):
+
 - Every hat and outfit look (64): drawn inside the robot clips, no separate symbol.
 - Character action poses (8), protection blink and portal transit overlays (2),
   touch controls (5) and seven interface panels and button states.

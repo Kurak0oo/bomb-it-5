@@ -5,13 +5,15 @@ extends RefCounted
 ## Source `UIManager.gamePlay` rotation order.
 const ORDER: Array[StringName] = [&"birthday_party", &"candy_factory", &"cinema", &"zoo",
 	&"luxury_stores", &"magic_library"]
+## `fixed_choices` and `soft_choices` are the art lists `<Set>MapData.init` draws two from each
+## round (`_fixedArr`, `_unfixedArr`); see docs/evidence/edition-5-stage-tiles.md.
 const SETS := {
-	&"birthday_party": {"title": "BIRTHDAY PARTY", "prefix": "BirthdayParty", "vehicles": [&"horse", &"moto"], "features": [&"toy_hand"]},
-	&"candy_factory": {"title": "CANDY FACTORY", "prefix": "CandyFactory", "vehicles": [&"moto", &"car"], "features": [&"belt"]},
-	&"cinema": {"title": "CINEMA", "prefix": "Cinema", "vehicles": [&"moto", &"car"], "features": [&"portal"]},
-	&"zoo": {"title": "ZOO", "prefix": "Zoo", "vehicles": [&"horse", &"dragon"], "features": [&"crocodile"]},
-	&"luxury_stores": {"title": "LUXURY SHOP", "prefix": "LuxuryStores", "vehicles": [&"car"], "features": []},
-	&"magic_library": {"title": "MAGIC LIBRARY", "prefix": "MagicLibrary", "vehicles": [&"horse", &"moto"], "features": [&"spellbook"]},
+	&"birthday_party": {"title": "BIRTHDAY PARTY", "prefix": "BirthdayParty", "vehicles": [&"horse", &"moto"], "features": [&"toy_hand"], "fixed_choices": [1, 2, 3], "soft_choices": [1, 2, 3, 4, 5, 6, 7, 8]},
+	&"candy_factory": {"title": "CANDY FACTORY", "prefix": "CandyFactory", "vehicles": [&"moto", &"car"], "features": [&"belt"], "fixed_choices": [1, 2, 4], "soft_choices": [1, 2, 3, 4, 5, 6]},
+	&"cinema": {"title": "CINEMA", "prefix": "Cinema", "vehicles": [&"moto", &"car"], "features": [&"portal"], "fixed_choices": [1, 3], "soft_choices": [1, 2, 3, 4]},
+	&"zoo": {"title": "ZOO", "prefix": "Zoo", "vehicles": [&"horse", &"dragon"], "features": [&"crocodile"], "fixed_choices": [1, 5], "soft_choices": [1, 2, 3, 4]},
+	&"luxury_stores": {"title": "LUXURY SHOP", "prefix": "LuxuryStores", "vehicles": [&"car"], "features": [], "fixed_choices": [1, 3], "soft_choices": [1, 2, 3, 4, 5, 6]},
+	&"magic_library": {"title": "MAGIC LIBRARY", "prefix": "MagicLibrary", "vehicles": [&"horse", &"moto"], "features": [&"spellbook"], "fixed_choices": [1, 2, 4], "soft_choices": [1, 2, 3]},
 }
 ## Features the round implements; a set needing anything else stays unavailable.
 const SUPPORTED_FEATURES: Array[StringName] = [&"portal", &"belt", &"toy_hand", &"crocodile", &"spellbook"]

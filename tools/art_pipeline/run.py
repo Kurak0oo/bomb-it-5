@@ -151,7 +151,7 @@ def main(argv=None):
     except extract.SwfMissing as error:
         log.error('%s', error)
         return 3
-    CANDIDATES.mkdir(exist_ok=True)
+    CANDIDATES.mkdir(parents=True, exist_ok=True)
     (CANDIDATES / '.gdignore').write_text('Candidate art is reviewed outside Godot; import chosen files via the workbench.\n')
     export_summary = extract.export(swf, digest, config)
     assets, counts = manifest.build(config)

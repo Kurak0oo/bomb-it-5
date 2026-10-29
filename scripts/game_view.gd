@@ -9,6 +9,8 @@ const ROBOT_TITLES := ["BLUE", "RUBY", "LIME", "GOLD", "VIOLET", "SLATE", "MINT"
 const ROBOT_COLORS := [Color("66d8ff"), Color("ed86c6"), Color("b6e36a"), Color("ffd470"),
 	Color("b394f0"), Color("9aa6b4"), Color("8ce2b5"), Color("f2f4f7")]
 const LOOK_COLORS := [Color("e35d6a"), Color("4f8fe0"), Color("f2b84b"), Color("5cc48d"), Color("a66ce0"), Color("ef8a3c"), Color("3fb7c9")]
+## Cinema soft choices 1-4 (`_brick5` frames 53-56); the first and third keep their older slot ids.
+const CINEMA_SOFT := ["board.clapper", "board.popcorn_box", "board.popcorn", "board.clapperboard"]
 ## Standalone seat robots when an actor carries no explicit robot.
 const SEAT_ROBOTS := {&"human": 0, &"ruby": 1, &"mint": 6, &"gold": 3}
 const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
@@ -201,6 +203,13 @@ func _tile(cell: Vector2i, kind: StringName) -> void:
 	if not skin.draw(self, "board.floor_odd" if (cell.x + cell.y) % 2 else "board.floor_even", Rect2(at, Vector2.ONE * PITCH)):
 		draw_rect(Rect2(at, Vector2.ONE * PITCH), Color("53304d") if (cell.x + cell.y) % 2 else Color("5c3555"))
 		draw_line(at + Vector2(0, 35), at + Vector2(35, 35), Color("472942"), 1)
+	# A rolled board names each box's art choice (`StageSets.SETS`); the recorded practice
+	# board has none and keeps the parity rule.
+	var variant = state.get("board_meta", {}).get("variants", {}).get(cell)
+	if kind == &"solid" and variant != null:
+		if skin.draw(self, "board.spotlight" if variant == 1 else "board.seat", Rect2(at, Vector2.ONE * 36)): return
+	elif kind == &"soft" and variant != null:
+		if skin.draw(self, CINEMA_SOFT[variant - 1], Rect2(at, Vector2.ONE * 36)): return
 	if kind == &"solid":
 		if cell.x == 0 or cell.y == 0 or cell.x == 16 or cell.y == 14:
 			if skin.draw(self, "board.wall", Rect2(at, Vector2.ONE * 36)): return
@@ -248,20 +257,22 @@ func _themed_tile(cell: Vector2i, kind: StringName, set_id: StringName) -> void:
 	if not skin.draw(self, prefix + ("floor_odd" if (cell.x + cell.y) % 2 else "floor_even"), rect):
 		draw_rect(rect, theme[1] if (cell.x + cell.y) % 2 else theme[0])
 	var size: Vector2i = state.get("board_meta", {}).get("size", Vector2i(17, 15))
+	var variants: Dictionary = state.get("board_meta", {}).get("variants", {})
 	if kind == &"solid":
+		# The outer ring is ordinary fixed props in the source; it draws their art when rolled.
+		if variants.has(cell) and skin.draw(self, prefix + "solid_%d" % variants[cell], rect): return
 		if cell.x == 0 or cell.y == 0 or cell.x == size.x - 1 or cell.y == size.y - 1:
 			if skin.draw(self, prefix + "wall", rect): return
 			_box(Rect2(at + Vector2.ONE, Vector2.ONE * 34), theme[2], theme[2].lightened(0.4), 5)
 			return
 		var center = state.get("board_meta", {}).get("center")
 		if center != null and Rect2i(center, Vector2i(3, 3)).has_point(cell): return
-		var variant: int = state.get("board_meta", {}).get("variants", {}).get(cell, 1)
-		if skin.draw(self, prefix + "solid_%d" % variant, rect): return
+		var variant: int = variants.get(cell, 1)
 		var fill: Color = theme[3].lerp(theme[2], 0.25 * (variant % 3))
 		_box(Rect2(at + Vector2(5, 4), Vector2(26, 28)), fill, theme[4], 7)
 		draw_circle(at + Vector2(18, 13), 6, theme[4])
 	elif kind == &"soft":
-		if skin.draw(self, prefix + ("soft_a" if (cell.x + cell.y) % 2 else "soft_b"), rect): return
+		if skin.draw(self, prefix + "soft_%d" % variants.get(cell, 1 + (cell.x + cell.y) % 2), rect): return
 		_box(Rect2(at + Vector2(7, 9), Vector2(22, 22)), theme[5], theme[6], 4)
 		draw_line(at + Vector2(9, 14), at + Vector2(27, 14), theme[6], 2)
 	elif kind in [&"belt", &"crocodile"]:

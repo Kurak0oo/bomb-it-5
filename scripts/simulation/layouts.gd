@@ -37,6 +37,10 @@ static func roll(name: String, soft_chance: float, rng: RandomNumberGenerator) -
 	var features: Dictionary = {}
 	var variants: Dictionary = {}
 	var pairs: Dictionary = {}
+	# Art only: the round's two fixed and two soft choices (`<Set>MapData.init`).
+	var entry: Dictionary = StageSets.SETS[StringName(layout.set)]
+	var fixed_choices := _pick_two(entry.fixed_choices, rng)
+	var soft_choices := _pick_two(entry.soft_choices, rng)
 	for y in layout.rows.size():
 		var row: Array = layout.rows[y]
 		for x in row.size():
@@ -47,11 +51,12 @@ static func roll(name: String, soft_chance: float, rng: RandomNumberGenerator) -
 				# Pac-Man layouts (`setDataByPacMan`) and plain unfixedProp leave the cell empty.
 				if instance == "unfixedProp_r" and not layout.pac_man and rng.randf() < soft_chance:
 					tile = &"soft"
+					variants[cell] = soft_choices[rng.randi_range(0, 1)]
 			elif instance.begins_with("fixedProp"):
 				tile = &"solid"
-				# Visual variant only; `_r` cells draw from the set's solid art list.
-				var variant := instance.get_slice("_", 1)
-				variants[cell] = rng.randi_range(1, 7) if variant == "r" else int(variant)
+				# Visual variant only. The source ignores a numbered prop's own number and draws
+				# the round's first fixed choice; `_r` cells draw either choice.
+				variants[cell] = fixed_choices[rng.randi_range(0, 1)] if instance == "fixedProp_r" else fixed_choices[0]
 			elif instance in ["centerProp", "holdProp"]:
 				tile = &"solid"
 			elif instance.begins_with("portal_"):
@@ -65,9 +70,20 @@ static func roll(name: String, soft_chance: float, rng: RandomNumberGenerator) -
 			cells[cell] = tile
 	var board := BoardData.make(cells, BoardData._link(pairs), StringName(layout.set), features, name)
 	board.variants = variants
+	board.fixed_choices = fixed_choices
+	board.soft_choices = soft_choices
 	board.portal_ids = BoardData.pair_ids(pairs)
 	board.center = CENTER if layout.rows[CENTER.y][CENTER.x] == "centerProp" else null
 	return board
+
+
+## Two distinct entries in draw order, as the source splices them from its list.
+static func _pick_two(choices: Array, rng: RandomNumberGenerator) -> Array:
+	var pool := choices.duplicate()
+	var result := []
+	while result.size() < 2:
+		result.append(pool.pop_at(rng.randi_range(0, pool.size() - 1)))
+	return result
 
 
 static func _feature_kind(instance: String) -> StringName:

@@ -19,7 +19,7 @@ captures, corrections and limits. Finished art #20 and final human desktop accep
 The generated art pass was rejected by the user on 2026-10-20 and reverted in
 `0f41b43` / `8211c82`; the gameplay fidelity commits remain. Presentation #20 is
 reopened and #21 remains open. The user now owns art selection through the
-[Art Workbench](art-workbench.md): now 262 visual slots (89 before #70), native default previews,
+[Art Workbench](art-workbench.md): now 281 visual slots (89 before #70), native default previews,
 applied/draft comparison, view-only original context, imported images and sheets,
 animation/facing/placement controls, undo/reset and preview in the actual game.
 The checked-in active manifest is empty, so normal play keeps the earlier native
@@ -467,3 +467,27 @@ pages (in-play HUD and pause icon moved to #91) and asks for the missing
 screen-hook ADR; #87 and #88 blockers were updated. Spec #71's text still
 describes the superseded 700×510 layout and cardinal stick; DESIGN.md is current.
 
+
+### 2026-10-29 tile art choices and the screen-hook ADR (#74, #76)
+
+A cloud session picked up the replica with the user's SWF (recorded hash) and Godot 4.5
+(`4.5.stable.official.876b29033`, Linux, downloaded with the user's approval). FFDec
+exported 1068 scripts to `.scratch/edition-5-research/publisher-scripts/` and the pack
+was rebuilt (now 195 slot sheets); `run.py` now creates `original/art` when `original/`
+does not exist yet.
+
+The handoff's "frame offset" suspicion for the wrong Magic Library board art was wrong:
+`_brick5` frames are 1-based and the slot frames were right. The selection rule was
+wrong. Each round, `<Set>MapData.init` draws two fixed and two soft art choices; a
+numbered `fixedProp_<n>` draws the first fixed choice whatever its number (the outer ring
+included), `fixedProp_r` either choice, and each soft block either soft choice. The
+round now does the same (`Layouts.roll`, `StageSets.SETS` choice lists), the renderer
+draws the ring as fixed props, and the catalogue has one `soft_<n>` slot per soft-list
+entry instead of `soft_a`/`soft_b`, plus Cinema's popcorn box and clapperboard (281
+slots). The [tile evidence](evidence/edition-5-stage-tiles.md) is corrected and the
+[captures](verification/original-replica-2026-10-29/README.md) match the original
+Magic Library opening. Prop scale and overlap (the original draws frames at 30/32 from
+their registration, not fitted to the cell) and whole-background floors remain open.
+
+ADR 0009, cited by `scripts/art/screen_layout.gd` but never committed, is
+[reconstructed](adr/0009-screen-art-ghosts-and-plates.md) from that file's header.

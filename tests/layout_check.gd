@@ -59,6 +59,8 @@ func _initialize() -> void:
 	var zoo: Dictionary = Layouts.roll("ZooStage1", 0.6, _rng(4))
 	_expect(zoo.features.values().any(func(f): return f.kind == &"crocodile"), "set tiles are kept as board features")
 
+	_tile_art_follows_the_round_choices()
+
 	_expect(StageSets.available_sets() == StageSets.ORDER, "every stage set is offered once its features are ported (#63-#66)")
 
 	var luxury: Dictionary = Layouts.roll("LuxuryStoresStage2", 0.6, _rng(9))
@@ -70,6 +72,37 @@ func _initialize() -> void:
 			"bomb_events": [&"down", &"up"] if tick == 30 else []}])
 	_expect(state.board.size() == 255 and state.mode == &"arcade", "Arcade plays on a rolled Luxury Shop board")
 	_finish()
+
+
+## `<Set>MapData.init` draws two fixed and two soft art choices per round; a numbered
+## `fixedProp_N` (the outer ring included) always draws the first fixed choice, `_r` either
+## one, and each soft block either soft choice (`MapMaster.createRow`). docs/evidence/edition-5-stage-tiles.md.
+func _tile_art_follows_the_round_choices() -> void:
+	var picks_ok := true
+	var numbered_ok := true
+	var random_ok := true
+	var soft_ok := true
+	var ring_varies := {}
+	for name in Layouts.all():
+		var layout: Dictionary = Layouts.all()[name]
+		var entry: Dictionary = StageSets.SETS[StringName(layout.set)]
+		for seed_value in 8:
+			var board: Dictionary = Layouts.roll(name, 1.0, _rng(seed_value))
+			var fixed: Array = board.fixed_choices
+			var soft: Array = board.soft_choices
+			picks_ok = picks_ok and fixed.size() == 2 and fixed[0] != fixed[1] and soft.size() == 2 and soft[0] != soft[1] \
+				and fixed.all(func(n): return n in entry.fixed_choices) and soft.all(func(n): return n in entry.soft_choices)
+			for cell in board.cells:
+				var instance: String = layout.rows[cell.y][cell.x]
+				if instance == "fixedProp_r": random_ok = random_ok and board.variants.get(cell) in fixed
+				elif instance.begins_with("fixedProp"): numbered_ok = numbered_ok and board.variants.get(cell) == fixed[0]
+				if board.cells[cell] == &"soft": soft_ok = soft_ok and board.variants.get(cell) in soft
+			ring_varies[board.variants.get(Vector2i(0, 0))] = true
+	_expect(picks_ok, "each round draws two distinct fixed and soft art choices from its set's lists")
+	_expect(numbered_ok, "numbered fixed props, the outer ring included, draw the first fixed choice")
+	_expect(random_ok, "random fixed props draw one of the round's two fixed choices")
+	_expect(soft_ok, "soft blocks draw one of the round's two soft choices")
+	_expect(ring_varies.size() > 1, "the outer ring's art changes with the round's first fixed choice")
 
 
 func _soft_ratio(name: String, chance: float) -> float:

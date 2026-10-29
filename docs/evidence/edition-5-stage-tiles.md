@@ -51,33 +51,54 @@ four area pairs.
 
 ## Variant lists per set
 
-Each `<Set>MapData.init` declares the choices: `_loc1_` feeds `_unfixedArr` (soft
-blocks), `_loc2_` feeds `_fixedArr` (fixed props).
+Each `<Set>MapData.init` (run once per round, when `Game` builds its `worldSet`) splices
+**two distinct** entries, in random order, from a fixed list into `_fixedArr` and from a
+soft list into `_unfixedArr` (passed to `MapMaster.unfixedFrameArr`):
 
-| Set | fixed choices | soft choices |
-| --- | --- | --- |
-| BirthdayParty | 1, 2, 3 | 1–8 |
-| CandyFactory | 1, 2, 4 | 1–6 |
-| Cinema | 1, 3 | 1–4 |
-| Zoo | 1, 5 | 1–4 |
-| LuxuryStores | 1, 3 | 1–6 |
-| MagicLibrary | 1, 2, 4 | 1, 3 |
+| Set | fixed list (`_loc2_`) | frames | soft list (`_loc1_`) | frames |
+| --- | --- | --- | --- | --- |
+| BirthdayParty | 1, 2, 3 | 1–3 | 1–8 | 5–12 |
+| CandyFactory | 1, 2, 4 | 25, 26, 28 | 1–6 | 29–34 |
+| Cinema | 1, 3 | 49, 51 | 1–4 | 53–56 |
+| Zoo | 1, 5 | 73, 77 | 1–4 | 80–83 |
+| LuxuryStores | 1, 3 | 97, 99 | 1–6 | 101–106 |
+| MagicLibrary | 1, 2, 4 | 121, 122, 124 | 1, 2, 3 | 126–128 |
 
-`MapMaster` reads those as `frame = beginNum - 1 + fixedChoice` and
-`frame = beginNum + fixedPropNum - 1 + softChoice`. The recorded layouts store their
-own variant numbers, so the pack maps `solid_N` to the consecutive frame
-`beginNum - 1 + N` (what `Box.gotoAndStop` would draw) and the two soft slots to the
-set's first two soft choices.
+`setData` / `setDataByPacMan` then assign each cell:
 
-## Floors and walls
+- `fixedProp_r`: `_fixedArr[int(Math.random() * 2)]`, either of the round's two choices.
+- any other `fixedProp_<n>`: `_fixedArr[0]`. **The layout's own number is never read**
+  (`split("_")[1]` is only compared with `"r"`). The outer ring is made of numbered fixed
+  props, so it always shows the round's first fixed choice.
+- `unfixedProp_r`: a soft candidate; `createRow` draws its frame from
+  `_unfixedFrameArr[int(Math.random() * 2)] + beginNum + fixedPropNum - 1`. Areas 1–4
+  are never set by these sets (`setUnfixedProb` passes the default area -1).
 
-The floor and the board border are the 576×544 `BackGround_<Set>` image, tiled at 32px.
-The pack cuts 32×32 tiles from it: `floor_even` at (32,32), `floor_odd` at (64,32),
-`wall` at (0,0). Cinema's background is uniform, which is why its floor slot previously
-used a flat `#888` stand-in.
+Frame contents (rendered from the FFDec frame export, 2026-10-29): Magic Library fixed
+121 books, 122 pencil cup, 124 mushroom lamp; soft 126 glasses, 127 scroll and quill,
+128 witch hat (125 is a coffee cup no layout reaches). Cinema fixed 49 spotlight, 51 red
+seat; soft 53 3D glasses, 54 popcorn, 55 drink, 56 clapperboard. Candy Factory fixed 25
+and 26 sweet jars, 28 pudding cup; soft 29 candy cane to 34 lollipop.
 
-The pipeline's config gained a `source.crop` region for this: it renders one declared
-box of a source asset instead of the asset's content bounds.
+This matches the reference openings: [Magic Library layout 2](reference-2026-10-21/stage-openings/magic-layout2.png)
+shows a lamp ring and lamp pillars (first fixed choice 4), pencil cups on `_r` cells
+(second choice 2) and glasses and witch hats as soft blocks (soft choices 1 and 3);
+[Candy Factory layout 2](reference-2026-10-21/stage-openings/candy-layout2.png) shows a
+pudding ring (choice 4), jars and two soft kinds.
+
+The first #74 mapping read `fixedProp_<n>` as frame `beginNum - 1 + n`, rolled `_r`
+cells over 1–7 and used the first two soft frames, so boards showed art the round could
+not draw and the ring fell back to a background crop. Corrected on 2026-10-29:
+`Layouts.roll` draws the two choices per round, the renderer draws `solid_<choice>` on
+every fixed cell including the ring and `soft_<choice>` on soft blocks, and the pack has
+one `soft_<n>` slot per soft-list entry.
+
+## Floors
+
+Empty cells get no box; the floor is the `BackGround_<Set>` bitmap that
+`AbstractMapSet.init` cuts at 540×540 and draws beneath the grid at 30/32 scale. The pack
+cuts 32×32 tiles from it: `floor_even` at (32,32), `floor_odd` at (64,32). The `wall`
+slot (a crop at (0,0)) is drawn only where a board has no rolled art.
 
 ## Still open for #74
 
