@@ -119,6 +119,9 @@ func _toy_hands() -> void:
 func _belt() -> void:
 	var game := _round("CandyFactoryStage1", {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(15, 13)}}, &"arcade", 7)
 	var belt: Dictionary = game.snapshot().features.filter(func(f): return f.kind == &"belt")[0]
+	_expect(game._features.all(func(feature): return feature.has_method("blocked_cells")),
+		"every stage feature answers blocked_cells, which the free-cell search asks (the belt did not)")
+	game = _round("CandyFactoryStage1", {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(15, 13)}}, &"arcade", 7)
 	_expect(belt.track.size() == 33 and belt.track[0] == Vector2i(8, 9) and belt.track[-1] == Vector2i(6, 11), "the 33-cell track runs from the machine exit (8,9) to (6,11)")
 	var spawned_at := -1
 	for tick in 215:

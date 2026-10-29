@@ -150,5 +150,10 @@ func _spawn(round_state: RefCounted) -> void:
 			"belt_position": Vector2(exit_cell)})
 
 
+## The belt's cells are `belt` board cells, which the round already treats as blocked.
+func blocked_cells() -> Array[Vector2i]:
+	return []
+
+
 func public_state() -> Dictionary:
 	return {"kind": &"belt", "track": track, "flow": flow, "exit": exit_cell, "next_spawn": BUILD_DELAY - total_frame}
