@@ -532,3 +532,22 @@ and the spellbook keeps its registered 3×3 size, closed on frame 1 until it fli
 
 `tests/replica_page_check.gd` now has 51 checks. Captures are in the
 [verification record](verification/original-replica-2026-10-29/README.md).
+
+### 2026-10-29 original engine and round clock (#79, #80)
+
+- #79: the replica's scheduler is `frame_driven`: logic still steps 35 times a second,
+  but at most once per drawn frame, and credit above one step is dropped, so a stall or a
+  slow device slows the game instead of jumping (Q13/Q14). The view blends actors, moving
+  bombs and projectiles between the last two steps by the scheduler's interpolation
+  fraction; the round state is never touched. Scheduler checks cover 60 and 120 Hz,
+  a one-second stall and a 30 Hz device; the adapted catch-up checks are unchanged.
+- #80: `BombSimulation` takes an injectable `seconds` source and ports `Game.countTime`
+  (`pastSecond` starts as NaN, so the first step counts; one second per change of
+  `Date.getSeconds()`, at most one per step; nothing while the engine is stopped).
+  Timeouts, `timePassed` pickups, the HUD time and the time bonus read
+  `clock_tick() = pastTime × 35`. The round host passes the wall clock under the
+  `original` profile; `Game.seconds_source` lets checks inject one. Adapted rounds keep
+  the 6,300-step clock.
+- Handoff gap 8 is verified from source: for one player `ArcadeMode.timeOut` →
+  `judgeHandler` → `winHandler` → `countScore(true)`, which pays `DIFF_POINT` and a time
+  bonus of `(gameTime − pastTime) × 10` (0 at timeout). The replica's settlement matches.

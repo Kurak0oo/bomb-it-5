@@ -17,6 +17,10 @@ var _paused: bool = false
 var _focused: bool = true
 var _controllers: Dictionary = {}
 var _pending_controllers: Dictionary = {}
+## The original engine (Q13/Q14): logic steps from drawn frames, at most one step per frame,
+## and time lost to a stall is dropped, so a slow device slows the game as Flash did. The
+## adapted scheduler instead catches up to MAX_TICKS_PER_FRAME.
+var frame_driven := false
 
 
 func _init(actor_ids: Array[StringName], tick_target: RefCounted = null) -> void:
@@ -65,9 +69,10 @@ func advance_time(elapsed_seconds: float) -> Dictionary:
 		return {"paused": true, "ticks": []}
 	if not is_finite(elapsed_seconds) or elapsed_seconds < 0.0:
 		return {"paused": false, "ticks": []}
-	_tick_credit = minf(_tick_credit + elapsed_seconds * TICKS_PER_SECOND, MAX_TICKS_PER_FRAME)
+	var limit := 2.0 - TICK_EPSILON if frame_driven else MAX_TICKS_PER_FRAME
+	_tick_credit = minf(_tick_credit + elapsed_seconds * TICKS_PER_SECOND, limit)
 	var ticks: Array[Dictionary] = []
-	while _tick_credit + TICK_EPSILON >= 1.0:
+	while _tick_credit + TICK_EPSILON >= 1.0 and (not frame_driven or ticks.is_empty()):
 		var batch: Array[Dictionary] = []
 		var captures: Dictionary = {}
 		for actor_id in _actor_ids:
@@ -94,6 +99,11 @@ func advance_time(elapsed_seconds: float) -> Dictionary:
 		ticks.append(result)
 		_tick_credit = maxf(0.0, _tick_credit - 1.0)
 	return {"paused": false, "ticks": ticks}
+
+
+## How far drawing is between the last step and the next, for interpolation only.
+func interpolation() -> float:
+	return clampf(_tick_credit, 0.0, 1.0)
 
 
 func _process(delta: float) -> void:

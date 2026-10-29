@@ -40,6 +40,13 @@ var _pending_outcome: StringName = &""
 var _ending_started := 0
 var _gameplay_end_tick := 0
 var _judgment_ready := false
+## Original round clock (#80, `Game.countTime`): `seconds` polls the wall-clock second once per
+## step and `_past_time` gains one whenever it changes, so stalls miss seconds and the first
+## step already counts one (`pastSecond` starts as NaN). Absent, the round runs on steps.
+var _seconds: Callable
+var _past_time := 0
+var _past_second := -1
+var _clock_advanced := false
 var _mode: RefCounted
 var _board_max := Vector2i(16, 14)
 var _features: Array = []
@@ -58,6 +65,7 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 	for cell in _board:
 		_board_max = Vector2i(maxi(_board_max.x, cell.x), maxi(_board_max.y, cell.y))
 	_rng.seed = _rules.get("seed", 5)
+	if _rules.get("seconds") is Callable: _seconds = _rules.seconds
 	_random_draws = _rules.get("random_draws", []).duplicate()
 	_drop_pool = Pickups.build_pool(_draw_random, _mode.drop_weights(), _rules.get("vehicles", [&"moto", &"car"]))
 	_vehicles_left = _rules.get("vehicle_budget", 4)
@@ -244,6 +252,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 			if _rules.get("damage", false):
 				if changed and _fire.has(registered_cells[actor_id]):
 					_hurt(actor_id, &"")
+		if _rules.get("round", false) and _round_stage != &"ending": _count_time()
 		if _rules.get("drops", false):
 			_advance_pickups()
 		_advance_death_movies()
@@ -263,7 +272,7 @@ func snapshot() -> Dictionary:
 		"blasts": [], "broken_soft_blocks": [], "flames": _flames.duplicate(true),
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
-		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else _tick)), "result_score": _result_score,
+		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else clock_tick())), "result_score": _result_score,
 		"mode": _mode.name, "difficulty": _mode.difficulty, "mode_state": _mode.public_state(), "points_goal": _mode.points_goal(), "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
 		"features": _features.map(func(feature): return feature.public_state()),
 		"pickups": _pickups.duplicate(true), "attacks": _weapons.attacks.duplicate(true),
@@ -424,6 +433,22 @@ func enemies() -> Array[Dictionary]:
 	return result
 
 
+## The round clock in steps: elapsed steps, or under the original clock its counted seconds
+## (`pastTime`) at 35 steps each, so modes keep one time unit.
+func clock_tick() -> int:
+	return _past_time * 35 if _seconds.is_valid() else _tick
+
+
+func _count_time() -> void:
+	_clock_advanced = false
+	if not _seconds.is_valid(): return
+	var second: int = _seconds.call()
+	if second != _past_second:
+		_past_time += 1
+		_past_second = second
+		_clock_advanced = true
+
+
 func _finish_round() -> void:
 	if _round_stage == &"ending":
 		# Source GameEndCartoon uses a three-second host Tween; accepted conversion freezes on pause.
@@ -433,11 +458,11 @@ func _finish_round() -> void:
 			_result_score = _mode.settle(self, _outcome, _gameplay_end_tick)
 			human().score = _result_score
 		return
-	_pending_outcome = _mode.judge(self, _judgment_ready, _tick)
+	_pending_outcome = _mode.judge(self, _judgment_ready, clock_tick())
 	if _pending_outcome != &"":
 		_round_stage = &"ending"
 		_ending_started = _tick
-		_gameplay_end_tick = _tick
+		_gameplay_end_tick = clock_tick()
 		for id in _actor_ids:
 			_weapons.cancel(_actors[id], id)
 			_actors[id].velocity = Vector2.ZERO
@@ -472,7 +497,7 @@ func _advance_pickups() -> void:
 			if not occupied and _spawned_drops < 32 and _draw_random() < _rules.get("drop_chance", _mode.drop_chance()):
 				_spawn_pickup(drop.cell, true)
 		drop_index += 1
-	var timed_count: int = _mode.timed_pickup_count(_tick)
+	var timed_count: int = _mode.timed_pickup_count(clock_tick()) if _clock_advanced or not _seconds.is_valid() else 0
 	if timed_count > 0: spawn_random_pickups(timed_count)
 	for actor in _actors.values():
 		if actor.alive and actor.transit_until == 0 and actor.action_started_tick != _tick and _pickups.has(actor.cell):

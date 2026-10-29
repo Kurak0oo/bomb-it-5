@@ -134,8 +134,12 @@ records the trade-off.
   - The levels buttons follow `GameSettingsUI.levelsHandle`: the button labelled 5
     sets one level; 5 levels is reached only by leaving the default.
   - The default difficulty is Easy (`GameModel.init`).
-  - Still to port, each from recovered source rather than approximation: the
-    Date-based round clock that can miss seconds during stalls, the exposed
+  - The round runs on the original engine (#79): at most one step per drawn frame,
+    stall time dropped, positions drawn between steps. The round clock is
+    `Game.countTime` (#80): a second is counted whenever the polled Date second
+    changes, at most one per step, the first step included; modes' timeouts, timed
+    pickups and time bonuses read those counted seconds.
+  - Still to port, each from recovered source rather than approximation: the exposed
     localization keys on original screens (with the original screen art), the exact
     `HitMove` lane assistance and geometric bomb-overlap bypass, and original timing
     quirks such as pending recovery while paused.

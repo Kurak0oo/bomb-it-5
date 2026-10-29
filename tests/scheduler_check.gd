@@ -18,6 +18,7 @@ func _initialize() -> void:
 	_input_is_rejected_while_paused_or_for_unknown_actors()
 	_focus_loss_pauses_and_focus_return_requires_explicit_resume()
 	_invalid_elapsed_time_cannot_poison_the_clock()
+	_frame_driven_steps_at_most_once_per_frame()
 	await _attached_scheduler_is_driven_by_godot_frames()
 	for scheduler in _schedulers:
 		scheduler.free()
@@ -168,6 +169,37 @@ func _invalid_elapsed_time_cannot_poison_the_clock() -> void:
 			"invalid elapsed time is ignored: %s" % elapsed)
 		_expect(scheduler.advance_time(0.5 / 35.0).ticks.map(func(tick: Dictionary): return tick.tick), [1],
 			"invalid elapsed time preserves accumulated valid time: %s" % elapsed)
+
+
+## #79, original profile: 35 steps a second from 60 or 120 Hz drawing, at most one step per
+## drawn frame, stall time dropped, and a slow device slows the game instead of jumping.
+func _frame_driven_steps_at_most_once_per_frame() -> void:
+	for hz in [60, 120]:
+		var scheduler := _new_scheduler([&"human"])
+		scheduler.frame_driven = true
+		var steps := 0
+		var most := 0
+		for frame in hz * 4:
+			var count: int = scheduler.advance_time(1.0 / hz).ticks.size()
+			steps += count
+			most = maxi(most, count)
+		_expect([steps, most], [140, 1], "original at %d Hz: 35 steps per second, never two in one frame" % hz)
+		var fractions: Array[float] = []
+		for frame in 3:
+			scheduler.advance_time(1.0 / hz)
+			fractions.append(scheduler.interpolation())
+		_expect(fractions.all(func(value): return value >= 0.0 and value < 1.0), true,
+			"original at %d Hz: drawing has an interpolation fraction between steps" % hz)
+	var stalled := _new_scheduler([&"human"])
+	stalled.frame_driven = true
+	_expect(stalled.advance_time(1.0).ticks.size(), 1, "original: a one-second stall gives one step")
+	_expect(stalled.advance_time(1.0 / 60.0).ticks.size() + stalled.advance_time(1.0 / 60.0).ticks.size() <= 2, true,
+		"original: the stalled time is dropped rather than replayed")
+	var slow := _new_scheduler([&"human"])
+	slow.frame_driven = true
+	var total := 0
+	for frame in 30 * 4: total += slow.advance_time(1.0 / 30.0).ticks.size()
+	_expect(total, 120, "original on a 30 Hz device: one step per frame, so the game slows to 30 steps a second")
 
 
 func _attached_scheduler_is_driven_by_godot_frames() -> void:

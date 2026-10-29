@@ -52,6 +52,10 @@ var scenery: Node2D
 var hud: Node2D
 ## Tests pin the safe area; otherwise it is read from the display every frame.
 var safe_area_override := Rect2()
+## The step before `state`, for drawing between steps (#79); never fed back to the round.
+var previous_state: Dictionary = {}
+## The replica round clock's second source (#80): the wall clock unless checks inject one.
+static var seconds_source: Callable
 
 
 func _ready() -> void:
@@ -162,13 +166,14 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 			actors[roster[index]].speed = mode.player_speed()
 	simulation = Simulation.new(roster, actors, board.cells,
 		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
-		"drops": true, "seed": session_seed, "mode": mode,
+		"drops": true, "seed": session_seed, "mode": mode, "seconds": _seconds_source() if replica else null,
 		"vehicles": StageSets.vehicles(board.skin),
 		"features": board.get("features", {}), "center": board.get("center"), "skin": board.skin,
 		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,
 			"variants": board.get("variants", {}), "center": board.get("center", Vector2i(7, 6)),
 			"portal_ids": board.get("portal_ids", {})}})
 	scheduler = Scheduler.new(roster, simulation)
+	scheduler.frame_driven = replica
 	add_child(scheduler)
 	scheduler.set_process(false)
 	ai = AIController.new(session_seed, [], profile)
@@ -176,6 +181,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		for id in roster.slice(1):
 			scheduler.set_controller(id, _ai_command.bind(id))
 	state = simulation.snapshot()
+	previous_state = {}
 	if replica: scenery.set_stage(board.skin)
 	touch_controls.enabled = true
 	touch_controls.reset()
@@ -186,6 +192,12 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	buttons.reset.text = "RESET" if practice else "TRY AGAIN"
 	buttons.reset.disabled = not practice
 	_refresh()
+
+
+## `Game.countTime` polls `new Date().getSeconds()`; checks inject a deterministic source.
+func _seconds_source() -> Callable:
+	if seconds_source.is_valid(): return seconds_source
+	return func() -> int: return Time.get_datetime_dict_from_system().second
 
 
 func get_snapshot() -> Dictionary:
@@ -205,6 +217,7 @@ func _ai_command(id: StringName) -> Dictionary:
 func advance_time(seconds: float) -> void:
 	var update: Dictionary = scheduler.advance_time(seconds)
 	for tick in update.ticks:
+		previous_state = state
 		state = tick
 		if state.get("round_stage") == &"ending":
 			touch_controls.enabled = false
@@ -336,7 +349,8 @@ func _refresh() -> void:
 	if is_instance_valid(view) and not state.is_empty():
 		touch_controls.enabled = _can_control()
 		var snapshot := get_snapshot()
-		view.present(snapshot, practice, paused)
+		var between: float = scheduler.interpolation() if replica and not paused and is_instance_valid(scheduler) else 1.0
+		view.present(snapshot, practice, paused, previous_state, between)
 		if replica:
 			hud.present(snapshot, paused)
 			var weapon: StringName = snapshot.actors[&"human"].get("weapon", &"")

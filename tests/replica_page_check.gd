@@ -73,6 +73,18 @@ func _scene() -> void:
 		covered = covered and not area.intersects(ReplicaLayout.MAP)
 	_expect(covered and game.scenery.get_index() > view.get_index(), "the scenery covers everything but the map, above the board")
 	_expect(game.scenery.stage_set == game.get_snapshot().board_meta.skin, "the scenery follows the round's stage set")
+	# #79: the replica scheduler is frame-driven and the view blends positions between steps.
+	_expect(game.scheduler.frame_driven, "the replica round steps from drawn frames")
+	game.scheduler.set_direction(&"human", Vector2.RIGHT)
+	for frame in 12: game.advance_time(1.0 / 60.0)
+	var before: Dictionary = game.get_snapshot()
+	var was: Vector2 = game.previous_state.actors[&"human"].position
+	var now: Vector2 = before.actors[&"human"].position
+	game.view.between = 0.5
+	_expect(now != was and game.view._blend(was, now).is_equal_approx(was.lerp(now, 0.5)), "actors draw halfway between steps at a half-step fraction")
+	game.view.queue_redraw()
+	await process_frame
+	_expect(game.get_snapshot() == before, "interpolation never changes the round state")
 	game.toggle_pause()
 	_expect(game.buttons.pause.visible and ReplicaLayout.MAP.encloses(Rect2(game.buttons.pause.position, game.buttons.pause.size)),
 		"pause shows RESUME over the map centre")

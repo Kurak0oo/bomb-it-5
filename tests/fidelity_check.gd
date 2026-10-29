@@ -43,6 +43,7 @@ func _initialize() -> void:
 	_chain_contact_order()
 	_external_blast_hits_every_stacked_bomb()
 	_ai_perception_rotation()
+	_date_round_clock()
 	if is_instance_valid(scheduler): scheduler.free()
 	var folder := ProjectSettings.globalize_path("res://.scratch/fidelity-port")
 	DirAccess.make_dir_recursive_absolute(folder)
@@ -498,6 +499,39 @@ func _ai_perception_rotation() -> void:
 	var state := _step()
 	_expect(state.controller_observations[&"b"].perception.danger.has(Vector2i(9, 5)) and not state.controller_observations[&"c"].perception.danger.has(Vector2i(9, 5)),
 		"new bombs enter only the selected brain's cached perception while off-turn routes retain their previous observation")
+
+
+## #80 `Game.countTime`: one second whenever the polled Date second changes, at most one per
+## step; the first step already counts (`pastSecond` starts as NaN); paused steps count none.
+func _date_round_clock() -> void:
+	const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
+	var wall := {"second": 7}
+	var actors := {&"human": {"cell": Vector2i(1, 1)}, &"ruby": {"cell": Vector2i(15, 13)}}
+	var rules := {"round": true, "drops": true, "mode": ArcadeMode.new(&"normal", &"cinema"), "seconds": func() -> int: return wall.second}
+	_start(actors, rules)
+	_expect(_step().remaining == 179 * 35, "original clock: the first step already counts a second (TIME 179)")
+	_expect(_step(34).remaining == 179 * 35, "original clock: no second passes while the Date second is unchanged")
+	wall.second = 10
+	_expect(_step().remaining == 178 * 35, "original clock: a stall that skips three Date seconds counts only one")
+	scheduler.pause()
+	wall.second = 30
+	_expect(scheduler.advance_time(5.0).ticks.is_empty() and simulation.snapshot().remaining == 178 * 35,
+		"original clock: no seconds count while the engine is stopped")
+	scheduler.resume()
+	_expect(_step().remaining == 177 * 35, "original clock: the first step after resume counts the changed second once")
+	var spawned := 0
+	for second in range(4, 181):
+		wall.second = (wall.second + 1) % 60
+		var before: int = simulation.snapshot().pickups.size()
+		var state: Dictionary = _step()
+		if state.pickups.size() > before: spawned += 1
+		if state.round_stage != &"playing": break
+	_expect(spawned >= 2, "original clock: timed pickups follow counted seconds (`timePassed`)")
+	var ending: Dictionary = simulation.snapshot()
+	_expect(ending.round_stage == &"ending" and ending.pending_outcome == &"timeout" and ending.remaining == 0,
+		"original clock: TIME'S UP when 180 seconds are counted, after only %d steps" % ending.tick)
+	_start(actors, {"round": true, "mode": ArcadeMode.new(&"normal", &"cinema")})
+	_expect(_step(35).remaining == 6300 - 35, "adapted: the round keeps its 6,300-step simulation clock")
 
 
 func _produce_ai(id: StringName) -> Dictionary:

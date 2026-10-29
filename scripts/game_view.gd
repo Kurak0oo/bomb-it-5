@@ -38,7 +38,15 @@ var skin: RefCounted = VisualSkin.new()
 var compact := false
 
 
-func present(snapshot: Dictionary, is_practice: bool, is_paused: bool) -> void:
+## Drawing between steps (#79): `previous` is the step before `snapshot` and `between` how far
+## drawing is from it towards the next step. Only positions are blended; state is untouched.
+var previous: Dictionary = {}
+var between := 1.0
+
+
+func present(snapshot: Dictionary, is_practice: bool, is_paused: bool, previous_step: Dictionary = {}, fraction := 1.0) -> void:
+	previous = previous_step
+	between = fraction
 	state = snapshot
 	practice = is_practice
 	paused = is_paused
@@ -109,7 +117,7 @@ func _board_layer() -> void:
 		_label(at + Vector2(-text.length() * 4.0, 5), text, 13, Color("173c40"))
 	_mode_objects()
 	for bomb in state.bombs:
-		var bomb_at: Vector2 = ORIGIN + (bomb.position + Vector2.ONE * 0.5) * PITCH if bomb.has("position") else _center(bomb.cell)
+		var bomb_at: Vector2 = ORIGIN + (_blend(_was_bomb(bomb), bomb.position) + Vector2.ONE * 0.5) * PITCH if bomb.has("position") else _center(bomb.cell)
 		_bomb(bomb_at, bomb.get("kind", &"bomb") == &"mine")
 	for flame in state.flames:
 		for cell in flame.cells:
@@ -124,7 +132,7 @@ func _board_layer() -> void:
 		if attack.get("layer") == &"behind": _attack(attack)
 	for projectile in state.projectiles:
 		if projectile.get("phase") == &"cleanup": continue
-		var at: Vector2 = ORIGIN + (projectile.position + Vector2.ONE * 0.5) * PITCH
+		var at: Vector2 = ORIGIN + (_blend(_was_projectile(projectile), projectile.position) + Vector2.ONE * 0.5) * PITCH
 		if skin.draw(self, "projectile." + projectile.kind, ArtCatalog.rect("projectile." + projectile.kind, at), state.tick, projectile.direction): continue
 		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, true)
 		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
@@ -138,6 +146,30 @@ func _board_layer() -> void:
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind": _attack(attack)
 	_mode_overlays()
+
+
+## Where a moving thing is drawn: its previous-step position blended towards `now`, unless it
+## jumped (portal, respawn) or has no previous step.
+func _blend(was: Variant, now: Vector2) -> Vector2:
+	if between >= 1.0 or was == null or (was as Vector2).distance_to(now) > 1.5: return now
+	return (was as Vector2).lerp(now, between)
+
+
+func _was_actor(id: StringName) -> Variant:
+	var actor: Dictionary = previous.get("actors", {}).get(id, {})
+	return actor.position if actor.get("alive", false) else null
+
+
+func _was_bomb(bomb: Dictionary) -> Variant:
+	for old in previous.get("bombs", []):
+		if old.actor_id == bomb.actor_id and old.has("position") and (old.position as Vector2).distance_to(bomb.position) <= 1.5: return old.position
+	return null
+
+
+func _was_projectile(projectile: Dictionary) -> Variant:
+	for old in previous.get("projectiles", []):
+		if old.actor_id == projectile.actor_id and old.get("born") == projectile.get("born"): return old.position
+	return null
 
 
 ## Pair 1 draws green and pair 2 purple; the recorded instance falls back to its columns.
@@ -399,7 +431,7 @@ func _bomb(at: Vector2, mine: bool) -> void:
 
 
 func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
-	var at: Vector2 = ORIGIN + (actor.position + Vector2.ONE * 0.5) * PITCH
+	var at: Vector2 = ORIGIN + (_blend(_was_actor(id), actor.position) + Vector2.ONE * 0.5) * PITCH
 	var color: Color = ROBOT_COLORS[robot]
 	if not actor.alive:
 		if actor.get("removed", false): return
