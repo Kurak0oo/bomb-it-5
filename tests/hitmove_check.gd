@@ -21,6 +21,10 @@ func _initialize() -> void:
 	for name in fixture.cases:
 		_replay(name, fixture.cases[name], board)
 	_samples()
+	_belt_ride()
+	_toy_hand_pushes()
+	_rides()
+	_pac_man_catch()
 	print("%s: %d hitmove checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -76,6 +80,99 @@ func _samples() -> void:
 		bomb.cell = Vector2i((bomb.position + Vector2.ONE * 0.5).floor())
 		Movement.step_hit_move(bomb, Vector2.LEFT, board, [{"cell": Vector2i(2, 1)}])
 	_expect(is_equal_approx(bomb.position.x, 3.0), "an ordinary bomb stops a robot at its edge")
+
+
+## #83: an idle robot on the Candy Factory belt (`ConveyorBelt.robotMove` drives its own
+## `HitMove`, vertical pair swapped), recorded in tests/fixtures/belt-ride.json.
+func _belt_ride() -> void:
+	var Simulation = load("res://scripts/simulation/bomb_simulation.gd")
+	var Layouts = load("res://scripts/simulation/layouts.gd")
+	var ArcadeMode = load("res://scripts/simulation/modes/arcade_mode.gd")
+	var recorded: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/belt-ride.json"))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1
+	var board: Dictionary = Layouts.roll(recorded.layout, 0.0, rng)
+	var start := Vector2(recorded.start[0], recorded.start[1]) / 30.0
+	var round = Simulation.new([&"human"] as Array[StringName], {&"human": {"cell": Vector2i(start), "position": start}}, board.cells,
+		{"movement": true, "hit_move": true, "features": board.features, "center": board.center, "skin": board.skin,
+		"mode": ArcadeMode.new(&"normal", &"candy_factory")})
+	var mismatch := ""
+	var idle: Array[Dictionary] = [{"actor_id": &"human", "direction": Vector2.ZERO, "bomb_events": []}]
+	for row in recorded.frames:
+		var state: Dictionary = round.advance(idle)
+		var at: Vector2 = state.actors[&"human"].position * 30.0
+		if mismatch == "" and (absf(at.x - row[1]) > TOLERANCE or absf(at.y - row[2]) > TOLERANCE):
+			mismatch = "frame %d: got %s, recorded (%s, %s)" % [row[0], at, row[1], row[2]]
+	_expect(mismatch == "", "an idle belt ride matches the recorded twip positions for %d frames %s" % [recorded.frames.size(), mismatch])
+
+
+## #83: two toy-hand pushes of a robot at (12,7) with boxes at (13,7) and (14,7), as recorded
+## on Birthday Party seed 11. The first push snaps straight back (no visible movement); the
+## second, with the command's stale checked cell, moves 360 → 375 → 390 and stops in the box cell.
+func _toy_hand_pushes() -> void:
+	var Simulation = load("res://scripts/simulation/bomb_simulation.gd")
+	var board := {}
+	for y in 15:
+		for x in 17: board[Vector2i(x, y)] = &"solid" if x == 0 or y == 0 or x == 16 or y == 14 else &"floor"
+	board[Vector2i(13, 7)] = &"solid"
+	board[Vector2i(14, 7)] = &"solid"
+	var round = Simulation.new([&"human"] as Array[StringName], {&"human": {"cell": Vector2i(12, 7)}}, board, {"movement": true, "hit_move": true})
+	var idle: Array[Dictionary] = [{"actor_id": &"human", "direction": Vector2.ZERO, "bomb_events": []}]
+	var runs: Array = []
+	for push in 2:
+		round.actors()[&"human"].pushed = {"direction": Vector2i.RIGHT, "speed": 0.5}
+		var xs: Array = []
+		for frame in 4: xs.append(roundi(round.advance(idle).actors[&"human"].position.x * 30.0))
+		runs.append(xs)
+	_expect(runs == [[360, 360, 360, 360], [375, 390, 390, 390]], "toy-hand pushes follow the recorded stale-check behaviour: %s" % [runs])
+
+
+## #83: a horse jumping a box and a dragon crashing a soft box, right held from the frame
+## after the recorded key-down (tests/fixtures/rides.json).
+func _rides() -> void:
+	var Simulation = load("res://scripts/simulation/bomb_simulation.gd")
+	var recorded: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/fixtures/rides.json"))
+	for ride in ["horse", "dragon"]:
+		var spec: Dictionary = recorded[ride]
+		var board := {}
+		for y in 15:
+			for x in 17: board[Vector2i(x, y)] = &"solid" if x == 0 or y == 0 or x == 16 or y == 14 else &"floor"
+		for box in spec.boxes: board[Vector2i(box[0], box[1])] = &"solid"
+		for box in spec.soft: board[Vector2i(box[0], box[1])] = &"soft"
+		var start := Vector2i(spec.start[0], spec.start[1])
+		var round = Simulation.new([&"human"] as Array[StringName], {&"human": {"cell": start, "vehicle": StringName(ride), "drive_speed": spec.drive_speed}},
+			board, {"movement": true, "hit_move": true})
+		var right: Array[Dictionary] = [{"actor_id": &"human", "direction": Vector2.RIGHT, "bomb_events": []}]
+		var mismatch := ""
+		for row in spec.frames:
+			var at: Vector2 = round.advance(right).actors[&"human"].position * 30.0
+			if mismatch == "" and (absf(at.x - row[1]) > TOLERANCE or absf(at.y - row[2]) > TOLERANCE):
+				mismatch = "frame %d: got %s, recorded (%s, %s)" % [row[0], at, row[1], row[2]]
+		_expect(mismatch == "", "the %s ride matches the recorded positions %s" % [ride, mismatch])
+
+
+## #83: an invincible Pac-Man player catches a stopped ghost on the step after its position
+## enters the ghost's cell (recorded: x 435.1 on frame 860, ghost dead on 861), because the
+## cell registers from the position before each step.
+func _pac_man_catch() -> void:
+	var Simulation = load("res://scripts/simulation/bomb_simulation.gd")
+	var PacMan = load("res://scripts/simulation/modes/pac_man_mode.gd")
+	var board := {}
+	for y in 15:
+		for x in 17: board[Vector2i(x, y)] = &"solid" if x == 0 or y == 0 or x == 16 or y == 14 else &"floor"
+	var round = Simulation.new([&"human", &"ruby"] as Array[StringName], {&"human": {"cell": Vector2i(2, 1)}, &"ruby": {"cell": Vector2i(15, 1)}},
+		board, {"movement": true, "hit_move": true, "damage": true, "drops": true, "drop_chance": 0.0, "mode": PacMan.new(&"normal", &"cinema")})
+	round.actors()[&"human"].invincible_until = 100000
+	round.actors()[&"human"].invincible_active_from = 0
+	var commands: Array[Dictionary] = [{"actor_id": &"human", "direction": Vector2.RIGHT, "bomb_events": []},
+		{"actor_id": &"ruby", "direction": Vector2.ZERO, "bomb_events": []}]
+	var entered := -1
+	var caught := -1
+	for frame in 200:
+		var state: Dictionary = round.advance(commands)
+		if entered < 0 and floori(state.actors[&"human"].position.x + 0.5) == 15: entered = frame
+		if caught < 0 and not state.actors[&"ruby"].alive: caught = frame
+	_expect(entered >= 0 and caught == entered + 1, "an invincible player catches a ghost one step after entering its cell (entered %d, caught %d)" % [entered, caught])
 
 
 func _expect(condition: bool, label: String) -> void:

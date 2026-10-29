@@ -15,7 +15,7 @@ python tools/replay_reference.py --observe --output .scratch/edition-5-research/
 The build script uses a task-owned Ruffle checkout under ignored storage. It copies
 this package into that workspace and applies the recorded research patch chain:
 observer → fixtures → events → compact → focus → actors → geometry → drops →
-session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups → platforms.
+session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups → platforms → rides.
 It first reverses exact matching installed
 patches in reverse order and rejects other core changes. The default probe exposes
 full observation; fixture commands require `-Fixtures`, event/seed commands require

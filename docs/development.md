@@ -583,3 +583,14 @@ original's 100 ms (four steps) before pausing, cancels on a second press, holds 
 speed and ignores held movement until a new press, and credits paused wall time to
 weapon recovery, the Green Zone flag move and AI delays. Focus loss still pauses at once
 (Q15). `Game.msec_source` lets checks inject the wall clock.
+
+### 2026-10-29 robot interactions (#83)
+
+Belt rides, toy-hand pushes, crocodile bites, horse jumps, dragon crashes and the Pac-Man
+catch were recorded with the reference player (`tools/reference_player/cases/interactions/`,
+`reference-rides.patch` for the ride pickups) and are recorded in
+[robot interactions](evidence/edition-5-interactions.md). Under `hit_move` the belt drives
+robots through the `HitMove` edges with twip positions, the toy hand ports the stale
+`_preCheck` cell, horse and dragon rides follow `HorseProp.frog` and `DragonProp.crash`, and
+positions and speeds are kept as doubles. Crocodile timing and the Pac-Man catch already
+matched. `tests/hitmove_check.gd` covers each.

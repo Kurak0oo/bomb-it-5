@@ -67,32 +67,62 @@ const RESISTANCE := 0.6
 
 
 static func step_hit_move(actor: Dictionary, direction: Vector2, board: Dictionary, bombs: Array) -> void:
+	actor.hit_cells = []
 	var push: float = actor.drive_speed if actor.get("vehicle", &"") != &"" else actor.get("speed", 1.6)
-	var speed: Vector2 = actor.velocity * GRID
+	# The original speed is a double; Vector2 is single precision, so keep it beside `velocity`
+	# unless something else (a stop, a respawn) has changed the velocity since.
+	var sx: float = actor.velocity.x * GRID
+	var sy: float = actor.velocity.y * GRID
+	var kept: Array = actor.get("pixel_speed", [])
+	if kept.size() == 2 and absf(kept[0] - sx) < 1e-3 and absf(kept[1] - sy) < 1e-3:
+		sx = kept[0]
+		sy = kept[1]
 	if direction == Vector2.ZERO:
 		# `moveStop`: the speed decays, nothing moves.
-		actor.velocity = speed * RESISTANCE / GRID
+		_keep_speed(actor, sx * RESISTANCE, sy * RESISTANCE)
 		return
 	actor.facing = direction
-	var at: Vector2 = actor.position * GRID
+	var at := pixels(actor)
 	var cell: Vector2i = actor.cell
 	if direction.x != 0:
-		speed = Vector2(RESISTANCE * speed.x + signf(direction.x) * push, 0)
+		sx = RESISTANCE * sx + signf(direction.x) * push
+		sy = 0.0
 		if (direction.x < 0 and cell.x > 0) or (direction.x > 0 and cell.x < 16):
-			at = _afoul(at, 0, direction.x > 0, speed.x, board, bombs)
+			at = _afoul(at, 0, direction.x > 0, sx, board, bombs, actor.hit_cells)
 	else:
-		speed = Vector2(0, RESISTANCE * speed.y + signf(direction.y) * push)
+		sx = 0.0
+		sy = RESISTANCE * sy + signf(direction.y) * push
 		if (direction.y < 0 and cell.y > 0) or (direction.y > 0 and cell.y < 14):
-			at = _afoul(at, 1, direction.y > 0, speed.y, board, bombs)
-	actor.position = at / GRID
-	actor.velocity = speed / GRID
+			at = _afoul(at, 1, direction.y > 0, sy, board, bombs, actor.hit_cells)
+	set_pixels(actor, at)
+	_keep_speed(actor, sx, sy)
 	for departed in actor.departures.duplicate():
 		if not overlaps(actor.position, departed): actor.departures.erase(departed)
 
 
+## The robot's display position in pixels as doubles (`[x, y]`), kept beside the single-precision
+## `position` unless something else has moved the robot since.
+static func pixels(actor: Dictionary) -> Array:
+	var kept: Array = actor.get("pixel_position", [])
+	var from_cells: Vector2 = actor.position * GRID
+	if kept.size() == 2 and absf(kept[0] - from_cells.x) < 0.01 and absf(kept[1] - from_cells.y) < 0.01: return kept.duplicate()
+	return [float(from_cells.x), float(from_cells.y)]
+
+
+static func set_pixels(actor: Dictionary, at: Array) -> void:
+	actor.pixel_position = at.duplicate()
+	actor.position = Vector2(at[0], at[1]) / GRID
+
+
+static func _keep_speed(actor: Dictionary, sx: float, sy: float) -> void:
+	actor.pixel_speed = [sx, sy]
+	actor.velocity = Vector2(sx, sy) / GRID
+
+
 ## `leftAfoul` / `rightAfoul` (axis 0) and `upAfoul` / `downAfoul` (axis 1). `forward` is right
 ## or down, chosen by the pressed key; `speed` keeps its sign, so a reversal can still move back.
-static func _afoul(at: Vector2, axis: int, forward: bool, speed: float, board: Dictionary, bombs: Array) -> Vector2:
+## A box or bomb in the leading cell is reported in `hits` (`_hitHandleArr`, used by rides).
+static func _afoul(at: Array, axis: int, forward: bool, speed: float, board: Dictionary, bombs: Array, hits: Array = []) -> Array:
 	var across := 1 - axis
 	var lead := floori((at[axis] + (GRID if forward else 0.0) + speed) / GRID)
 	var middle := floori((at[axis] + GRID / 2) / GRID)
@@ -107,22 +137,24 @@ static func _afoul(at: Vector2, axis: int, forward: bool, speed: float, board: D
 			if high == centre or _passable(target.call(lead, high), board, bombs) or fposmod(at[across] + GRID, GRID) == 0:
 				return _twips(at, axis, at[axis] + speed)
 			# Lane assistance: slide back towards the centre row.
-			var distance := at[across] + GRID - high * GRID
+			var distance: float = at[across] + GRID - high * GRID
 			return _twips(at, across, at[across] - (absf(speed) if distance > absf(speed) else distance))
 		if _passable(target.call(lead, low), board, bombs) or fposmod(at[across], GRID) == 0:
 			return _twips(at, axis, at[axis] + speed)
-		var distance := centre * GRID - at[across]
+		var distance: float = centre * GRID - at[across]
 		return _twips(at, across, at[across] + (absf(speed) if distance > absf(speed) else distance))
 	var blocker: Vector2i = target.call(lead, centre)
 	if blocker.x < 0 or blocker.y < 0 or blocker.x > 16 or blocker.y > 14 or not _occupied(blocker, board, bombs):
 		return at
-	# A box or bomb ahead: move up to its edge, or not at all once touching (`hasHit`).
+	# A box or bomb ahead: move up to its edge, or not at all once touching (`hasHit`); then the
+	# hit handlers run with that cell.
 	var edge := lead * GRID
 	if not forward:
 		if edge + GRID < at[axis]:
-			return _twips(at, axis, at[axis] + (speed if edge + GRID - at[axis] <= speed else edge + GRID - at[axis]))
+			at = _twips(at, axis, at[axis] + (speed if edge + GRID - at[axis] <= speed else edge + GRID - at[axis]))
 	elif at[axis] + GRID < edge:
-		return _twips(at, axis, at[axis] + (speed if edge - (at[axis] + GRID) >= speed else edge - (at[axis] + GRID)))
+		at = _twips(at, axis, at[axis] + (speed if edge - (at[axis] + GRID) >= speed else edge - (at[axis] + GRID)))
+	hits.append(blocker)
 	return at
 
 
@@ -141,8 +173,9 @@ static func _occupied(cell: Vector2i, board: Dictionary, bombs: Array) -> bool:
 
 
 ## Flash stores display positions in whole twips (1/20 px), truncating the assigned value.
-static func _twips(at: Vector2, axis: int, value: float) -> Vector2:
+static func _twips(at: Variant, axis: int, value: float, snap := 1e-4) -> Variant:
 	var offset := STAGE_OFFSET[axis]
-	# Vector2 is single precision: snap its noise (well under a hundredth of a twip) away first.
-	at[axis] = floorf(snappedf((value + offset) * 20.0, 0.01)) / 20.0 - offset
+	# Snap rounding noise away first: 1e-4 twip for double positions; single-precision callers
+	# (belt cargo, jumps) pass a coarser snap.
+	at[axis] = floorf(snappedf((value + offset) * 20.0, snap)) / 20.0 - offset
 	return at

@@ -1,0 +1,11 @@
+--- a/core/src/avm2/reference_fixtures.rs
++++ b/core/src/avm2/reference_fixtures.rs
+@@ -46,6 +46,8 @@
+                 Some("invincibility") => "zlong.bombit5.items.tools.InvincibilityProp",
+                 Some("car") => "zlong.bombit5.items.rides.CarProp",
+                 Some("moto") => "zlong.bombit5.items.rides.MotoCycleProp",
++                Some("horse") => "zlong.bombit5.items.rides.HorseProp",
++                Some("dragon") => "zlong.bombit5.items.rides.DragonProp",
+                 _ => return Err("Unsupported pickup kind".into()),
+             };
+             Operation::Pickup { class }

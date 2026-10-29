@@ -147,6 +147,10 @@ records the trade-off.
     the request takes effect four steps later and a second press cancels it; robots keep
     their speed and wait for a new press; TweenMax timers (weapon recovery, AI delays, the
     Green Zone flag move) keep counting paused wall time.
+  - Robot interactions follow the reference recordings (#83, [evidence](docs/evidence/edition-5-interactions.md)):
+    belt rides use the `HitMove` edges and twips, toy-hand pushes keep the stale checked
+    cell, horse jumps aim past the box at `drive_speed / 0.4`, and a dragon crash keeps
+    the robot's speed through its 19-step stop.
   - Still to port, each from recovered source rather than approximation: the exposed
     localization keys on original screens (with the original screen art).
 - **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:

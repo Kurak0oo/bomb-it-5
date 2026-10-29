@@ -14,9 +14,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from inspect_reference_focus import FocusGraph  # noqa: E402
 
 
-def frame_rows(run):
+def frame_rows(run, trace='pause-trace'):
     rows = []
-    for path in sorted((run / 'pause-trace').glob('f*.json'), key=lambda p: int(re.findall(r'\d+', p.name)[-1])):
+    for path in sorted((run / trace).glob('f*.json'), key=lambda p: int(re.findall(r'\d+', p.name)[-1])):
         graph = FocusGraph.read(path)
         human = graph.human()
         view = graph.node(human['view'])
@@ -38,9 +38,10 @@ def frame_rows(run):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('run', type=Path)
+    parser.add_argument('--trace', default='pause-trace', help='focus-trace folder inside RUN')
     args = parser.parse_args()
-    rows = frame_rows(args.run)
-    out = args.run / 'pause-frames.csv'
+    rows = frame_rows(args.run, args.trace)
+    out = args.run / (args.trace.replace('-trace', '') + '-frames.csv')
     with open(out, 'w', newline='') as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
         writer.writeheader()

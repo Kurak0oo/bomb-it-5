@@ -70,11 +70,10 @@ empty.
 
 - Kill, Green Zone, Pac-Man, difficulty and the stage-set features were observed with
   an idle or scripted player. Robot pushes, belt rides, crocodile bites, horse and
-  dragon rides and the Pac-Man player catching ghosts were not observed at runtime
-  and are ported from source. AI decisions in the new modes were not traced call by
+  dragon rides and the Pac-Man player catching ghosts were later observed and
+  corrected ([#83](../../evidence/edition-5-interactions.md)). AI decisions in the new modes were not traced call by
   call.
-- The belt uses float positions; cell crossings can drift by a tick against the
-  original's twip positions.
+- The belt used float positions (fixed in #83 under the replica profile).
 - Audio is deferred. Local 2-player, physical phone/iOS testing and export are out
   of scope.
 - Final art (#20) and human desktop acceptance (#21) remain open.

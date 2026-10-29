@@ -47,7 +47,7 @@ try {
     $patches = @('reference-observer.patch', 'reference-fixtures.patch', 'reference-events.patch',
         'reference-compact.patch', 'reference-focus.patch', 'reference-actors.patch',
         'reference-geometry.patch', 'reference-drops.patch', 'reference-session-state.patch',
-        'reference-class-names.patch', 'reference-actor-bombs.patch', 'reference-ai-returns.patch', 'reference-move-step.patch', 'reference-active-pickups.patch', 'reference-platforms.patch') |
+        'reference-class-names.patch', 'reference-actor-bombs.patch', 'reference-ai-returns.patch', 'reference-move-step.patch', 'reference-active-pickups.patch', 'reference-platforms.patch', 'reference-rides.patch') |
         ForEach-Object { [IO.Path]::GetFullPath((Join-Path $PSScriptRoot $_)) }
     if ($Baseline -and ($Fixtures -or $Events -or $Compact -or $Focus)) { throw 'A baseline requires all research command features disabled' }
     if ($Baseline -and ((& git diff HEAD --name-only -- core) -or (& git ls-files --others --exclude-standard -- core))) {

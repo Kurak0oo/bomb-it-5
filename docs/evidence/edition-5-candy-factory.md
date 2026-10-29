@@ -44,5 +44,6 @@ track](reference-2026-10-21/features/candy-belt.json);
 `scripts/simulation/features/belt.gd`, run in the engine-handler phase after bomb fuses,
 blasts and weapons and before robot movement (`GameEngine.as:230-270`; the machine
 registers at map build, before robots). `tests/stage_features_check.gd` covers each rule.
-Float positions drift up to a tick against the original's twip positions. Robots riding
-the belt were not observed at runtime.
+The desktop profile's float positions drift up to a tick against the original's twip
+positions; the replica profile rides in twips and matches the
+[recorded ride](edition-5-interactions.md).

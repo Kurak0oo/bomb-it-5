@@ -61,5 +61,6 @@ rides in `bomb_simulation.gd` (`_ride_contact`, `_advance_jump`) and `pickups.gd
 `tests/stage_features_check.gd` covers each rule.
 
 The mounted-hit recovery keeps the existing 35-tick port from the
-[protection probes](edition-5-protection-vehicle-probes.md). Crocodile bites, rides and
-AI reactions to crocodiles were not observed at runtime; the idle run shows timing only.
+[protection probes](edition-5-protection-vehicle-probes.md). Crocodile bites and rides
+were later recorded ([robot interactions](edition-5-interactions.md)); AI reactions to
+crocodiles were not observed at runtime.

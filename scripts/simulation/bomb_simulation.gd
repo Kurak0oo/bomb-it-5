@@ -244,12 +244,16 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 				if actor.alive and not actor.get("pushed", {}).is_empty():
 					_advance_push(actor)
 				elif actor.alive and actor.get("jump", {}).size() > 0:
-					_advance_jump(actor)
+					if original_movement(): _advance_jump_original(actor)
+					else: _advance_jump(actor)
 				elif actor.alive and actor.transit_until == 0 and actor.busy_until <= _tick and not actor.movement_rearm:
 					# Original rounds port `HitMove` for single-axis requests; stick diagonals keep the
 					# accepted eight-direction rules (decision E).
 					if _rules.get("hit_move", false) and (command.direction.x == 0 or command.direction.y == 0):
 						Movement.step_hit_move(actor, command.direction, _board, _bombs)
+						if actor.vehicle in [&"horse", &"dragon"] and not actor.hit_cells.is_empty():
+							_ride_hit_original(actor, actor.hit_cells[0])
+						continue
 					else:
 						Movement.step(actor, command.direction, _board, _bombs)
 					if actor.vehicle in [&"horse", &"dragon"]: _ride_contact(actor, command.direction)
@@ -441,6 +445,11 @@ func enemies() -> Array[Dictionary]:
 	for id in _actor_ids.slice(1):
 		result.append(_actors[id])
 	return result
+
+
+## Whether this round moves robots with the original `HitMove` (and twip positions).
+func original_movement() -> bool:
+	return _rules.get("hit_move", false)
 
 
 ## The original pause took effect (`Game.doGamePause` → `RobotController.robotPause`).
@@ -676,6 +685,9 @@ func _advance_flying() -> void:
 ## PushRobotCommand: no control; on entering a cell holding a box or bomb, stop and snap
 ## back to the previous cell along the push axis.
 func _advance_push(actor: Dictionary) -> void:
+	if original_movement():
+		_advance_push_original(actor)
+		return
 	var direction: Vector2i = actor.pushed.direction
 	var before := Vector2i(floori(actor.position.x + 0.5), floori(actor.position.y + 0.5))
 	var moved: Vector2 = (actor.position + Vector2(direction) * actor.pushed.speed).clamp(Vector2.ZERO, Vector2(_board_max))
@@ -686,6 +698,26 @@ func _advance_push(actor: Dictionary) -> void:
 		else: moved.y = before.y
 		actor.pushed = {}
 	actor.position = moved
+
+
+## `PushRobotCommand.moveFuc` (#83): integer pixel steps; the live cell (`xN`) is tested only
+## when it differs from the command's last checked cell, which persists between pushes. A
+## robot pushed once against a box therefore enters that box cell on its next push and stops
+## one cell later (observed: docs/evidence/edition-5-interactions.md).
+func _advance_push_original(actor: Dictionary) -> void:
+	var direction: Vector2i = actor.pushed.direction
+	var step := int(actor.pushed.speed * Movement.GRID)
+	var at := Vector2i(int(actor.position.x * Movement.GRID), int(actor.position.y * Movement.GRID)) + direction * step
+	at = at.clamp(Vector2i.ZERO, Vector2i(16, 14) * int(Movement.GRID))
+	actor.velocity = Vector2.ZERO
+	var cell := Vector2i(floori((at.x + 15) / Movement.GRID), floori((at.y + 15) / Movement.GRID))
+	if cell != actor.get("push_check", Vector2i.ZERO):
+		actor.push_check = cell
+		if not Movement._passable(cell, _board, _bombs):
+			actor.pushed = {}
+			if direction.x != 0: at.x = (cell.x - direction.x) * int(Movement.GRID)
+			else: at.y = (cell.y - direction.y) * int(Movement.GRID)
+	actor.position = Vector2(at) / Movement.GRID
 
 
 ## HorseProp/DragonProp `hitHandleArr`: fires while pushing flush into a blocked cell ahead.
@@ -713,6 +745,60 @@ func _ride_contact(actor: Dictionary, direction: Vector2) -> void:
 		_pending_drops.append({"cell": ahead, "born": _tick, "frame": 0})
 		actor.busy_until = _tick + 18
 		actor.velocity = Vector2.ZERO
+
+
+## Rides under the original movement (#83): `HorseProp.frog` and `DragonProp.crash` run as
+## `HitMove` hit handlers for the box or bomb in the leading cell (evidence:
+## docs/evidence/edition-5-interactions.md).
+func _ride_hit_original(actor: Dictionary, cell: Vector2i) -> void:
+	var speed: Vector2 = actor.velocity * Movement.GRID
+	var bomb_at := func(at: Vector2i) -> bool: return _bombs.any(func(b): return b.cell == at)
+	if actor.vehicle == &"horse":
+		var px: Vector2 = actor.position * Movement.GRID
+		var live := Vector2i(floori((px.x + 15) / Movement.GRID), floori((px.y + 15) / Movement.GRID))
+		# `AbstractRobot.speed`: the ride's terminal speed, velocity / (1 - resistance).
+		var terminal: float = actor.drive_speed / (1.0 - Movement.RESISTANCE)
+		var aim := cell
+		var jump := Vector2.ZERO
+		if speed.y == 0 and speed.x != 0:
+			aim.x += int(signf(speed.x))
+			jump = Vector2(signf(speed.x) * terminal, -signf(px.y - live.y * Movement.GRID))
+		elif speed.x == 0 and speed.y != 0:
+			aim.y += int(signf(speed.y))
+			jump = Vector2(-signf(px.x - live.x * Movement.GRID), signf(speed.y) * terminal)
+		else:
+			return
+		if aim.x < 0 or aim.y < 0 or aim.x > 16 or aim.y > 14 or bomb_at.call(aim) or _board.get(aim) in [&"solid", &"soft"]: return
+		actor.jump = {"aim": aim, "speed": jump, "axis": 0 if speed.y == 0 else 1}
+	elif not bomb_at.call(cell) and _board.get(cell) == &"soft":
+		# The crash breaks the soft box, scores it and stops the dragon (`RobotStopCommand(17)`
+		# moves again on the 19th frame) under `InvincibilityCommand(17)`.
+		_board[cell] = &"floor"
+		_current_broken.append(cell)
+		actor.score += 10
+		_pending_drops.append({"cell": cell, "born": _tick, "frame": 0})
+		actor.busy_until = _tick + 19
+		actor.protected_until = maxi(actor.protected_until, _tick + 19)
+		# `robotMoveStop` leaves the model speed: the first step after the stop keeps it.
+
+
+## `HorseProp.xJump` / `yJump`: the frame the robot reaches the aim cell it stops (speed zero)
+## without moving; otherwise it steps by the jump speed, and corrects the cross axis by 1 px.
+func _advance_jump_original(actor: Dictionary) -> void:
+	var aim: Vector2 = Vector2(actor.jump.aim) * Movement.GRID
+	var jump: Vector2 = actor.jump.speed
+	var axis: int = actor.jump.axis
+	var across := 1 - axis
+	var px: Vector2 = actor.position * Movement.GRID
+	var done := px[axis] == aim[axis] if axis == 0 else absf(px[axis] - aim[axis]) < 1
+	if done:
+		actor.velocity = Vector2.ZERO
+		actor.jump = {}
+		return
+	if absf(jump[axis]) < absf(aim[axis] - px[axis]): px[axis] += jump[axis]
+	else: px[axis] = aim[axis]
+	if absf(px[across] - aim[across]) > 1: px[across] += jump[across]
+	actor.position = Vector2(Movement._twips(Movement._twips(px, 0, px.x, 1e-3), 1, px.y, 1e-3)) / Movement.GRID
 
 
 ## The horse jump: 60 px at 4 px per tick along the push axis, 1 px per tick across.
