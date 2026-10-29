@@ -2710,6 +2710,201 @@
    "source": {
     "sprite": "UI_pause"
    }
+  },
+  "cartoon.won": {
+   "source": {
+    "sprite": "winCartoon",
+    "frames": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     16,
+     17,
+     18,
+     19,
+     20
+    ],
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ]
+   },
+   "note": "GameEndCartoon tweens the clip to frame 100 over 3 s. The FFDec export draws content only on frames 1-20 (15 drops out; win/lose are empty after 20, time-up static), so the sheet holds 1-20 and the replica keeps frame 20 for the rest of the tween; verify against the reference player."
+  },
+  "cartoon.lost": {
+   "source": {
+    "sprite": "loseCartoon",
+    "frames": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     16,
+     17,
+     18,
+     19,
+     20
+    ],
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ]
+   },
+   "note": "GameEndCartoon tweens the clip to frame 100 over 3 s. The FFDec export draws content only on frames 1-20 (15 drops out; win/lose are empty after 20, time-up static), so the sheet holds 1-20 and the replica keeps frame 20 for the rest of the tween; verify against the reference player."
+  },
+  "cartoon.timeout": {
+   "source": {
+    "sprite": "timeUpCartoon",
+    "frames": [
+     1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     9,
+     10,
+     11,
+     12,
+     13,
+     14,
+     16,
+     17,
+     18,
+     19,
+     20
+    ],
+    "crop": [
+     0,
+     0,
+     700,
+     510
+    ]
+   },
+   "note": "GameEndCartoon tweens the clip to frame 100 over 3 s. The FFDec export draws content only on frames 1-20 (15 drops out; win/lose are empty after 20, time-up static), so the sheet holds 1-20 and the replica keeps frame 20 for the rest of the tween; verify against the reference player."
+  },
+  "screen.pause": {
+   "source": {
+    "sprite": "UI_pause"
+   },
+   "note": "Pause page (`PauseUI`), opened from the replica pause icon"
+  },
+  "scenery.birthday_party": {
+   "source": {
+    "sprite": "BackGround_BirthdayParty",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     576,
+     544
+    ]
+   },
+   "note": "The whole set background (AbstractMapSet.init draws it under the grid); tiles every 32 px, so it repeats seamlessly into the replica side scenery"
+  },
+  "scenery.candy_factory": {
+   "source": {
+    "sprite": "BackGround_CandyFactory",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     576,
+     544
+    ]
+   },
+   "note": "The whole set background (AbstractMapSet.init draws it under the grid); tiles every 32 px, so it repeats seamlessly into the replica side scenery"
+  },
+  "scenery.cinema": {
+   "source": {
+    "sprite": "BackGround_Cinema",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     576,
+     544
+    ]
+   },
+   "note": "The whole set background (AbstractMapSet.init draws it under the grid); tiles every 32 px, so it repeats seamlessly into the replica side scenery"
+  },
+  "scenery.zoo": {
+   "source": {
+    "sprite": "BackGround_Zoo",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     576,
+     544
+    ]
+   },
+   "note": "The whole set background (AbstractMapSet.init draws it under the grid); tiles every 32 px, so it repeats seamlessly into the replica side scenery"
+  },
+  "scenery.luxury_stores": {
+   "source": {
+    "sprite": "BackGround_LuxuryStores",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     576,
+     544
+    ]
+   },
+   "note": "The whole set background (AbstractMapSet.init draws it under the grid); tiles every 32 px, so it repeats seamlessly into the replica side scenery"
+  },
+  "scenery.magic_library": {
+   "source": {
+    "sprite": "BackGround_MagicLibrary",
+    "frames": [
+     1
+    ],
+    "crop": [
+     0,
+     0,
+     576,
+     544
+    ]
+   },
+   "note": "The whole set background (AbstractMapSet.init draws it under the grid); tiles every 32 px, so it repeats seamlessly into the replica side scenery"
   }
  },
  "notes": {

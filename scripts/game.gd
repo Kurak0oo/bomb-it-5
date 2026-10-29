@@ -17,6 +17,7 @@ const SaveStore = preload("res://scripts/save_store.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 const ReplicaLayout = preload("res://scripts/replica_layout.gd")
 const ReplicaScenery = preload("res://scripts/replica_scenery.gd")
+const ReplicaHud = preload("res://scripts/replica_hud.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -48,6 +49,7 @@ var bindings: Dictionary = SaveStore.DEFAULT_KEYS.duplicate()
 ## The replica page (ReplicaLayout) under the `original` profile, fixed when the node is ready.
 var replica := false
 var scenery: Node2D
+var hud: Node2D
 ## Tests pin the safe area; otherwise it is read from the display every frame.
 var safe_area_override := Rect2()
 
@@ -68,11 +70,18 @@ func _ready() -> void:
 		add_child(scenery)
 	touch_controls = TouchControls.new()
 	touch_controls.skin = visual_skin
+	touch_controls.replica = Fidelity.original
 	add_child(touch_controls)
 	touch_controls.direction_changed.connect(func(direction: Vector2):
 		if is_instance_valid(scheduler): scheduler.set_direction(&"human", direction))
 	touch_controls.bomb_event.connect(func(event: StringName):
 		if is_instance_valid(scheduler): scheduler.enqueue_bomb_event(&"human", event))
+	if replica:
+		hud = ReplicaHud.new()
+		hud.name = "Hud"
+		hud.skin = visual_skin
+		hud.pause_pressed.connect(toggle_pause)
+		add_child(hud)
 	_make_button("match", "START MATCH", Vector2(1010, 100), func(): start_session(false))
 	_make_button("practice", "PRACTICE", Vector2(1010, 148), func(): start_session(true))
 	_make_button("pause", "PAUSE", Vector2(1010, 220), toggle_pause)
@@ -85,8 +94,8 @@ func _ready() -> void:
 		# Development and caption-free page: pause comes from the pause icon (#91) and P;
 		# RESUME and MAIN MENU appear only on the pause overlay over the map centre.
 		buttons.pause.visible = false
-		buttons.pause.position = Vector2(535, 330)
-		buttons.menu.position = Vector2(535, 384)
+		_place_pause_button(buttons.pause, hud.pause_to_page(hud.PAUSE_RESUME))
+		_place_pause_button(buttons.menu, hud.pause_to_page(hud.PAUSE_MENU))
 	if auto_start: start_session(true)
 
 
@@ -310,10 +319,28 @@ func _make_button(key: String, caption: String, position_at: Vector2, action: Ca
 
 
 
+## RESUME and MAIN MENU on the replica's pause screen: ghosts over the painted buttons when
+## the original art is shown (ADR 0009), native buttons otherwise.
+func _place_pause_button(button: Button, rect: Rect2) -> void:
+	button.position = rect.position
+	button.size = rect.size
+	if hud.pause_art():
+		var clear := StyleBoxEmpty.new()
+		for name in ["normal", "hover", "pressed", "disabled", "focus"]: button.add_theme_stylebox_override(name, clear)
+		button.add_theme_color_override("font_color", Color.TRANSPARENT)
+		button.add_theme_color_override("font_hover_color", Color.TRANSPARENT)
+		button.add_theme_color_override("font_pressed_color", Color.TRANSPARENT)
+
+
 func _refresh() -> void:
 	if is_instance_valid(view) and not state.is_empty():
 		touch_controls.enabled = _can_control()
-		view.present(get_snapshot(), practice, paused)
+		var snapshot := get_snapshot()
+		view.present(snapshot, practice, paused)
+		if replica:
+			hud.present(snapshot, paused)
+			var weapon: StringName = snapshot.actors[&"human"].get("weapon", &"")
+			touch_controls.item = &"" if weapon in [&"", &"none"] else weapon
 
 
 func _can_control() -> bool:

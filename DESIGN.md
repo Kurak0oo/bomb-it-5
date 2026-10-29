@@ -124,9 +124,11 @@ records the trade-off.
   (`scripts/fidelity.gd`). This branch runs the `original` profile. The `adapted`
   profile keeps the accepted adaptations so the art branches and tests that cover
   them share the same code. Under `original`:
-  - Movement is cardinal only. The touch stick selects the dominant axis; there are
-    no diagonals, so diagonal speed, wall sliding and diagonal corner rules do not
-    arise. Keyboard keeps the recovered last-pressed priority.
+  - Keyboard and AI movement are single-cardinal: the keyboard keeps the recovered
+    last-pressed priority and the AI sends one axis. The touch stick is the exception
+    (E below): it requests eight directions, and the round moves any diagonal it
+    receives with the accepted eight-direction rules. The round does not know which
+    producer sent a command, so each producer owns its direction rule.
   - Arcade timeout completes the level, as `ArcadeMode.timeOut` does: TIME'S UP, then
     LEVEL COMPLETE, settled as a win with no time bonus.
   - The levels buttons follow `GameSettingsUI.levelsHandle`: the button labelled 5
@@ -139,8 +141,8 @@ records the trade-off.
     quirks such as pending recovery while paused.
 - **Replica interview (2026-10-28):** the user accepted Q1–Q10 with clarifications:
   - **Phone game (Q1):** the replica is a landscape phone game; the fixed touch stick
-    and bomb button stay, with keyboard for desktop development. The stick requests
-    one cardinal direction.
+    and bomb button stay, with keyboard for desktop development. The stick's single
+    cardinal direction was superseded by E (eight directions).
   - **Screen (Q2):** the original layout scales smoothly to mainstream phones in
     landscape, whatever their size.
   - **Original features (Q3):** single player only (no two players on one phone, so
@@ -182,6 +184,11 @@ records the trade-off.
     - Outcomes use the original end animations over the centre of the map; no extra
       banners. Titles, captions and explanations do not appear in play.
     - The original 700×510 gameplay layout and its left stats column are not used.
+    - Implementation (2026-10-29): the page may run one cell into a top or bottom
+      safe-area inset, because that band holds only the board's cropped ring row; the
+      side inset always keeps the page clear. The pause icon opens the original pause
+      page; outcomes play the original end cartoons over the stage area, mapped to the
+      page at the board's scale.
   - **Phone build (Q12):** iOS first, installed privately on the user's devices;
     Android follows.
   - **Smooth presentation (Q13):** the logic stays at 35 original steps per second;

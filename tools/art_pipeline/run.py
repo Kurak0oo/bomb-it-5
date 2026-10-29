@@ -59,7 +59,7 @@ def plan(assets, config):
         rows = []
         for name in names:
             asset = manifest.resolve(name, by_name, by_id)
-            frames = pick_frames(len(asset['frames']), source.get('frames', 'all'), config['max_frames'])
+            frames = pick_frames(len(asset['frames']), source.get('frames', 'all'), source.get('max_frames', config['max_frames']))
             rows.append([{'asset': asset, 'frame': f} for f in frames])
         columns = max(len(r) for r in rows)
         rows = [[r[int(i * len(r) / columns)] for i in range(columns)] for r in rows]

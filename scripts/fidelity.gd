@@ -6,14 +6,6 @@ extends RefCounted
 static var original := true
 
 
-## Original controllers send one cardinal direction (`InteractiveController`, `HitMove`);
-## a diagonal request keeps its dominant axis, horizontal on a tie.
-static func direction(requested: Vector2) -> Vector2:
-	if not original or requested.x == 0 or requested.y == 0:
-		return requested
-	return Vector2(signf(requested.x), 0) if absf(requested.x) >= absf(requested.y) else Vector2(0, signf(requested.y))
-
-
 ## `ArcadeMode.timeOut` completes the level even with enemies alive; adapted play loses.
 static func timeout_wins() -> bool:
 	return original

@@ -4,6 +4,7 @@ extends SceneTree
 
 const ReplicaLayout = preload("res://scripts/replica_layout.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
+const TouchControls = preload("res://scripts/touch_controls.gd")
 ## Logical viewports under `canvas_items` + `expand` at 720 px height, with safe areas.
 ## 2532×1170 (iPhone 13/14) has a 47 pt sensor housing on one side and a 21 pt home indicator.
 const PHONE := Vector2(2532.0 * 720 / 1170, 720)
@@ -20,6 +21,8 @@ func _initialize() -> void:
 func _run() -> void:
 	_page_fit()
 	await _scene()
+	await _hud()
+	await _scenery()
 	print("%s: %d replica page checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -75,6 +78,139 @@ func _scene() -> void:
 		"pause shows RESUME over the map centre")
 	game.toggle_pause()
 	_expect(not game.buttons.pause.visible, "resuming hides the pause controls")
+	await _controls(game)
+	game.queue_free()
+	await process_frame
+
+
+## #90: the stick and bomb button sit on the side areas, inside the safe area, sized for
+## thumbs; touch works in screen coordinates; keyboard and AI stay single-cardinal.
+func _controls(game) -> void:
+	var stick := Rect2(TouchControls.STICK - Vector2.ONE * TouchControls.STICK_REACH, Vector2.ONE * TouchControls.STICK_REACH * 2)
+	var bomb := Rect2(TouchControls.BOMB - Vector2.ONE * TouchControls.BOMB_REACH, Vector2.ONE * TouchControls.BOMB_REACH * 2)
+	_expect(ReplicaLayout.LEFT.encloses(stick) and ReplicaLayout.RIGHT.encloses(bomb) and not stick.intersects(ReplicaLayout.MAP)
+		and not bomb.intersects(ReplicaLayout.MAP), "stick bottom-left and bomb bottom-right never overlap playable cells")
+	_expect(_important(Rect2(0, 0, 1280, 720)).encloses(stick) and _important(Rect2(0, 0, 1280, 720)).encloses(bomb),
+		"both controls stay inside the safe band of every checked screen")
+	# 44 pt minimum touch target on the 2532×1170 phone (1 logical px = 1170 / 720 / 3 pt).
+	var points_per_px := 1170.0 / 720 / 3
+	_expect(TouchControls.BOMB_REACH * 2 * points_per_px >= 44 and TouchControls.STICK_REACH * 2 * points_per_px >= 88,
+		"the stick and button are sized for thumbs")
+	for placement in [{"scale": 1.0, "offset": Vector2(NOTCH + 50, 0)}, {"scale": 0.8, "offset": Vector2(40, 30)}]:
+		game.position = placement.offset
+		game.scale = Vector2.ONE * placement.scale
+		var page_to_screen := func(at: Vector2) -> Vector2: return placement.offset + at * placement.scale
+		var touch := InputEventScreenTouch.new()
+		touch.index = 0
+		touch.position = page_to_screen.call(TouchControls.STICK)
+		touch.pressed = true
+		root.push_input(touch, true)
+		var drag := InputEventScreenDrag.new()
+		drag.index = 0
+		drag.position = page_to_screen.call(TouchControls.STICK + Vector2(-50, 50))
+		root.push_input(drag, true)
+		game.advance_time(1.0 / 35.0)
+		_expect(game.get_snapshot().commands[0].direction.is_equal_approx(Vector2(-1, 1).normalized()),
+			"touch in screen coordinates drives the eight-way stick at page scale %.1f" % placement.scale)
+		touch.pressed = false
+		root.push_input(touch, true)
+		var press := InputEventScreenTouch.new()
+		press.index = 1
+		press.position = page_to_screen.call(TouchControls.BOMB)
+		press.pressed = true
+		root.push_input(press, true)
+		game.advance_time(1.0 / 35.0)
+		_expect(game.get_snapshot().commands[0].bomb_events == [&"down"], "the bomb button presses in screen coordinates at page scale %.1f" % placement.scale)
+		press.pressed = false
+		root.push_input(press, true)
+		game.advance_time(1.0 / 35.0)
+	var keys := [KEY_RIGHT, KEY_DOWN]
+	for key in keys:
+		var event := InputEventKey.new()
+		event.keycode = key
+		event.pressed = true
+		root.push_input(event, true)
+	game.advance_time(1.0 / 35.0)
+	_expect(game.get_snapshot().commands[0].direction == Vector2.DOWN, "keyboard keeps one cardinal direction: the last key held")
+	for key in keys:
+		var event := InputEventKey.new()
+		event.keycode = key
+		root.push_input(event, true)
+	var cardinal := true
+	for tick in 300:
+		game.advance_time(1.0 / 35.0)
+		for command in game.get_snapshot().commands:
+			if command.actor_id != &"human": cardinal = cardinal and (command.direction.x == 0 or command.direction.y == 0)
+	_expect(cardinal, "original AI commands stay single-cardinal")
+
+
+## #91: the compact HUD reads the live round and the session, and never covers playable cells.
+func _hud() -> void:
+	var Hud = load("res://scripts/replica_hud.gd")
+	var playable := Rect2(ReplicaLayout.MAP.position + Vector2(0, ReplicaLayout.CELL), ReplicaLayout.MAP.size - Vector2(0, ReplicaLayout.CELL * 2))
+	var zones: Array = [Hud.STATUS, Hud.TIMER, Hud.LEVEL, Rect2(Hud.PAUSE_CENTER - Vector2.ONE * Hud.PAUSE_RADIUS, Vector2.ONE * Hud.PAUSE_RADIUS * 2)]
+	for x in Hud.RIVAL_X: zones.append(Rect2(Vector2(x, Hud.RIVAL_Y) - Vector2(26, 26), Vector2(52, 60)))
+	_expect(zones.all(func(zone): return not zone.intersects(playable) and Rect2(0, 0, 1280, 720).encloses(zone)),
+		"HUD zones cover only the scenery and the board's cropped top row")
+	for mode in [&"arcade", &"kill", &"green_zone"]:
+		var session = load("res://scripts/session.gd").new(11)
+		session.mode = mode
+		session.begin()
+		var game = load("res://scripts/game.gd").new()
+		game.session = session
+		game.auto_start = false
+		root.add_child(game)
+		await process_frame
+		game.set_process(false)
+		game.play_level()
+		for tick in 40: game.advance_time(1.0 / 35.0)
+		var hud = game.hud
+		var rivals: Array = hud.rivals()
+		_expect(rivals.map(func(id): return hud.robot_of(id)) == Array(session.ai_robots).slice(0, rivals.size()),
+			"%s: rival badges show the session's drawn AI robots" % mode)
+		var expected: String = "0/10" if mode != &"arcade" else str(game.get_snapshot().actors[&"human"].score)
+		_expect(hud.score_text(&"human") == expected, "%s: the score slot shows %s" % [mode, expected])
+		var remaining: int = game.get_snapshot().remaining
+		_expect(hud.time_text() == "%d:%02d" % [ceili(remaining / 35.0) / 60, ceili(remaining / 35.0) % 60]
+			and hud.state.session.level == session.level_text(), "%s: the timer reads the round clock and the level badge the session" % mode)
+		if mode == &"kill":
+			_expect(game.touch_controls.replica and game.touch_controls.item == &"hammer",
+				"kill: the bomb button shows the equipped hammer in the mockup style (#78)")
+		elif mode == &"arcade":
+			_expect(game.touch_controls.item == &"", "arcade: the bomb button shows the bomb")
+		hud.pause_button.pressed.emit()
+		_expect(game.paused and hud.paused, "%s: the pause icon opens the pause screen" % mode)
+		hud.pause_button.pressed.emit()
+		_expect(not game.paused, "%s: the pause icon resumes" % mode)
+		game.queue_free()
+		await process_frame
+
+
+## #92: each stage set's original background fills the scenery and changes between levels;
+## without the pack the plain extension remains.
+func _scenery() -> void:
+	var Catalog = load("res://scripts/art/catalog.gd")
+	var StageSets = load("res://scripts/simulation/stage_sets.gd")
+	var ids: Array = Catalog.entries().map(func(entry): return entry.id)
+	_expect(StageSets.ORDER.all(func(set_id): return "scenery." + set_id in ids), "every stage set has a side-scenery slot")
+	var session = load("res://scripts/session.gd").new(5)
+	session.levels = 2
+	session.begin()
+	var game = load("res://scripts/game.gd").new()
+	game.session = session
+	game.auto_start = false
+	root.add_child(game)
+	await process_frame
+	game.set_process(false)
+	game.play_level()
+	var first: StringName = game.scenery.stage_set
+	session.last_result = session.Result.LEVEL_WIN
+	session.current_set = &"zoo" if first != &"zoo" else &"cinema"
+	game.play_level()
+	_expect(game.scenery.stage_set == session.current_set, "the scenery changes with the stage set between levels")
+	var bare = load("res://scripts/replica_scenery.gd").new()
+	_expect(bare.background() == null, "without the original pack the plain extension remains")
+	bare.free()
 	game.queue_free()
 	await process_frame
 

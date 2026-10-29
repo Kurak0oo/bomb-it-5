@@ -138,8 +138,6 @@ func _board_layer() -> void:
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind": _attack(attack)
 	_mode_overlays()
-	if compact and (paused or state.outcome != &"running" or state.get("round_stage") == &"ending"):
-		_overlay()
 
 
 ## Pair 1 draws green and pair 2 purple; the recorded instance falls back to its columns.

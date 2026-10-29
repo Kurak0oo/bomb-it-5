@@ -15,7 +15,7 @@ const SET_FEATURES := {"zoo": [["crocodile", "Crocodile · closed"], ["crocodile
 	"magic_library": [["spellbook", "Spellbook"], ["sign_bomb", "Spellbook sign · bomb"], ["sign_pickup", "Spellbook sign · pickup"]]}
 const SCREENS := [["menu", "Main menu"], ["settings", "Game settings"], ["character", "Character select"],
 	["how_to_play", "How to play"], ["score", "Level score"], ["dress_up", "Dress up"], ["game_over", "Game over"],
-	["game_win", "Game complete"]]
+	["game_win", "Game complete"], ["pause", "Pause"]]
 const RIDES: Array[String] = ["car", "moto", "horse", "dragon"]
 static var _cache: Array[Dictionary] = []
 
@@ -30,6 +30,7 @@ static func entries() -> Array[Dictionary]:
 		["portal_green", "Portal · green"], ["portal_purple", "Portal · purple"],
 		["marquee", "Cinema centrepiece"]]:
 		result.append(_entry("board." + item[0], item[1], "Board", Vector2(108, 108) if item[0] == "marquee" else Vector2(36, 36)))
+	result.append(_entry("scenery.cinema", "Cinema · Side scenery", "Board", Vector2(576, 544)))
 	for set_id in SETS:
 		var set_title := set_id.replace("_", " ").capitalize()
 		for item in [["floor_even", "Floor · light"], ["floor_odd", "Floor · dark"], ["wall", "Outer wall"]]:
@@ -39,6 +40,7 @@ static func entries() -> Array[Dictionary]:
 		for variant in range(1, 8):
 			result.append(_entry("board.%s.solid_%d" % [set_id, variant], "%s · Solid block %d" % [set_title, variant], "Stage sets", Vector2(36, 36)))
 		result.append(_entry("board.%s.center" % set_id, set_title + " · Centrepiece", "Stage sets", Vector2(108, 108)))
+		result.append(_entry("scenery.%s" % set_id, set_title + " · Side scenery", "Stage sets", Vector2(576, 544)))
 		for item in SET_FEATURES.get(set_id, []):
 			var size := Vector2(72, 72) if item[0] == "spellbook" else Vector2(36, 36)
 			result.append(_entry("board.%s.%s" % [set_id, item[0]], "%s · %s" % [set_title, item[1]], "Stage sets", size))
@@ -84,6 +86,9 @@ static func entries() -> Array[Dictionary]:
 		result.append(_entry("screen." + item[0], "Screen · " + item[1], "Screens", Vector2(1280, 720)))
 	for outcome in ["won", "lost", "timeout", "game_over", "paused"]:
 		result.append(_entry("outcome." + outcome, "Outcome · " + outcome.replace("_", " "), "Outcomes", Vector2(64, 64)))
+	# The original end cartoons (`GameEndCartoon`) over the whole 700×510 stage, at 3/4 size.
+	for outcome in ["won", "lost", "timeout"]:
+		result.append(_entry("cartoon." + outcome, "End cartoon · " + outcome, "Outcomes", Vector2(525, 383)))
 	_cache = result
 	return _cache
 
@@ -114,7 +119,7 @@ static func _entry(id: String, title: String, category: String, size: Vector2) -
 		var family := "fireball" if kind == "shotgun" else kind
 		reference = REFERENCE + "weapon-survey/weapon-survey-%s-right-01/first-frame.png" % family
 		if kind == "flamer": reference = REFERENCE + "weapon-survey/flamer-geometry-right-01/input.png"
-	elif id.begins_with("outcome.") or id == "ui.results":
+	elif id.begins_with("outcome.") or id.begins_with("cartoon.") or id == "ui.results":
 		reference = REFERENCE + "results/zero-kill-win/win-results.png"
 	elif id.begins_with("board.zoo."): reference = FEATURES + "zoo-crocodiles-open.png"
 	elif id.begins_with("board.birthday_party."): reference = FEATURES + "birthday-toy-hands-open.png"

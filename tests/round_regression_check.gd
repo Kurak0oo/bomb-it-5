@@ -61,9 +61,11 @@ func _expect(condition: bool, label: String) -> void:
 
 func _movement() -> void:
 	Fidelity.original = true
-	var cardinal := _game({"movement": true}, {&"human": {"cell": Vector2i(3, 3)}})
-	var dominant := _ticks(cardinal, 10, Vector2(1, 0.5)).actors[&"human"].position as Vector2
-	_expect(dominant.x > 3.5 and dominant.y == 3.0, "original: a diagonal request moves along its dominant axis only")
+	# Decision E: the replica's stick moves in eight directions with the accepted diagonal
+	# rules; only its producers (keyboard, AI) are single-cardinal.
+	var stick := _game({"movement": true}, {&"human": {"cell": Vector2i(3, 3)}})
+	var both := _ticks(stick, 10, Vector2(1, 1)).actors[&"human"].position as Vector2
+	_expect(both.x > 3.2 and is_equal_approx(both.x - 3, both.y - 3), "original: a stick diagonal moves on both axes (E)")
 	Fidelity.original = false
 	var straight := _game({"movement": true}, {&"human": {"cell": Vector2i(3, 3)}})
 	var diagonal := _game({"movement": true}, {&"human": {"cell": Vector2i(3, 3)}})

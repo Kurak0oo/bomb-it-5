@@ -1,11 +1,12 @@
 extends RefCounted
 ## Continuous full-cell footprint in cell units; source uses 30 units per cell.
 
-const Fidelity = preload("res://scripts/fidelity.gd")
 
 
 static func step(actor: Dictionary, direction: Vector2, board: Dictionary, bombs: Array) -> void:
-	direction = Fidelity.direction(direction).normalized()
+	# Single-cardinal producers (keyboard, original AI) send cardinal requests; the stick may
+	# send diagonals, which use the accepted eight-direction rules (decision E).
+	direction = direction.normalized()
 	if direction == Vector2.ZERO:
 		actor.velocity *= 0.6
 		return

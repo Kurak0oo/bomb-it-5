@@ -25,3 +25,25 @@ Remaining differences, not covered by this fix:
 
 Checks: `tools/run_checks.sh` passes all 20 suites (690 checks, `layout_check` adds five
 for the art choices), and `tools/check_art_workbench.gd` passes 38 checks under Xvfb.
+
+## Replica page (#89–#92, #78)
+
+Captured with the scratch fixtures under `.scratch/capture/` at 1558×720 (the logical
+viewport of a 2532×1170 phone under `canvas_items`/`expand`) and 1280×720 (1920×1080).
+
+- [Magic Library at phone size](page-magic-library-1558x720.png): the 48 px board fills
+  the page height with half-cropped ring columns, the set background continues into the
+  side scenery, the compact HUD (status pill, time, rivals, pause icon) and the
+  mockup-style stick and bomb button. Compare the accepted
+  [mockup](../../design/replica-layout-phone.png).
+- [All six sets, phone size](page-six-sets-1558x720.png) and
+  [16:9](page-six-sets-1280x720.png).
+- [Pause](page-pause-1558x720.png): the original `UI_pause` page (exposed key `P_PAUSE`)
+  with MAIN MENU and RESUME as ghost buttons over its painted buttons.
+- [Ending](page-ending-1558x720.png): the original `winCartoon` over the map at 26 % of
+  the 3-second ending.
+
+The end cartoons' FFDec frame export has content only on frames 1–20 of 100 (frame 15
+drops out; win and lose are empty afterwards), so the sheet holds those frames and the
+replica keeps frame 20 for the rest of the tween. Whether the original also clears the
+title after frame 20 needs a reference-player recording.

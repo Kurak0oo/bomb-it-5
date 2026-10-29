@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Fidelity = preload("res://scripts/fidelity.gd")
+const TouchControls = preload("res://scripts/touch_controls.gd")
 var failures := 0
 var checks := 0
 
@@ -20,13 +21,13 @@ func _run() -> void:
 		scene.set_process(false)
 		var touch := InputEventScreenTouch.new()
 		touch.index = 0
-		touch.position = Vector2(145, 535)
+		touch.position = TouchControls.STICK
 		touch.pressed = true
 		root.push_input(touch, true)
 		Fidelity.original = false
 		var drag := InputEventScreenDrag.new()
 		drag.index = 0
-		drag.position = Vector2(200, 590)
+		drag.position = TouchControls.STICK + Vector2(55, 55)
 		root.push_input(drag, true)
 		scene.advance_time(1.0 / 35.0)
 		var direction: Vector2 = scene.get_snapshot().commands[0].direction
@@ -45,15 +46,15 @@ func _run() -> void:
 			touch.pressed = false
 			root.push_input(touch, true)
 		Fidelity.original = true
-		# Original profile: the stick keeps the dominant axis, as the original's single cardinal direction.
-		for row in [[Vector2(1, 0.3), Vector2.RIGHT], [Vector2(0.3, 1), Vector2.DOWN], [Vector2(-1, -0.4), Vector2.LEFT],
-			[Vector2(0.2, -1), Vector2.UP]]:
+		# Original profile (decision E): the stick still requests eight directions.
+		for row in [[Vector2(1, 0.3), Vector2.RIGHT], [Vector2(0.9, 1), Vector2(1, 1).normalized()], [Vector2(-1, -0.4), Vector2.LEFT],
+			[Vector2(-0.8, -1), Vector2(-1, -1).normalized()]]:
 			touch.pressed = true
 			root.push_input(touch, true)
 			drag.position = touch.position + row[0].normalized() * 100
 			root.push_input(drag, true)
 			scene.advance_time(1.0 / 35.0)
-			_expect(scene.get_snapshot().commands[0].direction == row[1], "original: the stick requests one cardinal direction")
+			_expect(scene.get_snapshot().commands[0].direction.is_equal_approx(row[1]), "original: the stick requests eight directions (E)")
 			touch.pressed = false
 			root.push_input(touch, true)
 		touch.pressed = true
@@ -72,7 +73,7 @@ func _run() -> void:
 			"unrelated board touches do not create gameplay commands")
 		touch.pressed = false
 		root.push_input(touch, true)
-		drag.position = Vector2(200, 590)
+		drag.position = TouchControls.STICK + Vector2(55, 55)
 		scene.start_session(false, 42)
 		for index in 20:
 			scene.advance_time(1.0 / 35.0)
@@ -132,13 +133,13 @@ func _run() -> void:
 		_expect(scene.get_snapshot().paused, "focus return does not automatically resume the scene")
 		scene.toggle_pause()
 		scene.start_session(true, 42)
-		touch.position = Vector2(145, 535)
+		touch.position = TouchControls.STICK
 		touch.pressed = true
 		root.push_input(touch, true)
 		root.push_input(drag, true)
 		var action_touch := InputEventScreenTouch.new()
 		action_touch.index = 1
-		action_touch.position = Vector2(1115, 535)
+		action_touch.position = TouchControls.BOMB
 		action_touch.pressed = true
 		root.push_input(action_touch, true)
 		scene.advance_time(1.0 / 35)

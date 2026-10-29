@@ -511,3 +511,24 @@ clip to the 30 px cell). Brick slots carry a registered crop and the pack record
 props overhang the row above as in the original; floors draw before all boxes. Magic
 Library no longer draws centre frame 144 under its spellbook (the source hides that box),
 and the spellbook keeps its registered 3×3 size, closed on frame 1 until it flips.
+
+### 2026-10-29 replica controls, HUD and scenery (#90, #91, #92, #78)
+
+- #90: the stick is eight-way in both profiles and the round no longer collapses
+  diagonals; keyboard (last held key) and AI producers stay single-cardinal, which is how
+  E is enforced without the round knowing the producer. Fidelity's `direction` helper is
+  gone. The stick sits at (150, 560) and the button at (1130, 560) on the side areas; touch
+  is checked in screen coordinates on offset and scaled pages.
+- #91: `scripts/replica_hud.gd` draws the status pill, time with level badge, rival
+  badges (portraits from each actor's session-drawn robot, so gap 3 is closed) and a
+  pause icon. Kill and Green Zone show x/10. Pause opens the original `UI_pause` page
+  (new `screen.pause` slot); outcomes play `winCartoon`/`loseCartoon`/`timeUpCartoon`
+  (new `cartoon.*` slots) over the map. The adapted hint text no longer appears in play.
+- #92: `scenery.<set>` slots hold each set's whole `BackGround_<Set>`; it repeats every
+  32 px, so the scenery lays it on the board grid at 48/32 and dims it.
+- #78: under `original` the stick is a translucent ring with direction marks and a gold
+  thumb, and the round bomb button shows the equipped item; control slots still replace
+  them.
+
+`tests/replica_page_check.gd` now has 51 checks. Captures are in the
+[verification record](verification/original-replica-2026-10-29/README.md).

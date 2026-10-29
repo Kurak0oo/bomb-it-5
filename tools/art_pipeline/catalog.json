@@ -96,6 +96,14 @@
     ]
   },
   {
+    "category": "Board",
+    "id": "scenery.cinema",
+    "size": [
+      576,
+      544
+    ]
+  },
+  {
     "category": "Stage sets",
     "id": "board.birthday_party.floor_even",
     "size": [
@@ -249,6 +257,14 @@
   },
   {
     "category": "Stage sets",
+    "id": "scenery.birthday_party",
+    "size": [
+      576,
+      544
+    ]
+  },
+  {
+    "category": "Stage sets",
     "id": "board.birthday_party.toy_hand",
     "size": [
       36,
@@ -393,6 +409,14 @@
   },
   {
     "category": "Stage sets",
+    "id": "scenery.candy_factory",
+    "size": [
+      576,
+      544
+    ]
+  },
+  {
+    "category": "Stage sets",
     "id": "board.candy_factory.belt",
     "size": [
       36,
@@ -517,6 +541,14 @@
     "size": [
       108,
       108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "scenery.zoo",
+    "size": [
+      576,
+      544
     ]
   },
   {
@@ -673,6 +705,14 @@
   },
   {
     "category": "Stage sets",
+    "id": "scenery.luxury_stores",
+    "size": [
+      576,
+      544
+    ]
+  },
+  {
+    "category": "Stage sets",
     "id": "board.magic_library.floor_even",
     "size": [
       36,
@@ -781,6 +821,14 @@
     "size": [
       108,
       108
+    ]
+  },
+  {
+    "category": "Stage sets",
+    "id": "scenery.magic_library",
+    "size": [
+      576,
+      544
     ]
   },
   {
@@ -2208,6 +2256,14 @@
     ]
   },
   {
+    "category": "Screens",
+    "id": "screen.pause",
+    "size": [
+      1280,
+      720
+    ]
+  },
+  {
     "category": "Outcomes",
     "id": "outcome.won",
     "size": [
@@ -2245,6 +2301,30 @@
     "size": [
       64,
       64
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "cartoon.won",
+    "size": [
+      525,
+      383
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "cartoon.lost",
+    "size": [
+      525,
+      383
+    ]
+  },
+  {
+    "category": "Outcomes",
+    "id": "cartoon.timeout",
+    "size": [
+      525,
+      383
     ]
   }
 ]
