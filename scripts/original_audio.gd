@@ -138,10 +138,13 @@ func pause_game_music() -> void:
 
 func restart_game_music() -> void:
 	if not music_on: return
-	if game_paused and _game_stream != null:
+	# Resume replays the paused track even when no pack is installed: a missing stream is
+	# silence, not a reason to advance to the next track (checks run with or without it).
+	if game_paused:
 		game_paused = false
-		_game.stream = _game_stream
-		if is_inside_tree(): _game.play()
+		if _game_stream != null:
+			_game.stream = _game_stream
+			if is_inside_tree(): _game.play()
 		_channel = true
 		played.append(StringName(order[(level_music + order.size() - 1) % order.size()]))
 	else:
