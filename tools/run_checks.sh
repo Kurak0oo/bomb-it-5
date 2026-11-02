@@ -30,6 +30,7 @@ suites=(
 	"res://tests/audio_check.gd|^PASS: [0-9]+ audio checks$"
 	"res://tests/quality_check.gd|^PASS: [0-9]+ quality checks$"
 	"res://tests/ai_trace_check.gd|^PASS: [0-9]+ ai trace checks$"
+	"res://tests/avm_random_check.gd|^PASS: [0-9]+ avm random checks$"
 	"res://tools/playthrough_check.gd|^PASS: 3 full-board playthrough checks "
 )
 for suite in "${suites[@]}"; do

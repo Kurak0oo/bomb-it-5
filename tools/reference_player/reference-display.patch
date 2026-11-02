@@ -1,0 +1,164 @@
+diff --git a/core/src/lib.rs b/core/src/lib.rs
+index d76c1cba..b9762237 100644
+--- a/core/src/lib.rs
++++ b/core/src/lib.rs
+@@ -16,6 +16,7 @@ extern crate num_derive;
+ mod avm1;
+ mod avm2;
+ mod avm_rng;
++pub(crate) mod reference_display;
+ mod binary_data;
+ pub mod bitmap;
+ mod character;
+diff --git a/core/src/player.rs b/core/src/player.rs
+index 295bcb48..c2c02a72 100644
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2327,6 +2327,11 @@ impl Player {
+         })
+     }
+ 
++    /// Research-only display-list dump for the comparison loop. No game code is executed.
++    pub fn reference_display_list(&mut self) -> serde_json::Value {
++        self.mutate_with_update_context(crate::reference_display::dump)
++    }
++
+     pub fn reference_state(&mut self, max_depth: usize, max_objects: usize) -> serde_json::Value {
+         self.mutate_with_update_context(|context| {
+             crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
+diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
+new file mode 100644
+index 00000000..2876ce0b
+--- /dev/null
++++ b/core/src/reference_display.rs
+@@ -0,0 +1,130 @@
++//! Research-only display-list dump for the comparison loop. Reads native display state
++//! only: no ActionScript getters or methods run, and nothing is written.
++use crate::avm2::TObject;
++use crate::context::UpdateContext;
++use crate::display_object::{
++    BoundsMode, DisplayObject, TDisplayObject, TDisplayObjectContainer,
++};
++use serde_json::{json, Value as Json};
++
++const MAX_NODES: usize = 20000;
++const MAX_DEPTH: usize = 64;
++
++/// A stable path segment: the instance name, unless it is a Flash auto name
++/// (`instanceN`, whose N depends on creation order), in which case the depth.
++fn segment(display: DisplayObject<'_>) -> String {
++    if let Some(name) = display.name() {
++        let name = name.to_utf8_lossy().into_owned();
++        let auto = name
++            .strip_prefix("instance")
++            .is_some_and(|rest| !rest.is_empty() && rest.bytes().all(|b| b.is_ascii_digit()));
++        if !name.is_empty() && !auto {
++            return name;
++        }
++    }
++    format!("@{}", display.depth())
++}
++
++fn kind(display: DisplayObject<'_>) -> &'static str {
++    if display.as_stage().is_some() {
++        "stage"
++    } else if display.as_movie_clip().is_some() {
++        "movie_clip"
++    } else if display.as_avm2_button().is_some() {
++        "button"
++    } else if display.as_edit_text().is_some() {
++        "text"
++    } else if display.as_bitmap().is_some() {
++        "bitmap"
++    } else if display.as_morph_shape().is_some() {
++        "morph_shape"
++    } else {
++        "graphic"
++    }
++}
++
++fn matrix(m: ruffle_render::matrix::Matrix) -> Json {
++    json!([m.a, m.b, m.c, m.d, m.tx.to_pixels(), m.ty.to_pixels()])
++}
++
++pub(crate) fn dump(context: &mut UpdateContext<'_>) -> Json {
++    let stage = context.stage;
++    let mut nodes = Vec::new();
++    let mut truncated = false;
++    // Depth-first in render order, so `order` is the painter's order.
++    let mut todo: Vec<(DisplayObject<'_>, String, usize, bool)> = Vec::new();
++    for child in stage.iter_render_list().collect::<Vec<_>>().into_iter().rev() {
++        todo.push((child, String::new(), 0, true));
++    }
++    while let Some((display, parent, depth, parent_visible)) = todo.pop() {
++        if nodes.len() >= MAX_NODES || depth > MAX_DEPTH {
++            truncated = true;
++            break;
++        }
++        let path = if parent.ends_with("/@state") {
++            // The button's state child: its own segment is meaningless (not on a timeline).
++            parent.clone()
++        } else {
++            format!("{parent}/{}", segment(display))
++        };
++        let visible = display.visible();
++        let ct = display.base().color_transform();
++        let bounds = display.world_bounds(BoundsMode::Engine);
++        let mut node = json!({
++            "path": path,
++            "order": nodes.len(),
++            "kind": kind(display),
++            "name": display.name().map(|n| n.to_utf8_lossy().into_owned()),
++            "depth": display.depth(),
++            "character_id": display.id(),
++            "class": display.object2().map(|o| o.instance_of_class_name(context.gc()).to_utf8_lossy().into_owned()),
++            "visible": visible,
++            "effective_visible": parent_visible && visible,
++            "alpha": display.alpha(),
++            "color_transform": {
++                "mult": [ct.r_multiply.to_f64(), ct.g_multiply.to_f64(), ct.b_multiply.to_f64(), ct.a_multiply.to_f64()],
++                "add": [ct.r_add, ct.g_add, ct.b_add, ct.a_add],
++            },
++            "blend_mode": format!("{:?}", display.blend_mode()),
++            "filters": display.filters().len(),
++            "matrix": matrix(display.base().matrix()),
++            "stage_matrix": matrix(display.local_to_global_matrix()),
++            "stage_bounds": if bounds.is_valid() {
++                json!([bounds.x_min.to_pixels(), bounds.y_min.to_pixels(), bounds.x_max.to_pixels(), bounds.y_max.to_pixels()])
++            } else { Json::Null },
++        });
++        if let Some(clip) = display.as_movie_clip() {
++            node["frame"] = json!(clip.current_frame());
++            node["total_frames"] = json!(clip.header_frames());
++            node["label"] = json!(clip.current_label().map(|(l, _)| l.to_utf8_lossy().into_owned()));
++        }
++        // A button draws one state child, which is not in a render list: walk it as
++        // `<button>/@state` so the art of the shown state is compared too.
++        let mut state_child = None;
++        if let Some(button) = display.as_avm2_button() {
++            let state = button.state();
++            node["button_state"] = json!(format!("{:?}", state).to_lowercase());
++            state_child = button.get_state_child(state.into());
++        }
++        if let Some(text) = display.as_edit_text() {
++            node["text"] = json!(text.text().to_utf8_lossy().into_owned());
++        }
++        nodes.push(node);
++        if let Some(container) = display.as_container() {
++            let children: Vec<_> = container.iter_render_list().collect();
++            for child in children.into_iter().rev() {
++                todo.push((child, path.clone(), depth + 1, parent_visible && visible));
++            }
++        }
++        if let Some(child) = state_child {
++            todo.push((child, format!("{path}/@state"), depth + 1, parent_visible && visible));
++        }
++    }
++    json!({
++        "schema": "bombit5-display-list-v1",
++        "stage": {"width": 700, "height": 510, "frame_rate": *context.frame_rate},
++        "units": "stage pixels; matrix = [a, b, c, d, tx, ty]",
++        "truncated": truncated,
++        "nodes": nodes,
++    })
++}

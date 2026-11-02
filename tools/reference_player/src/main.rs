@@ -1,4 +1,4 @@
-//! Original-SWF research player: pinned Ruffle, offscreen Vulkan, explicit frame steps.
+//! Original-SWF research player: pinned Ruffle, offscreen Vulkan (Metal on macOS), explicit frame steps.
 //! Reads commands from stdin, one per line. Frame counter = number of run_frame() calls.
 use anyhow::{anyhow, Result};
 use ruffle_core::events::{KeyDescriptor, KeyLocation, LogicalKey, MouseButton, NamedKey, PhysicalKey};
@@ -34,9 +34,14 @@ fn main() -> Result<()> {
     tracing_subscriber::fmt().with_env_filter("warn").with_writer(std::io::stderr).init();
     let args: Vec<String> = std::env::args().collect();
     let swf = &args[1];
-    let instance = create_wgpu_instance(wgpu::Backends::VULKAN, wgpu::BackendOptions::default(), None);
+    // Vulkan everywhere it exists, so recorded runs keep their renderer; macOS has Metal only.
+    #[cfg(target_os = "macos")]
+    let backends = wgpu::Backends::METAL;
+    #[cfg(not(target_os = "macos"))]
+    let backends = wgpu::Backends::VULKAN;
+    let instance = create_wgpu_instance(backends, wgpu::BackendOptions::default(), None);
     let (adapter, device, queue) = futures::executor::block_on(request_adapter_and_device(
-        wgpu::Backends::VULKAN, &instance, None, wgpu::PowerPreference::LowPower))
+        backends, &instance, None, wgpu::PowerPreference::LowPower))
         .map_err(|e| anyhow!(e.to_string()))?;
     eprintln!("adapter: {:?}", adapter.get_info());
     let descriptors = Arc::new(Descriptors::new(instance, adapter, device, queue));
@@ -195,6 +200,11 @@ fn main() -> Result<()> {
                 let result_path = std::path::Path::new(t[1]).with_file_name(
                     format!("{}-result.json", std::path::Path::new(t[1]).file_stem().unwrap().to_string_lossy()));
                 std::fs::write(result_path, serde_json::to_vec(&result)?)?;
+            }
+            #[cfg(feature = "reference-display")]
+            "display" => {
+                let list = player.lock().unwrap().reference_display_list();
+                std::fs::write(t[1], serde_json::to_vec(&list)?)?;
             }
             "shot" => shot(&player, t[1])?,
             "kd" => ev(PlayerEvent::KeyDown { key: key(t[1])? }),

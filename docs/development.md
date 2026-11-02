@@ -59,18 +59,25 @@ checkpoints. Until then it is a placeholder, not a reference.
 
 ## The comparison loop
 
-`tools/compare.sh <case>` is a thin wrapper over a Python script (macOS bash 3.2 and
-Linux). It has two halves, so agents without the SWF can still run the node diff:
+`tools/compare.sh <case>` wraps `tools/compare/compare.py` (macOS bash 3.2 and Linux).
+It has two halves, so agents without the SWF can still run the node diff:
 
-1. `record` (owner's Mac: SWF, Ruffle on Metal): run the case in the reference player,
-   with a fixed `seed`, scripted input and frame count (stepped, not timed) on the
-   700×510 stage. Commit the node dump as a golden JSON; captures with original art
-   stay local.
-2. `check` (anywhere with Godot): run the same case, dump nodes, diff against the
-   golden, and, where captures exist, write a pixel score and heatmap.
+1. `record` (owner's Mac: SWF, reference player built by
+   `tools/reference_player/build.sh`, Ruffle on Metal): run the case with its `seed`,
+   scripted input and stepped frame count on the 700×510 stage; write the display-list
+   dump as goldens in `tests/goldens/<case>/` (committed) and the captures to
+   `.scratch/compare/<case>/reference/` (local).
+2. `check` (anywhere with Godot 4.5; `GODOT=...`, xvfb on headless Linux): run the
+   same case in a 700×510 SubViewport at the SWF frame rate, diff nodes against the
+   goldens, and, where local captures exist, write SSIM, regional ΔE and a heatmap.
 
-Nodes are matched by display-list path (instance name, depth, character id), never by
-runtime object id, and generated Godot scenes reuse those names. Gameplay cases use the
+`tools/compare.sh main-menu` records when it can, then checks. `all` checks every case
+in `tools/compare/cases/`; `accept <case>` sets the floor. Diff logic has unit checks:
+`python3 -m unittest discover -s tools/compare`.
+
+Nodes are matched by display-list path (instance name, or `@depth` for unnamed
+children), never by runtime object id. Generated Godot nodes carry that path as the
+`swf_path` meta; `swf_baked` marks a node that draws its whole SWF subtree. Gameplay cases use the
 player's focus dump (actors, bombs, cells) instead of the display list.
 
 Pass means **highly alike**, not identical: positions within 0.5 stage units, scale
@@ -90,8 +97,8 @@ runs on every change.
 | 5 | Each mode × stage set against reference recordings | Diff passes per case, owner plays each mode |
 | 6 | Phone fit and touch controls on top of the faithful screens | Owner plays on device |
 
-Known for checkpoint 1: `tools/reference_player/build.sh` uses GNU `sed -i` and fails
-on macOS; the art pipeline auto-installs Java only via apt (use `brew install openjdk`).
+Known for checkpoint 2: the art pipeline auto-installs Java only via apt (on macOS,
+`brew install openjdk`).
 
 ## Branches and structure
 
@@ -111,9 +118,21 @@ Separate art, logic and UI by folder and interface, on one trunk.
 
 ## Status
 
-Checkpoint 0 is waiting for the owner. Done: `main` fast-forwarded to the
-`original-replica` tip (23d1d73), superseded issues #1, #20, #21, #56, #71, #87, #88 and
-#93 closed, short doc set on `claude/kind-johnson-vp2tp9`. Left for the owner (the
-agent's git access cannot push tags or delete branches): push the tags `pre-restart`
-(23d1d73) and `archive/art-pipeline` (dc4e49a), delete the four retired branches, and
-merge the doc set into `main`.
+Checkpoint 0: the owner accepted it on 2026-11-02. GitHub still shows the four retired
+branches and neither tag, so `git push origin pre-restart archive/art-pipeline` and the
+branch deletions need repeating from the owner's clone.
+
+Checkpoint 1 is implemented on `claude/kind-johnson-vp2tp9` and waits for its first
+recording on the owner's Mac:
+
+- Reference player: new `display` command (`reference-display.patch`), Metal on macOS,
+  portable `build.sh`. Verified on Linux against Ruffle's own test SWFs, including a
+  button moving from `up` to `over` on hover.
+- Godot half and diff: verified here against the current placeholder menu, which fails
+  as expected (no `swf_path` nodes yet; SSIM far below 0.98).
+- Same RNG: `scripts/simulation/avm_random.gd` ports Flash's `Math.random`; it
+  reproduces 48 seeded draws recorded in `docs/evidence` exactly. The screens and
+  simulation still use Godot's RNG; wiring it in belongs to checkpoints 4–5.
+- Owner: run `tools/reference_player/build.sh`, then `tools/compare.sh main-menu`, and
+  commit `tests/goldens/main-menu/`. Look at the frame-301 capture: if the menu is
+  still animating there, move the capture later in `tools/compare/cases/main-menu.json`.

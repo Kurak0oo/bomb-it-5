@@ -1,0 +1,9 @@
+{
+  "name": "main-menu",
+  "origin": "Main menu at rest after the intro, reached as in tools/reference_player/cases/stages/*.json (START is clicked there at frame 301). Checkpoint 1 case.",
+  "actions": [
+    {"command": "seed 55"},
+    {"command": "step 301"},
+    {"capture": "idle"}
+  ]
+}

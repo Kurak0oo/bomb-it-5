@@ -5,7 +5,8 @@ param(
     [switch]$Fixtures,
     [switch]$Events,
     [switch]$Compact,
-    [switch]$Focus
+    [switch]$Focus,
+    [switch]$Display
 )
 $ErrorActionPreference = 'Stop'
 $revision = '45366370ed7d1a59c89aa3cf7b765c7a274407cd'
@@ -47,9 +48,9 @@ try {
     $patches = @('reference-observer.patch', 'reference-fixtures.patch', 'reference-events.patch',
         'reference-compact.patch', 'reference-focus.patch', 'reference-actors.patch',
         'reference-geometry.patch', 'reference-drops.patch', 'reference-session-state.patch',
-        'reference-class-names.patch', 'reference-actor-bombs.patch', 'reference-ai-returns.patch', 'reference-move-step.patch', 'reference-active-pickups.patch', 'reference-platforms.patch', 'reference-rides.patch') |
+        'reference-class-names.patch', 'reference-actor-bombs.patch', 'reference-ai-returns.patch', 'reference-move-step.patch', 'reference-active-pickups.patch', 'reference-platforms.patch', 'reference-rides.patch', 'reference-display.patch') |
         ForEach-Object { [IO.Path]::GetFullPath((Join-Path $PSScriptRoot $_)) }
-    if ($Baseline -and ($Fixtures -or $Events -or $Compact -or $Focus)) { throw 'A baseline requires all research command features disabled' }
+    if ($Baseline -and ($Fixtures -or $Events -or $Compact -or $Focus -or $Display)) { throw 'A baseline requires all research command features disabled' }
     if ($Baseline -and ((& git diff HEAD --name-only -- core) -or (& git ls-files --others --exclude-standard -- core))) {
         throw 'Baseline requires an unchanged core; use a separate checkout'
     }
@@ -72,6 +73,7 @@ try {
     if ($Events) { $featureNames += 'reference-events' }
     if ($Compact) { $featureNames += 'reference-compact' }
     if ($Focus) { $featureNames += 'reference-focus' }
+    if ($Display) { $featureNames += 'reference-display' }
     if ($featureNames.Count) { $features = @('--features', ($featureNames -join ',')) }
     Invoke-Checked cargo (@('check', '--locked', '-p', 'probe') + $features)
     if (!$CheckOnly) { Invoke-Checked cargo (@('build', '--locked', '-p', 'probe', '--profile', 'ci', '--jobs', '6') + $features) }
@@ -88,6 +90,7 @@ try {
         events = [bool]$Events
         compact = [bool]$Compact
         focus = [bool]$Focus
+        display = [bool]$Display
         installed_patches = @(if (!$Baseline) { $patches | ForEach-Object {
             @{ name = [IO.Path]::GetFileName($_); sha256 = (Get-FileHash -LiteralPath $_ -Algorithm SHA256).Hash.ToLowerInvariant() }
         } })

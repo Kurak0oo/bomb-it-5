@@ -11,6 +11,7 @@ reference-fixtures = ["reference-state"]
 reference-events = ["reference-state"]
 reference-compact = ["reference-state"]
 reference-focus = ["reference-state"]
+reference-display = []
 
 [dependencies]
 futures = { workspace = true }

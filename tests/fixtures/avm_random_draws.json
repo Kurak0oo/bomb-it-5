@@ -1,0 +1,341 @@
+{
+ "origin": "Math.random draws recorded by the reference player with an explicit original-RNG seed (events patch: draw = count of AVM2 Math.random calls since start).",
+ "draws": [
+  {
+   "seed": 1,
+   "draw": 557,
+   "raw": 634458854,
+   "result": 0.295442926697433,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 558,
+   "raw": 986152039,
+   "result": 0.4592128279618919,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 559,
+   "raw": 302284027,
+   "result": 0.1407619691453874,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 560,
+   "raw": 722778813,
+   "result": 0.33657011250033975,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 561,
+   "raw": 899278896,
+   "result": 0.41875936836004257,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 562,
+   "raw": 541369707,
+   "result": 0.2520949146710336,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 563,
+   "raw": 1846982977,
+   "result": 0.8600684707053006,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 564,
+   "raw": 1733761242,
+   "result": 0.8073454918339849,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 565,
+   "raw": 2094721805,
+   "result": 0.9754308522678912,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 566,
+   "raw": 1972527575,
+   "result": 0.9185297298245132,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 567,
+   "raw": 1100894258,
+   "result": 0.5126438373699784,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 1,
+   "draw": 568,
+   "raw": 474609053,
+   "result": 0.22100706258788705,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed1-02/events/f000798.json"
+  },
+  {
+   "seed": 2,
+   "draw": 417,
+   "raw": 746225213,
+   "result": 0.3474881933070719,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-actor-eligibility-02/events/f000723.json"
+  },
+  {
+   "seed": 2,
+   "draw": 437,
+   "raw": 666557139,
+   "result": 0.3103898554109037,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-timed-natural-02/events/f002818.json"
+  },
+  {
+   "seed": 2,
+   "draw": 438,
+   "raw": 1580808687,
+   "result": 0.7361214081756771,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-timed-natural-02/events/f002818.json"
+  },
+  {
+   "seed": 2,
+   "draw": 439,
+   "raw": 1604954975,
+   "result": 0.7473653997294605,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-timed-natural-02/events/f002818.json"
+  },
+  {
+   "seed": 2,
+   "draw": 440,
+   "raw": 1229678222,
+   "result": 0.572613543830812,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-timed-natural-02/events/f002818.json"
+  },
+  {
+   "seed": 2,
+   "draw": 572,
+   "raw": 178988836,
+   "result": 0.08334817178547382,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-quota-boundary-01/events/f003693.json"
+  },
+  {
+   "seed": 2,
+   "draw": 573,
+   "raw": 1040978092,
+   "result": 0.48474319837987423,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-quota-boundary-01/events/f003693.json"
+  },
+  {
+   "seed": 2,
+   "draw": 575,
+   "raw": 156843018,
+   "result": 0.07303572166711092,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-quota-boundary-01/events/f003747.json"
+  },
+  {
+   "seed": 2,
+   "draw": 576,
+   "raw": 1653931809,
+   "result": 0.7701720152981579,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-quota-boundary-01/events/f003747.json"
+  },
+  {
+   "seed": 2,
+   "draw": 602,
+   "raw": 1439316938,
+   "result": 0.6702341781929135,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-drop-seed2-02/events/f000814.json"
+  },
+  {
+   "seed": 2,
+   "draw": 622,
+   "raw": 54070535,
+   "result": 0.02517855493351817,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-quota-boundary-01/events/tail-006221.json"
+  },
+  {
+   "seed": 2,
+   "draw": 623,
+   "raw": 2040934598,
+   "result": 0.9503842322155833,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-quota-boundary-01/events/tail-006221.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 516,
+   "raw": 678138469,
+   "result": 0.31578283244743943,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f001587.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 517,
+   "raw": 2103879724,
+   "result": 0.9796953406184912,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f001587.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 527,
+   "raw": 239213689,
+   "result": 0.11139255436137319,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f001857.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 528,
+   "raw": 2131773906,
+   "result": 0.9926845813170075,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f001857.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 559,
+   "raw": 190565205,
+   "result": 0.08873883867636323,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f002559.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 560,
+   "raw": 2137869107,
+   "result": 0.995522880461067,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f002559.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 582,
+   "raw": 861382002,
+   "result": 0.40111225191503763,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f003045.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 583,
+   "raw": 2129986644,
+   "result": 0.9918523225933313,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f003045.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 600,
+   "raw": 540701607,
+   "result": 0.2517838063649833,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f003423.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 601,
+   "raw": 2093285467,
+   "result": 0.9747620052658021,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/f003423.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 680,
+   "raw": 1365573182,
+   "result": 0.6358945658430457,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/tail-006221.json"
+  },
+  {
+   "seed": 1050,
+   "draw": 681,
+   "raw": 1366757791,
+   "result": 0.636446192394942,
+   "source": "docs/evidence/reference-2026-10-19/pickups/pickup-vehicle-boundary-02/events/tail-006221.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 433,
+   "raw": 1254992037,
+   "result": 0.5844012075103819,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 434,
+   "raw": 1937628555,
+   "result": 0.9022786072455347,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 435,
+   "raw": 1864361709,
+   "result": 0.8681610734201968,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 436,
+   "raw": 1007556093,
+   "result": 0.46917986730113626,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 437,
+   "raw": 1513777076,
+   "result": 0.7049073819071054,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 438,
+   "raw": 365574073,
+   "result": 0.17023369343951344,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 439,
+   "raw": 295130496,
+   "result": 0.1374308466911316,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 440,
+   "raw": 1613625790,
+   "result": 0.7514030626043677,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 441,
+   "raw": 736687874,
+   "result": 0.3430470237508416,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 442,
+   "raw": 2061860399,
+   "result": 0.9601285676471889,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 443,
+   "raw": 1382105935,
+   "result": 0.6435932288877666,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  },
+  {
+   "seed": 12345,
+   "draw": 444,
+   "raw": 844615720,
+   "result": 0.39330484345555305,
+   "source": "docs/evidence/reference-2026-10-19/weapon-lifecycle/lifecycle-fireball-paced-01/raw-events/f000741.json"
+  }
+ ]
+}

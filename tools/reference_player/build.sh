@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
-# Linux counterpart of build.ps1 with all research features (-Fixtures -Events -Compact -Focus).
-# Needs Rust, git and a Vulkan driver (Mesa lavapipe works headless).
+# macOS/Linux counterpart of build.ps1 with all research features
+# (-Fixtures -Events -Compact -Focus -Display). Needs Rust, git and python3, plus a
+# Vulkan driver on Linux (Mesa lavapipe works headless); macOS uses Metal.
+# CHECK_ONLY=1 runs cargo check instead of building the player.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 checkout="${1:-$here/../../.scratch/edition-5-research/ruffle-runtime}"
 revision=45366370ed7d1a59c89aa3cf7b765c7a274407cd
 patches=(reference-observer reference-fixtures reference-events reference-compact reference-focus
 	reference-actors reference-geometry reference-drops reference-session-state reference-class-names
-	reference-actor-bombs reference-ai-returns reference-move-step reference-active-pickups reference-platforms reference-rides)
+	reference-actor-bombs reference-ai-returns reference-move-step reference-active-pickups reference-platforms reference-rides
+	reference-display)
 if [[ ! -d "$checkout/.git" ]]; then
 	git init -q "$checkout"
 	git -C "$checkout" remote add origin https://github.com/ruffle-rs/ruffle
@@ -21,7 +24,17 @@ cp "$here/Cargo.toml" "$checkout/probe/Cargo.toml"
 cp "$here/Cargo.lock" "$checkout/Cargo.lock"
 cp "$here/src/main.rs" "$checkout/probe/src/main.rs"
 touch "$checkout/probe/Cargo.toml" "$checkout/Cargo.lock" "$checkout/probe/src/main.rs"
-grep -qE '^\s*"probe",?\s*$' "$checkout/Cargo.toml" || sed -i 's/^\(\s*\)"exporter",/\1"exporter",\n\1"probe",/' "$checkout/Cargo.toml"
+# Portable workspace insertion (BSD sed on macOS has no GNU `sed -i`).
+python3 - "$checkout/Cargo.toml" <<'PY'
+import re, sys
+path = sys.argv[1]
+text = open(path).read()
+if not re.search(r'(?m)^\s*"probe",?\s*$', text):
+    text, count = re.subn(r'(?m)^(\s*)"exporter",$', r'\1"exporter",\n\1"probe",', text, count=1)
+    if not count:
+        sys.exit("Workspace insertion point not found")
+    open(path, "w").write(text)
+PY
 cd "$checkout"
 for ((i=${#patches[@]}-1; i>=0; i--)); do
 	if git apply --reverse --check --ignore-space-change "$here/${patches[$i]}.patch" 2>/dev/null; then
@@ -30,7 +43,11 @@ for ((i=${#patches[@]}-1; i>=0; i--)); do
 done
 [[ -z "$(git diff HEAD --name-only -- core)$(git ls-files --others --exclude-standard -- core)" ]] || { echo "Unrelated core changes" >&2; exit 1; }
 for patch in "${patches[@]}"; do git apply --ignore-space-change "$here/$patch.patch"; done
-features=reference-fixtures,reference-events,reference-compact,reference-focus
+features=reference-fixtures,reference-events,reference-compact,reference-focus,reference-display
+if [[ "${CHECK_ONLY:-0}" == 1 ]]; then
+	cargo check --locked -p probe --features "$features"
+	exit 0
+fi
 cargo build --locked -p probe --profile ci --features "$features"
 git diff HEAD > reference-changes.patch
 python3 - "$revision" "$features" <<'PY'

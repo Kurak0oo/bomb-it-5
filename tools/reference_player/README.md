@@ -5,6 +5,8 @@ The input protocol derives from the supplied [Dots harness](../../docs/evidence/
 Ruffle is pinned to `45366370ed7d1a59c89aa3cf7b765c7a274407cd`;
 `Cargo.lock` pins the dependency graph, including this workspace package.
 
+On macOS (Metal) or Linux (Vulkan; Mesa lavapipe works headless), with Rust, git and python3: `tools/reference_player/build.sh` builds every research feature including `display` (`CHECK_ONLY=1` only type-checks).
+
 On Windows with Rust/MSVC build tools and a Vulkan adapter:
 
 ```powershell
@@ -15,7 +17,7 @@ python tools/replay_reference.py --observe --output .scratch/edition-5-research/
 The build script uses a task-owned Ruffle checkout under ignored storage. It copies
 this package into that workspace and applies the recorded research patch chain:
 observer → fixtures → events → compact → focus → actors → geometry → drops →
-session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups → platforms → rides.
+session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups → platforms → rides → display.
 It first reverses exact matching installed
 patches in reverse order and rejects other core changes. The default probe exposes
 full observation; fixture commands require `-Fixtures`, event/seed commands require
@@ -65,6 +67,7 @@ Protocol (one command per line):
 - `shot FILE.png`: render and synchronously save the complete viewport.
 - `cap DIR` / `cap off`: render/capture every stepped frame.
 - `state FILE.json`: bounded native slot graph, available with the observer feature.
+- `display FILE.json`: the stage display list for the comparison loop (`-Display` / `build.sh`): per node its path (instance name, or `@depth` for unnamed and auto-named children; a button's shown state is `<button>/@state`), kind, class, character id, visibility, alpha, colour transform, local and stage matrices, stage bounds, clip frame/label, button state and text.
 - `trace DIR` / `trace off`: save a state graph after each stepped frame.
 - `compact FILE.json`, `trace-compact DIR` / `trace-compact off`: omit native painting trees, retaining logical objects and directly referenced animation frame numbers. `--observe --compact` selects compact snapshots in the driver.
 - `focus FILE.json`, `trace-focus DIR` / `trace-focus off`: explicit game/actor/AI/callback/cell/bomb/map-feature projection (`platforms`: each `maps.platform` object a Grid slot references) with physical-slot layouts, available with `-Focus`. `--observe --focus` selects this mode. An expensive initial full-graph bootstrap is explicitly marked.
