@@ -111,4 +111,9 @@ Separate art, logic and UI by folder and interface, on one trunk.
 
 ## Status
 
-Checkpoint 0 in progress on `claude/kind-johnson-vp2tp9`.
+Checkpoint 0 is waiting for the owner. Done: `main` fast-forwarded to the
+`original-replica` tip (23d1d73), superseded issues #1, #20, #21, #56, #71, #87, #88 and
+#93 closed, short doc set on `claude/kind-johnson-vp2tp9`. Left for the owner (the
+agent's git access cannot push tags or delete branches): push the tags `pre-restart`
+(23d1d73) and `archive/art-pipeline` (dc4e49a), delete the four retired branches, and
+merge the doc set into `main`.
