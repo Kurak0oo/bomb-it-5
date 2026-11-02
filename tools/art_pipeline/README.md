@@ -4,7 +4,7 @@ Batch tool that turns artwork from the edition 5 SWF into lightly modified
 **candidate art** for the Art Workbench's 281 named slots. It never applies
 anything: it does not write `assets/skins/active.json` or `assets/skins/imports/`.
 Review every candidate yourself, then import the ones you choose in the workbench
-with **Replace image…** ([ADR 0006](../../docs/adr/0006-swf-derived-candidate-art.md)).
+with **Replace image…** (ADR 0006, tag `pre-restart`).
 
 ## Run
 
@@ -32,7 +32,7 @@ are downloaded from their GitHub releases into `.scratch/tools/` and hash-checke
 ## Original pack (replica build)
 
 On the `original-replica` branch the game shows the original art itself
-([ADR 0008](../../docs/adr/0008-original-replica-build.md)):
+(ADR 0008, tag `pre-restart`):
 
 ```
 python tools/art_pipeline/original_pack.py [--swf PATH] [--resume] [--jobs N]

@@ -1,658 +1,114 @@
-# Development and decision frontier
+# Development: restart plan (2026-11-02)
 
-## Current boundary
+The old development narrative, interview records, specs, ADRs and verification records
+are archived under the `pre-restart` tag (`git show pre-restart:DESIGN.md`). This file is
+the only status document; keep it under one page.
 
-The complete edition 5 game ([specification #56](specs/complete-edition-5-game.md)) is
-implemented on 2026-10-21/22: tickets #57–#70 are closed. The game opens on the main
-menu; Game Settings, character select with unlockable looks, How to Play with key
-rebinding, pause to Main Menu, per-level score, game win and game over screens drive a
-multi-level session. All four modes (Arcade, Battle Royale, Pac-Man, Green Zone), all
-six stage sets with their map features and rides, and Easy/Normal/Hard are playable
-against one to three AI. Practice is a development launch (`-- --practice`, the
-workbench preview default). Each mode, difficulty and stage-set feature was observed on
-the reference player before porting; see the evidence index. 677 headless checks in 20
-suites and 27 workbench UI checks pass; see the
-[implementation verification](verification/complete-game-2026-10-21/README.md) for
-captures, corrections and limits. Finished art #20 and final human desktop acceptance
-#21 remain open.
+## Why we are restarting
 
-The generated art pass was rejected by the user on 2026-10-20 and reverted in
-`0f41b43` / `8211c82`; the gameplay fidelity commits remain. Presentation #20 is
-reopened and #21 remains open. The user now owns art selection through the
-[Art Workbench](art-workbench.md): now 281 visual slots (89 before #70), native default previews,
-applied/draft comparison, view-only original context, imported images and sheets,
-animation/facing/placement controls, undo/reset and preview in the actual game.
-The checked-in active manifest is empty, so normal play keeps the earlier native
-presentation. The workbench passes 27 UI/rendering checks and independent Standards
-and Spec review, with no outstanding findings. Status and verification are recorded
-in [the workbench verification](verification/art-workbench-2026-10-20/README.md).
+- Early milestones worked: a small playable slice, played by the owner, with concrete
+  findings (#10–#19). Source ports (`HitMove`, pause, frame engine, Date clock, audio
+  rules) are trustworthy.
+- Automated checks work well for logic and kept doing so. UI and art were closed the
+  same way, although no check could judge them: menus were drawn at invented
+  coordinates, original art was later overlaid with ghost buttons, and a new phone
+  layout replaced the original game screen. Their checks only compared the layout
+  tables with themselves, so misalignment passed, and nobody looked at the result
+  before more work was stacked on top.
+- Owner acceptance (#20, #21) never closed while scope kept growing on top.
 
-Fidelity implementation #38–#55 is implemented, desktop-verified and reviewed on
-2026-10-20, approved by the user's implement instruction. The graph has 18 tickets and 32 native blocker
-edges; #20 additionally waits for #55. Source-grounded regressions use the real
-scheduler/round with copied controller observations and focused scene checks.
-See [verification](verification/fidelity-2026-10-20/README.md) for coverage,
-conversions and completed Standards/Spec reviews. All 408 checks pass, including
-164 focused fidelity checks and three full-board playthroughs; 14 production
-scripts parse/typecheck. These counts are not a claim of complete original-runtime
-parity. DESIGN.md records the implementation conversions
-under its decision history. Finished original artwork #20, final desktop/human
-acceptance #21 and later physical phone/iOS evaluation remain separate.
+## What we keep and what we drop
 
-The 2026-10-16 repository audit found an empty main scene and project configuration, with no gameplay scripts, tests, SWF, or recovery records. Inspect the files for subsequent implementation state.
+Keep: `scripts/simulation/` (round, scheduler, command boundary, HitMove, pause, modes,
+AI), audio rules, `fidelity.gd`, the seeded Ruffle reference player and its recordings,
+`docs/evidence/`, and the SWF extractor in `tools/art_pipeline/` as input for the
+converter.
 
-The Godot 4.5 desktop game is runnable. It opens in one-actor practice and offers a local match against three AI on the recorded Cinema board. Continuous cardinal/diagonal movement, collision/corridor assistance, paired portals, ordinary bombs/chains, persistent hazards, damage/protection, conditional pickups, source-reachable weapons/rides, round time/endings, lives/score/HUD, results/retry/new-session flow and temporary original vector presentation are integrated. The scene drives one scheduler and consumes owned round results. The original 244-check baseline is extended to 408 passing checks by the reviewed fidelity work, with inspected rendered captures in the linked verification record; physical phone/iOS testing and export remain deferred. The four named unresolved item slots remain empty. Read [runtime evidence](evidence/edition-5-runtime-systems.md) for source mappings, explicit omissions and parity limits.
+Drop: the native menu coordinates in `app.gd`, the ghost/plate overlay
+(`screen_layout.gd`), the mobile gameplay layout (`replica_layout.gd`, `replica_hud.gd`,
+`replica_scenery.gd`), the Art Workbench as a delivery path, and the 1280×720 window.
+Code is removed by the checkpoint that replaces it, so the game keeps running between
+checkpoints. Until then it is a placeholder, not a reference.
 
-The [complete runnable Godot game specification](specs/runnable-godot-game.md) consolidates the accepted delivery scope through Q28, with user-confirmed tests through the existing scheduler/real round and a small scene-test layer. It preserves practice as an intermediate milestone and physical phone/iOS testing after publication-ready Godot development. Source-recovery prerequisites are explicit rather than treated as settled behavior. GitHub Issues and the default triage vocabulary are configured; the specification is published as [issue #1](https://github.com/Kurak0oo/bomb-it-5/issues/1) with `ready-for-agent`. The approved 20-ticket implementation graph is published as issues #2–#21 with 29 native blocking edges. Gameplay functionality is implemented and desktop checks pass; presentation #20 and final acceptance #21 remain open pending source-feel parity work, the finished redraw and desktop play-quality assessment. Further joystick polish is deferred to physical phone testing by the user. Consult live issue states before claiming subsequent work.
+## Rules of work
 
-The reverse-engineering-first recovery and selected fidelity port are complete. The [first audit](evidence/edition-5-reverse-engineering-audit.md) is historical static/source preparation. Independent original playback and controlled dynamic traces are recorded in the [evidence index](evidence/README.md); the [fidelity verification](verification/fidelity-2026-10-20/README.md) records which recovered behavior is now ported, comparison coverage and bounded remaining differences. Final artwork and human desktop acceptance are the next delivery gates.
+1. **One checkpoint at a time.** One screen or one mode per checkpoint. No new ticket
+   until the owner has accepted the previous one.
+2. **Who closes what.** Logic closes on automated checks against the reference player.
+   UI and art close only when the owner has confirmed them. Until then they count as
+   placeholders behind an art slot or a generated scene, so replacing them touches no
+   logic or layout code. The comparison loop only decides whether a screen is ready for
+   the owner to look at.
+3. **Generate, don't measure.** Positions, scales, button states and frame timing come
+   from the SWF data (display list, placement matrices, AS3), not from screenshots or
+   values typed in by hand.
+4. **Translate, don't reinvent.** Port AS3 logic close to line for line, keeping the
+   original class and method names, and cite the source method in a comment.
+5. **Faithful first, phone later, at one scale.** The replica shows the 700×510 stage
+   scaled to fit. Phone layout is a later step on top of a matching replica.
+   - Everything is placed in stage units (32 px board pitch, 30-unit cells) and reaches
+     the screen through **one** scale factor. A phone layout changes that factor and
+     where the HUD and controls sit, never the art.
+   - Sprites draw at their original registration point and scale, never fitted into a
+     cell. Robots and tall props overlap the row above, as in the original.
+   - Vector art is rendered once at the largest scale needed (3× covers phones, 4×
+     tablets). Bitmap art stays at source resolution and is sampled once, source to
+     screen. No AI upscaling or colour remapping: details and colours must match.
+6. **Short docs.** README, AGENTS.md, this file, GLOSSARY.md. Evidence is read only when
+   a task needs it.
 
-The user approved the 16 recovery-ticket breakdown by invoking implement. Issues [#22–#37](https://github.com/Kurak0oo/bomb-it-5/issues/22) are published with 29 verified native blocking edges. #22–#37 now meet the reviewed selected-scope recovery criteria. The [acceptance audit](evidence/edition-5-recovery-verification.md) records the evidence, review findings/fixes and checks. The [reviewed handoff](evidence/edition-5-porting-handoff.md) maps recovered behavior to current Godot differences. The [canonical tooling record](evidence/edition-5-recovery-tooling.md) preserves builds, exact patches and instrumentation limits. Parent #1 is unchanged, and presentation #20/final acceptance #21 stay open. Complete original-runtime evidence against each ticket's criteria before closure; the new-game tests do not substitute for it.
+## The comparison loop
 
-## Decision tree
+`tools/compare.sh <case>` is a thin wrapper over a Python script (macOS bash 3.2 and
+Linux). It has two halves, so agents without the SWF can still run the node diff:
 
-| Branch | State | Prerequisite / next action |
+1. `record` (owner's Mac: SWF, Ruffle on Metal): run the case in the reference player,
+   with a fixed `seed`, scripted input and frame count (stepped, not timed) on the
+   700×510 stage. Commit the node dump as a golden JSON; captures with original art
+   stay local.
+2. `check` (anywhere with Godot): run the same case, dump nodes, diff against the
+   golden, and, where captures exist, write a pixel score and heatmap.
+
+Nodes are matched by display-list path (instance name, depth, character id), never by
+runtime object id, and generated Godot scenes reuse those names. Gameplay cases use the
+player's focus dump (actors, bombs, cells) instead of the display list.
+
+Pass means **highly alike**, not identical: positions within 0.5 stage units, scale
+within 0.1%, same frame and visibility; SSIM ≥ 0.98 and no region off by more than
+ΔE≈2. When the owner accepts a screen, its scores become that case's floor. Every case
+runs on every change.
+
+## Checkpoints
+
+| # | Checkpoint | Done when |
 | --- | --- | --- |
-| Rules authority | Settled | Edition 5; see DESIGN.md and ADR 0001 |
-| Reverse engineering before fidelity rebuilding | Recovery #22–#37 complete; fidelity #38–#55 implemented and reviewed on 2026-10-20 | Read the [porting handoff](evidence/edition-5-porting-handoff.md), [evidence index](evidence/README.md) and [port verification](verification/fidelity-2026-10-20/README.md). Finished redraw #20 precedes final human desktop acceptance #21; 408 passing checks are not complete paired parity |
-| Command calling contract | Implemented and checked on 2026-10-16 | See DESIGN.md for accepted behavior and the interface below |
-| Fidelity of clock, lives, score and endings | Settled on 2026-10-16 | Recover exact behavior before implementation |
-| Original input and timing | Static source recovered on 2026-10-16 | Read [the evidence](evidence/edition-5-input-and-timing.md); runtime cadence and lifecycle edge cases remain unmeasured |
-| Ordered commands and event capture | Implemented and checked on 2026-10-18 | Ordered down/up lists preserve repeats; tick-start captures retain their cutoff through rejection and commit once after acceptance |
-| Tick scheduling and pause/focus reset | Implemented and checked on 2026-10-18; bomb target integrated on 2026-10-19 | One scheduler drives 35 logical ticks/sec with bounded catch-up, cleared input and explicit resume after focus loss; visible controls and AI producers are integrated |
-| First bomb/soft-block batch semantics | Implemented and checked on 2026-10-19 | Input before existing countdowns/blasts, newborn countdown from the following tick, roster priority and test-only board excerpt. Real scheduler integration includes pause/focus and bounded catch-up; see [phase evidence](evidence/edition-5-gameplay-phases.md) |
-| First visible controllable board | Implemented, reviewed and desktop-verified on 2026-10-19 | Whole runnable Godot 4.5 game is the delivery target; practice is an intermediate milestone. Corridor assistance and full recorded CinemaStage1 with working portals are accepted. Physical phone/iOS tests follow publication-ready Godot development |
-| Complete runnable game specification | Published on 2026-10-19; test boundary confirmed | [Specification](specs/runnable-godot-game.md) covers full delivery and source prerequisites; [issue #1](https://github.com/Kurak0oo/bomb-it-5/issues/1) carries `ready-for-agent`. Approved implementation tickets #2–#21 are published |
-| Complete game implementation graph | 20 tickets and 29 native blocking edges verified on 2026-10-19 | Gameplay tickets #2–#19 are complete; presentation #20 and final acceptance #21 remain open. Passing functional checks does not accept the finished artwork or release readiness. [Issue #21](https://github.com/Kurak0oo/bomb-it-5/issues/21) is the complete desktop Godot acceptance gate before deferred physical phone/iOS testing |
-| First board and gameplay screen | Rendered CinemaStage1 audited and selected for practice on 2026-10-19 | [Canonical 255-cell reconstruction](evidence/cinema-stage1-recorded-board.md): all 110 soft candidates resolved, (14,10) corrected. Paired portals are in practice scope. This is image evidence, not a runtime collision dump |
-| Bomb, soft block, damage, clock, lives and score | Static findings, logged probes and repeats imported | Read the assessment: 72 countdown callbacks; distinguish input-counter and first-visible-frame timing. Quantized/sampled probes and no independent replay limit generalization |
-| Original items and AI | Slots resolved by reachability (#85) | Both glove classes are reachable and ported in the replica ([item slots](evidence/edition-5-item-slots.md)). Edition 5 has no bouncer, carpet or heavy bomb. The source-grounded Normal controller is implemented; exact original state-machine parity is not claimed |
-| Arcade timeout, clock and text fidelity | Implemented and checked on 2026-10-19 | 180 simulation seconds, pause stops clock; timeout loses if enemies remain; readable labels. Clock and timeout deliberately depart from original behavior; release language remains open |
-| Store name | Open, independent | Decide before publishing; does not block the first slice |
-| Art selection and replacement workflow | User rejected generated art; desktop workbench implemented on 2026-10-20; SWF-derived candidate art permitted on 2026-10-21 | Choose and preview replacements per visual slot, then Apply to game. The [art pipeline](../tools/art_pipeline/README.md) produces ignored candidates for manual review only; it never applies them. No art style is approved by tooling checks. #20 stays open until presentation acceptance; #21 follows |
-| Complete edition 5 game scope | Accepted on 2026-10-21; specification #56 and tickets #57–#70 published; #57–#70 implemented and closed on 2026-10-22 ([verification](verification/complete-game-2026-10-21/README.md)) | All four selectable modes, original board rolls with a seam for invented maps, per-mode source timeouts, practice as a development launch, an extended workbench catalogue, menu/settings/character select/How to Play/key rebinding/pause/score screens, six stage sets with levels, three difficulties and local cloth/hat unlocks; one human against 1–3 AI. See DESIGN.md and ADR 0007. Static recovery of modes, difficulty, settings, progression, scoring and unlocks is in [modes and flow](evidence/edition-5-modes-and-flow.md) (2026-10-21), which also corrects Arcade soft blocks to 0.6. Follow-up answers fix the 5-level defect, keep one to three enemies and require runtime observation before each port. Published as #56 with #57–#70; #21 is blocked by them and by #20, which stays open |
-| Co-op, then PvP | Deferred | First local slice precedes networking design. Local 2-player on one device is deferred (2026-10-21) |
-| Douyin export | Deferred | Consult douyin.md when export work is requested |
-| Original replica build | R1–R3 and Q1–Q21 accepted on 2026-10-28; spec #71 and tickets #72–#88 published; #72 baseline and #73 pack confirmed on 2026-10-28 | DESIGN.md and [ADR 0008](adr/0008-original-replica-build.md) own the rules. The `original` profile is the branch default and all 20 suites pass under it (677 checks, Godot 4.5 stable, macOS universal build); adaptations still run with the profile switched off inside their own checks. The original asset pack is built locally from the user's SWF (112 slot sheets from the recorded hash); slots with no source yet are listed under #74. Remaining ports are listed in DESIGN.md |
-
-The Q1–Q13 command/bomb decisions are implemented. Subsequent decisions through Q28 settle the preview/input/collision scope, including replacement Q17 (eight directions), replacement Q22 (late phone/iOS testing), and Q26's complete runnable Godot 4.5 delivery target. Practice is an intermediate integration milestone. Corridor assistance and the reconstructed CinemaStage1 board with working portals are accepted; exact acceleration tuning is implementation work grounded in the recovered source, not an approved new profile. Main Godot development uses desktop and automated verification and does not wait for a phone prototype. AI, damage, round clock, endings, score/lives, HUD and complete playable flow are now integrated and desktop-verified. Glove-slot identity and three unidentified item slots remain separate later branches. Store name and release language can remain deferred. Runtime facts still need investigation where they affect a proposed choice.
-
-## Interview updates
-
-### Settled: original replica build (2026-10-28)
-
-The user wants two delivery lines. The original art pieces are made on separate
-branches. The `original-replica` branch delivers a faithful reproduction of edition 5
-as a final product, so the project always has the original game, running in Godot,
-to compare against. It starts from `claude/adoring-gates-9eckgx` (complete game, #56
-and #57–#70), not `main`. The user accepted R1–R3 on 2026-10-28 and has the SWF
-locally; for R2 they asked that every rule refer to the original game design.
-DESIGN.md and ADR 0008 record the result.
-
-Constraints found:
-
-- The repository is public. ADR 0006 and the `.gitignore` keep the SWF and everything
-  extracted from it out of git, and #20/#21 require no source assets in the product.
-- The authority SWF is not in this repository or the cloud container. Extraction and
-  visual checks of original assets run only on the user's machine.
-- The current gameplay carries accepted adaptations (eight directions, equal diagonal
-  speed, collision sliding and corner safety, corridor assistance, bomb-overlap
-  departure, 35-tick simulation clock, Arcade loss on timeout, the 5-level default
-  fixing the 5-sets-1 defect, readable labels).
-
-Accepted decisions:
-
-- **R1 Asset delivery.** Commit only a loader and the art pipeline's extraction; the
-  game reads original art and audio from an ignored local pack built from the user's
-  SWF, falling back to the native presentation when absent. Alternative: commit the
-  extracted assets, which publishes the original artwork in a public repository.
-- **R2 Behaviour.** One gameplay codebase with an `original` fidelity profile that turns
-  off each accepted adaptation where the source behaviour is recovered, and an
-  `adapted` profile for the new game. Alternative: change the rules directly on this
-  branch, which forks gameplay from the art branches and makes later merges costly.
-- **R3 Scope of "finish".** The replica includes original audio and closes the
-  recorded limits: runtime observation of pushes, belts, crocodile bites, horse and
-  dragon rides and Pac-Man ghost catching; call-level AI traces in the new modes; belt
-  twip positions instead of floats; and the four unresolved item slots. Unselectable
-  modes (Speed, Water, Collect, Painting) stay out unless the user adds them.
-
-On 2026-10-28 the user answered "all yes" to replica interview Q1–Q10, clarifying
-Q1 (phone game, stick present), Q2 (smooth on mainstream landscape phones), Q3
-(single player, original sound/music/quality, MORE GAMES removed) and Q7 (copy the
-original engine but present at 60 or 120 fps without hitches). DESIGN.md records
-the result. Q11–Q17 were accepted the same day, with Q12 changed to iOS
-first. Q18–Q21 were accepted the same day, with Q18 choosing a free
-Apple ID. The user confirmed the shared understanding and approved the
-17-ticket breakdown. The specification is [issue #71](https://github.com/Kurak0oo/bomb-it-5/issues/71);
-tickets #72–#88 are its sub-issues, with `Blocked by:` lines because the tracker
-tools available could not write native dependencies. Agent tickets carry
-`ready-for-agent`; #73, #87 and #88 run on the user's machine and are unlabelled
-because the repository has no `ready-for-human` label yet. #72 (baseline checks)
-is the only unblocked ticket.
-
-### 2026-10-21 complete edition 5 game scope
-
-The user asked to turn the playable arena into the complete game, with the
-original menus and modes. Accepted answers: all four selectable modes together,
-with future modes, maps, rules and enemy designs kept easy to add; menu, settings,
-character select, How to Play with key rebinding, and cloth/hat unlocks; local
-2-player deferred; a new specification whose tickets block final acceptance #21.
-#20 stays open. DESIGN.md and [ADR 0007](adr/0007-complete-edition-5-game.md)
-record the scope. No implementation or tracker changes were made.
-
-The follow-ups were settled in the same interview: original layout picks and
-soft-block rolls in every mode, with a map-data seam for invented maps later;
-each mode's recovered timeout judgment; practice as a development launch only;
-and a workbench catalogue extended to eight robots, cosmetics, new screens and
-stage-set skins.
-
-The static recovery is recorded in [modes and flow](evidence/edition-5-modes-and-flow.md).
-The user then accepted: 5/10/15/20 levels with the source's 5-sets-1 defect
-fixed; one to three enemies for one player, as in the source; and runtime
-observation of each mode, difficulty and stage-set map feature before porting it.
-The user approved the [specification](specs/complete-edition-5-game.md) and its
-ticket graph, deferring audio. It is published as
-[issue #56](https://github.com/Kurak0oo/bomb-it-5/issues/56) with sub-issues #57–#70,
-each `ready-for-agent`: #57 mode/board/AI-profile seams; #58 recorded layouts and
-board rolls; #59 menu, settings, character select and session; #60 Easy/Hard;
-#61 How to Play and key rebinding; #62 unlocks; #63–#66 Zoo, Birthday Party,
-Candy Factory and Magic Library; #67 Kill; #68 Green Zone; #69 Pac-Man; #70
-workbench catalogue. Blockers are recorded as `Blocked by` sections. #21 now
-verifies the complete game and is blocked by #20 and #57–#70.
-
-### 2026-10-21 SWF-derived candidate art
-
-The user decided that art extracted from the edition 5 SWF may be modified into
-candidate art for the workbench slots, with every candidate manually reviewed
-before Apply to game. DESIGN.md and [ADR 0006](adr/0006-swf-derived-candidate-art.md)
-record the boundary. The batch pipeline in `tools/art_pipeline/` writes only to
-ignored `.scratch/` and `candidates/` storage; it does not write the active
-manifest or imports. Release rights, store identity and #20 acceptance remain open.
-
-### 2026-10-19 approved ticket publication
-
-The user approved the 20-ticket breakdown of specification #1. Issues #2–#21 cover visible practice, continuous/diagonal movement, hazards, portals, desktop-verified touch controls, clock/outcomes, conditional drops and upgrades, AI navigation/combat, source-reachable Cinema vehicles and weapon effects, session accounting/flow, original presentation and complete desktop acceptance. Every ticket carries `ready-for-agent`; 29 native blocking edges match the approved graph. Ticket bodies, labels and exact blocker sets were read back and verified. Specification #1's body, title, state, labels and other checked fields were left unchanged. The four unresolved named item slots, physical phone testing and export remain outside this graph. No gameplay implementation changed during publication.
-
-### Settled interview: first visible controllable board (2026-10-19)
-
-The user invoked grill-with-docs after the committed headless bomb slice. The next milestone is a visible practice board where one actor can move, place a bomb and see a soft block break. This is distinct from the accepted first full match with one human and three AI.
-
-The user accepted Q14, Q15, Q16 and Q18 on 2026-10-19: direct-entry practice scope with Pause/Resume/Reset, temporary original geometric presentation, an Arrow-key/Space development adapter preserving original keyboard priority, and one down/up pair per touch press/release without synthetic held repeat. The user explicitly rejected Q17's cardinal-only mapping and requires eight phone directions, including diagonals. DESIGN.md and ADR 0004 record that adaptation; diagonal movement and practice preview are now glossary terms.
-
-The source investigations are complete and recorded in [movement and board evidence](evidence/edition-5-movement-and-board.md). Original motion is continuous, cardinal and accelerating, with collision-dependent lane assistance; it is not one cell per input. The user's concern about grid stepping therefore does not require copying a nonexistent original stepping rule. Eight directions are a deliberate new control choice, not proof that joystick hardware requires diagonals. The user explicitly notes balance implications and wants later phone playtests.
-
-The user answered "all yes" to Q19–Q21 on 2026-10-19: equal straight/diagonal top speed, full-footprint collision with sliding and no blocked-corner shortcuts, and shared human/AI eight-direction physical movement capability. DESIGN.md and ADR 0004 record the decisions; the glossary now defines wall sliding. AI route selection and behavior remain outside the practice slice.
-
-The user rejected Q22 on 2026-10-19: all physical phone-related testing waits until the main Godot game is ready for publication, followed by iOS testing. Do not require or propose an early phone-control prototype again. This does not disable desktop/automated checks or decide a replacement export platform. The user accepted Q23 and emphasized that the fixed stick remains visible and its demonstration/animation responds to input, with PUBG Mobile, Honor of Kings or similar mature games as presentation references. Q24's normal-speed request outside the deadzone and Q25's owner-independent bomb departure followed by blocked re-entry once fully clear are accepted. DESIGN.md and ADR 0004 are updated; [reference notes](evidence/mobile-control-references.md) separate official sources from our own visual-feedback contract.
-
-The follow-up board audit now resolves all candidate cells in frames 697/698 and independently reproduces one correction: (14,10) is soft. The [canonical rendered-instance record](evidence/cinema-stage1-recorded-board.md), CSV and audit preserve this result without rewriting the original delivered transcription. It is a rendered-image reconstruction, not runtime collision-state extraction.
-
-The user answered Q26 with a delivery clarification: the whole runnable game is to be implemented in Godot 4.5. This is recorded as the primary deliverable; the practice board remains an intermediate integration milestone, not completion of that objective. The answer does not select the exact acceleration/heading-response profile previously recommended, so do not attribute that profile to the user. Use the recovered movement as the baseline and identify any deliberate adaptation separately.
-
-The user accepted Q27 and Q28 on 2026-10-19: smooth collision-safe corridor alignment within the movement budget and a fixed practice layout using the corrected captured CinemaStage1 instance with its paired portals working. Reset restores that instance. DESIGN.md and ADR 0004 are updated; corridor assistance and portal are glossary terms.
-
-The next planning step is to consolidate the complete accepted Godot first-build deliverable and its dependency graph: visible board/control integration, full local match with three AI and damage/endings, clock/lives/score/HUD/flow, then publication readiness. The main Godot build should not be replaced by another isolated phone prototype. Numeric input-feedback/deadzone/acceleration tuning can proceed during Godot development, with physical device validation at the accepted later stage. Source-recovered mechanics need evidence-linked implementation, not repeated interviews asking the user to supply facts. The main scene and gameplay implementation remain unchanged during this interview.
-
-### Settled interview: first bomb/soft-block slice (2026-10-18)
-
-The user resumed grill-with-docs after the scheduler slice. Read-only source investigations established immediate human bomb placement, later frame movement, phase-dependent eligibility for a newborn bomb's first countdown, and synchronous collision-map mutation during explosions. See [the focused evidence record](evidence/edition-5-gameplay-phases.md); these findings do not choose batching semantics.
-
-The user answered "all yes" to Q9–Q12 on 2026-10-18. DESIGN.md records placement before movement, the first newborn countdown on the following tick with timed detonation on N+72, fixed roster action priority, and a headless placement/fuse/blast/soft-block-removal slice using a source-verified excerpt strictly as a test fixture. Movement, damage, drops, AI, rendering and full-board certification are deferred. ADR 0003 records the batching trade-off; GLOSSARY.md now defines fuse and blast.
-
-The user then answered "yes" to Q13 on 2026-10-18: input first, then existing bomb countdowns/blasts, then movement when movement is implemented. With capacity one, a down event on the existing bomb's expiry tick fails and is consumed; another delivered down is needed after capacity is available. DESIGN.md and ADR 0003 record the accepted rule and consequence.
-
-The product-decision frontier is empty for this headless slice. All five recommendations and the concrete expiry example have been confirmed; do not ask them again before implementation. A later TDD invocation must establish its public gameplay observation seam before writing tests. Item identity, release language, store name and the other explicitly deferred gameplay branches remain outside this slice.
-
-### Active interview: adapting recovered behavior (2026-10-17)
-
-The user accepted all five recommendations on 2026-10-17: ordered bomb events preserving repeated downs/ups replace the two booleans; external scheduling runs 35 logical ticks/sec; the round clock counts 180 simulation seconds and stops paused; timeout loses with enemies remaining; visible labels use intended readable text. These are accepted requirements, not implemented behavior. DESIGN.md and ADR 0002 own the contract and rationale. The delivered supplement now restores the captures/harness, demonstrates both glove candidates, and captures a normal all-enemies-dead victory. Three named item slots and the glove-slot selection remain unresolved.
-
-On 2026-10-18 the user also accepted Q6–Q8: bounded catch-up, pause/focus input reset with explicit resume, and tick-start event capture consumed only after acceptance. DESIGN.md owns the exact rules. The stall scenario was hypothetical; no game freeze was diagnosed or observed in this implementation.
-
-Ask the whole ready frontier for the branch under discussion, with a recommendation for each decision. Keep downstream questions blocked until prerequisites settle. After an answer, update the accepted rule in DESIGN.md, record the answer date here, and recompute the frontier. Update resolved domain terms in GLOSSARY.md immediately. Use ADRs only for consequential trade-offs whose rationale would otherwise be lost.
-
-Before starting implementation from an interview, confirm the shared understanding if it has not already been confirmed. A request to maintain these documents authorizes recording settled answers and organizing knowledge; it does not settle unanswered gameplay choices.
-
-## Checks and handoff
-
-The confirmed test seam is roster construction followed by `advance(commands)`. Tests observe public results (acceptance, logical tick, and consumed commands), without inspecting private state or invoking gameplay. Work one failing behavior and its implementation at a time.
-
-The ordered-command slice requested on 2026-10-18 adds the agreed test seam of bomb-event enqueue, tick-start capture and acknowledgement after the actual `advance(commands)` result. Tests use the real command module, with no internal mocks or private-state access. Scheduling and gameplay phases remain outside this slice.
-
-For the requested scheduler and pause/resume slice, tests use a scheduler Node with the real command module and event queues: construction with a roster, elapsed-time advancement, per-actor direction/bomb input, pause/resume, and public Godot focus notifications. The observed result is paused state and the accepted tick results. Supplied elapsed time makes timing checks deterministic; tests do not reach into accumulators or mock internal modules. The main scene stays empty.
-
-The implement request on 2026-10-19 proceeds with the proposed first-bomb seam: construction of a headless bomb simulation with a fixed actor roster, starting cells/settings and the [source-verified board excerpt](evidence/first-bomb-test-excerpt.md), followed by `advance(commands)` using the existing command format. Public observations are acceptance, logical tick, copied board/bomb state, blast cells and broken soft blocks. The simulation uses the real command boundary; the scheduler accepts the real simulation as its tick target so integration checks exercise elapsed time and pause/catch-up without mocks. The pre-implementation baseline was 69 passing assertions on Godot 4.5 stable. The three proposed behavior slices are implemented directly from DESIGN.md; no tracker tickets have been published.
-
-The command checks verify that a valid explicit call advances exactly one tick and consumes one command per registered actor without rendering. They verify that missing, duplicate, and unknown actors leave state unchanged, and that roster size is not hard-coded to four. Scheduler checks cover partial intervals, 35 ticks across different render rates, stall limits and discarded debt, per-actor held direction, ordered events consumed once, invalid intake, pause/resume and focus notifications. One short live SceneTree check verifies automatic Node processing; timing assertions otherwise supply elapsed time directly.
-
-Run `./tools/run_checks.ps1 -Godot 'path/to/Godot_4.5_console.exe'` from PowerShell. Without `-Godot`, the runner uses the local ignored `.scratch/godot-4.5/Godot_v4.5-stable_win64_console.exe` if present. It requires a Godot 4.5 executable, successful exits, no engine/script errors, and every listed suite's success marker. On Linux, `tools/run_checks.sh` runs the same 20 suites; graphical suites need a display (Xvfb works). The workbench UI check runs separately with `--script res://tools/check_art_workbench.gd`.
-
-## Implemented interface
-
-Load [command_boundary.gd](../scripts/simulation/command_boundary.gd) and construct it with an `Array[StringName]` of unique actor IDs. The boundary copies the roster. Its only advancing operation is `advance(commands: Array[Dictionary])`.
-
-Each command has `actor_id: StringName`, `direction: Vector2`, and `bomb_events: Array`. Every event must be the StringName `&"down"` or `&"up"`. Order and repeated down/up events are preserved; no held-state deduplication occurs. Idle commands use `Vector2.ZERO` and an empty array. The former two booleans are no longer the payload. The command boundary transports these values; the round interprets movement and actions. Non-finite direction vectors reject the batch before any state advances.
-
-The public result contains `accepted: bool`, `tick: int`, and `commands: Array[Dictionary]`. It reports the last accepted batch (empty at tick 0), preserving supplied order; order does not define gameplay resolution. Rejection leaves that state unchanged. Input and result command values are copied so callers cannot rewrite consumed ticks. Missing fields or incorrect field types also reject the batch.
-
-### Per-actor bomb-event queue
-
-Load [bomb_event_queue.gd](../scripts/simulation/bomb_event_queue.gd) and create one instance per actor that needs buffered bomb input. Its public interface is:
-
-- `enqueue(event: StringName) -> bool`: append a down/up event; reject unknown names without changing the queue.
-- `capture() -> Dictionary`: capture the pending prefix for a tick, returning `token: int` and a copied `events` array. Repeated capture calls return the same active token and events until acceptance, including when that capture is empty. Later enqueues remain outside its cutoff.
-- `acknowledge(token: int, accepted: bool) -> bool`: pass the token back to the same queue with the actual command result's `accepted` value. Acceptance consumes only that prefix and closes the capture; rejection retains it for retry. Stale, duplicate or inactive tokens cannot consume anything. Tokens are local to their queue.
-
-The caller captures all actors at tick start, supplies one command for each registered actor to `advance`, then acknowledges each capture using that same batch's result. A rejected batch must not be acknowledged as accepted. Events arriving after a cutoff become available after the active capture succeeds. Returned event arrays do not expose the queue's owned arrays. The queue has no OS input hookup or pause method; its owning scheduler clears queued input across pause/resume.
-
-The [command checks](../tests/command_boundary_check.gd) exercise these public interfaces with 28 assertions.
-
-### Scheduler and pause/resume
-
-Load [tick_scheduler.gd](../scripts/simulation/tick_scheduler.gd) and construct it with an `Array[StringName]` of unique actor IDs and an optional `RefCounted` tick target. It copies the roster and owns one queue per actor. With no target it creates the real command boundary as before. A supplied target must implement `advance(commands)` with the same fixed roster and return command-admission results; the real bomb simulation supplies that interface. Its public interface is:
-
-- `advance_time(elapsed_seconds: float) -> Dictionary`: one frame's elapsed time returns `paused: bool` and `ticks: Array[Dictionary]` of command-boundary results. Fractions accumulate at 35 ticks/sec; at most five ticks are attempted, and all excess credit, including a stall remainder, is discarded. Negative or non-finite elapsed time is ignored without changing valid accumulated time.
-- `set_direction(actor_id: StringName, direction: Vector2) -> bool`: replace that actor's held direction. Values are transported without interpreting analog-stick policy.
-- `enqueue_bomb_event(actor_id: StringName, event: StringName) -> bool`: buffer a down/up event for tick-start capture. Each capture is acknowledged with the real batch's admission result. Catch-up ticks do not replay accepted events.
-- `pause() -> void`: pause and clear held direction, queued events and time credit. Paused updates add no debt. Actor roster and accepted tick count remain intact.
-- `resume() -> bool`: explicitly resume only when paused and focused, clearing input/time again. Calling it while running or unfocused returns false. Gameplay needs fresh input after resume.
-
-Unknown actors, invalid bomb events and input while paused return false. Idle actors receive explicit zero-direction, empty-event commands from the scheduler. Godot application focus-out notifications pause automatically; focus-in only permits explicit resume. This is scheduler state, not a global SceneTree pause.
-
-Attach the Node to a scene tree for automatic `_process(delta)` scheduling. For manual elapsed-time driving, keep it detached or call `set_process(false)` before attaching; do not also drive an automatically processing Node manually. Automatic updates advance the configured target; manual `advance_time` returns per-frame results. The gameplay scene attaches the scheduler with automatic processing disabled and drives that same interface once per rendered frame. Desktop/touch adapters feed the human; registered AI producers supply proposals at tick capture. `set_controller(actor_id, producer)` binds a callable returning direction/events; its captured proposal is copied and held through rejection, and reset across pause/resume.
-
-The [scheduler checks](../tests/scheduler_check.gd) contain 41 assertions; the command suite has 28.
-
-### Round simulation and the compatible bomb slice
-
-Load [bomb_simulation.gd](../scripts/simulation/bomb_simulation.gd) and construct it with `actor_ids: Array[StringName]`, `actors: Dictionary` and `board: Dictionary`. IDs must be unique; each ID needs a settings dictionary with `cell: Vector2i`, optional positive integer `power` (default 1) and `capacity` (default 1). Board keys are `Vector2i` coordinates; values are StringNames `&"floor"`, `&"solid"` or `&"soft"`. Omitted cells bound the supplied board. Construction owns copies of all input values. A fourth optional rules dictionary enables movement, damage, portals, drops and round endings; the original three-argument headless bomb setup remains compatible. The production scene enables the complete round. Portal cells are also represented as `&"portal"`; they are walkable but reject ordinary placement and stop ordinary blast rays.
-
-Its advancing interface is the existing `advance(commands: Array[Dictionary]) -> Dictionary`, composed with the real command boundary. The result retains `accepted`, `tick`, and copied `commands` and adds:
-
-- `board: Dictionary`: a copied current collision board.
-- `bombs: Array[Dictionary]`: copied live bombs containing `actor_id`, `cell`, and captured `power`, without private timer fields.
-- `blasts: Array[Dictionary]`: this call's detonation records, each containing `actor_id`, origin `cell`, and footprint `cells`.
-- `broken_soft_blocks: Array[Vector2i]`: soft cells removed by those detonations.
-
-Rejection preserves board, bombs and logical time and returns no new blast/break records. Accepted gameplay failures still consume the input batch. Placement runs in roster order at pre-movement actor cells and checks capacity and floor/bomb occupancy. Ordinary up events do not place bombs; equipped actions use their recovered handlers. With movement enabled, directions move actors after bomb/weapon/portal phases.
-
-Timed bombs expire on placement tick plus 72, after that tick's input phase. Detonation immediately frees bomb capacity; rays include floor and the first soft cell, exclude solids, and stop at the board boundary, soft cells or another bomb. A hit ordinary bomb chains synchronously; each bomb detonates once. Soft collision cells clear immediately. The source-verified excerpt and worked footprints are test fixtures, not a full production board.
-
-Blast records remain per-call detonation events. Additional copied state includes actors (continuous position, facing, life/protection, movement and equipment statistics), visible flames, active fire cells, pickups, weapon actions/projectiles, remaining ticks, outcome and result score. `snapshot()` returns current state without advancing; a terminal round no longer accepts ticks. The [bomb checks](../tests/bomb_simulation_check.gd) retain 43 assertions for the compatible foundational slice. New round/scene/regression/playthrough checks verify the integrated game through the agreed seam. Exact SWF AI-state-machine and painted attack-bound parity are not claimed; see the evidence record.
-
-## Current gameplay integration
-
-The scene host owns session retry hearts and cumulative result totals; the round owns actor life loss, gameplay and each result. The production setup uses Normal Arcade and reuses the recorded map for permitted retries/play-again within this first single-map scope. The [phase policy](../DESIGN.md) and [integration ADR](adr/0005-integrate-gameplay-through-the-round.md) record new deterministic phases and source conversions. The source-linked [runtime record](evidence/edition-5-runtime-systems.md) covers portal blast blocking, overlapping fire cleanup, protection, conditional drops, weapon/riding callbacks, scoring and AI adaptation limits.
-
-Run `./tools/play.ps1` to play using the local 4.5 engine, or open the project in Godot 4.5. Desktop-rendered captures and deterministic playthrough records are in ignored game-capture storage. They are development evidence, not physical phone validation.
-
-## Handoff history
-
-Once the tick and the relevant recovered behavior exist, add a headless check for one bomb blast and one broken soft block, linked to the SWF evidence. Until that evidence exists, do not turn assumptions into parity tests.
-
-At handoff, record completed work, remaining prerequisites, and verification performed here. Keep product rules in DESIGN.md and recovered observations in the evidence records rather than copying them into the handoff.
-
-### 2026-10-16 documentation handoff
-
-Recorded the two accepted interview answers, added the knowledge map, glossary and source-authority ADR, separated recovery evidence from inherited export notes, and replaced stale agent instructions with document-specific pointers. All relative Markdown links across the eight documents resolved; `git diff --check` passed. Project configuration and the main scene were unchanged. The command slice and SWF recovery remain unimplemented.
-
-### 2026-10-16 command-boundary interview
-
-The user accepted the recommendations for rejection of incomplete input, explicit advancement, and a fixed per-round roster, then confirmed the combined contract and its recording. The accepted rules are in DESIGN.md under "Command calling contract." This resolves the calling-contract branch; original input semantics and tick frequency still await evidence. Documentation was updated without implementing the boundary.
-
-### 2026-10-16 TDD implementation
-
-Implemented the boundary and headless runner through eight red-to-green behavior slices: explicit advancement, missing actors, duplicate actors, unknown actors, roster ownership, consumed-command ownership, required fields, and field types. All 13 assertions passed on Godot 4.5 stable. Configuration and the main scene were unchanged. SWF recovery remains the prerequisite for original input semantics and gameplay parity checks.
-
-### 2026-10-16 input and timing research
-
-Recovered a publisher-distributed edition 5 build and documented provenance, hashes, source locators, input handling, and timing in [one research record](evidence/edition-5-input-and-timing.md). The earlier claim that 35 was only inherited from bomb-it-1 is superseded by independent edition 5 evidence. No gameplay, command implementation, or engine configuration was changed. The next design discussion is how to adapt the original event stream and frame-driven updates to the accepted explicit command boundary.
-
-### 2026-10-17 Dots evidence intake
-
-Organized the repo-root SWF pack and both Downloads HTML5 packs into source records under `docs/evidence/observations/` and raw reference storage under `.scratch/edition-5-research/observations/`. Inventory: 318 preserved files, 123 imported text/data documents. The [assessment](evidence/edition-5-play-observations.md) concludes that the request is partially fulfilled and lists the exact follow-up. Source claims are separated from alternate-build observations and unsupported probe details. All file hashes, 174 images, 16 video decodes, 44 map-coordinate grids and local documentation links passed verification. Gameplay code, scene and engine settings were not changed.
-
-### 2026-10-17 supplemental Dots evidence and accepted adaptation choices
-
-Organized the 11-part supplement and 17-part follow-up from the root download directory. Preserved all 28 original archives and 3,609 expanded files under ignored investigation storage; imported 19 documentation/data records with separate provenance inventory and audit. All 28 ZIP CRCs, 3,605 supplied checksums, 3,532 image decodes and 12 MP4 decodes passed. All 23 missing harness stills, first-board frames, harness source/lock/patches/logs are now delivered. Captures demonstrate both glove candidates and normal elimination victory with TIME 59, results and Next; zero player kill credit does not invalidate the all-enemies-dead ending. Raw probes are partly palette-quantized/sampled, the first-board occupancy remains partly uncertain, and three item identities remain unresolved. Supplied tooling was inspected statically and not executed. See the current evidence assessment for confidence limits.
-
-The user accepted all five adaptation recommendations during intake. The new command events, scheduler, simulation clock, timeout rule and readable labels remain unimplemented. Existing boolean-payload checks are the current implementation baseline. No gameplay, scene or project configuration changes were made during organization.
-
-### 2026-10-18 scheduling and lifecycle interview
-
-Recorded acceptance of Q6–Q8 in DESIGN.md and updated ADR 0002 and the frontier. No gameplay implementation changed; the boolean-based boundary and its checks remain the existing baseline.
-
-### 2026-10-18 ordered-command TDD upgrade
-
-Completed eight red-to-green slices: ordered payload migration, atomic event validation, ordered queue capture, accepted consumption, rejected retention, cutoff through retry, stale/duplicate acknowledgement protection, and intake rejection of unknown events. Migrated the existing roster, advancement and ownership checks to the ordered payload. All 28 assertions pass through public interfaces on Godot 4.5 stable. Updated the implemented interface and frontier. Scheduler/catch-up, pause/focus reset, clock and gameplay remain pending; project configuration and the main scene were unchanged.
-
-### 2026-10-18 scheduler and pause/resume TDD slice
-
-Completed eleven red-to-green slices through the scheduler's public elapsed-time, input and lifecycle interfaces, using the real command boundary and queues. The attached Node processes rendered-frame time, limits catch-up to five ticks, discards excess time, transports held direction and consumes ordered events once. Pause and focus loss clear input/time; focus return requires explicit resume. Invalid elapsed values cannot poison the clock. A 90-frame timing check exposed floating-point undercounting, corrected with a tiny tick-boundary tolerance. Both suites pass 69 assertions on Godot 4.5 stable (28 command/queue, 41 scheduler). The runner now requires both success markers. Configuration and the empty main scene remain unchanged.
-
-Next work is the evidence-linked gameplay slice: the subsequent Q9–Q13 interview has settled its event phases; implement and check one bomb blast and one broken soft block with a source-verified test excerpt. Verify the uncertain first-board cells before certifying its full layout. Controller adapters, round countdown, timeout and readable labels are still unimplemented; item identity decisions remain separate prerequisites for their behavior.
-
-### 2026-10-19 first-bomb implementation
-
-Implemented the three proposed behavior slices directly from the accepted design: ordinary placement with atomic admission, timed blast/soft-block removal, and real scheduler input/lifecycle integration. Eight red-to-green changes established placement, repeated-event occupancy protection, roster priority, floor guards, the N+72 fuse, source-derived blast/block rules, scheduler target binding, and source-supported synchronous chaining. Additional public-interface checks cover rejection without fuse aging, owned snapshots, expiry-tick input consumption, power-two blocker stopping, paused fuses and discarded catch-up time. There are 43 bomb-simulation assertions and 112 across the three suites on Godot 4.5 stable. Runtime script parsing/typechecking is included in the single-suite runs and an explicit check-only pass.
-
-The concrete fixture remains a source-verified excerpt. This implements detonation records and collision changes, not persistent flames, movement, damage, drops, AI, visuals or a complete first board. The next visible-play milestone needs its board occupancy verified and its movement/control/presentation decisions settled. Project settings and the empty main scene are unchanged. No tracker configuration or published issues were created; local DESIGN.md is the originating specification. Review compares the staged project against initial commit `f4491e12481055d6faf090968728921c45357d9f`, including the pre-existing uncommitted foundation and organized evidence needed for a reproducible checkout.
-
-Final verification: the full runner passes 28 command, 41 scheduler and 43 bomb assertions (112 total), with no engine/script errors; both changed runtime modules also pass Godot's check-only parsing/typechecking. Local links in all 14 authored documentation records resolve. Authored-file whitespace checks pass; four existing whitespace warnings in imported evidence remain preserved, including literal multiline localization text. Parallel review found no specification gaps or substantive standards violations; its one stale scheduler-table sentence was corrected. The reviewed project is committed on the current branch without publishing or pushing.
-
-
-### 2026-10-19 playable desktop implementation and functional verification
-
-Implemented gameplay functionality across the approved graph through the real scheduler/round, preserving the 112 foundational assertions. Presentation #20 and final acceptance #21 were initially closed prematurely; see the correction below. The final full runner passes **244 checks** on Godot 4.5 stable: 28 command/queue, 41 scheduler, 43 ordinary-bomb, 16 feature tracer, 84 regression, 29 scene and three full-board playthrough checks. Runtime scripts pass parsing/type checks; no engine/script errors were reported. Public scene input checks cover all eight stick sectors, deadzone, unrelated board touches, concurrent controls, desktop key priority and lifecycle reset.
-
-The full-board fixture drives ordinary legal commands for all four actors, without changing private round state. Seed 2 reaches elimination victory at tick 2828, one player kill and result score 3300; seeds 5 and 42 reach defeat at ticks 1309 and 2022, each with one kill and score 300. Timeout and simultaneous-ending precedence have separate public round checks. These are deterministic desktop correctness scenarios, not a device performance or difficulty benchmark.
-
-The actual Compatibility-rendered game was captured and visually inspected at 1280×720: [active match](verification/desktop-2026-10-19/match.png), [pause](verification/desktop-2026-10-19/pause.png), [defeat/results](verification/desktop-2026-10-19/results.png), [game over](verification/desktop-2026-10-19/game-over.png) and [legitimate victory](verification/desktop-2026-10-19/victory.png). `tools/capture_game.gd` reproduces these through the scene and existing scheduler producer interface. It takes over human commands for the victory capture, without forcing actor deaths or outcomes. Layout, hearts, readable labels, controls and next actions are visible. The heading LOCAL ARCADE describes the development build; it is not a selected store identity.
-
-Parallel Standards and Spec reviews found no outstanding material findings after fixes. Review prompted one shared public-state projection, round-published flamer display geometry, removal of inactive AI from decision rotation, and preservation of multi-cell escape movement between brain turns. The latter two have regression coverage. Exact retail AI-state-machine/difficulty parity and SWF painted attack bounds remain unclaimed. The four unresolved named item slots remain excluded; physical phone/iOS tests, export/signing, store identity and release language remain later work.
-
-
-### 2026-10-19 presentation and final-acceptance correction
-
-The current procedural vector art provides playable integration visuals. It has not fulfilled the accepted finished redraw in the original painting style. Closing presentation #20 and final desktop acceptance #21 was premature; those tickets are reopened. The 244 functional checks and rendered captures remain valid evidence of the implemented desktop behavior, not proof of finished visual quality or publication readiness. The earlier two-axis review missed this presentation gap.
-
-Assess the desktop build now for movement/corridor feel, bomb/weapon timing and feedback, understandable damage/protection/portal states, AI activity and challenge, match pacing, and retry/result clarity. Compare source-grounded rules with the recovered evidence and separate accepted adaptations from unresolved parity limits. The recorded full-board runs are automated command-driven playthroughs, not human usability validation.
-
-Finish and assess the original art/animation pass under #20, then repeat integrated desktop acceptance under #21 with the resulting visuals. Retain the existing functional evidence and add coverage for any discovered defects. Physical phone/iOS testing stays deferred until the main Godot build passes that gate. The working title and Bomb It 5 references in project metadata/research remain; source sprites and audio are not loaded by gameplay, but the game is intentionally derived from edition 5 rules and map design.
-
-
-### 2026-10-19 desktop feel feedback and source audit
-
-The user defers joystick improvement until phone testing. They report a roughly half-second lethal explosion tail and incomplete/stiff weapon animation/use, and prefer establishing the original edition 5 logic/feel before the final original-art replacement. DESIGN.md records this priority. Most implemented behavior felt acceptable to the user; diagonal movement has not yet been assessed in actual play. The current Arrow-key adapter intentionally accepts one cardinal direction; synthetic/mouse-emulated stick input supports diagonals, but the recorded board's narrow lanes restrict opportunities. Open-board automated motion checks do not establish real play feel.
-
-The [control-timing diagnostic](../tools/inspect_control_timing.gd) drives the real public round with legal commands. In an isolated ordinary explosion at tick 73, entry at tick 89 remains lethal with a flame present; entry at tick 90 is safe with no flame/fire. This reproduces the current 17-tick (0.486 s) tail and finds no hidden lethal interval after the round removes its flame. It is not an SWF parity test. The original retains fire until Bomb.ended's greater-than-15 boundary; GameEngine calls blast cleanup after bomb handlers, so the ordinary timed-detonation path's first cleanup callback can occur in its creation frame. Trace/replay that phase and later weapon-triggered chains before claiming exact parity or changing every hazard to a single different duration. See the evidence clarification below.
-
-The same diagnostic measures movement interruption from action input to the next movement: hammer 24 ticks (0.686 s), flamer 23 (0.657 s), laser 22 (0.629 s), triple-shot 41 (1.171 s), fireball 24 (0.686 s). Original AbstractWeapon.robotMoveStop/Start and weapon commands establish that Arcade actions do stop movement, but these coarse replacement durations are not complete frame/geometry/state-machine parity. Rendering is simplified, and flamer endpoint growth is reconstructed. No rendering-performance hitch has been established. In follow-up, the user attributes the weapon stiffness primarily to incomplete animation and asks not to spend further effort on weapon-specific lag diagnosis now; retain the fidelity findings for the later rebuild/animation pass.
-
-Next fidelity work: compare original and rebuilt per-action sequences (input, animation, hit/projectile creation, collision/damage, recovery and movement resumption), resolve callback-phase differences, replace approximations with source-derived behavior where not deliberately adapted, and add public seam regressions. Use the original assets/animation as reference during this work; shipping art remains the final original redraw. Do not infer a fidelity percentage from passing the new-game suite or from class/line counts. Current GDScript is a new implementation with source-derived rule/data translations; no original ActionScript runtime is embedded. AI, animation-dependent weapon geometry and presentation are reconstructed and not full original ports. Functional feature coverage and source-feel fidelity are separate gates.
-
-
-### 2026-10-19 reverse-engineering-first structural audit
-
-Following the user's request, reconstructed the original selected Normal Arcade/Cinema structure before further fidelity porting. The source-linked [reconstruction](evidence/edition-5-structure-reconstruction.md) covers startup, map/player/robot ownership, engine phases, command chains, animation-dependent weapons, AI states/search and death/result staging. Newly checked facts include conditional position/state/vehicle-triggered fire checks, dictionary command enumeration, ordered Normal AI states, delayed mode/result checks and live callback mutation. Targeted fresh P-code from the hashed SWF corroborates the AI accumulator's missing reset and a large unused allocation embedded in StateAttack; the latter is not an invitation to copy unrelated filler into gameplay.
-
-Added [inspect_swf_structure.py](../tools/inspect_swf_structure.py) and a generated [inventory](evidence/edition-5-structure-inventory.json): 218 game-package ActionScript files with hashes/declaration metadata, three ABC block hashes, 635 named symbols, 2,098 sprite definitions and 18 selected timelines. An independent JPEXS XML export agrees on all 18 frame totals and 336 placement records' containing frames and compared identity/geometry fields. Deterministic regeneration, authority-hash rejection and authored links are checked. The parser explicitly does not evaluate live bounds, every optional tag field or runtime scheduling.
-
-The [audit and verification gaps](evidence/edition-5-reverse-engineering-audit.md) records the supplied harness inspection and readiness limits. No new original-SWF playback, full pinned Ruffle build, native Flash comparison or game-state tracing was performed. No gameplay code or production artwork changed; the previous 244 gameplay checks are not reclassified as SWF parity. The next recovery gate is an independently reproduced reference session and controlled traces for fire/phase edges, action timelines/bounds, AI transitions and death/results. Joystick polish and physical phone/iOS testing remain deferred.
-
-
-### 2026-10-19 original-runtime recovery and porting handoff
-
-Implemented the approved recovery graph through the publisher SWF, with a pinned locked Windows reference player, acknowledged input replay, read-only state/event/RNG/geometry observation and explicit original-method fixtures. The [tooling record](evidence/edition-5-recovery-tooling.md) preserves the fourteen-patch chain, canonical build, historical exact patch bytes, failed whole-session equivalence and narrower successful comparisons. Authority bytes are unchanged; generated templates and host clocks remain observable differences rather than hidden assumptions.
-
-The [evidence index](evidence/README.md) links ordinary bombs, both-owner chains/overlap, all-cardinal movement and both portal pairs, conditional drops/caps/budgets, protection/vehicles, ten mine scenarios, 24 directional weapon actions, 35 two-action target cases, three laser portal rays, 15 weapon lifecycle cases, 88 measured flamer endpoints, representative Normal AI decisions and complete selected result/retry flows. Curated bundles retain original cases/logs/frames, source locators, hashes, selected native observations and actual execution/RNG events. Bounded untested permutations, emulator warnings, source bugs and observation costs remain explicit.
-
-The [source-to-Godot map](evidence/edition-5-porting-handoff.md) classifies current behavior and orders later faithful porting. It preserves accepted scheduling/batching, eight directions/full footprint, simulation clock/timeout, fresh-input pause, the fixed recorded board and readable labels. No new original rules or artwork were ported during recovery. Final redraw #20, desktop publication acceptance #21, physical phone/iOS testing and the four unresolved slots remain separate. The full unchanged Godot 4.5 runner passes all 244 functional checks; these are not relabeled as SWF parity.
-
-Final independent Standards/Spec review found one material issue on each axis: staged-core provenance and missing laser/portal measurement. Both are fixed and verified; the final [acceptance record](evidence/edition-5-recovery-verification.md) reports zero outstanding material findings. A derived actor-registration projection was corrected separately and rechecked against raw Game.robots. Authority bytes and production gameplay remain unchanged.
-
-### 2026-10-28 original-profile baseline (#72)
-
-Ran the complete suite on Godot 4.5 (`4.5.stable.official.876b29033`, macOS universal
-build) with `tools/run_checks.sh` under the branch default `original` profile:
-20 suites, 677 checks, every success marker reached, no engine or script errors. The
-adaptations still run with the profile switched off inside `game_scene_check`,
-`round_play_check` and `round_regression_check`, so both profiles are exercised. No
-gameplay code needed a fix, so nothing in `scripts/` changed. The art workbench check
-was not run this session: it needs a windowed display and hangs headless.
-
-The local original pack for the replica exists on this machine and is ignored by git
-(`original/`, 112 slot sheets, 7 MB). The SWF was not available here, so the pack was
-assembled from the art pipeline's already exported review output: the 71 exported slot
-sheets kept their unmodified `before.png`, and the 41 slots added by #70 were rebuilt
-from the per-asset `before.png` sheets using `tools/art_pipeline/config.json` sources.
-Both keep only original rendering, never the modified `candidate.png`. A script loading
-the pack through `scripts/art/skin.gd` finds every sampled slot, and a rebuilt-slot spot
-check (violet/slate robots, Zoo crocodile, Magic Library spellbook, horse, Green Zone
-flag, main menu) renders the original art. That path is superseded by the SWF build below.
-
-### 2026-10-28 original art pack from the SWF (#73)
-
-With the publisher SWF supplied at `~/Downloads/agame-bomb-it-5-zh-fix.swf`
-(sha256 `718c04c7…0408a2`, the recorded authority), `original_pack.py` ran end to end:
-FFDec 26.3.0 extracted the symbols, the manifest resolved every configured source
-(`unresolved_sources: []`, 5056 assets kept), and 112 slot sheets were written in 108 s
-with 0 failures to `original/art/slots/` plus `original/active.json`. Nothing under
-`original/` is tracked (`.gitignore`); the tracked `manifest.csv` was left at its
-committed bytes because a local rerun only rewrites content hashes.
-
-A session renders the pack: the [match capture](verification/original-replica-2026-10-28/match.png) shows the
-original robots and portraits, Magic Library spellbook, pickups, bombs and HUD chrome.
-`tools/capture_game.gd` had rotted against the #59 menu refactor (`main.tscn` now returns
-`app.gd`, whose `start_session()` takes no seed) and is fixed to drive the round host
-directly, so the desktop capture path works again.
-
-Still missing or approximate, for #74:
-
-- 86 of 262 slots still have no source and draw natively: all 64 hats and outfits,
-  action poses, protection blink and portal transit, the five touch controls and seven
-  interface panels. Stage-set floors, walls, solid and soft blocks and centrepieces are
-  now original (see the tile evidence record).
-- The original profile still shows the adapted control hint "Eight directions · equal
-  speed" in the HUD, which is wrong under the original profile.
-
-### Layout interview (2026-10-29)
-
-After comparing the replica capture with the original Magic Library opening, the
-user kept the original-pack verification captures as evidence, chose to keep the
-1280×720 page for the replica, and asked to settle the layout design before #77
-continues. They also said "eight directions are fine", which conflicts with the
-accepted cardinal-only stick; it is an open question in this interview.
-
-The user answered L2 (a: centred 16:9 page) and E (c: eight directions on the
-stick, cardinal keyboard), recorded in DESIGN.md; the code still collapses stick
-diagonals under the `original` profile and must follow E. For L1 the user set a
-mobile-first direction instead of the original Flash layout: the map fills most of
-the screen with the stick as part of the map area, no titles or explanations on
-screen, no stats column on the left, and a themed pause icon top right. A mockup
-following that direction is under review; L1 stays open until the user accepts it.
-
-The user accepted the mockup and M1–M6 on 2026-10-29 ("all yes"), asking that the
-side scenery, which they likened to Hearthstone's board surrounds, be polished to
-the original art's style. DESIGN.md records the gameplay layout; the mockups are in
-`docs/design/` (they show original-art crops, kept like the verification captures).
-#77 is updated to this layout. The layout frontier is empty.
-
-On 2026-10-29 #77 was split into #89 (page fit and full board), #90 (eight-way
-stick and bomb button on the scenery), #91 (play HUD and pause icon) and #92
-(original background extended into the side scenery), each blocked by #89 except
-#89 itself; #77 is closed as split. #93 polishes the surrounds (blocked by #92).
-#78 now follows the mockup style and waits on #90; #76 covers only full-screen
-pages (in-play HUD and pause icon moved to #91) and asks for the missing
-screen-hook ADR; #87 and #88 blockers were updated. Spec #71's text still
-describes the superseded 700×510 layout and cardinal stick; DESIGN.md is current.
-
-
-### 2026-10-29 tile art choices and the screen-hook ADR (#74, #76)
-
-A cloud session picked up the replica with the user's SWF (recorded hash) and Godot 4.5
-(`4.5.stable.official.876b29033`, Linux, downloaded with the user's approval). FFDec
-exported 1068 scripts to `.scratch/edition-5-research/publisher-scripts/` and the pack
-was rebuilt (now 195 slot sheets); `run.py` now creates `original/art` when `original/`
-does not exist yet.
-
-The handoff's "frame offset" suspicion for the wrong Magic Library board art was wrong:
-`_brick5` frames are 1-based and the slot frames were right. The selection rule was
-wrong. Each round, `<Set>MapData.init` draws two fixed and two soft art choices; a
-numbered `fixedProp_<n>` draws the first fixed choice whatever its number (the outer ring
-included), `fixedProp_r` either choice, and each soft block either soft choice. The
-round now does the same (`Layouts.roll`, `StageSets.SETS` choice lists), the renderer
-draws the ring as fixed props, and the catalogue has one `soft_<n>` slot per soft-list
-entry instead of `soft_a`/`soft_b`, plus Cinema's popcorn box and clapperboard (281
-slots). The [tile evidence](evidence/edition-5-stage-tiles.md) is corrected and the
-[captures](verification/original-replica-2026-10-29/README.md) match the original
-Magic Library opening. Prop scale and overlap (the original draws frames at 30/32 from
-their registration, not fitted to the cell) and whole-background floors remain open.
-
-ADR 0009, cited by `scripts/art/screen_layout.gd` but never committed, is
-[reconstructed](adr/0009-screen-art-ghosts-and-plates.md) from that file's header.
-
-### 2026-10-29 replica page and original box size (#89, #74)
-
-Under the `original` profile a match is now drawn on the mobile-first page
-(`scripts/replica_layout.gd`): the 17×15 board at 48 px cells fills the 1280×720 page
-height, centred, with the outer ring columns cropped to half a cell by the scenery layer
-(`scripts/replica_scenery.gd`, a plain per-set extension until #92). The view's compact mode
-draws only the board; titles, captions, hints, the roster column and the development
-buttons are gone, and RESUME/MAIN MENU appear only over the map while paused. The page
-keeps 1:1 and stays inside the display safe area, re-read every frame; it may run one cell
-into a top or bottom inset (the home indicator), because that band holds only the board's
-cropped ring row. `tests/replica_page_check.gd` covers 2532×1170 with the sensor housing on
-either side, 1920×1080, 2048×1536 and a cramped safe area.
-
-`_brick5` boxes are now drawn at the original size: the clip's frames sit in a 32-unit cell
-from its top-left and tall props rise up to 20 units above it (`Box.setItem` scales the
-clip to the 30 px cell). Brick slots carry a registered crop and the pack records it, so
-props overhang the row above as in the original; floors draw before all boxes. Magic
-Library no longer draws centre frame 144 under its spellbook (the source hides that box),
-and the spellbook keeps its registered 3×3 size, closed on frame 1 until it flips.
-
-### 2026-10-29 replica controls, HUD and scenery (#90, #91, #92, #78)
-
-- #90: the stick is eight-way in both profiles and the round no longer collapses
-  diagonals; keyboard (last held key) and AI producers stay single-cardinal, which is how
-  E is enforced without the round knowing the producer. Fidelity's `direction` helper is
-  gone. The stick sits at (150, 560) and the button at (1130, 560) on the side areas; touch
-  is checked in screen coordinates on offset and scaled pages.
-- #91: `scripts/replica_hud.gd` draws the status pill, time with level badge, rival
-  badges (portraits from each actor's session-drawn robot, so gap 3 is closed) and a
-  pause icon. Kill and Green Zone show x/10. Pause opens the original `UI_pause` page
-  (new `screen.pause` slot); outcomes play `winCartoon`/`loseCartoon`/`timeUpCartoon`
-  (new `cartoon.*` slots) over the map. The adapted hint text no longer appears in play.
-- #92: `scenery.<set>` slots hold each set's whole `BackGround_<Set>`; it repeats every
-  32 px, so the scenery lays it on the board grid at 48/32 and dims it.
-- #78: under `original` the stick is a translucent ring with direction marks and a gold
-  thumb, and the round bomb button shows the equipped item; control slots still replace
-  them.
-
-`tests/replica_page_check.gd` now has 51 checks. Captures are in the
-[verification record](verification/original-replica-2026-10-29/README.md).
-
-### 2026-10-29 original engine and round clock (#79, #80)
-
-- #79: the replica's scheduler is `frame_driven`: logic still steps 35 times a second,
-  but at most once per drawn frame, and credit above one step is dropped, so a stall or a
-  slow device slows the game instead of jumping (Q13/Q14). The view blends actors, moving
-  bombs and projectiles between the last two steps by the scheduler's interpolation
-  fraction; the round state is never touched. Scheduler checks cover 60 and 120 Hz,
-  a one-second stall and a 30 Hz device; the adapted catch-up checks are unchanged.
-- #80: `BombSimulation` takes an injectable `seconds` source and ports `Game.countTime`
-  (`pastSecond` starts as NaN, so the first step counts; one second per change of
-  `Date.getSeconds()`, at most one per step; nothing while the engine is stopped).
-  Timeouts, `timePassed` pickups, the HUD time and the time bonus read
-  `clock_tick() = pastTime × 35`. The round host passes the wall clock under the
-  `original` profile; `Game.seconds_source` lets checks inject one. Adapted rounds keep
-  the 6,300-step clock.
-- Handoff gap 8 is verified from source: for one player `ArcadeMode.timeOut` →
-  `judgeHandler` → `winHandler` → `countScore(true)`, which pays `DIFF_POINT` and a time
-  bonus of `(gameTime − pastTime) × 10` (0 at timeout). The replica's settlement matches.
-
-### 2026-10-29 original `HitMove` (#82)
-
-`Movement.step_hit_move` ports `RobotModel.move*` (`v = 0.6v ± speed`, the other axis
-zeroed, `moveStop` decays without moving), `RobotController.move*` (the `view.xN` edge
-guard) and `HitMove.*Afoul` literally: the own-cell shortcut, `fixedHitTest` (boxes and
-ordinary bombs block, landmines and platforms pass), lane assistance with the `-1` edge,
-moving up to a blocker's edge, and the signed residual speed that briefly reverses through
-a wall. `AbstractObject.xPos` lives on the display container, so every position write is
-truncated to twips; that quantization is what makes 32.59 read 32.55. The round uses it
-for single-axis requests when the replica host sets `hit_move`; stick diagonals keep the
-eight-direction rules (E). The departure ledger is not consulted: leaving a bomb works
-because the robot's middle cell equals its leading cell until it is clear.
-
-`tools/extract_hitmove_fixtures.py` turns the recorded seed-42 movement probes into
-`tests/fixtures/hitmove-probes.json` (numbers only), and `tests/hitmove_check.gd` replays
-all eight (motion with reversal, corridor turns in four directions, three cardinal runs:
-392 frames) to within 1e-4 px of the recorded position and speed on every frame. `Tractor`
-objects in `game.hitArr` and the platform `transSpeed` term are not ported; no selectable
-stage uses them.
-
-The reference player now also builds on this Linux container (`tools/reference_player/build.sh`
-with Mesa lavapipe) and replays the corridor case.
-
-### 2026-10-29 pause and focus (#81)
-
-Traced with the reference player on Linux (`tools/reference_player/cases/pause/`) and recorded
-in [pause and focus](evidence/edition-5-pause-and-focus.md). The replica now waits the
-original's 100 ms (four steps) before pausing, cancels on a second press, holds each robot's
-speed and ignores held movement until a new press, and credits paused wall time to
-weapon recovery, the Green Zone flag move and AI delays. Focus loss still pauses at once
-(Q15). `Game.msec_source` lets checks inject the wall clock.
-
-### 2026-10-29 robot interactions (#83)
-
-Belt rides, toy-hand pushes, crocodile bites, horse jumps, dragon crashes and the Pac-Man
-catch were recorded with the reference player (`tools/reference_player/cases/interactions/`,
-`reference-rides.patch` for the ride pickups) and are recorded in
-[robot interactions](evidence/edition-5-interactions.md). Under `hit_move` the belt drives
-robots through the `HitMove` edges with twip positions, the toy hand ports the stale
-`_preCheck` cell, horse and dragon rides follow `HorseProp.frog` and `DragonProp.crash`, and
-positions and speeds are kept as doubles. Crocodile timing and the Pac-Man catch already
-matched. `tests/hitmove_check.gd` covers each.
-
-### 2026-10-29 item slots (#85)
-
-The drop tables (`AbstractGameMode.initMap`), the rules XML and the class tree settle the four
-named slots ([item slots](evidence/edition-5-item-slots.md)). `BombShoesProp` (PUSH THE BOMB,
-Arcade 10) and `BoxingProp` (BOXING GLOVE, Arcade 1, Battle Royale and Green Zone 15) are
-reachable. The replica drops them through `glove_items` and ports the kick and the punch.
-Edition 5 has no bouncer, magic carpet or heavy bomb. Four art slots were added (295 in all).
-
-### 2026-10-29 audio (#75)
-
-`tools/art_pipeline/original_audio.py` exports the SWF's 37 class-linked sounds
-unmodified to the ignored `original/audio/`. The simulation raises sound classes per step
-at the points the source calls `createSound`. `scripts/original_audio.gd` ports
-`SoundManger`'s music rules, and the switches persist in the save file. The event map and
-the classes that are silent in the original are recorded in
-[audio](evidence/edition-5-audio.md).
-
-### 2026-10-29 original screens (#76)
-
-The screen sheets are cropped to the 700×510 stage that `UIManager` clips to, so every page
-draws into one frame. `tools/measure_screen_art.py` measures the named instances from the SVG
-export. `ScreenLayout.PAGES` holds the slots, plates with sampled colours, and the baked and
-live names for the menu, Game Settings, character select, Controls, Power-ups, score, game
-over, game complete and pause pages. Art the replica removes is hidden in the pipeline. The
-power-ups page gained a slot (296 slots). The record is
-[original screens](evidence/edition-5-screens.md).
-
-### 2026-10-29 quality switch (#86)
-
-`scripts/quality.gd` ports `qualityCtlHandle`: HIGH, MEDIUM and LOW cycle from the main
-menu and pause switches, start at HIGH and last for the session only. The Compatibility
-renderer has no 2D MSAA, so the levels map to the canvas texture filter (bitmap smoothing)
-and the antialiased flag of procedural lines and arcs (shape anti-aliasing). The switches
-draw their original frames (three new slots, 299 in all). The record is
-[quality](evidence/edition-5-quality.md), with a capture.
-
-### 2026-10-29 robot looks and remaining art (#74)
-
-The 64 hat and outfit slots are mapped to frames of the innermost `hatMc`/`bodyMc` clip in
-each robot direction clip, found from the SWF timelines. The 22 slots with no SWF art
-(action pose, blink, transit, touch controls, desktop panels) are marked `no_original`.
-Under the replica, the blink and transit are drawn as the original colour flash and fade.
-The record is [robot looks](evidence/edition-5-robot-looks.md).
-
-### 2026-10-29 AI in every mode and difficulty (#84)
-
-Twelve reference traces (`tools/reference_player/cases/ai-modes/`) record each mode and
-difficulty's live AI profile and call-level decisions. All twelve profiles match
-`ai_profiles.gd`. The traces and source fixed five differences: the `getTimer` answer gate,
-Flag and Defence drawing no number, Defence's shared-cell bomb, Follow entered with no
-position or no bomb, and spawn protection not being invincible. `tests/ai_trace_check.gd`
-covers them. The record is [AI modes](evidence/edition-5-ai-modes.md).
-
-### 2026-10-29 iPhone build steps (#87)
-
-[iOS install](ios.md) gives the steps for a private Xcode install with a free Apple ID. They
-were checked against Godot 4.5-stable's source and Apple's pages. The project now allows
-both landscape directions (sensor landscape) and uses the Ambient audio session, and the
-game also pauses on `NOTIFICATION_APPLICATION_PAUSED`. Building and installing on the
-user's Mac and iPhone remains the user's step.
-
+| 0 | Archive old docs, tag `pre-restart`, retire `original-replica` into `main`, delete stale branches, close superseded issues | Repo has the short doc set |
+| 1 | Comparison loop for one static screen (main menu); macOS-safe reference build; same-RNG check | Node diff and pixel diff run from one command |
+| 2 | Render bake-off (Ruffle symbol render at 3× vs FFDec→resvg vs FFDec PNG), then display-list → Godot scene converter for the main menu | Diff passes, buttons show up/over/down/disabled, owner accepts |
+| 3 | Remaining menus: Game Settings, character select, How to Play, results | Each screen passes and owner accepts |
+| 4 | Gameplay screen at original layout, Cinema set | Frame-matched cases pass, owner plays it |
+| 5 | Each mode × stage set against reference recordings | Diff passes per case, owner plays each mode |
+| 6 | Phone fit and touch controls on top of the faithful screens | Owner plays on device |
+
+Known for checkpoint 1: `tools/reference_player/build.sh` uses GNU `sed -i` and fails
+on macOS; the art pipeline auto-installs Java only via apt (use `brew install openjdk`).
+
+## Branches and structure
+
+Separate art, logic and UI by folder and interface, on one trunk.
+
+- `main` is the single trunk. Feature branches last one checkpoint and merge within days.
+- Retired at checkpoint 0: `original-replica` (fast-forwarded into `main`),
+  `claude/adoring-gates-9eckgx` and `claude/pensive-volta-a8va4o` (no unique commits),
+  `claude/bomb-it-5-art-pipeline-do9896` (new-art redesign work, kept as tag
+  `archive/art-pipeline`).
+- `scripts/simulation/` is logic: no nodes or art, driven by commands and snapshots.
+- `scripts/ui/` holds screens and the HUD: reads snapshots, sends commands, takes layout
+  from generated scenes.
+- `assets/` holds art references only. Original art stays in the ignored local pack.
+- Product variants (faithful replica vs. Douyin build with new art) are build profiles
+  (`fidelity.gd` plus an art pack choice), not branches.
+
+## Status
+
+Checkpoint 0 in progress on `claude/kind-johnson-vp2tp9`.

@@ -9,7 +9,7 @@ The retail original game whose SWF is the rules authority for this project.
 _Avoid_: Bomb It 1, the cheat build, a portal description
 
 **Original replica**:
-The Godot build that reproduces edition 5 exactly, delivered as a phone game.
+The Godot build that reproduces edition 5 exactly, showing the original 700×510 stage through one scale factor. Phone fit comes later on top of it.
 _Avoid_: reference, clone
 
 **Reference player**:
@@ -18,6 +18,22 @@ _Avoid_: replica, emulator build
 
 **Fidelity profile**:
 The choice between following edition 5 exactly (original) and the accepted new-game adaptations (adapted).
+
+**Stage unit**:
+One unit of the original 700×510 stage coordinate space, in which all art and layout are placed.
+
+**Checkpoint**:
+One screen or one mode of work, finished only when its checks pass and, for UI and art, the owner accepts it.
+
+**Placeholder**:
+UI or art that the owner has not confirmed as matching the original, kept swappable behind an art slot or generated scene.
+_Avoid_: final, approved
+
+**Comparison case**:
+A scripted run with fixed seed, input and frame count, played in both the reference player and Godot and diffed.
+
+**Golden dump**:
+The committed node data recorded from the reference player for a comparison case.
 
 **Original pack**:
 The art and audio taken from the user's own SWF, kept on their machine and never committed.
@@ -102,10 +118,6 @@ The explosion produced by a bomb, covering its cell and rays in the four cardina
 
 **Soft block**:
 A breakable obstacle on the board.
-
-**Candidate art**:
-An unapproved image proposed for a visual slot, awaiting the user's manual review before any Apply to game.
-_Avoid_: approved art, final art
 
 **Magic carpet**:
 One of the four item names from the portal description. Edition 5 has no such item, and likewise no bouncer or heavy bomb.

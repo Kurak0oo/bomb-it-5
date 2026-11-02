@@ -1,6 +1,6 @@
 extends RefCounted
-## Fidelity profile (ADR 0008). `original` follows the edition 5 design exactly;
-## `adapted` keeps the accepted new-game adaptations in DESIGN.md.
+## Fidelity profile (ADR 0008, tag pre-restart). `original` follows the edition 5 design exactly;
+## `adapted` keeps the accepted new-game adaptations in DESIGN.md (tag pre-restart).
 ## The original-replica branch runs `original`; checks of an adaptation switch it off.
 
 static var original := true

@@ -1,5 +1,7 @@
 # Original-game evidence
 
+> Since the 2026-11-02 restart, links from these records to `DESIGN.md`, `docs/adr/`, `docs/specs/` and `docs/verification/` point to files kept under the `pre-restart` tag (`git show pre-restart:<path>`).
+
 The evidence starts with the hashed publisher build and separates static findings, supplied play observations, and independently checked artifacts. The Dots delivery adds source support for normal Arcade endings, conditional drops and other systems, with supplemental captures, tooling and an observed normal elimination win. A later two-frame pixel audit reconstructs the recorded first-board occupancy with one correction; runtime-state corroboration and several item identities remain open. Read the integration assessment and its newer linked records before treating imported claims as verified.
 
 ## Records

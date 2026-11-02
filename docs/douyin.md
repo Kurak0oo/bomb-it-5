@@ -1,10 +1,10 @@
 # Douyin export
 
-Export is deferred beyond the current work. The project's accepted platform and presentation choices are in [DESIGN.md](../DESIGN.md).
+Export is deferred beyond the current work. The plan is in [development.md](development.md); earlier platform choices are in `DESIGN.md` under the `pre-restart` tag.
 
 ## Inherited platform notes — verify before export
 
-These statements were carried forward from the original DESIGN.md and AGENTS.md on 2026-10-16. They have no cited official source in this repo and were not independently verified during the documentation reorganization.
+These statements were carried forward from the original DESIGN.md (now under `pre-restart`) and AGENTS.md on 2026-10-16. They have no cited official source in this repo and were not independently verified during the documentation reorganization.
 
 - The official Godot exporter lists Godot 4.5 only and rejects custom export templates.
 - WebSocket is available; TCP, UDP, WebRTC, threads, GDExtension, and C# are unavailable.

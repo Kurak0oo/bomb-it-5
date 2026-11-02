@@ -1,5 +1,5 @@
 extends RefCounted
-## Headless round and compatible ordinary-bomb slice; see DESIGN.md and runtime evidence.
+## Headless round and compatible ordinary-bomb slice; see DESIGN.md (tag pre-restart) and runtime evidence.
 
 const CommandModule = preload("res://scripts/simulation/command_boundary.gd")
 const Movement = preload("res://scripts/simulation/movement.gd")
