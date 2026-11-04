@@ -129,10 +129,17 @@ Goldens for `main-menu` (title at frame 301, menu at frame 541, 35 fps) were rec
 on the owner's Mac and checked from a machine without the SWF. The menu's buttons are
 timeline clips, not Flash buttons, so their states show as clip frames.
 
-Checkpoint 2 is in progress: render bake-off. `tools/bakeoff/bakeoff.py` renders a
-captured frame three ways at 3× (A: reference player `--scale 3`; B: FFDec SVG pieces
-placed by the golden's stage matrices, rasterised once by resvg; C: FFDec PNG pieces at 3×),
-scores each back at 1× against the reference capture, lists what B/C cannot rebuild
-(filters, blends, device-font text), and writes `sheet.png`. Verified here on Ruffle test
-SWFs; the real run happens on the owner's Mac. Hover and press captures for the menu
-buttons still need adding to the case.
+Checkpoint 2 is in progress. Owner decisions on 2026-11-04:
+
+- **Route A for the replica's art:** pieces are rendered by the reference player itself
+  (`piece PATH FILE.png` at `--scale 3`), with their masks, filters and blends. The
+  bake-off on the real menu showed FFDec-based pieces (B, C) losing masks (110 masked
+  placements in the SWF), filters and blends (56 nodes on the menu).
+- **Pixel pass line lowered, comparison kept at 1×:** SSIM ≥ 0.95 and region ΔE ≤ 8,
+  from route A's measured 0.9676 / 7.44. The owner judges the rest from the heatmap.
+
+The display dump now records mask relationships (`clip_depth`, `mask`, `scroll_rect`)
+and filter-inclusive `render_bounds`; goldens derive `clip_mask`, and the node diff
+requires all three mask fields to match. The `main-menu` goldens predate this and must
+be re-recorded on the owner's Mac. Next: the display-list → Godot scene converter for
+the title screen and the main menu, then hover and press captures for the menu buttons.

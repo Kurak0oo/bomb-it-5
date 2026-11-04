@@ -1,20 +1,33 @@
+diff --git a/core/src/display_object.rs b/core/src/display_object.rs
+index 0904753c..22a23fff 100644
+--- a/core/src/display_object.rs
++++ b/core/src/display_object.rs
+@@ -731,7 +731,7 @@ impl<'gc> DisplayObjectBase<'gc> {
+         self.contains_flag(DisplayObjectFlags::VISIBLE)
+     }
+ 
+-    fn set_visible(&self, value: bool) -> bool {
++    pub(crate) fn set_visible(&self, value: bool) -> bool {
+         let changed = self.visible() != value;
+         self.set_flag(DisplayObjectFlags::VISIBLE, value);
+         changed
 diff --git a/core/src/lib.rs b/core/src/lib.rs
-index d76c1cba..b9762237 100644
+index d76c1cba..c5f9bf01 100644
 --- a/core/src/lib.rs
 +++ b/core/src/lib.rs
 @@ -16,6 +16,7 @@ extern crate num_derive;
  mod avm1;
  mod avm2;
  mod avm_rng;
-+pub(crate) mod reference_display;
++pub mod reference_display;
  mod binary_data;
  pub mod bitmap;
  mod character;
 diff --git a/core/src/player.rs b/core/src/player.rs
-index 295bcb48..c2c02a72 100644
+index 295bcb48..9d22fcc5 100644
 --- a/core/src/player.rs
 +++ b/core/src/player.rs
-@@ -2327,6 +2327,11 @@ impl Player {
+@@ -2327,6 +2327,21 @@ impl Player {
          })
      }
  
@@ -23,22 +36,35 @@ index 295bcb48..c2c02a72 100644
 +        self.mutate_with_update_context(crate::reference_display::dump)
 +    }
 +
++    /// Research-only: hide everything but one display-list path, for an isolated render.
++    pub fn reference_isolate(&mut self, path: &str) -> Result<crate::reference_display::ReferencePiece, String> {
++        self.mutate_with_update_context(|context| crate::reference_display::isolate(context, path))
++    }
++
++    /// Research-only: undo `reference_isolate`.
++    pub fn reference_restore(&mut self, piece: crate::reference_display::ReferencePiece) {
++        self.mutate_with_update_context(|context| crate::reference_display::restore(context, piece))
++    }
++
      pub fn reference_state(&mut self, max_depth: usize, max_objects: usize) -> serde_json::Value {
          self.mutate_with_update_context(|context| {
              crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
 diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
 new file mode 100644
-index 00000000..2876ce0b
+index 00000000..6623746c
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,130 @@
-+//! Research-only display-list dump for the comparison loop. Reads native display state
-+//! only: no ActionScript getters or methods run, and nothing is written.
+@@ -0,0 +1,246 @@
++//! Research-only display-list dump for the comparison loop, and isolated piece renders.
++//! The dump reads native display state only: no ActionScript getters or methods run and
++//! nothing is written. `isolate` temporarily hides other display objects (native
++//! visibility flags only) so one piece renders alone; `restore` puts them back.
 +use crate::avm2::TObject;
 +use crate::context::UpdateContext;
 +use crate::display_object::{
-+    BoundsMode, DisplayObject, TDisplayObject, TDisplayObjectContainer,
++    BoundsMode, DisplayObject, TDisplayObject, TDisplayObjectContainer, WindowMode,
 +};
++use ruffle_render::matrix::Matrix;
 +use serde_json::{json, Value as Json};
 +
 +const MAX_NODES: usize = 20000;
@@ -85,6 +111,8 @@ index 00000000..2876ce0b
 +    let stage = context.stage;
 +    let mut nodes = Vec::new();
 +    let mut truncated = false;
++    let mut maskers = Vec::new();
++    let mut seen: Vec<(DisplayObject<'_>, String)> = Vec::new();
 +    // Depth-first in render order, so `order` is the painter's order.
 +    let mut todo: Vec<(DisplayObject<'_>, String, usize, bool)> = Vec::new();
 +    for child in stage.iter_render_list().collect::<Vec<_>>().into_iter().rev() {
@@ -127,6 +155,21 @@ index 00000000..2876ce0b
 +                json!([bounds.x_min.to_pixels(), bounds.y_min.to_pixels(), bounds.x_max.to_pixels(), bounds.y_max.to_pixels()])
 +            } else { Json::Null },
 +        });
++        if display.clip_depth() > 0 {
++            node["clip_depth"] = json!(display.clip_depth());
++        }
++        if let Some(rect) = display.scroll_rect() {
++            node["scroll_rect"] = json!([rect.x_min.to_pixels(), rect.y_min.to_pixels(),
++                rect.width().to_pixels(), rect.height().to_pixels()]);
++        }
++        let render = display.render_bounds_with_transform(&display.local_to_global_matrix(), true, &Matrix::IDENTITY);
++        if render.is_valid() {
++            node["render_bounds"] = json!([render.x_min.to_pixels(), render.y_min.to_pixels(),
++                render.x_max.to_pixels(), render.y_max.to_pixels()]);
++        }
++        if let Some(masker) = display.masker() {
++            maskers.push((nodes.len(), masker));
++        }
 +        if let Some(clip) = display.as_movie_clip() {
 +            node["frame"] = json!(clip.current_frame());
 +            node["total_frames"] = json!(clip.header_frames());
@@ -143,6 +186,7 @@ index 00000000..2876ce0b
 +        if let Some(text) = display.as_edit_text() {
 +            node["text"] = json!(text.text().to_utf8_lossy().into_owned());
 +        }
++        seen.push((display, path.clone()));
 +        nodes.push(node);
 +        if let Some(container) = display.as_container() {
 +            let children: Vec<_> = container.iter_render_list().collect();
@@ -154,6 +198,11 @@ index 00000000..2876ce0b
 +            todo.push((child, format!("{path}/@state"), depth + 1, parent_visible && visible));
 +        }
 +    }
++    // An AS3 `mask` names another display object; record it by path.
++    for (index, masker) in maskers {
++        let path = seen.iter().find(|(d, _)| DisplayObject::ptr_eq(*d, masker)).map(|(_, p)| p.clone());
++        nodes[index]["mask"] = json!(path.unwrap_or_else(|| "(off the display list)".into()));
++    }
 +    json!({
 +        "schema": "bombit5-display-list-v1",
 +        "stage": {"width": 700, "height": 510, "frame_rate": *context.frame_rate},
@@ -161,4 +210,94 @@ index 00000000..2876ce0b
 +        "truncated": truncated,
 +        "nodes": nodes,
 +    })
++}
++
++
++/// State to undo an `isolate`.
++pub struct ReferencePiece {
++    hidden: Vec<String>,
++    window_mode: WindowMode,
++    /// Render bounds of the piece in stage units (filters included): x_min, y_min, x_max, y_max.
++    pub render_bounds: [f64; 4],
++    /// The same bounds in viewport pixels (through the stage view matrix, filters scaled
++    /// as the renderer scales them).
++    pub pixel_bounds: [f64; 4],
++}
++
++fn children(display: DisplayObject<'_>) -> Vec<DisplayObject<'_>> {
++    display.as_container().map(|c| c.iter_render_list().collect()).unwrap_or_default()
++}
++
++/// The chain of display objects from a stage child to `path`, using the dump's segments.
++fn resolve<'gc>(stage: DisplayObject<'gc>, path: &str) -> Option<Vec<DisplayObject<'gc>>> {
++    let mut chain = Vec::new();
++    let mut current = stage;
++    for part in path.split('/').skip(1) {
++        let next = if part == "@state" {
++            let button = current.as_avm2_button()?;
++            button.get_state_child(button.state().into())?
++        } else {
++            children(current).into_iter().find(|c| segment(*c) == part)?
++        };
++        chain.push(next);
++        current = next;
++    }
++    (!chain.is_empty()).then_some(chain)
++}
++
++/// Hide everything that would draw besides `path`, keeping the masks that clip it.
++pub(crate) fn isolate(context: &mut UpdateContext<'_>, path: &str) -> Result<ReferencePiece, String> {
++    let stage = context.stage;
++    let chain = resolve(stage.into(), path).ok_or_else(|| format!("no display object at {path}"))?;
++    let mut hidden = Vec::new();
++    let mut parent: DisplayObject<'_> = stage.into();
++    let mut parent_path = String::new();
++    for &node in &chain {
++        if parent.as_avm2_button().is_none() {
++            for sibling in children(parent) {
++                if DisplayObject::ptr_eq(sibling, node) || !sibling.visible() {
++                    continue;
++                }
++                let clips_node = sibling.clip_depth() > 0
++                    && sibling.depth() < node.depth()
++                    && sibling.clip_depth() >= node.depth();
++                let masks_node = node.masker().is_some_and(|m| DisplayObject::ptr_eq(m, sibling));
++                if clips_node || masks_node {
++                    continue;
++                }
++                // The native flag only: `set_visible` would also drop focus, a game-visible effect.
++                sibling.base().set_visible(false);
++                parent.invalidate_cached_bitmap();
++                hidden.push(format!("{parent_path}/{}", segment(sibling)));
++            }
++        }
++        parent_path = if parent.as_avm2_button().is_some() { format!("{parent_path}/@state") } else { format!("{parent_path}/{}", segment(node)) };
++        parent = node;
++    }
++    let target = *chain.last().unwrap();
++    let b = target.render_bounds_with_transform(&target.local_to_global_matrix(), true, &Matrix::IDENTITY);
++    let view = stage.view_matrix();
++    let p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++    let window_mode = stage.window_mode();
++    stage.set_window_mode(WindowMode::Transparent);
++    Ok(ReferencePiece {
++        hidden,
++        window_mode,
++        render_bounds: [b.x_min.to_pixels(), b.y_min.to_pixels(), b.x_max.to_pixels(), b.y_max.to_pixels()],
++        pixel_bounds: [p.x_min.to_pixels(), p.y_min.to_pixels(), p.x_max.to_pixels(), p.y_max.to_pixels()],
++    })
++}
++
++pub(crate) fn restore(context: &mut UpdateContext<'_>, piece: ReferencePiece) {
++    let stage = context.stage;
++    for path in &piece.hidden {
++        if let Some(chain) = resolve(stage.into(), path) {
++            let node = *chain.last().unwrap();
++            node.base().set_visible(true);
++            if let Some(parent) = node.parent() {
++                parent.invalidate_cached_bitmap();
++            }
++        }
++    }
++    stage.set_window_mode(piece.window_mode);
 +}

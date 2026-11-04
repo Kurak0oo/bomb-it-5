@@ -76,6 +76,28 @@ class NodeDiff(unittest.TestCase):
         self.assertFalse(nodes.diff(g, godot(ref_node('/b', frame=2, button_state='up')))['passed'])
         self.assertFalse(nodes.diff(g, godot(ref_node('/b', frame=2)))['passed'])
 
+    def test_mask_relationships_must_match(self):
+        g = golden(ref_node('/m', clip_depth=3), ref_node('/a', clip_mask='/m'))
+        self.assertTrue(nodes.diff(g, godot(ref_node('/m', clip_depth=3), ref_node('/a', clip_mask='/m')))['passed'])
+        report = nodes.diff(g, godot(ref_node('/m', clip_depth=3), ref_node('/a')))
+        self.assertFalse(report['passed'])
+        self.assertIn('clip_mask', report['mismatches'][0]['problems'][0])
+        self.assertFalse(nodes.diff(g, godot(ref_node('/m'), ref_node('/a', clip_mask='/m')))['passed'])
+
+    def test_normalize_links_timeline_masks_to_the_depths_they_clip(self):
+        def raw(path, depth, **extra):
+            node = {'path': path, 'kind': 'graphic', 'depth': depth, 'effective_visible': True,
+                    'stage_matrix': [1, 0, 0, 1, 0, 0]}
+            node.update(extra)
+            return node
+        dump = {'schema': 'bombit5-display-list-v1', 'truncated': False, 'stage': {},
+                'nodes': [raw('/c', 0), raw('/c/@1', 1, clip_depth=3), raw('/c/@2', 2), raw('/c/@3', 3), raw('/c/@4', 4)]}
+        out = {n['path']: n for n in nodes.normalize_reference(dump)['nodes']}
+        self.assertEqual(out['/c/@2'].get('clip_mask'), '/c/@1')
+        self.assertEqual(out['/c/@3'].get('clip_mask'), '/c/@1')
+        self.assertNotIn('clip_mask', out['/c/@4'])
+        self.assertNotIn('clip_mask', out['/c/@1'])
+
     def test_decompose_reads_flash_matrix(self):
         angle = math.radians(30)
         m = [2 * math.cos(angle), 2 * math.sin(angle), -3 * math.sin(angle), 3 * math.cos(angle), 5, 6]
@@ -120,10 +142,10 @@ class PixelDiff(unittest.TestCase):
 
     def test_tinted_region_fails_on_colour(self):
         tinted = self.base.copy()
-        tinted[0:64, 0:64] = (60, 60, 80)
+        tinted[0:64, 0:64] = (110, 60, 80)
         result = pixels.compare(self.save('a.png', self.base), self.save('b.png', tinted), Path(self.dir.name) / 'h.png')
         self.assertFalse(result['passed'])
-        self.assertGreater(result['max_region_delta_e'], 2.0)
+        self.assertGreater(result['max_region_delta_e'], pixels.DEFAULT_THRESHOLDS['delta_e'])
         self.assertEqual((result['worst_region']['x'], result['worst_region']['y']), (0, 0))
 
     def test_shifted_content_lowers_ssim(self):

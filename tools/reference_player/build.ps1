@@ -6,7 +6,8 @@ param(
     [switch]$Events,
     [switch]$Compact,
     [switch]$Focus,
-    [switch]$Display
+    [switch]$Display,
+    [switch]$Reset
 )
 $ErrorActionPreference = 'Stop'
 $revision = '45366370ed7d1a59c89aa3cf7b765c7a274407cd'
@@ -45,6 +46,9 @@ if ($workspace -notmatch '(?m)^\s*"probe",?\s*$') {
 }
 Push-Location $Checkout
 try {
+    # -Reset returns core/ of this task-owned checkout to the pinned revision, for when a
+    # research patch changed (only exact matching patches can be reversed).
+    if ($Reset) { Invoke-Checked git @('checkout', '-q', '--', 'core'); Invoke-Checked git @('clean', '-fdq', '--', 'core') }
     $patches = @('reference-observer.patch', 'reference-fixtures.patch', 'reference-events.patch',
         'reference-compact.patch', 'reference-focus.patch', 'reference-actors.patch',
         'reference-geometry.patch', 'reference-drops.patch', 'reference-session-state.patch',

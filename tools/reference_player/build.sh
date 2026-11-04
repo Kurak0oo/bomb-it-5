@@ -3,6 +3,8 @@
 # (-Fixtures -Events -Compact -Focus -Display). Needs Rust, git and python3, plus a
 # Vulkan driver on Linux (Mesa lavapipe works headless); macOS uses Metal.
 # CHECK_ONLY=1 runs cargo check instead of building the player.
+# RESET=1 first returns core/ of this task-owned checkout to the pinned revision; use it
+# after a research patch changed, since only exact matching patches can be reversed.
 set -euo pipefail
 here="$(cd "$(dirname "$0")" && pwd)"
 checkout="${1:-$here/../../.scratch/edition-5-research/ruffle-runtime}"
@@ -36,6 +38,10 @@ if not re.search(r'(?m)^\s*"probe",?\s*$', text):
     open(path, "w").write(text)
 PY
 cd "$checkout"
+if [[ "${RESET:-0}" == 1 ]]; then
+	git checkout -q -- core
+	git clean -fdq -- core
+fi
 for ((i=${#patches[@]}-1; i>=0; i--)); do
 	if git apply --reverse --check --ignore-space-change "$here/${patches[$i]}.patch" 2>/dev/null; then
 		git apply --reverse --ignore-space-change "$here/${patches[$i]}.patch"

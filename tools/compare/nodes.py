@@ -15,7 +15,11 @@ DEFAULT_TOLERANCES = {
 
 GOLDEN_FIELDS = ('path', 'kind', 'class', 'character_id', 'depth', 'name', 'effective_visible',
                  'alpha', 'stage_matrix', 'stage_bounds', 'frame', 'total_frames', 'label',
-                 'button_state', 'text', 'color_transform', 'blend_mode', 'filters')
+                 'button_state', 'text', 'color_transform', 'blend_mode', 'filters',
+                 'clip_depth', 'mask', 'scroll_rect', 'render_bounds')
+# Mask relationships must match exactly: which node is a timeline mask (clip_depth),
+# which sibling mask clips a node (clip_mask), and which node an AS3 `mask` names.
+MASK_FIELDS = ('clip_depth', 'clip_mask', 'mask')
 
 
 def _round(value, places=4):
@@ -37,6 +41,16 @@ def normalize_reference(dump):
     nodes = []
     for node in dump['nodes']:
         nodes.append({k: _round(node[k]) for k in GOLDEN_FIELDS if node.get(k) is not None})
+    # A timeline mask (clip_depth N at depth d) clips its siblings at depths d+1..N.
+    by_parent = {}
+    for node in nodes:
+        by_parent.setdefault(node['path'].rsplit('/', 1)[0], []).append(node)
+    for siblings in by_parent.values():
+        masks = [n for n in siblings if n.get('clip_depth')]
+        for node in siblings:
+            for mask in masks:
+                if mask['depth'] < node.get('depth', 0) <= mask['clip_depth']:
+                    node['clip_mask'] = mask['path']
     return {'schema': 'bombit5-golden-nodes-v1', 'stage': dump['stage'], 'nodes': nodes}
 
 
@@ -93,6 +107,9 @@ def diff(golden, godot, tolerances=None):
                 worst[key] = max(worst[key], value)
                 if value > tol[key] + 1e-12:
                     problems.append(f'{key} off by {value:.4g} (tolerance {tol[key]:.4g})')
+            for key in MASK_FIELDS:
+                if ref.get(key) != got.get(key):
+                    problems.append(f'{key} {got.get(key)!r} != {ref.get(key)!r}')
             for key in ('frame', 'button_state', 'text'):
                 if key in ref and key in got and ref[key] != got[key]:
                     problems.append(f'{key} {got[key]!r} != {ref[key]!r}')

@@ -212,6 +212,33 @@ fn main() -> Result<()> {
                 let list = player.lock().unwrap().reference_display_list();
                 std::fs::write(t[1], serde_json::to_vec(&list)?)?;
             }
+            #[cfg(feature = "reference-display")]
+            "piece" => {
+                // One display-list path rendered alone (its masks, filters and blends
+                // included) on a transparent stage, cropped to its render bounds.
+                let piece = player.lock().unwrap().reference_isolate(t[1]).map_err(|e| anyhow!(e))?;
+                let (bounds, px) = (piece.render_bounds, piece.pixel_bounds);
+                let rendered = {
+                    let mut pl = player.lock().unwrap();
+                    pl.render();
+                    let r = <dyn Any>::downcast_mut::<WgpuRenderBackend<TextureTarget>>(pl.renderer_mut()).unwrap();
+                    r.capture_frame()
+                };
+                player.lock().unwrap().reference_restore(piece);
+                let img = rendered.ok_or(anyhow!("no frame"))?;
+                let x0 = (px[0].floor().max(0.0) as u32).min(w);
+                let y0 = (px[1].floor().max(0.0) as u32).min(h);
+                let x1 = (px[2].ceil().max(0.0) as u32).min(w);
+                let y1 = (px[3].ceil().max(0.0) as u32).min(h);
+                let crop = image::imageops::crop_imm(&img, x0, y0, (x1 - x0).max(1), (y1 - y0).max(1)).to_image();
+                crop.save(t[2])?;
+                std::fs::write(format!("{}.json", t[2]), serde_json::to_vec(&serde_json::json!({
+                    "path": t[1], "scale": scale, "render_bounds": bounds,
+                    "pixel_origin": [x0, y0], "pixel_size": [crop.width(), crop.height()],
+                    "pixel_bounds": px,
+                    "clipped_by_viewport": px[0] < 0.0 || px[1] < 0.0 || px[2] > w as f64 || px[3] > h as f64,
+                }))?)?;
+            }
             "shot" => shot(&player, t[1])?,
             "kd" => ev(PlayerEvent::KeyDown { key: key(t[1])? }),
             "ku" => ev(PlayerEvent::KeyUp { key: key(t[1])? }),

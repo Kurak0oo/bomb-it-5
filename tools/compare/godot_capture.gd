@@ -7,7 +7,8 @@ extends SceneTree
 ## Nodes are dumped only where a generated scene marks them with the `swf_path` meta (the
 ## reference player's display-list path). Optional metas: `swf_baked` (the node draws its
 ## whole SWF subtree, so reference descendants are not expected), `swf_kind`,
-## `swf_frame`, `swf_button_state`, `swf_text`.
+## `swf_frame`, `swf_button_state`, `swf_text`, and the mask relationships
+## `swf_clip_depth`, `swf_clip_mask`, `swf_mask` (paths, as in the golden).
 
 const STAGE := Vector2i(700, 510)
 
@@ -85,7 +86,7 @@ func _dump(node: Node, dump: Dictionary) -> void:
 					"effective_visible": item.is_visible_in_tree(),
 					"alpha": item.modulate.a * item.self_modulate.a,
 					"stage_matrix": [t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y]}
-				for key in ["frame", "button_state", "text"]:
+				for key in ["frame", "button_state", "text", "clip_depth", "clip_mask", "mask"]:
 					if item.has_meta("swf_" + key): entry[key] = item.get_meta("swf_" + key)
 				if not entry.has("frame") and item is AnimatedSprite2D:
 					entry.frame = (item as AnimatedSprite2D).frame + 1

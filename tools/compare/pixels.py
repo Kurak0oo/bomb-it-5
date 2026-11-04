@@ -2,13 +2,16 @@
 
 "Highly alike", not identical: Ruffle and Godot antialias differently, so the score is a
 structural similarity over the whole frame plus a check that no region's average colour
-is visibly off. Colour difference is CIE76 ΔE on CIELAB (about 2.3 is a just-noticeable
-difference).
+is clearly off. Colour difference is CIE76 ΔE on CIELAB (about 2.3 is a just-noticeable
+difference; the default line of 8 allows the antialiasing differences of a 3×→1× render).
 """
 import numpy as np
 from PIL import Image
 
-DEFAULT_THRESHOLDS = {'ssim': 0.98, 'delta_e': 2.0, 'region': 16}
+# Set from the route A bake-off on the real main menu (2026-11-04): Ruffle at 3× scaled to
+# 1× scored SSIM 0.9676 and max region ΔE 7.44 against the 1× reference, so a correct
+# render passes with some margin. The owner judges the rest from the heatmap.
+DEFAULT_THRESHOLDS = {'ssim': 0.95, 'delta_e': 8.0, 'region': 16}
 
 
 def load(path):

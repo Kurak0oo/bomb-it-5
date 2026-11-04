@@ -64,10 +64,11 @@ Protocol (one command per line):
 - `step N`: preload, run one frame, then update timers by `1000/frame_rate` milliseconds, N times.
 - `kd KEY` / `ku KEY`: deliver one key-down/up between frames; no synthesized repeat.
 - `click X Y`, `move X Y`: pointer input in the 700×510 viewport.
-- `shot FILE.png`: render and synchronously save the complete viewport.
+- `shot FILE.png`: render and synchronously save the complete viewport. Start the player with `--scale N` to render the 700×510 stage at N× (input coordinates stay in stage units).
 - `cap DIR` / `cap off`: render/capture every stepped frame.
 - `state FILE.json`: bounded native slot graph, available with the observer feature.
-- `display FILE.json`: the stage display list for the comparison loop (`-Display` / `build.sh`): per node its path (instance name, or `@depth` for unnamed and auto-named children; a button's shown state is `<button>/@state`), kind, class, character id, visibility, alpha, colour transform, local and stage matrices, stage bounds, clip frame/label, button state and text.
+- `display FILE.json`: the stage display list for the comparison loop (`-Display` / `build.sh`): per node its path (instance name, or `@depth` for unnamed and auto-named children; a button's shown state is `<button>/@state`), kind, class, character id, visibility, alpha, colour transform, local and stage matrices, stage bounds, clip frame/label, button state and text, plus mask relationships (`clip_depth` for timeline masks, `mask` naming an AS3 mask by path, `scroll_rect`) and `render_bounds` (stage units, filter spread included).
+- `piece PATH FILE.png`: render one display-list path alone at the player's `--scale`, with its own masks, filters and blends, on a transparent stage, cropped to its render bounds; `FILE.png.json` records the bounds and pixel origin. Other objects are hidden through native visibility flags only and restored afterwards (no ActionScript runs, focus is untouched).
 - `trace DIR` / `trace off`: save a state graph after each stepped frame.
 - `compact FILE.json`, `trace-compact DIR` / `trace-compact off`: omit native painting trees, retaining logical objects and directly referenced animation frame numbers. `--observe --compact` selects compact snapshots in the driver.
 - `focus FILE.json`, `trace-focus DIR` / `trace-focus off`: explicit game/actor/AI/callback/cell/bomb/map-feature projection (`platforms`: each `maps.platform` object a Grid slot references) with physical-slot layouts, available with `-Focus`. `--observe --focus` selects this mode. An expensive initial full-graph bootstrap is explicitly marked.
