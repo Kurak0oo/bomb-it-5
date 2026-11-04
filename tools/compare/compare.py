@@ -62,6 +62,15 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def reference_sha256(case_path):
+    """Hash of what the reference player runs: Godot-only fields (godot_*) and Godot-only
+    actions (only godot_* fields) may change freely."""
+    case = json.loads(Path(case_path).read_text(encoding='utf-8'))
+    strip = lambda a: {k: v for k, v in a.items() if not k.startswith('godot_')}
+    case = dict(strip(case), actions=[strip(a) for a in case['actions'] if strip(a)])
+    return hashlib.sha256(json.dumps(case, sort_keys=True).encode()).hexdigest()
+
+
 def record(name, player, swf):
     from replay_reference import ReferenceSession, SWF_SHA256
     case_path, case, captures = load_case(name)
@@ -84,6 +93,8 @@ def record(name, player, swf):
         ok = False
         try:
             for action in case['actions']:
+                if 'fixture' in action:
+                    session.fixture(action['fixture'])
                 if 'command' in action:
                     fps = session.command(action['command'])['fps_setting']
                 if 'capture' in action:
@@ -101,7 +112,7 @@ def record(name, player, swf):
         golden = nodes.normalize_reference(dump)
         golden['frame'] = frames[capture]
         (target / f'{capture}.json').write_text(json.dumps(golden, indent=1, sort_keys=True) + '\n', encoding='utf-8')
-    meta = {'case': name, 'case_sha256': sha256(case_path), 'swf_sha256': sha256(swf),
+    meta = {'case': name, 'case_sha256': reference_sha256(case_path), 'swf_sha256': sha256(swf),
             'player_sha256': sha256(player), 'fps': fps, 'frames': frames,
             'note': 'Recorded by tools/compare/compare.py record; regenerate rather than edit.'}
     (target / 'meta.json').write_text(json.dumps(meta, indent=1, sort_keys=True) + '\n', encoding='utf-8')
@@ -177,7 +188,7 @@ def check(name, godot):
     if not meta_path.is_file():
         raise SystemExit(f'No goldens for {name}; run `compare.py record {name}` on a machine with the SWF')
     meta = json.loads(meta_path.read_text(encoding='utf-8'))
-    if meta['case_sha256'] != sha256(case_path):
+    if meta['case_sha256'] not in (reference_sha256(case_path), sha256(case_path)):
         raise SystemExit(f'{name}: the case changed since its goldens were recorded; record again')
     floor_path = golden_dir / 'floor.json'
     floor = json.loads(floor_path.read_text(encoding='utf-8')) if floor_path.is_file() else {}

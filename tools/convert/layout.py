@@ -65,19 +65,114 @@ SCREENS = {
                              'cinemaStages', 'weddingStages', 'mysteriousStages', 'caveStages'),
                  'extra': {'dropdown': ['showMenu']},
                  'states': False},
+    # CharacterSelectUI + ClothesPanel (scripts/ui/character_select_ui.gd, clothes_panel.gd).
+    # Each robot's display (robotStage1/robotMc/robot<N>) and clothes panel
+    # (Art_clothPanel<N>, made from the library when the robot is chosen) come from the
+    # capture with that robot selected.
+    'character': {'golden': ('character-select', 'char0'), 'root_class': 'UI_SELECTCHARACTER',
+                  'controller': 'character_select_ui',
+                  'class_segments': ('Art_clothPanel',),
+                  'interactive': {n: n for n in (
+                      [f'robotIcon{i}' for i in range(8)] + ['startBtn', 'backBtn', 'setAvatarBt', 'robotStage1',
+                      'robotStage2'] + [f'icon{i}' for i in range(1, 7)] + [f'hat{i}' for i in range(1, 7)])},
+                  'optional_interactive': tuple([f'icon{i}' for i in range(1, 7)] + [f'hat{i}' for i in range(1, 7)]),
+                  'widgets': tuple([f'robotIcon{i}' for i in range(8)] + ['startBtn', 'backBtn', 'setAvatarBt',
+                      'robotStage1', 'robotStage2', 'bodyMc', 'hatMc'] + [f'icon{i}' for i in range(1, 7)]
+                      + [f'hat{i}' for i in range(1, 7)]),
+                  'extra': {f'char{n}': [f'robotStage1/robotMc/robot{n}', f'class:Art_clothPanel{n}'] for n in range(1, 8)},
+                  'states': False},
+    # HowToPlayUI (scripts/ui/how_to_play_ui.gd): buttons, the message clip's frames and the
+    # 1P key caps, live TextFields that are clicked to rebind.
+    'controls': {'golden': ('how-to-play', 'controls'), 'root_class': 'UI_CONTROLS',
+                 'controller': 'how_to_play_ui',
+                 'interactive': {n: n for n in ('back', 'powerUps', 'defaule', 'save', 'onePOneUp', 'onePOneLeft',
+                                                'onePOneDown', 'onePOneRight', 'onePOneBomb')},
+                 'widgets': ('back', 'powerUps', 'defaule', 'save', 'messenge'),
+                 'live_text': ('onePOneUp', 'onePOneLeft', 'onePOneDown', 'onePOneRight', 'onePOneBomb'),
+                 'states': False},
+    # PowerUpsUI (scripts/ui/power_ups_ui.gd).
+    'powerups': {'golden': ('how-to-play', 'powerups'), 'root_class': 'UI_POWER_UPS',
+                 'controller': 'power_ups_ui',
+                 'interactive': {n: n for n in ('back', 'controls')},
+                 'widgets': ('back', 'controls'),
+                 'states': False},
+    # OnePScoreUI on PlayerScoreUI (scripts/ui/one_p_score_ui.gd, player_score_ui.gd): the
+    # one-player score screen. win-score (level complete, NEXT) is the main capture. The
+    # failed title (levelTitle frame 2 shows title4) comes from loss-score; RESTART is hidden
+    # at win-score, so its frames are drawn at loss-score, where it shows (art_from). The
+    # unlock tip (UnlockTipScreen, class UI_UNLOCK_TIP) is a clip the controller adds to this
+    # screen's own clip (`__pmc.addChild`), so it is a part of this screen from the unlock-tip
+    # capture, with the tip's clothes panel and unlock bursts (Art_clothPanel0,
+    # Art_unlockAnimas, made from the library) addressed by class. Only robot 0's looks are
+    # recorded on the tip (the case plays robot 0). MORE GAMES and the publisher logos
+    # (__id12_) are original parts of this screen; no owner edit covers them yet.
+    'score': {'golden': ('results', 'win-score'), 'root_class': 'UI_LEVEL_COMPLETED_ONEP',
+              'controller': 'one_p_score_ui',
+              'class_segments': ('UI_UNLOCK_TIP', 'Art_clothPanel', 'Art_unlockAnimas'),
+              'interactive': {n: n for n in (
+                  ['nextLevel', 'restartBtn', 'dressUpBtn', 'moregames', 'okBt', 'robotBtn1']
+                  + [f'icon{i}' for i in range(1, 7)] + [f'hat{i}' for i in range(1, 7)])},
+              'optional_interactive': tuple([f'icon{i}' for i in range(1, 7)] + [f'hat{i}' for i in range(1, 7)]),
+              'widgets': tuple(['nextLevel', 'restartBtn', 'dressUpBtn', 'moregames', 'bonus_txt', 'modePic',
+                                'text_mode', 'okBt', 'robotBtn1', 'bodyMc', 'hatMc']
+                               + [f'icon{i}' for i in range(1, 7)] + [f'hat{i}' for i in range(1, 7)]),
+              'live_text': ('kill', 'time', 'difficulity', 'levelScore', 'total', 'LevelOver_1', 'LevelOver_2',
+                            'scoreText'),
+              'extra': {'unlock-tip': ['class:UI_UNLOCK_TIP'], 'loss-score': ['title/title4']},
+              'art_from': {'loss-score': ['restartBtn']},
+              # Godot opens this screen itself (a dev launch with the recorded points), at
+              # the timeline index each capture was taken at.
+              'capture_phase': ('unlock-tip', 'win-score', 'loss-score'),
+              'states': False},
 }
 
 EDITS = Path(__file__).resolve().parent / 'owner_edits.json'
 # Flash blend modes the screen reproduces (scripts/ui/swf_blend.gdshader).
 BLENDS = ('Multiply', 'Screen', 'Lighten', 'Darken', 'Difference', 'Add', 'Subtract', 'Overlay', 'HardLight')
 
-CARRIED = ('kind', 'name', 'class', 'depth', 'character_id', 'effective_visible', 'alpha',
+CARRIED = ('golden_path', 'kind', 'name', 'class', 'depth', 'character_id', 'effective_visible', 'alpha',
            'stage_matrix', 'stage_bounds', 'render_bounds', 'frame', 'total_frames', 'label',
-           'button_state', 'text', 'clip_depth', 'clip_mask', 'mask', 'blend_mode', 'filters')
+           'button_state', 'text', 'text_format', 'clip_depth', 'clip_mask', 'mask', 'blend_mode', 'filters')
 
 
 def parent_of(path):
     return path.rsplit('/', 1)[0]
+
+
+def _names_path(relative):
+    """`robotStage1/robotMc@3/robot3` -> `robotStage1/robotMc/robot3` (names, depths kept for @)."""
+    return '/'.join(p if p.startswith('@') else p.split('@')[0] for p in relative.split('/'))
+
+
+def _matches(node, relative, selector):
+    """An extra-part selector: `class:<Class>`, a relative path of names, or a bare name."""
+    if selector.startswith('class:'):
+        return node.get('class') == selector[6:]
+    if '/' in selector:
+        return _names_path(relative) == selector
+    return relative.rsplit('/', 1)[-1].split('@')[0] == selector
+
+
+def _class_segments(nodes, prefixes):
+    if not prefixes:
+        return nodes
+    # Original path of each such clip -> its class, which replaces its `@depth` segment
+    # (also inside another renamed clip: the unlock tip's own clothes panel).
+    renamed = {}
+    for node in nodes:
+        last = node['path'].rsplit('/', 1)[-1]
+        if last.startswith('@') and (node.get('class') or '').startswith(prefixes):
+            renamed[node['path']] = node['class']
+    if not renamed:
+        return nodes
+    out = []
+    for node in nodes:
+        parts = node['path'].split('/')
+        new = [renamed.get('/'.join(parts[:k + 1]), parts[k]) for k in range(len(parts))]
+        if new != parts:
+            node = dict(node, path='/'.join(new), golden_path=node.get('golden_path', node['path']))
+        out.append(node)
+    return out
 
 
 def _unique_paths(nodes):
@@ -171,21 +266,33 @@ def build(name, spec):
     if len(roots) != 1:
         raise SystemExit(f'{name}: expected one root clip ({spec.get("root_class") or spec.get("root_path")}), found {len(roots)}')
     screen_root = roots[0]
-    # Parts that are off the display list at the capture (a dropdown added on demand) come
-    # from another capture of the same case; they start hidden.
+    # Unnamed clips made from the library at run time (`Attach.getSprite("Art_clothPanel3")`)
+    # all sit at the same depth; such a clip takes its class as its segment, so each is
+    # addressable. The original path stays as `golden_path` for the comparison.
+    prefixes = tuple(spec.get('class_segments', ()))
+    nodes = _class_segments(nodes, prefixes)
+    by_path = {n['path']: n for n in nodes}
+
+    # Parts that are off the display list at the capture (a dropdown added on demand, the
+    # other robots' panels) come from other captures of the same case; they start hidden.
     extra_paths = set()
-    for extra_capture, names in spec.get('extra', {}).items():
+    for extra_capture, selectors in spec.get('extra', {}).items():
         extra = _unique_paths([n for n in json.loads((GOLDENS / case / f'{extra_capture}.json').read_text(encoding='utf-8'))['nodes']
                                if n.get('kind') != 'stage'])
-        for instance in names:
+        extra = _class_segments(extra, prefixes)
+        extra_by_path = {n['path']: n for n in extra}
+        for selector in selectors:
             tops = [n['path'] for n in extra if n['path'].startswith(screen_root + '/')
-                    and n['path'].rsplit('/', 1)[-1] == instance]
+                    and _matches(n, n['path'][len(screen_root) + 1:], selector)]
             if len(tops) != 1:
-                raise SystemExit(f'{name}: {instance} not found once in the {extra_capture} capture')
+                raise SystemExit(f'{name}: {selector} not found once in the {extra_capture} capture ({len(tops)})')
+            if tops[0] in by_path:
+                continue  # already on the main capture
             for n in extra:
                 if (n['path'] == tops[0] or n['path'].startswith(tops[0] + '/')) and n['path'] not in by_path:
                     # Only the part itself starts hidden; its children show with it.
-                    n = dict(n, initially_hidden=n['path'] == tops[0], from_capture=extra_capture)
+                    n = dict(n, initially_hidden=n['path'] == tops[0], from_capture=extra_capture,
+                             parent_frame_there=extra_by_path.get(parent_of(n['path']), {}).get('frame'))
                     nodes.append(n)
                     by_path[n['path']] = n
                     extra_paths.add(n['path'])
@@ -196,7 +303,7 @@ def build(name, spec):
 
     interactive = {p: spec['interactive'][segment_name(p)] for p in by_path
                    if p.startswith(screen_root + '/') and segment_name(p) in spec['interactive']}
-    missing = set(spec['interactive']) - {segment_name(p) for p in interactive}
+    missing = set(spec['interactive']) - set(spec.get('optional_interactive', ())) - {segment_name(p) for p in interactive}
     if missing:
         raise SystemExit(f'{name}: interactive instances not in the golden: {sorted(missing)}')
 
@@ -205,7 +312,12 @@ def build(name, spec):
     while path:
         expanded.add(path)
         path = parent_of(path)
-    for p in interactive:
+    # Interactive instances, widgets and parts from other captures each stay their own
+    # node, so every group above them is split.
+    keep = set(interactive) | {p for p in by_path if p.startswith(screen_root + '/')
+                               and segment_name(p) in tuple(spec.get('widgets', ())) + tuple(spec.get('live_text', ()))}
+    keep |= {p for p in extra_paths if by_path[p].get('initially_hidden')}
+    for p in keep:
         q = parent_of(p)
         while q.startswith(screen_root):
             expanded.add(q)
@@ -231,16 +343,26 @@ def build(name, spec):
     states_path = GOLDENS / case / f'{capture}.states.json'
     states = json.loads(states_path.read_text(encoding='utf-8'))['states'] if states_path.is_file() else {}
     sequences = {}
-    if timeline is not None:
+    # Parts from other captures loop on their own timeline (record_screen.py timeline).
+    extra_timelines = {c: Timeline.load(GOLDENS / case / f'{c}.timeline.json') for c in spec.get('extra', {})}
+
+    def tl(path):
+        node = by_path.get(path, {})
+        return extra_timelines.get(node['from_capture']) if node.get('from_capture') else timeline
+
+    def key(path):
+        return by_path.get(path, {}).get('golden_path', path)
+
+    if timeline is not None or any(extra_timelines.values()):
         # Animation decides how far groups are split: a part whose inside changes is split
         # into its children while they stay the same; otherwise it is a frame sequence.
         queue = [n['path'] for n in nodes if parent_of(n['path']) in expanded and n['path'] not in expanded]
         while queue:
             path = queue.pop(0)
             node = by_path.get(path, {})
-            if node.get('clip_depth'):
+            if node.get('clip_depth') or tl(path) is None:
                 continue
-            looks = timeline.look_changes(path)
+            looks = tl(path).look_changes(key(path))
             if not looks:
                 continue
             if path in interactive:
@@ -249,22 +371,49 @@ def build(name, spec):
                 sequences[path] = looks
                 continue
             kids = [p for p in by_path if parent_of(p) == path]
-            if kids and timeline.children_stable(path):
+            # A group Flash composites on its own (filters or a blend: p2head's outline)
+            # cannot be split without losing that pass; it plays as a sequence.
+            composites = node.get('filters') or node.get('blend_mode', 'Normal') != 'Normal'
+            # Its own colour tween is baked into its art (pieces render with their
+            # ancestors' colour), so it plays as rendered frames too.
+            composites = composites or tl(path).colour_changes(key(path))
+            if kids and not composites and tl(path).children_stable(key(path)):
                 expanded.add(path)
                 queue += kids
             else:
                 sequences[path] = looks
 
-    layout_nodes, warnings = [], []
+    # A widget that is also a group (robotStage1: highlight frames behind a robot) draws its
+    # frames as art without the parts laid out inside it; its other children are that art.
+    group_widgets = {p for p in expanded if p.startswith(screen_root + '/') and segment_name(p) in spec.get('widgets', ())
+                     and (by_path[p].get('total_frames') or 1) > 1}
+    # A widget hidden at the main capture (RESTART after a win) cannot be rendered there:
+    # its frames are rendered at another capture of the case where it shows.
+    art_from = {}
+    for other, names in spec.get('art_from', {}).items():
+        shown = {n['path'] for n in _class_segments(_unique_paths(json.loads(
+            (GOLDENS / case / f'{other}.json').read_text(encoding='utf-8'))['nodes']), prefixes) if n.get('effective_visible')}
+        for p in by_path:
+            if p.startswith(screen_root + '/') and segment_name(p) in names and not by_path[p].get('from_capture'):
+                if p not in shown:
+                    raise SystemExit(f'{name}: {p} does not show at the {other} capture either')
+                art_from[p] = other
+    layout_nodes, warnings, covered = [], [], {}
     for node in nodes:
         path = node['path']
         parent = parent_of(path)
         if path not in expanded and parent not in expanded and parent != '':
             continue  # inside a piece
+        if parent in group_widgets and path not in expanded:
+            covered.setdefault(parent, []).append(node.get('golden_path', path))
+            continue  # drawn by its group's frame art
         entry = {'path': path, 'parent': parent}
         entry.update({k: node[k] for k in CARRIED if k in node})
-        if timeline is not None and timeline.changes(path):
-            entry['track'] = timeline.tracks[path]
+        own = tl(path)
+        if own is not None and own.changes(key(path)):
+            entry['track'] = own.tracks[key(path)]
+        if own is not None and node.get('from_capture'):
+            entry['timeline_of'] = node['from_capture']
         if path in expanded:
             entry['role'] = 'group'
         elif node.get('clip_depth'):
@@ -272,9 +421,9 @@ def build(name, spec):
         elif path in sequences:
             entry['role'] = 'sequence'
             entry['baked'] = True
-            present = [i for i in range(timeline.frames) if (timeline.state(path, i) or [0] * 9)[6]]
+            present = [i for i in range(own.frames) if (own.state(key(path), i) or [0] * 9)[6]]
             # Art where the look changes, plus where it first shows and at the capture.
-            points = set(sequences[path]) | {timeline.data['capture_index']} | ({present[0]} if present else set())
+            points = set(sequences[path]) | {own.data['capture_index']} | ({present[0]} if present else set())
             entry['art_frames'] = sorted(i for i in points if i in set(present))
         else:
             entry['role'] = 'piece'
@@ -283,14 +432,24 @@ def build(name, spec):
                                                         'Difference', 'Add', 'Subtract', 'Overlay', 'HardLight'):
                 warnings.append(f'{path}: piece blends ({node["blend_mode"]}) with what lies below, in a mode '
                                 'the screen cannot reproduce; rendered alone it will look different')
+        if node.get('parent_frame_there'):
+            entry['parent_frame'] = node['parent_frame_there']
+        elif parent in by_path and by_path[parent].get('frame'):
+            # The parent's frame when this node was recorded: a clip's timeline shows
+            # different children per frame (robotMc shows robot<N> on frame N+1).
+            entry['parent_frame'] = by_path[parent]['frame']
         if node.get('from_capture'):
             entry['from_capture'] = node['from_capture']
             if node.get('initially_hidden'):
                 entry['initially_hidden'] = True
+        if path in group_widgets:
+            entry['frames_hide'] = [by_path[p].get('golden_path', p) for p in expanded if parent_of(p) == path]
         if segment_name(path) in spec.get('widgets', ()) and (node.get('total_frames') or 1) > 1:
             # Every frame of a widget clip is rendered (selected, disabled, …): its screen
             # controller shows them with set_frame, as the AS3 does with gotoAndStop.
             entry['widget_frames'] = list(range(1, int(node['total_frames']) + 1))
+        if path in art_from:
+            entry['art_from'] = art_from[path]
         if path in interactive:
             entry['action'] = interactive[path]
             if path in states:
@@ -299,11 +458,27 @@ def build(name, spec):
                 # original's MOUSE_DOWN handlers do (no press frame could be recorded).
                 if states[path].get('kind') == 'button':
                     entry['states']['acts_on'] = 'press' if states[path].get('press') is None else 'release'
-        if timeline is not None and entry.get('role') == 'piece' and not node.get('effective_visible'):
-            first = timeline.first_visible(path)
+        if own is not None and entry.get('role') == 'piece' and not node.get('effective_visible'):
+            first = own.first_visible(key(path))
             if first is not None:
                 entry['first_visible'] = first
         layout_nodes.append(entry)
+    for e in layout_nodes:
+        if e['path'] in covered:
+            e['covers'] = covered[e['path']]
+    # A parent frame matters only where the children of one clip were recorded on different
+    # frames of it (robotMc's robots): those follow the parent's frame instead of starting
+    # hidden. Elsewhere the parent frame is dropped.
+    by_parent = {}
+    for e in layout_nodes:
+        if 'parent_frame' in e:
+            by_parent.setdefault(e['parent'], set()).add(e['parent_frame'])
+    for e in layout_nodes:
+        if 'parent_frame' in e:
+            if len(by_parent.get(e['parent'], ())) > 1:
+                e.pop('initially_hidden', None)
+            else:
+                del e['parent_frame']
     layout_nodes, edits = _apply_owner_edits(name, screen_root, layout_nodes, by_path)
     # A visible node with no bounds draws nothing (an empty sprite: char 295 in the title
     # screen is one frame with zero placements). Asking the reference player for such a
@@ -317,6 +492,7 @@ def build(name, spec):
             pieces.append(n['path'])
         else:
             warnings.append(f'{n["path"]}: no bounds at this frame (empty clip); not rendered as a piece')
+    phases = _capture_phases(spec, case, timeline, screen_root) if timeline is not None else None
     return {
         'schema': 'bombit5-swf-layout-v1',
         'screen': name,
@@ -330,10 +506,83 @@ def build(name, spec):
         'warnings': warnings,
         'owner_edits': edits,
         'controller': spec.get('controller'),
-        'timeline': None if timeline is None else {
-            k: timeline.data[k] for k in ('opened_frame', 'opened_after_input', 'capture_index', 'period', 'period_capped')},
+        'extra_timelines': _extra_shown_before(spec, case, extra_timelines, phases),
+        'timeline': None if timeline is None else dict(
+            {k: timeline.data[k] for k in ('opened_frame', 'opened_after_input', 'capture_index', 'period', 'period_capped')},
+            **({'capture_index_of': phases} if phases else {})),
         'nodes': layout_nodes,
     }
+
+
+def _capture_phases(spec, case, timeline, screen_root):
+    """For a screen the comparison opens itself (`capture_phase` in the spec: the score
+    screen, which Godot cannot reach by playing a round), the timeline index at which each
+    of the case's captures of it was taken: the index whose recorded clip frames,
+    visibility and positions agree best with that capture's golden. A wall-time screen
+    (the original's tweens run on the clock) opens at a slightly different frame in every
+    recording, so the index is read from the golden itself rather than from the run."""
+    captures = spec.get('capture_phase')
+    if not captures:
+        return None
+    phases = {}
+    for capture in captures:
+        index, off, moving = _best_index(timeline, _golden_under(case, capture, screen_root))
+        phases[capture] = index
+        if off:
+            print(f'  note: {capture} matches timeline index {index} but for {off}/{moving} moving nodes')
+    return phases
+
+
+def _golden_under(case, capture, prefix):
+    return {n['path']: n for n in json.loads((GOLDENS / case / f'{capture}.json').read_text(encoding='utf-8'))['nodes']
+            if n['path'].startswith(prefix)}
+
+
+def _best_index(timeline, golden):
+    """The timeline index whose moving nodes agree best with a golden: (index, nodes off, moving)."""
+    moving = [p for p in timeline.tracks if timeline.changes(p) and p in golden]
+    best = (0, len(moving))
+    for i in range(timeline.frames):
+        off = 0
+        for p in moving:
+            state, ref = timeline.state(p, i), golden[p]
+            m = ref.get('stage_matrix') or [1, 0, 0, 1, 0, 0]
+            if (not state or bool(state[6]) != bool(ref.get('effective_visible')) or (state[7] or 0) != (ref.get('frame') or 0)
+                    or abs(state[4] - m[4]) > 0.5 or abs(state[5] - m[5]) > 0.5):
+                off += 1
+        if off < best[1]:
+            best = (i, off)
+    return best[0], best[1], len(moving)
+
+
+def _extra_shown_before(spec, case, extra_timelines, phases):
+    """A part from another capture plays on its own timeline, from that capture's run
+    (`from_shown`: index 0 is the frame it shows; older recordings start at the capture).
+    With capture phases, the part's run is matched to the golden too (its index L at the
+    capture); the part shows with the screen (the unlock tip and the failed title are made
+    in the score screen's initData), so its timeline runs `shown_offset` = L - phase frames
+    ahead of the frames it has shown in Godot."""
+    out = {}
+    for c, x in extra_timelines.items():
+        if x is None:
+            continue
+        entry = {k: x.data[k] for k in ('period', 'shown_before_capture')}
+        if x.data.get('from_shown'):
+            entry.update(from_shown=True, capture_index=x.data['capture_index'])
+        if phases and c in phases:
+            tops = tuple(x.data.get('tops', ()))
+            golden = {p: n for p, n in _golden_under(case, c, '/').items() if p.startswith(tops)}
+            local, off, moving = _best_index(x, golden)
+            if not moving:
+                pass  # a part that does not change has no phase to match
+            elif x.data.get('from_shown'):
+                entry['shown_offset'] = local - phases[c]
+            else:
+                entry['shown_before_capture'] = phases[c] - local
+            if off:
+                print(f'  note: the {c} part matches its timeline at {local} but for {off}/{moving} moving nodes')
+        out[c] = entry
+    return out
 
 
 def main():

@@ -21,7 +21,12 @@ func remove(instance: String, kind: StringName, handler: Callable) -> void:
 	list.erase(handler)
 
 
+## `instance` is the address relative to the screen root; listeners on the bare instance
+## name hear it too (a top-level `arcadeMode`, or `cinemaStages` inside the dropdown).
 func dispatch(instance: String, kind: StringName) -> void:
+	var name := instance.get_slice("/", instance.get_slice_count("/") - 1)
 	# A copy: handlers may add or remove listeners while running, as in AS3.
-	for handler: Callable in (_table.get(instance + ":" + kind, []) as Array).duplicate():
-		handler.call(instance)
+	var handlers: Array = (_table.get(instance + ":" + kind, []) as Array).duplicate()
+	if name != instance: handlers += (_table.get(name + ":" + kind, []) as Array).duplicate()
+	for handler: Callable in handlers:
+		handler.call(instance if _table.get(instance + ":" + kind, []).has(handler) else name)

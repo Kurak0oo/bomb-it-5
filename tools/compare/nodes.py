@@ -16,7 +16,7 @@ DEFAULT_TOLERANCES = {
 GOLDEN_FIELDS = ('path', 'kind', 'class', 'character_id', 'depth', 'name', 'effective_visible',
                  'alpha', 'stage_matrix', 'stage_bounds', 'frame', 'total_frames', 'label',
                  'button_state', 'text', 'color_transform', 'blend_mode', 'filters',
-                 'clip_depth', 'mask', 'scroll_rect', 'render_bounds')
+                 'clip_depth', 'mask', 'scroll_rect', 'render_bounds', 'text_format')
 # Mask relationships must match exactly: which node is a timeline mask (clip_depth),
 # which sibling mask clips a node (clip_mask), and which node an AS3 `mask` names.
 MASK_FIELDS = ('clip_depth', 'clip_mask', 'mask')
@@ -101,12 +101,19 @@ def diff(golden, godot, tolerances=None):
     actual = {}
     for node in godot['nodes']:
         if node['path'] in actual:
-            raise ValueError(f'duplicate swf_path in Godot scene: {node["path"]}')
+            # Alternatives that share an original path (each robot's panel at the same depth)
+            # are fine while at most one shows; that one is compared.
+            if actual[node['path']].get('effective_visible') and node.get('effective_visible'):
+                raise ValueError(f'duplicate swf_path in Godot scene: {node["path"]}')
+            if not node.get('effective_visible'):
+                continue
         actual[node['path']] = node
     baked = [p for p, n in actual.items() if n.get('baked')]
+    # Parts a group widget draws in its frame art (robotStage1's highlight shapes).
+    drawn = [c for n in actual.values() for c in n.get('covers', ())]
 
     def covered(path):
-        return any(path.startswith(b + '/') for b in baked)
+        return any(path.startswith(b + '/') for b in baked) or any(path == c or path.startswith(c + '/') for c in drawn)
 
     required = [p for p, n in reference.items() if n.get('kind') != 'stage' and not covered(p)]
     # Hidden reference nodes only need checking when Godot builds them too.

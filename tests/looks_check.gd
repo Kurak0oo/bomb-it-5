@@ -33,28 +33,37 @@ func _run() -> void:
 	await _click(_find("startGame"))
 	await app.screen_opened()
 	await _click(_find("confirm"))
-	_expect(_find("Look1") != null and _find("Look1").disabled, "a fresh save shows every look locked")
-	_expect(_find_text("2500 PTS") != null, "locked looks show their unlock score")
-	await _click(_find("StartGame"))
+	await app.screen_opened()
+	var swf = app.screen.get_child(0)
+	# ClothesPanel: frame 1 is an unlocked look, 5 a locked one.
+	_expect(swf.get_frame("Art_clothPanel0/hat1") == 5 and swf.get_frame("Art_clothPanel0/icon1") == 5,
+		"a fresh save shows every look locked")
+	await _click(_find("startBtn"))
 	app.game.set_process(false)
 	app._on_level_settled({"outcome": &"won", "result_score": 7300, "actors": {&"human": {"lives": 3}},
 		"result_breakdown": {"kills": 0, "time": 5300, "difficulty": 2000}})
 	await process_frame
-	_expect(_find("UnlockTip") != null and _find_text("New outfit unlocked!") != null, "crossing unlock scores announces new looks")
-	_expect(_find_text("HAT 1, HAT 2") != null, "the tip names each newly unlocked look")
+	var score = app.screen.get_child(0)
+	# OnePScoreUI.unlockCloth: the tip (UnlockTipScreen) opens with its "New outfit
+	# unlocked!" line and a burst over each new look (UnlockAnimaPanel).
+	_expect(score.is_shown("UI_UNLOCK_TIP") and score.is_shown("UI_UNLOCK_TIP/containerMc/unlock_tip"),
+		"crossing unlock scores opens the unlock tip")
+	_expect(score.get_text("UI_UNLOCK_TIP/containerMc/scoreText") == "7300", "the tip shows the total score")
 	_expect(SaveStore.new(SAVE).unlocks.get("0", []) == [1, 2], "unlocks are saved at once")
-	await _click(_find("TipOk"))
-	_expect(_find("UnlockTip") == null or not _find("UnlockTip").is_visible_in_tree(), "OK closes the tip")
-	await _click(_find("DressUp"))
-	_expect(app.current == &"dress_up" and not _find("Look2").disabled and _find("Look3").disabled, "DRESS UP offers the unlocked looks only")
-	await _click(_find("Look2"))
+	await _click(_find("okBt"))
+	_expect(not score.is_shown("UI_UNLOCK_TIP"), "OK closes the tip")
+	await _click(_find("dressUpBtn"))
+	_expect(app.current == &"score" and score.is_shown("UI_UNLOCK_TIP"), "DRESS UP opens the tip to change looks")
+	var panel := "UI_UNLOCK_TIP/containerMc/Art_clothPanel0/"
+	_expect(score.get_frame(panel + "hat2") == 1 and score.get_frame(panel + "hat3") == 5, "DRESS UP offers the unlocked looks only")
+	await _click(_find("hat2"))
 	_expect(app.session.hat == 2, "choosing an unlocked hat wears it")
-	await _click(_find("Look2"))
+	await _click(_find("hat2"))
 	_expect(app.session.hat == 0, "choosing the worn hat again removes it")
-	await _click(_find("Look1"))
-	await _click(_find("DressDone"))
-	_expect(app.current == &"score", "OK returns to the score screen")
-	await _click(_find("Continue"))
+	await _click(_find("hat1"))
+	await _click(_find("okBt"))
+	_expect(app.current == &"score" and not score.is_shown("UI_UNLOCK_TIP"), "OK returns to the score screen")
+	await _click(_find("nextLevel"))
 	var actor: Dictionary = app.game.get_snapshot().actors[&"human"]
 	_expect(actor.hat == 1 and actor.body == 0, "the next level shows the chosen look")
 	var ai_ok := true
@@ -76,9 +85,12 @@ func _run() -> void:
 	await _click(_find("startGame"))
 	await app.screen_opened()
 	await _click(_find("confirm"))
-	_expect(not _find("Look1").disabled and not _find("Look2").disabled and _find("Look3").disabled, "unlocks persist across launches")
-	await _click(_find("Robot1"))
-	_expect(_find("Look1").disabled, "looks are unlocked per robot")
+	await app.screen_opened()
+	swf = app.screen.get_child(0)
+	_expect(swf.get_frame("Art_clothPanel0/hat1") == 1 and swf.get_frame("Art_clothPanel0/hat2") == 1
+		and swf.get_frame("Art_clothPanel0/hat3") == 5, "unlocks persist across launches")
+	await _click(_find("robotIcon1"))
+	_expect(swf.is_shown("Art_clothPanel1") and swf.get_frame("Art_clothPanel1/hat1") == 5, "looks are unlocked per robot")
 	app.queue_free()
 	await process_frame
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))

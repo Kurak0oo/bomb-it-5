@@ -214,6 +214,45 @@ widgets play their recorded frame as a sequence; alpha is part of the timeline; 
 made by a click starts on the next frame, as in the original; the pixel pass line is the
 measured 3×→1× resampling ceiling minus 0.02 (this screen's thin borders cap it at
 0.949). Result: settings and dropdown nodes 116/116 and 126/126, pixels within the
-ceiling; title and menu still pass. Waiting for the owner's review before the next
-screen (character select).
+ceiling; title and menu still pass. Owner review: accepted, with the 2-player option removed (owner edit).
 
+Character select (in progress): `CharacterSelectUI`, `ClothesPanel` and `Button` are
+ported (a subagent did the port; `scripts/ui/character_select_ui.gd`, `clothes_panel.gd`,
+`button.gd`). The case selects each of the 8 robots in turn; every robot's display and
+clothes panel (`Art_clothPanel<N>`, made from the library on selection, addressed by its
+class) comes from its own capture, with its own recorded loop. New pipeline pieces:
+children recorded on different frames of one clip follow that clip's frame (robotMc
+shows robot<N> on frame N+1); a widget that is also a group (robotStage1) draws its
+frames without the parts laid out inside it (`piece … FRAME HIDE`); instances are
+addressed by path relative to the screen root; live text (`set_text`) is drawn in the
+SWF's embedded fonts (`record_screen.py fonts`) with each TextField's recorded format.
+
+How to Play and Power-ups (2026-11-04): `HowToPlayUI` and `PowerUpsUI` are ported
+(subagent). Both captures pass: nodes 135/135 and 91/91, pixels at the resampling
+ceiling (SSIM 0.9747 / 0.9765). Generic fixes from these screens:
+- a group Flash composites on its own (filters, a blend) that animates inside plays as a
+  sequence instead of being split, so its filter pass survives (p2head's outline);
+- each piece is padded by a few transparent pixels before resampling so its texels land
+  on the screen's pixel grid, and the fit offset is whole pixels (`SwfScreen._pads`);
+  pieces no longer blur by a third of a pixel, and every earlier screen moved up to its
+  ceiling (menu SSIM 0.9416 → 0.9796);
+- a case action may carry `godot_command` where an owner edit moved its target (the menu
+  click on the moved HOW TO PLAY); the goldens' case hash ignores `godot_*` fields;
+- the reference player's `piece` deadlocked on a path absent at that frame (the error
+  branch re-locked the player); it now writes the `missing` marker;
+- unnamed siblings at one depth (the game board, the unlock tip's panels) get `#k`
+  segments, their order among those siblings.
+
+Results (in progress): case `results` (from the research case results/02) records the
+score screen after a won level with the new-outfit tip on top (`unlock-tip`), after OK
+(`win-score`) and after a lost level (`loss-score`). Recording replays the original-method
+fixtures (`fixture` actions; the player is given a state walk first so it finds the Game).
+
+`OnePScoreUI`, `PlayerScoreUI`, `UnlockTipScreen` and `UnlockAnimaPanel` are ported and
+drive the generated `score` screen (main capture `win-score`; the failed title and the tip
+are parts from the other two captures; RESTART, hidden after a win, draws its frames at
+`loss-score`). Godot cannot play the original round, so the case's Godot-only `settle`
+actions end each round with the points its golden shows, through the app's own round-end
+path. The original opens this screen on the wall clock, so each recording opens it at a
+different frame: the layout reads each capture's *capture phase* from its golden.
+`-- --screen score --capture loss-score` opens it for review.

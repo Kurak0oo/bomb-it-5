@@ -47,36 +47,44 @@ func _run() -> void:
 	await _click(_find("btn_play"))
 	await app.screen_opened()
 	await _click(_find("howToPlay"))
-	_expect(app.current == &"how_to_play" and _find("Key_bomb").text == "Space", "HOW TO PLAY shows the current controls")
-	await _click(_find("Key_bomb"))
-	_expect(_find("Message").text == "Select a key with your keyboard", "clicking a control waits for a key")
+	await app.screen_opened()
+	var caps := "ctrlField/"
+	_expect(app.current == &"controls" and _swf().get_text(caps + "onePOneBomb") == "Space", "HOW TO PLAY shows the current controls")
+	await _click(_find("onePOneBomb"))
+	_expect(_swf().get_frame("messenge") == 2, "clicking a control waits for a key (message frame 2)")
 	await _press(KEY_Q)
-	_expect(_find("Key_bomb").text == "Q", "pressing a key rebinds the control")
-	await _click(_find("Key_up"))
+	_expect(_swf().get_text(caps + "onePOneBomb") == "Q", "pressing a key rebinds the control")
+	await _click(_find("onePOneUp"))
 	await _press(KEY_P)
-	_expect(_find("Message").text.begins_with("This key is not possible") and _find("Key_up").text == "↑",
-		"a reserved key is refused with the original message")
-	await _click(_find("Back"))
+	# MyTextField.onePOneUpKeyHandle: KEY_ERROR leaves the cap as the click cleared it;
+	# onePOneUpFocusHandle puts the default back when focus leaves.
+	_expect(_swf().get_frame("messenge") == 3 and _swf().get_text(caps + "onePOneUp") == "",
+		"a reserved key is refused with the original message (frame 3)")
+	await _click(_find("back"))
+	await app.screen_opened()
 	await _click(_find("howToPlay"))
-	_expect(_find("Key_bomb").text == "Space", "leaving without SAVE discards changes")
-	await _click(_find("Key_bomb"))
+	await app.screen_opened()
+	_expect(_swf().get_text(caps + "onePOneBomb") == "Space", "leaving without SAVE discards changes")
+	await _click(_find("onePOneBomb"))
 	await _press(KEY_Q)
-	await _click(_find("SaveKeys"))
-	_expect(_find("Message").text == "Custom controls saved.", "SAVE confirms with the original message")
-	await _click(_find("Back"))
+	await _click(_find("save"))
+	_expect(_swf().get_frame("messenge") == 4, "SAVE confirms with the original message (frame 4)")
+	await _click(_find("back"))
+	await app.screen_opened()
 	await _click(_find("howToPlay"))
-	_expect(_find("Key_bomb").text == "Q", "saved controls persist")
-	await _click(_find("PowerUpsTab"))
-	_expect(_find_text("SPORT CAR") != null and _find_text("LIGHTNING GUN") != null and _find_text("INVINCIBILITY") != null,
-		"the power-up guide lists pickups, weapons and vehicles")
-	var gloves: bool = _find_text("BOXING GLOVE") != null and _find_text("PUSH THE BOMB") != null
-	_expect(gloves == Fidelity.original, "the glove items are described exactly where rounds drop them (#85)")
-	await _click(_find("Back"))
+	await app.screen_opened()
+	_expect(_swf().get_text(caps + "onePOneBomb") == "Q", "saved controls persist")
+	await _click(_find("powerUps"))
+	await app.screen_opened()
+	_expect(app.current == &"powerups" and _find("controls") != null, "POWER-UPS opens the power-up guide")
+	await _click(_find("back"))
+	await app.screen_opened()
 
 	await _click(_find("startGame"))
 	await app.screen_opened()
 	await _click(_find("confirm"))
-	await _click(_find("StartGame"))
+	await app.screen_opened()
+	await _click(_find("startBtn"))
 	var game: Node2D = app.game
 	game.set_process(false)
 	_expect(game.bindings[&"bomb"] == KEY_Q, "the level uses the saved bindings")
@@ -88,6 +96,10 @@ func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))
 	print("%s: %d controls checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
+
+
+func _swf() -> Node:
+	return app.screen.get_child(0)
 
 
 func _press(keycode: int) -> void:

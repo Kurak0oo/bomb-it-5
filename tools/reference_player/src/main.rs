@@ -217,8 +217,21 @@ fn main() -> Result<()> {
                 // One display-list path rendered alone (its masks, filters and blends
                 // included) on a transparent stage, cropped to its render bounds.
                 // Optional 4th word: render a widget clip at that frame (restored afterwards).
-                let frame: Option<u16> = t.get(3).map(|f| f.parse()).transpose()?;
-                let piece = player.lock().unwrap().reference_isolate(t[1], frame).map_err(|e| anyhow!(e))?;
+                let goto: Option<u16> = t.get(3).filter(|f| **f != "-").map(|f| f.parse()).transpose()?;
+                // Optional 5th word: comma-separated paths inside the piece to leave out.
+                let also_hide: Vec<String> = t.get(4).map(|s| s.split(',').map(String::from).collect()).unwrap_or_default();
+                // A path that is not on the display list at this frame is reported, not fatal.
+                // Bind first: a guard held through the match would deadlock the error arm's lock.
+                let isolated = player.lock().unwrap().reference_isolate(t[1], goto, &also_hide);
+                let piece = match isolated {
+                    Ok(piece) => piece,
+                    Err(e) => {
+                        std::fs::write(format!("{}.json", t[2]), serde_json::to_vec(&serde_json::json!({"path": t[1], "missing": e}))?)?;
+                        writeln!(out, "OK frame={frame} wall_ms={} fps_setting={} cmd={line}", t0.elapsed().as_millis(), player.lock().unwrap().frame_rate())?;
+                        out.flush()?;
+                        continue;
+                    }
+                };
                 let (bounds, px) = (piece.render_bounds, piece.pixel_bounds);
                 let rendered = {
                     let mut pl = player.lock().unwrap();

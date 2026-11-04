@@ -1,0 +1,207 @@
+{
+ "name": "results",
+ "origin": "The one-player score screen (OnePScoreUI, class UI_LEVEL_COMPLETED_ONEP) after a won and a lost level. Built from tools/reference_player/cases/results/02-zero-kill-win-next.json: seed 42, Normal, Cinema; original AI.stop and controller.addBomb fixtures make the three enemies bomb themselves (unlock-tip: the score screen with the new-outfit tip UnlockTipScreen, class UI_UNLOCK_TIP, on top; its OK at okBt's centre closes it: win-score, level 1 complete), NEXT (nextLevel's centre) plays level 2, a life pickup and a stationary self-bomb lose it (loss-score). realtime 1 lets the original timers run on wall time. Checkpoint 3.",
+ "godot_note": "Godot replays the menus with the same clicks; the rounds themselves are settled by the Godot-only `settle` actions with the recorded points.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 81"
+  },
+  {
+   "godot_command": "settle win-score",
+   "godot_note": "Godot cannot play the original round: it ends here with the points the original's score screen showed at win-score, and the screen opens as far into its timeline at each capture as the original's was (godot_capture.gd settle)."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 1
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 2
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 3
+   }
+  },
+  {
+   "command": "step 120"
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 180"
+  },
+  {
+   "capture": "unlock-tip"
+  },
+  {
+   "command": "click 371.1 466.2"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 20"
+  },
+  {
+   "capture": "win-score"
+  },
+  {
+   "command": "realtime 0"
+  },
+  {
+   "command": "click 543.3 422.0"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 100"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "pickup",
+    "kind": "life"
+   }
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "godot_command": "settle loss-score",
+   "godot_note": "As above, for the lost level 2 (right after the original's own bomb, so the Space press still lands in the round)."
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 285"
+  },
+  {
+   "capture": "loss-score"
+  },
+  {
+   "command": "realtime 0"
+  }
+ ]
+}

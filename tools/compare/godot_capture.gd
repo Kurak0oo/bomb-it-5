@@ -9,6 +9,16 @@ extends SceneTree
 ## whole SWF subtree, so reference descendants are not expected), `swf_kind`,
 ## `swf_frame`, `swf_button_state`, `swf_text`, and the mask relationships
 ## `swf_clip_depth`, `swf_clip_mask`, `swf_mask` (paths, as in the golden).
+##
+## The app starts from a fresh save file, as the reference player starts with no
+## SharedObject (unlocks, keys and switches all at their defaults).
+##
+## An action with only `godot_*` fields runs in Godot alone (the reference player and the
+## golden hash skip it). Its `godot_command` may be `settle CAPTURE`: Godot cannot replay
+## the original's round, so the app ends the current round with the points the original
+## showed at CAPTURE (its golden) and opens the score screen so that, when CAPTURE is
+## taken, the screen is as far into its timeline as the original's was
+## (`App.settle_as_recorded`).
 
 const STAGE := Vector2i(700, 510)
 
@@ -34,15 +44,23 @@ func _initialize() -> void:
 	root.add_child(_viewport)
 	# Generated screens follow the stepped frames, not the clock (see swf_screen.gd).
 	load("res://scripts/ui/swf_screen.gd").frame_locked = true
-	_viewport.add_child(load(ProjectSettings.get_setting("application/run/main_scene")).instantiate())
+	var app: Node = load(ProjectSettings.get_setting("application/run/main_scene")).instantiate()
+	if "save_path" in app:
+		app.save_path = _out.path_join("save.json")
+		DirAccess.remove_absolute(app.save_path)
+	_viewport.add_child(app)
 	_run.call_deferred(case)
 
 
 func _run(case: Dictionary) -> void:
 	var log := []
-	for action in case.actions:
-		if action.has("command"):
-			var words: PackedStringArray = String(action.command).split(" ", false)
+	var actions: Array = case.actions
+	for step_index in actions.size():
+		var action: Dictionary = actions[step_index]
+		if action.has("command") or action.has("godot_command"):
+			# `godot_command` replaces the input where an owner edit moved its target
+			# (the case says why); the reference player always runs `command`.
+			var words: PackedStringArray = String(action.get("godot_command", action.get("command"))).split(" ", false)
 			match words[0]:
 				"step":
 					for i in int(words[1]):
@@ -57,12 +75,16 @@ func _run(case: Dictionary) -> void:
 					_mouse_move(Vector2(float(words[1]), float(words[2])))
 				"kd", "ku":
 					_key(words[1], words[0] == "kd")
+				"settle":
+					var golden_path := "res://tests/goldens/%s/%s.json" % [case.name, words[1]]
+					var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
+					_viewport.get_child(0).settle_as_recorded(golden, words[1], _frames_until(actions, step_index, words[1]))
 				"seed":
 					# The replica's RNG (scripts/simulation/avm_random.gd) is not wired into
 					# the screens yet; record it so the report shows the case expected one.
 					log.append({"frame": _frame, "note": "seed %s not applied (no seeded RNG hook yet)" % words[1]})
 				_:
-					log.append({"frame": _frame, "note": "ignored command " + action.command})
+					log.append({"frame": _frame, "note": "ignored command " + " ".join(words)})
 		if action.has("capture"):
 			await RenderingServer.frame_post_draw
 			var name: String = action.capture
@@ -89,6 +111,7 @@ func _dump(node: Node, dump: Dictionary) -> void:
 					# A generated screen draws alpha inside its piece art, so it reports it as a meta.
 					"alpha": float(item.get_meta("swf_alpha", item.modulate.a * item.self_modulate.a)),
 					"stage_matrix": [t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y]}
+				if item.has_meta("swf_covers"): entry.covers = item.get_meta("swf_covers")
 				for key in ["frame", "button_state", "text", "clip_depth", "clip_mask", "mask"]:
 					if item.has_meta("swf_" + key): entry[key] = item.get_meta("swf_" + key)
 				if not entry.has("frame") and item is AnimatedSprite2D:
@@ -127,6 +150,18 @@ func _key(name: String, pressed: bool) -> void:
 	event.physical_keycode = event.keycode
 	event.pressed = pressed
 	_viewport.push_input(event)
+
+
+## Frames the case steps from after action `at` until its capture `capture`.
+static func _frames_until(actions: Array, at: int, capture: String) -> int:
+	var frames := 0
+	for k in range(at + 1, actions.size()):
+		var action: Dictionary = actions[k]
+		if action.get("capture", "") == capture: return frames
+		var words := String(action.get("godot_command", action.get("command", ""))).split(" ", false)
+		if words.size() == 2 and words[0] == "step": frames += int(words[1])
+	push_error("no capture %s after action %d" % [capture, at])
+	return frames
 
 
 static func _arg(args: PackedStringArray, flag: String) -> String:

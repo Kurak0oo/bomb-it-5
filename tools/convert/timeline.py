@@ -1,7 +1,8 @@
 """Read a recorded screen timeline (record_screen.py timeline) and answer layout questions.
 
 A track is a list of changes `[index, state]` where index counts frames since the screen
-opened and state is `[a, b, c, d, tx, ty, visible, frame, character, alpha]`, or null while the node is
+opened and state is `[a, b, c, d, tx, ty, visible, frame, character, alpha, colour]` (colour: the RGB
+multipliers and offsets of the colour transform; older timelines stop at alpha), or null while the node is
 absent. Indices run from 0 to capture_index + period.
 """
 import bisect
@@ -69,7 +70,8 @@ class Timeline:
         rel = _compose(inverse, c[:6]) if inverse else c[:6]
         # A descendant's own alpha is played back as a transform-like change, so it is not
         # a change of look (index 9 is alpha; older timelines have none).
-        return [round(v, 3) for v in rel] + list(c[6:9])
+        # A descendant's colour (index 10) is part of how the parent looks.
+        return [round(v, 3) for v in rel] + list(c[6:9]) + list(c[10:11])
 
     def look_changes(self, path):
         """Frame indices where anything inside `path` changes relative to `path` itself
@@ -80,7 +82,7 @@ class Timeline:
         own = self.tracks.get(path, [])
         for k in range(1, len(own)):
             prev, cur = own[k - 1][1], own[k][1]
-            if prev is None or cur is None or prev[7:9] != cur[7:9]:
+            if prev is None or cur is None or prev[7:9] != cur[7:9] or prev[10:11] != cur[10:11]:
                 points.add(own[k][0])
         candidates = set()
         for d in inside:
@@ -96,6 +98,11 @@ class Timeline:
                     points.add(i)
                     break
         return sorted(points)
+
+    def colour_changes(self, path):
+        """Whether the node's own colour transform changes (a tint or brightness tween)."""
+        own = [s for _, s in self.tracks.get(path, []) if s is not None]
+        return len({json.dumps(s[10:11]) for s in own}) > 1
 
     def children_stable(self, path):
         for child in self.children(path):

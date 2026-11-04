@@ -1,0 +1,13 @@
+{
+ "case": "results",
+ "case_sha256": "9f0f5756b99bfc9b350e0e0dfa535ef64db8f7dafbe2352f567b2b35020ac1aa",
+ "fps": 35.0,
+ "frames": {
+  "loss-score": 1428,
+  "unlock-tip": 1021,
+  "win-score": 1041
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "4d48867cf034d74d73b360ebc33e4482337d85c06d04f08ad0a1c22d061df958",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

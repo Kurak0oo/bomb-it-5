@@ -1,0 +1,44 @@
+{
+ "name": "how-to-play",
+ "origin": "How to Play (HowToPlayUI, class UI_CONTROLS) from the menu's HOW TO PLAY (centre of howToPlay's stage bounds in the menu golden), then Power-ups (PowerUpsUI, class UI_POWER_UPS) from its POWER-UPS button (centre of powerUps' stage bounds in the controls capture). Checkpoint 3.",
+ "actions": [
+  {
+   "command": "seed 55"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 556.525 274.925",
+   "godot_command": "click 556.525 309.425",
+   "godot_why": "owner edit: the menu moves HOW TO PLAY down by 34.5 (tools/convert/owner_edits.json)"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "capture": "controls"
+  },
+  {
+   "command": "click 540.325 435.475"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "capture": "powerups"
+  }
+ ]
+}

@@ -1,9 +1,11 @@
 extends Control
 ## Main scene: the edition 5 screen flow (`UIManager`) around the round host.
 ## Title (`UILoading`) → main menu → Game Settings → character select → levels → score
-## screen → game win/over. Title and main menu are generated original screens
-## (scripts/ui/swf_screen.gd); the later screens are still placeholders (checkpoint 3).
-## `--practice` after `--` opens the development practice board directly.
+## screen → game win/over. Every screen up to the score screen is a generated original
+## screen (scripts/ui/swf_screen.gd); the game win/over screens are still placeholders
+## (checkpoint 3). `--practice` after `--` opens the development practice board directly;
+## `--screen NAME` one generated screen (`--screen score --capture loss-score`: the score
+## screen with a recorded capture's points).
 
 const Game = preload("res://scripts/game.gd")
 const Session = preload("res://scripts/session.gd")
@@ -21,6 +23,10 @@ const Audio = preload("res://scripts/original_audio.gd")
 const Quality = preload("res://scripts/quality.gd")
 const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 const GameSettingsUI = preload("res://scripts/ui/game_settings_ui.gd")
+const CharacterSelectUI = preload("res://scripts/ui/character_select_ui.gd")
+const HowToPlayUI = preload("res://scripts/ui/how_to_play_ui.gd")
+const PowerUpsUI = preload("res://scripts/ui/power_ups_ui.gd")
+const OnePScoreUI = preload("res://scripts/ui/one_p_score_ui.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -100,6 +106,11 @@ func _ready() -> void:
 	elif "--screen" in args and args.find("--screen") + 1 < args.size():
 		# Development launch: one generated original screen on its own, for review.
 		var id := StringName(args[args.find("--screen") + 1])
+		if id == &"score":
+			# With the points, title and settings of a recorded capture (`--capture`).
+			var at := args.find("--capture")
+			_review_score(args[at + 1] if at >= 0 and at + 1 < args.size() else "win-score")
+			return
 		var timeline = SwfScreen.layout_of(id).get("timeline")
 		_swf_page(id, int(timeline.opened_frame) if timeline is Dictionary else 0)
 	else:
@@ -111,8 +122,8 @@ func _exit_tree() -> void:
 
 
 func _draw() -> void:
-	if is_instance_valid(game): return
-	if current in [&"title", &"menu", &"settings"]:
+	if is_instance_valid(game) and game.visible: return
+	if current in [&"title", &"menu", &"settings", &"character", &"controls", &"powerups", &"score"]:
 		# Outside the original stage there is nothing: letterbox black.
 		draw_rect(Rect2(Vector2.ZERO, size), Color.BLACK)
 		return
@@ -215,10 +226,21 @@ func _swf_page(id: StringName, delay := 0) -> SwfScreen:
 	return swf
 
 
+## `HowToPlayUI` (controls, key rebinding) and `PowerUpsUI`, ported.
 func show_how_to_play(page_name: StringName = &"controls") -> void:
-	if page_name == &"controls": store.load_file()
-	_show_guide(page_name)
+	if page_name == &"power_ups":
+		show_power_ups()
+		return
+	_end_game()
+	store.load_file()
+	var swf := _swf_page(&"controls", _open_delay(&"controls"))
+	swf.set_meta("controller", HowToPlayUI.new(swf, self))
 
+
+func show_power_ups() -> void:
+	_end_game()
+	var swf := _swf_page(&"powerups", _open_delay(&"powerups"))
+	swf.set_meta("controller", PowerUpsUI.new(swf, self))
 
 func _show_guide(page_name: StringName) -> void:
 	_rebinding = &""
@@ -341,88 +363,12 @@ func _set_mode(mode: StringName) -> void:
 	show_settings()
 
 
+## `CharacterSelectUI` + `ClothesPanel`, ported: robots, outfits and hats on the original
+## screen; START begins the session, BACK returns to Game Settings.
 func show_character_select() -> void:
-	var page := _page(&"character")
-	_label(page, &"Title", "CHOOSE YOUR ROBOT", Rect2(0, 40, 1280, 0), 42, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
-	for index in Session.ROBOTS.size():
-		var badge := RobotBadge.new()
-		badge.name = "Robot%d" % index
-		var at := _rect(badge.name, Rect2(150 + index * 125, 120, 110, 110))
-		badge.robot = index
-		badge.skin = skin
-		badge.position = at.position
-		badge.size = at.size
-		badge.selected = index == session.robot
-		# The sheet paints the eight `robotIcon` heads; a badge there only marks the choice.
-		badge.ghost = _art and ScreenLayout.is_baked(_layout, badge.name)
-		badge.chosen.connect(func(robot: int):
-			if robot != session.robot:
-				session.robot = robot
-				session.hat = 0
-				session.body = 0
-			show_character_select())
-		page.add_child(badge)
-		if not badge.ghost:
-			UiKit.label(page, Session.ROBOT_TITLES[index].to_upper(), badge.position + Vector2(0, 116), 17,
-				GameView.ROBOT_COLORS[index], 110, HORIZONTAL_ALIGNMENT_CENTER)
-	var preview := RobotBadge.new()
-	preview.name = "Preview"
-	var shown := _rect(&"preview", Rect2(260, 290, 220, 220))
-	preview.robot = session.robot
-	preview.skin = skin
-	preview.position = shown.position
-	preview.size = shown.size
-	preview.selected = true
-	preview.bare = _art
-	preview.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	# `robotStage1` shows the chosen robot; the sheet's frame shows robot 0.
-	_plate(&"preview")
-	page.add_child(preview)
-	preview.hat = session.hat
-	preview.body = session.body
-	var looks := _rect(&"looks_panel", Rect2(540, 290, 560, 250))
-	_looks_panel(page, looks.position, show_character_select, looks.size)
-	_button(page, &"Back", "BACK", Rect2(130, 610, 220, 60), show_settings, 24)
-	# SET AS AVATAR uploaded to the portal (`GamatarSender`); the replica keeps it inert (Q3).
-	var avatar := _button(page, &"SetAvatar", "SET AS AVATAR", Rect2(520, 610, 240, 60), func(): pass, 22)
-	avatar.tooltip_text = "Not available in this edition"
-	var start := _button(page, &"StartGame", "START", Rect2(930, 610, 220, 60), start_session, 24)
-	start.grab_focus.call_deferred()
-
-
-## Eight look slots of the chosen robot (`ClothesPanel`): one hat and one outfit at a time,
-## clicking the worn one removes it; locked looks show their unlock score.
-func _looks_panel(page: Control, at: Vector2, refresh: Callable, area := Vector2(560, 250)) -> void:
-	UiKit.panel(page, Rect2(at, area), Color("1d4557"), Color("5d96a3"))
-	UiKit.label(page, "LOOKS", at + Vector2(24, 14), 22, Color("ffc79a"))
-	var pitch := Vector2((area.x - 48) / 4.0, 94 * area.y / 250.0)
-	var cell_size := Vector2(pitch.x - 12, 50)
-	var unlocked: Array = store.unlocks.get(str(session.robot), [])
-	for number in range(1, 9):
-		var entry: Array = Looks.look(session.robot, number)
-		var worn: bool = (session.hat if entry[0] == &"hat" else session.body) == entry[1]
-		var cell := at + Vector2(24 + ((number - 1) % 4) * pitch.x, 56 + ((number - 1) / 4) * pitch.y)
-		var widget := UiKit.button(page, Looks.title(session.robot, number), Rect2(cell, cell_size),
-			func(): _wear(entry, refresh), null, 15)
-		widget.name = "Look%d" % number
-		widget.disabled = number not in unlocked
-		if worn:
-			var chosen := StyleBoxFlat.new()
-			chosen.bg_color = Color("c8743f")
-			chosen.border_color = UiKit.ACCENT
-			chosen.set_border_width_all(2)
-			chosen.set_corner_radius_all(10)
-			for state_name in ["normal", "hover"]: widget.add_theme_stylebox_override(state_name, chosen)
-		if widget.disabled:
-			UiKit.label(page, "%d PTS" % Looks.THRESHOLDS[number - 1], cell + Vector2(0, 52), 13, Color("8fb1ba"), cell_size.x, HORIZONTAL_ALIGNMENT_CENTER)
-	if unlocked.is_empty():
-		UiKit.label(page, "Score points to unlock outfits.", at + Vector2(130, 18), 16, Color("b4d2d7"), area.x - 150)
-
-
-func _wear(entry: Array, refresh: Callable) -> void:
-	if entry[0] == &"hat": session.hat = 0 if session.hat == entry[1] else entry[1]
-	else: session.body = 0 if session.body == entry[1] else entry[1]
-	refresh.call()
+	_end_game()
+	var swf := _swf_page(&"character", _open_delay(&"character"))
+	swf.set_meta("controller", CharacterSelectUI.new(swf, self))
 
 
 func start_session() -> void:
@@ -443,109 +389,97 @@ func _start_level() -> void:
 		game.level_settled.connect(_on_level_settled)
 		game.main_menu_requested.connect(show_main_menu)
 		add_child(game)
+	game.visible = true
 	game.play_level()
 	current = &"playing"
 	queue_redraw()
 
 
-func _on_level_settled(snapshot: Dictionary) -> void:
+func _on_level_settled(snapshot: Dictionary, delay := 0) -> void:
 	var outcome: StringName = snapshot.outcome
 	var won: bool = outcome == &"won" or (outcome == &"timeout" and session.mode == &"arcade" and Fidelity.timeout_wins())
 	var result: int = session.settle(&"won" if won else &"lost", snapshot.result_score,
 		snapshot.actors[&"human"].lives)
-	# Every score screen checks the session total against the unlock scores (`OnePScoreUI`).
-	var key := str(session.robot)
-	_new_looks = Looks.newly_unlocked(session.robot, session.total_score, store.unlocks.get(key, []))
-	if not _new_looks.is_empty():
-		var unlocked: Array = store.unlocks.get(key, []).duplicate()
-		unlocked.append_array(_new_looks)
-		unlocked.sort()
-		store.unlocks[key] = unlocked
-		store.save_file()
 	_last_snapshot = snapshot
 	if result == Session.Result.GAME_OVER:
+		# The last heart goes straight to the end screen (placeholder until it is converted);
+		# it still checks the session total against the unlock scores.
+		var key := str(session.robot)
+		_new_looks = Looks.newly_unlocked(session.robot, session.total_score, store.unlocks.get(key, []))
+		if not _new_looks.is_empty():
+			var unlocked: Array = store.unlocks.get(key, []).duplicate()
+			unlocked.append_array(_new_looks)
+			unlocked.sort()
+			store.unlocks[key] = unlocked
+			store.save_file()
 		show_end(false)
 	else:
-		show_score(snapshot)
+		show_score(snapshot, delay)
 
 
-func show_score(snapshot: Dictionary) -> void:
-	var page := _page(&"score", false)
-	var won: bool = session.last_result in [Session.Result.LEVEL_WIN, Session.Result.GAME_WIN]
-	if not _art:
-		page.add_child(_shade())
-		UiKit.panel(page, Rect2(290, 100, 700, 520))
-	# `PlayerScoreUI.setdata` fills the title's `[X]/[X]`; the title clip's second frame is the loss.
-	var title := "LEVEL %s COMPLETE!" % session.level_text() if won else "LEVEL %s FAILED…" % session.level_text()
-	var heading := _label(page, &"title", title, Rect2(290, 130, 700, 0), 38, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
-	_live(heading, &"title", Color("ffd23c"))
-	if _art:
-		heading.add_theme_font_size_override("font_size", 44)
-		heading.add_theme_constant_override("outline_size", 10)
-		heading.add_theme_color_override("font_outline_color", Color("7a1d00"))
-	var parts: Dictionary = snapshot.get("result_breakdown", {})
-	var rows := [["ENEMIES KILLED", parts.get("kills", 0)], ["TIME BONUS", parts.get("time", 0)],
-		["%s BONUS" % str(session.difficulty).to_upper(), parts.get("difficulty", 0)],
-		["LEVEL SCORE", snapshot.result_score], ["TOTAL SCORE", session.total_score]]
-	for index in rows.size():
-		var y := 210 + index * 56
-		var caption := _label(page, StringName("row_label_%d" % index), rows[index][0], Rect2(360, y, 0, 0), 24,
-			Color("ffc79a") if index >= 3 else UiKit.FONT_COLOR)
-		# The mode caption (`text_mode`) and the difficulty bonus (`bonus_txt`) change; the rest is painted.
-		_live(caption, caption.name, Color("12306e"))
-		var value := _label(page, StringName("row_value_%d" % index), str(rows[index][1]), Rect2(720, y, 200, 0), 24,
-			UiKit.ACCENT, HORIZONTAL_ALIGNMENT_RIGHT)
-		_live(value, value.name, Color("12306e"))
-		if _art:
-			caption.add_theme_font_size_override("font_size", 26)
-			value.add_theme_font_size_override("font_size", 28)
-	var proceed := _button(page, &"Continue", "NEXT" if won else "TRY AGAIN", Rect2(660, 520, 260, 64), _continue, 24)
-	if _art and not won:
-		# The sheet paints `nextLevel`; after a loss the original shows `restartBtn` there instead.
-		UiKit.ghost_text(proceed, Color.WHITE)
-		UiKit.plate(screen, Rect2(proceed.position + Vector2(24, 12), proceed.size - Vector2(48, 24)), Color("ff9419"))
-		screen.move_child(screen.get_child(-1), proceed.get_index())
-	_button(page, &"DressUp", "DRESS UP", Rect2(360, 520, 260, 64), show_dress_up, 24)
-	proceed.grab_focus.call_deferred()
-	if not _new_looks.is_empty(): _unlock_tip(page)
+## `OnePScoreUI` (UI_LEVEL_COMPLETED_ONEP), ported: the level's points, NEXT or RESTART
+## (and Space), DRESS UP, and the unlock tip when the total unlocks looks, on the
+## generated original screen. The round stays loaded, hidden, for RESTART and NEXT.
+func show_score(snapshot: Dictionary, delay := 0) -> void:
+	if is_instance_valid(game): game.visible = false
+	var swf := _swf_page(&"score", delay)
+	var round_state := {"personalPlayers": [OnePScoreUI.personal_player(snapshot, session)]}
+	swf.set_meta("controller", OnePScoreUI.new(swf, self, OnePScoreUI.game_result(session.last_result), round_state))
 
 
-func _unlock_tip(page: Control) -> void:
-	var tip := Control.new()
-	tip.name = "UnlockTip"
-	tip.size = Vector2(1280, 720)
-	page.add_child(tip)
-	tip.add_child(_shade())
-	UiKit.panel(tip, Rect2(390, 200, 500, 300))
-	UiKit.label(tip, "New outfit unlocked!", Vector2(390, 230), 32, UiKit.ACCENT, 500, HORIZONTAL_ALIGNMENT_CENTER)
-	var names := PackedStringArray()
-	for number in _new_looks: names.append(Looks.title(session.robot, number))
-	UiKit.label(tip, ", ".join(names), Vector2(420, 300), 22, UiKit.FONT_COLOR, 440, HORIZONTAL_ALIGNMENT_CENTER)
-	var ok := UiKit.button(tip, "OK", Rect2(540, 410, 200, 60), func():
-		_new_looks.clear()
-		tip.queue_free(), skin, 24)
-	ok.name = "TipOk"
-	ok.grab_focus.call_deferred()
+## The comparison loop (tools/compare/godot_capture.gd `settle`) and `--screen score` only.
+## Godot cannot replay the original's round, so the round ends with the points the
+## original's score screen showed at a recorded capture (its golden: the TextFields `kill`,
+## `time`, `difficulity` and `levelScore`, and levelTitle's frame, 1 complete or 2 failed),
+## through the app's own round-end path. Hearts are not on the screen: a failed level with
+## RESTART showing keeps the session's. With `frames_to_capture`, the screen opens so that
+## when the capture is taken it is as far into its timeline as the original's was
+## (`capture_index_of`, matched by tools/convert/layout.py).
+func settle_as_recorded(golden: Dictionary, capture: String, frames_to_capture := -1) -> void:
+	var screen_layout := SwfScreen.layout_of(&"score")
+	var root: String = screen_layout.screen_root
+	var shown := {}
+	for node: Dictionary in golden.nodes:
+		if String(node.path).begins_with(root + "/"): shown[String(node.path).substr(root.length() + 1)] = node
+	var points := func(field: String) -> int: return String(shown.get(field, {}).get("text", "0")).to_int()
+	var won: bool = int(shown.get("title", {}).get("frame", 1)) == 1
+	var lives: int = session.lives if won or bool(shown.get("restartBtn", {}).get("effective_visible", false)) else 0
+	var delay := 0
+	if frames_to_capture >= 0:
+		var phases: Dictionary = screen_layout.get("timeline", {}).get("capture_index_of", {})
+		delay = frames_to_capture - int(phases.get(capture, 0))
+	_end_game()
+	_on_level_settled({"outcome": &"won" if won else &"lost", "result_score": points.call("levelScore"),
+		"actors": {&"human": {"lives": lives}},
+		"result_breakdown": {"kills": points.call("kill"), "time": points.call("time"),
+			"difficulty": points.call("difficulity")}}, delay)
 
 
-## DRESS UP from the score screen: change looks between levels.
-func show_dress_up() -> void:
-	var page := _page(&"dress_up", false)
-	page.add_child(_shade())
-	UiKit.label(page, "DRESS UP", Vector2(0, 90), 42, UiKit.ACCENT, 1280, HORIZONTAL_ALIGNMENT_CENTER)
-	var preview := RobotBadge.new()
-	preview.robot = session.robot
-	preview.hat = session.hat
-	preview.body = session.body
-	preview.skin = skin
-	preview.position = Vector2(240, 230)
-	preview.size = Vector2(220, 220)
-	preview.selected = true
-	page.add_child(preview)
-	_looks_panel(page, Vector2(500, 215), show_dress_up)
-	var done := UiKit.button(page, "OK", Rect2(540, 560, 200, 60), func(): show_score(_last_snapshot), skin, 24)
-	done.name = "DressDone"
-	done.grab_focus.call_deferred()
+## `--screen score [--capture NAME]`: the score screen as the original showed it at a
+## capture of the results case, with that capture's settings: "LEVEL n / m" from the title,
+## the difficulty from `bonus_txt`'s frame, the robot from `p1head`'s (the inverse of
+## `PlayerScoreUI.initData` and `OnePScoreUI.initData`) and the earlier levels' points
+## (`total` less `levelScore`). Unlocks come from the player's own save.
+func _review_score(capture: String) -> void:
+	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/goldens/results/%s.json" % capture))
+	var root: String = SwfScreen.layout_of(&"score").screen_root
+	var title := RegEx.create_from_string("(\\d+) / (\\d+)")
+	var level := 1
+	var earlier := 0
+	for node: Dictionary in golden.nodes:
+		var relative := String(node.path).trim_prefix(root + "/")
+		var found: RegExMatch = title.search(String(node.get("text", ""))) if relative.begins_with("title/") else null
+		if found != null:
+			level = found.get_string(1).to_int()
+			session.levels = found.get_string(2).to_int()
+		elif relative == "bonus_txt": session.difficulty = [&"easy", &"normal", &"hard"][int(node.frame) - 1]
+		elif relative == "p1head": session.robot = int(node.frame) - 1
+		elif relative == "total": earlier += String(node.text).to_int()
+		elif relative == "levelScore": earlier -= String(node.text).to_int()
+	session.begin()
+	session.level = level
+	session.total_score = earlier  # the levels before this one
+	settle_as_recorded(golden, capture)
 
 
 func _continue() -> void:
@@ -578,13 +512,6 @@ func show_end(won: bool) -> void:
 		HORIZONTAL_ALIGNMENT_RIGHT)
 	_live(total, &"total_value", Color("12306e"))
 	_button(page, &"TryAgain", "TRY AGAIN", Rect2(510, 460, 260, 64), show_settings, 24).grab_focus.call_deferred()
-
-
-func _unhandled_key_input(event: InputEvent) -> void:
-	# Original score screens also continue on Space.
-	if current == &"score" and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_SPACE:
-		get_viewport().set_input_as_handled()
-		_continue()
 
 
 func _open_practice() -> void:
@@ -727,65 +654,6 @@ func _shade() -> ColorRect:
 	shade.size = Vector2(1280, 720)
 	shade.mouse_filter = Control.MOUSE_FILTER_STOP
 	return shade
-
-
-## A selectable robot portrait: workbench portrait slot or the native robot drawing.
-class RobotBadge extends Control:
-	signal chosen(robot: int)
-	var robot := 0
-	var hat := 0
-	var body := 0
-	var skin: RefCounted
-	var selected := false
-	## Over a painted head: only the choice ring is drawn.
-	var ghost := false
-	## Over a plate on an art page: the robot without the badge box.
-	var bare := false
-
-	func _ready() -> void:
-		focus_mode = Control.FOCUS_ALL
-		mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
-
-	func _gui_input(event: InputEvent) -> void:
-		var pressed: bool = event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT
-		pressed = pressed or event.is_action_pressed("ui_accept")
-		if pressed:
-			chosen.emit(robot)
-			accept_event()
-
-	func _draw() -> void:
-		var rect := Rect2(Vector2.ZERO, size)
-		var color: Color = GameView.ROBOT_COLORS[robot]
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color("234e62")
-		style.border_color = Color("ffd989") if selected or has_focus() else color.darkened(0.3)
-		style.set_border_width_all(4 if selected else 2)
-		style.set_corner_radius_all(16)
-		if ghost:
-			style.draw_center = false
-			if selected or has_focus(): draw_style_box(style, rect.grow(-6))
-			return
-		if not bare: draw_style_box(style, rect)
-		if skin != null and skin.draw(self, "actor.%s.portrait" % GameView.ROBOT_SLOTS[robot], rect.grow(-size.x * 0.12)):
-			return
-		var center := size * 0.5
-		var unit := size.x / 110.0
-		draw_circle(center + Vector2(0, 8) * unit, 30 * unit, color.darkened(0.25))
-		draw_circle(center - Vector2(0, 6) * unit, 32 * unit, color)
-		draw_rect(Rect2(center + Vector2(-22, -18) * unit, Vector2(44, 20) * unit), Color("244357"))
-		draw_circle(center + Vector2(-10, -8) * unit, 5 * unit, Color("e1fff3"))
-		draw_circle(center + Vector2(10, -8) * unit, 5 * unit, Color("e1fff3"))
-		draw_line(center - Vector2(0, 38) * unit, center - Vector2(0, 48) * unit, color, 3 * unit)
-		if body > 0:
-			var cloth: Color = GameView.LOOK_COLORS[(body + robot) % GameView.LOOK_COLORS.size()]
-			draw_rect(Rect2(center + Vector2(-24, 14) * unit, Vector2(48, 14) * unit), cloth)
-		if hat > 0:
-			var felt: Color = GameView.LOOK_COLORS[(hat * 2 + robot) % GameView.LOOK_COLORS.size()]
-			draw_colored_polygon(PackedVector2Array([center + Vector2(-28, -34) * unit, center + Vector2(28, -34) * unit,
-				center + Vector2(0, -58) * unit]), felt)
-
-	func _notification(what: int) -> void:
-		if what in [NOTIFICATION_FOCUS_ENTER, NOTIFICATION_FOCUS_EXIT]: queue_redraw()
 
 
 ## A pickup icon: the workbench `item.<kind>` slot or the native badge.

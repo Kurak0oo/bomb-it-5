@@ -3,7 +3,7 @@
 #   1. record the case's goldens with the reference player (tools/compare.sh record)
 #   2. record each screen's timeline and interactive states (record_screen.py timeline/states)
 #   3. regenerate the screen layouts from the goldens (tools/convert/layout.py)
-#   4. render every piece and sequence frame into the ignored local pack (record_screen.py art)
+#   4. render every piece and sequence frame, and export the fonts, into the ignored local pack
 #   5. check Godot against the goldens, with pixels (tools/compare.sh check)
 # Commit tests/goldens/ and scenes/swf/ afterwards; original/ stays local.
 # Needs Python 3.10+ with numpy and pillow; set PYTHON to choose the interpreter.
@@ -16,4 +16,5 @@ case_name="${1:-main-menu}"
 "$py" "$here/convert/record_screen.py" states "$case_name"
 "$py" "$here/convert/layout.py"
 "$py" "$here/convert/record_screen.py" art "$case_name"
+"$py" "$here/convert/record_screen.py" fonts "$case_name"
 "$py" "$here/compare/compare.py" check "$case_name"

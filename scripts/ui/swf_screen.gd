@@ -27,11 +27,17 @@ signal mouse_event(instance: String, kind: StringName)
 ## Any mouse press on the stage, after the instances' own handlers (AS3 bubbling to the
 ## root). `press` counts presses, so a handler can ignore the press that added it.
 signal stage_down(press: int)
+## A key press, as the AS3 stage's KeyboardEvent sees it: the Flash keyCode.
+signal key_down(keycode: int)
 
 const STAGE := Vector2(700, 510)
 const PACK := "res://original/screens/%s/manifest.json"
 const FPS := 35.0
 const BLEND_SHADER := preload("res://scripts/ui/swf_blend.gdshader")
+const FlashKeys = preload("res://scripts/ui/flash_keys.gd")
+const FONTS := "res://original/fonts/fonts.json"
+## Flash's TextField draws its text 2 units inside its bounds.
+const GUTTER := 2.0
 ## flash.display.BlendMode names (as the reference player dumps them) -> shader modes.
 const BLEND_MODES := {"Multiply": 1, "Screen": 2, "Lighten": 3, "Darken": 4, "Difference": 5,
 	"Add": 6, "Subtract": 7, "Overlay": 8, "HardLight": 9}
@@ -45,6 +51,7 @@ static var frame_locked := false
 static var _images := {}
 static var _resized := {}
 static var _cache_lock := Mutex.new()
+static var _fonts := {}
 static var _warm_tasks: Array[int] = []
 
 var screen_name: StringName
@@ -57,6 +64,9 @@ var index := 0
 var is_open := false
 
 var _records: Array[Dictionary] = []
+var _by_path_rec: Dictionary = {}
+var _extra_shown_at: Dictionary = {}
+var _t := 0
 var _by_name: Dictionary = {}
 var _art: Array[Dictionary] = []
 var _px := -1.0
@@ -114,19 +124,26 @@ func build(screen: StringName) -> void:
 			for change: Array in entry.track:
 				rec.track_index.append(int(change[0]))
 				rec.track.append(change[1])
-		node.set_meta("swf_path", path)
+		node.set_meta("swf_path", entry.get("golden_path", path))
 		node.set_meta("swf_kind", entry.get("kind", ""))
 		node.set_meta("swf_alpha", entry.get("alpha", 1.0))
 		node.set_meta("swf_baked", entry.role in ["piece", "sequence"])
+		if entry.has("covers"): node.set_meta("swf_covers", entry.covers)
 		for key in ["frame", "button_state", "text", "clip_depth", "clip_mask", "mask"]:
 			if entry.has(key): node.set_meta("swf_" + key, entry[key])
 		_records.append(rec)
+		_by_path_rec[path] = rec
 		_add_piece_art(rec, manifest)
 		if entry.has("action") and entry.has("stage_bounds"):
 			rec.hit = _hit(rec)
 			_hits.add_child(rec.hit)
+		# Instances are addressed by name, or by their path relative to the screen root
+		# (`robotStage1/robotMc/robot3/bodyMc`, `Art_clothPanel3/icon1`), as the AS3 does
+		# with `_mc["robotStage1"]["robotMc"]`.
 		if entry.has("name"):
-			_by_name[String(entry.name).split("@")[0]] = rec
+			_by_name.get_or_add(String(entry.name).split("@")[0], rec)
+		var relative := _relative(path)
+		if not relative.is_empty(): _by_name[relative] = rec
 	add_child(_hits)
 	_apply(0)
 	visible = open_delay <= 0
@@ -138,7 +155,8 @@ func build(screen: StringName) -> void:
 func fit(size: Vector2) -> void:
 	var factor := minf(size.x / STAGE.x, size.y / STAGE.y)
 	scale = Vector2(factor, factor)
-	position = (size - STAGE * factor) * 0.5
+	# Whole pixels, so pieces aligned to the stage origin's pixel grid stay sharp (_pads).
+	position = ((size - STAGE * factor) * 0.5).round()
 	_px = -1.0
 	_refresh_art.call_deferred()
 
@@ -161,6 +179,28 @@ func set_frame(instance: String, frame: int) -> void:
 	_apply(index)
 
 
+## `play()` on an instance stopped by `set_frame`: the clip runs on as the recording shows
+## it (the original played it then too), so its recorded track takes over again.
+func play(instance: String) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return
+	rec.override = -1
+	_apply(index)
+
+
+## `addFrameScript(frame - 1, script)`: `script` runs (deferred, after the frame is drawn
+## up) each time the instance, on the display list, comes to `frame` (1-based).
+func add_frame_script(instance: String, frame: int, script: Callable) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return
+	rec.get_or_add("scripts", {})[frame] = script
+
+
+## `totalFrames` of an instance.
+func get_total_frames(instance: String) -> int:
+	return int(_by_name.get(instance, {}).get("entry", {}).get("total_frames", 1))
+
+
 ## `currentFrame` of an instance.
 func get_frame(instance: String) -> int:
 	var rec: Dictionary = _by_name.get(instance, {})
@@ -170,11 +210,13 @@ func get_frame(instance: String) -> int:
 	return int(s[7]) if s is Array and s.size() > 7 else int(rec.frame)
 
 
-## `addChild` / `removeChild` of an instance on its parent.
+## `addChild` / `removeChild` of an instance on its parent, or its `visible`: shown, an
+## instance the capture recorded hidden shows too (RESTART after a loss).
 func set_shown(instance: String, shown: bool) -> void:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty(): return
 	rec.shown = shown
+	rec.made_visible = shown
 	_apply(index)
 
 
@@ -187,6 +229,89 @@ func set_enabled(instance: String, enabled: bool) -> void:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty() or rec.hit == null: return
 	rec.hit.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
+
+
+## `TextField.text = text`: the field's recorded art gives way to live text, drawn in the
+## SWF's own font (original/fonts/, exported by record_screen.py fonts) with its format.
+func set_text(instance: String, text: String) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return
+	if not rec.has("label") and text == String(rec.entry.get("text", "")): return  # unchanged: keep the art
+	rec["live_text"] = text
+	if not rec.has("label"): rec["label"] = _make_label(rec)
+	rec.label.text = text
+	rec.node.set_meta("swf_text", text)
+	_fit_label(rec)
+	_apply(index)
+
+
+func get_text(instance: String) -> String:
+	var rec: Dictionary = _by_name.get(instance, {})
+	return String(rec.get("live_text", rec.get("entry", {}).get("text", "")))
+
+
+func _make_label(rec: Dictionary) -> Label:
+	var f: Dictionary = rec.entry.get("text_format", {})
+	var label := Label.new()
+	label.name = "LiveText"
+	label.set_meta("swf_art", true)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var font := _font(String(f.get("font", "")), bool(f.get("bold", false)))
+	if font != null: label.add_theme_font_override("font", font)
+	var colour: Array = f.get("color", [0, 0, 0])
+	label.add_theme_color_override("font_color", Color8(int(colour[0]), int(colour[1]), int(colour[2])))
+	label.horizontal_alignment = {"Left": HORIZONTAL_ALIGNMENT_LEFT, "Center": HORIZONTAL_ALIGNMENT_CENTER,
+		"Right": HORIZONTAL_ALIGNMENT_RIGHT, "Justify": HORIZONTAL_ALIGNMENT_FILL}.get(String(f.get("align", "Left")), HORIZONTAL_ALIGNMENT_LEFT)
+	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if f.get("word_wrap", false) else TextServer.AUTOWRAP_OFF
+	label.clip_text = false
+	rec.node.add_child(label)
+	return label
+
+
+## Font size for the real screen scale, so text stays sharp; the label is scaled back.
+func _fit_label(rec: Dictionary) -> void:
+	var label: Label = rec.label
+	var f: Dictionary = rec.entry.get("text_format", {})
+	var px := maxf(0.01, _px if _px > 0.0 else pixels_per_unit())
+	var b: Array = f.get("local_bounds", [0, 0, 100, 20])
+	label.add_theme_font_size_override("font_size", maxi(1, roundi(float(f.get("size", 12)) * px)))
+	label.add_theme_constant_override("line_spacing", roundi(float(f.get("leading", 0)) * px))
+	label.position = Vector2(float(b[0]) + GUTTER + float(f.get("left_margin", 0)), float(b[1]) + GUTTER)
+	label.size = (Vector2(float(b[2]) - float(b[0]), float(b[3]) - float(b[1])) - Vector2(2 * GUTTER, 2 * GUTTER)) * px
+	label.scale = Vector2(1.0 / px, 1.0 / px)
+
+
+## The family's embedded subsets: the largest first, the others as fallbacks.
+static func _font(family: String, bold: bool) -> Font:
+	var key := family + ("|b" if bold else "")
+	if _fonts.has(key): return _fonts[key]
+	var font: Font = null
+	if FileAccess.file_exists(FONTS):
+		var families: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(FONTS))
+		var files: Array = families.get(family, [])
+		var loaded: Array[Font] = []
+		for file in files:
+			var ff := FontFile.new()
+			if ff.load_dynamic_font(ProjectSettings.globalize_path(FONTS.get_base_dir().path_join(file))) == OK: loaded.append(ff)
+		if not loaded.is_empty():
+			var primary: FontFile = loaded[0]
+			primary.fallbacks = loaded.slice(1)
+			font = primary
+			if bold:
+				var variation := FontVariation.new()
+				variation.base_font = primary
+				variation.variation_embolden = 0.6
+				font = variation
+	_fonts[key] = font
+	return font
+
+
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not is_open or not is_visible_in_tree(): return
+	if event is InputEventKey and event.pressed and not event.echo:
+		var code := FlashKeys.from_godot(event.physical_keycode if event.keycode == KEY_NONE else event.keycode)
+		if code != 0: key_down.emit(code)
 
 
 func _input(event: InputEvent) -> void:
@@ -216,7 +341,26 @@ func _process(delta: float) -> void:
 			visible = true
 			_hits.visible = true
 			opened.emit()
+		_t = t
 		_apply(_timeline_index(t))
+
+
+## Timeline index of one node: the screen's, or for a part from another capture its own
+## loop, counted from when it was shown so that the recorded capture comes as many frames
+## after showing as it did in the original.
+func _local_index(rec: Dictionary, i_screen: int) -> int:
+	var cap: String = rec.entry.get("timeline_of", "")
+	if cap.is_empty(): return i_screen
+	var own: Dictionary = layout.get("extra_timelines", {}).get(cap, {})
+	var period: int = maxi(1, int(own.get("period", 1)))
+	var since: int = _t - int(_extra_shown_at.get(cap, _t))
+	if own.get("from_shown", false):
+		# Recorded from the frame the part shows, through its capture, then a loop. A
+		# wall-time screen's part may run some frames ahead (`shown_offset`, layout.py).
+		since = maxi(0, since + int(own.get("shown_offset", 0)))
+		var capture: int = int(own.capture_index)
+		return since if since <= capture else capture + (since - capture) % period
+	return posmod(since - int(own.get("shown_before_capture", 0)), period)
 
 
 func _timeline_index(t: int) -> int:
@@ -235,6 +379,13 @@ func _state(rec: Dictionary, i: int):
 	return rec.track[k] if rec.track[k] != null else []
 
 
+## The clip frame a node shows at timeline index `i` (an override from `set_frame` wins).
+func _shown_frame(rec: Dictionary, i: int) -> int:
+	if int(rec.override) > 0: return int(rec.override)
+	var s = _state(rec, i)
+	return int(s[7]) if s is Array and s.size() > 7 else int(rec.frame)
+
+
 func _global_at(rec: Dictionary, i: int) -> Transform2D:
 	var s = _state(rec, i)
 	if s is Array and s.size() >= 6:
@@ -242,15 +393,21 @@ func _global_at(rec: Dictionary, i: int) -> Transform2D:
 	return rec.static
 
 
-func _apply(i: int) -> void:
-	index = i
+func _apply(i_screen: int) -> void:
+	index = i_screen
 	var globals := {}
 	var shown := {}
 	for rec: Dictionary in _records:
+		var i := _local_index(rec, i_screen)
 		var s = _state(rec, i)
 		var present: bool = s == null or (s is Array and s.size() > 0)
 		var g: Transform2D = _global_at(rec, i) if present else rec.static
-		var vis: bool = present and rec.shown and (rec.visible if s == null else bool(s[6]))
+		var vis: bool = present and rec.shown and ((rec.visible if s == null else bool(s[6])) or rec.get("made_visible", false))
+		# A clip's timeline shows different children per frame (robotMc shows robot<N> on
+		# frame N+1): once the parent is sent to a frame, only that frame's children show.
+		var parent_rec: Dictionary = _by_path_rec.get(rec.parent, {})
+		if vis and rec.entry.has("parent_frame") and not parent_rec.is_empty():
+			vis = _shown_frame(parent_rec, i) == int(rec.entry.parent_frame)
 		var frame: int = int(rec.frame) if s == null or not present else int(s[7])
 		var parent_g: Transform2D = globals.get(rec.parent, Transform2D.IDENTITY)
 		var parent_shown: bool = shown.get(rec.parent, true)
@@ -259,9 +416,21 @@ func _apply(i: int) -> void:
 		node.visible = vis or (present and rec.shown and not parent_shown)
 		globals[rec.path] = g
 		shown[rec.path] = vis and parent_shown
+		# The first part of another capture to show starts that capture's own clock.
+		var cap: String = rec.entry.get("timeline_of", "")
+		if not cap.is_empty() and _by_path_rec.get(rec.parent, {}).get("entry", {}).get("timeline_of", "") != cap:
+			if vis and parent_shown:
+				if not _extra_shown_at.has(cap): _extra_shown_at[cap] = _t
+			else:
+				_extra_shown_at.erase(cap)
 		if rec.hit != null: rec.hit.visible = vis and parent_shown
 		if rec.override > 0: frame = rec.override
 		if frame > 0: node.set_meta("swf_frame", frame)
+		if rec.has("scripts"):
+			var on_list: bool = vis and parent_shown
+			if on_list and frame != int(rec.get("script_frame", -1)) and rec.scripts.has(frame):
+				(rec.scripts[frame] as Callable).call_deferred()
+			rec.script_frame = frame if on_list else -1
 		# Recorded alpha (older timelines have none): the art carries the alpha it was
 		# rendered with at the capture, so the node scales by the ratio.
 		if s is Array and s.size() > 9:
@@ -273,7 +442,11 @@ func _apply(i: int) -> void:
 
 
 func _show_art(rec: Dictionary, i: int, _frame: int) -> void:
+	# (`_frame` is the clip frame the node shows at timeline index `i`)
 	if rec.art.is_empty(): return
+	if rec.has("live_text"):
+		for art: Dictionary in rec.art: art.sprite.visible = false
+		return
 	var pick := -1
 	var wanted: int = rec.override if rec.override > 0 else int(rec.get("state_frame", -1))
 	# At its recorded frame a widget plays its recorded art (a sequence when it animates).
@@ -281,12 +454,20 @@ func _show_art(rec: Dictionary, i: int, _frame: int) -> void:
 	if wanted > 0:
 		for k in rec.art.size():
 			if int(rec.art[k].get("state", -1)) == wanted: pick = k
+	if pick < 0 and rec.entry.role == "group":
+		# A group widget's art is its frame art, for the frame it shows now.
+		for k in rec.art.size():
+			if int(rec.art[k].get("state", -1)) == _frame: pick = k
 	if pick < 0:
 		for k in rec.art.size():
 			var art: Dictionary = rec.art[k]
 			if art.has("state"): continue
 			# A sequence shows its latest art at or before this frame; a static piece its one image.
 			if pick < 0 or int(art.index) <= i: pick = k
+	if pick < 0:
+		# A widget with no art at rest (hidden at its capture) shows its frame's art.
+		for k in rec.art.size():
+			if int(rec.art[k].get("state", -1)) == _frame: pick = k
 	for k in rec.art.size():
 		var art: Dictionary = rec.art[k]
 		art.sprite.visible = k == pick
@@ -363,6 +544,7 @@ func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
 		"size": Vector2(size[0], size[1]) if size.size() == 2 else Vector2.ZERO,
 		"at": _global_at(rec, at),
 		"origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) / float(piece.scale) + rec.offset,
+		"pixel_origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]),
 		"px": -1.0}
 	if state > 0: art["state"] = state
 	rec.art.append(art)
@@ -371,6 +553,8 @@ func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
 
 func _refresh_art() -> void:
 	_px = pixels_per_unit()
+	for rec: Dictionary in _records:
+		if rec.has("label"): _fit_label(rec)
 	for rec: Dictionary in _records:
 		for art: Dictionary in rec.art:
 			if art.sprite.visible: _ensure(art)
@@ -383,13 +567,42 @@ func _ensure(art: Dictionary) -> void:
 	art.px = px
 	var source := _image(art.file)
 	if source == null: return
-	var w := maxi(1, roundi(source.get_width() * px / art.scale))
-	var h := maxi(1, roundi(source.get_height() * px / art.scale))
+	var pads := _pads(art.pixel_origin, Vector2(source.get_width(), source.get_height()), art.scale, px)
+	var padded: Vector2 = Vector2(source.get_width(), source.get_height()) + pads[0] + pads[1]
+	var w := maxi(1, roundi(padded.x * px / art.scale))
+	var h := maxi(1, roundi(padded.y * px / art.scale))
 	var sprite: Sprite2D = art.sprite
-	sprite.texture = ImageTexture.create_from_image(_resized_image(art.file, source, w, h))
+	sprite.texture = ImageTexture.create_from_image(_resized_image(art.file, source, w, h, pads))
 	# Stage units per texture pixel, per axis (the rounded size keeps the exact extent).
-	var unit := Vector2(source.get_width() / art.scale / w, source.get_height() / art.scale / h)
-	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, art.origin)
+	var unit := Vector2(padded.x / art.scale / w, padded.y / art.scale / h)
+	var origin: Vector2 = art.origin - (pads[0] as Vector2) / art.scale
+	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, origin)
+
+
+## Transparent source pixels to add before ([0]) and after ([1]) a piece, per axis, so its
+## resampled texels fall on the screen's pixel grid: a piece rendered at 3× starts on a
+## third of a stage unit, which at 1× would sit between screen pixels and be blurred by
+## the texture filter. Exact where 3×/px is whole (1×, 3×); nearest otherwise.
+static func _pads(pixel_origin: Vector2, size: Vector2, scale: float, px: float) -> Array:
+	var before := Vector2.ZERO
+	var after := Vector2.ZERO
+	var count := int(ceil(scale / maxf(px, 0.001) - 0.0001))
+	for axis in 2:
+		var best := INF
+		for p in count:
+			var at := (pixel_origin[axis] - p) * px / scale
+			var off := absf(at - roundf(at))
+			if off < best - 0.0001:
+				best = off
+				before[axis] = p
+		best = INF
+		for q in count:
+			var extent := (size[axis] + before[axis] + q) * px / scale
+			var off := absf(extent - roundf(extent))
+			if off < best - 0.0001:
+				best = off
+				after[axis] = q
+	return [before, after]
 
 
 ## The premultiplied 3× image of a piece file, decoded once.
@@ -409,14 +622,20 @@ static func _image(file: String) -> Image:
 	return image
 
 
-static func _resized_image(file: String, source: Image, w: int, h: int) -> Image:
-	var key := "%s|%d|%d" % [file, w, h]
+static func _resized_image(file: String, source: Image, w: int, h: int, pads: Array = [Vector2.ZERO, Vector2.ZERO]) -> Image:
+	var key := "%s|%d|%d|%s|%s" % [file, w, h, pads[0], pads[1]]
 	_cache_lock.lock()
 	var image: Image = _resized.get(key)
 	_cache_lock.unlock()
 	if image != null: return image
-	image = source.duplicate()
-	if w != source.get_width() or h != source.get_height():
+	if pads[0] != Vector2.ZERO or pads[1] != Vector2.ZERO:
+		var before: Vector2 = pads[0]
+		var size := Vector2i(Vector2(source.get_width(), source.get_height()) + before + (pads[1] as Vector2))
+		image = Image.create_empty(size.x, size.y, false, source.get_format())
+		image.blit_rect(source, Rect2i(0, 0, source.get_width(), source.get_height()), Vector2i(before))
+	else:
+		image = source.duplicate()
+	if w != image.get_width() or h != image.get_height():
 		image.resize(w, h, Image.INTERPOLATE_LANCZOS)
 	_cache_lock.lock()
 	_resized[key] = image
@@ -443,7 +662,9 @@ static func warm(screen: StringName, px: float) -> void:
 			var image := _image(path)
 			if image != null and px > 0.0:
 				var s := float(piece.scale)
-				_resized_image(path, image, maxi(1, roundi(image.get_width() * px / s)), maxi(1, roundi(image.get_height() * px / s)))))
+				var pads := _pads(Vector2(piece.pixel_origin[0], piece.pixel_origin[1]), Vector2(image.get_width(), image.get_height()), s, px)
+				var padded: Vector2 = Vector2(image.get_width(), image.get_height()) + pads[0] + pads[1]
+				_resized_image(path, image, maxi(1, roundi(padded.x * px / s)), maxi(1, roundi(padded.y * px / s)), pads)))
 
 
 ## Wait for background decoding before the program exits.
@@ -473,6 +694,8 @@ class HitArea extends Button:
 
 	func _has_point(point: Vector2) -> bool:
 		if not Rect2(Vector2.ZERO, size).has_point(point): return false
+		# A TextField is hit anywhere in its box (Flash tests its bounds, not its glyphs).
+		if rec.entry.get("kind", "") == "text": return true
 		var art: Dictionary = {}
 		for candidate: Dictionary in rec.art:
 			if candidate.sprite.visible: art = candidate
@@ -515,7 +738,8 @@ func _hit(rec: Dictionary) -> Button:
 		hit.button_down.connect(func(): _state_frame(rec, states.get("press")))
 		hit.button_up.connect(func(): _state_frame(rec, states.get("hover") if hit.is_hovered() else null))
 	if layout.get("controller") != null:
-		var instance := String(hit.name)
+		# The address relative to the screen root: several panels each have an `icon1`.
+		var instance := _relative(entry.path)
 		hit.mouse_entered.connect(func(): mouse_event.emit(instance, &"over"))
 		hit.mouse_exited.connect(func(): mouse_event.emit(instance, &"out"))
 		hit.button_down.connect(func(): mouse_event.emit(instance, &"down"))
@@ -546,6 +770,19 @@ func _background_colour() -> Color:
 
 static func _matrix(m: Array) -> Transform2D:
 	return Transform2D(Vector2(m[0], m[1]), Vector2(m[2], m[3]), Vector2(m[4], m[5]))
+
+
+func has_instance(instance: String) -> bool:
+	return _by_name.has(instance)
+
+
+## A path relative to the screen root, in instance names (`@depth` segments kept as is).
+func _relative(path: String) -> String:
+	var root: String = layout.get("screen_root", "")
+	if not path.begins_with(root + "/"): return ""
+	var parts := path.substr(root.length() + 1).split("/")
+	for k in parts.size(): parts[k] = parts[k].split("@")[0] if not parts[k].begins_with("@") else parts[k]
+	return "/".join(parts)
 
 
 ## Layout nodes are named `swf_<segment>` so hit areas can carry the plain instance names.

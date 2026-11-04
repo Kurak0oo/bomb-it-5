@@ -24,7 +24,7 @@ index d76c1cba..c5f9bf01 100644
  pub mod bitmap;
  mod character;
 diff --git a/core/src/player.rs b/core/src/player.rs
-index 295bcb48..83ce4db5 100644
+index 295bcb48..3fd56104 100644
 --- a/core/src/player.rs
 +++ b/core/src/player.rs
 @@ -2327,6 +2327,21 @@ impl Player {
@@ -37,8 +37,8 @@ index 295bcb48..83ce4db5 100644
 +    }
 +
 +    /// Research-only: hide everything but one display-list path, for an isolated render.
-+    pub fn reference_isolate(&mut self, path: &str, frame: Option<u16>) -> Result<crate::reference_display::ReferencePiece, String> {
-+        self.mutate_with_update_context(|context| crate::reference_display::isolate(context, path, frame))
++    pub fn reference_isolate(&mut self, path: &str, frame: Option<u16>, also_hide: &[String]) -> Result<crate::reference_display::ReferencePiece, String> {
++        self.mutate_with_update_context(|context| crate::reference_display::isolate(context, path, frame, also_hide))
 +    }
 +
 +    /// Research-only: undo `reference_isolate`.
@@ -51,10 +51,10 @@ index 295bcb48..83ce4db5 100644
              crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
 diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
 new file mode 100644
-index 00000000..8f77bb33
+index 00000000..04be4327
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,289 @@
+@@ -0,0 +1,330 @@
 +//! Research-only display-list dump for the comparison loop, and isolated piece renders.
 +//! The dump reads native display state only: no ActionScript getters or methods run and
 +//! nothing is written. `isolate` temporarily hides other display objects (native
@@ -70,10 +70,26 @@ index 00000000..8f77bb33
 +const MAX_NODES: usize = 20000;
 +const MAX_DEPTH: usize = 64;
 +
++/// A stable path segment (see `base_segment`). Siblings that would still share one
++/// (unnamed children added at the same depth) get `#k`, their index among those
++/// siblings in render order.
++fn segment(display: DisplayObject<'_>) -> String {
++    let base = base_segment(display);
++    let Some(parent) = display.parent() else { return base };
++    // Only same-depth siblings can collide (both segment forms end in the depth).
++    let same: Vec<_> = children(parent).into_iter()
++        .filter(|s| s.depth() == display.depth() && base_segment(*s) == base).collect();
++    if same.len() < 2 {
++        return base;
++    }
++    let index = same.iter().position(|s| DisplayObject::ptr_eq(*s, display)).unwrap_or(0);
++    format!("{base}#{index}")
++}
++
 +/// A stable path segment: the instance name, unless it is a Flash auto name
 +/// (`instanceN`, whose N depends on creation order), in which case the depth. A name
 +/// that several siblings share gets its depth appended (`name@depth`) to stay unique.
-+fn segment(display: DisplayObject<'_>) -> String {
++fn base_segment(display: DisplayObject<'_>) -> String {
 +    if let Some(name) = display.name() {
 +        let name = name.to_utf8_lossy().into_owned();
 +        let auto = name
@@ -190,7 +206,22 @@ index 00000000..8f77bb33
 +            state_child = button.get_state_child(state.into());
 +        }
 +        if let Some(text) = display.as_edit_text() {
-+            node["text"] = json!(text.text().to_utf8_lossy().into_owned());
++            let content = text.text();
++            node["text"] = json!(content.to_utf8_lossy().into_owned());
++            // The field's format, so live text can be drawn as the original lays it out.
++            let f = text.text_format(0, content.len().max(1));
++            let local = display.bounds(BoundsMode::Script);
++            node["text_format"] = json!({
++                "font": f.font.as_ref().map(|s| s.to_utf8_lossy().into_owned()),
++                "size": f.size, "color": f.color.map(|c| [c.r, c.g, c.b]),
++                "align": f.align.map(|a| format!("{a:?}")), "bold": f.bold, "italic": f.italic,
++                "leading": f.leading, "letter_spacing": f.letter_spacing,
++                "left_margin": f.left_margin, "right_margin": f.right_margin, "indent": f.indent,
++                "multiline": text.is_multiline(), "word_wrap": text.is_word_wrap(),
++                "autosize": format!("{:?}", text.autosize()), "device_font": text.is_device_font(),
++                "html": text.is_html(),
++                "local_bounds": [local.x_min.to_pixels(), local.y_min.to_pixels(), local.x_max.to_pixels(), local.y_max.to_pixels()],
++            });
 +        }
 +        seen.push((display, path.clone()));
 +        nodes.push(node);
@@ -258,7 +289,7 @@ index 00000000..8f77bb33
 +}
 +
 +/// Hide everything that would draw besides `path`, keeping the masks that clip it.
-+pub(crate) fn isolate(context: &mut UpdateContext<'_>, path: &str, frame: Option<u16>) -> Result<ReferencePiece, String> {
++pub(crate) fn isolate(context: &mut UpdateContext<'_>, path: &str, frame: Option<u16>, also_hide: &[String]) -> Result<ReferencePiece, String> {
 +    let stage = context.stage;
 +    let chain = resolve(stage.into(), path).ok_or_else(|| format!("no display object at {path}"))?;
 +    let mut hidden = Vec::new();
@@ -287,6 +318,16 @@ index 00000000..8f77bb33
 +        parent = node;
 +    }
 +    let target = *chain.last().unwrap();
++    // Parts inside the piece that are rendered separately (a robot inside its stage).
++    for extra in also_hide {
++        if let Some(chain) = resolve(stage.into(), extra) {
++            let node = *chain.last().unwrap();
++            if node.visible() {
++                node.base().set_visible(false);
++                hidden.push(extra.clone());
++            }
++        }
++    }
 +    // A widget clip's other frames (selected, disabled, …): go there, render, come back.
 +    let mut goto = None;
 +    if let (Some(frame), Some(clip)) = (frame, target.as_movie_clip()) {

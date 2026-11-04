@@ -1,0 +1,12 @@
+{
+ "case": "how-to-play",
+ "case_sha256": "bf461b72a54e59a8489ebe85d85d205cf91ce0bd0dee07aec4d58bee5a4bd0b4",
+ "fps": 35.0,
+ "frames": {
+  "controls": 581,
+  "powerups": 621
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "2b9eaf009f0fbeb3377b7e359df5cc48fd4c094533bfd6e33bbf918fd440d37e",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

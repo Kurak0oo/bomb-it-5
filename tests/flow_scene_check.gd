@@ -53,10 +53,11 @@ func _run() -> void:
 	await _click(_find("confirm"))
 	await app.screen_opened()
 	_expect(app.current == &"character", "CONFIRM opens character select")
-	_expect(_find("Robot7") != null, "all eight robots are offered")
-	await _click(_find("Robot5"))
-	_expect(app.session.robot == 5, "clicking a robot selects it")
-	await _click(_find("StartGame"))
+	await app.screen_opened()
+	_expect(_find("robotIcon7") != null, "all eight robots are offered")
+	await _click(_find("robotIcon5"))
+	await _click(_find("startBtn"))
+	_expect(app.session.robot == 5, "clicking a robot selects it (startFunc: P1Robot)")
 	_expect(app.current == &"playing" and is_instance_valid(app.game), "START begins the first level")
 	var game: Node2D = app.game
 	game.set_process(false)
@@ -85,7 +86,8 @@ func _run() -> void:
 
 	app.session.levels = 5
 	await _click(_find("confirm"))
-	await _click(_find("StartGame"))
+	await app.screen_opened()
+	await _click(_find("startBtn"))
 	game = app.game
 	game.set_process(false)
 	app.session.level = 5
@@ -93,16 +95,22 @@ func _run() -> void:
 		"result_breakdown": {"kills": 300, "time": 200, "difficulty": 2000}})
 	await process_frame
 	_expect(app.current == &"score" and _find_text("LEVEL 5 / 5 COMPLETE!") != null, "winning the last level shows its score")
-	_expect(_find_text("NORMAL BONUS") != null and _find_text("2000") != null, "the score screen shows the difficulty bonus")
+	var score = app.screen.get_child(0)
+	_expect(score.get_frame("bonus_txt") == 2 and score.get_text("difficulity") == "2000",
+		"the score screen shows the difficulty bonus (bonus_txt frame 2: NORMAL BONUS)")
+	_expect(score.is_shown("nextLevel") and not score.is_shown("restartBtn"), "a won level offers NEXT, not RESTART")
 	# 2,500 points also unlock the first look; its tip covers the score screen until OK.
-	if _find("TipOk") != null: await _click(_find("TipOk"))
-	await _click(_find("Continue"))
+	_expect(score.is_shown("UI_UNLOCK_TIP"), "crossing an unlock score opens the unlock tip")
+	await _click(_find("okBt"))
+	_expect(not score.is_shown("UI_UNLOCK_TIP"), "OK closes the unlock tip")
+	await _click(_find("nextLevel"))
 	_expect(app.current == &"game_win" and _find_text("GAME COMPLETE!") != null, "NEXT after the last level completes the game")
 
 	await _click(_find("TryAgain"))
 	await app.screen_opened()
 	await _click(_find("confirm"))
-	await _click(_find("StartGame"))
+	await app.screen_opened()
+	await _click(_find("startBtn"))
 	game = app.game
 	game.set_process(false)
 	game.toggle_pause()
@@ -117,7 +125,8 @@ func _run() -> void:
 	await _click(_find("killMode"))
 	_expect(app.session.mode == &"kill", "Battle Royale can be chosen")
 	await _click(_find("confirm"))
-	await _click(_find("StartGame"))
+	await app.screen_opened()
+	await _click(_find("startBtn"))
 	app.game.set_process(false)
 	_expect(app.game.get_snapshot().mode == &"kill" and app.game.get_snapshot().actors[&"human"].weapon == &"hammer",
 		"a Battle Royale level starts with the hammer")
