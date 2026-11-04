@@ -1,0 +1,12 @@
+{
+ "case": "main-menu",
+ "case_sha256": "db051c9817ba59cd0c8dafa62453e3c94ce2a7c04d33c641f27b1c0806a7ce9b",
+ "fps": 35.0,
+ "frames": {
+  "menu": 541,
+  "title": 301
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "ce05f9cf8bcdb0c395c88251ea538f042b2c7421637328daaa60f31acb5fb98f",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

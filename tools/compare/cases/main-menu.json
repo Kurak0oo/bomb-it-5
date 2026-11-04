@@ -1,9 +1,12 @@
 {
   "name": "main-menu",
-  "origin": "Main menu at rest after the intro, reached as in tools/reference_player/cases/stages/*.json (START is clicked there at frame 301). Checkpoint 1 case.",
+  "origin": "Main menu after the intro, reached as in tools/reference_player/cases/stages/*.json: the title/loading screen is captured at frame 301, PLAY is clicked at (349,440), and the menu is captured 240 frames later. The menu's decorative idle loop never stops, so the frame number pins its phase; the START/HOW TO PLAY/MORE GAMES buttons are settled from frame 541 onward. Checkpoint 1 case.",
   "actions": [
     {"command": "seed 55"},
     {"command": "step 301"},
-    {"capture": "idle"}
+    {"capture": "title"},
+    {"command": "click 349 440"},
+    {"command": "step 240"},
+    {"capture": "menu"}
   ]
 }
