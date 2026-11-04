@@ -220,6 +220,18 @@ def _inner(svg_text):
     return svg_text[start:svg_text.rindex('</svg>')]
 
 
+def _namespaces(svg_text):
+    """The piece root's xmlns:prefix declarations.
+
+    _inner drops the root element, and with it the declarations FFDec puts there
+    (ffdec:objectType, ffdec:original, ffdec:has, ffdec:fill). Inlining the body into
+    the composite then leaves those prefixes undeclared, which strict parsers such as
+    resvg reject. Re-declare them on the piece's own wrapper.
+    """
+    root = svg_text[svg_text.index('<svg'):svg_text.index('>', svg_text.index('<svg'))]
+    return ''.join(re.findall(r'\sxmlns:[A-Za-z0-9_.-]+="[^"]*"', root))
+
+
 def route_b(items, export, scale, missing, background, view):
     w, h = STAGE[0] * scale, STAGE[1] * scale
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" '
@@ -248,7 +260,8 @@ def route_b(items, export, scale, missing, background, view):
             filters.append(f'<filter id="{fid}" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" '
                            f'values="{r} 0 0 0 {ar} 0 {g} 0 0 {ag} 0 0 {bl} 0 {ab} 0 0 0 {al} {aa}"/></filter>')
             filter_attr = f' filter="url(#{fid})"'
-        parts.append(f'<g transform="{transform}"{filter_attr}>{_prefix_ids(_inner(text), f"p{i}_")}</g>')
+        ns = _namespaces(text)
+        parts.append(f'<g{ns} transform="{transform}"{filter_attr}>{_prefix_ids(_inner(text), f"p{i}_")}</g>')
     parts.insert(1, '<defs>' + ''.join(filters) + '</defs>')
     parts.append('</svg>')
     import resvg_py
