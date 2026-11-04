@@ -9,6 +9,8 @@ var app: Control
 
 
 func _initialize() -> void:
+	# Generated screens follow frames, not the clock, so waiting for them is quick.
+	load("res://scripts/ui/swf_screen.gd").frame_locked = true
 	_run.call_deferred()
 
 
@@ -28,26 +30,29 @@ func _run() -> void:
 	_expect(_find("moregames") == null, "MORE GAMES (the portal link) is removed (owner edit)")
 
 	await _click(_find("startGame"))
+	await app.screen_opened()
 	_expect(app.current == &"settings", "START opens Game Settings")
-	_expect(not _find("Mode_arcade").disabled, "Arcade is selectable")
-	await _click(_find_text("5"))
+	_expect(_find("arcadeMode") != null and _find("collectMode") != null, "the four mode cards are offered")
+	await _click(_find("levelsFive"))
 	_expect(app.session.levels == 1, "original: the levels button named five sets one level (levelsHandle)")
-	await _click(_find_text("10"))
-	_expect(app.session.levels == 10, "a levels button sets its labelled count")
-	await _click(_find_text("NORMAL"))
+	await _click(_find("levelsTen"))
+	_expect(app.session.levels == 10, "a levels button sets its count")
+	await _click(_find("normal"))
 	_expect(app.session.difficulty == &"normal", "a difficulty can be chosen")
-	await _click(_find_text("1"))
+	await _click(_find("enemiesOne"))
 	_expect(app.session.enemies == 1, "one to three enemies can be chosen")
-	_expect(_find_text("0") == null, "zero enemies is not offered to one player")
-	var arena: OptionButton = _find("Arena")
-	_expect(arena.get_item_text(0) == "RANDOM" and arena.item_count == 1 + app.StageSets.available_sets().size(),
-		"the arena list offers Random and every available stage set")
-	arena.select(arena.item_count - 1)
-	arena.item_selected.emit(arena.item_count - 1)
+	_expect(_find("enemiesZero").mouse_filter == Control.MOUSE_FILTER_IGNORE, "zero enemies is disabled for one player")
+	var swf = app.screen.get_child(0)
+	_expect(not swf.is_shown("showMenu"), "the stage list starts closed")
+	await _click(_find("mapMenu"))
+	_expect(swf.is_shown("showMenu"), "the arena button opens the stage list")
+	await _click(_find("cinemaStages"))
+	_expect(app.session.stage == &"cinema" and swf.get_frame("choose") == 2, "picking Cinema sets it (choose frame 2, stagesHandle)")
+	_expect(not swf.is_shown("showMenu"), "picking a stage closes the list")
 	var chosen_set: StringName = app.session.stage
-	_expect(chosen_set != &"random", "an arena can be chosen")
-	await _click(_find("Next"))
-	_expect(app.current == &"character", "NEXT opens character select")
+	await _click(_find("confirm"))
+	await app.screen_opened()
+	_expect(app.current == &"character", "CONFIRM opens character select")
 	_expect(_find("Robot7") != null, "all eight robots are offered")
 	await _click(_find("Robot5"))
 	_expect(app.session.robot == 5, "clicking a robot selects it")
@@ -79,7 +84,7 @@ func _run() -> void:
 	_expect(app.current == &"settings", "TRY AGAIN after game over returns to Game Settings")
 
 	app.session.levels = 5
-	await _click(_find("Next"))
+	await _click(_find("confirm"))
 	await _click(_find("StartGame"))
 	game = app.game
 	game.set_process(false)
@@ -95,7 +100,8 @@ func _run() -> void:
 	_expect(app.current == &"game_win" and _find_text("GAME COMPLETE!") != null, "NEXT after the last level completes the game")
 
 	await _click(_find("TryAgain"))
-	await _click(_find("Next"))
+	await app.screen_opened()
+	await _click(_find("confirm"))
 	await _click(_find("StartGame"))
 	game = app.game
 	game.set_process(false)
@@ -107,9 +113,10 @@ func _run() -> void:
 	_expect(app.current == &"menu" and not is_instance_valid(app.game), "MAIN MENU leaves the level")
 
 	await _click(_find("startGame"))
-	await _click(_find("Mode_kill"))
-	_expect(app.session.mode == &"kill" and _find_text("Be the 1st to kill 10 enemies!") != null, "Battle Royale can be chosen")
-	await _click(_find("Next"))
+	await app.screen_opened()
+	await _click(_find("killMode"))
+	_expect(app.session.mode == &"kill", "Battle Royale can be chosen")
+	await _click(_find("confirm"))
 	await _click(_find("StartGame"))
 	app.game.set_process(false)
 	_expect(app.game.get_snapshot().mode == &"kill" and app.game.get_snapshot().actors[&"human"].weapon == &"hammer",
@@ -144,6 +151,10 @@ func _click(control: Control) -> void:
 	if control == null:
 		_expect(false, "control to click exists")
 		return
+	# A generated screen shows some instances only after a while (PLAY after loading).
+	for wait in 900:
+		if control.is_visible_in_tree(): break
+		await process_frame
 	var at := control.get_global_rect().get_center()
 	for pressed in [true, false]:
 		var event := InputEventMouseButton.new()

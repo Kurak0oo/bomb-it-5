@@ -124,6 +124,29 @@ def run_godot(name, case_path, godot, fps):
     return out
 
 
+CEILING_MARGIN = {'ssim': 0.02, 'delta_e': 2.0}
+
+
+def resampling_ceiling(case, capture, reference_png):
+    """How close the original's own 3× frame of this capture, scaled to 1×, comes to its 1×
+    frame. The art pack keeps that 3× frame (record_screen.py art). None without the pack."""
+    from PIL import Image
+    big = None
+    for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
+        layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+            big = ROOT / 'original' / 'screens' / layout['screen'] / 'reference-3x.png'
+    if big is None or not big.is_file():
+        big = next(iter((ROOT / 'original' / 'screens').glob(f'*/reference-3x-{case}-{capture}.png')), None)
+    if big is None or not big.is_file():
+        return None
+    small = WORK / case / f'{capture}-reference-3x-to-1x.png'
+    Image.open(big).convert('RGB').resize((700, 510), Image.LANCZOS).save(small)
+    _, masks = owner_edits(case, capture)
+    result = pixels.compare(reference_png, small, WORK / case / f'{capture}-ceiling-heatmap.png', masks=masks)
+    return {k: result[k] for k in ('ssim', 'max_region_delta_e')}
+
+
 def owner_edits(case, capture):
     """Owner edits of the screen recorded by this capture (from its generated layout), and
     the stage rectangles they change: original and new places, excluded from pixels."""
@@ -167,12 +190,20 @@ def check(name, godot):
         reference_png = WORK / name / 'reference' / f'{capture}.png'
         if reference_png.is_file():
             thresholds = dict(case.get('thresholds', {}))
+            ceiling = resampling_ceiling(name, capture, reference_png)
+            if ceiling:
+                # No 3× pipeline can beat the original's own 3× render scaled to 1×.
+                base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
+                thresholds['ssim'] = min(base['ssim'], ceiling['ssim'] - CEILING_MARGIN['ssim'])
+                thresholds['delta_e'] = max(base['delta_e'], ceiling['max_region_delta_e'] + CEILING_MARGIN['delta_e'])
             if capture in floor:
                 base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
                 thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
                 thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
             entry['pixel'] = pixels.compare(reference_png, out / f'{capture}.png',
                                             WORK / name / f'{capture}-heatmap.png', thresholds, masks)
+            if ceiling:
+                entry['pixel']['ceiling'] = ceiling
         else:
             entry['pixel'] = {'passed': None, 'skipped': 'no local reference capture (record on the SWF machine)'}
         report['captures'][capture] = entry
@@ -203,7 +234,8 @@ def print_report(report):
             print(f'    pixels: {p["error"]}')
         else:
             print(f'    pixels: SSIM {p["ssim"]} (need {p["thresholds"]["ssim"]:.4g}), max region ΔE '
-                  f'{p["max_region_delta_e"]} (need ≤ {p["thresholds"]["delta_e"]:.4g}), heatmap {capture}-heatmap.png')
+                  f'{p["max_region_delta_e"]} (need ≤ {p["thresholds"]["delta_e"]:.4g}), heatmap {capture}-heatmap.png'
+                  + (f'; 3×→1× ceiling SSIM {p["ceiling"]["ssim"]}, ΔE {p["ceiling"]["max_region_delta_e"]}' if p.get('ceiling') else ''))
 
 
 def accept(name):

@@ -81,8 +81,8 @@ class Player:
         self.dumps += 1
         return json.loads(path.read_text(encoding='utf-8'))
 
-    def piece(self, path, target):
-        self.command(f'piece {path} {target}')
+    def piece(self, path, target, frame=None):
+        self.command(f'piece {path} {target}' + (f' {frame}' if frame else ''))
         return json.loads(Path(f'{target}.json').read_text(encoding='utf-8'))
 
     def shot(self, target):
@@ -142,7 +142,7 @@ def period_of(golden, root):
 def state_of(node):
     m = node.get('stage_matrix') or [1, 0, 0, 1, 0, 0]
     return [round(v, 4) for v in m] + [1 if node.get('effective_visible') else 0, node.get('frame') or 0,
-                                        node.get('character_id') or 0]
+                                        node.get('character_id') or 0, round(node.get('alpha', 1.0), 4)]
 
 
 # ------------------------------------------------------------------ timeline
@@ -191,7 +191,7 @@ def record_timeline(case_name, player_path, swf):
         out = {'schema': 'bombit5-screen-timeline-v1', 'screen': screen, 'case': case_name, 'capture': capture,
                'root': root, 'opened_frame': opened, 'opened_after_input': opened - last_input,
                'capture_index': capture_index, 'period': period, 'period_capped': capped,
-               'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character'],
+               'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character', 'alpha'],
                'note': 'Changes only: [frame index since the screen opened, state or null when absent].',
                'tracks': tracks}
         target = GOLDENS / case_name / f'{capture}.timeline.json'
@@ -211,6 +211,8 @@ def centre(bounds):
 def record_states(case_name, player_path, swf):
     case = load_case(case_name)
     for capture, (screen, spec) in screens_of(case_name).items():
+        if spec.get('states') is False:
+            continue  # a ported controller drives this screen's widgets
         golden = json.loads((GOLDENS / case_name / f'{capture}.json').read_text(encoding='utf-8'))
         by_name = {}
         for node in golden['nodes']:
@@ -300,7 +302,8 @@ def record_art(case_name, player_path, swf):
         (PACK / '.gdignore').write_text('')
         for old in target.glob('piece-*.png'):
             old.unlink()
-        statics = {n['path']: n for n in layout['nodes'] if n['role'] == 'piece' and n['path'] in layout['pieces']}
+        statics = {n['path']: n for n in layout['nodes'] if n['role'] == 'piece' and n['path'] in layout['pieces']
+                   and not n.get('from_capture')}
         sequences = {n['path']: n for n in layout['nodes'] if n['role'] == 'sequence'}
         # A static piece renders at the capture if it is visible there, else at its first visible frame.
         wanted = {}
@@ -331,13 +334,15 @@ def record_art(case_name, player_path, swf):
                 _render_frame(p, p.frame - opened, wanted, sequences, pieces, seen, target, tmp)
         finally:
             p.close()
+        frames = _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, seen, target)
         states = target / 'states' / 'states.json'
         manifest = {'schema': 'bombit5-original-screen-v2', 'screen': screen,
                     'golden_sha256': layout['source']['golden_sha256'], 'swf_sha256': sha256(swf),
                     'player_sha256': sha256(player_path), 'scale': SCALE,
                     'pieces': {k: v for k, v in pieces.items() if not isinstance(v, dict) or 'frames' not in v},
                     'sequences': {k: v['frames'] for k, v in pieces.items() if isinstance(v, dict) and 'frames' in v},
-                    'states': json.loads(states.read_text(encoding='utf-8')) if states.is_file() else {}}
+                    'states': json.loads(states.read_text(encoding='utf-8')) if states.is_file() else {},
+                    'frames': frames}
         check = _self_check(layout, manifest, target)
         manifest['self_check'] = check
         (target / 'manifest.json').write_text(json.dumps(manifest, indent=1) + '\n', encoding='utf-8')
@@ -345,6 +350,41 @@ def record_art(case_name, player_path, swf):
               f'({len(seen)} distinct images); recomposed at the capture vs the reference frame: '
               f'SSIM {check.get("ssim")}, max region ΔE {check.get("max_region_delta_e")}')
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, seen, target):
+    """Widget frames and parts from other captures, each in a fresh run up to its capture,
+    so going to other frames never disturbs the timeline recording."""
+    by_capture = {}
+    for node in layout['nodes']:
+        where = node.get('from_capture', capture)
+        if node.get('widget_frames') or (node.get('from_capture') and node['role'] == 'piece' and node['path'] in layout['pieces']):
+            by_capture.setdefault(where, []).append(node)
+    frames = {}
+    capture_index = (layout.get('timeline') or {}).get('capture_index', 0)
+    for where, nodes in by_capture.items():
+        p = Player(player_path, swf)
+        tmp = Path(tempfile.mkdtemp(prefix='bombit5-frames-'))
+        try:
+            for line in single_steps(case, where):
+                p.command(line)
+            # The player's own 3× frame at this capture: the comparison's resampling ceiling.
+            p.shot(target / f'reference-3x-{case["name"]}-{where}.png')
+            present = {n['path'] for n in p.display()['nodes']}
+            for node in nodes:
+                path = node['path']
+                if path not in present:
+                    print(f'  warning: {path} not on the display list at the {where} capture; no art')
+                    continue
+                if node.get('from_capture') and node['role'] == 'piece':
+                    pieces[path] = dict(_store(p, path, target, tmp, seen), index=capture_index)
+                for frame in node.get('widget_frames', []):
+                    frames.setdefault(path, {})[str(frame)] = dict(_store(p, path, target, tmp, seen, frame),
+                                                                   index=capture_index)
+        finally:
+            p.close()
+            shutil.rmtree(tmp, ignore_errors=True)
+    return frames
 
 
 def _render_frame(p, index, wanted, sequences, pieces, seen, target, tmp):
@@ -356,9 +396,9 @@ def _render_frame(p, index, wanted, sequences, pieces, seen, target, tmp):
             entry['frames'][str(index)] = _store(p, path, target, tmp, seen)
 
 
-def _store(p, path, target, tmp, seen):
+def _store(p, path, target, tmp, seen, frame=None):
     raw = tmp / 'piece.png'
-    meta = p.piece(path, raw)
+    meta = p.piece(path, raw, frame)
     digest = hashlib.sha256(raw.read_bytes() + json.dumps(meta['pixel_origin']).encode()).hexdigest()
     if digest not in seen:
         name = f'piece-{len(seen):05d}.png'
@@ -395,6 +435,8 @@ def _self_check(layout, manifest, target):
     composite = Image.new('RGBA', (700 * SCALE, 510 * SCALE), tuple(bg[:3]) + (255,))
     for node in layout['nodes']:
         entry = None
+        if node.get('from_capture'):
+            continue  # recorded in another capture (e.g. a closed dropdown)
         if node['role'] == 'piece' and node.get('effective_visible'):
             entry = manifest['pieces'].get(node['path'])
         elif node['role'] == 'sequence' and node.get('effective_visible'):

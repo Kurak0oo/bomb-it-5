@@ -216,7 +216,9 @@ fn main() -> Result<()> {
             "piece" => {
                 // One display-list path rendered alone (its masks, filters and blends
                 // included) on a transparent stage, cropped to its render bounds.
-                let piece = player.lock().unwrap().reference_isolate(t[1]).map_err(|e| anyhow!(e))?;
+                // Optional 4th word: render a widget clip at that frame (restored afterwards).
+                let frame: Option<u16> = t.get(3).map(|f| f.parse()).transpose()?;
+                let piece = player.lock().unwrap().reference_isolate(t[1], frame).map_err(|e| anyhow!(e))?;
                 let (bounds, px) = (piece.render_bounds, piece.pixel_bounds);
                 let rendered = {
                     let mut pl = player.lock().unwrap();

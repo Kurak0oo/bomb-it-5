@@ -46,9 +46,30 @@ SCREENS = {
              # Clips whose frame is a setting, cycled by clicks (`qualityCtlHandle`, the
              # sound and music handlers); the others are buttons with hover/press frames.
              'switches': {'quality': True, 'sound': True, 'music': True}},
+    # GameSettingsUI: every widget is driven by the ported controller
+    # (scripts/ui/game_settings_ui.gd), so each instance's action is its own name and every
+    # frame of it is rendered. The stage dropdown `showMenu` is off the display list until
+    # mapMenu or choose is pressed, so it comes from the `dropdown` capture.
+    'settings': {'golden': ('game-settings', 'settings'), 'root_class': 'UI_SETTING',
+                 'controller': 'game_settings_ui',
+                 'interactive': {n: n for n in (
+                     'arcadeMode', 'killMode', 'collectMode', 'paintingMode', 'playersOne', 'playersTwo',
+                     'enemiesOne', 'enemiesTwo', 'enemiesThree', 'enemiesZero', 'levelsFive', 'levelsTen',
+                     'levelsFifteen', 'levelsTwenty', 'mapMenu', 'choose', 'easy', 'normal', 'hard', 'confirm',
+                     'back', 'randomStages', 'restaurantStages', 'basketballStages', 'cinemaStages',
+                     'weddingStages', 'mysteriousStages', 'caveStages')},
+                 'widgets': ('arcadeMode', 'killMode', 'collectMode', 'paintingMode', 'playersOne', 'playersTwo',
+                             'enemiesOne', 'enemiesTwo', 'enemiesThree', 'enemiesZero', 'levelsFive', 'levelsTen',
+                             'levelsFifteen', 'levelsTwenty', 'mapMenu', 'choose', 'easy', 'normal', 'hard',
+                             'confirm', 'back', 'randomStages', 'restaurantStages', 'basketballStages',
+                             'cinemaStages', 'weddingStages', 'mysteriousStages', 'caveStages'),
+                 'extra': {'dropdown': ['showMenu']},
+                 'states': False},
 }
 
 EDITS = Path(__file__).resolve().parent / 'owner_edits.json'
+# Flash blend modes the screen reproduces (scripts/ui/swf_blend.gdshader).
+BLENDS = ('Multiply', 'Screen', 'Lighten', 'Darken', 'Difference', 'Add', 'Subtract', 'Overlay', 'HardLight')
 
 CARRIED = ('kind', 'name', 'class', 'depth', 'character_id', 'effective_visible', 'alpha',
            'stage_matrix', 'stage_bounds', 'render_bounds', 'frame', 'total_frames', 'label',
@@ -150,6 +171,24 @@ def build(name, spec):
     if len(roots) != 1:
         raise SystemExit(f'{name}: expected one root clip ({spec.get("root_class") or spec.get("root_path")}), found {len(roots)}')
     screen_root = roots[0]
+    # Parts that are off the display list at the capture (a dropdown added on demand) come
+    # from another capture of the same case; they start hidden.
+    extra_paths = set()
+    for extra_capture, names in spec.get('extra', {}).items():
+        extra = _unique_paths([n for n in json.loads((GOLDENS / case / f'{extra_capture}.json').read_text(encoding='utf-8'))['nodes']
+                               if n.get('kind') != 'stage'])
+        for instance in names:
+            tops = [n['path'] for n in extra if n['path'].startswith(screen_root + '/')
+                    and n['path'].rsplit('/', 1)[-1] == instance]
+            if len(tops) != 1:
+                raise SystemExit(f'{name}: {instance} not found once in the {extra_capture} capture')
+            for n in extra:
+                if (n['path'] == tops[0] or n['path'].startswith(tops[0] + '/')) and n['path'] not in by_path:
+                    # Only the part itself starts hidden; its children show with it.
+                    n = dict(n, initially_hidden=n['path'] == tops[0], from_capture=extra_capture)
+                    nodes.append(n)
+                    by_path[n['path']] = n
+                    extra_paths.add(n['path'])
 
     def segment_name(path):
         last = path.rsplit('/', 1)[-1]
@@ -172,6 +211,22 @@ def build(name, spec):
             expanded.add(q)
             q = parent_of(q)
 
+    # A node that blends with what lies below must be its own piece, so the screen can
+    # blend it against the real backdrop: split every group above it.
+    # A group that Flash composites on its own (any blend mode, Layer included, or filters,
+    # which cache it as a bitmap) contains the blends inside it: the split stops there and
+    # that group is the piece.
+    for path, node in by_path.items():
+        if path.startswith(screen_root + '/') and node.get('blend_mode', 'Normal') in BLENDS:
+            chain, q = [], parent_of(path)
+            while q.startswith(screen_root):
+                group = by_path.get(q, {})
+                if q != screen_root and (group.get('blend_mode', 'Normal') != 'Normal' or group.get('filters')):
+                    chain = []  # blends inside this group: split only above it
+                else:
+                    chain.append(q)
+                q = parent_of(q)
+            expanded.update(chain)
     timeline = Timeline.load(GOLDENS / case / f'{capture}.timeline.json')
     states_path = GOLDENS / case / f'{capture}.states.json'
     states = json.loads(states_path.read_text(encoding='utf-8'))['states'] if states_path.is_file() else {}
@@ -183,10 +238,15 @@ def build(name, spec):
         while queue:
             path = queue.pop(0)
             node = by_path.get(path, {})
-            if node.get('clip_depth') or path in interactive:
+            if node.get('clip_depth'):
                 continue
             looks = timeline.look_changes(path)
             if not looks:
+                continue
+            if path in interactive:
+                # A widget animating inside (turning gears on the selected card): a sequence
+                # at its recorded frame; its other frames are single images.
+                sequences[path] = looks
                 continue
             kids = [p for p in by_path if parent_of(p) == path]
             if kids and timeline.children_stable(path):
@@ -223,6 +283,14 @@ def build(name, spec):
                                                         'Difference', 'Add', 'Subtract', 'Overlay', 'HardLight'):
                 warnings.append(f'{path}: piece blends ({node["blend_mode"]}) with what lies below, in a mode '
                                 'the screen cannot reproduce; rendered alone it will look different')
+        if node.get('from_capture'):
+            entry['from_capture'] = node['from_capture']
+            if node.get('initially_hidden'):
+                entry['initially_hidden'] = True
+        if segment_name(path) in spec.get('widgets', ()) and (node.get('total_frames') or 1) > 1:
+            # Every frame of a widget clip is rendered (selected, disabled, …): its screen
+            # controller shows them with set_frame, as the AS3 does with gotoAndStop.
+            entry['widget_frames'] = list(range(1, int(node['total_frames']) + 1))
         if path in interactive:
             entry['action'] = interactive[path]
             if path in states:
@@ -261,6 +329,7 @@ def build(name, spec):
         'pieces': pieces,
         'warnings': warnings,
         'owner_edits': edits,
+        'controller': spec.get('controller'),
         'timeline': None if timeline is None else {
             k: timeline.data[k] for k in ('opened_frame', 'opened_after_input', 'capture_index', 'period', 'period_capped')},
         'nodes': layout_nodes,

@@ -20,6 +20,7 @@ const Fidelity = preload("res://scripts/fidelity.gd")
 const Audio = preload("res://scripts/original_audio.gd")
 const Quality = preload("res://scripts/quality.gd")
 const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
+const GameSettingsUI = preload("res://scripts/ui/game_settings_ui.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -111,7 +112,7 @@ func _exit_tree() -> void:
 
 func _draw() -> void:
 	if is_instance_valid(game): return
-	if current in [&"title", &"menu"]:
+	if current in [&"title", &"menu", &"settings"]:
 		# Outside the original stage there is nothing: letterbox black.
 		draw_rect(Rect2(Vector2.ZERO, size), Color.BLACK)
 		return
@@ -152,6 +153,17 @@ func show_main_menu(from_title := false) -> void:
 	# (`mainMenu` drops the round's music first).
 	audio.null_game_music()
 	audio.create_ui_music()
+
+
+## Frames between the input and a screen's opening, as the original (recorded timeline),
+## unless an owner edit sets another delay for play.
+func _open_delay(id: StringName) -> int:
+	var screen_layout := SwfScreen.layout_of(id)
+	var timeline = screen_layout.get("timeline")
+	var delay: int = int(timeline.opened_after_input) if timeline is Dictionary else 0
+	var edit = screen_layout.get("owner_edits", {}).get("open_delay")
+	if edit is Dictionary and not SwfScreen.frame_locked: delay = int(edit.frames)
+	return delay
 
 
 ## Wait until the current generated screen has opened (it may open some frames late).
@@ -318,70 +330,11 @@ func _leave_guide() -> void:
 
 
 func show_settings() -> void:
-	var page := _page(&"settings")
-	_label(page, &"Title", "GAME SETTINGS", Rect2(0, 40, 1280, 0), 42, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
-	var modes := Modes.available()
-	for index in MODE_ORDER.size():
-		var mode: StringName = MODE_ORDER[index]
-		var card := _button(page, StringName("Mode_" + mode), MODE_TITLES[mode], Rect2(130 + index * 260, 110, 240, 120),
-			func(): _set_mode(mode), 22)
-		card.toggle_mode = true
-		card.button_pressed = session.mode == mode
-		card.disabled = mode not in modes
-		if not (_art and ScreenLayout.is_baked(_layout, card.name)):
-			var chosen := StyleBoxFlat.new()
-			chosen.bg_color = Color("c8743f")
-			chosen.border_color = UiKit.ACCENT
-			chosen.set_border_width_all(3)
-			chosen.set_corner_radius_all(12)
-			card.add_theme_stylebox_override("pressed", chosen)
-		card.tooltip_text = Modes.GOALS.get(mode, "Not available yet")
-	_label(page, &"Goals", Modes.GOALS.get(session.mode, ""), Rect2(0, 245, 1280, 0), 19, Color("b4d2d7"),
-		HORIZONTAL_ALIGNMENT_CENTER)
-	var rows := [["ENEMIES", 300, &"LabelEnemies"], ["LEVELS", 370, &"LabelLevels"], ["ARENA", 440, &"LabelArena"],
-		["DIFFICULTY", 510, &"LabelDifficulty"]]
-	for row in rows:
-		_label(page, row[2], row[0], Rect2(180, row[1] + 8, 0, 0), 22, Color("ffc79a"))
-	var enemies := UiKit.choices(page, Vector2(400, 300), [["3", 3, true], ["2", 2, true], ["1", 1, true]], session.enemies,
-		func(value): session.enemies = value, 116, [&"Enemies3", &"Enemies2", &"Enemies1"], _placer)
-	for widget in enemies: _gate(widget, widget.name)
-	var level_options: Array = []
-	var level_names: Array = []
-	for count in Session.LEVEL_CHOICES:
-		level_options.append([str(count), Fidelity.levels_for_button(count), true])
-		level_names.append(&"Levels%d" % count)
-	var levels := UiKit.choices(page, Vector2(400, 370), level_options, session.levels, func(value): session.levels = value,
-		116, level_names, _placer)
-	for widget in levels: _gate(widget, widget.name)
-	var arena := OptionButton.new()
-	arena.name = "Arena"
-	var arena_rect := _rect(&"Arena", Rect2(400, 440, 500, 44))
-	arena.position = arena_rect.position
-	arena.size = arena_rect.size
-	arena.add_theme_font_size_override("font_size", 19)
-	arena.add_item("RANDOM")
-	arena.set_item_metadata(0, &"random")
-	for set_id in StageSets.available_sets():
-		arena.add_item(StageSets.title(set_id))
-		arena.set_item_metadata(arena.item_count - 1, set_id)
-	for index in arena.item_count:
-		if arena.get_item_metadata(index) == session.stage: arena.select(index)
-	arena.item_selected.connect(func(index: int): session.stage = arena.get_item_metadata(index))
-	page.add_child(arena)
-	if _art:
-		arena.alignment = HORIZONTAL_ALIGNMENT_CENTER
-		arena.add_theme_font_size_override("font_size", 28)
-	_live(arena, &"Arena", Color("13848c"))
-	var difficulty_options: Array = []
-	for difficulty in DIFFICULTIES:
-		difficulty_options.append([str(difficulty).to_upper(), difficulty, difficulty in playable_difficulties])
-	if session.difficulty not in playable_difficulties: session.difficulty = &"normal"
-	var difficulties := UiKit.choices(page, Vector2(400, 510), difficulty_options, session.difficulty,
-		func(value): session.difficulty = value, 160, [&"Difficulty_easy", &"Difficulty_normal", &"Difficulty_hard"], _placer)
-	for widget in difficulties: _gate(widget, widget.name)
-	_button(page, &"Back", "BACK", Rect2(130, 610, 220, 60), show_main_menu, 24)
-	_button(page, &"Next", "NEXT", Rect2(930, 610, 220, 60), show_character_select, 24).grab_focus.call_deferred()
-
+	_end_game()
+	var swf := _swf_page(&"settings", _open_delay(&"settings"))
+	# `GameSettingsUI`, ported: it drives the screen's clips and writes the session.
+	swf.set_meta("controller", GameSettingsUI.new(swf, self))
+	audio.null_game_music()
 
 func _set_mode(mode: StringName) -> void:
 	session.mode = mode

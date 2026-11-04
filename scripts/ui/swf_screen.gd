@@ -22,6 +22,11 @@ extends Node2D
 
 signal action(name: StringName)
 signal opened
+## For screens driven by a ported controller: over / out / down / up / click on an instance.
+signal mouse_event(instance: String, kind: StringName)
+## Any mouse press on the stage, after the instances' own handlers (AS3 bubbling to the
+## root). `press` counts presses, so a handler can ignore the press that added it.
+signal stage_down(press: int)
 
 const STAGE := Vector2(700, 510)
 const PACK := "res://original/screens/%s/manifest.json"
@@ -58,6 +63,8 @@ var _px := -1.0
 var _clock := 0.0
 var _timeline: Dictionary = {}
 var _hits: Node2D
+var press_count := 0
+var _created_frame := -1
 
 
 static func create(screen: StringName, delay := 0) -> Node2D:
@@ -72,6 +79,7 @@ static func layout_of(screen: StringName) -> Dictionary:
 
 
 func build(screen: StringName) -> void:
+	_created_frame = Engine.get_process_frames()
 	screen_name = screen
 	name = "Swf_" + String(screen)
 	layout = layout_of(screen)
@@ -99,7 +107,9 @@ func build(screen: StringName) -> void:
 		var rec := {"entry": entry, "node": node, "parent": entry.parent, "path": path,
 			"static": _matrix(entry.stage_matrix), "visible": bool(entry.effective_visible),
 			"frame": entry.get("frame", 0), "offset": Vector2(moved[0], moved[1]),
-			"track_index": PackedInt32Array(), "track": [], "art": [], "override": -1}
+			"track_index": PackedInt32Array(), "track": [], "art": [], "override": -1,
+			"shown": not entry.get("initially_hidden", false), "hit": null,
+			"alpha_at_capture": float(entry.get("alpha", 1.0))}
 		if entry.has("track"):
 			for change: Array in entry.track:
 				rec.track_index.append(int(change[0]))
@@ -113,8 +123,10 @@ func build(screen: StringName) -> void:
 		_records.append(rec)
 		_add_piece_art(rec, manifest)
 		if entry.has("action") and entry.has("stage_bounds"):
-			_hits.add_child(_hit(rec))
-			_by_name[String(entry.get("name", "")).split("@")[0]] = rec
+			rec.hit = _hit(rec)
+			_hits.add_child(rec.hit)
+		if entry.has("name"):
+			_by_name[String(entry.name).split("@")[0]] = rec
 	add_child(_hits)
 	_apply(0)
 	visible = open_delay <= 0
@@ -141,7 +153,7 @@ func node_for(path: String) -> Node2D:
 	return by_path.get(path)
 
 
-## Show a switch's frame (1-based clip frame), as its owner's setting dictates.
+## `gotoAndStop(frame)` on an instance (1-based clip frame).
 func set_frame(instance: String, frame: int) -> void:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty(): return
@@ -149,7 +161,49 @@ func set_frame(instance: String, frame: int) -> void:
 	_apply(index)
 
 
+## `currentFrame` of an instance.
+func get_frame(instance: String) -> int:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return 0
+	if rec.override > 0: return rec.override
+	var s = _state(rec, index)
+	return int(s[7]) if s is Array and s.size() > 7 else int(rec.frame)
+
+
+## `addChild` / `removeChild` of an instance on its parent.
+func set_shown(instance: String, shown: bool) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return
+	rec.shown = shown
+	_apply(index)
+
+
+func is_shown(instance: String) -> bool:
+	return bool(_by_name.get(instance, {}).get("shown", false))
+
+
+## `mouseEnabled` of an instance.
+func set_enabled(instance: String, enabled: bool) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty() or rec.hit == null: return
+	rec.hit.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
+
+
+func _input(event: InputEvent) -> void:
+	if not is_open or not is_visible_in_tree(): return
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		press_count += 1
+		_emit_stage_down.call_deferred(press_count)
+
+
+func _emit_stage_down(press: int) -> void:
+	stage_down.emit(press)
+
+
 func _process(delta: float) -> void:
+	# A screen made by input (a click) during this frame has not run a frame yet: in the
+	# original, input lands between frames and the next frame is the screen's first.
+	if _created_frame > 0 and Engine.get_process_frames() == _created_frame: return
 	# The comparison loop steps frames, not time: one SWF frame per Godot frame.
 	_clock += 1.0 / FPS if frame_locked else delta
 	while _clock >= 1.0 / FPS - 1e-6:
@@ -196,17 +250,25 @@ func _apply(i: int) -> void:
 		var s = _state(rec, i)
 		var present: bool = s == null or (s is Array and s.size() > 0)
 		var g: Transform2D = _global_at(rec, i) if present else rec.static
-		var vis: bool = present and (rec.visible if s == null else bool(s[6]))
+		var vis: bool = present and rec.shown and (rec.visible if s == null else bool(s[6]))
 		var frame: int = int(rec.frame) if s == null or not present else int(s[7])
 		var parent_g: Transform2D = globals.get(rec.parent, Transform2D.IDENTITY)
 		var parent_shown: bool = shown.get(rec.parent, true)
 		var node: Node2D = rec.node
 		node.transform = parent_g.affine_inverse() * g
-		node.visible = vis or (present and not parent_shown)
+		node.visible = vis or (present and rec.shown and not parent_shown)
 		globals[rec.path] = g
 		shown[rec.path] = vis and parent_shown
+		if rec.hit != null: rec.hit.visible = vis and parent_shown
 		if rec.override > 0: frame = rec.override
 		if frame > 0: node.set_meta("swf_frame", frame)
+		# Recorded alpha (older timelines have none): the art carries the alpha it was
+		# rendered with at the capture, so the node scales by the ratio.
+		if s is Array and s.size() > 9:
+			var alpha := float(s[9])
+			node.set_meta("swf_alpha", alpha)
+			var base := float(rec.alpha_at_capture)
+			node.modulate.a = alpha / base if base > 0.0 else alpha
 		_show_art(rec, i, frame)
 
 
@@ -214,6 +276,8 @@ func _show_art(rec: Dictionary, i: int, _frame: int) -> void:
 	if rec.art.is_empty(): return
 	var pick := -1
 	var wanted: int = rec.override if rec.override > 0 else int(rec.get("state_frame", -1))
+	# At its recorded frame a widget plays its recorded art (a sequence when it animates).
+	if wanted == int(rec.frame) and rec.entry.role == "sequence": wanted = -1
 	if wanted > 0:
 		for k in rec.art.size():
 			if int(rec.art[k].get("state", -1)) == wanted: pick = k
@@ -258,9 +322,11 @@ func _add_piece_art(rec: Dictionary, manifest: Dictionary) -> void:
 			for key in keys: _add_art(rec, frames[key], int(key), -1)
 		else:
 			_add_outline(rec, entry.get("render_bounds", entry.get("stage_bounds", [])))
-	var states = manifest.get("states", {}).get(path)
-	if states is Dictionary:
-		for frame in states: _add_art(rec, states[frame], capture, int(frame))
+	# Art per clip frame: recorded hover/press states, and every frame of a widget.
+	for source in ["states", "frames"]:
+		var by_frame = manifest.get(source, {}).get(path)
+		if by_frame is Dictionary:
+			for frame in by_frame: _add_art(rec, by_frame[frame], int(by_frame[frame].get("index", capture)), int(frame))
 
 
 ## One rendered image of a piece. It was rendered in stage space at timeline `at`: its sprite
@@ -277,6 +343,11 @@ func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
 	var blend: int = BLEND_MODES.get(String(rec.entry.get("blend_mode", "Normal")), 0)
 	if blend > 0:
 		# A piece that blends with what lies below it (Flash blend mode), via the screen.
+		# The screen is copied right before it, so it sees everything already drawn.
+		var copy := BackBufferCopy.new()
+		copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+		copy.set_meta("swf_art", true)
+		rec.node.add_child(copy)
 		var shader := ShaderMaterial.new()
 		shader.shader = BLEND_SHADER
 		shader.set_shader_parameter("mode", blend)
@@ -443,7 +514,14 @@ func _hit(rec: Dictionary) -> Button:
 		hit.mouse_exited.connect(func(): _state_frame(rec, null))
 		hit.button_down.connect(func(): _state_frame(rec, states.get("press")))
 		hit.button_up.connect(func(): _state_frame(rec, states.get("hover") if hit.is_hovered() else null))
-	if states.get("acts_on", "release") == "press":
+	if layout.get("controller") != null:
+		var instance := String(hit.name)
+		hit.mouse_entered.connect(func(): mouse_event.emit(instance, &"over"))
+		hit.mouse_exited.connect(func(): mouse_event.emit(instance, &"out"))
+		hit.button_down.connect(func(): mouse_event.emit(instance, &"down"))
+		hit.button_up.connect(func(): mouse_event.emit(instance, &"up"))
+		hit.pressed.connect(func(): mouse_event.emit(instance, &"click"))
+	elif states.get("acts_on", "release") == "press":
 		hit.button_down.connect(func(): action.emit(act))
 	else:
 		hit.pressed.connect(func(): action.emit(act))

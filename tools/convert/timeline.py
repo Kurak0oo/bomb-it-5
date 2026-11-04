@@ -1,7 +1,7 @@
 """Read a recorded screen timeline (record_screen.py timeline) and answer layout questions.
 
 A track is a list of changes `[index, state]` where index counts frames since the screen
-opened and state is `[a, b, c, d, tx, ty, visible, frame, character]`, or null while the node is
+opened and state is `[a, b, c, d, tx, ty, visible, frame, character, alpha]`, or null while the node is
 absent. Indices run from 0 to capture_index + period.
 """
 import bisect
@@ -67,7 +67,9 @@ class Timeline:
             return None
         inverse = _inverse(p[:6])
         rel = _compose(inverse, c[:6]) if inverse else c[:6]
-        return [round(v, 3) for v in rel] + list(c[6:])
+        # A descendant's own alpha is played back as a transform-like change, so it is not
+        # a change of look (index 9 is alpha; older timelines have none).
+        return [round(v, 3) for v in rel] + list(c[6:9])
 
     def look_changes(self, path):
         """Frame indices where anything inside `path` changes relative to `path` itself
@@ -78,7 +80,7 @@ class Timeline:
         own = self.tracks.get(path, [])
         for k in range(1, len(own)):
             prev, cur = own[k - 1][1], own[k][1]
-            if prev is None or cur is None or prev[7:] != cur[7:]:
+            if prev is None or cur is None or prev[7:9] != cur[7:9]:
                 points.add(own[k][0])
         candidates = set()
         for d in inside:

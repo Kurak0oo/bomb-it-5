@@ -11,6 +11,8 @@ var app: Control
 
 
 func _initialize() -> void:
+	# Generated screens follow frames, not the clock, so waiting for them is quick.
+	load("res://scripts/ui/swf_screen.gd").frame_locked = true
 	_run.call_deferred()
 
 
@@ -72,7 +74,8 @@ func _run() -> void:
 	await _click(_find("Back"))
 
 	await _click(_find("startGame"))
-	await _click(_find("Next"))
+	await app.screen_opened()
+	await _click(_find("confirm"))
 	await _click(_find("StartGame"))
 	var game: Node2D = app.game
 	game.set_process(false)
@@ -100,6 +103,10 @@ func _click(control: Control) -> void:
 	if control == null:
 		_expect(false, "control to click exists")
 		return
+	# A generated screen shows some instances only after a while (PLAY after loading).
+	for wait in 900:
+		if control.is_visible_in_tree(): break
+		await process_frame
 	var at := control.get_global_rect().get_center()
 	for pressed in [true, false]:
 		var event := InputEventMouseButton.new()

@@ -24,7 +24,7 @@ index d76c1cba..c5f9bf01 100644
  pub mod bitmap;
  mod character;
 diff --git a/core/src/player.rs b/core/src/player.rs
-index 295bcb48..9d22fcc5 100644
+index 295bcb48..83ce4db5 100644
 --- a/core/src/player.rs
 +++ b/core/src/player.rs
 @@ -2327,6 +2327,21 @@ impl Player {
@@ -37,8 +37,8 @@ index 295bcb48..9d22fcc5 100644
 +    }
 +
 +    /// Research-only: hide everything but one display-list path, for an isolated render.
-+    pub fn reference_isolate(&mut self, path: &str) -> Result<crate::reference_display::ReferencePiece, String> {
-+        self.mutate_with_update_context(|context| crate::reference_display::isolate(context, path))
++    pub fn reference_isolate(&mut self, path: &str, frame: Option<u16>) -> Result<crate::reference_display::ReferencePiece, String> {
++        self.mutate_with_update_context(|context| crate::reference_display::isolate(context, path, frame))
 +    }
 +
 +    /// Research-only: undo `reference_isolate`.
@@ -51,10 +51,10 @@ index 295bcb48..9d22fcc5 100644
              crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
 diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
 new file mode 100644
-index 00000000..797712c5
+index 00000000..8f77bb33
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,270 @@
+@@ -0,0 +1,289 @@
 +//! Research-only display-list dump for the comparison loop, and isolated piece renders.
 +//! The dump reads native display state only: no ActionScript getters or methods run and
 +//! nothing is written. `isolate` temporarily hides other display objects (native
@@ -227,6 +227,8 @@ index 00000000..797712c5
 +    /// A piece that blends with what lies below renders with its own colours (Normal);
 +    /// the consumer applies the blend against its own backdrop. Restored afterwards.
 +    blend: Option<(String, ruffle_render::blend::ExtendedBlendMode)>,
++    /// A clip moved to another frame for this render: path, frame and play state to restore.
++    goto: Option<(String, u16, bool)>,
 +    /// Render bounds of the piece in stage units (filters included): x_min, y_min, x_max, y_max.
 +    pub render_bounds: [f64; 4],
 +    /// The same bounds in viewport pixels (through the stage view matrix, filters scaled
@@ -256,7 +258,7 @@ index 00000000..797712c5
 +}
 +
 +/// Hide everything that would draw besides `path`, keeping the masks that clip it.
-+pub(crate) fn isolate(context: &mut UpdateContext<'_>, path: &str) -> Result<ReferencePiece, String> {
++pub(crate) fn isolate(context: &mut UpdateContext<'_>, path: &str, frame: Option<u16>) -> Result<ReferencePiece, String> {
 +    let stage = context.stage;
 +    let chain = resolve(stage.into(), path).ok_or_else(|| format!("no display object at {path}"))?;
 +    let mut hidden = Vec::new();
@@ -285,6 +287,13 @@ index 00000000..797712c5
 +        parent = node;
 +    }
 +    let target = *chain.last().unwrap();
++    // A widget clip's other frames (selected, disabled, …): go there, render, come back.
++    let mut goto = None;
++    if let (Some(frame), Some(clip)) = (frame, target.as_movie_clip()) {
++        goto = Some((path.to_string(), clip.current_frame(), clip.playing()));
++        clip.goto_frame(context, crate::display_object::GotoInfo {
++            frame, stop_or_play: crate::display_object::StopOrPlay::Stop });
++    }
 +    let b = target.render_bounds_with_transform(&target.local_to_global_matrix(), true, &Matrix::IDENTITY);
 +    let view = stage.view_matrix();
 +    let p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
@@ -302,6 +311,7 @@ index 00000000..797712c5
 +        hidden,
 +        window_mode,
 +        blend,
++        goto,
 +        render_bounds: [b.x_min.to_pixels(), b.y_min.to_pixels(), b.x_max.to_pixels(), b.y_max.to_pixels()],
 +        pixel_bounds: [p.x_min.to_pixels(), p.y_min.to_pixels(), p.x_max.to_pixels(), p.y_max.to_pixels()],
 +    })
@@ -319,6 +329,15 @@ index 00000000..797712c5
 +        }
 +    }
 +    stage.set_window_mode(piece.window_mode);
++    if let Some((path, frame, playing)) = &piece.goto {
++        if let Some(clip) = resolve(stage.into(), path).and_then(|c| c.last().unwrap().as_movie_clip()) {
++            clip.goto_frame(context, crate::display_object::GotoInfo {
++                frame: *frame, stop_or_play: crate::display_object::StopOrPlay::Stop });
++            if *playing {
++                clip.play();
++            }
++        }
++    }
 +    if let Some((path, mode)) = &piece.blend {
 +        if let Some(chain) = resolve(stage.into(), path) {
 +            chain.last().unwrap().set_blend_mode(*mode);

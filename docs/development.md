@@ -202,3 +202,18 @@ max region ΔE 5.7 / 5.2: PASS.
 
 Checkpoint 3 is in progress: Game Settings, character select, How to Play (controls and
 power-ups) and the results screens, converted the same way.
+
+Game Settings (2026-11-04): `GameSettingsUI` and `ToggletButton` are ported
+(`scripts/ui/game_settings_ui.gd`, `toggle_button.gd`, AS3 listeners via `swf_events.gd`),
+quirks included (Cinema on `choose` frame 5 in `initData` but 2 in `stagesHandle`; the
+five-levels button sets one level). Every widget frame is rendered by the reference
+player (`piece PATH FILE FRAME`); the stage dropdown, off the display list until opened,
+comes from a second capture. Generic fixes from this screen: groups are split down to
+every blended node unless a group composites on its own (blend or filters); animated
+widgets play their recorded frame as a sequence; alpha is part of the timeline; a screen
+made by a click starts on the next frame, as in the original; the pixel pass line is the
+measured 3×→1× resampling ceiling minus 0.02 (this screen's thin borders cap it at
+0.949). Result: settings and dropdown nodes 116/116 and 126/126, pixels within the
+ceiling; title and menu still pass. Waiting for the owner's review before the next
+screen (character select).
+

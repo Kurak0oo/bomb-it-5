@@ -111,7 +111,9 @@ def diff(golden, godot, tolerances=None):
     required = [p for p, n in reference.items() if n.get('kind') != 'stage' and not covered(p)]
     # Hidden reference nodes only need checking when Godot builds them too.
     missing = [p for p in required if p not in actual and reference[p].get('effective_visible')]
-    extra = [p for p in actual if p not in reference]
+    # A Godot node the original does not have counts only if it shows (a closed dropdown
+    # that the original keeps off its display list is fine while hidden).
+    extra = [p for p in actual if p not in reference and actual[p].get('effective_visible')]
     mismatches = []
     worst = {'position': 0.0, 'scale': 0.0, 'rotation': 0.0, 'alpha': 0.0}
     for path in required:
