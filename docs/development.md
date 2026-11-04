@@ -129,7 +129,9 @@ Goldens for `main-menu` (title at frame 301, menu at frame 541, 35 fps) were rec
 on the owner's Mac and checked from a machine without the SWF. The menu's buttons are
 timeline clips, not Flash buttons, so their states show as clip frames.
 
-Checkpoint 2 is in progress. Owner decisions on 2026-11-04:
+Checkpoint 2 is done: accepted by the owner on 2026-11-04. Record of the work:
+
+ Owner decisions on 2026-11-04:
 
 - **Route A for the replica's art:** pieces are rendered by the reference player itself
   (`piece PATH FILE.png` at `--scale 3`), with their masks, filters and blends. The
@@ -197,3 +199,6 @@ owner edits out. Owner edits add: skip the intro pause in play (the comparison k
 original timing). Result: pieces recompose to SSIM 0.99998 (title) / 0.99996 (menu);
 node diff with animation 185/185 and 158/158; Godot vs original SSIM 0.990 / 0.970,
 max region ΔE 5.7 / 5.2: PASS.
+
+Checkpoint 3 is in progress: Game Settings, character select, How to Play (controls and
+power-ups) and the results screens, converted the same way.
