@@ -118,9 +118,9 @@ Separate art, logic and UI by folder and interface, on one trunk.
 
 ## Status
 
-Checkpoint 0: the owner accepted it on 2026-11-02. GitHub still shows the four retired
-branches and neither tag, so `git push origin pre-restart archive/art-pipeline` and the
-branch deletions need repeating from the owner's clone.
+Checkpoint 0 is done: accepted by the owner on 2026-11-02; tags `pre-restart` (23d1d73)
+and `archive/art-pipeline` (dc4e49a) are on GitHub and the four retired branches are
+deleted (verified 2026-11-04).
 
 Checkpoint 1 is implemented on `claude/kind-johnson-vp2tp9` and waits for its first
 recording on the owner's Mac:
