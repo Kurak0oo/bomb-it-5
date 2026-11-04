@@ -80,11 +80,19 @@ func _run() -> void:
 			await process_frame
 			_expect(app.current == &"playing" and game.get_snapshot().board_meta.skin == chosen_set,
 				"Space retries the level in the same arena")
-	_expect(app.current == &"game_over" and _find_text("GAME OVER") != null, "the last heart ends in GAME OVER")
-	await _click(_find("TryAgain"))
+	_expect(app.current == &"game_over" and app.screen.get_child(0).screen_name == &"game_over",
+		"the last heart ends on the generated Game Over screen (UI_GAMEOVERONEP)")
+	await app.screen_opened()
+	var over = app.screen.get_child(0)
+	_expect(over.get_text("score") == str(app.session.total_score), "Game Over shows the final total (OnePGameOverUI.initData)")
+	_expect(_find("moregames") == null, "MORE GAMES (the portal link) is removed from Game Over (owner edit)")
+	await _click(_find("back"))
+	await app.screen_opened()
 	_expect(app.current == &"settings", "TRY AGAIN after game over returns to Game Settings")
+	_expect(app.session.levels == 5 and app.session.difficulty == &"easy" and app.session.stage == &"random",
+		"TRY AGAIN resets the settings (GameModel.init: five levels, Easy, random stage)")
 
-	app.session.levels = 5
+	await _click(_find("normal"))
 	await _click(_find("confirm"))
 	await app.screen_opened()
 	await _click(_find("startBtn"))
@@ -105,9 +113,12 @@ func _run() -> void:
 	await _click(_find("okBt"))
 	_expect(not score.is_shown("UI_UNLOCK_TIP"), "OK closes the unlock tip")
 	await _click(_find("nextLevel"))
-	_expect(app.current == &"game_win" and _find_text("GAME COMPLETE!") != null, "NEXT after the last level completes the game")
+	_expect(app.current == &"game_win" and app.screen.get_child(0).screen_name == &"game_win",
+		"NEXT after the last level opens the generated congratulations screen (UI_CONGRATULATIONSONEP)")
+	await app.screen_opened()
+	_expect(app.screen.get_child(0).get_text("score") == "2500", "the congratulations screen shows the final total")
 
-	await _click(_find("TryAgain"))
+	await _click(_find("back"))
 	await app.screen_opened()
 	await _click(_find("confirm"))
 	await app.screen_opened()

@@ -227,6 +227,11 @@
    "class": "flash.display::MovieClip",
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -97482,6 +97487,27 @@
    "class": "flash.display::MovieClip",
    "depth": 142,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -97519,6 +97545,24 @@
    "class": "flash.display::MovieClip",
    "depth": 161,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -97704,6 +97748,27 @@
    "class": "flash.display::MovieClip",
    "depth": 196,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -97741,6 +97806,11 @@
    "class": "flash.display::MovieClip",
    "depth": 215,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -97778,6 +97848,27 @@
    "class": "flash.display::MovieClip",
    "depth": 233,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -98000,6 +98091,27 @@
    "class": "flash.display::MovieClip",
    "depth": 272,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -98074,6 +98186,24 @@
    "class": "flash.display::MovieClip",
    "depth": 295,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -98111,6 +98241,27 @@
    "class": "flash.display::MovieClip",
    "depth": 314,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -98223,6 +98374,24 @@
    "class": "flash.display::MovieClip",
    "depth": 922,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -98266,6 +98435,24 @@
    "class": "flash.display::MovieClip",
    "depth": 929,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -98308,6 +98495,43 @@
    "class": "translation_20",
    "depth": 936,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "GradientBevelFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      102,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 3,
    "frame": 1,
    "kind": "movie_clip",
@@ -98491,7 +98715,7 @@
  "source": {
   "frame": 621,
   "golden": "tests/goldens/how-to-play/powerups.json",
-  "golden_sha256": "31e8dc7e5b1154720bda8af03da9493a2dc34da77beda2b17ac353064002e4c2"
+  "golden_sha256": "6ad1a3ff8787ee264cfc30319bd6b259884eae89f7489fcd172555b3d4ed2f90"
  },
  "stage": {
   "background": [

@@ -1,0 +1,11 @@
+{
+ "case": "game-over",
+ "case_sha256": "f8c21936ad79fe4d6fcaba30bfb44347adf261f0e6a70f66520ac35b3d585c71",
+ "fps": 35.0,
+ "frames": {
+  "game-over": 1779
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "ea4ab0c70457a9a036fc2baa1a9c634467db827793fa4b88caa2c52cd24da474",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

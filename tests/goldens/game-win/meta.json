@@ -1,0 +1,11 @@
+{
+ "case": "game-win",
+ "case_sha256": "0a11bfe09ca0102fa850a2f909afbbadd24273ef228a69e41bb7927fbf13f54c",
+ "fps": 35.0,
+ "frames": {
+  "congratulations": 1086
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "ea4ab0c70457a9a036fc2baa1a9c634467db827793fa4b88caa2c52cd24da474",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

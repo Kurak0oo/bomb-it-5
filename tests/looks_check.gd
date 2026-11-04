@@ -93,6 +93,16 @@ func _run() -> void:
 		and swf.get_frame("Art_clothPanel0/hat3") == 5, "unlocks persist across launches")
 	await _click(_find("robotIcon1"))
 	_expect(swf.is_shown("Art_clothPanel1") and swf.get_frame("Art_clothPanel1/hat1") == 5, "looks are unlocked per robot")
+	# AbstractGameMode.loseHandler: the last heart still makes the score screen (onePScore,
+	# which unlocks) before UIManager.gameOver replaces it with Game Over.
+	await _click(_find("startBtn"))
+	app.game.set_process(false)
+	app._on_level_settled({"outcome": &"lost", "result_score": 2600, "actors": {&"human": {"lives": 0}},
+		"result_breakdown": {}})
+	await process_frame
+	_expect(app.current == &"game_over" and app.screen.get_child(0).get_text("score") == "2600",
+		"the last heart opens Game Over with the session total")
+	_expect(SaveStore.new(SAVE).unlocks.get("1", []) == [1], "a game over still unlocks the looks its total reached")
 	app.queue_free()
 	await process_frame
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))

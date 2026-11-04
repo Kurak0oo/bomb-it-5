@@ -34,6 +34,7 @@ const STAGE := Vector2(700, 510)
 const PACK := "res://original/screens/%s/manifest.json"
 const FPS := 35.0
 const BLEND_SHADER := preload("res://scripts/ui/swf_blend.gdshader")
+const GLOW_SHADER := preload("res://scripts/ui/swf_glow.gdshader")
 const FlashKeys = preload("res://scripts/ui/flash_keys.gd")
 const FONTS := "res://original/fonts/fonts.json"
 ## Flash's TextField draws its text 2 units inside its bounds.
@@ -239,7 +240,8 @@ func set_text(instance: String, text: String) -> void:
 	if text == String(rec.entry.get("text", "")):
 		# The recorded text again: its art (with the field's filters) shows, not live text.
 		if rec.has("label"):
-			rec.label.queue_free()
+			# (with the CanvasGroup that draws its filters, when it has one)
+			(rec.label.get_parent() if rec.label.get_parent() is CanvasGroup else rec.label).queue_free()
 			rec.erase("label")
 			rec.erase("live_text")
 			rec.node.set_meta("swf_text", text)
@@ -273,8 +275,62 @@ func _make_label(rec: Dictionary) -> Label:
 	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if f.get("word_wrap", false) else TextServer.AUTOWRAP_OFF
 	label.clip_text = false
-	rec.node.add_child(label)
+	var glow := _glow_filter(rec.entry)
+	if glow.is_empty():
+		rec.node.add_child(label)
+		return label
+	# The field's GlowFilter: the text draws into a group whose shader adds the glow.
+	var group := CanvasGroup.new()
+	group.name = "LiveTextFilters"
+	group.set_meta("swf_art", true)
+	var material := ShaderMaterial.new()
+	material.shader = GLOW_SHADER
+	var colour_g: Array = glow.get("color", [255, 255, 255])
+	material.set_shader_parameter("glow_color", Color8(int(colour_g[0]), int(colour_g[1]), int(colour_g[2]),
+		roundi(float(glow.get("alpha", 1.0)) * 255.0)))
+	material.set_shader_parameter("strength", float(glow.get("strength", 2.0)))
+	material.set_shader_parameter("inner", bool(glow.get("inner", false)))
+	material.set_shader_parameter("knockout", bool(glow.get("knockout", false)))
+	material.set_shader_parameter("composite_source", bool(glow.get("composite_source", true)))
+	group.material = material
+	group.add_child(label)
+	rec.node.add_child(group)
 	return label
+
+
+## The field's filters as the display dump records them (`filter_list`). Only a single
+## GlowFilter is drawn for live text; any other list keeps its art and warns once.
+static func _glow_filter(entry: Dictionary) -> Dictionary:
+	var filters: Array = entry.get("filter_list", [])
+	if filters.is_empty(): return {}
+	if filters.size() > 1 or String(filters[0].get("type", "")) != "GlowFilter":
+		push_warning("%s: live text draws only a single GlowFilter, not %s" % [entry.get("path", ""), filters])
+		return {}
+	return filters[0]
+
+
+## One axis of a Flash blur in screen pixels: `quality` passes of Ruffle's box, which spans
+## `size` pixels with whole taps inside and fractional end taps (render/wgpu/src/filters/
+## blur.rs, BlurFilter::apply: radius = (size - 1) / 2, m = ceil(radius) - 1, end weight
+## alpha = floor((radius - m) * 255) / 255, sum = size). Odd length, centred.
+static func _glow_kernel(size: float, passes: int) -> PackedFloat32Array:
+	var kernel := PackedFloat32Array([1.0])
+	var full := minf(size, 255.0)
+	if full <= 1.0: return kernel
+	var radius := (full - 1.0) / 2.0
+	var m := ceilf(radius) - 1.0
+	var alpha := floorf((radius - m) * 255.0) / 255.0
+	var box := PackedFloat32Array()
+	box.append(alpha / full)
+	for k in int(2.0 * m + 1.0): box.append(1.0 / full)
+	box.append(alpha / full)
+	for p in maxi(1, passes):
+		var out := PackedFloat32Array()
+		out.resize(kernel.size() + box.size() - 1)
+		for i in kernel.size():
+			for j in box.size(): out[i + j] += kernel[i] * box[j]
+		kernel = out
+	return kernel
 
 
 ## Font size for the real screen scale, so text stays sharp; the label is scaled back.
@@ -283,11 +339,47 @@ func _fit_label(rec: Dictionary) -> void:
 	var f: Dictionary = rec.entry.get("text_format", {})
 	var px := maxf(0.01, _px if _px > 0.0 else pixels_per_unit())
 	var b: Array = f.get("local_bounds", [0, 0, 100, 20])
-	label.add_theme_font_size_override("font_size", maxi(1, roundi(float(f.get("size", 12)) * px)))
-	label.add_theme_constant_override("line_spacing", roundi(float(f.get("leading", 0)) * px))
-	label.position = Vector2(float(b[0]) + GUTTER + float(f.get("left_margin", 0)), float(b[1]) + GUTTER)
-	label.size = (Vector2(float(b[2]) - float(b[0]), float(b[3]) - float(b[1])) - Vector2(2 * GUTTER, 2 * GUTTER)) * px
+	var font_px := maxi(1, roundi(float(f.get("size", 12)) * px))
+	label.add_theme_font_size_override("font_size", font_px)
+	# Flash (Ruffle's edit_text.rs / html/layout.rs) puts the first baseline at the field's
+	# top + GUTTER + the SWF font's ascent at the format's size (`ascent`, recorded from the
+	# player's layout metrics), and each next line ascent + descent + leading lower. Godot's
+	# Label puts it at its top + the shaped line's ascent from the exported TTF, whose
+	# metrics are not the SWF font's: move the label by the difference.
+	var line := TextLine.new()
+	line.add_string(label.text if not label.text.is_empty() else " ", label.get_theme_font("font"), font_px)
+	var top := 0.0
+	var spacing := float(f.get("leading", 0)) * px
+	if f.has("ascent"):
+		top = float(f.ascent) - line.get_line_ascent() / px
+		spacing = (float(f.ascent) + float(f.get("descent", 0)) + float(f.get("leading", 0))) * px \
+			- line.get_line_ascent() - line.get_line_descent()
+	label.add_theme_constant_override("line_spacing", roundi(spacing))
+	var left := GUTTER + float(f.get("left_margin", 0))
+	var right := GUTTER + float(f.get("right_margin", 0))
+	label.position = Vector2(float(b[0]) + left, float(b[1]) + GUTTER + top)
+	label.size = Vector2(float(b[2]) - float(b[0]) - left - right, float(b[3]) - float(b[1]) - 2 * GUTTER) * px
 	label.scale = Vector2(1.0 / px, 1.0 / px)
+	var group := label.get_parent() as CanvasGroup
+	if group != null: _fit_glow(group, _glow_filter(rec.entry), px)
+
+
+## The glow's kernels for the current screen scale. Ruffle scales a filter's blur with the
+## stage matrix as (blur - 1) * scale + 1 (swf BlurFilter::scale_blur).
+func _fit_glow(group: CanvasGroup, glow: Dictionary, px: float) -> void:
+	var passes := int(glow.get("quality", 1))
+	var kx := _glow_kernel((float(glow.get("blur_x", 0)) - 1.0) * px + 1.0, passes)
+	var ky := _glow_kernel((float(glow.get("blur_y", 0)) - 1.0) * px + 1.0, passes)
+	var material: ShaderMaterial = group.material
+	material.set_shader_parameter("nx", mini(kx.size(), 64))
+	material.set_shader_parameter("ny", mini(ky.size(), 64))
+	material.set_shader_parameter("wx", kx)
+	material.set_shader_parameter("wy", ky)
+	# The group draws the glow around the text: its rect and cleared backbuffer reach past
+	# the kernel (margins in local units or screen pixels, whichever is larger).
+	var reach := float(maxi(kx.size(), ky.size()) / 2 + 2) * maxf(1.0, 1.0 / px)
+	group.fit_margin = reach
+	group.clear_margin = reach * 2.0
 
 
 ## The family's embedded subsets: the largest first, the others as fallbacks.
@@ -428,7 +520,9 @@ func _apply(i_screen: int) -> void:
 		var cap: String = rec.entry.get("timeline_of", "")
 		if not cap.is_empty() and _by_path_rec.get(rec.parent, {}).get("entry", {}).get("timeline_of", "") != cap:
 			if vis and parent_shown:
-				if not _extra_shown_at.has(cap): _extra_shown_at[cap] = _t
+				# As a screen made by input (see _created_frame): the frame that shows it
+				# is its first in the original only from the next frame on.
+				if not _extra_shown_at.has(cap): _extra_shown_at[cap] = _t + 1
 			else:
 				_extra_shown_at.erase(cap)
 		if rec.hit != null: rec.hit.visible = vis and parent_shown

@@ -1,0 +1,155 @@
+{
+ "name": "game-win",
+ "origin": "The one-player congratulations screen (OnePGameOverUI on PlayerGameOver, class UI_CONGRATULATIONSONEP) after the last level is won. As the results case (from tools/reference_player/cases/results/02-zero-kill-win-next.json: seed 42, Normal, Cinema, original AI.stop and controller.addBomb fixtures make the three enemies bomb themselves), with the five-levels option pressed (levelsFive's centre in the game-settings golden), which sets one level (GameSettingsUI.levelsHandle), so the first win is GAME_WIN: the score screen and its unlock tip (OK at okBt's centre), then NEXT (nextLevel's centre) opens the congratulations screen (PlayerScoreUI.nextLevelFunc -> UIManager.gameOver). realtime 1 lets the original timers run on wall time. Checkpoint 3.",
+ "godot_note": "Godot replays the menus and the score screen with the same clicks; the round is settled by the Godot-only `settle` action with the recorded final score.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "click 257.6 349.05"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 81"
+  },
+  {
+   "godot_command": "settle congratulations",
+   "godot_note": "Godot cannot play the original round: it ends here as the last level won, with the final score the original's congratulations screen showed (App.settle_as_recorded); the score screen, its unlock tip and NEXT are then replayed with the same clicks."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 1
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 2
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 3
+   }
+  },
+  {
+   "command": "step 120"
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 180"
+  },
+  {
+   "command": "click 371.1 466.2"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 20"
+  },
+  {
+   "command": "realtime 0"
+  },
+  {
+   "command": "click 543.3 422.0"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "capture": "congratulations"
+  }
+ ]
+}

@@ -51,10 +51,10 @@ index 295bcb48..3fd56104 100644
              crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
 diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
 new file mode 100644
-index 00000000..04be4327
+index 00000000..c52aa1ee
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,369 @@
+@@ -0,0 +1,419 @@
 +//! Research-only display-list dump for the comparison loop, and isolated piece renders.
 +//! The dump reads native display state only: no ActionScript getters or methods run and
 +//! nothing is written. `isolate` temporarily hides other display objects (native
@@ -126,6 +126,33 @@ index 00000000..04be4327
 +    }
 +}
 +
++/// A filter's parameters as `flash.filters` names them (blur in local units, before the
++/// stage scale; colour as 0-255 RGB plus alpha 0-1; quality is the pass count).
++fn filter_json(filter: &ruffle_render::filters::Filter) -> Json {
++    use ruffle_render::filters::Filter;
++    let rgb = |c: &swf::Color| json!([c.r, c.g, c.b]);
++    match filter {
++        Filter::GlowFilter(f) => json!({
++            "type": "GlowFilter", "color": rgb(&f.color), "alpha": f.color.a as f64 / 255.0,
++            "blur_x": f.blur_x.to_f64(), "blur_y": f.blur_y.to_f64(), "strength": f.strength.to_f64(),
++            "quality": f.num_passes(), "inner": f.is_inner(), "knockout": f.is_knockout(),
++            "composite_source": f.composite_source(),
++        }),
++        Filter::DropShadowFilter(f) => json!({
++            "type": "DropShadowFilter", "color": rgb(&f.color), "alpha": f.color.a as f64 / 255.0,
++            "blur_x": f.blur_x.to_f64(), "blur_y": f.blur_y.to_f64(), "strength": f.strength.to_f64(),
++            "angle": f.angle.to_f64().to_degrees(), "distance": f.distance.to_f64(),
++            "quality": f.num_passes(), "inner": f.is_inner(), "knockout": f.is_knockout(),
++            "hide_object": f.hide_object(),
++        }),
++        Filter::BlurFilter(f) => json!({
++            "type": "BlurFilter", "blur_x": f.blur_x.to_f64(), "blur_y": f.blur_y.to_f64(),
++            "quality": f.num_passes(),
++        }),
++        other => json!({"type": format!("{other:?}").split(['(', ' ', '{']).next().unwrap_or("").to_string()}),
++    }
++}
++
 +fn matrix(m: ruffle_render::matrix::Matrix) -> Json {
 +    json!([m.a, m.b, m.c, m.d, m.tx.to_pixels(), m.ty.to_pixels()])
 +}
@@ -178,6 +205,9 @@ index 00000000..04be4327
 +                json!([bounds.x_min.to_pixels(), bounds.y_min.to_pixels(), bounds.x_max.to_pixels(), bounds.y_max.to_pixels()])
 +            } else { Json::Null },
 +        });
++        if !display.filters().is_empty() {
++            node["filter_list"] = json!(display.filters().iter().map(filter_json).collect::<Vec<_>>());
++        }
 +        if display.clip_depth() > 0 {
 +            node["clip_depth"] = json!(display.clip_depth());
 +        }
@@ -223,6 +253,12 @@ index 00000000..04be4327
 +                "html": text.is_html(),
 +                "local_bounds": [local.x_min.to_pixels(), local.y_min.to_pixels(), local.x_max.to_pixels(), local.y_max.to_pixels()],
 +            });
++            // `getLineMetrics`' font ascent and descent at the format's size: the first line's
++            // baseline sits at local_bounds' top + 2 (gutter) + ascent.
++            if let Some(m) = text.layout_metrics() {
++                node["text_format"]["ascent"] = json!(m.ascent.to_pixels());
++                node["text_format"]["descent"] = json!(m.descent.to_pixels());
++            }
 +        }
 +        seen.push((display, path.clone()));
 +        nodes.push(node);
@@ -261,7 +297,7 @@ index 00000000..04be4327
 +    blend: Option<(String, ruffle_render::blend::ExtendedBlendMode)>,
 +    /// A clip moved to another frame for this render: path, frame and play state to restore.
 +    goto: Option<(String, u16, bool)>,
-+    /// The stage's top clip moved so the piece fits the viewport: its path and matrix to restore.
++    /// The piece moved so it fits the viewport: its path and matrix to restore.
 +    shifted: Option<(String, Matrix)>,
 +    /// That move in viewport pixels (subtract it from the image's pixel origin).
 +    pub shift_px: [f64; 2],
@@ -356,16 +392,27 @@ index 00000000..04be4327
 +    };
 +    let (px0, py0, px1, py1) = (p.x_min.to_pixels(), p.y_min.to_pixels(), p.x_max.to_pixels(), p.y_max.to_pixels());
 +    let shift_units = [fit(px0, px1, vw), fit(py0, py1, vh)];
-+    let shifted = if shift_units != [0.0, 0.0] {
-+        let root = chain[0];
-+        let original = root.base().matrix();
-+        let mut moved = original;
-+        moved.tx += Twips::from_pixels(shift_units[0]);
-+        moved.ty += Twips::from_pixels(shift_units[1]);
-+        root.set_matrix(moved);
-+        root.invalidate_cached_bitmap();
-+        p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
-+        Some((path.split('/').take(2).collect::<Vec<_>>().join("/"), original))
++    // Move the piece itself, not its ancestors: a mask at the stage edge (the screen's own
++    // clip) must stay where it is, as it does when the original part drifts on stage.
++    let shifted = if shift_units != [0.0, 0.0] && target.parent().is_some() {
++        let parent = target.parent().unwrap().local_to_global_matrix();
++        let (a, b, c, d) = (parent.a as f64, parent.b as f64, parent.c as f64, parent.d as f64);
++        let det = a * d - b * c;
++        if det.abs() > 1e-9 {
++            let (sx, sy) = (shift_units[0], shift_units[1]);
++            let original = target.base().matrix();
++            let mut moved = original;
++            moved.tx += Twips::from_pixels((d * sx - c * sy) / det);
++            moved.ty += Twips::from_pixels((-b * sx + a * sy) / det);
++            target.set_matrix(moved);
++            for &node in &chain {
++                node.invalidate_cached_bitmap();
++            }
++            p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++            Some((path.to_string(), original))
++        } else {
++            None
++        }
 +    } else {
 +        None
 +    };
@@ -379,9 +426,10 @@ index 00000000..04be4327
 +    } else {
 +        None
 +    };
++    let moved_px = if shifted.is_some() { [shift_units[0] * unit, shift_units[1] * unit] } else { [0.0, 0.0] };
 +    Ok(ReferencePiece {
 +        shifted,
-+        shift_px: [shift_units[0] * unit, shift_units[1] * unit],
++        shift_px: moved_px,
 +        hidden,
 +        window_mode,
 +        blend,
@@ -405,8 +453,10 @@ index 00000000..04be4327
 +    stage.set_window_mode(piece.window_mode);
 +    if let Some((path, matrix)) = &piece.shifted {
 +        if let Some(chain) = resolve(stage.into(), path) {
-+            chain[0].set_matrix(*matrix);
-+            chain[0].invalidate_cached_bitmap();
++            chain.last().unwrap().set_matrix(*matrix);
++            for &node in &chain {
++                node.invalidate_cached_bitmap();
++            }
 +        }
 +    }
 +    if let Some((path, frame, playing)) = &piece.goto {

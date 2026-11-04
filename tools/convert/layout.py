@@ -124,6 +124,27 @@ SCREENS = {
               # the timeline index each capture was taken at.
               'capture_phase': ('unlock-tip', 'win-score', 'loss-score'),
               'states': False},
+    # OnePGameOverUI on PlayerGameOver (scripts/ui/one_p_game_over_ui.gd,
+    # player_game_over.gd): the end screen after the last heart (UI_GAMEOVERONEP, game-over
+    # case) and after the last level (UI_CONGRATULATIONSONEP, game-win case). TRY AGAIN
+    # (`back`) returns to Game Settings; `score` is the final total, `p1head` the robot (only
+    # robot 0's head is recorded: the cases play robot 0). MORE GAMES and the publisher logos
+    # (`Logos`) are portal parts, removed by owner edits.
+    'game_over': {'golden': ('game-over', 'game-over'), 'root_class': 'UI_GAMEOVERONEP',
+                  'controller': 'one_p_game_over_ui',
+                  'interactive': {n: n for n in ('back', 'moregames')},
+                  'widgets': ('back', 'moregames'),
+                  'live_text': ('score',),
+                  # Opened by the round's end on the wall clock (realtime), as the score
+                  # screen: Godot opens it itself at the recorded capture's timeline index.
+                  'capture_phase': ('game-over',),
+                  'states': False},
+    'game_win': {'golden': ('game-win', 'congratulations'), 'root_class': 'UI_CONGRATULATIONSONEP',
+                 'controller': 'one_p_game_over_ui',
+                 'interactive': {n: n for n in ('back', 'moregames')},
+                 'widgets': ('back', 'moregames'),
+                 'live_text': ('score',),
+                 'states': False},
 }
 
 EDITS = Path(__file__).resolve().parent / 'owner_edits.json'
@@ -132,7 +153,8 @@ BLENDS = ('Multiply', 'Screen', 'Lighten', 'Darken', 'Difference', 'Add', 'Subtr
 
 CARRIED = ('golden_path', 'kind', 'name', 'class', 'depth', 'character_id', 'effective_visible', 'alpha',
            'stage_matrix', 'stage_bounds', 'render_bounds', 'frame', 'total_frames', 'label',
-           'button_state', 'text', 'text_format', 'clip_depth', 'clip_mask', 'mask', 'blend_mode', 'filters')
+           'button_state', 'text', 'text_format', 'clip_depth', 'clip_mask', 'mask', 'blend_mode', 'filters',
+           'filter_list')
 
 
 def parent_of(path):

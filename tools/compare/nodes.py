@@ -16,7 +16,8 @@ DEFAULT_TOLERANCES = {
 GOLDEN_FIELDS = ('path', 'kind', 'class', 'character_id', 'depth', 'name', 'effective_visible',
                  'alpha', 'stage_matrix', 'stage_bounds', 'frame', 'total_frames', 'label',
                  'button_state', 'text', 'color_transform', 'blend_mode', 'filters',
-                 'clip_depth', 'mask', 'scroll_rect', 'render_bounds', 'text_format')
+                 'clip_depth', 'mask', 'scroll_rect', 'render_bounds', 'text_format',
+                 'filter_list')
 # Mask relationships must match exactly: which node is a timeline mask (clip_depth),
 # which sibling mask clips a node (clip_mask), and which node an AS3 `mask` names.
 MASK_FIELDS = ('clip_depth', 'clip_mask', 'mask')

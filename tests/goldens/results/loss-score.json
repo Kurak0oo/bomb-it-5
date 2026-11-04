@@ -230,7 +230,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139792",
+   "name": "instance139572",
    "path": "/root1/__mainMc/GameMc/@0/@0",
    "render_bounds": [
     -71.65,
@@ -323,10 +323,15 @@
    },
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139793",
+   "name": "instance139573",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@1",
    "render_bounds": [
     -22.7,
@@ -373,7 +378,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139794",
+   "name": "instance139574",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@1/@2",
    "render_bounds": [
     -22.7,
@@ -419,7 +424,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139795",
+   "name": "instance139575",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@5",
    "render_bounds": [
     -24.9,
@@ -466,7 +471,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139796",
+   "name": "instance139576",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@6",
    "render_bounds": [
     461.65,
@@ -513,7 +518,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139797",
+   "name": "instance139577",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@6/@1",
    "render_bounds": [
     461.65,
@@ -560,7 +565,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139798",
+   "name": "instance139578",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@8",
    "render_bounds": [
     94.45,
@@ -607,7 +612,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139799",
+   "name": "instance139579",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@8/@1",
    "render_bounds": [
     94.45,
@@ -654,7 +659,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139800",
+   "name": "instance139580",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@10",
    "render_bounds": [
     529.2,
@@ -701,7 +706,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139801",
+   "name": "instance139581",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@10/@1",
    "render_bounds": [
     529.2,
@@ -748,7 +753,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139802",
+   "name": "instance139582",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@12",
    "render_bounds": [
     373.35,
@@ -795,7 +800,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139803",
+   "name": "instance139583",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@12/@1",
    "render_bounds": [
     373.35,
@@ -842,7 +847,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139804",
+   "name": "instance139584",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@14",
    "render_bounds": [
     373.35,
@@ -889,7 +894,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139805",
+   "name": "instance139585",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@14/@1",
    "render_bounds": [
     373.35,
@@ -936,7 +941,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139806",
+   "name": "instance139586",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@16",
    "render_bounds": [
     573.8,
@@ -983,7 +988,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139807",
+   "name": "instance139587",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@16/@1",
    "render_bounds": [
     573.8,
@@ -1030,7 +1035,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139808",
+   "name": "instance139588",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@18",
    "render_bounds": [
     399.55,
@@ -1077,7 +1082,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139809",
+   "name": "instance139589",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@18/@1",
    "render_bounds": [
     399.55,
@@ -1124,7 +1129,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139810",
+   "name": "instance139590",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@20",
    "render_bounds": [
     192.3,
@@ -1171,7 +1176,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139811",
+   "name": "instance139591",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@20/@1",
    "render_bounds": [
     192.3,
@@ -1218,7 +1223,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139812",
+   "name": "instance139592",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@22",
    "render_bounds": [
     143.4,
@@ -1265,7 +1270,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139813",
+   "name": "instance139593",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@22/@1",
    "render_bounds": [
     143.4,
@@ -1312,7 +1317,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139814",
+   "name": "instance139594",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@24",
    "render_bounds": [
     17.7,
@@ -1359,7 +1364,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139815",
+   "name": "instance139595",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@24/@1",
    "render_bounds": [
     17.7,
@@ -1406,7 +1411,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139816",
+   "name": "instance139596",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@26",
    "render_bounds": [
     88.3,
@@ -1453,7 +1458,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139817",
+   "name": "instance139597",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@26/@1",
    "render_bounds": [
     88.3,
@@ -1500,7 +1505,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139818",
+   "name": "instance139598",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@28",
    "render_bounds": [
     448.95,
@@ -1547,7 +1552,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139819",
+   "name": "instance139599",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@28/@1",
    "render_bounds": [
     448.95,
@@ -1594,7 +1599,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139820",
+   "name": "instance139600",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@30",
    "render_bounds": [
     602.35,
@@ -1641,7 +1646,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139821",
+   "name": "instance139601",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@30/@1",
    "render_bounds": [
     602.35,
@@ -1688,7 +1693,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139822",
+   "name": "instance139602",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@32",
    "render_bounds": [
     643.1,
@@ -1735,7 +1740,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139823",
+   "name": "instance139603",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@32/@1",
    "render_bounds": [
     643.1,
@@ -1782,7 +1787,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139824",
+   "name": "instance139604",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@34",
    "render_bounds": [
     500.1,
@@ -1829,7 +1834,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139825",
+   "name": "instance139605",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@34/@1",
    "render_bounds": [
     500.1,
@@ -1876,7 +1881,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139826",
+   "name": "instance139606",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@36",
    "render_bounds": [
     521.7,
@@ -1923,7 +1928,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139827",
+   "name": "instance139607",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@36/@1",
    "render_bounds": [
     521.7,
@@ -1970,7 +1975,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139828",
+   "name": "instance139608",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@38",
    "render_bounds": [
     199.65,
@@ -2017,7 +2022,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139829",
+   "name": "instance139609",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@38/@1",
    "render_bounds": [
     199.65,
@@ -2064,7 +2069,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139830",
+   "name": "instance139610",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@40",
    "render_bounds": [
     42.25,
@@ -2111,7 +2116,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139831",
+   "name": "instance139611",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@40/@1",
    "render_bounds": [
     42.25,
@@ -2158,7 +2163,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139832",
+   "name": "instance139612",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@42",
    "render_bounds": [
     54.95,
@@ -2205,7 +2210,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139833",
+   "name": "instance139613",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@42/@1",
    "render_bounds": [
     54.95,
@@ -2252,7 +2257,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139834",
+   "name": "instance139614",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@44",
    "render_bounds": [
     269.3,
@@ -2299,7 +2304,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139835",
+   "name": "instance139615",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@44/@1",
    "render_bounds": [
     269.3,
@@ -2346,7 +2351,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139836",
+   "name": "instance139616",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@46",
    "render_bounds": [
     605.1,
@@ -2393,7 +2398,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139837",
+   "name": "instance139617",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@46/@1",
    "render_bounds": [
     605.1,
@@ -2440,7 +2445,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139838",
+   "name": "instance139618",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@48",
    "render_bounds": [
     585.1,
@@ -2487,7 +2492,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139839",
+   "name": "instance139619",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@48/@1",
    "render_bounds": [
     585.1,
@@ -2534,7 +2539,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139840",
+   "name": "instance139620",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@50",
    "render_bounds": [
     122.5,
@@ -2581,7 +2586,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139841",
+   "name": "instance139621",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@50/@1",
    "render_bounds": [
     122.5,
@@ -2628,7 +2633,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139842",
+   "name": "instance139622",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@52",
    "render_bounds": [
     59.45,
@@ -2675,7 +2680,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139843",
+   "name": "instance139623",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@52/@1",
    "render_bounds": [
     59.45,
@@ -2722,7 +2727,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139844",
+   "name": "instance139624",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@54",
    "render_bounds": [
     638.05,
@@ -2769,7 +2774,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139845",
+   "name": "instance139625",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@54/@1",
    "render_bounds": [
     638.05,
@@ -2816,7 +2821,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139846",
+   "name": "instance139626",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@56",
    "render_bounds": [
     557.5,
@@ -2863,7 +2868,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139847",
+   "name": "instance139627",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@56/@1",
    "render_bounds": [
     557.5,
@@ -2910,7 +2915,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139848",
+   "name": "instance139628",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@58",
    "render_bounds": [
     605.05,
@@ -2957,7 +2962,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139849",
+   "name": "instance139629",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@58/@1",
    "render_bounds": [
     605.05,
@@ -3004,7 +3009,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139850",
+   "name": "instance139630",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@60",
    "render_bounds": [
     462.9,
@@ -3051,7 +3056,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139851",
+   "name": "instance139631",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@60/@1",
    "render_bounds": [
     462.9,
@@ -3098,7 +3103,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139852",
+   "name": "instance139632",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@62",
    "render_bounds": [
     477.85,
@@ -3145,7 +3150,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139853",
+   "name": "instance139633",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@62/@1",
    "render_bounds": [
     477.85,
@@ -3192,7 +3197,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139854",
+   "name": "instance139634",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@64",
    "render_bounds": [
     395.0,
@@ -3239,7 +3244,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139855",
+   "name": "instance139635",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@64/@1",
    "render_bounds": [
     395.0,
@@ -3286,7 +3291,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139856",
+   "name": "instance139636",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@66",
    "render_bounds": [
     605.05,
@@ -3333,7 +3338,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139857",
+   "name": "instance139637",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@66/@1",
    "render_bounds": [
     605.05,
@@ -3380,7 +3385,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139858",
+   "name": "instance139638",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@68",
    "render_bounds": [
     632.35,
@@ -3427,7 +3432,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139859",
+   "name": "instance139639",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@68/@1",
    "render_bounds": [
     632.35,
@@ -3474,7 +3479,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139860",
+   "name": "instance139640",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@70",
    "render_bounds": [
     670.2,
@@ -3521,7 +3526,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139861",
+   "name": "instance139641",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@70/@1",
    "render_bounds": [
     670.2,
@@ -3568,7 +3573,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139862",
+   "name": "instance139642",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@72",
    "render_bounds": [
     486.95,
@@ -3615,7 +3620,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139863",
+   "name": "instance139643",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@72/@1",
    "render_bounds": [
     486.95,
@@ -3662,7 +3667,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139864",
+   "name": "instance139644",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@74",
    "render_bounds": [
     449.4,
@@ -3709,7 +3714,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139865",
+   "name": "instance139645",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@74/@1",
    "render_bounds": [
     449.4,
@@ -3756,7 +3761,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139866",
+   "name": "instance139646",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@76",
    "render_bounds": [
     327.95,
@@ -3803,7 +3808,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139867",
+   "name": "instance139647",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@76/@1",
    "render_bounds": [
     327.95,
@@ -3850,7 +3855,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139868",
+   "name": "instance139648",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@78",
    "render_bounds": [
     83.65,
@@ -3897,7 +3902,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139869",
+   "name": "instance139649",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@78/@1",
    "render_bounds": [
     83.65,
@@ -3944,7 +3949,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139870",
+   "name": "instance139650",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@80",
    "render_bounds": [
     128.5,
@@ -3991,7 +3996,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139871",
+   "name": "instance139651",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@80/@1",
    "render_bounds": [
     128.5,
@@ -4038,7 +4043,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139872",
+   "name": "instance139652",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@82",
    "render_bounds": [
     40.3,
@@ -4085,7 +4090,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139873",
+   "name": "instance139653",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@82/@1",
    "render_bounds": [
     40.3,
@@ -4132,7 +4137,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139874",
+   "name": "instance139654",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@84",
    "render_bounds": [
     160.8,
@@ -4179,7 +4184,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139875",
+   "name": "instance139655",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@84/@1",
    "render_bounds": [
     160.8,
@@ -4226,7 +4231,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139876",
+   "name": "instance139656",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@86",
    "render_bounds": [
     28.4,
@@ -4273,7 +4278,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139877",
+   "name": "instance139657",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@86/@1",
    "render_bounds": [
     28.4,
@@ -4320,7 +4325,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139878",
+   "name": "instance139658",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@88",
    "render_bounds": [
     340.65,
@@ -4367,7 +4372,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139879",
+   "name": "instance139659",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@88/@1",
    "render_bounds": [
     340.65,
@@ -4414,7 +4419,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139880",
+   "name": "instance139660",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@90",
    "render_bounds": [
     411.7,
@@ -4461,7 +4466,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139881",
+   "name": "instance139661",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@90/@1",
    "render_bounds": [
     411.7,
@@ -4556,7 +4561,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139882",
+   "name": "instance139662",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@1",
    "render_bounds": [
     -24.5,
@@ -4603,7 +4608,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139883",
+   "name": "instance139663",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@1/@1",
    "render_bounds": [
     -24.5,
@@ -4650,7 +4655,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139884",
+   "name": "instance139664",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@3",
    "render_bounds": [
     -71.65,
@@ -4697,7 +4702,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139885",
+   "name": "instance139665",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@3/@1",
    "render_bounds": [
     -71.65,
@@ -4792,7 +4797,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139886",
+   "name": "instance139666",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@1",
    "render_bounds": [
     4.55,
@@ -4839,7 +4844,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139887",
+   "name": "instance139667",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@1/@23",
    "render_bounds": [
     4.55,
@@ -4886,7 +4891,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139888",
+   "name": "instance139668",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@25",
    "render_bounds": [
     56.8,
@@ -4933,7 +4938,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139889",
+   "name": "instance139669",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@25/@17",
    "render_bounds": [
     56.8,
@@ -4978,19 +4983,19 @@
    "depth": 122,
    "effective_visible": true,
    "filters": 0,
-   "frame": 34,
+   "frame": 35,
    "kind": "movie_clip",
-   "name": "instance139890",
+   "name": "instance139670",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@122",
    "render_bounds": [
     192.8,
-    86.6,
+    86.05,
     229.15,
     171.2
    ],
    "stage_bounds": [
     192.8,
-    86.6,
+    86.05,
     229.15,
     171.2
    ],
@@ -5028,27 +5033,27 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139891",
+   "name": "instance139671",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@122/@1",
    "render_bounds": [
     192.8,
-    86.6,
+    86.0,
     229.15,
-    171.2
+    171.15
    ],
    "stage_bounds": [
     192.8,
-    86.6,
+    86.0,
     229.15,
-    171.2
+    171.15
    ],
    "stage_matrix": [
     1.01,
     0.0,
     0.0,
-    0.9724,
+    0.9787,
     192.8,
-    86.6
+    86.0
    ],
    "total_frames": 1
   },
@@ -5075,27 +5080,27 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139892",
+   "name": "instance139672",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@122/@1/@1",
    "render_bounds": [
     192.8,
-    86.6,
+    86.0,
     229.15,
-    171.2
+    171.15
    ],
    "stage_bounds": [
     192.8,
-    86.6,
+    86.0,
     229.15,
-    171.2
+    171.15
    ],
    "stage_matrix": [
     1.01,
     0.0,
     0.0,
-    0.9724,
+    0.9787,
     192.8,
-    86.6
+    86.0
    ]
   },
   {
@@ -5120,21 +5125,21 @@
    "depth": 124,
    "effective_visible": true,
    "filters": 0,
-   "frame": 74,
+   "frame": 75,
    "kind": "movie_clip",
-   "name": "instance139893",
+   "name": "instance139673",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@124",
    "render_bounds": [
-    8.95,
-    136.5,
-    52.2,
-    233.3
+    9.3,
+    138.0,
+    52.65,
+    234.85
    ],
    "stage_bounds": [
-    8.95,
-    136.5,
-    52.2,
-    233.3
+    9.3,
+    138.0,
+    52.65,
+    234.85
    ],
    "stage_matrix": [
     1.01,
@@ -5147,7 +5152,7 @@
    "total_frames": 75
   },
   {
-   "alpha": 0.9883,
+   "alpha": 1.0,
    "blend_mode": "Normal",
    "character_id": 195,
    "class": "flash.display::MovieClip",
@@ -5162,7 +5167,7 @@
      1.0,
      1.0,
      1.0,
-     0.9883
+     1.0
     ]
    },
    "depth": 1,
@@ -5170,27 +5175,27 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139894",
+   "name": "instance139674",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@124/@1",
    "render_bounds": [
-    8.95,
-    136.45,
-    52.2,
-    233.25
+    9.3,
+    138.0,
+    52.65,
+    234.85
    ],
    "stage_bounds": [
-    8.95,
-    136.45,
-    52.2,
-    233.25
+    9.3,
+    138.0,
+    52.65,
+    234.85
    ],
    "stage_matrix": [
-    1.0084,
-    0.0529,
-    -0.0529,
-    1.0084,
-    13.9,
-    136.45
+    1.0086,
+    0.0532,
+    -0.0532,
+    1.0086,
+    14.3,
+    138.0
    ],
    "total_frames": 1
   },
@@ -5217,27 +5222,27 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139895",
+   "name": "instance139675",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@124/@1/@1",
    "render_bounds": [
-    8.95,
-    136.45,
-    52.2,
-    233.25
+    9.3,
+    138.0,
+    52.65,
+    234.85
    ],
    "stage_bounds": [
-    8.95,
-    136.45,
-    52.2,
-    233.25
+    9.3,
+    138.0,
+    52.65,
+    234.85
    ],
    "stage_matrix": [
-    1.0084,
-    0.0529,
-    -0.0529,
-    1.0084,
-    13.9,
-    136.45
+    1.0086,
+    0.0532,
+    -0.0532,
+    1.0086,
+    14.3,
+    138.0
    ]
   },
   {
@@ -5262,21 +5267,21 @@
    "depth": 126,
    "effective_visible": true,
    "filters": 0,
-   "frame": 24,
+   "frame": 25,
    "kind": "movie_clip",
-   "name": "instance139896",
+   "name": "instance139676",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@126",
    "render_bounds": [
     536.8,
-    141.0,
+    141.5,
     570.1,
-    205.1
+    206.15
    ],
    "stage_bounds": [
     536.8,
-    141.0,
+    141.5,
     570.1,
-    205.1
+    206.15
    ],
    "stage_matrix": [
     1.01,
@@ -5312,27 +5317,27 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139897",
+   "name": "instance139677",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@126/@1",
    "render_bounds": [
     536.85,
-    141.0,
+    141.5,
     570.15,
-    205.1
+    206.15
    ],
    "stage_bounds": [
     536.85,
-    141.0,
+    141.5,
     570.15,
-    205.1
+    206.15
    ],
    "stage_matrix": [
     1.01,
     0.0,
     0.0,
-    1.0013,
+    1.01,
     553.7,
-    204.7
+    205.75
    ],
    "total_frames": 1
   },
@@ -5359,27 +5364,27 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139898",
+   "name": "instance139678",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@126/@1/@1",
    "render_bounds": [
     536.85,
-    141.0,
+    141.5,
     570.15,
-    205.1
+    206.15
    ],
    "stage_bounds": [
     536.85,
-    141.0,
+    141.5,
     570.15,
-    205.1
+    206.15
    ],
    "stage_matrix": [
     1.01,
     0.0,
     0.0,
-    1.0013,
+    1.01,
     553.7,
-    204.7
+    205.75
    ]
   },
   {
@@ -5404,21 +5409,21 @@
    "depth": 128,
    "effective_visible": true,
    "filters": 0,
-   "frame": 74,
+   "frame": 75,
    "kind": "movie_clip",
-   "name": "instance139899",
+   "name": "instance139679",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@128",
    "render_bounds": [
-    677.9,
-    32.25,
-    703.65,
-    80.15
+    677.4,
+    33.0,
+    702.9,
+    80.8
    ],
    "stage_bounds": [
-    677.9,
-    32.25,
-    703.65,
-    80.15
+    677.4,
+    33.0,
+    702.9,
+    80.8
    ],
    "stage_matrix": [
     1.01,
@@ -5454,27 +5459,27 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139900",
+   "name": "instance139680",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@128/@1",
    "render_bounds": [
-    677.9,
-    32.25,
-    703.65,
-    80.15
+    677.4,
+    33.0,
+    702.9,
+    80.8
    ],
    "stage_bounds": [
-    677.9,
-    32.25,
-    703.65,
-    80.15
+    677.4,
+    33.0,
+    702.9,
+    80.8
    ],
    "stage_matrix": [
-    1.0095,
-    0.0272,
-    -0.0272,
-    1.0095,
-    690.15,
-    79.3
+    1.0096,
+    0.0227,
+    -0.0227,
+    1.0096,
+    689.65,
+    80.0
    ],
    "total_frames": 1
   },
@@ -5501,27 +5506,27 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139901",
+   "name": "instance139681",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@128/@1/@4",
    "render_bounds": [
-    677.9,
-    32.25,
-    703.65,
-    80.15
+    677.4,
+    33.0,
+    702.9,
+    80.8
    ],
    "stage_bounds": [
-    677.9,
-    32.25,
-    703.65,
-    80.15
+    677.4,
+    33.0,
+    702.9,
+    80.8
    ],
    "stage_matrix": [
-    1.0095,
-    0.0272,
-    -0.0272,
-    1.0095,
-    690.15,
-    79.3
+    1.0096,
+    0.0227,
+    -0.0227,
+    1.0096,
+    689.65,
+    80.0
    ]
   },
   {
@@ -5546,21 +5551,21 @@
    "depth": 130,
    "effective_visible": true,
    "filters": 0,
-   "frame": 14,
+   "frame": 15,
    "kind": "movie_clip",
-   "name": "instance139902",
+   "name": "instance139682",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@130",
    "render_bounds": [
-    658.5,
-    175.6,
+    657.85,
+    175.5,
     699.25,
-    264.75
+    264.9
    ],
    "stage_bounds": [
-    658.5,
-    175.6,
+    657.85,
+    175.5,
     699.25,
-    264.75
+    264.9
    ],
    "stage_matrix": [
     1.01,
@@ -5596,27 +5601,27 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139903",
+   "name": "instance139683",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@130/@1",
    "render_bounds": [
-    658.45,
-    175.65,
+    657.8,
+    175.55,
     699.2,
-    264.8
+    264.95
    ],
    "stage_bounds": [
-    658.45,
-    175.65,
+    657.8,
+    175.55,
     699.2,
-    264.8
+    264.95
    ],
    "stage_matrix": [
-    1.0069,
-    -0.0756,
-    0.0756,
-    1.0069,
-    658.45,
-    178.2
+    1.0062,
+    -0.0837,
+    0.0837,
+    1.0062,
+    657.8,
+    178.4
    ],
    "total_frames": 1
   },
@@ -5643,27 +5648,27 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139904",
+   "name": "instance139684",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@130/@1/@1",
    "render_bounds": [
-    658.45,
-    175.65,
+    657.8,
+    175.55,
     699.2,
-    264.8
+    264.95
    ],
    "stage_bounds": [
-    658.45,
-    175.65,
+    657.8,
+    175.55,
     699.2,
-    264.8
+    264.95
    ],
    "stage_matrix": [
-    1.0069,
-    -0.0756,
-    0.0756,
-    1.0069,
-    658.45,
-    178.2
+    1.0062,
+    -0.0837,
+    0.0837,
+    1.0062,
+    657.8,
+    178.4
    ]
   },
   {
@@ -5689,7 +5694,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139905",
+   "name": "instance139685",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@141",
    "render_bounds": [
     17.95,
@@ -5733,10 +5738,31 @@
    },
    "depth": 142,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139906",
+   "name": "instance139686",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142",
    "render_bounds": [
     605.75,
@@ -5783,7 +5809,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139907",
+   "name": "instance139687",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@13",
    "render_bounds": [
     608.75,
@@ -5830,7 +5856,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139908",
+   "name": "instance139688",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@14",
    "render_bounds": [
     617.9,
@@ -5877,7 +5903,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139909",
+   "name": "instance139689",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@14/@1",
    "render_bounds": [
     617.9,
@@ -5923,7 +5949,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139910",
+   "name": "instance139690",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@18",
    "render_bounds": [
     617.0,
@@ -5967,10 +5993,28 @@
    },
    "depth": 161,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139911",
+   "name": "instance139691",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161",
    "render_bounds": [
     622.3,
@@ -6017,7 +6061,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139912",
+   "name": "instance139692",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@13",
    "render_bounds": [
     625.3,
@@ -6064,7 +6108,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139913",
+   "name": "instance139693",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@14",
    "render_bounds": [
     632.8,
@@ -6111,7 +6155,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139914",
+   "name": "instance139694",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@14/@1",
    "render_bounds": [
     632.8,
@@ -6157,7 +6201,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139915",
+   "name": "instance139695",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@18",
    "render_bounds": [
     632.1,
@@ -6204,7 +6248,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139916",
+   "name": "instance139696",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@180",
    "render_bounds": [
     693.65,
@@ -6251,7 +6295,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139917",
+   "name": "instance139697",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@180/@3",
    "render_bounds": [
     693.65,
@@ -6298,7 +6342,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139918",
+   "name": "instance139698",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@184",
    "render_bounds": [
     673.8,
@@ -6345,7 +6389,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139919",
+   "name": "instance139699",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@184/@3",
    "render_bounds": [
     673.8,
@@ -6392,7 +6436,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139920",
+   "name": "instance139700",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@188",
    "render_bounds": [
     539.75,
@@ -6439,7 +6483,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139921",
+   "name": "instance139701",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@188/@3",
    "render_bounds": [
     539.75,
@@ -6486,7 +6530,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139922",
+   "name": "instance139702",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@192",
    "render_bounds": [
     -6.7,
@@ -6533,7 +6577,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139923",
+   "name": "instance139703",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@192/@3",
    "render_bounds": [
     -6.7,
@@ -6577,10 +6621,31 @@
    },
    "depth": 196,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139924",
+   "name": "instance139704",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196",
    "render_bounds": [
     649.6,
@@ -6627,7 +6692,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139925",
+   "name": "instance139705",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@13",
    "render_bounds": [
     652.6,
@@ -6674,7 +6739,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139926",
+   "name": "instance139706",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@14",
    "render_bounds": [
     661.95,
@@ -6721,7 +6786,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139927",
+   "name": "instance139707",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@14/@1",
    "render_bounds": [
     661.95,
@@ -6767,7 +6832,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139928",
+   "name": "instance139708",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@18",
    "render_bounds": [
     661.6,
@@ -6811,10 +6876,15 @@
    },
    "depth": 215,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139929",
+   "name": "instance139709",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@215",
    "render_bounds": [
     536.75,
@@ -6861,7 +6931,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139930",
+   "name": "instance139710",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@215/@17",
    "render_bounds": [
     536.75,
@@ -6905,10 +6975,31 @@
    },
    "depth": 233,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139931",
+   "name": "instance139711",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233",
    "render_bounds": [
     55.7,
@@ -6955,7 +7046,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139932",
+   "name": "instance139712",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@13",
    "render_bounds": [
     58.7,
@@ -7002,7 +7093,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139933",
+   "name": "instance139713",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@14",
    "render_bounds": [
     68.8,
@@ -7049,7 +7140,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139934",
+   "name": "instance139714",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@14/@1",
    "render_bounds": [
     68.8,
@@ -7095,7 +7186,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139935",
+   "name": "instance139715",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@18",
    "render_bounds": [
     67.8,
@@ -7142,7 +7233,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139936",
+   "name": "instance139716",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@252",
    "render_bounds": [
     641.75,
@@ -7189,7 +7280,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139937",
+   "name": "instance139717",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@252/@3",
    "render_bounds": [
     641.75,
@@ -7236,7 +7327,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139938",
+   "name": "instance139718",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@256",
    "render_bounds": [
     605.65,
@@ -7283,7 +7374,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139939",
+   "name": "instance139719",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@256/@3",
    "render_bounds": [
     605.65,
@@ -7330,7 +7421,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139940",
+   "name": "instance139720",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@260",
    "render_bounds": [
     -6.7,
@@ -7377,7 +7468,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139941",
+   "name": "instance139721",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@260/@3",
    "render_bounds": [
     -6.7,
@@ -7424,7 +7515,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139942",
+   "name": "instance139722",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@264",
    "render_bounds": [
     366.85,
@@ -7471,7 +7562,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139943",
+   "name": "instance139723",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@264/@3",
    "render_bounds": [
     366.85,
@@ -7518,7 +7609,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139944",
+   "name": "instance139724",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@268",
    "render_bounds": [
     697.15,
@@ -7565,7 +7656,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139945",
+   "name": "instance139725",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@268/@3",
    "render_bounds": [
     697.15,
@@ -7609,10 +7700,31 @@
    },
    "depth": 272,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139946",
+   "name": "instance139726",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272",
    "render_bounds": [
     18.25,
@@ -7659,7 +7771,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139947",
+   "name": "instance139727",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@13",
    "render_bounds": [
     21.25,
@@ -7706,7 +7818,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139948",
+   "name": "instance139728",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@14",
    "render_bounds": [
     30.4,
@@ -7753,7 +7865,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139949",
+   "name": "instance139729",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@14/@1",
    "render_bounds": [
     30.4,
@@ -7799,7 +7911,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139950",
+   "name": "instance139730",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@18",
    "render_bounds": [
     29.5,
@@ -7846,7 +7958,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139951",
+   "name": "instance139731",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@291",
    "render_bounds": [
     19.05,
@@ -7893,7 +8005,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139952",
+   "name": "instance139732",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@291/@3",
    "render_bounds": [
     19.05,
@@ -7937,10 +8049,28 @@
    },
    "depth": 295,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139953",
+   "name": "instance139733",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295",
    "render_bounds": [
     -17.75,
@@ -7987,7 +8117,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139954",
+   "name": "instance139734",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@13",
    "render_bounds": [
     -14.75,
@@ -8034,7 +8164,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139955",
+   "name": "instance139735",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@14",
    "render_bounds": [
     -7.25,
@@ -8081,7 +8211,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139956",
+   "name": "instance139736",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@14/@1",
    "render_bounds": [
     -7.25,
@@ -8127,7 +8257,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139957",
+   "name": "instance139737",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@18",
    "render_bounds": [
     -7.95,
@@ -8171,10 +8301,31 @@
    },
    "depth": 314,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139958",
+   "name": "instance139738",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314",
    "render_bounds": [
     32.8,
@@ -8221,7 +8372,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139959",
+   "name": "instance139739",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@13",
    "render_bounds": [
     35.8,
@@ -8268,7 +8419,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139960",
+   "name": "instance139740",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@14",
    "render_bounds": [
     45.15,
@@ -8315,7 +8466,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139961",
+   "name": "instance139741",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@14/@1",
    "render_bounds": [
     45.15,
@@ -8361,7 +8512,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139962",
+   "name": "instance139742",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@18",
    "render_bounds": [
     44.8,
@@ -8408,7 +8559,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139963",
+   "name": "instance139743",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316",
    "render_bounds": [
     0.15,
@@ -8455,7 +8606,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139964",
+   "name": "instance139744",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@1",
    "render_bounds": [
     164.15,
@@ -8499,10 +8650,46 @@
    },
    "depth": 2,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      101,
+      163
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139965",
+   "name": "instance139745",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@2",
    "render_bounds": [
     0.15,
@@ -8549,7 +8736,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139966",
+   "name": "instance139746",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@2/@1",
    "render_bounds": [
     9.15,
@@ -8593,10 +8780,46 @@
    },
    "depth": 4,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      101,
+      163
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139967",
+   "name": "instance139747",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@4",
    "render_bounds": [
     645.2,
@@ -8643,7 +8866,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139968",
+   "name": "instance139748",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@4/@1",
    "render_bounds": [
     654.2,
@@ -8689,7 +8912,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139969",
+   "name": "instance139749",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@8",
    "render_bounds": [
     40.6,
@@ -8736,7 +8959,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139970",
+   "name": "instance139750",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@9",
    "render_bounds": [
     53.0,
@@ -8783,7 +9006,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139971",
+   "name": "instance139751",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@9/@1",
    "render_bounds": [
     53.0,
@@ -8830,7 +9053,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139972",
+   "name": "instance139752",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@11",
    "render_bounds": [
     544.85,
@@ -8877,7 +9100,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139973",
+   "name": "instance139753",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@11/@1",
    "render_bounds": [
     544.85,
@@ -8924,7 +9147,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139974",
+   "name": "instance139754",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@13",
    "render_bounds": [
     491.85,
@@ -8971,7 +9194,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139975",
+   "name": "instance139755",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@13/@1",
    "render_bounds": [
     491.85,
@@ -9018,7 +9241,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139976",
+   "name": "instance139756",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@15",
    "render_bounds": [
     400.9,
@@ -9065,7 +9288,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139977",
+   "name": "instance139757",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@15/@1",
    "render_bounds": [
     400.9,
@@ -9112,7 +9335,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139978",
+   "name": "instance139758",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@17",
    "render_bounds": [
     463.1,
@@ -9159,7 +9382,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139979",
+   "name": "instance139759",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@17/@1",
    "render_bounds": [
     463.1,
@@ -9206,7 +9429,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139980",
+   "name": "instance139760",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@19",
    "render_bounds": [
     288.1,
@@ -9253,7 +9476,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139981",
+   "name": "instance139761",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@19/@1",
    "render_bounds": [
     288.1,
@@ -9300,7 +9523,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139982",
+   "name": "instance139762",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@21",
    "render_bounds": [
     619.15,
@@ -9347,7 +9570,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139983",
+   "name": "instance139763",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@21/@1",
    "render_bounds": [
     619.15,
@@ -9394,7 +9617,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139984",
+   "name": "instance139764",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@23",
    "render_bounds": [
     594.75,
@@ -9441,7 +9664,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139985",
+   "name": "instance139765",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@23/@1",
    "render_bounds": [
     594.75,
@@ -9488,7 +9711,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139986",
+   "name": "instance139766",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@25",
    "render_bounds": [
     623.1,
@@ -9535,7 +9758,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139987",
+   "name": "instance139767",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@25/@1",
    "render_bounds": [
     623.1,
@@ -9582,7 +9805,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139988",
+   "name": "instance139768",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@27",
    "render_bounds": [
     584.3,
@@ -9629,7 +9852,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139989",
+   "name": "instance139769",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@27/@1",
    "render_bounds": [
     584.3,
@@ -9676,7 +9899,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139990",
+   "name": "instance139770",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@29",
    "render_bounds": [
     371.55,
@@ -9723,7 +9946,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139991",
+   "name": "instance139771",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@29/@1",
    "render_bounds": [
     371.55,
@@ -9770,7 +9993,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139992",
+   "name": "instance139772",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@31",
    "render_bounds": [
     315.1,
@@ -9817,7 +10040,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139993",
+   "name": "instance139773",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@31/@1",
    "render_bounds": [
     315.1,
@@ -9864,7 +10087,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139994",
+   "name": "instance139774",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@33",
    "render_bounds": [
     47.1,
@@ -9911,7 +10134,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139995",
+   "name": "instance139775",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@33/@1",
    "render_bounds": [
     47.1,
@@ -9958,7 +10181,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139996",
+   "name": "instance139776",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@35",
    "render_bounds": [
     81.9,
@@ -10005,7 +10228,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139997",
+   "name": "instance139777",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@35/@1",
    "render_bounds": [
     81.9,
@@ -10052,7 +10275,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance139998",
+   "name": "instance139778",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@37",
    "render_bounds": [
     131.7,
@@ -10099,7 +10322,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance139999",
+   "name": "instance139779",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@37/@1",
    "render_bounds": [
     131.7,
@@ -10146,7 +10369,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140000",
+   "name": "instance139780",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@39",
    "render_bounds": [
     53.0,
@@ -10193,7 +10416,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140001",
+   "name": "instance139781",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@39/@1",
    "render_bounds": [
     53.0,
@@ -10240,7 +10463,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140002",
+   "name": "instance139782",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@41",
    "render_bounds": [
     134.3,
@@ -10287,7 +10510,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140003",
+   "name": "instance139783",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@41/@1",
    "render_bounds": [
     134.3,
@@ -10334,7 +10557,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140004",
+   "name": "instance139784",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@43",
    "render_bounds": [
     427.7,
@@ -10381,7 +10604,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140005",
+   "name": "instance139785",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@43/@1",
    "render_bounds": [
     427.7,
@@ -10428,7 +10651,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140006",
+   "name": "instance139786",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@45",
    "render_bounds": [
     95.85,
@@ -10475,7 +10698,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140007",
+   "name": "instance139787",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@45/@1",
    "render_bounds": [
     95.85,
@@ -10522,7 +10745,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140008",
+   "name": "instance139788",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@47",
    "render_bounds": [
     81.9,
@@ -10569,7 +10792,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140009",
+   "name": "instance139789",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@47/@1",
    "render_bounds": [
     81.9,
@@ -10616,7 +10839,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140010",
+   "name": "instance139790",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@49",
    "render_bounds": [
     243.7,
@@ -10663,7 +10886,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140011",
+   "name": "instance139791",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@49/@1",
    "render_bounds": [
     243.7,
@@ -10710,7 +10933,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140012",
+   "name": "instance139792",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@51",
    "render_bounds": [
     371.55,
@@ -10757,7 +10980,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140013",
+   "name": "instance139793",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@51/@1",
    "render_bounds": [
     371.55,
@@ -10804,7 +11027,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140014",
+   "name": "instance139794",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@53",
    "render_bounds": [
     288.1,
@@ -10851,7 +11074,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140015",
+   "name": "instance139795",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@53/@1",
    "render_bounds": [
     288.1,
@@ -10898,7 +11121,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140016",
+   "name": "instance139796",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@55",
    "render_bounds": [
     528.9,
@@ -10945,7 +11168,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140017",
+   "name": "instance139797",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@55/@1",
    "render_bounds": [
     528.9,
@@ -10992,7 +11215,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140018",
+   "name": "instance139798",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@57",
    "render_bounds": [
     215.3,
@@ -11039,7 +11262,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140019",
+   "name": "instance139799",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@57/@1",
    "render_bounds": [
     215.3,
@@ -11085,7 +11308,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140020",
+   "name": "instance139800",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@62",
    "render_bounds": [
     47.6,
@@ -11132,7 +11355,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140021",
+   "name": "instance139801",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@63",
    "render_bounds": [
     34.9,
@@ -11179,7 +11402,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140022",
+   "name": "instance139802",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@63/@4",
    "render_bounds": [
     34.9,
@@ -11223,10 +11446,28 @@
    },
    "depth": 5,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140023",
+   "name": "instance139803",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@63/@5",
    "render_bounds": [
     41.1,
@@ -11273,7 +11514,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140024",
+   "name": "instance139804",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@63/@5/@4",
    "render_bounds": [
     45.1,
@@ -11317,10 +11558,28 @@
    },
    "depth": 69,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140025",
+   "name": "instance139805",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@69",
    "render_bounds": [
     58.2,
@@ -11367,7 +11626,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140026",
+   "name": "instance139806",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@69/@4",
    "render_bounds": [
     62.2,
@@ -11411,10 +11670,28 @@
    },
    "depth": 74,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140027",
+   "name": "instance139807",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@74",
    "render_bounds": [
     627.5,
@@ -11461,7 +11738,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140028",
+   "name": "instance139808",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@74/@4",
    "render_bounds": [
     631.5,
@@ -11507,7 +11784,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140029",
+   "name": "instance139809",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@79",
    "render_bounds": [
     47.6,
@@ -11551,10 +11828,28 @@
    },
    "depth": 80,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140030",
+   "name": "instance139810",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@80",
    "render_bounds": [
     57.2,
@@ -11601,7 +11896,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140031",
+   "name": "instance139811",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@80/@4",
    "render_bounds": [
     61.2,
@@ -11645,10 +11940,28 @@
    },
    "depth": 85,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140032",
+   "name": "instance139812",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@85",
    "render_bounds": [
     618.2,
@@ -11695,7 +12008,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140033",
+   "name": "instance139813",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@85/@4",
    "render_bounds": [
     622.2,
@@ -11741,7 +12054,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140034",
+   "name": "instance139814",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@91",
    "render_bounds": [
     521.0,
@@ -11785,10 +12098,28 @@
    },
    "depth": 92,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140035",
+   "name": "instance139815",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@92",
    "render_bounds": [
     523.25,
@@ -11835,7 +12166,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140036",
+   "name": "instance139816",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@92/@4",
    "render_bounds": [
     527.25,
@@ -11881,7 +12212,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140037",
+   "name": "instance139817",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@98",
    "render_bounds": [
     523.9,
@@ -11928,7 +12259,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140038",
+   "name": "instance139818",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@99",
    "render_bounds": [
     620.95,
@@ -11975,7 +12306,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140039",
+   "name": "instance139819",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@99/@4",
    "render_bounds": [
     620.95,
@@ -12019,10 +12350,28 @@
    },
    "depth": 5,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140040",
+   "name": "instance139820",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@99/@5",
    "render_bounds": [
     639.2,
@@ -12069,7 +12418,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140041",
+   "name": "instance139821",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@99/@5/@4",
    "render_bounds": [
     643.2,
@@ -12113,10 +12462,28 @@
    },
    "depth": 105,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140042",
+   "name": "instance139822",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@105",
    "render_bounds": [
     611.25,
@@ -12163,7 +12530,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140043",
+   "name": "instance139823",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@105/@4",
    "render_bounds": [
     615.25,
@@ -12207,10 +12574,46 @@
    },
    "depth": 110,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140044",
+   "name": "instance139824",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@110",
    "render_bounds": [
     7.0,
@@ -12257,7 +12660,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140045",
+   "name": "instance139825",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@110/@1",
    "render_bounds": [
     16.0,
@@ -12303,7 +12706,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140046",
+   "name": "instance139826",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@112",
    "render_bounds": [
     158.95,
@@ -12347,10 +12750,46 @@
    },
    "depth": 113,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140047",
+   "name": "instance139827",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@113",
    "render_bounds": [
     93.75,
@@ -12397,7 +12836,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140048",
+   "name": "instance139828",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@113/@1",
    "render_bounds": [
     102.75,
@@ -12443,7 +12882,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140049",
+   "name": "instance139829",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@115",
    "render_bounds": [
     160.95,
@@ -12487,10 +12926,46 @@
    },
    "depth": 116,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140050",
+   "name": "instance139830",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@116",
    "render_bounds": [
     578.25,
@@ -12537,7 +13012,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140051",
+   "name": "instance139831",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@116/@1",
    "render_bounds": [
     587.25,
@@ -12581,10 +13056,46 @@
    },
    "depth": 118,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140052",
+   "name": "instance139832",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@118",
    "render_bounds": [
     499.75,
@@ -12631,7 +13142,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140053",
+   "name": "instance139833",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@118/@1",
    "render_bounds": [
     508.75,
@@ -12677,7 +13188,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140054",
+   "name": "instance139834",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@128",
    "render_bounds": [
     152.95,
@@ -12721,10 +13232,28 @@
    },
    "depth": 129,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140055",
+   "name": "instance139835",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@129",
    "render_bounds": [
     155.2,
@@ -12771,7 +13300,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140056",
+   "name": "instance139836",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@129/@4",
    "render_bounds": [
     159.2,
@@ -12817,7 +13346,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140057",
+   "name": "instance139837",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@135",
    "render_bounds": [
     526.35,
@@ -12861,10 +13390,28 @@
    },
    "depth": 136,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140058",
+   "name": "instance139838",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@136",
    "render_bounds": [
     528.6,
@@ -12911,7 +13458,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140059",
+   "name": "instance139839",
    "path": "/root1/__mainMc/GameMc/@0/@0/@316/@136/@4",
    "render_bounds": [
     532.6,
@@ -12957,7 +13504,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140060",
+   "name": "instance139840",
    "path": "/root1/__mainMc/GameMc/@0/@0/@457",
    "render_bounds": [
     136.1,
@@ -13001,6 +13548,24 @@
    },
    "depth": 458,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 2,
    "kind": "movie_clip",
@@ -13052,7 +13617,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140114",
+   "name": "instance139894",
    "path": "/root1/__mainMc/GameMc/@0/@0/bonus_txt/@1",
    "render_bounds": [
     190.0,
@@ -13124,6 +13689,7 @@
    "text": "NORMAL BONUS",
    "text_format": {
     "align": "Left",
+    "ascent": 20.15,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13131,6 +13697,7 @@
      51,
      112
     ],
+    "descent": 4.2,
     "device_font": false,
     "font": "Impact",
     "html": false,
@@ -13174,7 +13741,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140062",
+   "name": "instance139842",
    "path": "/root1/__mainMc/GameMc/@0/@0/@496",
    "render_bounds": [
     147.8,
@@ -13218,10 +13785,28 @@
    },
    "depth": 497,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140063",
+   "name": "instance139843",
    "path": "/root1/__mainMc/GameMc/@0/@0/@497",
    "render_bounds": [
     185.0,
@@ -13293,6 +13878,7 @@
    "text": "TIME BONUS",
    "text_format": {
     "align": "Left",
+    "ascent": 20.15,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13300,6 +13886,7 @@
      50,
      111
     ],
+    "descent": 4.2,
     "device_font": false,
     "font": "Impact",
     "html": false,
@@ -13343,7 +13930,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140064",
+   "name": "instance139844",
    "path": "/root1/__mainMc/GameMc/@0/@0/@499",
    "render_bounds": [
     177.5,
@@ -13437,7 +14024,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140065",
+   "name": "instance139845",
    "path": "/root1/__mainMc/GameMc/@0/@0/modePic/@19",
    "render_bounds": [
     154.55,
@@ -13529,10 +14116,28 @@
    },
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140066",
+   "name": "instance139846",
    "path": "/root1/__mainMc/GameMc/@0/@0/text_mode/@1",
    "render_bounds": [
     185.0,
@@ -13604,6 +14209,7 @@
    "text": "1_ENEMIES KILLED",
    "text_format": {
     "align": "Left",
+    "ascent": 20.15,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13611,6 +14217,7 @@
      50,
      111
     ],
+    "descent": 4.2,
     "device_font": false,
     "font": "Impact",
     "html": false,
@@ -13654,7 +14261,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140067",
+   "name": "instance139847",
    "path": "/root1/__mainMc/GameMc/@0/@0/@522",
    "render_bounds": [
     177.5,
@@ -13698,10 +14305,28 @@
    },
    "depth": 523,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140068",
+   "name": "instance139848",
    "path": "/root1/__mainMc/GameMc/@0/@0/@523",
    "render_bounds": [
     185.0,
@@ -13773,6 +14398,7 @@
    "text": "LEVEL SCORE",
    "text_format": {
     "align": "Left",
+    "ascent": 20.15,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13780,6 +14406,7 @@
      51,
      112
     ],
+    "descent": 4.2,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -13823,7 +14450,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140069",
+   "name": "instance139849",
    "path": "/root1/__mainMc/GameMc/@0/@0/@528",
    "render_bounds": [
     147.8,
@@ -13867,10 +14494,28 @@
    },
    "depth": 529,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140070",
+   "name": "instance139850",
    "path": "/root1/__mainMc/GameMc/@0/@0/@529",
    "render_bounds": [
     185.0,
@@ -13942,6 +14587,7 @@
    "text": "L_TOTAL SCORE",
    "text_format": {
     "align": "Left",
+    "ascent": 20.15,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13949,6 +14595,7 @@
      50,
      111
     ],
+    "descent": 4.2,
     "device_font": false,
     "font": "Impact",
     "html": false,
@@ -13992,7 +14639,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140071",
+   "name": "instance139851",
    "path": "/root1/__mainMc/GameMc/@0/@0/@541",
    "render_bounds": [
     151.65,
@@ -14036,6 +14683,24 @@
    },
    "depth": 542,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "kill",
@@ -14063,6 +14728,7 @@
    "text": "0",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -14070,6 +14736,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -14113,7 +14780,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140072",
+   "name": "instance139852",
    "path": "/root1/__mainMc/GameMc/@0/@0/@543",
    "render_bounds": [
     439.85,
@@ -14157,6 +14824,24 @@
    },
    "depth": 544,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "time",
@@ -14184,6 +14869,7 @@
    "text": "0",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -14191,6 +14877,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -14234,7 +14921,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140073",
+   "name": "instance139853",
    "path": "/root1/__mainMc/GameMc/@0/@0/@545",
    "render_bounds": [
     439.85,
@@ -14278,6 +14965,24 @@
    },
    "depth": 546,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "difficulity",
@@ -14305,6 +15010,7 @@
    "text": "0",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -14312,6 +15018,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -14355,7 +15062,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140074",
+   "name": "instance139854",
    "path": "/root1/__mainMc/GameMc/@0/@0/@547",
    "render_bounds": [
     439.85,
@@ -14399,6 +15106,24 @@
    },
    "depth": 548,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "levelScore",
@@ -14426,6 +15151,7 @@
    "text": "0",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -14433,6 +15159,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -14476,7 +15203,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140075",
+   "name": "instance139855",
    "path": "/root1/__mainMc/GameMc/@0/@0/@549",
    "render_bounds": [
     439.85,
@@ -14520,6 +15247,24 @@
    },
    "depth": 550,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "total",
@@ -14547,6 +15292,7 @@
    "text": "3780",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -14554,6 +15300,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -14595,6 +15342,40 @@
    },
    "depth": 551,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 2.0,
+     "blur_y": 2.0,
+     "color": [
+      0,
+      51,
+      102
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -14604,13 +15385,13 @@
     483.3,
     91.05,
     547.65,
-    146.4
+    146.5
    ],
    "stage_bounds": [
     490.3,
     98.05,
     540.65,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.9261,
@@ -14646,19 +15427,19 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140076",
+   "name": "instance139856",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1",
    "render_bounds": [
     490.3,
     98.05,
     540.65,
-    139.4
+    139.5
    ],
    "stage_bounds": [
     490.3,
     98.05,
     540.65,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.8576,
@@ -14694,7 +15475,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140077",
+   "name": "instance139857",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@1",
    "render_bounds": [
     490.3,
@@ -14741,7 +15522,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140078",
+   "name": "instance139858",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@1/@15",
    "render_bounds": [
     490.3,
@@ -14788,7 +15569,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140079",
+   "name": "instance139859",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@17",
    "render_bounds": [
     499.15,
@@ -14835,7 +15616,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140080",
+   "name": "instance139860",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@17/@9",
    "render_bounds": [
     499.15,
@@ -14882,19 +15663,19 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140081",
+   "name": "instance139861",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27",
    "render_bounds": [
     501.5,
-    115.55,
+    114.75,
     512.8,
-    139.4
+    139.5
    ],
    "stage_bounds": [
     501.5,
-    115.55,
+    114.75,
     512.8,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.1889,
@@ -14929,7 +15710,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140082",
+   "name": "instance139862",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@1",
    "render_bounds": [
     501.5,
@@ -14976,19 +15757,19 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140083",
+   "name": "instance139863",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2",
    "render_bounds": [
     501.5,
-    115.5,
+    114.7,
     512.7,
-    139.35
+    139.45
    ],
    "stage_bounds": [
     501.5,
-    115.5,
+    114.7,
     512.7,
-    139.35
+    139.45
    ],
    "stage_matrix": [
     0.2066,
@@ -15023,7 +15804,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140084",
+   "name": "instance139864",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2/@1",
    "render_bounds": [
     502.1,
@@ -15070,7 +15851,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140085",
+   "name": "instance139865",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2/@2",
    "render_bounds": [
     503.5,
@@ -15117,7 +15898,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140086",
+   "name": "instance139866",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2/@2/@5",
    "render_bounds": [
     503.5,
@@ -15162,21 +15943,21 @@
    "depth": 8,
    "effective_visible": true,
    "filters": 0,
-   "frame": 74,
+   "frame": 75,
    "kind": "movie_clip",
-   "name": "instance140087",
+   "name": "instance139867",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2/@8",
    "render_bounds": [
     501.5,
-    115.55,
+    114.75,
     512.7,
-    139.4
+    139.5
    ],
    "stage_bounds": [
     501.5,
-    115.55,
+    114.75,
     512.7,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.2066,
@@ -15212,7 +15993,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140088",
+   "name": "instance139868",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2/@8/@1",
    "render_bounds": [
     501.95,
@@ -15259,19 +16040,19 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "morph_shape",
-   "name": "instance151165",
+   "name": "instance150942",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2/@8/@2",
    "render_bounds": [
     501.65,
-    115.55,
+    114.75,
     512.7,
-    125.6
+    124.8
    ],
    "stage_bounds": [
     501.65,
-    115.55,
+    114.75,
     512.7,
-    125.6
+    124.8
    ],
    "stage_matrix": [
     0.2066,
@@ -15306,19 +16087,19 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "morph_shape",
-   "name": "instance151166",
+   "name": "instance150943",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@27/@2/@8/@3",
    "render_bounds": [
     501.5,
-    129.35,
+    129.45,
     512.55,
-    139.4
+    139.5
    ],
    "stage_bounds": [
     501.5,
-    129.35,
+    129.45,
     512.55,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.2066,
@@ -15353,19 +16134,19 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140091",
+   "name": "instance139871",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30",
    "render_bounds": [
     518.4,
-    115.55,
+    114.75,
     529.7,
-    139.4
+    139.5
    ],
    "stage_bounds": [
     518.4,
-    115.55,
+    114.75,
     529.7,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.1889,
@@ -15400,7 +16181,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140092",
+   "name": "instance139872",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@1",
    "render_bounds": [
     518.4,
@@ -15447,19 +16228,19 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140093",
+   "name": "instance139873",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2",
    "render_bounds": [
     518.45,
-    115.5,
+    114.7,
     529.65,
-    139.35
+    139.45
    ],
    "stage_bounds": [
     518.45,
-    115.5,
+    114.7,
     529.65,
-    139.35
+    139.45
    ],
    "stage_matrix": [
     0.2066,
@@ -15494,7 +16275,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140094",
+   "name": "instance139874",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2/@1",
    "render_bounds": [
     519.05,
@@ -15541,7 +16322,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140095",
+   "name": "instance139875",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2/@2",
    "render_bounds": [
     520.45,
@@ -15588,7 +16369,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140096",
+   "name": "instance139876",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2/@2/@5",
    "render_bounds": [
     520.45,
@@ -15633,21 +16414,21 @@
    "depth": 8,
    "effective_visible": true,
    "filters": 0,
-   "frame": 74,
+   "frame": 75,
    "kind": "movie_clip",
-   "name": "instance140097",
+   "name": "instance139877",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2/@8",
    "render_bounds": [
     518.45,
-    115.55,
+    114.75,
     529.65,
-    139.4
+    139.5
    ],
    "stage_bounds": [
     518.45,
-    115.55,
+    114.75,
     529.65,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.2066,
@@ -15683,7 +16464,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140098",
+   "name": "instance139878",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2/@8/@1",
    "render_bounds": [
     518.9,
@@ -15730,19 +16511,19 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "morph_shape",
-   "name": "instance151163",
+   "name": "instance150940",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2/@8/@2",
    "render_bounds": [
     518.6,
-    115.55,
+    114.75,
     529.65,
-    125.6
+    124.8
    ],
    "stage_bounds": [
     518.6,
-    115.55,
+    114.75,
     529.65,
-    125.6
+    124.8
    ],
    "stage_matrix": [
     0.2066,
@@ -15777,19 +16558,19 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "morph_shape",
-   "name": "instance151164",
+   "name": "instance150941",
    "path": "/root1/__mainMc/GameMc/@0/@0/p1head/@1/@30/@2/@8/@3",
    "render_bounds": [
     518.45,
-    129.35,
+    129.45,
     529.5,
-    139.4
+    139.5
    ],
    "stage_bounds": [
     518.45,
-    129.35,
+    129.45,
     529.5,
-    139.4
+    139.5
    ],
    "stage_matrix": [
     0.2066,
@@ -15821,6 +16602,24 @@
    },
    "depth": 673,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -15872,7 +16671,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140101",
+   "name": "instance139881",
    "path": "/root1/__mainMc/GameMc/@0/@0/dressUpBtn/@1",
    "render_bounds": [
     274.75,
@@ -15919,7 +16718,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140102",
+   "name": "instance139882",
    "path": "/root1/__mainMc/GameMc/@0/@0/dressUpBtn/@1/@4",
    "render_bounds": [
     274.75,
@@ -15963,10 +16762,31 @@
    },
    "depth": 6,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      206,
+      88,
+      32
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140103",
+   "name": "instance139883",
    "path": "/root1/__mainMc/GameMc/@0/@0/dressUpBtn/@6",
    "render_bounds": [
     280.05,
@@ -16038,6 +16858,7 @@
    "text": "DRESS UP",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -16045,6 +16866,7 @@
      203,
      0
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -16134,6 +16956,43 @@
    },
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "GradientBevelFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      116,
+      21,
+      6
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 3,
    "frame": 1,
    "kind": "movie_clip",
@@ -16209,6 +17068,7 @@
    "text": "LEVEL 2 / 5 FAILED\u2026",
    "text_format": {
     "align": "Center",
+    "ascent": 36.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -16216,6 +17076,7 @@
      205,
      1
     ],
+    "descent": 8.2,
     "device_font": false,
     "font": "Swiss 921 BT",
     "html": false,
@@ -16257,6 +17118,24 @@
    },
    "depth": 682,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -16308,7 +17187,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140104",
+   "name": "instance139884",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@1",
    "render_bounds": [
     81.45,
@@ -16355,7 +17234,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140105",
+   "name": "instance139885",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@1/@4",
    "render_bounds": [
     81.45,
@@ -16399,10 +17278,28 @@
    },
    "depth": 6,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      177,
+      77,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140106",
+   "name": "instance139886",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@6",
    "render_bounds": [
     86.6,
@@ -16474,6 +17371,7 @@
    "text": "MORE GAMES",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -16481,6 +17379,7 @@
      255,
      251
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -16522,6 +17421,24 @@
    },
    "depth": 689,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -16573,7 +17490,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140107",
+   "name": "instance139887",
    "path": "/root1/__mainMc/GameMc/@0/@0/restartBtn/@1",
    "render_bounds": [
     466.0,
@@ -16620,7 +17537,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140108",
+   "name": "instance139888",
    "path": "/root1/__mainMc/GameMc/@0/@0/restartBtn/@1/@4",
    "render_bounds": [
     466.0,
@@ -16664,10 +17581,28 @@
    },
    "depth": 6,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      206,
+      88,
+      32
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140109",
+   "name": "instance139889",
    "path": "/root1/__mainMc/GameMc/@0/@0/restartBtn/@6",
    "render_bounds": [
     471.25,
@@ -16739,6 +17674,7 @@
    "text": "TRY AGAIN",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -16746,6 +17682,7 @@
      255,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -16787,6 +17724,24 @@
    },
    "depth": 696,
    "effective_visible": false,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -16838,7 +17793,7 @@
    "filters": 0,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140110",
+   "name": "instance139890",
    "path": "/root1/__mainMc/GameMc/@0/@0/nextLevel/@1",
    "render_bounds": [
     466.0,
@@ -16885,7 +17840,7 @@
    "effective_visible": false,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140111",
+   "name": "instance139891",
    "path": "/root1/__mainMc/GameMc/@0/@0/nextLevel/@1/@4",
    "render_bounds": [
     466.0,
@@ -16929,10 +17884,28 @@
    },
    "depth": 6,
    "effective_visible": false,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      206,
+      88,
+      32
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
-   "name": "instance140112",
+   "name": "instance139892",
    "path": "/root1/__mainMc/GameMc/@0/@0/nextLevel/@6",
    "render_bounds": [
     471.4,
@@ -17004,6 +17977,7 @@
    "text": "NEXT",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -17011,6 +17985,7 @@
      255,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -17102,7 +18077,7 @@
    "effective_visible": true,
    "filters": 0,
    "kind": "graphic",
-   "name": "instance140113",
+   "name": "instance139893",
    "path": "/root1/__mainMc/GameMc/@0/@0/__id12_/@1",
    "render_bounds": [
     252.35,

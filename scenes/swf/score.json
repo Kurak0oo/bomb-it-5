@@ -241,6 +241,11 @@
    "class": "flash.display::MovieClip",
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -178191,6 +178196,27 @@
    "class": "flash.display::MovieClip",
    "depth": 142,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -178228,6 +178254,24 @@
    "class": "flash.display::MovieClip",
    "depth": 161,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -178413,6 +178457,27 @@
    "class": "flash.display::MovieClip",
    "depth": 196,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -178450,6 +178515,11 @@
    "class": "flash.display::MovieClip",
    "depth": 215,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -178487,6 +178557,27 @@
    "class": "flash.display::MovieClip",
    "depth": 233,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -178709,6 +178800,27 @@
    "class": "flash.display::MovieClip",
    "depth": 272,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -178783,6 +178895,24 @@
    "class": "flash.display::MovieClip",
    "depth": 295,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -178820,6 +178950,27 @@
    "class": "flash.display::MovieClip",
    "depth": 314,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -178929,6 +179080,24 @@
    "class": "DIFFICULTYBONUS",
    "depth": 458,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 2,
    "kind": "movie_clip",
@@ -179006,6 +179175,24 @@
    "class": "translation_110",
    "depth": 497,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -179203,6 +179390,24 @@
    "class": "translation_107",
    "depth": 523,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -179275,6 +179480,24 @@
    "class": "translation_111",
    "depth": 529,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -179347,6 +179570,24 @@
    "class": "flash.text::TextField",
    "depth": 542,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "kill",
@@ -179376,6 +179617,7 @@
    "text": "0",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -179383,6 +179625,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -179446,6 +179689,24 @@
    "class": "flash.text::TextField",
    "depth": 544,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "time",
@@ -179475,6 +179736,7 @@
    "text": "1780",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -179482,6 +179744,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -179545,6 +179808,24 @@
    "class": "flash.text::TextField",
    "depth": 546,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "difficulity",
@@ -179574,6 +179855,7 @@
    "text": "2000",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -179581,6 +179863,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -179644,6 +179927,24 @@
    "class": "flash.text::TextField",
    "depth": 548,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "levelScore",
@@ -179673,6 +179974,7 @@
    "text": "3780",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -179680,6 +179982,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -179743,6 +180046,24 @@
    "class": "flash.text::TextField",
    "depth": 550,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "kind": "text",
    "name": "total",
@@ -179772,6 +180093,7 @@
    "text": "3780",
    "text_format": {
     "align": "Right",
+    "ascent": 17.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -179779,6 +180101,7 @@
      46,
      149
     ],
+    "descent": 4.95,
     "device_font": false,
     "font": "Arial Black",
     "html": false,
@@ -180581,6 +180904,40 @@
    "class": "BOMBIT5UI_fla::roleHead_263",
    "depth": 551,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 2.0,
+     "blur_y": 2.0,
+     "color": [
+      0,
+      51,
+      102
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -180619,6 +180976,24 @@
    "class": "flash.display::MovieClip",
    "depth": 673,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -180696,6 +181071,43 @@
    "class": "translation_72",
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "GradientBevelFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      102,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 3,
    "frame": 1,
    "kind": "movie_clip",
@@ -180763,6 +181175,7 @@
    "text": "LEVEL 1 / 5 COMPLETE!",
    "text_format": {
     "align": "Center",
+    "ascent": 36.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -180770,6 +181183,7 @@
      205,
      1
     ],
+    "descent": 8.2,
     "device_font": false,
     "font": "Swiss 921 BT",
     "html": true,
@@ -180800,6 +181214,24 @@
    "class": "flash.display::MovieClip",
    "depth": 689,
    "effective_visible": false,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -180843,6 +181275,24 @@
    "class": "flash.display::MovieClip",
    "depth": 696,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -182216,6 +182666,24 @@
    "class": "flash.display::MovieClip",
    "depth": 14,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -182850,6 +183318,24 @@
    "class": "flash.display::MovieClip",
    "depth": 21,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -183484,6 +183970,24 @@
    "class": "flash.display::MovieClip",
    "depth": 27,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -183802,6 +184306,24 @@
    "class": "flash.display::MovieClip",
    "depth": 32,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -184120,6 +184642,24 @@
    "class": "flash.display::MovieClip",
    "depth": 37,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -190474,6 +191014,42 @@
    "class": "flash.display::MovieClip",
    "depth": 84,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -191108,6 +191684,42 @@
    "class": "flash.display::MovieClip",
    "depth": 87,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -191742,6 +192354,24 @@
    "class": "flash.display::MovieClip",
    "depth": 97,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -192376,6 +193006,24 @@
    "class": "flash.display::MovieClip",
    "depth": 104,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -193450,6 +194098,26 @@
    "class": "flash.display::MovieClip",
    "depth": 106,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "angle": 85.9996,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      98,
+      152
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 3,
    "from_capture": "unlock-tip",
@@ -193788,6 +194456,24 @@
    "class": "translation_79",
    "depth": 133,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -194121,6 +194807,24 @@
    "class": "translation_79",
    "depth": 135,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      102,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -194454,6 +195158,11 @@
    "class": "translation_79",
    "depth": 137,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "GradientBevelFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -195120,6 +195829,7 @@
    "text": "U_TOTAL SCORE:",
    "text_format": {
     "align": "Right",
+    "ascent": 20.15,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -195127,6 +195837,7 @@
      50,
      111
     ],
+    "descent": 4.2,
     "device_font": false,
     "font": "Impact",
     "html": false,
@@ -195465,6 +196176,7 @@
    "text": "3780",
    "text_format": {
     "align": "Left",
+    "ascent": 20.9,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -195472,6 +196184,7 @@
      50,
      111
     ],
+    "descent": 4.7,
     "device_font": false,
     "font": "Swiss 921 BT",
     "html": true,
@@ -195793,6 +196506,24 @@
    "class": "translation_103",
    "depth": 142,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -196443,6 +197174,24 @@
    "class": "flash.display::MovieClip",
    "depth": 147,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -196767,6 +197516,26 @@
    "class": "flash.display::MovieClip",
    "depth": 154,
    "effective_visible": false,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "angle": 85.9996,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      98,
+      152
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "from_capture": "unlock-tip",
@@ -200477,6 +201246,30 @@
    "class": "flash.display::MovieClip",
    "depth": 2,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      102,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.0195,
+     "type": "GlowFilter"
+    },
+    {
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "quality": 1,
+     "type": "BlurFilter"
+    }
+   ],
    "filters": 2,
    "frame": 6,
    "from_capture": "unlock-tip",
@@ -286531,6 +287324,43 @@
    "class": "translation_73",
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "GradientBevelFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      116,
+      21,
+      6
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 3,
    "frame": 1,
    "from_capture": "loss-score",
@@ -286601,6 +287431,7 @@
    "text": "LEVEL 2 / 5 FAILED\u2026",
    "text_format": {
     "align": "Center",
+    "ascent": 36.6,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -286608,6 +287439,7 @@
      205,
      1
     ],
+    "descent": 8.2,
     "device_font": false,
     "font": "Swiss 921 BT",
     "html": false,
@@ -286816,7 +287648,7 @@
  "source": {
   "frame": 1041,
   "golden": "tests/goldens/results/win-score.json",
-  "golden_sha256": "175fb88f4ab83981dbfaace69c5fcaf6f0f18b8332a7aa2dc108a483f8503040"
+  "golden_sha256": "a3eb68f799a04e2784ac4207889317ad84b04c28ce12e4e13100463b48acf108"
  },
  "stage": {
   "background": [
@@ -286832,7 +287664,7 @@
  "timeline": {
   "capture_index": 172,
   "capture_index_of": {
-   "loss-score": 74,
+   "loss-score": 75,
    "unlock-tip": 75,
    "win-score": 95
   },

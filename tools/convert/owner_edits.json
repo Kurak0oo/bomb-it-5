@@ -64,5 +64,17 @@
    "/moregames": "MORE GAMES, the portal link (owner decision, 2026-11-04)",
    "/__id12_": "Logos: the publisher logo at the bottom (owner decision, 2026-11-04)"
   }
+ },
+ "game_over": {
+  "remove": {
+   "/moregames": "MORE GAMES, the portal link (owner preference: portal links removed on every screen, 2026-11-04)",
+   "/__id10_": "Logos: the publisher logos at the bottom (owner preference: portal links removed on every screen, 2026-11-04)"
+  }
+ },
+ "game_win": {
+  "remove": {
+   "/moregames": "MORE GAMES, the portal link (owner preference: portal links removed on every screen, 2026-11-04)",
+   "/__id8_": "Logos: the publisher logos at the bottom (owner preference: portal links removed on every screen, 2026-11-04)"
+  }
  }
 }

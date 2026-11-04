@@ -1,11 +1,11 @@
 extends Control
 ## Main scene: the edition 5 screen flow (`UIManager`) around the round host.
 ## Title (`UILoading`) → main menu → Game Settings → character select → levels → score
-## screen → game win/over. Every screen up to the score screen is a generated original
-## screen (scripts/ui/swf_screen.gd); the game win/over screens are still placeholders
-## (checkpoint 3). `--practice` after `--` opens the development practice board directly;
-## `--screen NAME` one generated screen (`--screen score --capture loss-score`: the score
-## screen with a recorded capture's points).
+## screen → game win/over. Every screen is a generated original screen
+## (scripts/ui/swf_screen.gd). `--practice` after `--` opens the development practice board
+## directly; `--screen NAME` one generated screen (`--screen score --capture loss-score`: the
+## score screen with a recorded capture's points; `--screen game_over` / `game_win`: the end
+## screens with their recorded final score).
 
 const Game = preload("res://scripts/game.gd")
 const Session = preload("res://scripts/session.gd")
@@ -17,7 +17,6 @@ const GameView = preload("res://scripts/game_view.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const ArtCatalog = preload("res://scripts/art/catalog.gd")
 const ScreenLayout = preload("res://scripts/art/screen_layout.gd")
-const Looks = preload("res://scripts/looks.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 const Audio = preload("res://scripts/original_audio.gd")
 const Quality = preload("res://scripts/quality.gd")
@@ -27,6 +26,7 @@ const CharacterSelectUI = preload("res://scripts/ui/character_select_ui.gd")
 const HowToPlayUI = preload("res://scripts/ui/how_to_play_ui.gd")
 const PowerUpsUI = preload("res://scripts/ui/power_ups_ui.gd")
 const OnePScoreUI = preload("res://scripts/ui/one_p_score_ui.gd")
+const OnePGameOverUI = preload("res://scripts/ui/one_p_game_over_ui.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -73,7 +73,6 @@ var store: RefCounted
 var audio: Node
 var _rebinding: StringName = &""
 var _last_snapshot: Dictionary = {}
-var _new_looks: Array[int] = []
 var _message: Label
 ## Art layout control (#76): -1 native, 0 follow the pack, 1 art hotspots (checks).
 var screen_layout_override := 0
@@ -111,6 +110,9 @@ func _ready() -> void:
 			var at := args.find("--capture")
 			_review_score(args[at + 1] if at >= 0 and at + 1 < args.size() else "win-score")
 			return
+		if id in [&"game_over", &"game_win"]:
+			_review_end(id)
+			return
 		var timeline = SwfScreen.layout_of(id).get("timeline")
 		_swf_page(id, int(timeline.opened_frame) if timeline is Dictionary else 0)
 	else:
@@ -123,7 +125,7 @@ func _exit_tree() -> void:
 
 func _draw() -> void:
 	if is_instance_valid(game) and game.visible: return
-	if current in [&"title", &"menu", &"settings", &"character", &"controls", &"powerups", &"score"]:
+	if current in [&"title", &"menu", &"settings", &"character", &"controls", &"powerups", &"score", &"game_over", &"game_win"]:
 		# Outside the original stage there is nothing: letterbox black.
 		draw_rect(Rect2(Vector2.ZERO, size), Color.BLACK)
 		return
@@ -401,18 +403,12 @@ func _on_level_settled(snapshot: Dictionary, delay := 0) -> void:
 	var result: int = session.settle(&"won" if won else &"lost", snapshot.result_score,
 		snapshot.actors[&"human"].lives)
 	_last_snapshot = snapshot
+	# `AbstractGameMode.loseHandler` / `winHandler`: the score screen for every result
+	# (`onePScore`, which also unlocks the looks the total reached); after the last heart
+	# `gameOver(GAME_OVER)` replaces it at once, so the Game Over screen takes the delay.
 	if result == Session.Result.GAME_OVER:
-		# The last heart goes straight to the end screen (placeholder until it is converted);
-		# it still checks the session total against the unlock scores.
-		var key := str(session.robot)
-		_new_looks = Looks.newly_unlocked(session.robot, session.total_score, store.unlocks.get(key, []))
-		if not _new_looks.is_empty():
-			var unlocked: Array = store.unlocks.get(key, []).duplicate()
-			unlocked.append_array(_new_looks)
-			unlocked.sort()
-			store.unlocks[key] = unlocked
-			store.save_file()
-		show_end(false)
+		show_score(snapshot)
+		show_end(false, delay)
 	else:
 		show_score(snapshot, delay)
 
@@ -436,6 +432,10 @@ func show_score(snapshot: Dictionary, delay := 0) -> void:
 ## when the capture is taken it is as far into its timeline as the original's was
 ## (`capture_index_of`, matched by tools/convert/layout.py).
 func settle_as_recorded(golden: Dictionary, capture: String, frames_to_capture := -1) -> void:
+	var end := _end_screen_of(golden)
+	if end != &"":
+		_settle_end_as_recorded(golden, capture, end, frames_to_capture)
+		return
 	var screen_layout := SwfScreen.layout_of(&"score")
 	var root: String = screen_layout.screen_root
 	var shown := {}
@@ -482,6 +482,50 @@ func _review_score(capture: String) -> void:
 	settle_as_recorded(golden, capture)
 
 
+## The end screen (`game_over`, `game_win`) whose root clip a golden shows, or none.
+func _end_screen_of(golden: Dictionary) -> StringName:
+	var classes := {"UI_GAMEOVERONEP": &"game_over", "UI_CONGRATULATIONSONEP": &"game_win"}
+	for node: Dictionary in golden.nodes:
+		if classes.has(String(node.get("class", ""))): return classes[String(node.class)]
+	return &""
+
+
+## `settle_as_recorded` for a capture of an end screen. The original's screen shows only
+## the final score (`score`, the score screen's `total`): the round ends as the last level
+## won (`game_win`, as the session's last level) or with the last heart spent
+## (`game_over`), with the points that make the session total that score. Game Over opens
+## from the round's end, so it takes the capture's timeline index as the score screen
+## does; the congratulations screen opens later, from NEXT on the score screen.
+func _settle_end_as_recorded(golden: Dictionary, capture: String, end: StringName, frames_to_capture := -1) -> void:
+	var screen_layout := SwfScreen.layout_of(end)
+	var root: String = screen_layout.screen_root
+	var final := 0
+	for node: Dictionary in golden.nodes:
+		if String(node.path) == root + "/score": final = String(node.get("text", "0")).to_int()
+	var won := end == &"game_win"
+	if won: session.level = session.levels
+	var delay := 0
+	if frames_to_capture >= 0 and not won:
+		var phases: Dictionary = screen_layout.get("timeline", {}).get("capture_index_of", {})
+		delay = frames_to_capture - int(phases.get(capture, 0))
+	_end_game()
+	_on_level_settled({"outcome": &"won" if won else &"lost", "result_score": final - session.total_score,
+		"actors": {&"human": {"lives": session.lives if won else 0}}, "result_breakdown": {}}, delay)
+
+
+## `--screen game_over` / `--screen game_win`: the end screen with its recorded capture's
+## final score and robot (`p1head`'s frame, the inverse of `OnePGameOverUI.initData`).
+func _review_end(id: StringName) -> void:
+	var source: String = SwfScreen.layout_of(id).source.golden
+	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://" + source))
+	var root: String = SwfScreen.layout_of(id).screen_root
+	for node: Dictionary in golden.nodes:
+		if String(node.path) == root + "/p1head": session.robot = int(node.frame) - 1
+	session.begin()
+	settle_as_recorded(golden, source.get_file().get_basename())
+	if id == &"game_win": show_end(true)
+
+
 func _continue() -> void:
 	if session.last_result == Session.Result.GAME_WIN:
 		show_end(true)
@@ -490,28 +534,22 @@ func _continue() -> void:
 	_start_level()
 
 
-func show_end(won: bool) -> void:
-	_end_game()
-	# `OnePGameOverUI`: menu music, after the win or lose jingle if it is still playing.
-	audio.create_over_ui_music()
-	var page := _page(&"game_win" if won else &"game_over")
-	if not _art: UiKit.panel(page, Rect2(290, 130, 700, 440))
-	_label(page, &"title", "GAME COMPLETE!" if won else "GAME OVER", Rect2(290, 170, 700, 0), 52, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
-	if not won:
-		_label(page, &"retry_hint", "Don't give up! Give it another bomb…", Rect2(290, 260, 700, 0), 22, Color("b4d2d7"), HORIZONTAL_ALIGNMENT_CENTER)
-	if not _new_looks.is_empty():
-		var names := PackedStringArray()
-		for number in _new_looks: names.append(Looks.title(session.robot, number))
-		var unlock := _label(page, &"end_unlock", "New outfit unlocked! " + ", ".join(names), Rect2(290, 400, 700, 0), 20,
-			UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
-		unlock.name = "EndUnlock"
-		if _art: unlock.add_theme_color_override("font_color", Color("12306e"))
-		_new_looks.clear()
-	_label(page, &"total_label", "TOTAL SCORE", Rect2(400, 340, 0, 0), 28, Color("ffc79a"))
-	var total := _label(page, &"total_value", str(session.total_score), Rect2(680, 340, 200, 0), 28, UiKit.ACCENT,
-		HORIZONTAL_ALIGNMENT_RIGHT)
-	_live(total, &"total_value", Color("12306e"))
-	_button(page, &"TryAgain", "TRY AGAIN", Rect2(510, 460, 260, 64), show_settings, 24).grab_focus.call_deferred()
+## `UIManager.gameOver(gameResult)`, one player: the round is disposed, the score screen
+## hidden, `OnePGameOverUI` opened with the score screen's `total` (UI_GAMEOVERONEP after
+## the last heart, UI_CONGRATULATIONSONEP after the last level), then the score screen's
+## controller destroyed. TRY AGAIN (`backHandle`) returns to Game Settings. Without a score
+## screen (a development launch) the session total stands in for `total`.
+func show_end(won: bool, delay := -1) -> void:
+	_end_game()  # this.game.dispose()
+	var swf_score = screen.get_child(0) if is_instance_valid(screen) and screen.get_child_count() > 0 else null
+	var score_ui = swf_score.get_meta("controller") if swf_score is SwfScreen and current == &"score" and swf_score.has_meta("controller") else null
+	var total: int = score_ui.total if score_ui != null else session.total_score
+	_clear_screen()  # this._uiOnePScore.display = false
+	var id := &"game_win" if won else &"game_over"
+	var swf := _swf_page(id, _open_delay(id) if delay < 0 else delay)
+	var gameResult: int = OnePGameOverUI.GameResult.GAME_WIN if won else OnePGameOverUI.GameResult.GAME_OVER
+	swf.set_meta("controller", OnePGameOverUI.new(swf, self, total, gameResult))
+	if score_ui != null: score_ui.destroy()
 
 
 func _open_practice() -> void:

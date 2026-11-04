@@ -38,6 +38,10 @@ The committed node data recorded from the reference player for a comparison case
 **Capture phase**:
 How many frames a screen had been open when a capture was taken, read from that capture's golden dump rather than from a run. Needed where the original opens a screen on the wall clock, so each recording opens it at a different frame.
 
+**End screen**:
+The screen that closes a one-player session with its final score and TRY AGAIN: Game Over after the last heart, congratulations (GAME COMPLETE!) after the last level.
+_Avoid_: results screen, score screen
+
 **Original pack**:
 The art and audio taken from the user's own SWF, kept on their machine and never committed.
 _Avoid_: assets, candidate art

@@ -311,6 +311,11 @@
    },
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -5721,6 +5726,27 @@
    },
    "depth": 142,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -5955,6 +5981,24 @@
    },
    "depth": 161,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -6565,6 +6609,27 @@
    },
    "depth": 196,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -6799,6 +6864,11 @@
    },
    "depth": 215,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -6893,6 +6963,27 @@
    },
    "depth": 233,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -7597,6 +7688,27 @@
    },
    "depth": 272,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      183,
+      64,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -7925,6 +8037,24 @@
    },
    "depth": 295,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      38,
+      136,
+      126
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -8159,6 +8289,27 @@
    },
    "depth": 314,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "ColorMatrixFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      211,
+      50,
+      159
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -8487,6 +8638,42 @@
    },
    "depth": 2,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      101,
+      163
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -8581,6 +8768,42 @@
    },
    "depth": 4,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      101,
+      163
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -11211,6 +11434,24 @@
    },
    "depth": 5,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -11305,6 +11546,24 @@
    },
    "depth": 69,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -11399,6 +11658,24 @@
    },
    "depth": 74,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -11539,6 +11816,24 @@
    },
    "depth": 80,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -11633,6 +11928,24 @@
    },
    "depth": 85,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -11773,6 +12086,24 @@
    },
    "depth": 92,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -12007,6 +12338,24 @@
    },
    "depth": 5,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -12101,6 +12450,24 @@
    },
    "depth": 105,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -12195,6 +12562,42 @@
    },
    "depth": 110,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -12335,6 +12738,42 @@
    },
    "depth": 113,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -12475,6 +12914,42 @@
    },
    "depth": 116,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -12569,6 +13044,42 @@
    },
    "depth": 118,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      65,
+      116
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "angle": 89.9994,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      0,
+      140,
+      196
+     ],
+     "distance": 2.0,
+     "hide_object": false,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "DropShadowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -12709,6 +13220,24 @@
    },
    "depth": 129,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -12849,6 +13378,24 @@
    },
    "depth": 136,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      51,
+      51,
+      51
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -13037,6 +13584,24 @@
    },
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      37,
+      100,
+      131
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -13112,6 +13677,7 @@
    "text": "C_P1",
    "text_format": {
     "align": "Left",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13119,6 +13685,7 @@
      254,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -13160,6 +13727,24 @@
    },
    "depth": 3,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      171,
+      62,
+      24
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -13235,6 +13820,7 @@
    "text": "C_P2",
    "text_format": {
     "align": "Left",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13242,6 +13828,7 @@
      191,
      2
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -13283,6 +13870,24 @@
    },
    "depth": 5,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -13358,6 +13963,7 @@
    "text": "MOVE",
    "text_format": {
     "align": "Center",
+    "ascent": 24.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13365,6 +13971,7 @@
      97,
      0
     ],
+    "descent": 5.05,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -13406,6 +14013,24 @@
    },
    "depth": 7,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -13481,6 +14106,7 @@
    "text": "BOMB",
    "text_format": {
     "align": "Center",
+    "ascent": 24.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13488,6 +14114,7 @@
      97,
      0
     ],
+    "descent": 5.05,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -13529,6 +14156,24 @@
    },
    "depth": 9,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      37,
+      100,
+      131
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -13604,6 +14249,7 @@
    "text": "C_P1",
    "text_format": {
     "align": "Left",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -13611,6 +14257,7 @@
      254,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -13652,6 +14299,40 @@
    },
    "depth": 11,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 2.0,
+     "blur_y": 2.0,
+     "color": [
+      0,
+      51,
+      102
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -14784,6 +15465,40 @@
    },
    "depth": 133,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 2.0,
+     "blur_y": 2.0,
+     "color": [
+      0,
+      51,
+      102
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -15916,6 +16631,40 @@
    },
    "depth": 255,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 2.0,
+     "blur_y": 2.0,
+     "color": [
+      0,
+      51,
+      102
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    },
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 2,
    "frame": 1,
    "kind": "movie_clip",
@@ -18533,6 +19282,7 @@
    "text": "\u2191",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -18540,6 +19290,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -18608,6 +19359,7 @@
    "text": "\u2190",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -18615,6 +19367,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -18683,6 +19436,7 @@
    "text": "\u2193",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -18690,6 +19444,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -18758,6 +19513,7 @@
    "text": "\u2192",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -18765,6 +19521,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -18833,6 +19590,7 @@
    "text": "\u2191",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -18840,6 +19598,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -18908,6 +19667,7 @@
    "text": "\u2190",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -18915,6 +19675,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -18983,6 +19744,7 @@
    "text": "\u2193",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -18990,6 +19752,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19058,6 +19821,7 @@
    "text": "\u2192",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19065,6 +19829,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19133,6 +19898,7 @@
    "text": "Space",
    "text_format": {
     "align": "Center",
+    "ascent": 14.3,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19140,6 +19906,7 @@
      0,
      0
     ],
+    "descent": 4.0,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19208,6 +19975,7 @@
    "text": "W",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19215,6 +19983,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19283,6 +20052,7 @@
    "text": "A",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19290,6 +20060,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19404,6 +20175,7 @@
    "text": "S",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19411,6 +20183,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19479,6 +20252,7 @@
    "text": "D",
    "text_format": {
     "align": "Center",
+    "ascent": 15.4,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19486,6 +20260,7 @@
      0,
      0
     ],
+    "descent": 4.3,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19554,6 +20329,7 @@
    "text": "Space",
    "text_format": {
     "align": "Center",
+    "ascent": 14.3,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19561,6 +20337,7 @@
      0,
      0
     ],
+    "descent": 4.0,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19629,6 +20406,7 @@
    "text": "Enter",
    "text_format": {
     "align": "Center",
+    "ascent": 14.3,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19636,6 +20414,7 @@
      0,
      0
     ],
+    "descent": 4.0,
     "device_font": false,
     "font": "Arial Black",
     "html": true,
@@ -19677,6 +20456,24 @@
    },
    "depth": 809,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -19771,6 +20568,24 @@
    },
    "depth": 7,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      206,
+      88,
+      32
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -19846,6 +20661,7 @@
    "text": "C_RESET",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -19853,6 +20669,7 @@
      255,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -19894,6 +20711,24 @@
    },
    "depth": 817,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 6.0,
+     "blur_y": 6.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -19988,6 +20823,24 @@
    },
    "depth": 7,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      206,
+      88,
+      32
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -20063,6 +20916,7 @@
    "text": "C_SAVE",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -20070,6 +20924,7 @@
      255,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -20111,6 +20966,24 @@
    },
    "depth": 825,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -20253,6 +21126,24 @@
    },
    "depth": 6,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      206,
+      88,
+      32
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -20328,6 +21219,7 @@
    "text": "BACK",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -20335,6 +21227,7 @@
      255,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -20376,6 +21269,24 @@
    },
    "depth": 832,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      0,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 1.5,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -20518,6 +21429,24 @@
    },
    "depth": 6,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 3.0,
+     "blur_y": 3.0,
+     "color": [
+      206,
+      88,
+      32
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 5.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -20593,6 +21522,7 @@
    "text": "C_POWER-UPS",
    "text_format": {
     "align": "Center",
+    "ascent": 25.2,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -20600,6 +21530,7 @@
      255,
      255
     ],
+    "descent": 5.25,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -20689,6 +21620,24 @@
    },
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 10.0,
+     "blur_y": 10.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -20764,6 +21713,7 @@
    "text": "CONTROLS",
    "text_format": {
     "align": "Center",
+    "ascent": 40.35,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -20771,6 +21721,7 @@
      204,
      0
     ],
+    "descent": 8.4,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -20812,6 +21763,24 @@
    },
    "depth": 3,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 4.0,
+     "blur_y": 4.0,
+     "color": [
+      102,
+      0,
+      0
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -20887,6 +21856,7 @@
    "text": "CONTROLS",
    "text_format": {
     "align": "Center",
+    "ascent": 40.35,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -20894,6 +21864,7 @@
      204,
      0
     ],
+    "descent": 8.4,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -20935,6 +21906,11 @@
    },
    "depth": 5,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "type": "GradientBevelFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -21010,6 +21986,7 @@
    "text": "CONTROLS",
    "text_format": {
     "align": "Center",
+    "ascent": 40.35,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -21017,6 +21994,7 @@
      204,
      0
     ],
+    "descent": 8.4,
     "device_font": false,
     "font": "Impact",
     "html": true,
@@ -21106,6 +22084,24 @@
    },
    "depth": 1,
    "effective_visible": true,
+   "filter_list": [
+    {
+     "alpha": 1.0,
+     "blur_x": 5.0,
+     "blur_y": 5.0,
+     "color": [
+      255,
+      255,
+      255
+     ],
+     "composite_source": true,
+     "inner": false,
+     "knockout": false,
+     "quality": 1,
+     "strength": 10.0,
+     "type": "GlowFilter"
+    }
+   ],
    "filters": 1,
    "frame": 1,
    "kind": "movie_clip",
@@ -21181,6 +22177,7 @@
    "text": "Click a control button to change it.",
    "text_format": {
     "align": "Center",
+    "ascent": 20.15,
     "autosize": "None",
     "bold": false,
     "color": [
@@ -21188,6 +22185,7 @@
      48,
      109
     ],
+    "descent": 4.2,
     "device_font": false,
     "font": "Impact",
     "html": true,
