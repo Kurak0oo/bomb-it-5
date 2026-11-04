@@ -21,6 +21,8 @@ var screen_name: StringName
 var layout: Dictionary
 var by_path: Dictionary = {}
 var art_loaded := 0
+var _art: Array[Dictionary] = []
+var _art_px := -1.0
 
 
 static func create(screen: StringName) -> Node2D:
@@ -71,11 +73,37 @@ func build(screen: StringName) -> void:
 	add_child(hits)
 
 
-## Scale the stage to fit `size` and centre it: the one scale factor of rule 5.
+## Scale the stage to fit `size` and centre it: the one scale factor of rule 5. Piece art
+## is then resampled once, from its 3× source to the exact screen scale.
 func fit(size: Vector2) -> void:
 	var factor := minf(size.x / STAGE.x, size.y / STAGE.y)
 	scale = Vector2(factor, factor)
 	position = (size - STAGE * factor) * 0.5
+	_refresh_art.call_deferred()
+
+
+## Screen pixels per stage unit, through the window's own stretch.
+func pixels_per_unit() -> float:
+	if not is_inside_tree(): return scale.x
+	return (get_viewport().get_final_transform() * get_global_transform_with_canvas()).get_scale().x
+
+
+func _refresh_art() -> void:
+	var px := pixels_per_unit()
+	if px <= 0.0 or is_equal_approx(px, _art_px): return
+	_art_px = px
+	for art: Dictionary in _art:
+		var source: Image = art.image
+		var w := maxi(1, roundi(source.get_width() * px / art.scale))
+		var h := maxi(1, roundi(source.get_height() * px / art.scale))
+		var image: Image = source.duplicate()
+		if w != source.get_width() or h != source.get_height():
+			image.resize(w, h, Image.INTERPOLATE_LANCZOS)
+		var sprite: Sprite2D = art.sprite
+		sprite.texture = ImageTexture.create_from_image(image)
+		# Stage units per texture pixel, per axis (the rounded size keeps the exact extent).
+		var unit := Vector2(source.get_width() / art.scale / w, source.get_height() / art.scale / h)
+		sprite.transform = art.stage.affine_inverse() * Transform2D(0.0, unit, 0.0, art.origin)
 
 
 func node_for(path: String) -> Node2D:
@@ -94,24 +122,21 @@ func _manifest() -> Dictionary:
 func _add_art(node: Node2D, stage: Transform2D, piece: Dictionary) -> void:
 	var image := Image.load_from_file(ProjectSettings.globalize_path((PACK % screen_name).get_base_dir().path_join(piece.file)))
 	if image == null: return
-	# Premultiplied alpha, so filtering the 3× texture down does not bleed the black of
-	# transparent pixels into edges (dark fringes on thin lines).
+	# Premultiplied alpha, so resampling does not bleed the black of transparent pixels
+	# into edges (dark fringes on thin lines).
 	image.premultiply_alpha()
-	image.generate_mipmaps()
 	var sprite := Sprite2D.new()
 	sprite.name = "Art"
 	sprite.set_meta("swf_art", true)
-	sprite.texture = ImageTexture.create_from_image(image)
 	sprite.centered = false
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	var material := CanvasItemMaterial.new()
 	material.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA
 	sprite.material = material
-	var s := 1.0 / float(piece.scale)
-	# The piece was rendered in stage space: undo the node's own transform.
-	sprite.transform = stage.affine_inverse() * Transform2D(0.0, Vector2(s, s), 0.0,
-		Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) * s)
 	node.add_child(sprite)
+	# The piece was rendered in stage space: its sprite undoes the node's own transform.
+	_art.append({"sprite": sprite, "image": image, "scale": float(piece.scale), "stage": stage,
+		"origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) / float(piece.scale)})
 	art_loaded += 1
 
 

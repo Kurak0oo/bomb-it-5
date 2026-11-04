@@ -150,7 +150,8 @@ Converter v1 (static screens) is in place:
   and their actions are the port of `UILoading` and `MainMenuUI` (sources in the file).
 - `scripts/ui/swf_screen.gd` builds the screen in Godot: one Node2D per layout node at
   its stage matrix, the whole stage fitted to the window by one scale factor, piece art
-  from the local pack `original/screens/<screen>/` (premultiplied alpha, mipmapped), an
+  from the local pack `original/screens/<screen>/` (premultiplied alpha, resampled once
+  with Lanczos from 3× to the exact screen scale, redone on resize), an
   outline where the pack is missing, hit areas over interactive instances.
 - `tools/convert/render_pieces.py` renders the pieces with the reference player at 3×
   and checks that, laid back together, they reproduce the player's own frame.
