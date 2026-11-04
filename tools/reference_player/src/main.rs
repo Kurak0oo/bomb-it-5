@@ -34,6 +34,12 @@ fn main() -> Result<()> {
     tracing_subscriber::fmt().with_env_filter("warn").with_writer(std::io::stderr).init();
     let args: Vec<String> = std::env::args().collect();
     let swf = &args[1];
+    // `--scale N` renders the 700×510 stage at N× (render bake-off); input coordinates
+    // stay in stage units and are scaled here, so cases run unchanged.
+    let scale: f64 = match args.iter().position(|a| a == "--scale") {
+        Some(i) => args.get(i + 1).ok_or(anyhow!("--scale needs a value"))?.parse()?,
+        None => 1.0,
+    };
     // Vulkan everywhere it exists, so recorded runs keep their renderer; macOS has Metal only.
     #[cfg(target_os = "macos")]
     let backends = wgpu::Backends::METAL;
@@ -46,12 +52,12 @@ fn main() -> Result<()> {
     eprintln!("adapter: {:?}", adapter.get_info());
     let descriptors = Arc::new(Descriptors::new(instance, adapter, device, queue));
     let movie = movie_from_path(swf, None).map_err(|e| anyhow!(e.to_string()))?;
-    let (w, h) = (700u32, 510u32);
+    let (w, h) = ((700.0 * scale).round() as u32, (510.0 * scale).round() as u32);
     let target = TextureTarget::new(&descriptors.device, (w, h)).map_err(|e| anyhow!(e.to_string()))?;
     let player: Arc<Mutex<Player>> = PlayerBuilder::new()
         .with_renderer(WgpuRenderBackend::new(descriptors.clone(), target).map_err(|e| anyhow!(e.to_string()))?)
         .with_movie(movie)
-        .with_viewport_dimensions(w, h, 1.0)
+        .with_viewport_dimensions(w, h, scale)
         .with_autoplay(true)
         .build();
     let mut frame: u64 = 0;
@@ -209,9 +215,9 @@ fn main() -> Result<()> {
             "shot" => shot(&player, t[1])?,
             "kd" => ev(PlayerEvent::KeyDown { key: key(t[1])? }),
             "ku" => ev(PlayerEvent::KeyUp { key: key(t[1])? }),
-            "move" => ev(PlayerEvent::MouseMove { x: t[1].parse()?, y: t[2].parse()? }),
+            "move" => ev(PlayerEvent::MouseMove { x: t[1].parse::<f64>()? * scale, y: t[2].parse::<f64>()? * scale }),
             "click" => {
-                let (x, y): (f64, f64) = (t[1].parse()?, t[2].parse()?);
+                let (x, y): (f64, f64) = (t[1].parse::<f64>()? * scale, t[2].parse::<f64>()? * scale);
                 ev(PlayerEvent::MouseMove { x, y });
                 ev(PlayerEvent::MouseDown { x, y, button: MouseButton::Left, index: None });
                 ev(PlayerEvent::MouseUp { x, y, button: MouseButton::Left });

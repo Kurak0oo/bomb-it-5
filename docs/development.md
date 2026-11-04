@@ -129,5 +129,10 @@ Goldens for `main-menu` (title at frame 301, menu at frame 541, 35 fps) were rec
 on the owner's Mac and checked from a machine without the SWF. The menu's buttons are
 timeline clips, not Flash buttons, so their states show as clip frames.
 
-Checkpoint 2 is next. Hover and press captures for the menu buttons must be added to the
-case and recorded on the owner's Mac.
+Checkpoint 2 is in progress: render bake-off. `tools/bakeoff/bakeoff.py` renders a
+captured frame three ways at 3× (A: reference player `--scale 3`; B: FFDec SVG pieces
+placed by the golden's stage matrices, rasterised once by resvg; C: FFDec PNG pieces at 3×),
+scores each back at 1× against the reference capture, lists what B/C cannot rebuild
+(filters, blends, device-font text), and writes `sheet.png`. Verified here on Ruffle test
+SWFs; the real run happens on the owner's Mac. Hover and press captures for the menu
+buttons still need adding to the case.
