@@ -321,6 +321,8 @@ def record_art(case_name, player_path, swf):
                     _render_frame(p, p.frame - opened, wanted, sequences, pieces, seen, target, tmp)
             if opened is None:
                 opened = p.frame - timeline.get('capture_index', 0)
+                if not timeline:  # no recorded timeline: everything renders at the capture
+                    _render_frame(p, p.frame - opened, wanted, sequences, pieces, seen, target, tmp)
             p.shot(tmp / 'full.png')
             full = tmp / 'full.png'
             shutil.copy(full, target / 'reference-3x.png')

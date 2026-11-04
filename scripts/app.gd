@@ -125,6 +125,9 @@ func show_title() -> void:
 	var timeline = SwfScreen.layout_of(&"title").get("timeline")
 	var swf := _swf_page(&"title", int(timeline.opened_frame) if timeline is Dictionary else 0)
 	swf.action.connect(func(name: StringName): if name == &"play": show_main_menu(true))
+	# Decode the menu's art in the background now, so PLAY (and every later return to the
+	# menu) does not wait on disk.
+	(func(): SwfScreen.warm(&"menu", swf.pixels_per_unit())).call_deferred()
 
 
 ## `MainMenuUI`: START → Game Settings, HOW TO PLAY → controls, and the quality, sound and

@@ -31,6 +31,12 @@ const FPS := 35.0
 ## Godot frame instead of by elapsed time, as the reference player is stepped.
 static var frame_locked := false
 
+## Decoded art, shared by every build of every screen: returning to a screen reuses it.
+## `warm` fills it from a background thread, so opening a screen does not wait on disk.
+static var _images := {}
+static var _resized := {}
+static var _cache_lock := Mutex.new()
+
 var screen_name: StringName
 var layout: Dictionary
 var by_path: Dictionary = {}
@@ -254,13 +260,10 @@ func _add_piece_art(rec: Dictionary, manifest: Dictionary) -> void:
 
 ## One rendered image of a piece. It was rendered in stage space at timeline `at`: its sprite
 ## undoes the node's transform at that frame, so later motion of the node carries the art.
+## The image itself is decoded only when the art is first shown (or by `warm`).
 func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
 	var file := ProjectSettings.globalize_path((PACK % screen_name).get_base_dir().path_join(piece.file))
-	var image := Image.load_from_file(file)
-	if image == null: return
-	# Premultiplied alpha, so resampling does not bleed the black of transparent pixels
-	# into edges (dark fringes on thin lines).
-	image.premultiply_alpha()
+	if not FileAccess.file_exists(file): return
 	var sprite := Sprite2D.new()
 	sprite.name = "Art"
 	sprite.set_meta("swf_art", true)
@@ -271,7 +274,9 @@ func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
 	sprite.material = material
 	sprite.visible = false
 	rec.node.add_child(sprite)
-	var art := {"sprite": sprite, "image": image, "scale": float(piece.scale), "index": at,
+	var size: Array = piece.get("pixel_size", [])
+	var art := {"sprite": sprite, "file": file, "scale": float(piece.scale), "index": at,
+		"size": Vector2(size[0], size[1]) if size.size() == 2 else Vector2.ZERO,
 		"at": _global_at(rec, at),
 		"origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) / float(piece.scale) + rec.offset,
 		"px": -1.0}
@@ -292,17 +297,69 @@ func _ensure(art: Dictionary) -> void:
 	var px := _px if _px > 0.0 else pixels_per_unit()
 	if is_equal_approx(px, art.px): return
 	art.px = px
-	var source: Image = art.image
+	var source := _image(art.file)
+	if source == null: return
 	var w := maxi(1, roundi(source.get_width() * px / art.scale))
 	var h := maxi(1, roundi(source.get_height() * px / art.scale))
-	var image: Image = source.duplicate()
-	if w != source.get_width() or h != source.get_height():
-		image.resize(w, h, Image.INTERPOLATE_LANCZOS)
 	var sprite: Sprite2D = art.sprite
-	sprite.texture = ImageTexture.create_from_image(image)
+	sprite.texture = ImageTexture.create_from_image(_resized_image(art.file, source, w, h))
 	# Stage units per texture pixel, per axis (the rounded size keeps the exact extent).
 	var unit := Vector2(source.get_width() / art.scale / w, source.get_height() / art.scale / h)
 	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, art.origin)
+
+
+## The premultiplied 3× image of a piece file, decoded once.
+static func _image(file: String) -> Image:
+	_cache_lock.lock()
+	var image: Image = _images.get(file)
+	_cache_lock.unlock()
+	if image != null: return image
+	image = Image.load_from_file(file)
+	if image == null: return null
+	# Premultiplied alpha, so resampling does not bleed the black of transparent pixels
+	# into edges (dark fringes on thin lines).
+	image.premultiply_alpha()
+	_cache_lock.lock()
+	_images[file] = image
+	_cache_lock.unlock()
+	return image
+
+
+static func _resized_image(file: String, source: Image, w: int, h: int) -> Image:
+	var key := "%s|%d|%d" % [file, w, h]
+	_cache_lock.lock()
+	var image: Image = _resized.get(key)
+	_cache_lock.unlock()
+	if image != null: return image
+	image = source.duplicate()
+	if w != source.get_width() or h != source.get_height():
+		image.resize(w, h, Image.INTERPOLATE_LANCZOS)
+	_cache_lock.lock()
+	_resized[key] = image
+	_cache_lock.unlock()
+	return image
+
+
+## Decode (and, for screen scale `px`, resample) a screen's art in a background thread,
+## while another screen is showing.
+static func warm(screen: StringName, px: float) -> void:
+	var file := PACK % screen
+	if not FileAccess.file_exists(file): return
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(file))
+	var base := ProjectSettings.globalize_path(file.get_base_dir())
+	var jobs := []
+	for piece in manifest.get("pieces", {}).values(): jobs.append(piece)
+	for states in manifest.get("states", {}).values():
+		for piece in states.values(): jobs.append(piece)
+	for frames in manifest.get("sequences", {}).values():
+		for piece in frames.values(): jobs.append(piece)
+	WorkerThreadPool.add_task(func():
+		for piece in jobs:
+			var path: String = base.path_join(piece.file)
+			var image := _image(path)
+			if image != null and px > 0.0:
+				var s := float(piece.scale)
+				_resized_image(path, image, maxi(1, roundi(image.get_width() * px / s)), maxi(1, roundi(image.get_height() * px / s))))
 
 
 func _add_outline(rec: Dictionary, bounds: Array) -> void:
@@ -318,17 +375,45 @@ func _add_outline(rec: Dictionary, bounds: Array) -> void:
 
 # ------------------------------------------------------------------ input
 
+## A hit area tested against the art itself, as Flash tests a clip's shapes rather than
+## its bounding box: a point counts where the shown art is at least half opaque.
+class HitArea extends Button:
+	var screen: Node2D
+	var rec: Dictionary
+
+	func _has_point(point: Vector2) -> bool:
+		if not Rect2(Vector2.ZERO, size).has_point(point): return false
+		var art: Dictionary = {}
+		for candidate: Dictionary in rec.art:
+			if candidate.sprite.visible: art = candidate
+		if art.is_empty(): return true  # no art (outline placeholder): the bounds decide
+		var image: Image = screen._image(art.file)
+		if image == null: return true
+		var stage := position + point
+		# The art was rendered in stage space at its render frame; buttons do not move.
+		var pixel: Vector2 = ((stage - (art.origin as Vector2)) * float(art.scale)).floor()
+		if pixel.x < 0 or pixel.y < 0 or pixel.x >= image.get_width() or pixel.y >= image.get_height():
+			return false
+		return image.get_pixelv(Vector2i(pixel)).a >= 0.5
+
+
 func _hit(rec: Dictionary) -> Button:
 	var entry: Dictionary = rec.entry
 	var bounds: Array = entry.stage_bounds
-	var hit := Button.new()
+	var hit := HitArea.new()
+	hit.screen = self
+	hit.rec = rec
 	hit.name = String(entry.name).split("@")[0] if entry.has("name") else _node_name(entry.path)
 	hit.flat = true
 	hit.focus_mode = Control.FOCUS_NONE
 	for style in ["normal", "hover", "pressed", "disabled", "focus"]:
 		hit.add_theme_stylebox_override(style, StyleBoxEmpty.new())
-	hit.position = Vector2(bounds[0], bounds[1]) + rec.offset
-	hit.size = Vector2(bounds[2] - bounds[0], bounds[3] - bounds[1])
+	# The area covers every state's art (a hovered button may draw larger than at rest).
+	var area := Rect2(Vector2(bounds[0], bounds[1]) + rec.offset, Vector2(bounds[2] - bounds[0], bounds[3] - bounds[1]))
+	for art: Dictionary in rec.art:
+		if art.size != Vector2.ZERO: area = area.merge(Rect2(art.origin, art.size / art.scale))
+	hit.position = area.position
+	hit.size = area.size
 	hit.set_meta("swf_art", true)
 	hit.set_meta("swf_hit", entry.path)
 	var act := StringName(entry.action)
