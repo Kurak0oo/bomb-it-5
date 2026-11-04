@@ -91,7 +91,7 @@ runs on every change.
 | --- | --- | --- |
 | 0 | Archive old docs, tag `pre-restart`, retire `original-replica` into `main`, delete stale branches, close superseded issues | Repo has the short doc set |
 | 1 | Comparison loop for one static screen (main menu); macOS-safe reference build; same-RNG check | Node diff and pixel diff run from one command |
-| 2 | Render bake-off (Ruffle symbol render at 3× vs FFDec→resvg vs FFDec PNG), then display-list → Godot scene converter for the main menu | Diff passes, buttons show up/over/down/disabled, owner accepts |
+| 2 | Render bake-off (Ruffle symbol render at 3× vs FFDec→resvg vs FFDec PNG), then display-list → Godot scene converter for the title/loading screen (`UiLoading`) and the main menu, which the case reaches through it | Both captures pass, menu buttons (timeline clips) show up/over/down, owner accepts |
 | 3 | Remaining menus: Game Settings, character select, How to Play, results | Each screen passes and owner accepts |
 | 4 | Gameplay screen at original layout, Cinema set | Frame-matched cases pass, owner plays it |
 | 5 | Each mode × stage set against reference recordings | Diff passes per case, owner plays each mode |
@@ -122,17 +122,12 @@ Checkpoint 0 is done: accepted by the owner on 2026-11-02; tags `pre-restart` (2
 and `archive/art-pipeline` (dc4e49a) are on GitHub and the four retired branches are
 deleted (verified 2026-11-04).
 
-Checkpoint 1 is implemented on `claude/kind-johnson-vp2tp9` and waits for its first
-recording on the owner's Mac:
+Checkpoint 1 is done: accepted by the owner on 2026-11-04. The reference player's
+`display` command, `tools/compare.sh` (record/check), and the Flash `Math.random` port
+(`scripts/simulation/avm_random.gd`, matching 48 recorded seeded draws) are in place.
+Goldens for `main-menu` (title at frame 301, menu at frame 541, 35 fps) were recorded
+on the owner's Mac and checked from a machine without the SWF. The menu's buttons are
+timeline clips, not Flash buttons, so their states show as clip frames.
 
-- Reference player: new `display` command (`reference-display.patch`), Metal on macOS,
-  portable `build.sh`. Verified on Linux against Ruffle's own test SWFs, including a
-  button moving from `up` to `over` on hover.
-- Godot half and diff: verified here against the current placeholder menu, which fails
-  as expected (no `swf_path` nodes yet; SSIM far below 0.98).
-- Same RNG: `scripts/simulation/avm_random.gd` ports Flash's `Math.random`; it
-  reproduces 48 seeded draws recorded in `docs/evidence` exactly. The screens and
-  simulation still use Godot's RNG; wiring it in belongs to checkpoints 4–5.
-- Owner: run `tools/reference_player/build.sh`, then `tools/compare.sh main-menu`, and
-  commit `tests/goldens/main-menu/`. Look at the frame-301 capture: if the menu is
-  still animating there, move the capture later in `tools/compare/cases/main-menu.json`.
+Checkpoint 2 is next. Hover and press captures for the menu buttons must be added to the
+case and recorded on the owner's Mac.
