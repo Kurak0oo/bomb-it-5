@@ -124,7 +124,8 @@ func show_title() -> void:
 
 
 ## `MainMenuUI`: START → Game Settings, HOW TO PLAY → controls, and the quality, sound and
-## music switches. MORE GAMES (the portal link) is drawn but inert.
+## music switches. The portal's MORE GAMES, promo strip, "Add to your site" and language
+## bar are removed by owner edits (tools/convert/owner_edits.json).
 func show_main_menu() -> void:
 	_end_game()
 	var swf := _swf_page(&"menu")

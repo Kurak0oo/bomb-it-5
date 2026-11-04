@@ -65,7 +65,7 @@ func build(screen: StringName) -> void:
 			if entry.has(key): node.set_meta("swf_" + key, entry[key])
 		if entry.role == "piece" and entry.effective_visible:
 			if manifest.has(path):
-				_add_art(node, stage, manifest[path])
+				_add_art(node, stage, manifest[path], entry.get("moved_by", [0.0, 0.0]))
 			else:
 				_add_outline(node, stage, entry.get("render_bounds", entry.get("stage_bounds", [])))
 		if entry.has("action") and entry.has("stage_bounds"):
@@ -119,7 +119,8 @@ func _manifest() -> Dictionary:
 	return manifest.get("pieces", {})
 
 
-func _add_art(node: Node2D, stage: Transform2D, piece: Dictionary) -> void:
+## `moved_by`: an owner edit's offset; the piece was rendered at its original place.
+func _add_art(node: Node2D, stage: Transform2D, piece: Dictionary, moved_by: Array) -> void:
 	var image := Image.load_from_file(ProjectSettings.globalize_path((PACK % screen_name).get_base_dir().path_join(piece.file)))
 	if image == null: return
 	# Premultiplied alpha, so resampling does not bleed the black of transparent pixels
@@ -136,7 +137,8 @@ func _add_art(node: Node2D, stage: Transform2D, piece: Dictionary) -> void:
 	node.add_child(sprite)
 	# The piece was rendered in stage space: its sprite undoes the node's own transform.
 	_art.append({"sprite": sprite, "image": image, "scale": float(piece.scale), "stage": stage,
-		"origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) / float(piece.scale)})
+		"origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) / float(piece.scale)
+			+ Vector2(moved_by[0], moved_by[1])})
 	art_loaded += 1
 
 

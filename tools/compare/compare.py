@@ -124,6 +124,25 @@ def run_godot(name, case_path, godot, fps):
     return out
 
 
+def owner_edits(case, capture):
+    """Owner edits of the screen recorded by this capture (from its generated layout), and
+    the stage rectangles they change: original and new places, excluded from pixels."""
+    for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
+        layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+            edits = layout.get('owner_edits', {})
+            masks = []
+            for info in edits.get('removed', {}).values():
+                if info.get('render_bounds'):
+                    masks.append(info['render_bounds'])
+            for info in edits.get('moved', {}).values():
+                if info.get('render_bounds'):
+                    b, (dx, dy) = info['render_bounds'], info['by']
+                    masks += [b, [b[0] + dx, b[1] + dy, b[2] + dx, b[3] + dy]]
+            return edits, masks
+    return {}, []
+
+
 def check(name, godot):
     case_path, case, captures = load_case(name)
     golden_dir = GOLDENS / name
@@ -140,7 +159,11 @@ def check(name, godot):
     for capture in captures:
         golden = json.loads((golden_dir / f'{capture}.json').read_text(encoding='utf-8'))
         actual = json.loads((out / f'{capture}.nodes.json').read_text(encoding='utf-8'))
+        edits, masks = owner_edits(name, capture)
+        golden = nodes.apply_owner_edits(golden, edits)
         entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
+        if edits.get('removed') or edits.get('moved'):
+            entry['owner_edits'] = {'removed': sorted(edits.get('removed', {})), 'moved': sorted(edits.get('moved', {}))}
         reference_png = WORK / name / 'reference' / f'{capture}.png'
         if reference_png.is_file():
             thresholds = dict(case.get('thresholds', {}))
@@ -149,7 +172,7 @@ def check(name, godot):
                 thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
                 thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
             entry['pixel'] = pixels.compare(reference_png, out / f'{capture}.png',
-                                            WORK / name / f'{capture}-heatmap.png', thresholds)
+                                            WORK / name / f'{capture}-heatmap.png', thresholds, masks)
         else:
             entry['pixel'] = {'passed': None, 'skipped': 'no local reference capture (record on the SWF machine)'}
         report['captures'][capture] = entry
@@ -163,6 +186,10 @@ def print_report(report):
     print(f'{"PASS" if report["passed"] else "FAIL"}: {report["case"]}')
     for capture, entry in report['captures'].items():
         n, p = entry['node'], entry['pixel']
+        if entry.get('owner_edits'):
+            e = entry['owner_edits']
+            print(f'  {capture}: owner edits expected: {len(e["removed"])} removed, {len(e["moved"])} moved '
+                  '(excluded from the pixel score)')
         print(f'  {capture}: nodes {n["matched"]}/{n["reference_nodes"]} matched, {len(n["missing"])} missing, '
               f'{len(n["extra"])} extra, {len(n["mismatches"])} off'
               + (f'; Godot has {n["godot_unmapped_visible"]} unmapped visible nodes' if n['godot_unmapped_visible'] else ''))

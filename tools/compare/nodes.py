@@ -74,6 +74,26 @@ def _angle(a, b):
     return abs((a - b + 180) % 360 - 180)
 
 
+def apply_owner_edits(golden, edits):
+    """The golden as the owner wants it: removed subtrees dropped, moved ones shifted."""
+    removed, moved = edits.get('removed', {}), edits.get('moved', {})
+    nodes = []
+    for node in golden['nodes']:
+        path = node['path']
+        if any(path == r or path.startswith(r + '/') for r in removed):
+            continue
+        for m, info in moved.items():
+            if path == m or path.startswith(m + '/'):
+                node = dict(node)
+                dx, dy = info['by']
+                matrix = list(node['stage_matrix'])
+                matrix[4] += dx
+                matrix[5] += dy
+                node['stage_matrix'] = matrix
+        nodes.append(node)
+    return dict(golden, nodes=nodes)
+
+
 def diff(golden, godot, tolerances=None):
     """Return a report: matched/missing/extra paths and every out-of-tolerance field."""
     tol = dict(DEFAULT_TOLERANCES, **(tolerances or {}))

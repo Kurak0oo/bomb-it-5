@@ -79,11 +79,18 @@ def heatmap(a, b, path):
     Image.fromarray((out * 255).round().astype(np.uint8)).save(path)
 
 
-def compare(reference_path, godot_path, heatmap_path, thresholds=None):
+def compare(reference_path, godot_path, heatmap_path, thresholds=None, masks=()):
+    """`masks`: stage rectangles (x0, y0, x1, y1) excluded from scoring, for owner edits
+    that intentionally differ from the original."""
     t = dict(DEFAULT_THRESHOLDS, **(thresholds or {}))
     a, b = load(reference_path), load(godot_path)
     if a.shape != b.shape:
         return {'passed': False, 'error': f'size {b.shape[1]}x{b.shape[0]} != {a.shape[1]}x{a.shape[0]}'}
+    for x0, y0, x1, y1 in masks:
+        ys = slice(max(0, int(np.floor(y0))), max(0, int(np.ceil(y1))))
+        xs = slice(max(0, int(np.floor(x0))), max(0, int(np.ceil(x1))))
+        a[ys, xs] = 0.5
+        b[ys, xs] = 0.5
     score = ssim(a, b)
     grid = region_delta_e(a, b, t['region'])
     heatmap(a, b, heatmap_path)
@@ -92,4 +99,5 @@ def compare(reference_path, godot_path, heatmap_path, thresholds=None):
             'ssim': round(score, 5), 'max_region_delta_e': round(float(grid.max()), 3),
             'worst_region': {'x': int(worst[1] * t['region']), 'y': int(worst[0] * t['region']),
                              'size': t['region']},
-            'regions_over': int((grid > t['delta_e']).sum()), 'thresholds': t}
+            'regions_over': int((grid > t['delta_e']).sum()), 'thresholds': t,
+            'masked_regions': [list(m) for m in masks]}

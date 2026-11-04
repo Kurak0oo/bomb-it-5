@@ -167,6 +167,15 @@ Owner, on the Mac: `RESET=1 tools/reference_player/build.sh`, then `tools/conver
 (record, layout, pieces, check). Commit `tests/goldens/` and `scenes/swf/`; `original/`
 stays local. Then review with `-- --screen title` / `-- --screen menu` or by playing.
 
+Owner review of v1 (2026-11-04): the menu looks right. Owner edits, kept in
+`tools/convert/owner_edits.json` and treated by the comparison as expected differences
+(removed nodes and moved regions are left out of the pixel score):
+
+- title: remove the portal preloader box in the middle;
+- menu: remove the promo strip of other Bomb It games (bottom left), MORE GAMES,
+  "Add to your site" and the language bar (top left); move HOW TO PLAY down half a
+  button pitch (half the way to MORE GAMES' place), to balance START.
+
 Not in v1: button hover/press frames, the switches' other frames, and animation (the
 robot `mm`, stars and the promo flip play only their captured frame). Those need the
 frames recorded through input (v2).

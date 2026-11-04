@@ -23,8 +23,7 @@ func _run() -> void:
 	await _click(_find("btn_play"))
 	_expect(app.current == &"menu", "PLAY opens the main menu")
 	_expect(_find("startGame") != null and _find("howToPlay") != null, "the menu offers START and HOW TO PLAY")
-	await _click(_find("moregames"))
-	_expect(app.current == &"menu", "MORE GAMES (the portal link) is drawn but inert")
+	_expect(_find("moregames") == null, "MORE GAMES (the portal link) is removed (owner edit)")
 
 	await _click(_find("startGame"))
 	_expect(app.current == &"settings", "START opens Game Settings")

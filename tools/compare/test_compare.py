@@ -98,6 +98,17 @@ class NodeDiff(unittest.TestCase):
         self.assertNotIn('clip_mask', out['/c/@4'])
         self.assertNotIn('clip_mask', out['/c/@1'])
 
+    def test_owner_edits_remove_subtrees_and_shift_moved_nodes(self):
+        g = golden(ref_node('/a', 10, 10), ref_node('/a/b', 12, 12), ref_node('/m', 5, 5), ref_node('/m/c', 6, 6))
+        edits = {'removed': {'/a': {}}, 'moved': {'/m': {'by': [0, 30]}}}
+        edited = {n['path']: n for n in nodes.apply_owner_edits(g, edits)['nodes']}
+        self.assertNotIn('/a', edited)
+        self.assertNotIn('/a/b', edited)
+        self.assertEqual(edited['/m']['stage_matrix'][4:], [5, 35])
+        self.assertEqual(edited['/m/c']['stage_matrix'][4:], [6, 36])
+        report = nodes.diff(nodes.apply_owner_edits(g, edits), godot(ref_node('/m', 5, 35), ref_node('/m/c', 6, 36)))
+        self.assertTrue(report['passed'], report)
+
     def test_decompose_reads_flash_matrix(self):
         angle = math.radians(30)
         m = [2 * math.cos(angle), 2 * math.sin(angle), -3 * math.sin(angle), 3 * math.cos(angle), 5, 6]
@@ -153,6 +164,13 @@ class PixelDiff(unittest.TestCase):
         result = pixels.compare(self.save('a.png', self.base), self.save('b.png', shifted), Path(self.dir.name) / 'h.png')
         self.assertLess(result['ssim'], 0.98)
         self.assertFalse(result['passed'])
+
+    def test_masked_region_is_not_scored(self):
+        changed = self.base.copy()
+        changed[100:200, 200:300] = (255, 0, 0)
+        a, b = self.save('a.png', self.base), self.save('b.png', changed)
+        self.assertFalse(pixels.compare(a, b, Path(self.dir.name) / 'h.png')['passed'])
+        self.assertTrue(pixels.compare(a, b, Path(self.dir.name) / 'h.png', masks=[(190, 90, 310, 210)])['passed'])
 
     def test_size_mismatch_is_reported(self):
         small = self.base[:500]

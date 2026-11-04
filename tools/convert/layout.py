@@ -35,12 +35,14 @@ SCREENS = {
     'title': {'golden': ('main-menu', 'title'), 'root_class': 'UI_loading',
               'interactive': {'btn_play': 'play'}},
     # MainMenuUI: START -> Game Settings, HOW TO PLAY -> controls, quality/sound/music
-    # switches (docs/evidence/edition-5-modes-and-flow.md, edition-5-quality.md);
-    # MORE GAMES is the portal link, shown but inert.
+    # switches (docs/evidence/edition-5-modes-and-flow.md, edition-5-quality.md).
+    # MORE GAMES is the portal link; the owner removed it (owner_edits.json).
     'menu': {'golden': ('main-menu', 'menu'), 'root_class': 'UI_MainMenu',
              'interactive': {'startGame': 'start', 'howToPlay': 'how_to_play', 'quality': 'quality',
                              'sound': 'sound', 'music': 'music', 'moregames': 'more_games'}},
 }
+
+EDITS = Path(__file__).resolve().parent / 'owner_edits.json'
 
 CARRIED = ('kind', 'name', 'class', 'depth', 'character_id', 'effective_visible', 'alpha',
            'stage_matrix', 'stage_bounds', 'render_bounds', 'frame', 'total_frames', 'label',
@@ -80,6 +82,51 @@ def _unique_paths(nodes):
             node['path'] = new_prefix + path[len(old_prefix):]
         result.append(node)
     return result
+
+
+def _shift(bounds, dx, dy):
+    return [bounds[0] + dx, bounds[1] + dy, bounds[2] + dx, bounds[3] + dy] if bounds else bounds
+
+
+def _apply_owner_edits(name, screen_root, layout_nodes, by_path):
+    """Remove and move nodes as tools/convert/owner_edits.json says. A move is expressed in
+    the original's own quantities (a fraction of the way to another node's position)."""
+    spec = json.loads(EDITS.read_text(encoding='utf-8')).get(name, {})
+    removed, moved = {}, {}
+    for rel, why in spec.get('remove', {}).items():
+        path = screen_root + rel
+        if path not in by_path:
+            raise SystemExit(f'{name}: owner edit removes {rel}, which is not in the golden')
+        removed[path] = {'why': why, 'render_bounds': by_path[path].get('render_bounds') or by_path[path].get('stage_bounds')}
+    for rel, how in spec.get('move', {}).items():
+        path, target = screen_root + rel, screen_root + how['toward']
+        if path not in by_path or target not in by_path:
+            raise SystemExit(f'{name}: owner edit moves {rel} toward {how["toward"]}, not both in the golden')
+        a, b = by_path[path]['stage_matrix'], by_path[target]['stage_matrix']
+        axis = how.get('axis', 'xy')
+        delta = [round((b[4] - a[4]) * how['fraction'], 4) if 'x' in axis else 0.0,
+                 round((b[5] - a[5]) * how['fraction'], 4) if 'y' in axis else 0.0]
+        moved[path] = {'by': delta, 'why': how.get('why', ''),
+                       'render_bounds': by_path[path].get('render_bounds') or by_path[path].get('stage_bounds')}
+    kept = []
+    for node in layout_nodes:
+        path = node['path']
+        if any(path == r or path.startswith(r + '/') for r in removed):
+            continue
+        for m, info in moved.items():
+            if path == m or path.startswith(m + '/'):
+                dx, dy = info['by']
+                node = dict(node)
+                sm = list(node['stage_matrix'])
+                sm[4] += dx
+                sm[5] += dy
+                node['stage_matrix'] = sm
+                for key in ('stage_bounds', 'render_bounds'):
+                    if node.get(key):
+                        node[key] = _shift(node[key], dx, dy)
+                node['moved_by'] = [dx, dy]
+        kept.append(node)
+    return kept, {'removed': removed, 'moved': moved}
 
 
 def build(name, spec):
@@ -137,6 +184,7 @@ def build(name, spec):
         if path in interactive:
             entry['action'] = interactive[path]
         layout_nodes.append(entry)
+    layout_nodes, edits = _apply_owner_edits(name, screen_root, layout_nodes, by_path)
     # A visible node with no bounds draws nothing (an empty sprite: char 295 in the title
     # screen is one frame with zero placements). Asking the reference player for such a
     # piece makes it crop a zero-size rectangle, so skip it and say so; never drop art
@@ -160,6 +208,7 @@ def build(name, spec):
         'screen_root': screen_root,
         'pieces': pieces,
         'warnings': warnings,
+        'owner_edits': edits,
         'nodes': layout_nodes,
     }
 

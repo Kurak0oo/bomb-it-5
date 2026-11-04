@@ -1,0 +1,20 @@
+{
+ "note": "Owner edits on top of the faithful layout (owner review, 2026-11-04). Paths are relative to the screen's root clip. tools/convert/layout.py applies them; the comparison treats them as expected differences.",
+ "title": {
+  "remove": {
+   "/preloader": "the portal preloader's 300x250 box in the middle of the title"
+  }
+ },
+ "menu": {
+  "remove": {
+   "/flip": "PromoFlip: links and small images for the other Bomb It games, bottom left",
+   "/moregames": "MORE GAMES, the portal link",
+   "/add_to_site": "Add to your site",
+   "/@1303": "Art_CountriesBox: the language menu bar at the top left"
+  },
+  "move": {
+   "/howToPlay": {"toward": "/moregames", "fraction": 0.5, "axis": "y",
+                  "why": "with MORE GAMES gone, HOW TO PLAY moves down half a button pitch to balance START"}
+  }
+ }
+}
