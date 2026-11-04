@@ -13,8 +13,16 @@
    "/@1303": "Art_CountriesBox: the language menu bar at the top left"
   },
   "move": {
-   "/howToPlay": {"toward": "/moregames", "fraction": 0.5, "axis": "y",
-                  "why": "with MORE GAMES gone, HOW TO PLAY moves down half a button pitch to balance START"}
+   "/howToPlay": {
+    "toward": "/moregames",
+    "fraction": 0.5,
+    "axis": "y",
+    "why": "with MORE GAMES gone, HOW TO PLAY moves down half a button pitch to balance START"
+   }
+  },
+  "open_delay": {
+   "frames": 0,
+   "why": "the original shows its publisher intro for 226 frames (6.5 s) between PLAY and the menu; the replica has no intro, so the menu opens at once (play only: the comparison keeps the original timing)"
   }
  }
 }

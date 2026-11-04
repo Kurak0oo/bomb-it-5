@@ -51,10 +51,10 @@ index 295bcb48..9d22fcc5 100644
              crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
 diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
 new file mode 100644
-index 00000000..fb2809e0
+index 00000000..797712c5
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,253 @@
+@@ -0,0 +1,270 @@
 +//! Research-only display-list dump for the comparison loop, and isolated piece renders.
 +//! The dump reads native display state only: no ActionScript getters or methods run and
 +//! nothing is written. `isolate` temporarily hides other display objects (native
@@ -224,6 +224,9 @@ index 00000000..fb2809e0
 +pub struct ReferencePiece {
 +    hidden: Vec<String>,
 +    window_mode: WindowMode,
++    /// A piece that blends with what lies below renders with its own colours (Normal);
++    /// the consumer applies the blend against its own backdrop. Restored afterwards.
++    blend: Option<(String, ruffle_render::blend::ExtendedBlendMode)>,
 +    /// Render bounds of the piece in stage units (filters included): x_min, y_min, x_max, y_max.
 +    pub render_bounds: [f64; 4],
 +    /// The same bounds in viewport pixels (through the stage view matrix, filters scaled
@@ -287,9 +290,18 @@ index 00000000..fb2809e0
 +    let p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
 +    let window_mode = stage.window_mode();
 +    stage.set_window_mode(WindowMode::Transparent);
++    use ruffle_render::blend::ExtendedBlendMode;
++    let mode = target.blend_mode();
++    let blend = if mode != ExtendedBlendMode::Normal && mode != ExtendedBlendMode::Layer {
++        target.set_blend_mode(ExtendedBlendMode::Normal);
++        Some((path.to_string(), mode))
++    } else {
++        None
++    };
 +    Ok(ReferencePiece {
 +        hidden,
 +        window_mode,
++        blend,
 +        render_bounds: [b.x_min.to_pixels(), b.y_min.to_pixels(), b.x_max.to_pixels(), b.y_max.to_pixels()],
 +        pixel_bounds: [p.x_min.to_pixels(), p.y_min.to_pixels(), p.x_max.to_pixels(), p.y_max.to_pixels()],
 +    })
@@ -307,4 +319,9 @@ index 00000000..fb2809e0
 +        }
 +    }
 +    stage.set_window_mode(piece.window_mode);
++    if let Some((path, mode)) = &piece.blend {
++        if let Some(chain) = resolve(stage.into(), path) {
++            chain.last().unwrap().set_blend_mode(*mode);
++        }
++    }
 +}

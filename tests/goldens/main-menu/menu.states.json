@@ -1,0 +1,63 @@
+{
+ "capture": "menu",
+ "case": "main-menu",
+ "note": "Clip frame shown at rest, hovered, pressed (and dragged off / released off), or after each click of a switch, as the reference player showed it.",
+ "schema": "bombit5-screen-states-v1",
+ "screen": "menu",
+ "states": {
+  "/root1/__mainMc/GameMc/@0/@0/howToPlay": {
+   "hover": 2,
+   "kind": "button",
+   "press": null,
+   "press_out": null,
+   "released_out": null,
+   "rest": 1
+  },
+  "/root1/__mainMc/GameMc/@0/@0/moregames": {
+   "hover": 2,
+   "kind": "button",
+   "press": 3,
+   "press_out": 1,
+   "released_out": 1,
+   "rest": 1
+  },
+  "/root1/__mainMc/GameMc/@0/@0/music": {
+   "click_cycle": [
+    2,
+    1,
+    2
+   ],
+   "hover": 1,
+   "kind": "switch",
+   "rest": 1
+  },
+  "/root1/__mainMc/GameMc/@0/@0/quality": {
+   "click_cycle": [
+    2,
+    3,
+    1
+   ],
+   "hover": 1,
+   "kind": "switch",
+   "rest": 1
+  },
+  "/root1/__mainMc/GameMc/@0/@0/sound": {
+   "click_cycle": [
+    2,
+    1,
+    2
+   ],
+   "hover": 1,
+   "kind": "switch",
+   "rest": 1
+  },
+  "/root1/__mainMc/GameMc/@0/@0/startGame": {
+   "hover": 2,
+   "kind": "button",
+   "press": null,
+   "press_out": null,
+   "released_out": null,
+   "rest": 1
+  }
+ }
+}

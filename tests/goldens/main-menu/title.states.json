@@ -1,0 +1,17 @@
+{
+ "capture": "title",
+ "case": "main-menu",
+ "note": "Clip frame shown at rest, hovered, pressed (and dragged off / released off), or after each click of a switch, as the reference player showed it.",
+ "schema": "bombit5-screen-states-v1",
+ "screen": "title",
+ "states": {
+  "/root1/__mainMc/@0/btn_play": {
+   "hover": 2,
+   "kind": "button",
+   "press": null,
+   "press_out": null,
+   "released_out": null,
+   "rest": 1
+  }
+ }
+}

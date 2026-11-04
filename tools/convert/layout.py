@@ -132,7 +132,10 @@ def _apply_owner_edits(name, screen_root, layout_nodes, by_path):
                         node[key] = _shift(node[key], dx, dy)
                 node['moved_by'] = [dx, dy]
         kept.append(node)
-    return kept, {'removed': removed, 'moved': moved}
+    edits = {'removed': removed, 'moved': moved}
+    if 'open_delay' in spec:
+        edits['open_delay'] = spec['open_delay']
+    return kept, edits
 
 
 def build(name, spec):
@@ -216,13 +219,18 @@ def build(name, spec):
         else:
             entry['role'] = 'piece'
             entry['baked'] = True
-            if node.get('blend_mode', 'Normal') not in ('Normal', 'Layer'):
-                warnings.append(f'{path}: piece blends ({node["blend_mode"]}) with what lies below; '
-                                'rendered alone it will look different')
+            if node.get('blend_mode', 'Normal') not in ('Normal', 'Layer', 'Multiply', 'Screen', 'Lighten', 'Darken',
+                                                        'Difference', 'Add', 'Subtract', 'Overlay', 'HardLight'):
+                warnings.append(f'{path}: piece blends ({node["blend_mode"]}) with what lies below, in a mode '
+                                'the screen cannot reproduce; rendered alone it will look different')
         if path in interactive:
             entry['action'] = interactive[path]
             if path in states:
-                entry['states'] = states[path]
+                entry['states'] = dict(states[path])
+                # A button whose screen is gone right after the press acts on press, as the
+                # original's MOUSE_DOWN handlers do (no press frame could be recorded).
+                if states[path].get('kind') == 'button':
+                    entry['states']['acts_on'] = 'press' if states[path].get('press') is None else 'release'
         if timeline is not None and entry.get('role') == 'piece' and not node.get('effective_visible'):
             first = timeline.first_visible(path)
             if first is not None:

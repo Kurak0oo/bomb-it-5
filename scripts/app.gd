@@ -105,6 +105,10 @@ func _ready() -> void:
 		show_title()
 
 
+func _exit_tree() -> void:
+	SwfScreen.finish_warming()
+
+
 func _draw() -> void:
 	if is_instance_valid(game): return
 	if current in [&"title", &"menu"]:
@@ -137,6 +141,10 @@ func show_main_menu(from_title := false) -> void:
 	_end_game()
 	var timeline = SwfScreen.layout_of(&"menu").get("timeline")
 	var delay: int = int(timeline.opened_after_input) if from_title and timeline is Dictionary else 0
+	# Owner edit: skip the original's publisher-intro pause in play; the comparison loop
+	# (frame-locked) keeps the original timing its goldens were recorded with.
+	var skip = SwfScreen.layout_of(&"menu").get("owner_edits", {}).get("open_delay")
+	if from_title and skip is Dictionary and not SwfScreen.frame_locked: delay = int(skip.frames)
 	var swf := _swf_page(&"menu", delay)
 	swf.action.connect(_menu_action)
 	_sync_switches()

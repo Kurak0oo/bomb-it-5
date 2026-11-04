@@ -187,6 +187,13 @@ recorded hover and press frames, and shows the switches' frames from the session
 settings. Verified here on a generated test SWF (a tween and a frame-by-frame swap):
 Godot at frame 30 matches the reference exactly (nodes 6/6, SSIM 1.0).
 
-Owner, on the Mac: `RESET=1 tools/reference_player/build.sh` (new `down`/`up`
-commands), then `PYTHON=… tools/convert.sh`. Commit `tests/goldens/` (now with
-`.timeline.json` and `.states.json`) and `scenes/swf/`.
+First full v2 run on the real SWF (2026-11-04, in the cloud session; the owner provided
+the SWF, kept in the ignored `.scratch/`): title opens at frame 2, menu 226 frames after
+PLAY (the original's publisher intro), both loops capped at 600 frames. Findings fixed:
+START, HOW TO PLAY and PLAY act on press (the original's screen is gone after the press);
+blended pieces (the menu's HardLight stars) render in their own colours and Godot blends
+them against what lies below (`scripts/ui/swf_blend.gdshader`); the self-check leaves
+owner edits out. Owner edits add: skip the intro pause in play (the comparison keeps the
+original timing). Result: pieces recompose to SSIM 0.99998 (title) / 0.99996 (menu);
+node diff with animation 185/185 and 158/158; Godot vs original SSIM 0.990 / 0.970,
+max region ΔE 5.7 / 5.2: PASS.

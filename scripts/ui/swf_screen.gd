@@ -26,6 +26,10 @@ signal opened
 const STAGE := Vector2(700, 510)
 const PACK := "res://original/screens/%s/manifest.json"
 const FPS := 35.0
+const BLEND_SHADER := preload("res://scripts/ui/swf_blend.gdshader")
+## flash.display.BlendMode names (as the reference player dumps them) -> shader modes.
+const BLEND_MODES := {"Multiply": 1, "Screen": 2, "Lighten": 3, "Darken": 4, "Difference": 5,
+	"Add": 6, "Subtract": 7, "Overlay": 8, "HardLight": 9}
 
 ## Set by the comparison loop (tools/compare/godot_capture.gd): advance one SWF frame per
 ## Godot frame instead of by elapsed time, as the reference player is stepped.
@@ -36,6 +40,7 @@ static var frame_locked := false
 static var _images := {}
 static var _resized := {}
 static var _cache_lock := Mutex.new()
+static var _warm_tasks: Array[int] = []
 
 var screen_name: StringName
 var layout: Dictionary
@@ -269,9 +274,17 @@ func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
 	sprite.set_meta("swf_art", true)
 	sprite.centered = false
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	var material := CanvasItemMaterial.new()
-	material.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA
-	sprite.material = material
+	var blend: int = BLEND_MODES.get(String(rec.entry.get("blend_mode", "Normal")), 0)
+	if blend > 0:
+		# A piece that blends with what lies below it (Flash blend mode), via the screen.
+		var shader := ShaderMaterial.new()
+		shader.shader = BLEND_SHADER
+		shader.set_shader_parameter("mode", blend)
+		sprite.material = shader
+	else:
+		var material := CanvasItemMaterial.new()
+		material.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA
+		sprite.material = material
 	sprite.visible = false
 	rec.node.add_child(sprite)
 	var size: Array = piece.get("pixel_size", [])
@@ -353,13 +366,19 @@ static func warm(screen: StringName, px: float) -> void:
 		for piece in states.values(): jobs.append(piece)
 	for frames in manifest.get("sequences", {}).values():
 		for piece in frames.values(): jobs.append(piece)
-	WorkerThreadPool.add_task(func():
+	_warm_tasks.append(WorkerThreadPool.add_task(func():
 		for piece in jobs:
 			var path: String = base.path_join(piece.file)
 			var image := _image(path)
 			if image != null and px > 0.0:
 				var s := float(piece.scale)
-				_resized_image(path, image, maxi(1, roundi(image.get_width() * px / s)), maxi(1, roundi(image.get_height() * px / s))))
+				_resized_image(path, image, maxi(1, roundi(image.get_width() * px / s)), maxi(1, roundi(image.get_height() * px / s)))))
+
+
+## Wait for background decoding before the program exits.
+static func finish_warming() -> void:
+	for task in _warm_tasks: WorkerThreadPool.wait_for_task_completion(task)
+	_warm_tasks.clear()
 
 
 func _add_outline(rec: Dictionary, bounds: Array) -> void:
@@ -424,7 +443,10 @@ func _hit(rec: Dictionary) -> Button:
 		hit.mouse_exited.connect(func(): _state_frame(rec, null))
 		hit.button_down.connect(func(): _state_frame(rec, states.get("press")))
 		hit.button_up.connect(func(): _state_frame(rec, states.get("hover") if hit.is_hovered() else null))
-	hit.pressed.connect(func(): action.emit(act))
+	if states.get("acts_on", "release") == "press":
+		hit.button_down.connect(func(): action.emit(act))
+	else:
+		hit.pressed.connect(func(): action.emit(act))
 	return hit
 
 

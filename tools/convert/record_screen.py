@@ -367,6 +367,27 @@ def _store(p, path, target, tmp, seen):
     return {'file': seen[digest], **_piece_meta(meta)}
 
 
+def _blend(below, layer, mode):
+    """Composite `layer` over `below` with a Flash blend mode (as scripts/ui/swf_blend.gdshader)."""
+    if mode in ('Normal', 'Layer', None):
+        return Image.alpha_composite(below, layer)
+    d = np.asarray(below, float)[..., :3] / 255
+    s = np.asarray(layer, float) / 255
+    a = s[..., 3:4]
+    src = s[..., :3]
+    formulas = {
+        'Multiply': lambda: src * d, 'Screen': lambda: 1 - (1 - src) * (1 - d),
+        'Lighten': lambda: np.maximum(src, d), 'Darken': lambda: np.minimum(src, d),
+        'Difference': lambda: np.abs(src - d), 'Add': lambda: np.minimum(src + d, 1),
+        'Subtract': lambda: np.maximum(d - src, 0),
+        'Overlay': lambda: np.where(d < 0.5, 2 * src * d, 1 - 2 * (1 - src) * (1 - d)),
+        'HardLight': lambda: np.where(src < 0.5, 2 * src * d, 1 - 2 * (1 - src) * (1 - d)),
+    }
+    b = formulas.get(mode, lambda: src)()
+    out = d * (1 - a) + b * a
+    return Image.fromarray(np.dstack([out * 255, np.full(out.shape[:2], 255.0)]).round().astype(np.uint8), 'RGBA')
+
+
 def _self_check(layout, manifest, target):
     timeline = layout.get('timeline') or {}
     index = str(timeline.get('capture_index', 0))
@@ -383,9 +404,13 @@ def _self_check(layout, manifest, target):
         image = Image.open(target / entry['file']).convert('RGBA')
         layer = Image.new('RGBA', composite.size, (0, 0, 0, 0))
         layer.paste(image, tuple(entry['pixel_origin']))
-        composite = Image.alpha_composite(composite, layer)
+        composite = _blend(composite, layer, node.get('blend_mode', 'Normal'))
     composite.convert('RGB').save(target / 'composite.png')
-    result = pixels.compare(target / 'reference-3x.png', target / 'composite.png', target / 'composite-heatmap.png')
+    # Owner edits (removed nodes) are absent from the composite on purpose; leave them out.
+    masks = [[v * SCALE for v in info['render_bounds']] for info in layout.get('owner_edits', {}).get('removed', {}).values()
+             if info.get('render_bounds')]
+    result = pixels.compare(target / 'reference-3x.png', target / 'composite.png', target / 'composite-heatmap.png',
+                            masks=masks)
     return {k: result.get(k) for k in ('ssim', 'max_region_delta_e', 'regions_over', 'worst_region')}
 
 
