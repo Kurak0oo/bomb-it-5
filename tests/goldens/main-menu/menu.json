@@ -28,6 +28,12 @@
    "label": "Main",
    "name": "root1",
    "path": "/root1",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
    "stage_bounds": [
     0.0,
     0.0,
@@ -70,6 +76,18 @@
    "kind": "movie_clip",
    "name": "__mainMc",
    "path": "/root1/__mainMc",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "scroll_rect": [
+    0.0,
+    0.0,
+    700.0,
+    510.0
+   ],
    "stage_bounds": [
     0.0,
     0.0,
@@ -112,6 +130,12 @@
    "kind": "movie_clip",
    "name": "GameMc",
    "path": "/root1/__mainMc/GameMc",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
    "stage_bounds": [
     -71.65,
     -311.95,
@@ -154,6 +178,12 @@
    "kind": "movie_clip",
    "name": "instance1543",
    "path": "/root1/__mainMc/GameMc/@0",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
    "stage_bounds": [
     -71.65,
     -311.95,
@@ -196,6 +226,12 @@
    "kind": "movie_clip",
    "name": "instance1545",
    "path": "/root1/__mainMc/GameMc/@0/@0",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
    "stage_bounds": [
     -71.65,
     -311.95,
@@ -238,6 +274,12 @@
    "kind": "movie_clip",
    "name": "bg",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg",
+   "render_bounds": [
+    -71.65,
+    -43.9,
+    741.8,
+    551.05
+   ],
    "stage_bounds": [
     -71.65,
     -43.9,
@@ -280,6 +322,12 @@
    "kind": "movie_clip",
    "name": "instance1546",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@1",
+   "render_bounds": [
+    -22.7,
+    -19.55,
+    733.4,
+    533.25
+   ],
    "stage_bounds": [
     -22.7,
     -19.55,
@@ -321,6 +369,12 @@
    "kind": "graphic",
    "name": "instance1547",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@1/@2",
+   "render_bounds": [
+    -22.7,
+    -19.55,
+    733.4,
+    533.25
+   ],
    "stage_bounds": [
     -22.7,
     -19.55,
@@ -361,6 +415,12 @@
    "kind": "graphic",
    "name": "instance1548",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@5",
+   "render_bounds": [
+    -24.9,
+    305.35,
+    737.85,
+    551.05
+   ],
    "stage_bounds": [
     -24.9,
     305.35,
@@ -402,6 +462,12 @@
    "kind": "movie_clip",
    "name": "instance1549",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@6",
+   "render_bounds": [
+    461.65,
+    394.1,
+    541.1,
+    422.15
+   ],
    "stage_bounds": [
     461.65,
     394.1,
@@ -443,6 +509,12 @@
    "kind": "graphic",
    "name": "instance1550",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@6/@1",
+   "render_bounds": [
+    461.65,
+    394.1,
+    541.1,
+    422.15
+   ],
    "stage_bounds": [
     461.65,
     394.1,
@@ -484,6 +556,12 @@
    "kind": "movie_clip",
    "name": "instance1551",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@8",
+   "render_bounds": [
+    94.45,
+    405.0,
+    186.9,
+    442.8
+   ],
    "stage_bounds": [
     94.45,
     405.0,
@@ -525,6 +603,12 @@
    "kind": "graphic",
    "name": "instance1552",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@8/@1",
+   "render_bounds": [
+    94.45,
+    405.0,
+    186.9,
+    442.8
+   ],
    "stage_bounds": [
     94.45,
     405.0,
@@ -566,6 +650,12 @@
    "kind": "movie_clip",
    "name": "instance1553",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@10",
+   "render_bounds": [
+    529.2,
+    329.0,
+    586.35,
+    349.2
+   ],
    "stage_bounds": [
     529.2,
     329.0,
@@ -607,6 +697,12 @@
    "kind": "graphic",
    "name": "instance1554",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@10/@1",
+   "render_bounds": [
+    529.2,
+    329.0,
+    586.35,
+    349.2
+   ],
    "stage_bounds": [
     529.2,
     329.0,
@@ -648,6 +744,12 @@
    "kind": "movie_clip",
    "name": "instance1555",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@12",
+   "render_bounds": [
+    373.35,
+    434.55,
+    435.75,
+    472.0
+   ],
    "stage_bounds": [
     373.35,
     434.55,
@@ -689,6 +791,12 @@
    "kind": "graphic",
    "name": "instance1556",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@12/@1",
+   "render_bounds": [
+    373.35,
+    434.55,
+    435.75,
+    472.0
+   ],
    "stage_bounds": [
     373.35,
     434.55,
@@ -730,6 +838,12 @@
    "kind": "movie_clip",
    "name": "instance1557",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@14",
+   "render_bounds": [
+    373.35,
+    422.8,
+    414.15,
+    458.4
+   ],
    "stage_bounds": [
     373.35,
     422.8,
@@ -771,6 +885,12 @@
    "kind": "graphic",
    "name": "instance1558",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@14/@1",
+   "render_bounds": [
+    373.35,
+    422.8,
+    414.15,
+    458.4
+   ],
    "stage_bounds": [
     373.35,
     422.8,
@@ -812,6 +932,12 @@
    "kind": "movie_clip",
    "name": "instance1559",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@16",
+   "render_bounds": [
+    573.8,
+    407.6,
+    614.6,
+    443.2
+   ],
    "stage_bounds": [
     573.8,
     407.6,
@@ -853,6 +979,12 @@
    "kind": "graphic",
    "name": "instance1560",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@16/@1",
+   "render_bounds": [
+    573.8,
+    407.6,
+    614.6,
+    443.2
+   ],
    "stage_bounds": [
     573.8,
     407.6,
@@ -894,6 +1026,12 @@
    "kind": "movie_clip",
    "name": "instance1561",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@18",
+   "render_bounds": [
+    399.55,
+    376.3,
+    461.95,
+    413.75
+   ],
    "stage_bounds": [
     399.55,
     376.3,
@@ -935,6 +1073,12 @@
    "kind": "graphic",
    "name": "instance1562",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@18/@1",
+   "render_bounds": [
+    399.55,
+    376.3,
+    461.95,
+    413.75
+   ],
    "stage_bounds": [
     399.55,
     376.3,
@@ -976,6 +1120,12 @@
    "kind": "movie_clip",
    "name": "instance1563",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@20",
+   "render_bounds": [
+    192.3,
+    413.75,
+    254.7,
+    451.2
+   ],
    "stage_bounds": [
     192.3,
     413.75,
@@ -1017,6 +1167,12 @@
    "kind": "graphic",
    "name": "instance1564",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@20/@1",
+   "render_bounds": [
+    192.3,
+    413.75,
+    254.7,
+    451.2
+   ],
    "stage_bounds": [
     192.3,
     413.75,
@@ -1058,6 +1214,12 @@
    "kind": "movie_clip",
    "name": "instance1565",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@22",
+   "render_bounds": [
+    143.4,
+    399.25,
+    184.2,
+    434.85
+   ],
    "stage_bounds": [
     143.4,
     399.25,
@@ -1099,6 +1261,12 @@
    "kind": "graphic",
    "name": "instance1566",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@22/@1",
+   "render_bounds": [
+    143.4,
+    399.25,
+    184.2,
+    434.85
+   ],
    "stage_bounds": [
     143.4,
     399.25,
@@ -1140,6 +1308,12 @@
    "kind": "movie_clip",
    "name": "instance1567",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@24",
+   "render_bounds": [
+    17.7,
+    434.55,
+    58.5,
+    470.15
+   ],
    "stage_bounds": [
     17.7,
     434.55,
@@ -1181,6 +1355,12 @@
    "kind": "graphic",
    "name": "instance1568",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@24/@1",
+   "render_bounds": [
+    17.7,
+    434.55,
+    58.5,
+    470.15
+   ],
    "stage_bounds": [
     17.7,
     434.55,
@@ -1222,6 +1402,12 @@
    "kind": "movie_clip",
    "name": "instance1569",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@26",
+   "render_bounds": [
+    88.3,
+    422.8,
+    129.1,
+    458.4
+   ],
    "stage_bounds": [
     88.3,
     422.8,
@@ -1263,6 +1449,12 @@
    "kind": "graphic",
    "name": "instance1570",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@26/@1",
+   "render_bounds": [
+    88.3,
+    422.8,
+    129.1,
+    458.4
+   ],
    "stage_bounds": [
     88.3,
     422.8,
@@ -1304,6 +1496,12 @@
    "kind": "movie_clip",
    "name": "instance1571",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@28",
+   "render_bounds": [
+    448.95,
+    429.45,
+    483.55,
+    455.3
+   ],
    "stage_bounds": [
     448.95,
     429.45,
@@ -1345,6 +1543,12 @@
    "kind": "graphic",
    "name": "instance1572",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@28/@1",
+   "render_bounds": [
+    448.95,
+    429.45,
+    483.55,
+    455.3
+   ],
    "stage_bounds": [
     448.95,
     429.45,
@@ -1386,6 +1590,12 @@
    "kind": "movie_clip",
    "name": "instance1573",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@30",
+   "render_bounds": [
+    602.35,
+    453.55,
+    643.15,
+    489.15
+   ],
    "stage_bounds": [
     602.35,
     453.55,
@@ -1427,6 +1637,12 @@
    "kind": "graphic",
    "name": "instance1574",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@30/@1",
+   "render_bounds": [
+    602.35,
+    453.55,
+    643.15,
+    489.15
+   ],
    "stage_bounds": [
     602.35,
     453.55,
@@ -1468,6 +1684,12 @@
    "kind": "movie_clip",
    "name": "instance1575",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@32",
+   "render_bounds": [
+    643.1,
+    381.15,
+    683.9,
+    416.75
+   ],
    "stage_bounds": [
     643.1,
     381.15,
@@ -1509,6 +1731,12 @@
    "kind": "graphic",
    "name": "instance1576",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@32/@1",
+   "render_bounds": [
+    643.1,
+    381.15,
+    683.9,
+    416.75
+   ],
    "stage_bounds": [
     643.1,
     381.15,
@@ -1550,6 +1778,12 @@
    "kind": "movie_clip",
    "name": "instance1577",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@34",
+   "render_bounds": [
+    500.1,
+    358.85,
+    540.9,
+    394.45
+   ],
    "stage_bounds": [
     500.1,
     358.85,
@@ -1591,6 +1825,12 @@
    "kind": "graphic",
    "name": "instance1578",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@34/@1",
+   "render_bounds": [
+    500.1,
+    358.85,
+    540.9,
+    394.45
+   ],
    "stage_bounds": [
     500.1,
     358.85,
@@ -1632,6 +1872,12 @@
    "kind": "movie_clip",
    "name": "instance1579",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@36",
+   "render_bounds": [
+    521.7,
+    449.45,
+    573.75,
+    490.95
+   ],
    "stage_bounds": [
     521.7,
     449.45,
@@ -1673,6 +1919,12 @@
    "kind": "graphic",
    "name": "instance1580",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@36/@1",
+   "render_bounds": [
+    521.7,
+    449.45,
+    573.75,
+    490.95
+   ],
    "stage_bounds": [
     521.7,
     449.45,
@@ -1714,6 +1966,12 @@
    "kind": "movie_clip",
    "name": "instance1581",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@38",
+   "render_bounds": [
+    199.65,
+    363.5,
+    251.7,
+    405.0
+   ],
    "stage_bounds": [
     199.65,
     363.5,
@@ -1755,6 +2013,12 @@
    "kind": "graphic",
    "name": "instance1582",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@38/@1",
+   "render_bounds": [
+    199.65,
+    363.5,
+    251.7,
+    405.0
+   ],
    "stage_bounds": [
     199.65,
     363.5,
@@ -1796,6 +2060,12 @@
    "kind": "movie_clip",
    "name": "instance1583",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@40",
+   "render_bounds": [
+    42.25,
+    363.65,
+    81.8,
+    398.05
+   ],
    "stage_bounds": [
     42.25,
     363.65,
@@ -1837,6 +2107,12 @@
    "kind": "graphic",
    "name": "instance1584",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@40/@1",
+   "render_bounds": [
+    42.25,
+    363.65,
+    81.8,
+    398.05
+   ],
    "stage_bounds": [
     42.25,
     363.65,
@@ -1878,6 +2154,12 @@
    "kind": "movie_clip",
    "name": "instance1585",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@42",
+   "render_bounds": [
+    54.95,
+    449.35,
+    117.35,
+    486.8
+   ],
    "stage_bounds": [
     54.95,
     449.35,
@@ -1919,6 +2201,12 @@
    "kind": "graphic",
    "name": "instance1586",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@42/@1",
+   "render_bounds": [
+    54.95,
+    449.35,
+    117.35,
+    486.8
+   ],
    "stage_bounds": [
     54.95,
     449.35,
@@ -1960,6 +2248,12 @@
    "kind": "movie_clip",
    "name": "instance1587",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@44",
+   "render_bounds": [
+    269.3,
+    439.85,
+    331.7,
+    477.3
+   ],
    "stage_bounds": [
     269.3,
     439.85,
@@ -2001,6 +2295,12 @@
    "kind": "graphic",
    "name": "instance1588",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@44/@1",
+   "render_bounds": [
+    269.3,
+    439.85,
+    331.7,
+    477.3
+   ],
    "stage_bounds": [
     269.3,
     439.85,
@@ -2042,6 +2342,12 @@
    "kind": "movie_clip",
    "name": "instance1589",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@46",
+   "render_bounds": [
+    605.1,
+    422.8,
+    682.65,
+    469.3
+   ],
    "stage_bounds": [
     605.1,
     422.8,
@@ -2083,6 +2389,12 @@
    "kind": "graphic",
    "name": "instance1590",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@46/@1",
+   "render_bounds": [
+    605.1,
+    422.8,
+    682.65,
+    469.3
+   ],
    "stage_bounds": [
     605.1,
     422.8,
@@ -2124,6 +2436,12 @@
    "kind": "movie_clip",
    "name": "instance1591",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@48",
+   "render_bounds": [
+    585.1,
+    318.55,
+    625.9,
+    354.15
+   ],
    "stage_bounds": [
     585.1,
     318.55,
@@ -2165,6 +2483,12 @@
    "kind": "graphic",
    "name": "instance1592",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@48/@1",
+   "render_bounds": [
+    585.1,
+    318.55,
+    625.9,
+    354.15
+   ],
    "stage_bounds": [
     585.1,
     318.55,
@@ -2206,6 +2530,12 @@
    "kind": "movie_clip",
    "name": "instance1593",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@50",
+   "render_bounds": [
+    122.5,
+    449.5,
+    155.7,
+    483.2
+   ],
    "stage_bounds": [
     122.5,
     449.5,
@@ -2247,6 +2577,12 @@
    "kind": "graphic",
    "name": "instance1594",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@50/@1",
+   "render_bounds": [
+    122.5,
+    449.5,
+    155.7,
+    483.2
+   ],
    "stage_bounds": [
     122.5,
     449.5,
@@ -2288,6 +2624,12 @@
    "kind": "movie_clip",
    "name": "instance1595",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@52",
+   "render_bounds": [
+    59.45,
+    177.25,
+    94.45,
+    212.45
+   ],
    "stage_bounds": [
     59.45,
     177.25,
@@ -2329,6 +2671,12 @@
    "kind": "graphic",
    "name": "instance1596",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@52/@1",
+   "render_bounds": [
+    59.45,
+    177.25,
+    94.45,
+    212.45
+   ],
    "stage_bounds": [
     59.45,
     177.25,
@@ -2370,6 +2718,12 @@
    "kind": "movie_clip",
    "name": "instance1597",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@54",
+   "render_bounds": [
+    638.05,
+    86.75,
+    666.45,
+    115.2
+   ],
    "stage_bounds": [
     638.05,
     86.75,
@@ -2411,6 +2765,12 @@
    "kind": "graphic",
    "name": "instance1598",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@54/@1",
+   "render_bounds": [
+    638.05,
+    86.75,
+    666.45,
+    115.2
+   ],
    "stage_bounds": [
     638.05,
     86.75,
@@ -2452,6 +2812,12 @@
    "kind": "movie_clip",
    "name": "instance1599",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@56",
+   "render_bounds": [
+    557.5,
+    117.3,
+    600.7,
+    154.75
+   ],
    "stage_bounds": [
     557.5,
     117.3,
@@ -2493,6 +2859,12 @@
    "kind": "graphic",
    "name": "instance1600",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@56/@1",
+   "render_bounds": [
+    557.5,
+    117.3,
+    600.7,
+    154.75
+   ],
    "stage_bounds": [
     557.5,
     117.3,
@@ -2534,6 +2906,12 @@
    "kind": "movie_clip",
    "name": "instance1601",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@58",
+   "render_bounds": [
+    605.05,
+    168.1,
+    632.0,
+    195.15
+   ],
    "stage_bounds": [
     605.05,
     168.1,
@@ -2575,6 +2953,12 @@
    "kind": "graphic",
    "name": "instance1602",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@58/@1",
+   "render_bounds": [
+    605.05,
+    168.1,
+    632.0,
+    195.15
+   ],
    "stage_bounds": [
     605.05,
     168.1,
@@ -2616,6 +3000,12 @@
    "kind": "movie_clip",
    "name": "instance1603",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@60",
+   "render_bounds": [
+    462.9,
+    148.6,
+    506.15,
+    187.5
+   ],
    "stage_bounds": [
     462.9,
     148.6,
@@ -2657,6 +3047,12 @@
    "kind": "graphic",
    "name": "instance1604",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@60/@1",
+   "render_bounds": [
+    462.9,
+    148.6,
+    506.15,
+    187.5
+   ],
    "stage_bounds": [
     462.9,
     148.6,
@@ -2698,6 +3094,12 @@
    "kind": "movie_clip",
    "name": "instance1605",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@62",
+   "render_bounds": [
+    477.85,
+    40.05,
+    512.85,
+    75.25
+   ],
    "stage_bounds": [
     477.85,
     40.05,
@@ -2739,6 +3141,12 @@
    "kind": "graphic",
    "name": "instance1606",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@62/@1",
+   "render_bounds": [
+    477.85,
+    40.05,
+    512.85,
+    75.25
+   ],
    "stage_bounds": [
     477.85,
     40.05,
@@ -2780,6 +3188,12 @@
    "kind": "movie_clip",
    "name": "instance1607",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@64",
+   "render_bounds": [
+    395.0,
+    159.0,
+    423.4,
+    187.45
+   ],
    "stage_bounds": [
     395.0,
     159.0,
@@ -2821,6 +3235,12 @@
    "kind": "graphic",
    "name": "instance1608",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@64/@1",
+   "render_bounds": [
+    395.0,
+    159.0,
+    423.4,
+    187.45
+   ],
    "stage_bounds": [
     395.0,
     159.0,
@@ -2862,6 +3282,12 @@
    "kind": "movie_clip",
    "name": "instance1609",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@66",
+   "render_bounds": [
+    605.05,
+    35.5,
+    632.0,
+    62.55
+   ],
    "stage_bounds": [
     605.05,
     35.5,
@@ -2903,6 +3329,12 @@
    "kind": "graphic",
    "name": "instance1610",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@66/@1",
+   "render_bounds": [
+    605.05,
+    35.5,
+    632.0,
+    62.55
+   ],
    "stage_bounds": [
     605.05,
     35.5,
@@ -2944,6 +3376,12 @@
    "kind": "movie_clip",
    "name": "instance1611",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@68",
+   "render_bounds": [
+    632.35,
+    245.15,
+    676.65,
+    281.15
+   ],
    "stage_bounds": [
     632.35,
     245.15,
@@ -2985,6 +3423,12 @@
    "kind": "graphic",
    "name": "instance1612",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@68/@1",
+   "render_bounds": [
+    632.35,
+    245.15,
+    676.65,
+    281.15
+   ],
    "stage_bounds": [
     632.35,
     245.15,
@@ -3026,6 +3470,12 @@
    "kind": "movie_clip",
    "name": "instance1613",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@70",
+   "render_bounds": [
+    670.2,
+    192.65,
+    697.15,
+    219.6
+   ],
    "stage_bounds": [
     670.2,
     192.65,
@@ -3067,6 +3517,12 @@
    "kind": "graphic",
    "name": "instance1614",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@70/@1",
+   "render_bounds": [
+    670.2,
+    192.65,
+    697.15,
+    219.6
+   ],
    "stage_bounds": [
     670.2,
     192.65,
@@ -3108,6 +3564,12 @@
    "kind": "movie_clip",
    "name": "instance1615",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@72",
+   "render_bounds": [
+    486.95,
+    238.95,
+    515.35,
+    267.4
+   ],
    "stage_bounds": [
     486.95,
     238.95,
@@ -3149,6 +3611,12 @@
    "kind": "graphic",
    "name": "instance1616",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@72/@1",
+   "render_bounds": [
+    486.95,
+    238.95,
+    515.35,
+    267.4
+   ],
    "stage_bounds": [
     486.95,
     238.95,
@@ -3190,6 +3658,12 @@
    "kind": "movie_clip",
    "name": "instance1617",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@74",
+   "render_bounds": [
+    449.4,
+    258.55,
+    477.8,
+    287.0
+   ],
    "stage_bounds": [
     449.4,
     258.55,
@@ -3231,6 +3705,12 @@
    "kind": "graphic",
    "name": "instance1618",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@74/@1",
+   "render_bounds": [
+    449.4,
+    258.55,
+    477.8,
+    287.0
+   ],
    "stage_bounds": [
     449.4,
     258.55,
@@ -3272,6 +3752,12 @@
    "kind": "movie_clip",
    "name": "instance1619",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@76",
+   "render_bounds": [
+    327.95,
+    32.05,
+    364.9,
+    69.05
+   ],
    "stage_bounds": [
     327.95,
     32.05,
@@ -3313,6 +3799,12 @@
    "kind": "graphic",
    "name": "instance1620",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@76/@1",
+   "render_bounds": [
+    327.95,
+    32.05,
+    364.9,
+    69.05
+   ],
    "stage_bounds": [
     327.95,
     32.05,
@@ -3354,6 +3846,12 @@
    "kind": "movie_clip",
    "name": "instance1621",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@78",
+   "render_bounds": [
+    83.65,
+    49.0,
+    124.2,
+    78.65
+   ],
    "stage_bounds": [
     83.65,
     49.0,
@@ -3395,6 +3893,12 @@
    "kind": "graphic",
    "name": "instance1622",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@78/@1",
+   "render_bounds": [
+    83.65,
+    49.0,
+    124.2,
+    78.65
+   ],
    "stage_bounds": [
     83.65,
     49.0,
@@ -3436,6 +3940,12 @@
    "kind": "movie_clip",
    "name": "instance1623",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@80",
+   "render_bounds": [
+    128.5,
+    171.9,
+    181.0,
+    224.4
+   ],
    "stage_bounds": [
     128.5,
     171.9,
@@ -3477,6 +3987,12 @@
    "kind": "graphic",
    "name": "instance1624",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@80/@1",
+   "render_bounds": [
+    128.5,
+    171.9,
+    181.0,
+    224.4
+   ],
    "stage_bounds": [
     128.5,
     171.9,
@@ -3518,6 +4034,12 @@
    "kind": "movie_clip",
    "name": "instance1625",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@82",
+   "render_bounds": [
+    40.3,
+    101.4,
+    68.7,
+    129.85
+   ],
    "stage_bounds": [
     40.3,
     101.4,
@@ -3559,6 +4081,12 @@
    "kind": "graphic",
    "name": "instance1626",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@82/@1",
+   "render_bounds": [
+    40.3,
+    101.4,
+    68.7,
+    129.85
+   ],
    "stage_bounds": [
     40.3,
     101.4,
@@ -3600,6 +4128,12 @@
    "kind": "movie_clip",
    "name": "instance1627",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@84",
+   "render_bounds": [
+    160.8,
+    42.05,
+    213.05,
+    94.3
+   ],
    "stage_bounds": [
     160.8,
     42.05,
@@ -3641,6 +4175,12 @@
    "kind": "graphic",
    "name": "instance1628",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@84/@1",
+   "render_bounds": [
+    160.8,
+    42.05,
+    213.05,
+    94.3
+   ],
    "stage_bounds": [
     160.8,
     42.05,
@@ -3682,6 +4222,12 @@
    "kind": "movie_clip",
    "name": "instance1629",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@86",
+   "render_bounds": [
+    28.4,
+    256.5,
+    71.25,
+    292.55
+   ],
    "stage_bounds": [
     28.4,
     256.5,
@@ -3723,6 +4269,12 @@
    "kind": "graphic",
    "name": "instance1630",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@86/@1",
+   "render_bounds": [
+    28.4,
+    256.5,
+    71.25,
+    292.55
+   ],
    "stage_bounds": [
     28.4,
     256.5,
@@ -3764,6 +4316,12 @@
    "kind": "movie_clip",
    "name": "instance1631",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@88",
+   "render_bounds": [
+    340.65,
+    129.85,
+    375.65,
+    165.05
+   ],
    "stage_bounds": [
     340.65,
     129.85,
@@ -3805,6 +4363,12 @@
    "kind": "graphic",
    "name": "instance1632",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@88/@1",
+   "render_bounds": [
+    340.65,
+    129.85,
+    375.65,
+    165.05
+   ],
    "stage_bounds": [
     340.65,
     129.85,
@@ -3846,6 +4410,12 @@
    "kind": "movie_clip",
    "name": "instance1633",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@90",
+   "render_bounds": [
+    411.7,
+    238.95,
+    454.9,
+    276.4
+   ],
    "stage_bounds": [
     411.7,
     238.95,
@@ -3887,6 +4457,12 @@
    "kind": "graphic",
    "name": "instance1634",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@90/@1",
+   "render_bounds": [
+    411.7,
+    238.95,
+    454.9,
+    276.4
+   ],
    "stage_bounds": [
     411.7,
     238.95,
@@ -3928,6 +4504,12 @@
    "kind": "movie_clip",
    "name": "mc",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc",
+   "render_bounds": [
+    -71.65,
+    -43.9,
+    741.8,
+    330.9
+   ],
    "stage_bounds": [
     -71.65,
     -43.9,
@@ -3970,6 +4552,12 @@
    "kind": "movie_clip",
    "name": "instance1635",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@1",
+   "render_bounds": [
+    -24.5,
+    -9.35,
+    706.7,
+    307.25
+   ],
    "stage_bounds": [
     -24.5,
     -9.35,
@@ -4011,6 +4599,12 @@
    "kind": "graphic",
    "name": "instance1636",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@1/@1",
+   "render_bounds": [
+    -24.5,
+    -9.35,
+    706.7,
+    307.25
+   ],
    "stage_bounds": [
     -24.5,
     -9.35,
@@ -4052,6 +4646,12 @@
    "kind": "movie_clip",
    "name": "instance1637",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@3",
+   "render_bounds": [
+    -71.65,
+    -43.9,
+    741.8,
+    330.9
+   ],
    "stage_bounds": [
     -71.65,
     -43.9,
@@ -4093,6 +4693,12 @@
    "kind": "graphic",
    "name": "instance1638",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/mc/@3/@1",
+   "render_bounds": [
+    -71.65,
+    -43.9,
+    741.8,
+    330.9
+   ],
    "stage_bounds": [
     -71.65,
     -43.9,
@@ -4134,6 +4740,12 @@
    "kind": "movie_clip",
    "name": "stars",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars",
+   "render_bounds": [
+    4.55,
+    41.85,
+    679.35,
+    141.0
+   ],
    "stage_bounds": [
     4.55,
     41.85,
@@ -4176,6 +4788,12 @@
    "kind": "movie_clip",
    "name": "instance1639",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@1",
+   "render_bounds": [
+    4.55,
+    41.8,
+    627.15,
+    136.25
+   ],
    "stage_bounds": [
     4.55,
     41.8,
@@ -4217,6 +4835,12 @@
    "kind": "graphic",
    "name": "instance1640",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@1/@23",
+   "render_bounds": [
+    4.55,
+    41.8,
+    627.15,
+    136.25
+   ],
    "stage_bounds": [
     4.55,
     41.8,
@@ -4258,6 +4882,12 @@
    "kind": "movie_clip",
    "name": "instance1641",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@25",
+   "render_bounds": [
+    56.8,
+    44.35,
+    679.35,
+    141.0
+   ],
    "stage_bounds": [
     56.8,
     44.35,
@@ -4299,6 +4929,12 @@
    "kind": "graphic",
    "name": "instance1642",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/stars/@25/@17",
+   "render_bounds": [
+    56.8,
+    44.35,
+    679.35,
+    141.0
+   ],
    "stage_bounds": [
     56.8,
     44.35,
@@ -4340,6 +4976,12 @@
    "kind": "movie_clip",
    "name": "instance1643",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@122",
+   "render_bounds": [
+    192.8,
+    73.7,
+    229.15,
+    164.65
+   ],
    "stage_bounds": [
     192.8,
     73.7,
@@ -4382,6 +5024,12 @@
    "kind": "movie_clip",
    "name": "instance1644",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@122/@1",
+   "render_bounds": [
+    192.8,
+    73.7,
+    229.15,
+    164.65
+   ],
    "stage_bounds": [
     192.8,
     73.7,
@@ -4423,6 +5071,12 @@
    "kind": "graphic",
    "name": "instance1645",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@122/@1/@1",
+   "render_bounds": [
+    192.8,
+    73.7,
+    229.15,
+    164.65
+   ],
    "stage_bounds": [
     192.8,
     73.7,
@@ -4464,6 +5118,12 @@
    "kind": "movie_clip",
    "name": "instance1646",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@124",
+   "render_bounds": [
+    2.9,
+    133.75,
+    42.15,
+    229.05
+   ],
    "stage_bounds": [
     2.9,
     133.75,
@@ -4506,6 +5166,12 @@
    "kind": "movie_clip",
    "name": "instance1647",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@124/@1",
+   "render_bounds": [
+    2.9,
+    133.75,
+    42.15,
+    229.05
+   ],
    "stage_bounds": [
     2.9,
     133.75,
@@ -4547,6 +5213,12 @@
    "kind": "graphic",
    "name": "instance1648",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@124/@1/@1",
+   "render_bounds": [
+    2.9,
+    133.75,
+    42.15,
+    229.05
+   ],
    "stage_bounds": [
     2.9,
     133.75,
@@ -4588,6 +5260,12 @@
    "kind": "movie_clip",
    "name": "instance1649",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@126",
+   "render_bounds": [
+    536.8,
+    141.4,
+    570.1,
+    205.1
+   ],
    "stage_bounds": [
     536.8,
     141.4,
@@ -4630,6 +5308,12 @@
    "kind": "movie_clip",
    "name": "instance1650",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@126/@1",
+   "render_bounds": [
+    536.85,
+    141.4,
+    570.15,
+    205.1
+   ],
    "stage_bounds": [
     536.85,
     141.4,
@@ -4671,6 +5355,12 @@
    "kind": "graphic",
    "name": "instance1651",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@126/@1/@1",
+   "render_bounds": [
+    536.85,
+    141.4,
+    570.15,
+    205.1
+   ],
    "stage_bounds": [
     536.85,
     141.4,
@@ -4712,6 +5402,12 @@
    "kind": "movie_clip",
    "name": "instance1652",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@128",
+   "render_bounds": [
+    681.15,
+    27.8,
+    708.3,
+    76.4
+   ],
    "stage_bounds": [
     681.15,
     27.8,
@@ -4754,6 +5450,12 @@
    "kind": "movie_clip",
    "name": "instance1653",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@128/@1",
+   "render_bounds": [
+    681.15,
+    27.8,
+    708.3,
+    76.4
+   ],
    "stage_bounds": [
     681.15,
     27.8,
@@ -4795,6 +5497,12 @@
    "kind": "graphic",
    "name": "instance1654",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@128/@1/@4",
+   "render_bounds": [
+    681.15,
+    27.8,
+    708.3,
+    76.4
+   ],
    "stage_bounds": [
     681.15,
     27.8,
@@ -4836,6 +5544,12 @@
    "kind": "movie_clip",
    "name": "instance1655",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@130",
+   "render_bounds": [
+    658.5,
+    175.6,
+    699.25,
+    264.75
+   ],
    "stage_bounds": [
     658.5,
     175.6,
@@ -4878,6 +5592,12 @@
    "kind": "movie_clip",
    "name": "instance1656",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@130/@1",
+   "render_bounds": [
+    658.45,
+    175.65,
+    699.2,
+    264.8
+   ],
    "stage_bounds": [
     658.45,
     175.65,
@@ -4919,6 +5639,12 @@
    "kind": "graphic",
    "name": "instance1657",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@130/@1/@1",
+   "render_bounds": [
+    658.45,
+    175.65,
+    699.2,
+    264.8
+   ],
    "stage_bounds": [
     658.45,
     175.65,
@@ -4959,6 +5685,12 @@
    "kind": "graphic",
    "name": "instance1658",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@141",
+   "render_bounds": [
+    17.95,
+    188.85,
+    90.1,
+    324.9
+   ],
    "stage_bounds": [
     17.95,
     188.85,
@@ -5000,6 +5732,12 @@
    "kind": "movie_clip",
    "name": "instance1659",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142",
+   "render_bounds": [
+    605.75,
+    309.45,
+    651.7,
+    352.3
+   ],
    "stage_bounds": [
     608.75,
     312.45,
@@ -5041,6 +5779,12 @@
    "kind": "graphic",
    "name": "instance1660",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@13",
+   "render_bounds": [
+    608.75,
+    312.45,
+    648.7,
+    349.3
+   ],
    "stage_bounds": [
     608.75,
     312.45,
@@ -5082,6 +5826,12 @@
    "kind": "movie_clip",
    "name": "instance1661",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@14",
+   "render_bounds": [
+    617.9,
+    326.65,
+    637.2,
+    339.85
+   ],
    "stage_bounds": [
     617.9,
     326.65,
@@ -5123,6 +5873,12 @@
    "kind": "graphic",
    "name": "instance1662",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@14/@1",
+   "render_bounds": [
+    617.9,
+    326.65,
+    637.2,
+    339.85
+   ],
    "stage_bounds": [
     617.9,
     326.65,
@@ -5163,6 +5919,12 @@
    "kind": "graphic",
    "name": "instance1663",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@142/@18",
+   "render_bounds": [
+    617.0,
+    319.4,
+    639.3,
+    341.3
+   ],
    "stage_bounds": [
     617.0,
     319.4,
@@ -5204,6 +5966,12 @@
    "kind": "movie_clip",
    "name": "instance1664",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161",
+   "render_bounds": [
+    622.3,
+    302.35,
+    661.35,
+    339.05
+   ],
    "stage_bounds": [
     625.3,
     305.35,
@@ -5245,6 +6013,12 @@
    "kind": "graphic",
    "name": "instance1665",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@13",
+   "render_bounds": [
+    625.3,
+    305.35,
+    658.35,
+    336.05
+   ],
    "stage_bounds": [
     625.3,
     305.35,
@@ -5286,6 +6060,12 @@
    "kind": "movie_clip",
    "name": "instance1666",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@14",
+   "render_bounds": [
+    632.8,
+    317.0,
+    648.8,
+    328.2
+   ],
    "stage_bounds": [
     632.8,
     317.0,
@@ -5327,6 +6107,12 @@
    "kind": "graphic",
    "name": "instance1667",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@14/@1",
+   "render_bounds": [
+    632.8,
+    317.0,
+    648.8,
+    328.2
+   ],
    "stage_bounds": [
     632.8,
     317.0,
@@ -5367,6 +6153,12 @@
    "kind": "graphic",
    "name": "instance1668",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@161/@18",
+   "render_bounds": [
+    632.1,
+    311.15,
+    650.6,
+    329.35
+   ],
    "stage_bounds": [
     632.1,
     311.15,
@@ -5408,6 +6200,12 @@
    "kind": "movie_clip",
    "name": "instance1669",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@180",
+   "render_bounds": [
+    693.65,
+    324.05,
+    710.45,
+    340.8
+   ],
    "stage_bounds": [
     693.65,
     324.05,
@@ -5449,6 +6247,12 @@
    "kind": "graphic",
    "name": "instance1670",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@180/@3",
+   "render_bounds": [
+    693.65,
+    324.05,
+    710.45,
+    340.8
+   ],
    "stage_bounds": [
     693.65,
     324.05,
@@ -5490,6 +6294,12 @@
    "kind": "movie_clip",
    "name": "instance1671",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@184",
+   "render_bounds": [
+    673.8,
+    340.45,
+    693.75,
+    360.4
+   ],
    "stage_bounds": [
     673.8,
     340.45,
@@ -5531,6 +6341,12 @@
    "kind": "graphic",
    "name": "instance1672",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@184/@3",
+   "render_bounds": [
+    673.8,
+    340.45,
+    693.75,
+    360.4
+   ],
    "stage_bounds": [
     673.8,
     340.45,
@@ -5572,6 +6388,12 @@
    "kind": "movie_clip",
    "name": "instance1673",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@188",
+   "render_bounds": [
+    539.75,
+    306.95,
+    556.55,
+    323.7
+   ],
    "stage_bounds": [
     539.75,
     306.95,
@@ -5613,6 +6435,12 @@
    "kind": "graphic",
    "name": "instance1674",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@188/@3",
+   "render_bounds": [
+    539.75,
+    306.95,
+    556.55,
+    323.7
+   ],
    "stage_bounds": [
     539.75,
     306.95,
@@ -5654,6 +6482,12 @@
    "kind": "movie_clip",
    "name": "instance1675",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@192",
+   "render_bounds": [
+    -6.7,
+    366.65,
+    15.9,
+    389.25
+   ],
    "stage_bounds": [
     -6.7,
     366.65,
@@ -5695,6 +6529,12 @@
    "kind": "graphic",
    "name": "instance1676",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@192/@3",
+   "render_bounds": [
+    -6.7,
+    366.65,
+    15.9,
+    389.25
+   ],
    "stage_bounds": [
     -6.7,
     366.65,
@@ -5736,6 +6576,12 @@
    "kind": "movie_clip",
    "name": "instance1677",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196",
+   "render_bounds": [
+    649.6,
+    391.85,
+    699.55,
+    440.5
+   ],
    "stage_bounds": [
     652.6,
     394.85,
@@ -5777,6 +6623,12 @@
    "kind": "graphic",
    "name": "instance1678",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@13",
+   "render_bounds": [
+    652.6,
+    394.85,
+    696.55,
+    437.5
+   ],
    "stage_bounds": [
     652.6,
     394.85,
@@ -5818,6 +6670,12 @@
    "kind": "movie_clip",
    "name": "instance1679",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@14",
+   "render_bounds": [
+    661.95,
+    409.8,
+    683.7,
+    427.05
+   ],
    "stage_bounds": [
     661.95,
     409.8,
@@ -5859,6 +6717,12 @@
    "kind": "graphic",
    "name": "instance1680",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@14/@1",
+   "render_bounds": [
+    661.95,
+    409.8,
+    683.7,
+    427.05
+   ],
    "stage_bounds": [
     661.95,
     409.8,
@@ -5899,6 +6763,12 @@
    "kind": "graphic",
    "name": "instance1681",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@196/@18",
+   "render_bounds": [
+    661.6,
+    403.1,
+    686.6,
+    427.9
+   ],
    "stage_bounds": [
     661.6,
     403.1,
@@ -5940,6 +6810,12 @@
    "kind": "movie_clip",
    "name": "instance1682",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@215",
+   "render_bounds": [
+    536.75,
+    354.3,
+    613.55,
+    430.4
+   ],
    "stage_bounds": [
     536.75,
     354.3,
@@ -5981,6 +6857,12 @@
    "kind": "graphic",
    "name": "instance1683",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@215/@17",
+   "render_bounds": [
+    536.75,
+    354.3,
+    613.55,
+    430.4
+   ],
    "stage_bounds": [
     536.75,
     354.3,
@@ -6022,6 +6904,12 @@
    "kind": "movie_clip",
    "name": "instance1684",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233",
+   "render_bounds": [
+    55.7,
+    403.4,
+    105.65,
+    449.95
+   ],
    "stage_bounds": [
     58.7,
     406.4,
@@ -6063,6 +6951,12 @@
    "kind": "graphic",
    "name": "instance1685",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@13",
+   "render_bounds": [
+    58.7,
+    406.4,
+    102.65,
+    446.95
+   ],
    "stage_bounds": [
     58.7,
     406.4,
@@ -6104,6 +6998,12 @@
    "kind": "movie_clip",
    "name": "instance1686",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@14",
+   "render_bounds": [
+    68.8,
+    422.0,
+    90.05,
+    436.55
+   ],
    "stage_bounds": [
     68.8,
     422.0,
@@ -6145,6 +7045,12 @@
    "kind": "graphic",
    "name": "instance1687",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@14/@1",
+   "render_bounds": [
+    68.8,
+    422.0,
+    90.05,
+    436.55
+   ],
    "stage_bounds": [
     68.8,
     422.0,
@@ -6185,6 +7091,12 @@
    "kind": "graphic",
    "name": "instance1688",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@233/@18",
+   "render_bounds": [
+    67.8,
+    414.05,
+    92.35,
+    438.1
+   ],
    "stage_bounds": [
     67.8,
     414.05,
@@ -6226,6 +7138,12 @@
    "kind": "movie_clip",
    "name": "instance1689",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@252",
+   "render_bounds": [
+    641.75,
+    385.1,
+    661.55,
+    404.85
+   ],
    "stage_bounds": [
     641.75,
     385.1,
@@ -6267,6 +7185,12 @@
    "kind": "graphic",
    "name": "instance1690",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@252/@3",
+   "render_bounds": [
+    641.75,
+    385.1,
+    661.55,
+    404.85
+   ],
    "stage_bounds": [
     641.75,
     385.1,
@@ -6308,6 +7232,12 @@
    "kind": "movie_clip",
    "name": "instance1691",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@256",
+   "render_bounds": [
+    605.65,
+    396.75,
+    625.45,
+    416.5
+   ],
    "stage_bounds": [
     605.65,
     396.75,
@@ -6349,6 +7279,12 @@
    "kind": "graphic",
    "name": "instance1692",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@256/@3",
+   "render_bounds": [
+    605.65,
+    396.75,
+    625.45,
+    416.5
+   ],
    "stage_bounds": [
     605.65,
     396.75,
@@ -6390,6 +7326,12 @@
    "kind": "movie_clip",
    "name": "instance1693",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@260",
+   "render_bounds": [
+    -6.7,
+    324.5,
+    9.3,
+    340.5
+   ],
    "stage_bounds": [
     -6.7,
     324.5,
@@ -6431,6 +7373,12 @@
    "kind": "graphic",
    "name": "instance1694",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@260/@3",
+   "render_bounds": [
+    -6.7,
+    324.5,
+    9.3,
+    340.5
+   ],
    "stage_bounds": [
     -6.7,
     324.5,
@@ -6472,6 +7420,12 @@
    "kind": "movie_clip",
    "name": "instance1695",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@264",
+   "render_bounds": [
+    366.85,
+    406.4,
+    386.1,
+    425.6
+   ],
    "stage_bounds": [
     366.85,
     406.4,
@@ -6513,6 +7467,12 @@
    "kind": "graphic",
    "name": "instance1696",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@264/@3",
+   "render_bounds": [
+    366.85,
+    406.4,
+    386.1,
+    425.6
+   ],
    "stage_bounds": [
     366.85,
     406.4,
@@ -6554,6 +7514,12 @@
    "kind": "movie_clip",
    "name": "instance1697",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@268",
+   "render_bounds": [
+    697.15,
+    422.25,
+    719.75,
+    444.85
+   ],
    "stage_bounds": [
     697.15,
     422.25,
@@ -6595,6 +7561,12 @@
    "kind": "graphic",
    "name": "instance1698",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@268/@3",
+   "render_bounds": [
+    697.15,
+    422.25,
+    719.75,
+    444.85
+   ],
    "stage_bounds": [
     697.15,
     422.25,
@@ -6636,6 +7608,12 @@
    "kind": "movie_clip",
    "name": "instance1699",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272",
+   "render_bounds": [
+    18.25,
+    303.3,
+    64.2,
+    346.15
+   ],
    "stage_bounds": [
     21.25,
     306.3,
@@ -6677,6 +7655,12 @@
    "kind": "graphic",
    "name": "instance1700",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@13",
+   "render_bounds": [
+    21.25,
+    306.3,
+    61.2,
+    343.15
+   ],
    "stage_bounds": [
     21.25,
     306.3,
@@ -6718,6 +7702,12 @@
    "kind": "movie_clip",
    "name": "instance1701",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@14",
+   "render_bounds": [
+    30.4,
+    320.5,
+    49.7,
+    333.7
+   ],
    "stage_bounds": [
     30.4,
     320.5,
@@ -6759,6 +7749,12 @@
    "kind": "graphic",
    "name": "instance1702",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@14/@1",
+   "render_bounds": [
+    30.4,
+    320.5,
+    49.7,
+    333.7
+   ],
    "stage_bounds": [
     30.4,
     320.5,
@@ -6799,6 +7795,12 @@
    "kind": "graphic",
    "name": "instance1703",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@272/@18",
+   "render_bounds": [
+    29.5,
+    313.25,
+    51.8,
+    335.15
+   ],
    "stage_bounds": [
     29.5,
     313.25,
@@ -6840,6 +7842,12 @@
    "kind": "movie_clip",
    "name": "instance1704",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@291",
+   "render_bounds": [
+    19.05,
+    332.55,
+    35.85,
+    349.3
+   ],
    "stage_bounds": [
     19.05,
     332.55,
@@ -6881,6 +7889,12 @@
    "kind": "graphic",
    "name": "instance1705",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@291/@3",
+   "render_bounds": [
+    19.05,
+    332.55,
+    35.85,
+    349.3
+   ],
    "stage_bounds": [
     19.05,
     332.55,
@@ -6922,6 +7936,12 @@
    "kind": "movie_clip",
    "name": "instance1706",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295",
+   "render_bounds": [
+    -17.75,
+    286.95,
+    21.3,
+    323.65
+   ],
    "stage_bounds": [
     -14.75,
     289.95,
@@ -6963,6 +7983,12 @@
    "kind": "graphic",
    "name": "instance1707",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@13",
+   "render_bounds": [
+    -14.75,
+    289.95,
+    18.3,
+    320.65
+   ],
    "stage_bounds": [
     -14.75,
     289.95,
@@ -7004,6 +8030,12 @@
    "kind": "movie_clip",
    "name": "instance1708",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@14",
+   "render_bounds": [
+    -7.25,
+    301.6,
+    8.75,
+    312.8
+   ],
    "stage_bounds": [
     -7.25,
     301.6,
@@ -7045,6 +8077,12 @@
    "kind": "graphic",
    "name": "instance1709",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@14/@1",
+   "render_bounds": [
+    -7.25,
+    301.6,
+    8.75,
+    312.8
+   ],
    "stage_bounds": [
     -7.25,
     301.6,
@@ -7085,6 +8123,12 @@
    "kind": "graphic",
    "name": "instance1710",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@295/@18",
+   "render_bounds": [
+    -7.95,
+    295.75,
+    10.55,
+    313.95
+   ],
    "stage_bounds": [
     -7.95,
     295.75,
@@ -7126,6 +8170,12 @@
    "kind": "movie_clip",
    "name": "instance1711",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314",
+   "render_bounds": [
+    32.8,
+    352.35,
+    82.75,
+    401.0
+   ],
    "stage_bounds": [
     35.8,
     355.35,
@@ -7167,6 +8217,12 @@
    "kind": "graphic",
    "name": "instance1712",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@13",
+   "render_bounds": [
+    35.8,
+    355.35,
+    79.75,
+    398.0
+   ],
    "stage_bounds": [
     35.8,
     355.35,
@@ -7208,6 +8264,12 @@
    "kind": "movie_clip",
    "name": "instance1713",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@14",
+   "render_bounds": [
+    45.15,
+    370.35,
+    66.9,
+    387.6
+   ],
    "stage_bounds": [
     45.15,
     370.35,
@@ -7249,6 +8311,12 @@
    "kind": "graphic",
    "name": "instance1714",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@14/@1",
+   "render_bounds": [
+    45.15,
+    370.35,
+    66.9,
+    387.6
+   ],
    "stage_bounds": [
     45.15,
     370.35,
@@ -7289,6 +8357,12 @@
    "kind": "graphic",
    "name": "instance1715",
    "path": "/root1/__mainMc/GameMc/@0/@0/bg/@314/@18",
+   "render_bounds": [
+    44.8,
+    363.6,
+    69.8,
+    388.4
+   ],
    "stage_bounds": [
     44.8,
     363.6,
@@ -7329,6 +8403,12 @@
    "kind": "graphic",
    "name": "instance1716",
    "path": "/root1/__mainMc/GameMc/@0/@0/@317",
+   "render_bounds": [
+    118.15,
+    314.8,
+    529.05,
+    503.0
+   ],
    "stage_bounds": [
     118.15,
     314.8,
@@ -7370,6 +8450,12 @@
    "kind": "movie_clip",
    "name": "instance1717",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318",
+   "render_bounds": [
+    132.1,
+    147.35,
+    268.0,
+    361.25
+   ],
    "stage_bounds": [
     137.1,
     152.35,
@@ -7411,6 +8497,12 @@
    "kind": "graphic",
    "name": "instance1718",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@3",
+   "render_bounds": [
+    143.4,
+    174.4,
+    256.7,
+    340.9
+   ],
    "stage_bounds": [
     143.4,
     174.4,
@@ -7452,6 +8544,12 @@
    "kind": "movie_clip",
    "name": "instance1719",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@4",
+   "render_bounds": [
+    200.0,
+    204.65,
+    220.35,
+    225.0
+   ],
    "stage_bounds": [
     200.0,
     204.65,
@@ -7493,6 +8591,12 @@
    "kind": "graphic",
    "name": "instance1720",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@4/@3",
+   "render_bounds": [
+    200.0,
+    204.65,
+    220.35,
+    225.0
+   ],
    "stage_bounds": [
     200.0,
     204.65,
@@ -7534,6 +8638,12 @@
    "kind": "movie_clip",
    "name": "instance1721",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@8",
+   "render_bounds": [
+    212.8,
+    193.0,
+    233.15,
+    213.35
+   ],
    "stage_bounds": [
     212.8,
     193.0,
@@ -7575,6 +8685,12 @@
    "kind": "graphic",
    "name": "instance1722",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@8/@3",
+   "render_bounds": [
+    212.8,
+    193.0,
+    233.15,
+    213.35
+   ],
    "stage_bounds": [
     212.8,
     193.0,
@@ -7616,6 +8732,12 @@
    "kind": "movie_clip",
    "name": "instance1723",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@12",
+   "render_bounds": [
+    180.3,
+    227.0,
+    200.65,
+    247.35
+   ],
    "stage_bounds": [
     180.3,
     227.0,
@@ -7657,6 +8779,12 @@
    "kind": "graphic",
    "name": "instance1724",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@12/@3",
+   "render_bounds": [
+    180.3,
+    227.0,
+    200.65,
+    247.35
+   ],
    "stage_bounds": [
     180.3,
     227.0,
@@ -7698,6 +8826,12 @@
    "kind": "movie_clip",
    "name": "instance1725",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@16",
+   "render_bounds": [
+    159.95,
+    227.0,
+    180.3,
+    247.35
+   ],
    "stage_bounds": [
     159.95,
     227.0,
@@ -7739,6 +8873,12 @@
    "kind": "graphic",
    "name": "instance1726",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@16/@2",
+   "render_bounds": [
+    159.95,
+    227.0,
+    180.3,
+    247.35
+   ],
    "stage_bounds": [
     159.95,
     227.0,
@@ -7780,6 +8920,12 @@
    "kind": "movie_clip",
    "name": "instance1727",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@19",
+   "render_bounds": [
+    155.55,
+    206.65,
+    175.9,
+    227.0
+   ],
    "stage_bounds": [
     155.55,
     206.65,
@@ -7821,6 +8967,12 @@
    "kind": "graphic",
    "name": "instance1728",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@19/@3",
+   "render_bounds": [
+    155.55,
+    206.65,
+    175.9,
+    227.0
+   ],
    "stage_bounds": [
     155.55,
     206.65,
@@ -7862,6 +9014,12 @@
    "kind": "movie_clip",
    "name": "instance1729",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@23",
+   "render_bounds": [
+    175.5,
+    202.1,
+    195.85,
+    222.45
+   ],
    "stage_bounds": [
     175.5,
     202.1,
@@ -7903,6 +9061,12 @@
    "kind": "graphic",
    "name": "instance1730",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@23/@2",
+   "render_bounds": [
+    175.5,
+    202.1,
+    195.85,
+    222.45
+   ],
    "stage_bounds": [
     175.5,
     202.1,
@@ -7944,6 +9108,12 @@
    "kind": "movie_clip",
    "name": "instance1731",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@26",
+   "render_bounds": [
+    217.25,
+    209.8,
+    237.6,
+    230.15
+   ],
    "stage_bounds": [
     217.25,
     209.8,
@@ -7985,6 +9155,12 @@
    "kind": "graphic",
    "name": "instance1732",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@26/@2",
+   "render_bounds": [
+    217.25,
+    209.8,
+    237.6,
+    230.15
+   ],
    "stage_bounds": [
     217.25,
     209.8,
@@ -8026,6 +9202,12 @@
    "kind": "movie_clip",
    "name": "instance1733",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@29",
+   "render_bounds": [
+    170.15,
+    216.85,
+    190.5,
+    237.2
+   ],
    "stage_bounds": [
     170.15,
     216.85,
@@ -8067,6 +9249,12 @@
    "kind": "graphic",
    "name": "instance1734",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@29/@3",
+   "render_bounds": [
+    170.15,
+    216.85,
+    190.5,
+    237.2
+   ],
    "stage_bounds": [
     170.15,
     216.85,
@@ -8108,6 +9296,12 @@
    "kind": "movie_clip",
    "name": "instance1735",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@33",
+   "render_bounds": [
+    196.9,
+    232.2,
+    217.25,
+    252.55
+   ],
    "stage_bounds": [
     196.9,
     232.2,
@@ -8149,6 +9343,12 @@
    "kind": "graphic",
    "name": "instance1736",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@33/@2",
+   "render_bounds": [
+    196.9,
+    232.2,
+    217.25,
+    252.55
+   ],
    "stage_bounds": [
     196.9,
     232.2,
@@ -8190,6 +9390,12 @@
    "kind": "movie_clip",
    "name": "instance1737",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@36",
+   "render_bounds": [
+    166.2,
+    186.3,
+    186.55,
+    206.65
+   ],
    "stage_bounds": [
     166.2,
     186.3,
@@ -8231,6 +9437,12 @@
    "kind": "graphic",
    "name": "instance1738",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@36/@3",
+   "render_bounds": [
+    166.2,
+    186.3,
+    186.55,
+    206.65
+   ],
    "stage_bounds": [
     166.2,
     186.3,
@@ -8272,6 +9484,12 @@
    "kind": "movie_clip",
    "name": "instance1739",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@40",
+   "render_bounds": [
+    217.25,
+    227.05,
+    237.6,
+    247.4
+   ],
    "stage_bounds": [
     217.25,
     227.05,
@@ -8313,6 +9531,12 @@
    "kind": "graphic",
    "name": "instance1740",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@40/@3",
+   "render_bounds": [
+    217.25,
+    227.05,
+    237.6,
+    247.4
+   ],
    "stage_bounds": [
     217.25,
     227.05,
@@ -8354,6 +9578,12 @@
    "kind": "movie_clip",
    "name": "instance1741",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@44",
+   "render_bounds": [
+    179.85,
+    250.35,
+    200.2,
+    270.7
+   ],
    "stage_bounds": [
     179.85,
     250.35,
@@ -8395,6 +9625,12 @@
    "kind": "graphic",
    "name": "instance1742",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@44/@3",
+   "render_bounds": [
+    179.85,
+    250.35,
+    200.2,
+    270.7
+   ],
    "stage_bounds": [
     179.85,
     250.35,
@@ -8436,6 +9672,12 @@
    "kind": "movie_clip",
    "name": "instance1743",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@48",
+   "render_bounds": [
+    203.05,
+    250.35,
+    223.4,
+    270.7
+   ],
    "stage_bounds": [
     203.05,
     250.35,
@@ -8477,6 +9719,12 @@
    "kind": "graphic",
    "name": "instance1744",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@48/@3",
+   "render_bounds": [
+    203.05,
+    250.35,
+    223.4,
+    270.7
+   ],
    "stage_bounds": [
     203.05,
     250.35,
@@ -8518,6 +9766,12 @@
    "kind": "movie_clip",
    "name": "instance1745",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@52",
+   "render_bounds": [
+    143.25,
+    237.15,
+    163.6,
+    257.5
+   ],
    "stage_bounds": [
     143.25,
     237.15,
@@ -8559,6 +9813,12 @@
    "kind": "graphic",
    "name": "instance1746",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@52/@3",
+   "render_bounds": [
+    143.25,
+    237.15,
+    163.6,
+    257.5
+   ],
    "stage_bounds": [
     143.25,
     237.15,
@@ -8600,6 +9860,12 @@
    "kind": "movie_clip",
    "name": "instance1747",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@56",
+   "render_bounds": [
+    235.2,
+    216.9,
+    255.55,
+    237.25
+   ],
    "stage_bounds": [
     235.2,
     216.9,
@@ -8641,6 +9907,12 @@
    "kind": "graphic",
    "name": "instance1748",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@56/@3",
+   "render_bounds": [
+    235.2,
+    216.9,
+    255.55,
+    237.25
+   ],
    "stage_bounds": [
     235.2,
     216.9,
@@ -8682,6 +9954,12 @@
    "kind": "movie_clip",
    "name": "instance1749",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@60",
+   "render_bounds": [
+    159.25,
+    240.15,
+    179.6,
+    260.5
+   ],
    "stage_bounds": [
     159.25,
     240.15,
@@ -8723,6 +10001,12 @@
    "kind": "graphic",
    "name": "instance1750",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@60/@3",
+   "render_bounds": [
+    159.25,
+    240.15,
+    179.6,
+    260.5
+   ],
    "stage_bounds": [
     159.25,
     240.15,
@@ -8764,6 +10048,12 @@
    "kind": "movie_clip",
    "name": "instance1751",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@64",
+   "render_bounds": [
+    233.15,
+    196.55,
+    253.5,
+    216.9
+   ],
    "stage_bounds": [
     233.15,
     196.55,
@@ -8805,6 +10095,12 @@
    "kind": "graphic",
    "name": "instance1752",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@64/@3",
+   "render_bounds": [
+    233.15,
+    196.55,
+    253.5,
+    216.9
+   ],
    "stage_bounds": [
     233.15,
     196.55,
@@ -8846,6 +10142,12 @@
    "kind": "movie_clip",
    "name": "instance1753",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@68",
+   "render_bounds": [
+    152.65,
+    189.35,
+    173.0,
+    209.7
+   ],
    "stage_bounds": [
     152.65,
     189.35,
@@ -8887,6 +10189,12 @@
    "kind": "graphic",
    "name": "instance1754",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@68/@2",
+   "render_bounds": [
+    152.65,
+    189.35,
+    173.0,
+    209.7
+   ],
    "stage_bounds": [
     152.65,
     189.35,
@@ -8928,6 +10236,12 @@
    "kind": "movie_clip",
    "name": "instance1755",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@71",
+   "render_bounds": [
+    139.6,
+    219.75,
+    159.95,
+    240.1
+   ],
    "stage_bounds": [
     139.6,
     219.75,
@@ -8969,6 +10283,12 @@
    "kind": "graphic",
    "name": "instance1756",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@71/@3",
+   "render_bounds": [
+    139.6,
+    219.75,
+    159.95,
+    240.1
+   ],
    "stage_bounds": [
     139.6,
     219.75,
@@ -9010,6 +10330,12 @@
    "kind": "movie_clip",
    "name": "instance1757",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@75",
+   "render_bounds": [
+    223.4,
+    250.35,
+    243.75,
+    270.7
+   ],
    "stage_bounds": [
     223.4,
     250.35,
@@ -9051,6 +10377,12 @@
    "kind": "graphic",
    "name": "instance1758",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@75/@3",
+   "render_bounds": [
+    223.4,
+    250.35,
+    243.75,
+    270.7
+   ],
    "stage_bounds": [
     223.4,
     250.35,
@@ -9092,6 +10424,12 @@
    "kind": "movie_clip",
    "name": "instance1759",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@79",
+   "render_bounds": [
+    217.3,
+    181.8,
+    237.65,
+    202.15
+   ],
    "stage_bounds": [
     217.3,
     181.8,
@@ -9133,6 +10471,12 @@
    "kind": "graphic",
    "name": "instance1760",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@79/@3",
+   "render_bounds": [
+    217.3,
+    181.8,
+    237.65,
+    202.15
+   ],
    "stage_bounds": [
     217.3,
     181.8,
@@ -9174,6 +10518,12 @@
    "kind": "movie_clip",
    "name": "instance1761",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@83",
+   "render_bounds": [
+    163.6,
+    254.8,
+    183.95,
+    275.15
+   ],
    "stage_bounds": [
     163.6,
     254.8,
@@ -9215,6 +10565,12 @@
    "kind": "graphic",
    "name": "instance1762",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@83/@3",
+   "render_bounds": [
+    163.6,
+    254.8,
+    183.95,
+    275.15
+   ],
    "stage_bounds": [
     163.6,
     254.8,
@@ -9256,6 +10612,12 @@
    "kind": "movie_clip",
    "name": "instance1763",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@87",
+   "render_bounds": [
+    235.2,
+    237.25,
+    255.55,
+    257.6
+   ],
    "stage_bounds": [
     235.2,
     237.25,
@@ -9297,6 +10659,12 @@
    "kind": "graphic",
    "name": "instance1764",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@87/@3",
+   "render_bounds": [
+    235.2,
+    237.25,
+    255.55,
+    257.6
+   ],
    "stage_bounds": [
     235.2,
     237.25,
@@ -9338,6 +10706,12 @@
    "kind": "movie_clip",
    "name": "instance1765",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@91",
+   "render_bounds": [
+    207.1,
+    216.85,
+    227.45,
+    237.2
+   ],
    "stage_bounds": [
     207.1,
     216.85,
@@ -9379,6 +10753,12 @@
    "kind": "graphic",
    "name": "instance1766",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@91/@3",
+   "render_bounds": [
+    207.1,
+    216.85,
+    227.45,
+    237.2
+   ],
    "stage_bounds": [
     207.1,
     216.85,
@@ -9420,6 +10800,12 @@
    "kind": "movie_clip",
    "name": "instance1767",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@95",
+   "render_bounds": [
+    192.35,
+    265.0,
+    212.7,
+    285.35
+   ],
    "stage_bounds": [
     192.35,
     265.0,
@@ -9461,6 +10847,12 @@
    "kind": "graphic",
    "name": "instance1768",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@95/@3",
+   "render_bounds": [
+    192.35,
+    265.0,
+    212.7,
+    285.35
+   ],
    "stage_bounds": [
     192.35,
     265.0,
@@ -9502,6 +10894,12 @@
    "kind": "movie_clip",
    "name": "instance1769",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@99",
+   "render_bounds": [
+    163.6,
+    270.65,
+    183.95,
+    291.0
+   ],
    "stage_bounds": [
     163.6,
     270.65,
@@ -9543,6 +10941,12 @@
    "kind": "graphic",
    "name": "instance1770",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@99/@3",
+   "render_bounds": [
+    163.6,
+    270.65,
+    183.95,
+    291.0
+   ],
    "stage_bounds": [
     163.6,
     270.65,
@@ -9584,6 +10988,12 @@
    "kind": "movie_clip",
    "name": "instance1771",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@103",
+   "render_bounds": [
+    179.6,
+    272.7,
+    199.95,
+    293.05
+   ],
    "stage_bounds": [
     179.6,
     272.7,
@@ -9625,6 +11035,12 @@
    "kind": "graphic",
    "name": "instance1772",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@103/@3",
+   "render_bounds": [
+    179.6,
+    272.7,
+    199.95,
+    293.05
+   ],
    "stage_bounds": [
     179.6,
     272.7,
@@ -9666,6 +11082,12 @@
    "kind": "movie_clip",
    "name": "instance1773",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@107",
+   "render_bounds": [
+    214.8,
+    270.7,
+    235.15,
+    291.05
+   ],
    "stage_bounds": [
     214.8,
     270.7,
@@ -9707,6 +11129,12 @@
    "kind": "graphic",
    "name": "instance1774",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@107/@3",
+   "render_bounds": [
+    214.8,
+    270.7,
+    235.15,
+    291.05
+   ],
    "stage_bounds": [
     214.8,
     270.7,
@@ -9748,6 +11176,12 @@
    "kind": "movie_clip",
    "name": "instance1775",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@111",
+   "render_bounds": [
+    196.85,
+    275.2,
+    217.2,
+    295.55
+   ],
    "stage_bounds": [
     196.85,
     275.2,
@@ -9789,6 +11223,12 @@
    "kind": "graphic",
    "name": "instance1776",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@111/@2",
+   "render_bounds": [
+    196.85,
+    275.2,
+    217.2,
+    295.55
+   ],
    "stage_bounds": [
     196.85,
     275.2,
@@ -9830,6 +11270,12 @@
    "kind": "movie_clip",
    "name": "instance1777",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@114",
+   "render_bounds": [
+    190.5,
+    209.75,
+    210.85,
+    230.1
+   ],
    "stage_bounds": [
     190.5,
     209.75,
@@ -9871,6 +11317,12 @@
    "kind": "graphic",
    "name": "instance1778",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@114/@3",
+   "render_bounds": [
+    190.5,
+    209.75,
+    210.85,
+    230.1
+   ],
    "stage_bounds": [
     190.5,
     209.75,
@@ -9912,6 +11364,12 @@
    "kind": "movie_clip",
    "name": "instance1779",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@118",
+   "render_bounds": [
+    182.7,
+    240.15,
+    203.05,
+    260.5
+   ],
    "stage_bounds": [
     182.7,
     240.15,
@@ -9953,6 +11411,12 @@
    "kind": "graphic",
    "name": "instance1780",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@118/@3",
+   "render_bounds": [
+    182.7,
+    240.15,
+    203.05,
+    260.5
+   ],
    "stage_bounds": [
     182.7,
     240.15,
@@ -9994,6 +11458,12 @@
    "kind": "movie_clip",
    "name": "instance1781",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@122",
+   "render_bounds": [
+    210.15,
+    237.25,
+    230.5,
+    257.6
+   ],
    "stage_bounds": [
     210.15,
     237.25,
@@ -10035,6 +11505,12 @@
    "kind": "graphic",
    "name": "instance1782",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@122/@3",
+   "render_bounds": [
+    210.15,
+    237.25,
+    230.5,
+    257.6
+   ],
    "stage_bounds": [
     210.15,
     237.25,
@@ -10076,6 +11552,12 @@
    "kind": "movie_clip",
    "name": "instance1783",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@126",
+   "render_bounds": [
+    200.0,
+    189.45,
+    220.35,
+    209.8
+   ],
    "stage_bounds": [
     200.0,
     189.45,
@@ -10117,6 +11599,12 @@
    "kind": "graphic",
    "name": "instance1784",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@126/@3",
+   "render_bounds": [
+    200.0,
+    189.45,
+    220.35,
+    209.8
+   ],
    "stage_bounds": [
     200.0,
     189.45,
@@ -10158,6 +11646,12 @@
    "kind": "movie_clip",
    "name": "instance1785",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@130",
+   "render_bounds": [
+    186.7,
+    222.5,
+    207.05,
+    242.85
+   ],
    "stage_bounds": [
     186.7,
     222.5,
@@ -10199,6 +11693,12 @@
    "kind": "graphic",
    "name": "instance1786",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@130/@3",
+   "render_bounds": [
+    186.7,
+    222.5,
+    207.05,
+    242.85
+   ],
    "stage_bounds": [
     186.7,
     222.5,
@@ -10240,6 +11740,12 @@
    "kind": "movie_clip",
    "name": "instance1787",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@134",
+   "render_bounds": [
+    196.9,
+    234.5,
+    217.25,
+    254.85
+   ],
    "stage_bounds": [
     196.9,
     234.5,
@@ -10281,6 +11787,12 @@
    "kind": "graphic",
    "name": "instance1788",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@134/@3",
+   "render_bounds": [
+    196.9,
+    234.5,
+    217.25,
+    254.85
+   ],
    "stage_bounds": [
     196.9,
     234.5,
@@ -10322,6 +11834,12 @@
    "kind": "movie_clip",
    "name": "instance1789",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@138",
+   "render_bounds": [
+    172.95,
+    204.6,
+    193.3,
+    224.95
+   ],
    "stage_bounds": [
     172.95,
     204.6,
@@ -10363,6 +11881,12 @@
    "kind": "graphic",
    "name": "instance1790",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@138/@3",
+   "render_bounds": [
+    172.95,
+    204.6,
+    193.3,
+    224.95
+   ],
    "stage_bounds": [
     172.95,
     204.6,
@@ -10404,6 +11928,12 @@
    "kind": "movie_clip",
    "name": "instance1791",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@142",
+   "render_bounds": [
+    200.05,
+    176.15,
+    220.4,
+    196.5
+   ],
    "stage_bounds": [
     200.05,
     176.15,
@@ -10445,6 +11975,12 @@
    "kind": "graphic",
    "name": "instance1792",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@142/@3",
+   "render_bounds": [
+    200.05,
+    176.15,
+    220.4,
+    196.5
+   ],
    "stage_bounds": [
     200.05,
     176.15,
@@ -10486,6 +12022,12 @@
    "kind": "movie_clip",
    "name": "instance1793",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@146",
+   "render_bounds": [
+    179.7,
+    176.15,
+    200.05,
+    196.5
+   ],
    "stage_bounds": [
     179.7,
     176.15,
@@ -10527,6 +12069,12 @@
    "kind": "graphic",
    "name": "instance1794",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@146/@3",
+   "render_bounds": [
+    179.7,
+    176.15,
+    200.05,
+    196.5
+   ],
    "stage_bounds": [
     179.7,
     176.15,
@@ -10568,6 +12116,12 @@
    "kind": "movie_clip",
    "name": "instance1795",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@150",
+   "render_bounds": [
+    182.75,
+    186.3,
+    203.1,
+    206.65
+   ],
    "stage_bounds": [
     182.75,
     186.3,
@@ -10609,6 +12163,12 @@
    "kind": "graphic",
    "name": "instance1796",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@150/@3",
+   "render_bounds": [
+    182.75,
+    186.3,
+    203.1,
+    206.65
+   ],
    "stage_bounds": [
     182.75,
     186.3,
@@ -10649,6 +12209,12 @@
    "kind": "graphic",
    "name": "instance1797",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@156",
+   "render_bounds": [
+    137.1,
+    152.35,
+    263.0,
+    298.2
+   ],
    "stage_bounds": [
     137.1,
     152.35,
@@ -10690,6 +12256,12 @@
    "kind": "movie_clip",
    "name": "instance1798",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@157",
+   "render_bounds": [
+    196.9,
+    153.6,
+    205.2,
+    161.9
+   ],
    "stage_bounds": [
     196.9,
     153.6,
@@ -10731,6 +12303,12 @@
    "kind": "graphic",
    "name": "instance1799",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@157/@1",
+   "render_bounds": [
+    196.9,
+    153.6,
+    205.2,
+    161.9
+   ],
    "stage_bounds": [
     196.9,
     153.6,
@@ -10772,6 +12350,12 @@
    "kind": "movie_clip",
    "name": "instance1800",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@159",
+   "render_bounds": [
+    215.5,
+    156.0,
+    223.8,
+    164.3
+   ],
    "stage_bounds": [
     215.5,
     156.0,
@@ -10813,6 +12397,12 @@
    "kind": "graphic",
    "name": "instance1801",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@159/@1",
+   "render_bounds": [
+    215.5,
+    156.0,
+    223.8,
+    164.3
+   ],
    "stage_bounds": [
     215.5,
     156.0,
@@ -10854,6 +12444,12 @@
    "kind": "movie_clip",
    "name": "instance1802",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@161",
+   "render_bounds": [
+    224.65,
+    158.05,
+    232.95,
+    166.35
+   ],
    "stage_bounds": [
     224.65,
     158.05,
@@ -10895,6 +12491,12 @@
    "kind": "graphic",
    "name": "instance1803",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@161/@1",
+   "render_bounds": [
+    224.65,
+    158.05,
+    232.95,
+    166.35
+   ],
    "stage_bounds": [
     224.65,
     158.05,
@@ -10936,6 +12538,12 @@
    "kind": "movie_clip",
    "name": "instance1804",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@163",
+   "render_bounds": [
+    232.85,
+    163.4,
+    241.15,
+    171.7
+   ],
    "stage_bounds": [
     232.85,
     163.4,
@@ -10977,6 +12585,12 @@
    "kind": "graphic",
    "name": "instance1805",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@163/@1",
+   "render_bounds": [
+    232.85,
+    163.4,
+    241.15,
+    171.7
+   ],
    "stage_bounds": [
     232.85,
     163.4,
@@ -11018,6 +12632,12 @@
    "kind": "movie_clip",
    "name": "instance1806",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@165",
+   "render_bounds": [
+    161.45,
+    163.55,
+    169.75,
+    171.85
+   ],
    "stage_bounds": [
     161.45,
     163.55,
@@ -11059,6 +12679,12 @@
    "kind": "graphic",
    "name": "instance1807",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@165/@1",
+   "render_bounds": [
+    161.45,
+    163.55,
+    169.75,
+    171.85
+   ],
    "stage_bounds": [
     161.45,
     163.55,
@@ -11100,6 +12726,12 @@
    "kind": "movie_clip",
    "name": "instance1808",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@167",
+   "render_bounds": [
+    154.7,
+    169.95,
+    163.0,
+    178.25
+   ],
    "stage_bounds": [
     154.7,
     169.95,
@@ -11141,6 +12773,12 @@
    "kind": "graphic",
    "name": "instance1809",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@167/@1",
+   "render_bounds": [
+    154.7,
+    169.95,
+    163.0,
+    178.25
+   ],
    "stage_bounds": [
     154.7,
     169.95,
@@ -11182,6 +12820,12 @@
    "kind": "movie_clip",
    "name": "instance1810",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@169",
+   "render_bounds": [
+    178.25,
+    156.55,
+    186.55,
+    164.85
+   ],
    "stage_bounds": [
     178.25,
     156.55,
@@ -11223,6 +12867,12 @@
    "kind": "graphic",
    "name": "instance1811",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@169/@1",
+   "render_bounds": [
+    178.25,
+    156.55,
+    186.55,
+    164.85
+   ],
    "stage_bounds": [
     178.25,
     156.55,
@@ -11264,6 +12914,12 @@
    "kind": "movie_clip",
    "name": "instance1812",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@171",
+   "render_bounds": [
+    187.55,
+    154.5,
+    195.85,
+    162.8
+   ],
    "stage_bounds": [
     187.55,
     154.5,
@@ -11305,6 +12961,12 @@
    "kind": "graphic",
    "name": "instance1813",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@171/@1",
+   "render_bounds": [
+    187.55,
+    154.5,
+    195.85,
+    162.8
+   ],
    "stage_bounds": [
     187.55,
     154.5,
@@ -11346,6 +13008,12 @@
    "kind": "movie_clip",
    "name": "instance1814",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@173",
+   "render_bounds": [
+    176.15,
+    166.1,
+    184.45,
+    174.4
+   ],
    "stage_bounds": [
     176.15,
     166.1,
@@ -11387,6 +13055,12 @@
    "kind": "graphic",
    "name": "instance1815",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@173/@1",
+   "render_bounds": [
+    176.15,
+    166.1,
+    184.45,
+    174.4
+   ],
    "stage_bounds": [
     176.15,
     166.1,
@@ -11428,6 +13102,12 @@
    "kind": "movie_clip",
    "name": "instance1816",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@175",
+   "render_bounds": [
+    198.9,
+    161.7,
+    207.2,
+    170.0
+   ],
    "stage_bounds": [
     198.9,
     161.7,
@@ -11469,6 +13149,12 @@
    "kind": "graphic",
    "name": "instance1817",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@175/@1",
+   "render_bounds": [
+    198.9,
+    161.7,
+    207.2,
+    170.0
+   ],
    "stage_bounds": [
     198.9,
     161.7,
@@ -11510,6 +13196,12 @@
    "kind": "movie_clip",
    "name": "instance1818",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@177",
+   "render_bounds": [
+    209.0,
+    162.8,
+    217.3,
+    171.1
+   ],
    "stage_bounds": [
     209.0,
     162.8,
@@ -11551,6 +13243,12 @@
    "kind": "graphic",
    "name": "instance1819",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@177/@1",
+   "render_bounds": [
+    209.0,
+    162.8,
+    217.3,
+    171.1
+   ],
    "stage_bounds": [
     209.0,
     162.8,
@@ -11592,6 +13290,12 @@
    "kind": "movie_clip",
    "name": "instance1820",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@179",
+   "render_bounds": [
+    187.4,
+    161.8,
+    195.7,
+    170.1
+   ],
    "stage_bounds": [
     187.4,
     161.8,
@@ -11633,6 +13337,12 @@
    "kind": "graphic",
    "name": "instance1821",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@179/@1",
+   "render_bounds": [
+    187.4,
+    161.8,
+    195.7,
+    170.1
+   ],
    "stage_bounds": [
     187.4,
     161.8,
@@ -11674,6 +13384,12 @@
    "kind": "movie_clip",
    "name": "instance1822",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@181",
+   "render_bounds": [
+    169.85,
+    159.55,
+    178.15,
+    167.85
+   ],
    "stage_bounds": [
     169.85,
     159.55,
@@ -11715,6 +13431,12 @@
    "kind": "graphic",
    "name": "instance1823",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@181/@1",
+   "render_bounds": [
+    169.85,
+    159.55,
+    178.15,
+    167.85
+   ],
    "stage_bounds": [
     169.85,
     159.55,
@@ -11756,6 +13478,12 @@
    "kind": "movie_clip",
    "name": "instance1824",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@183",
+   "render_bounds": [
+    206.35,
+    154.35,
+    214.65,
+    162.65
+   ],
    "stage_bounds": [
     206.35,
     154.35,
@@ -11797,6 +13525,12 @@
    "kind": "graphic",
    "name": "instance1825",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@183/@1",
+   "render_bounds": [
+    206.35,
+    154.35,
+    214.65,
+    162.65
+   ],
    "stage_bounds": [
     206.35,
     154.35,
@@ -11838,6 +13572,12 @@
    "kind": "movie_clip",
    "name": "instance1826",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@185",
+   "render_bounds": [
+    162.95,
+    173.1,
+    171.25,
+    181.4
+   ],
    "stage_bounds": [
     162.95,
     173.1,
@@ -11879,6 +13619,12 @@
    "kind": "graphic",
    "name": "instance1827",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@185/@1",
+   "render_bounds": [
+    162.95,
+    173.1,
+    171.25,
+    181.4
+   ],
    "stage_bounds": [
     162.95,
     173.1,
@@ -11920,6 +13666,12 @@
    "kind": "movie_clip",
    "name": "instance1828",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@187",
+   "render_bounds": [
+    156.75,
+    179.25,
+    165.05,
+    187.55
+   ],
    "stage_bounds": [
     156.75,
     179.25,
@@ -11961,6 +13713,12 @@
    "kind": "graphic",
    "name": "instance1829",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@187/@1",
+   "render_bounds": [
+    156.75,
+    179.25,
+    165.05,
+    187.55
+   ],
    "stage_bounds": [
     156.75,
     179.25,
@@ -12002,6 +13760,12 @@
    "kind": "movie_clip",
    "name": "instance1830",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@189",
+   "render_bounds": [
+    221.4,
+    165.45,
+    229.7,
+    173.75
+   ],
    "stage_bounds": [
     221.4,
     165.45,
@@ -12043,6 +13807,12 @@
    "kind": "graphic",
    "name": "instance1831",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@189/@1",
+   "render_bounds": [
+    221.4,
+    165.45,
+    229.7,
+    173.75
+   ],
    "stage_bounds": [
     221.4,
     165.45,
@@ -12084,6 +13854,12 @@
    "kind": "movie_clip",
    "name": "instance1832",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@191",
+   "render_bounds": [
+    235.4,
+    174.85,
+    243.7,
+    183.15
+   ],
    "stage_bounds": [
     235.4,
     174.85,
@@ -12125,6 +13901,12 @@
    "kind": "graphic",
    "name": "instance1833",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@191/@1",
+   "render_bounds": [
+    235.4,
+    174.85,
+    243.7,
+    183.15
+   ],
    "stage_bounds": [
     235.4,
     174.85,
@@ -12166,6 +13948,12 @@
    "kind": "movie_clip",
    "name": "instance1834",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@193",
+   "render_bounds": [
+    226.2,
+    173.35,
+    234.5,
+    181.65
+   ],
    "stage_bounds": [
     226.2,
     173.35,
@@ -12207,6 +13995,12 @@
    "kind": "graphic",
    "name": "instance1835",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@193/@1",
+   "render_bounds": [
+    226.2,
+    173.35,
+    234.5,
+    181.65
+   ],
    "stage_bounds": [
     226.2,
     173.35,
@@ -12248,6 +14042,12 @@
    "kind": "movie_clip",
    "name": "instance1836",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@195",
+   "render_bounds": [
+    213.9,
+    170.4,
+    222.2,
+    178.7
+   ],
    "stage_bounds": [
     213.9,
     170.4,
@@ -12289,6 +14089,12 @@
    "kind": "graphic",
    "name": "instance1837",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@195/@1",
+   "render_bounds": [
+    213.9,
+    170.4,
+    222.2,
+    178.7
+   ],
    "stage_bounds": [
     213.9,
     170.4,
@@ -12330,6 +14136,12 @@
    "kind": "movie_clip",
    "name": "instance1838",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@197",
+   "render_bounds": [
+    202.5,
+    170.15,
+    210.8,
+    178.45
+   ],
    "stage_bounds": [
     202.5,
     170.15,
@@ -12371,6 +14183,12 @@
    "kind": "graphic",
    "name": "instance1839",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@197/@1",
+   "render_bounds": [
+    202.5,
+    170.15,
+    210.8,
+    178.45
+   ],
    "stage_bounds": [
     202.5,
     170.15,
@@ -12412,6 +14230,12 @@
    "kind": "movie_clip",
    "name": "instance1840",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@199",
+   "render_bounds": [
+    192.75,
+    168.95,
+    201.05,
+    177.25
+   ],
    "stage_bounds": [
     192.75,
     168.95,
@@ -12453,6 +14277,12 @@
    "kind": "graphic",
    "name": "instance1841",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@199/@1",
+   "render_bounds": [
+    192.75,
+    168.95,
+    201.05,
+    177.25
+   ],
    "stage_bounds": [
     192.75,
     168.95,
@@ -12494,6 +14324,12 @@
    "kind": "movie_clip",
    "name": "instance1842",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@201",
+   "render_bounds": [
+    182.7,
+    170.1,
+    191.0,
+    178.4
+   ],
    "stage_bounds": [
     182.7,
     170.1,
@@ -12535,6 +14371,12 @@
    "kind": "graphic",
    "name": "instance1843",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@201/@1",
+   "render_bounds": [
+    182.7,
+    170.1,
+    191.0,
+    178.4
+   ],
    "stage_bounds": [
     182.7,
     170.1,
@@ -12576,6 +14418,12 @@
    "kind": "movie_clip",
    "name": "instance1844",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@203",
+   "render_bounds": [
+    172.0,
+    171.4,
+    180.3,
+    179.7
+   ],
    "stage_bounds": [
     172.0,
     171.4,
@@ -12617,6 +14465,12 @@
    "kind": "graphic",
    "name": "instance1845",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@203/@1",
+   "render_bounds": [
+    172.0,
+    171.4,
+    180.3,
+    179.7
+   ],
    "stage_bounds": [
     172.0,
     171.4,
@@ -12658,6 +14512,12 @@
    "kind": "movie_clip",
    "name": "instance1846",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@205",
+   "render_bounds": [
+    220.3,
+    339.75,
+    236.8,
+    356.25
+   ],
    "stage_bounds": [
     220.3,
     339.75,
@@ -12699,6 +14559,12 @@
    "kind": "graphic",
    "name": "instance1847",
    "path": "/root1/__mainMc/GameMc/@0/@0/@318/@205/@2",
+   "render_bounds": [
+    220.3,
+    339.75,
+    236.8,
+    356.25
+   ],
    "stage_bounds": [
     220.3,
     339.75,
@@ -12739,6 +14605,12 @@
    "kind": "graphic",
    "name": "instance1848",
    "path": "/root1/__mainMc/GameMc/@0/@0/@528",
+   "render_bounds": [
+    644.3,
+    214.7,
+    713.8,
+    323.3
+   ],
    "stage_bounds": [
     644.3,
     214.7,
@@ -12780,6 +14652,12 @@
    "kind": "movie_clip",
    "name": "instance1849",
    "path": "/root1/__mainMc/GameMc/@0/@0/@529",
+   "render_bounds": [
+    682.4,
+    215.25,
+    693.9,
+    230.45
+   ],
    "stage_bounds": [
     682.4,
     215.25,
@@ -12821,6 +14699,12 @@
    "kind": "graphic",
    "name": "instance1850",
    "path": "/root1/__mainMc/GameMc/@0/@0/@529/@1",
+   "render_bounds": [
+    682.4,
+    215.25,
+    693.9,
+    230.45
+   ],
    "stage_bounds": [
     682.4,
     215.25,
@@ -12861,6 +14745,12 @@
    "kind": "graphic",
    "name": "instance1851",
    "path": "/root1/__mainMc/GameMc/@0/@0/@534",
+   "render_bounds": [
+    671.1,
+    217.15,
+    712.85,
+    258.9
+   ],
    "stage_bounds": [
     671.1,
     217.15,
@@ -12902,6 +14792,12 @@
    "kind": "movie_clip",
    "name": "instance1852",
    "path": "/root1/__mainMc/GameMc/@0/@0/@535",
+   "render_bounds": [
+    705.5,
+    232.35,
+    713.3,
+    242.6
+   ],
    "stage_bounds": [
     705.5,
     232.35,
@@ -12943,6 +14839,12 @@
    "kind": "graphic",
    "name": "instance1853",
    "path": "/root1/__mainMc/GameMc/@0/@0/@535/@1",
+   "render_bounds": [
+    705.5,
+    232.35,
+    713.3,
+    242.6
+   ],
    "stage_bounds": [
     705.5,
     232.35,
@@ -12984,6 +14886,12 @@
    "kind": "movie_clip",
    "name": "instance1854",
    "path": "/root1/__mainMc/GameMc/@0/@0/@537",
+   "render_bounds": [
+    672.15,
+    222.85,
+    680.65,
+    234.65
+   ],
    "stage_bounds": [
     672.15,
     222.85,
@@ -13025,6 +14933,12 @@
    "kind": "graphic",
    "name": "instance1855",
    "path": "/root1/__mainMc/GameMc/@0/@0/@537/@1",
+   "render_bounds": [
+    672.15,
+    222.85,
+    680.65,
+    234.65
+   ],
    "stage_bounds": [
     672.15,
     222.85,
@@ -13065,6 +14979,12 @@
    "kind": "graphic",
    "name": "instance1856",
    "path": "/root1/__mainMc/GameMc/@0/@0/@545",
+   "render_bounds": [
+    677.25,
+    237.65,
+    700.35,
+    256.95
+   ],
    "stage_bounds": [
     677.25,
     237.65,
@@ -13106,6 +15026,12 @@
    "kind": "movie_clip",
    "name": "instance1857",
    "path": "/root1/__mainMc/GameMc/@0/@0/@546",
+   "render_bounds": [
+    677.15,
+    245.6,
+    694.4,
+    257.45
+   ],
    "stage_bounds": [
     677.15,
     245.6,
@@ -13147,6 +15073,12 @@
    "kind": "graphic",
    "name": "instance1858",
    "path": "/root1/__mainMc/GameMc/@0/@0/@546/@1",
+   "render_bounds": [
+    677.15,
+    245.6,
+    694.4,
+    257.45
+   ],
    "stage_bounds": [
     677.15,
     245.6,
@@ -13187,6 +15119,12 @@
    "kind": "graphic",
    "name": "instance1859",
    "path": "/root1/__mainMc/GameMc/@0/@0/@564",
+   "render_bounds": [
+    671.2,
+    225.0,
+    709.2,
+    262.4
+   ],
    "stage_bounds": [
     671.2,
     225.0,
@@ -13228,6 +15166,12 @@
    "kind": "movie_clip",
    "name": "instance1860",
    "path": "/root1/__mainMc/GameMc/@0/@0/@565",
+   "render_bounds": [
+    690.7,
+    255.2,
+    701.85,
+    263.15
+   ],
    "stage_bounds": [
     690.7,
     255.2,
@@ -13269,6 +15213,12 @@
    "kind": "graphic",
    "name": "instance1861",
    "path": "/root1/__mainMc/GameMc/@0/@0/@565/@1",
+   "render_bounds": [
+    690.7,
+    255.2,
+    701.85,
+    263.15
+   ],
    "stage_bounds": [
     690.7,
     255.2,
@@ -13309,6 +15259,12 @@
    "kind": "graphic",
    "name": "instance1862",
    "path": "/root1/__mainMc/GameMc/@0/@0/@570",
+   "render_bounds": [
+    672.25,
+    249.75,
+    698.55,
+    262.3
+   ],
    "stage_bounds": [
     672.25,
     249.75,
@@ -13350,6 +15306,12 @@
    "kind": "movie_clip",
    "name": "instance1863",
    "path": "/root1/__mainMc/GameMc/@0/@0/@571",
+   "render_bounds": [
+    671.95,
+    251.4,
+    682.95,
+    258.6
+   ],
    "stage_bounds": [
     671.95,
     251.4,
@@ -13391,6 +15353,12 @@
    "kind": "graphic",
    "name": "instance1864",
    "path": "/root1/__mainMc/GameMc/@0/@0/@571/@1",
+   "render_bounds": [
+    671.95,
+    251.4,
+    682.95,
+    258.6
+   ],
    "stage_bounds": [
     671.95,
     251.4,
@@ -13431,6 +15399,12 @@
    "kind": "graphic",
    "name": "instance1865",
    "path": "/root1/__mainMc/GameMc/@0/@0/@578",
+   "render_bounds": [
+    675.25,
+    242.45,
+    695.8,
+    257.8
+   ],
    "stage_bounds": [
     675.25,
     242.45,
@@ -13472,6 +15446,12 @@
    "kind": "movie_clip",
    "name": "instance1866",
    "path": "/root1/__mainMc/GameMc/@0/@0/@579",
+   "render_bounds": [
+    685.25,
+    245.0,
+    692.65,
+    251.5
+   ],
    "stage_bounds": [
     685.25,
     245.0,
@@ -13513,6 +15493,12 @@
    "kind": "graphic",
    "name": "instance1867",
    "path": "/root1/__mainMc/GameMc/@0/@0/@579/@1",
+   "render_bounds": [
+    685.25,
+    245.0,
+    692.65,
+    251.5
+   ],
    "stage_bounds": [
     685.25,
     245.0,
@@ -13553,6 +15539,12 @@
    "kind": "graphic",
    "name": "instance1868",
    "path": "/root1/__mainMc/GameMc/@0/@0/@585",
+   "render_bounds": [
+    658.25,
+    239.75,
+    708.3,
+    313.45
+   ],
    "stage_bounds": [
     658.25,
     239.75,
@@ -13594,6 +15586,12 @@
    "kind": "movie_clip",
    "name": "instance1869",
    "path": "/root1/__mainMc/GameMc/@0/@0/@586",
+   "render_bounds": [
+    687.05,
+    276.05,
+    689.7,
+    280.95
+   ],
    "stage_bounds": [
     687.05,
     276.05,
@@ -13635,6 +15633,12 @@
    "kind": "graphic",
    "name": "instance1870",
    "path": "/root1/__mainMc/GameMc/@0/@0/@586/@1",
+   "render_bounds": [
+    687.05,
+    276.05,
+    689.7,
+    280.95
+   ],
    "stage_bounds": [
     687.05,
     276.05,
@@ -13675,6 +15679,12 @@
    "kind": "graphic",
    "name": "instance1871",
    "path": "/root1/__mainMc/GameMc/@0/@0/@589",
+   "render_bounds": [
+    679.65,
+    277.4,
+    689.2,
+    282.4
+   ],
    "stage_bounds": [
     679.65,
     277.4,
@@ -13716,6 +15726,12 @@
    "kind": "movie_clip",
    "name": "instance1872",
    "path": "/root1/__mainMc/GameMc/@0/@0/@590",
+   "render_bounds": [
+    679.8,
+    277.45,
+    682.45,
+    282.35
+   ],
    "stage_bounds": [
     679.8,
     277.45,
@@ -13757,6 +15773,12 @@
    "kind": "graphic",
    "name": "instance1873",
    "path": "/root1/__mainMc/GameMc/@0/@0/@590/@1",
+   "render_bounds": [
+    679.8,
+    277.45,
+    682.45,
+    282.35
+   ],
    "stage_bounds": [
     679.8,
     277.45,
@@ -13797,6 +15819,12 @@
    "kind": "graphic",
    "name": "instance1874",
    "path": "/root1/__mainMc/GameMc/@0/@0/@616",
+   "render_bounds": [
+    673.35,
+    259.2,
+    692.85,
+    282.4
+   ],
    "stage_bounds": [
     673.35,
     259.2,
@@ -13838,6 +15866,12 @@
    "kind": "movie_clip",
    "name": "instance1875",
    "path": "/root1/__mainMc/GameMc/@0/@0/@617",
+   "render_bounds": [
+    674.25,
+    293.65,
+    693.8,
+    314.35
+   ],
    "stage_bounds": [
     674.25,
     293.65,
@@ -13880,6 +15914,12 @@
    "kind": "movie_clip",
    "name": "instance1876",
    "path": "/root1/__mainMc/GameMc/@0/@0/@617/@1",
+   "render_bounds": [
+    674.25,
+    293.65,
+    693.8,
+    314.35
+   ],
    "stage_bounds": [
     674.25,
     293.65,
@@ -13921,6 +15961,12 @@
    "kind": "graphic",
    "name": "instance1877",
    "path": "/root1/__mainMc/GameMc/@0/@0/@617/@1/@10",
+   "render_bounds": [
+    674.25,
+    293.65,
+    693.8,
+    314.35
+   ],
    "stage_bounds": [
     674.25,
     293.65,
@@ -13961,6 +16007,12 @@
    "kind": "graphic",
    "name": "instance1878",
    "path": "/root1/__mainMc/GameMc/@0/@0/@623",
+   "render_bounds": [
+    -4.2,
+    302.45,
+    34.45,
+    347.85
+   ],
    "stage_bounds": [
     -4.2,
     302.45,
@@ -14002,6 +16054,12 @@
    "kind": "movie_clip",
    "name": "instance1879",
    "path": "/root1/__mainMc/GameMc/@0/@0/@624",
+   "render_bounds": [
+    561.8,
+    28.2,
+    596.65,
+    87.95
+   ],
    "stage_bounds": [
     561.8,
     28.2,
@@ -14043,6 +16101,12 @@
    "kind": "graphic",
    "name": "instance1880",
    "path": "/root1/__mainMc/GameMc/@0/@0/@624/@4",
+   "render_bounds": [
+    561.8,
+    28.2,
+    596.65,
+    87.95
+   ],
    "stage_bounds": [
     561.8,
     28.2,
@@ -14084,6 +16148,12 @@
    "kind": "movie_clip",
    "name": "instance1881",
    "path": "/root1/__mainMc/GameMc/@0/@0/@629",
+   "render_bounds": [
+    40.0,
+    13.0,
+    83.3,
+    66.55
+   ],
    "stage_bounds": [
     40.0,
     13.0,
@@ -14125,6 +16195,12 @@
    "kind": "graphic",
    "name": "instance1882",
    "path": "/root1/__mainMc/GameMc/@0/@0/@629/@4",
+   "render_bounds": [
+    40.0,
+    13.0,
+    83.3,
+    66.55
+   ],
    "stage_bounds": [
     40.0,
     13.0,
@@ -14166,6 +16242,12 @@
    "kind": "movie_clip",
    "name": "instance1883",
    "path": "/root1/__mainMc/GameMc/@0/@0/@634",
+   "render_bounds": [
+    314.65,
+    118.4,
+    350.65,
+    208.45
+   ],
    "stage_bounds": [
     314.65,
     118.4,
@@ -14208,6 +16290,12 @@
    "kind": "movie_clip",
    "name": "instance1884",
    "path": "/root1/__mainMc/GameMc/@0/@0/@634/@1",
+   "render_bounds": [
+    314.65,
+    118.4,
+    350.65,
+    208.45
+   ],
    "stage_bounds": [
     314.65,
     118.4,
@@ -14249,6 +16337,12 @@
    "kind": "graphic",
    "name": "instance1885",
    "path": "/root1/__mainMc/GameMc/@0/@0/@634/@1/@1",
+   "render_bounds": [
+    314.65,
+    118.4,
+    350.65,
+    208.45
+   ],
    "stage_bounds": [
     314.65,
     118.4,
@@ -14290,6 +16384,12 @@
    "kind": "movie_clip",
    "name": "instance1886",
    "path": "/root1/__mainMc/GameMc/@0/@0/@636",
+   "render_bounds": [
+    397.75,
+    186.7,
+    430.75,
+    249.8
+   ],
    "stage_bounds": [
     397.75,
     186.7,
@@ -14332,6 +16432,12 @@
    "kind": "movie_clip",
    "name": "instance1887",
    "path": "/root1/__mainMc/GameMc/@0/@0/@636/@1",
+   "render_bounds": [
+    397.75,
+    186.7,
+    430.75,
+    249.8
+   ],
    "stage_bounds": [
     397.75,
     186.7,
@@ -14373,6 +16479,12 @@
    "kind": "graphic",
    "name": "instance1888",
    "path": "/root1/__mainMc/GameMc/@0/@0/@636/@1/@1",
+   "render_bounds": [
+    397.75,
+    186.7,
+    430.75,
+    249.8
+   ],
    "stage_bounds": [
     397.75,
     186.7,
@@ -14414,6 +16526,12 @@
    "kind": "movie_clip",
    "name": "instance1889",
    "path": "/root1/__mainMc/GameMc/@0/@0/@638",
+   "render_bounds": [
+    103.0,
+    200.8,
+    129.85,
+    248.9
+   ],
    "stage_bounds": [
     103.0,
     200.8,
@@ -14456,6 +16574,12 @@
    "kind": "movie_clip",
    "name": "instance1890",
    "path": "/root1/__mainMc/GameMc/@0/@0/@638/@1",
+   "render_bounds": [
+    103.0,
+    200.8,
+    129.85,
+    248.9
+   ],
    "stage_bounds": [
     103.0,
     200.8,
@@ -14497,6 +16621,12 @@
    "kind": "graphic",
    "name": "instance1891",
    "path": "/root1/__mainMc/GameMc/@0/@0/@638/@1/@4",
+   "render_bounds": [
+    103.0,
+    200.8,
+    129.85,
+    248.9
+   ],
    "stage_bounds": [
     103.0,
     200.8,
@@ -14538,6 +16668,12 @@
    "kind": "movie_clip",
    "name": "instance1892",
    "path": "/root1/__mainMc/GameMc/@0/@0/@640",
+   "render_bounds": [
+    125.4,
+    29.25,
+    165.75,
+    117.55
+   ],
    "stage_bounds": [
     125.4,
     29.25,
@@ -14580,6 +16716,12 @@
    "kind": "movie_clip",
    "name": "instance1893",
    "path": "/root1/__mainMc/GameMc/@0/@0/@640/@1",
+   "render_bounds": [
+    125.4,
+    29.25,
+    165.75,
+    117.55
+   ],
    "stage_bounds": [
     125.4,
     29.25,
@@ -14621,6 +16763,12 @@
    "kind": "graphic",
    "name": "instance1894",
    "path": "/root1/__mainMc/GameMc/@0/@0/@640/@1/@1",
+   "render_bounds": [
+    125.4,
+    29.25,
+    165.75,
+    117.55
+   ],
    "stage_bounds": [
     125.4,
     29.25,
@@ -14661,6 +16809,12 @@
    "kind": "graphic",
    "name": "instance1895",
    "path": "/root1/__mainMc/GameMc/@0/@0/@651",
+   "render_bounds": [
+    10.7,
+    302.75,
+    234.85,
+    390.75
+   ],
    "stage_bounds": [
     10.7,
     302.75,
@@ -14702,6 +16856,12 @@
    "kind": "movie_clip",
    "name": "instance1896",
    "path": "/root1/__mainMc/GameMc/@0/@0/@652",
+   "render_bounds": [
+    20.65,
+    348.9,
+    47.2,
+    367.25
+   ],
    "stage_bounds": [
     20.65,
     348.9,
@@ -14743,6 +16903,12 @@
    "kind": "graphic",
    "name": "instance1897",
    "path": "/root1/__mainMc/GameMc/@0/@0/@652/@4",
+   "render_bounds": [
+    20.65,
+    348.9,
+    47.2,
+    367.25
+   ],
    "stage_bounds": [
     20.65,
     348.9,
@@ -14784,6 +16950,12 @@
    "kind": "movie_clip",
    "name": "instance1898",
    "path": "/root1/__mainMc/GameMc/@0/@0/@657",
+   "render_bounds": [
+    153.05,
+    366.75,
+    175.45,
+    389.15
+   ],
    "stage_bounds": [
     153.05,
     366.75,
@@ -14825,6 +16997,12 @@
    "kind": "graphic",
    "name": "instance1899",
    "path": "/root1/__mainMc/GameMc/@0/@0/@657/@3",
+   "render_bounds": [
+    153.05,
+    366.75,
+    175.45,
+    389.15
+   ],
    "stage_bounds": [
     153.05,
     366.75,
@@ -14866,6 +17044,12 @@
    "kind": "movie_clip",
    "name": "instance1900",
    "path": "/root1/__mainMc/GameMc/@0/@0/@661",
+   "render_bounds": [
+    193.25,
+    382.45,
+    242.75,
+    430.65
+   ],
    "stage_bounds": [
     196.25,
     385.45,
@@ -14907,6 +17091,12 @@
    "kind": "graphic",
    "name": "instance1901",
    "path": "/root1/__mainMc/GameMc/@0/@0/@661/@13",
+   "render_bounds": [
+    196.25,
+    385.45,
+    239.75,
+    427.65
+   ],
    "stage_bounds": [
     196.25,
     385.45,
@@ -14948,6 +17138,12 @@
    "kind": "movie_clip",
    "name": "instance1902",
    "path": "/root1/__mainMc/GameMc/@0/@0/@661/@14",
+   "render_bounds": [
+    205.5,
+    400.3,
+    227.0,
+    417.35
+   ],
    "stage_bounds": [
     205.5,
     400.3,
@@ -14989,6 +17185,12 @@
    "kind": "graphic",
    "name": "instance1903",
    "path": "/root1/__mainMc/GameMc/@0/@0/@661/@14/@1",
+   "render_bounds": [
+    205.5,
+    400.3,
+    227.0,
+    417.35
+   ],
    "stage_bounds": [
     205.5,
     400.3,
@@ -15029,6 +17231,12 @@
    "kind": "graphic",
    "name": "instance1904",
    "path": "/root1/__mainMc/GameMc/@0/@0/@661/@18",
+   "render_bounds": [
+    205.15,
+    393.6,
+    229.85,
+    418.15
+   ],
    "stage_bounds": [
     205.15,
     393.6,
@@ -15070,6 +17278,12 @@
    "kind": "movie_clip",
    "name": "instance1905",
    "path": "/root1/__mainMc/GameMc/@0/@0/@680",
+   "render_bounds": [
+    189.7,
+    334.9,
+    265.75,
+    410.2
+   ],
    "stage_bounds": [
     189.7,
     334.9,
@@ -15111,6 +17325,12 @@
    "kind": "graphic",
    "name": "instance1906",
    "path": "/root1/__mainMc/GameMc/@0/@0/@680/@17",
+   "render_bounds": [
+    189.7,
+    334.9,
+    265.75,
+    410.2
+   ],
    "stage_bounds": [
     189.7,
     334.9,
@@ -15152,6 +17372,12 @@
    "kind": "movie_clip",
    "name": "instance1907",
    "path": "/root1/__mainMc/GameMc/@0/@0/@698",
+   "render_bounds": [
+    112.0,
+    376.45,
+    161.5,
+    422.6
+   ],
    "stage_bounds": [
     115.0,
     379.45,
@@ -15193,6 +17419,12 @@
    "kind": "graphic",
    "name": "instance1908",
    "path": "/root1/__mainMc/GameMc/@0/@0/@698/@13",
+   "render_bounds": [
+    115.0,
+    379.45,
+    158.5,
+    419.6
+   ],
    "stage_bounds": [
     115.0,
     379.45,
@@ -15234,6 +17466,12 @@
    "kind": "movie_clip",
    "name": "instance1909",
    "path": "/root1/__mainMc/GameMc/@0/@0/@698/@14",
+   "render_bounds": [
+    125.0,
+    394.9,
+    146.0,
+    409.3
+   ],
    "stage_bounds": [
     125.0,
     394.9,
@@ -15275,6 +17513,12 @@
    "kind": "graphic",
    "name": "instance1910",
    "path": "/root1/__mainMc/GameMc/@0/@0/@698/@14/@1",
+   "render_bounds": [
+    125.0,
+    394.9,
+    146.0,
+    409.3
+   ],
    "stage_bounds": [
     125.0,
     394.9,
@@ -15315,6 +17559,12 @@
    "kind": "graphic",
    "name": "instance1911",
    "path": "/root1/__mainMc/GameMc/@0/@0/@698/@18",
+   "render_bounds": [
+    124.0,
+    387.05,
+    148.3,
+    410.85
+   ],
    "stage_bounds": [
     124.0,
     387.05,
@@ -15356,6 +17606,12 @@
    "kind": "movie_clip",
    "name": "instance1912",
    "path": "/root1/__mainMc/GameMc/@0/@0/@717",
+   "render_bounds": [
+    212.7,
+    333.8,
+    232.3,
+    353.35
+   ],
    "stage_bounds": [
     212.7,
     333.8,
@@ -15397,6 +17653,12 @@
    "kind": "graphic",
    "name": "instance1913",
    "path": "/root1/__mainMc/GameMc/@0/@0/@717/@3",
+   "render_bounds": [
+    212.7,
+    333.8,
+    232.3,
+    353.35
+   ],
    "stage_bounds": [
     212.7,
     333.8,
@@ -15438,6 +17700,12 @@
    "kind": "movie_clip",
    "name": "instance1914",
    "path": "/root1/__mainMc/GameMc/@0/@0/@721",
+   "render_bounds": [
+    186.45,
+    357.85,
+    206.05,
+    377.4
+   ],
    "stage_bounds": [
     186.45,
     357.85,
@@ -15479,6 +17747,12 @@
    "kind": "graphic",
    "name": "instance1915",
    "path": "/root1/__mainMc/GameMc/@0/@0/@721/@3",
+   "render_bounds": [
+    186.45,
+    357.85,
+    206.05,
+    377.4
+   ],
    "stage_bounds": [
     186.45,
     357.85,
@@ -15520,6 +17794,12 @@
    "kind": "movie_clip",
    "name": "instance1916",
    "path": "/root1/__mainMc/GameMc/@0/@0/@725",
+   "render_bounds": [
+    193.15,
+    325.8,
+    209.0,
+    341.65
+   ],
    "stage_bounds": [
     193.15,
     325.8,
@@ -15561,6 +17841,12 @@
    "kind": "graphic",
    "name": "instance1917",
    "path": "/root1/__mainMc/GameMc/@0/@0/@725/@3",
+   "render_bounds": [
+    193.15,
+    325.8,
+    209.0,
+    341.65
+   ],
    "stage_bounds": [
     193.15,
     325.8,
@@ -15602,6 +17888,12 @@
    "kind": "movie_clip",
    "name": "instance1918",
    "path": "/root1/__mainMc/GameMc/@0/@0/@729",
+   "render_bounds": [
+    182.3,
+    338.15,
+    201.35,
+    357.2
+   ],
    "stage_bounds": [
     182.3,
     338.15,
@@ -15643,6 +17935,12 @@
    "kind": "graphic",
    "name": "instance1919",
    "path": "/root1/__mainMc/GameMc/@0/@0/@729/@3",
+   "render_bounds": [
+    182.3,
+    338.15,
+    201.35,
+    357.2
+   ],
    "stage_bounds": [
     182.3,
     338.15,
@@ -15684,6 +17982,12 @@
    "kind": "movie_clip",
    "name": "instance1920",
    "path": "/root1/__mainMc/GameMc/@0/@0/@733",
+   "render_bounds": [
+    177.15,
+    371.75,
+    199.55,
+    394.15
+   ],
    "stage_bounds": [
     177.15,
     371.75,
@@ -15725,6 +18029,12 @@
    "kind": "graphic",
    "name": "instance1921",
    "path": "/root1/__mainMc/GameMc/@0/@0/@733/@3",
+   "render_bounds": [
+    177.15,
+    371.75,
+    199.55,
+    394.15
+   ],
    "stage_bounds": [
     177.15,
     371.75,
@@ -15765,6 +18075,12 @@
    "kind": "graphic",
    "name": "instance1922",
    "path": "/root1/__mainMc/GameMc/@0/@0/@737",
+   "render_bounds": [
+    27.7,
+    278.8,
+    83.65,
+    301.05
+   ],
    "stage_bounds": [
     27.7,
     278.8,
@@ -15806,6 +18122,12 @@
    "kind": "movie_clip",
    "name": "instance1923",
    "path": "/root1/__mainMc/GameMc/@0/@0/@738",
+   "render_bounds": [
+    22.85,
+    276.4,
+    207.2,
+    366.4
+   ],
    "stage_bounds": [
     27.85,
     279.4,
@@ -15847,6 +18169,12 @@
    "kind": "graphic",
    "name": "instance1924",
    "path": "/root1/__mainMc/GameMc/@0/@0/@738/@3",
+   "render_bounds": [
+    27.85,
+    279.4,
+    202.2,
+    363.4
+   ],
    "stage_bounds": [
     27.85,
     279.4,
@@ -15888,6 +18216,12 @@
    "kind": "movie_clip",
    "name": "instance1925",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742",
+   "render_bounds": [
+    21.15,
+    216.9,
+    135.2,
+    334.1
+   ],
    "stage_bounds": [
     21.15,
     216.9,
@@ -15930,6 +18264,12 @@
    "kind": "movie_clip",
    "name": "instance1926",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@1",
+   "render_bounds": [
+    92.75,
+    285.25,
+    120.7,
+    316.55
+   ],
    "stage_bounds": [
     92.75,
     285.25,
@@ -15971,6 +18311,12 @@
    "kind": "graphic",
    "name": "instance1927",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@1/@10",
+   "render_bounds": [
+    92.75,
+    285.25,
+    120.7,
+    316.55
+   ],
    "stage_bounds": [
     92.75,
     285.25,
@@ -16012,6 +18358,12 @@
    "kind": "movie_clip",
    "name": "instance1928",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@12",
+   "render_bounds": [
+    63.2,
+    296.1,
+    91.15,
+    327.4
+   ],
    "stage_bounds": [
     63.2,
     296.1,
@@ -16053,6 +18405,12 @@
    "kind": "graphic",
    "name": "instance1929",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@12/@10",
+   "render_bounds": [
+    63.2,
+    296.1,
+    91.15,
+    327.4
+   ],
    "stage_bounds": [
     63.2,
     296.1,
@@ -16093,6 +18451,12 @@
    "kind": "graphic",
    "name": "instance1930",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@31",
+   "render_bounds": [
+    75.8,
+    292.25,
+    114.4,
+    334.1
+   ],
    "stage_bounds": [
     75.8,
     292.25,
@@ -16134,6 +18498,12 @@
    "kind": "movie_clip",
    "name": "instance1931",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@32",
+   "render_bounds": [
+    21.15,
+    216.9,
+    135.2,
+    320.9
+   ],
    "stage_bounds": [
     21.15,
     216.9,
@@ -16175,6 +18545,12 @@
    "kind": "graphic",
    "name": "instance1932",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@32/@15",
+   "render_bounds": [
+    21.15,
+    216.9,
+    135.2,
+    320.9
+   ],
    "stage_bounds": [
     21.15,
     216.9,
@@ -16216,6 +18592,12 @@
    "kind": "movie_clip",
    "name": "instance1933",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@48",
+   "render_bounds": [
+    45.6,
+    248.6,
+    119.0,
+    314.65
+   ],
    "stage_bounds": [
     45.6,
     248.6,
@@ -16257,6 +18639,12 @@
    "kind": "graphic",
    "name": "instance1934",
    "path": "/root1/__mainMc/GameMc/@0/@0/@742/@48/@9",
+   "render_bounds": [
+    45.6,
+    248.6,
+    119.0,
+    314.65
+   ],
    "stage_bounds": [
     45.6,
     248.6,
@@ -16298,6 +18686,12 @@
    "kind": "movie_clip",
    "name": "instance1935",
    "path": "/root1/__mainMc/GameMc/@0/@0/@791",
+   "render_bounds": [
+    81.15,
+    263.15,
+    104.95,
+    285.75
+   ],
    "stage_bounds": [
     81.15,
     263.15,
@@ -16339,6 +18733,12 @@
    "kind": "graphic",
    "name": "instance1936",
    "path": "/root1/__mainMc/GameMc/@0/@0/@791/@4",
+   "render_bounds": [
+    81.15,
+    263.15,
+    104.95,
+    285.75
+   ],
    "stage_bounds": [
     81.15,
     263.15,
@@ -16380,6 +18780,12 @@
    "kind": "movie_clip",
    "name": "instance1937",
    "path": "/root1/__mainMc/GameMc/@0/@0/@796",
+   "render_bounds": [
+    52.0,
+    269.15,
+    81.7,
+    298.65
+   ],
    "stage_bounds": [
     52.0,
     269.15,
@@ -16421,6 +18827,12 @@
    "kind": "graphic",
    "name": "instance1938",
    "path": "/root1/__mainMc/GameMc/@0/@0/@796/@4",
+   "render_bounds": [
+    52.0,
+    269.15,
+    81.7,
+    298.65
+   ],
    "stage_bounds": [
     52.0,
     269.15,
@@ -16462,6 +18874,12 @@
    "kind": "movie_clip",
    "name": "instance1939",
    "path": "/root1/__mainMc/GameMc/@0/@0/@801",
+   "render_bounds": [
+    -6.4,
+    291.0,
+    185.3,
+    405.05
+   ],
    "stage_bounds": [
     -1.4,
     294.0,
@@ -16503,6 +18921,12 @@
    "kind": "graphic",
    "name": "instance1940",
    "path": "/root1/__mainMc/GameMc/@0/@0/@801/@16",
+   "render_bounds": [
+    -1.4,
+    294.0,
+    180.3,
+    402.05
+   ],
    "stage_bounds": [
     -1.4,
     294.0,
@@ -16543,6 +18967,12 @@
    "kind": "graphic",
    "name": "instance1941",
    "path": "/root1/__mainMc/GameMc/@0/@0/@829",
+   "render_bounds": [
+    63.05,
+    298.65,
+    118.35,
+    319.95
+   ],
    "stage_bounds": [
     63.05,
     298.65,
@@ -16584,6 +19014,12 @@
    "kind": "movie_clip",
    "name": "mm",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm",
+   "render_bounds": [
+    140.45,
+    161.0,
+    480.6,
+    442.5
+   ],
    "stage_bounds": [
     140.45,
     161.0,
@@ -16625,6 +19061,12 @@
    "kind": "graphic",
    "name": "instance1942",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@2",
+   "render_bounds": [
+    297.15,
+    330.15,
+    335.1,
+    369.65
+   ],
    "stage_bounds": [
     297.15,
     330.15,
@@ -16666,6 +19108,12 @@
    "kind": "movie_clip",
    "name": "instance1943",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@3",
+   "render_bounds": [
+    339.45,
+    388.55,
+    382.9,
+    439.8
+   ],
    "stage_bounds": [
     339.45,
     388.55,
@@ -16707,6 +19155,12 @@
    "kind": "graphic",
    "name": "instance1944",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@3/@5",
+   "render_bounds": [
+    339.45,
+    388.55,
+    382.9,
+    439.8
+   ],
    "stage_bounds": [
     339.45,
     388.55,
@@ -16748,6 +19202,12 @@
    "kind": "movie_clip",
    "name": "instance1945",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@9",
+   "render_bounds": [
+    318.95,
+    398.15,
+    345.4,
+    442.5
+   ],
    "stage_bounds": [
     318.95,
     398.15,
@@ -16789,6 +19249,12 @@
    "kind": "graphic",
    "name": "instance1946",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@9/@5",
+   "render_bounds": [
+    318.95,
+    398.15,
+    345.4,
+    442.5
+   ],
    "stage_bounds": [
     318.95,
     398.15,
@@ -16830,6 +19296,12 @@
    "kind": "movie_clip",
    "name": "bodyMc1",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/bodyMc1",
+   "render_bounds": [
+    306.8,
+    324.25,
+    381.95,
+    409.2
+   ],
    "stage_bounds": [
     306.8,
     324.25,
@@ -16871,6 +19343,12 @@
    "kind": "graphic",
    "name": "instance2093",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/bodyMc1/@106",
+   "render_bounds": [
+    306.8,
+    324.25,
+    381.95,
+    409.2
+   ],
    "stage_bounds": [
     306.8,
     324.25,
@@ -16911,6 +19389,12 @@
    "kind": "graphic",
    "name": "instance1948",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@123",
+   "render_bounds": [
+    331.7,
+    338.15,
+    370.2,
+    385.0
+   ],
    "stage_bounds": [
     331.7,
     338.15,
@@ -16952,6 +19436,12 @@
    "kind": "movie_clip",
    "name": "head",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head",
+   "render_bounds": [
+    229.2,
+    161.0,
+    480.6,
+    405.65
+   ],
    "stage_bounds": [
     229.2,
     161.0,
@@ -16994,6 +19484,12 @@
    "kind": "movie_clip",
    "name": "head",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/head",
+   "render_bounds": [
+    229.2,
+    161.0,
+    480.6,
+    405.65
+   ],
    "stage_bounds": [
     229.2,
     161.0,
@@ -17035,6 +19531,12 @@
    "kind": "graphic",
    "name": "instance1949",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/head/@24",
+   "render_bounds": [
+    229.2,
+    185.1,
+    480.1,
+    405.65
+   ],
    "stage_bounds": [
     229.2,
     185.1,
@@ -17076,6 +19578,12 @@
    "kind": "movie_clip",
    "name": "hatMc",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/head/hatMc",
+   "render_bounds": [
+    252.05,
+    160.95,
+    480.65,
+    349.7
+   ],
    "stage_bounds": [
     252.05,
     160.95,
@@ -17117,6 +19625,12 @@
    "kind": "graphic",
    "name": "instance1950",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/head/hatMc/@31",
+   "render_bounds": [
+    252.05,
+    160.95,
+    480.65,
+    349.7
+   ],
    "stage_bounds": [
     252.05,
     160.95,
@@ -17158,6 +19672,12 @@
    "kind": "movie_clip",
    "name": "instance1951",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@27",
+   "render_bounds": [
+    285.4,
+    258.05,
+    416.8,
+    366.85
+   ],
    "stage_bounds": [
     285.4,
     258.05,
@@ -17199,6 +19719,12 @@
    "kind": "graphic",
    "name": "instance1952",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@27/@10",
+   "render_bounds": [
+    285.4,
+    258.05,
+    416.8,
+    366.85
+   ],
    "stage_bounds": [
     285.4,
     258.05,
@@ -17240,6 +19766,12 @@
    "kind": "movie_clip",
    "name": "instance1953",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38",
+   "render_bounds": [
+    288.55,
+    258.8,
+    347.95,
+    357.4
+   ],
    "stage_bounds": [
     288.55,
     258.8,
@@ -17281,6 +19813,12 @@
    "kind": "graphic",
    "name": "instance1954",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@4",
+   "render_bounds": [
+    288.95,
+    270.95,
+    345.2,
+    328.75
+   ],
    "stage_bounds": [
     288.95,
     270.95,
@@ -17322,6 +19860,12 @@
    "kind": "movie_clip",
    "name": "instance1955",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@5",
+   "render_bounds": [
+    297.8,
+    283.6,
+    341.0,
+    326.8
+   ],
    "stage_bounds": [
     297.8,
     283.6,
@@ -17363,6 +19907,12 @@
    "kind": "graphic",
    "name": "instance1956",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@5/@1",
+   "render_bounds": [
+    297.8,
+    283.6,
+    341.0,
+    326.8
+   ],
    "stage_bounds": [
     297.8,
     283.6,
@@ -17404,6 +19954,12 @@
    "kind": "movie_clip",
    "name": "instance1957",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@5/@2",
+   "render_bounds": [
+    303.95,
+    289.75,
+    334.85,
+    320.65
+   ],
    "stage_bounds": [
     303.95,
     289.75,
@@ -17445,6 +20001,12 @@
    "kind": "graphic",
    "name": "instance1958",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@5/@2/@4",
+   "render_bounds": [
+    303.95,
+    289.75,
+    334.85,
+    320.65
+   ],
    "stage_bounds": [
     303.95,
     289.75,
@@ -17486,6 +20048,12 @@
    "kind": "movie_clip",
    "name": "instance1959",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@8",
+   "render_bounds": [
+    288.55,
+    258.85,
+    347.95,
+    357.45
+   ],
    "stage_bounds": [
     288.55,
     258.85,
@@ -17507,6 +20075,7 @@
    "blend_mode": "Normal",
    "character_id": 313,
    "class": "flash.display::Shape",
+   "clip_depth": 4,
    "color_transform": {
     "add": [
      0,
@@ -17527,6 +20096,12 @@
    "kind": "graphic",
    "name": "instance1960",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@8/@1",
+   "render_bounds": [
+    297.2,
+    283.15,
+    341.25,
+    327.25
+   ],
    "stage_bounds": [
     297.2,
     283.15,
@@ -17547,6 +20122,7 @@
    "blend_mode": "Normal",
    "character_id": 314,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@8/@1",
    "color_transform": {
     "add": [
      0,
@@ -17567,6 +20143,12 @@
    "kind": "graphic",
    "name": "instance1961",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@38/@8/@3",
+   "render_bounds": [
+    288.55,
+    258.85,
+    347.95,
+    357.45
+   ],
    "stage_bounds": [
     288.55,
     258.85,
@@ -17608,6 +20190,12 @@
    "kind": "movie_clip",
    "name": "instance1962",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47",
+   "render_bounds": [
+    354.25,
+    274.5,
+    416.8,
+    373.1
+   ],
    "stage_bounds": [
     354.25,
     274.5,
@@ -17649,6 +20237,12 @@
    "kind": "graphic",
    "name": "instance1963",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@4",
+   "render_bounds": [
+    360.6,
+    288.1,
+    416.8,
+    345.9
+   ],
    "stage_bounds": [
     360.6,
     288.1,
@@ -17690,6 +20284,12 @@
    "kind": "movie_clip",
    "name": "instance1964",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@5",
+   "render_bounds": [
+    362.65,
+    299.1,
+    405.85,
+    342.3
+   ],
    "stage_bounds": [
     362.65,
     299.1,
@@ -17731,6 +20331,12 @@
    "kind": "graphic",
    "name": "instance1965",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@5/@1",
+   "render_bounds": [
+    362.65,
+    299.1,
+    405.85,
+    342.3
+   ],
    "stage_bounds": [
     362.65,
     299.1,
@@ -17772,6 +20378,12 @@
    "kind": "movie_clip",
    "name": "instance1966",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@5/@2",
+   "render_bounds": [
+    368.75,
+    305.25,
+    399.7,
+    336.2
+   ],
    "stage_bounds": [
     368.75,
     305.25,
@@ -17813,6 +20425,12 @@
    "kind": "graphic",
    "name": "instance1967",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@5/@2/@4",
+   "render_bounds": [
+    368.75,
+    305.25,
+    399.7,
+    336.2
+   ],
    "stage_bounds": [
     368.75,
     305.25,
@@ -17854,6 +20472,12 @@
    "kind": "movie_clip",
    "name": "instance1968",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@8",
+   "render_bounds": [
+    354.3,
+    274.55,
+    413.65,
+    373.15
+   ],
    "stage_bounds": [
     354.3,
     274.55,
@@ -17875,6 +20499,7 @@
    "blend_mode": "Normal",
    "character_id": 313,
    "class": "flash.display::Shape",
+   "clip_depth": 4,
    "color_transform": {
     "add": [
      0,
@@ -17895,6 +20520,12 @@
    "kind": "graphic",
    "name": "instance1969",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@8/@1",
+   "render_bounds": [
+    362.4,
+    298.75,
+    406.45,
+    342.8
+   ],
    "stage_bounds": [
     362.4,
     298.75,
@@ -17915,6 +20546,7 @@
    "blend_mode": "Normal",
    "character_id": 314,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@8/@1",
    "color_transform": {
     "add": [
      0,
@@ -17935,6 +20567,12 @@
    "kind": "graphic",
    "name": "instance1970",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/head/@47/@8/@3",
+   "render_bounds": [
+    354.3,
+    274.55,
+    413.65,
+    373.15
+   ],
    "stage_bounds": [
     354.3,
     274.55,
@@ -17975,6 +20613,12 @@
    "kind": "graphic",
    "name": "instance1971",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@180",
+   "render_bounds": [
+    272.2,
+    334.05,
+    315.25,
+    363.9
+   ],
    "stage_bounds": [
     272.2,
     334.05,
@@ -18015,6 +20659,12 @@
    "kind": "graphic",
    "name": "instance2119",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@186",
+   "render_bounds": [
+    140.45,
+    258.7,
+    349.6,
+    405.35
+   ],
    "stage_bounds": [
     140.45,
     258.7,
@@ -18055,6 +20705,12 @@
    "kind": "graphic",
    "name": "instance1973",
    "path": "/root1/__mainMc/GameMc/@0/@0/mm/@197",
+   "render_bounds": [
+    305.25,
+    359.55,
+    345.85,
+    383.4
+   ],
    "stage_bounds": [
     305.25,
     359.55,
@@ -18095,6 +20751,12 @@
    "kind": "graphic",
    "name": "instance1974",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1037",
+   "render_bounds": [
+    216.05,
+    417.75,
+    267.9,
+    461.7
+   ],
    "stage_bounds": [
     216.05,
     417.75,
@@ -18136,6 +20798,12 @@
    "kind": "movie_clip",
    "name": "instance1975",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1038",
+   "render_bounds": [
+    427.35,
+    399.3,
+    483.1,
+    451.5
+   ],
    "stage_bounds": [
     430.35,
     402.3,
@@ -18177,6 +20845,12 @@
    "kind": "graphic",
    "name": "instance1976",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1038/@13",
+   "render_bounds": [
+    430.35,
+    402.3,
+    480.1,
+    448.5
+   ],
    "stage_bounds": [
     430.35,
     402.3,
@@ -18218,6 +20892,12 @@
    "kind": "movie_clip",
    "name": "instance1977",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1038/@14",
+   "render_bounds": [
+    441.65,
+    419.9,
+    465.75,
+    436.75
+   ],
    "stage_bounds": [
     441.65,
     419.9,
@@ -18259,6 +20939,12 @@
    "kind": "graphic",
    "name": "instance1978",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1038/@14/@1",
+   "render_bounds": [
+    441.65,
+    419.9,
+    465.75,
+    436.75
+   ],
    "stage_bounds": [
     441.65,
     419.9,
@@ -18299,6 +20985,12 @@
    "kind": "graphic",
    "name": "instance1979",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1038/@18",
+   "render_bounds": [
+    440.65,
+    411.05,
+    468.45,
+    438.4
+   ],
    "stage_bounds": [
     440.65,
     411.05,
@@ -18339,6 +21031,12 @@
    "kind": "graphic",
    "name": "instance1980",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1082",
+   "render_bounds": [
+    226.55,
+    410.8,
+    452.65,
+    485.1
+   ],
    "stage_bounds": [
     226.55,
     410.8,
@@ -18380,6 +21078,12 @@
    "kind": "movie_clip",
    "name": "instance1981",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1083",
+   "render_bounds": [
+    457.7,
+    437.8,
+    480.1,
+    460.2
+   ],
    "stage_bounds": [
     457.7,
     437.8,
@@ -18421,6 +21125,12 @@
    "kind": "graphic",
    "name": "instance1982",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1083/@3",
+   "render_bounds": [
+    457.7,
+    437.8,
+    480.1,
+    460.2
+   ],
    "stage_bounds": [
     457.7,
     437.8,
@@ -18462,6 +21172,12 @@
    "kind": "movie_clip",
    "name": "instance1983",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1087",
+   "render_bounds": [
+    181.1,
+    423.8,
+    200.7,
+    443.35
+   ],
    "stage_bounds": [
     181.1,
     423.8,
@@ -18503,6 +21219,12 @@
    "kind": "graphic",
    "name": "instance1984",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1087/@3",
+   "render_bounds": [
+    181.1,
+    423.8,
+    200.7,
+    443.35
+   ],
    "stage_bounds": [
     181.1,
     423.8,
@@ -18544,6 +21266,12 @@
    "kind": "movie_clip",
    "name": "instance1985",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1091",
+   "render_bounds": [
+    424.0,
+    483.6,
+    446.4,
+    506.0
+   ],
    "stage_bounds": [
     424.0,
     483.6,
@@ -18585,6 +21313,12 @@
    "kind": "graphic",
    "name": "instance1986",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1091/@3",
+   "render_bounds": [
+    424.0,
+    483.6,
+    446.4,
+    506.0
+   ],
    "stage_bounds": [
     424.0,
     483.6,
@@ -18626,6 +21360,12 @@
    "kind": "movie_clip",
    "name": "instance1987",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1095",
+   "render_bounds": [
+    128.75,
+    446.2,
+    151.15,
+    468.6
+   ],
    "stage_bounds": [
     128.75,
     446.2,
@@ -18667,6 +21407,12 @@
    "kind": "graphic",
    "name": "instance1988",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1095/@3",
+   "render_bounds": [
+    128.75,
+    446.2,
+    151.15,
+    468.6
+   ],
    "stage_bounds": [
     128.75,
     446.2,
@@ -18707,6 +21453,12 @@
    "kind": "graphic",
    "name": "instance1989",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1099",
+   "render_bounds": [
+    491.1,
+    463.55,
+    492.5,
+    464.9
+   ],
    "stage_bounds": [
     491.1,
     463.55,
@@ -18748,6 +21500,12 @@
    "kind": "movie_clip",
    "name": "startGame",
    "path": "/root1/__mainMc/GameMc/@0/@0/startGame",
+   "render_bounds": [
+    440.2,
+    164.1,
+    673.3,
+    241.3
+   ],
    "stage_bounds": [
     450.2,
     174.1,
@@ -18789,6 +21547,12 @@
    "kind": "graphic",
    "name": "instance1990",
    "path": "/root1/__mainMc/GameMc/@0/@0/startGame/@1",
+   "render_bounds": [
+    450.2,
+    174.1,
+    498.7,
+    231.3
+   ],
    "stage_bounds": [
     450.2,
     174.1,
@@ -18830,6 +21594,12 @@
    "kind": "movie_clip",
    "name": "instance1991",
    "path": "/root1/__mainMc/GameMc/@0/@0/startGame/@2",
+   "render_bounds": [
+    473.65,
+    181.85,
+    663.3,
+    228.15
+   ],
    "stage_bounds": [
     473.65,
     181.85,
@@ -18871,6 +21641,12 @@
    "kind": "graphic",
    "name": "instance1992",
    "path": "/root1/__mainMc/GameMc/@0/@0/startGame/@2/@4",
+   "render_bounds": [
+    473.65,
+    181.85,
+    663.3,
+    228.15
+   ],
    "stage_bounds": [
     473.65,
     181.85,
@@ -18911,6 +21687,12 @@
    "kind": "graphic",
    "name": "instance1993",
    "path": "/root1/__mainMc/GameMc/@0/@0/startGame/@13",
+   "render_bounds": [
+    453.8,
+    177.7,
+    495.1,
+    227.7
+   ],
    "stage_bounds": [
     453.8,
     177.7,
@@ -18952,6 +21734,12 @@
    "kind": "movie_clip",
    "name": "instance1994",
    "path": "/root1/__mainMc/GameMc/@0/@0/startGame/@14",
+   "render_bounds": [
+    491.5,
+    188.65,
+    655.0,
+    221.05
+   ],
    "stage_bounds": [
     494.5,
     191.65,
@@ -18993,6 +21781,12 @@
    "kind": "text",
    "name": "MainMenu_2",
    "path": "/root1/__mainMc/GameMc/@0/@0/startGame/@14/MainMenu_2",
+   "render_bounds": [
+    494.5,
+    191.65,
+    652.0,
+    218.05
+   ],
    "stage_bounds": [
     494.5,
     191.65,
@@ -19035,6 +21829,12 @@
    "kind": "movie_clip",
    "name": "howToPlay",
    "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay",
+   "render_bounds": [
+    439.3,
+    236.7,
+    673.75,
+    313.15
+   ],
    "stage_bounds": [
     449.3,
     246.7,
@@ -19076,6 +21876,12 @@
    "kind": "graphic",
    "name": "instance1995",
    "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay/@1",
+   "render_bounds": [
+    449.3,
+    246.7,
+    504.9,
+    303.15
+   ],
    "stage_bounds": [
     449.3,
     246.7,
@@ -19117,6 +21923,12 @@
    "kind": "movie_clip",
    "name": "instance1996",
    "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay/@2",
+   "render_bounds": [
+    474.1,
+    254.2,
+    663.75,
+    300.5
+   ],
    "stage_bounds": [
     474.1,
     254.2,
@@ -19158,6 +21970,12 @@
    "kind": "graphic",
    "name": "instance1997",
    "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay/@2/@4",
+   "render_bounds": [
+    474.1,
+    254.2,
+    663.75,
+    300.5
+   ],
    "stage_bounds": [
     474.1,
     254.2,
@@ -19198,6 +22016,12 @@
    "kind": "graphic",
    "name": "instance1998",
    "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay/@8",
+   "render_bounds": [
+    452.0,
+    249.4,
+    502.2,
+    300.45
+   ],
    "stage_bounds": [
     452.0,
     249.4,
@@ -19239,6 +22063,12 @@
    "kind": "movie_clip",
    "name": "instance1999",
    "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay/@9",
+   "render_bounds": [
+    493.75,
+    263.05,
+    657.25,
+    292.4
+   ],
    "stage_bounds": [
     496.75,
     266.05,
@@ -19280,6 +22110,12 @@
    "kind": "text",
    "name": "MainMenu_3",
    "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay/@9/MainMenu_3",
+   "render_bounds": [
+    496.75,
+    266.05,
+    654.25,
+    289.4
+   ],
    "stage_bounds": [
     496.75,
     266.05,
@@ -19322,6 +22158,12 @@
    "kind": "movie_clip",
    "name": "quality",
    "path": "/root1/__mainMc/GameMc/@0/@0/quality",
+   "render_bounds": [
+    639.8,
+    19.45,
+    695.0,
+    74.65
+   ],
    "stage_bounds": [
     647.8,
     27.45,
@@ -19364,6 +22206,12 @@
    "kind": "movie_clip",
    "name": "instance2000",
    "path": "/root1/__mainMc/GameMc/@0/@0/quality/@1",
+   "render_bounds": [
+    647.8,
+    27.45,
+    687.0,
+    66.65
+   ],
    "stage_bounds": [
     647.8,
     27.45,
@@ -19405,6 +22253,12 @@
    "kind": "graphic",
    "name": "instance2001",
    "path": "/root1/__mainMc/GameMc/@0/@0/quality/@1/@4",
+   "render_bounds": [
+    647.8,
+    27.45,
+    687.0,
+    66.65
+   ],
    "stage_bounds": [
     647.8,
     27.45,
@@ -19446,6 +22300,12 @@
    "kind": "movie_clip",
    "name": "instance2002",
    "path": "/root1/__mainMc/GameMc/@0/@0/quality/@6",
+   "render_bounds": [
+    658.05,
+    38.05,
+    677.7,
+    58.35
+   ],
    "stage_bounds": [
     658.05,
     38.05,
@@ -19487,6 +22347,12 @@
    "kind": "graphic",
    "name": "instance2003",
    "path": "/root1/__mainMc/GameMc/@0/@0/quality/@6/@1",
+   "render_bounds": [
+    658.05,
+    38.05,
+    677.7,
+    58.35
+   ],
    "stage_bounds": [
     658.05,
     38.05,
@@ -19528,6 +22394,12 @@
    "kind": "movie_clip",
    "name": "sound",
    "path": "/root1/__mainMc/GameMc/@0/@0/sound",
+   "render_bounds": [
+    639.8,
+    66.3,
+    695.0,
+    121.5
+   ],
    "stage_bounds": [
     647.8,
     74.3,
@@ -19570,6 +22442,12 @@
    "kind": "movie_clip",
    "name": "instance2004",
    "path": "/root1/__mainMc/GameMc/@0/@0/sound/@1",
+   "render_bounds": [
+    647.8,
+    74.3,
+    687.0,
+    113.5
+   ],
    "stage_bounds": [
     647.8,
     74.3,
@@ -19612,6 +22490,12 @@
    "kind": "movie_clip",
    "name": "instance2005",
    "path": "/root1/__mainMc/GameMc/@0/@0/sound/@1/@1",
+   "render_bounds": [
+    647.8,
+    74.3,
+    687.0,
+    113.5
+   ],
    "stage_bounds": [
     647.8,
     74.3,
@@ -19653,6 +22537,12 @@
    "kind": "graphic",
    "name": "instance2006",
    "path": "/root1/__mainMc/GameMc/@0/@0/sound/@1/@1/@4",
+   "render_bounds": [
+    647.8,
+    74.3,
+    687.0,
+    113.5
+   ],
    "stage_bounds": [
     647.8,
     74.3,
@@ -19693,6 +22583,12 @@
    "kind": "graphic",
    "name": "instance2007",
    "path": "/root1/__mainMc/GameMc/@0/@0/sound/@1/@9",
+   "render_bounds": [
+    653.5,
+    82.55,
+    680.95,
+    105.5
+   ],
    "stage_bounds": [
     653.5,
     82.55,
@@ -19734,6 +22630,12 @@
    "kind": "movie_clip",
    "name": "music",
    "path": "/root1/__mainMc/GameMc/@0/@0/music",
+   "render_bounds": [
+    639.8,
+    113.15,
+    695.0,
+    168.35
+   ],
    "stage_bounds": [
     647.8,
     121.15,
@@ -19776,6 +22678,12 @@
    "kind": "movie_clip",
    "name": "instance2008",
    "path": "/root1/__mainMc/GameMc/@0/@0/music/@1",
+   "render_bounds": [
+    647.8,
+    121.15,
+    687.0,
+    160.35
+   ],
    "stage_bounds": [
     647.8,
     121.15,
@@ -19818,6 +22726,12 @@
    "kind": "movie_clip",
    "name": "instance2009",
    "path": "/root1/__mainMc/GameMc/@0/@0/music/@1/@1",
+   "render_bounds": [
+    647.8,
+    121.15,
+    687.0,
+    160.35
+   ],
    "stage_bounds": [
     647.8,
     121.15,
@@ -19859,6 +22773,12 @@
    "kind": "graphic",
    "name": "instance2010",
    "path": "/root1/__mainMc/GameMc/@0/@0/music/@1/@1/@4",
+   "render_bounds": [
+    647.8,
+    121.15,
+    687.0,
+    160.35
+   ],
    "stage_bounds": [
     647.8,
     121.15,
@@ -19899,6 +22819,12 @@
    "kind": "graphic",
    "name": "instance2011",
    "path": "/root1/__mainMc/GameMc/@0/@0/music/@1/@6",
+   "render_bounds": [
+    656.9,
+    130.55,
+    676.5,
+    151.85
+   ],
    "stage_bounds": [
     656.9,
     130.55,
@@ -19939,6 +22865,12 @@
    "kind": "graphic",
    "name": "instance2012",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1184",
+   "render_bounds": [
+    36.9,
+    383.05,
+    491.1,
+    451.8
+   ],
    "stage_bounds": [
     36.9,
     383.05,
@@ -19980,6 +22912,12 @@
    "kind": "movie_clip",
    "name": "instance2013",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185",
+   "render_bounds": [
+    42.45,
+    9.1,
+    630.05,
+    167.65
+   ],
    "stage_bounds": [
     59.1,
     19.1,
@@ -20021,6 +22959,12 @@
    "kind": "graphic",
    "name": "instance2014",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@33",
+   "render_bounds": [
+    59.1,
+    19.1,
+    517.2,
+    147.05
+   ],
    "stage_bounds": [
     59.1,
     19.1,
@@ -20062,6 +23006,12 @@
    "kind": "movie_clip",
    "name": "instance2015",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@34",
+   "render_bounds": [
+    499.5,
+    24.85,
+    613.4,
+    157.65
+   ],
    "stage_bounds": [
     516.5,
     41.85,
@@ -20103,6 +23053,12 @@
    "kind": "graphic",
    "name": "instance2016",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@34/@1",
+   "render_bounds": [
+    516.5,
+    41.85,
+    595.55,
+    135.2
+   ],
    "stage_bounds": [
     516.5,
     41.85,
@@ -20144,6 +23100,12 @@
    "kind": "movie_clip",
    "name": "instance2017",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@34/@2",
+   "render_bounds": [
+    518.55,
+    42.95,
+    596.4,
+    135.7
+   ],
    "stage_bounds": [
     523.55,
     47.95,
@@ -20185,6 +23147,12 @@
    "kind": "graphic",
    "name": "instance2018",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@34/@2/@2",
+   "render_bounds": [
+    523.55,
+    47.95,
+    591.4,
+    130.7
+   ],
    "stage_bounds": [
     523.55,
     47.95,
@@ -20226,6 +23194,12 @@
    "kind": "movie_clip",
    "name": "instance2019",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@37",
+   "render_bounds": [
+    240.5,
+    69.6,
+    254.5,
+    83.15
+   ],
    "stage_bounds": [
     240.5,
     69.6,
@@ -20267,6 +23241,12 @@
    "kind": "graphic",
    "name": "instance2020",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@37/@1",
+   "render_bounds": [
+    240.5,
+    69.6,
+    254.5,
+    83.15
+   ],
    "stage_bounds": [
     240.5,
     69.6,
@@ -20308,6 +23288,12 @@
    "kind": "movie_clip",
    "name": "instance2021",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@39",
+   "render_bounds": [
+    96.25,
+    116.85,
+    106.95,
+    127.45
+   ],
    "stage_bounds": [
     96.25,
     116.85,
@@ -20349,6 +23335,12 @@
    "kind": "graphic",
    "name": "instance2022",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@39/@1",
+   "render_bounds": [
+    96.25,
+    116.85,
+    106.95,
+    127.45
+   ],
    "stage_bounds": [
     96.25,
     116.85,
@@ -20390,6 +23382,12 @@
    "kind": "movie_clip",
    "name": "instance2023",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@41",
+   "render_bounds": [
+    279.7,
+    78.4,
+    289.45,
+    87.55
+   ],
    "stage_bounds": [
     279.7,
     78.4,
@@ -20431,6 +23429,12 @@
    "kind": "graphic",
    "name": "instance2024",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@41/@1",
+   "render_bounds": [
+    279.7,
+    78.4,
+    289.45,
+    87.55
+   ],
    "stage_bounds": [
     279.7,
     78.4,
@@ -20472,6 +23476,12 @@
    "kind": "movie_clip",
    "name": "instance2025",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@43",
+   "render_bounds": [
+    211.1,
+    65.45,
+    220.85,
+    74.6
+   ],
    "stage_bounds": [
     211.1,
     65.45,
@@ -20513,6 +23523,12 @@
    "kind": "graphic",
    "name": "instance2026",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@43/@1",
+   "render_bounds": [
+    211.1,
+    65.45,
+    220.85,
+    74.6
+   ],
    "stage_bounds": [
     211.1,
     65.45,
@@ -20554,6 +23570,12 @@
    "kind": "movie_clip",
    "name": "instance2027",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@45",
+   "render_bounds": [
+    217.55,
+    80.8,
+    231.4,
+    94.05
+   ],
    "stage_bounds": [
     217.55,
     80.8,
@@ -20595,6 +23617,12 @@
    "kind": "graphic",
    "name": "instance2028",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@45/@1",
+   "render_bounds": [
+    217.55,
+    80.8,
+    231.4,
+    94.05
+   ],
    "stage_bounds": [
     217.55,
     80.8,
@@ -20636,6 +23664,12 @@
    "kind": "movie_clip",
    "name": "instance2029",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@47",
+   "render_bounds": [
+    85.65,
+    80.8,
+    95.4,
+    89.95
+   ],
    "stage_bounds": [
     85.65,
     80.8,
@@ -20677,6 +23711,12 @@
    "kind": "graphic",
    "name": "instance2030",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@47/@1",
+   "render_bounds": [
+    85.65,
+    80.8,
+    95.4,
+    89.95
+   ],
    "stage_bounds": [
     85.65,
     80.8,
@@ -20718,6 +23758,12 @@
    "kind": "movie_clip",
    "name": "instance2031",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@49",
+   "render_bounds": [
+    121.05,
+    112.95,
+    130.8,
+    122.1
+   ],
    "stage_bounds": [
     121.05,
     112.95,
@@ -20759,6 +23805,12 @@
    "kind": "graphic",
    "name": "instance2032",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@49/@1",
+   "render_bounds": [
+    121.05,
+    112.95,
+    130.8,
+    122.1
+   ],
    "stage_bounds": [
     121.05,
     112.95,
@@ -20800,6 +23852,12 @@
    "kind": "movie_clip",
    "name": "instance2033",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@51",
+   "render_bounds": [
+    279.7,
+    52.5,
+    289.45,
+    61.65
+   ],
    "stage_bounds": [
     279.7,
     52.5,
@@ -20841,6 +23899,12 @@
    "kind": "graphic",
    "name": "instance2034",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@51/@1",
+   "render_bounds": [
+    279.7,
+    52.5,
+    289.45,
+    61.65
+   ],
    "stage_bounds": [
     279.7,
     52.5,
@@ -20882,6 +23946,12 @@
    "kind": "movie_clip",
    "name": "instance2035",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@53",
+   "render_bounds": [
+    236.7,
+    46.65,
+    246.45,
+    55.8
+   ],
    "stage_bounds": [
     236.7,
     46.65,
@@ -20923,6 +23993,12 @@
    "kind": "graphic",
    "name": "instance2036",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@53/@1",
+   "render_bounds": [
+    236.7,
+    46.65,
+    246.45,
+    55.8
+   ],
    "stage_bounds": [
     236.7,
     46.65,
@@ -20964,6 +24040,12 @@
    "kind": "movie_clip",
    "name": "instance2037",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@55",
+   "render_bounds": [
+    311.8,
+    64.85,
+    325.8,
+    78.4
+   ],
    "stage_bounds": [
     311.8,
     64.85,
@@ -21005,6 +24087,12 @@
    "kind": "graphic",
    "name": "instance2038",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@55/@1",
+   "render_bounds": [
+    311.8,
+    64.85,
+    325.8,
+    78.4
+   ],
    "stage_bounds": [
     311.8,
     64.85,
@@ -21046,6 +24134,12 @@
    "kind": "movie_clip",
    "name": "instance2039",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@57",
+   "render_bounds": [
+    126.65,
+    87.55,
+    136.4,
+    96.7
+   ],
    "stage_bounds": [
     126.65,
     87.55,
@@ -21087,6 +24181,12 @@
    "kind": "graphic",
    "name": "instance2040",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@57/@1",
+   "render_bounds": [
+    126.65,
+    87.55,
+    136.4,
+    96.7
+   ],
    "stage_bounds": [
     126.65,
     87.55,
@@ -21128,6 +24228,12 @@
    "kind": "movie_clip",
    "name": "instance2041",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@59",
+   "render_bounds": [
+    352.0,
+    74.6,
+    365.85,
+    87.85
+   ],
    "stage_bounds": [
     352.0,
     74.6,
@@ -21169,6 +24275,12 @@
    "kind": "graphic",
    "name": "instance2042",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@59/@1",
+   "render_bounds": [
+    352.0,
+    74.6,
+    365.85,
+    87.85
+   ],
    "stage_bounds": [
     352.0,
     74.6,
@@ -21210,6 +24322,12 @@
    "kind": "movie_clip",
    "name": "instance2043",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@61",
+   "render_bounds": [
+    318.7,
+    42.25,
+    332.7,
+    55.8
+   ],
    "stage_bounds": [
     318.7,
     42.25,
@@ -21251,6 +24369,12 @@
    "kind": "graphic",
    "name": "instance2044",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@61/@1",
+   "render_bounds": [
+    318.7,
+    42.25,
+    332.7,
+    55.8
+   ],
    "stage_bounds": [
     318.7,
     42.25,
@@ -21292,6 +24416,12 @@
    "kind": "movie_clip",
    "name": "instance2045",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@63",
+   "render_bounds": [
+    354.6,
+    43.15,
+    364.35,
+    52.3
+   ],
    "stage_bounds": [
     354.6,
     43.15,
@@ -21333,6 +24463,12 @@
    "kind": "graphic",
    "name": "instance2046",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@63/@1",
+   "render_bounds": [
+    354.6,
+    43.15,
+    364.35,
+    52.3
+   ],
    "stage_bounds": [
     354.6,
     43.15,
@@ -21374,6 +24510,12 @@
    "kind": "movie_clip",
    "name": "instance2047",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@65",
+   "render_bounds": [
+    325.75,
+    80.8,
+    335.5,
+    89.95
+   ],
    "stage_bounds": [
     325.75,
     80.8,
@@ -21415,6 +24557,12 @@
    "kind": "graphic",
    "name": "instance2048",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@65/@1",
+   "render_bounds": [
+    325.75,
+    80.8,
+    335.5,
+    89.95
+   ],
    "stage_bounds": [
     325.75,
     80.8,
@@ -21456,6 +24604,12 @@
    "kind": "movie_clip",
    "name": "instance2049",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@67",
+   "render_bounds": [
+    402.6,
+    85.95,
+    416.45,
+    99.2
+   ],
    "stage_bounds": [
     402.6,
     85.95,
@@ -21497,6 +24651,12 @@
    "kind": "graphic",
    "name": "instance2050",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@67/@1",
+   "render_bounds": [
+    402.6,
+    85.95,
+    416.45,
+    99.2
+   ],
    "stage_bounds": [
     402.6,
     85.95,
@@ -21538,6 +24698,12 @@
    "kind": "movie_clip",
    "name": "instance2051",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@69",
+   "render_bounds": [
+    405.15,
+    51.6,
+    414.9,
+    60.75
+   ],
    "stage_bounds": [
     405.15,
     51.6,
@@ -21579,6 +24745,12 @@
    "kind": "graphic",
    "name": "instance2052",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@69/@1",
+   "render_bounds": [
+    405.15,
+    51.6,
+    414.9,
+    60.75
+   ],
    "stage_bounds": [
     405.15,
     51.6,
@@ -21620,6 +24792,12 @@
    "kind": "movie_clip",
    "name": "instance2053",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@71",
+   "render_bounds": [
+    417.6,
+    61.65,
+    431.6,
+    75.2
+   ],
    "stage_bounds": [
     417.6,
     61.65,
@@ -21661,6 +24839,12 @@
    "kind": "graphic",
    "name": "instance2054",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@71/@1",
+   "render_bounds": [
+    417.6,
+    61.65,
+    431.6,
+    75.2
+   ],
    "stage_bounds": [
     417.6,
     61.65,
@@ -21702,6 +24886,12 @@
    "kind": "movie_clip",
    "name": "instance2055",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@73",
+   "render_bounds": [
+    465.75,
+    89.95,
+    479.6,
+    103.2
+   ],
    "stage_bounds": [
     465.75,
     89.95,
@@ -21743,6 +24933,12 @@
    "kind": "graphic",
    "name": "instance2056",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@73/@1",
+   "render_bounds": [
+    465.75,
+    89.95,
+    479.6,
+    103.2
+   ],
    "stage_bounds": [
     465.75,
     89.95,
@@ -21784,6 +24980,12 @@
    "kind": "movie_clip",
    "name": "instance2057",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@75",
+   "render_bounds": [
+    461.3,
+    55.7,
+    471.05,
+    64.85
+   ],
    "stage_bounds": [
     461.3,
     55.7,
@@ -21825,6 +25027,12 @@
    "kind": "graphic",
    "name": "instance2058",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@75/@1",
+   "render_bounds": [
+    461.3,
+    55.7,
+    471.05,
+    64.85
+   ],
    "stage_bounds": [
     461.3,
     55.7,
@@ -21866,6 +25074,12 @@
    "kind": "movie_clip",
    "name": "instance2059",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@77",
+   "render_bounds": [
+    453.65,
+    74.0,
+    467.65,
+    87.55
+   ],
    "stage_bounds": [
     453.65,
     74.0,
@@ -21907,6 +25121,12 @@
    "kind": "graphic",
    "name": "instance2060",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@77/@1",
+   "render_bounds": [
+    453.65,
+    74.0,
+    467.65,
+    87.55
+   ],
    "stage_bounds": [
     453.65,
     74.0,
@@ -21948,6 +25168,12 @@
    "kind": "movie_clip",
    "name": "instance2061",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@79",
+   "render_bounds": [
+    558.55,
+    94.05,
+    572.55,
+    107.6
+   ],
    "stage_bounds": [
     558.55,
     94.05,
@@ -21989,6 +25215,12 @@
    "kind": "graphic",
    "name": "instance2062",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@79/@1",
+   "render_bounds": [
+    558.55,
+    94.05,
+    572.55,
+    107.6
+   ],
    "stage_bounds": [
     558.55,
     94.05,
@@ -22030,6 +25262,12 @@
    "kind": "movie_clip",
    "name": "instance2063",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@81",
+   "render_bounds": [
+    548.8,
+    67.4,
+    558.55,
+    76.55
+   ],
    "stage_bounds": [
     548.8,
     67.4,
@@ -22071,6 +25309,12 @@
    "kind": "graphic",
    "name": "instance2064",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@81/@1",
+   "render_bounds": [
+    548.8,
+    67.4,
+    558.55,
+    76.55
+   ],
    "stage_bounds": [
     548.8,
     67.4,
@@ -22112,6 +25356,12 @@
    "kind": "movie_clip",
    "name": "instance2065",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@83",
+   "render_bounds": [
+    547.75,
+    113.0,
+    557.5,
+    122.15
+   ],
    "stage_bounds": [
     547.75,
     113.0,
@@ -22153,6 +25403,12 @@
    "kind": "graphic",
    "name": "instance2066",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1185/@83/@1",
+   "render_bounds": [
+    547.75,
+    113.0,
+    557.5,
+    122.15
+   ],
    "stage_bounds": [
     547.75,
     113.0,
@@ -22194,6 +25450,12 @@
    "kind": "movie_clip",
    "name": "flip",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip",
+   "render_bounds": [
+    27.15,
+    392.35,
+    133.15,
+    502.95
+   ],
    "stage_bounds": [
     29.15,
     394.35,
@@ -22235,6 +25497,12 @@
    "kind": "graphic",
    "name": "instance2067",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/@1",
+   "render_bounds": [
+    29.15,
+    395.6,
+    127.25,
+    473.55
+   ],
    "stage_bounds": [
     29.15,
     395.6,
@@ -22277,6 +25545,12 @@
    "label": "_up",
    "name": "btn4",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn4",
+   "render_bounds": [
+    106.3,
+    480.0,
+    131.15,
+    500.95
+   ],
    "stage_bounds": [
     106.3,
     480.5,
@@ -22318,6 +25592,12 @@
    "kind": "graphic",
    "name": "instance2068",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn4/@2",
+   "render_bounds": [
+    106.3,
+    480.5,
+    126.7,
+    500.95
+   ],
    "stage_bounds": [
     106.3,
     480.5,
@@ -22358,6 +25638,12 @@
    "kind": "graphic",
    "name": "instance2069",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn4/@3",
+   "render_bounds": [
+    109.6,
+    480.0,
+    131.15,
+    499.85
+   ],
    "stage_bounds": [
     112.6,
     483.0,
@@ -22400,6 +25686,12 @@
    "label": "_up",
    "name": "btn3",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn3",
+   "render_bounds": [
+    81.0,
+    479.8,
+    106.75,
+    500.95
+   ],
    "stage_bounds": [
     81.0,
     480.5,
@@ -22441,6 +25733,12 @@
    "kind": "graphic",
    "name": "instance2070",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn3/@2",
+   "render_bounds": [
+    81.0,
+    480.5,
+    101.4,
+    500.95
+   ],
    "stage_bounds": [
     81.0,
     480.5,
@@ -22481,6 +25779,12 @@
    "kind": "graphic",
    "name": "instance2071",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn3/@3",
+   "render_bounds": [
+    85.15,
+    479.8,
+    106.75,
+    500.05
+   ],
    "stage_bounds": [
     88.15,
     482.8,
@@ -22523,6 +25827,12 @@
    "label": "_up",
    "name": "btn2",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn2",
+   "render_bounds": [
+    55.75,
+    479.8,
+    81.15,
+    500.95
+   ],
    "stage_bounds": [
     55.75,
     480.5,
@@ -22564,6 +25874,12 @@
    "kind": "graphic",
    "name": "instance2072",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn2/@2",
+   "render_bounds": [
+    55.75,
+    480.5,
+    76.15,
+    500.95
+   ],
    "stage_bounds": [
     55.75,
     480.5,
@@ -22604,6 +25920,12 @@
    "kind": "graphic",
    "name": "instance2073",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn2/@3",
+   "render_bounds": [
+    59.75,
+    479.8,
+    81.1,
+    499.85
+   ],
    "stage_bounds": [
     62.75,
     482.8,
@@ -22646,6 +25968,12 @@
    "label": "_up",
    "name": "btn1",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn1",
+   "render_bounds": [
+    30.5,
+    480.0,
+    54.75,
+    500.95
+   ],
    "stage_bounds": [
     30.5,
     480.5,
@@ -22687,6 +26015,12 @@
    "kind": "graphic",
    "name": "instance2074",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn1/@2",
+   "render_bounds": [
+    30.5,
+    480.5,
+    50.9,
+    500.95
+   ],
    "stage_bounds": [
     30.5,
     480.5,
@@ -22727,6 +26061,12 @@
    "kind": "graphic",
    "name": "instance2075",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/btn1/@3",
+   "render_bounds": [
+    34.7,
+    480.0,
+    54.7,
+    499.85
+   ],
    "stage_bounds": [
     37.7,
     483.0,
@@ -22747,6 +26087,7 @@
    "blend_mode": "Normal",
    "character_id": 3879,
    "class": "flash.display::Shape",
+   "clip_depth": 22,
    "color_transform": {
     "add": [
      0,
@@ -22767,6 +26108,12 @@
    "kind": "graphic",
    "name": "instance2076",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/@18",
+   "render_bounds": [
+    30.5,
+    396.95,
+    125.9,
+    472.2
+   ],
    "stage_bounds": [
     30.5,
     396.95,
@@ -22787,6 +26134,7 @@
    "blend_mode": "Normal",
    "character_id": 3893,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/GameMc/@0/@0/flip/@18",
    "color_transform": {
     "add": [
      0,
@@ -22808,6 +26156,12 @@
    "kind": "movie_clip",
    "name": "promotion",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/promotion",
+   "render_bounds": [
+    30.0,
+    394.35,
+    126.55,
+    480.25
+   ],
    "stage_bounds": [
     30.0,
     394.35,
@@ -22849,6 +26203,12 @@
    "kind": "graphic",
    "name": "instance2077",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/promotion/@1",
+   "render_bounds": [
+    30.0,
+    394.35,
+    126.55,
+    480.25
+   ],
    "stage_bounds": [
     30.0,
     394.35,
@@ -22889,6 +26249,12 @@
    "kind": "graphic",
    "name": "instance2078",
    "path": "/root1/__mainMc/GameMc/@0/@0/flip/@23",
+   "render_bounds": [
+    30.5,
+    396.95,
+    125.9,
+    472.2
+   ],
    "stage_bounds": [
     30.5,
     396.95,
@@ -22930,6 +26296,12 @@
    "kind": "movie_clip",
    "name": "moregames",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames",
+   "render_bounds": [
+    441.25,
+    305.7,
+    673.55,
+    382.4
+   ],
    "stage_bounds": [
     451.25,
     315.7,
@@ -22971,6 +26343,12 @@
    "kind": "graphic",
    "name": "instance2079",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@1",
+   "render_bounds": [
+    451.25,
+    315.7,
+    503.95,
+    372.4
+   ],
    "stage_bounds": [
     451.25,
     315.7,
@@ -23012,6 +26390,12 @@
    "kind": "movie_clip",
    "name": "instance2080",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@2",
+   "render_bounds": [
+    473.9,
+    323.2,
+    663.55,
+    369.5
+   ],
    "stage_bounds": [
     473.9,
     323.2,
@@ -23053,6 +26437,12 @@
    "kind": "graphic",
    "name": "instance2081",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@2/@4",
+   "render_bounds": [
+    473.9,
+    323.2,
+    663.55,
+    369.5
+   ],
    "stage_bounds": [
     473.9,
     323.2,
@@ -23093,6 +26483,12 @@
    "kind": "graphic",
    "name": "instance2082",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@8",
+   "render_bounds": [
+    453.95,
+    318.4,
+    501.25,
+    369.7
+   ],
    "stage_bounds": [
     453.95,
     318.4,
@@ -23134,6 +26530,12 @@
    "kind": "movie_clip",
    "name": "instance2083",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@9",
+   "render_bounds": [
+    495.3,
+    332.05,
+    658.8,
+    361.75
+   ],
    "stage_bounds": [
     498.3,
     335.05,
@@ -23175,6 +26577,12 @@
    "kind": "text",
    "name": "MainMenu_4",
    "path": "/root1/__mainMc/GameMc/@0/@0/moregames/@9/MainMenu_4",
+   "render_bounds": [
+    498.3,
+    335.05,
+    655.8,
+    358.75
+   ],
    "stage_bounds": [
     498.3,
     335.05,
@@ -23217,6 +26625,12 @@
    "kind": "movie_clip",
    "name": "instance2084",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1303",
+   "render_bounds": [
+    1.45,
+    -311.95,
+    152.15,
+    22.0
+   ],
    "stage_bounds": [
     1.45,
     -311.95,
@@ -23258,6 +26672,12 @@
    "kind": "graphic",
    "name": "instance2085",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1303/@2",
+   "render_bounds": [
+    1.45,
+    -311.95,
+    152.15,
+    22.0
+   ],
    "stage_bounds": [
     1.45,
     -311.95,
@@ -23299,6 +26719,12 @@
    "kind": "movie_clip",
    "name": "add_to_site",
    "path": "/root1/__mainMc/GameMc/@0/@0/add_to_site",
+   "render_bounds": [
+    464.55,
+    478.6,
+    570.5,
+    498.2
+   ],
    "stage_bounds": [
     464.55,
     478.7,
@@ -23341,6 +26767,12 @@
    "kind": "movie_clip",
    "name": "instance2086",
    "path": "/root1/__mainMc/GameMc/@0/@0/add_to_site/@1",
+   "render_bounds": [
+    464.55,
+    478.6,
+    570.5,
+    498.2
+   ],
    "stage_bounds": [
     468.55,
     482.6,
@@ -23382,6 +26814,12 @@
    "kind": "graphic",
    "name": "instance2087",
    "path": "/root1/__mainMc/GameMc/@0/@0/add_to_site/@1/@1",
+   "render_bounds": [
+    468.55,
+    482.6,
+    566.5,
+    494.2
+   ],
    "stage_bounds": [
     468.55,
     482.6,
@@ -23422,6 +26860,12 @@
    "kind": "graphic",
    "name": "instance2088",
    "path": "/root1/__mainMc/GameMc/@0/@0/add_to_site/@3",
+   "render_bounds": [
+    464.55,
+    478.7,
+    566.05,
+    495.25
+   ],
    "stage_bounds": [
     464.55,
     478.7,
@@ -23463,6 +26907,12 @@
    "kind": "movie_clip",
    "name": "instance2089",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1310",
+   "render_bounds": [
+    580.2,
+    478.7,
+    680.35,
+    499.25
+   ],
    "stage_bounds": [
     585.2,
     483.7,
@@ -23504,6 +26954,12 @@
    "kind": "graphic",
    "name": "instance2090",
    "path": "/root1/__mainMc/GameMc/@0/@0/@1310/@1",
+   "render_bounds": [
+    580.2,
+    478.7,
+    680.35,
+    499.25
+   ],
    "stage_bounds": [
     585.2,
     483.7,
@@ -23545,6 +27001,12 @@
    "kind": "movie_clip",
    "name": "__id3_",
    "path": "/root1/__mainMc/GameMc/@0/@0/__id3_",
+   "render_bounds": [
+    467.3,
+    413.3,
+    667.3,
+    463.3
+   ],
    "stage_bounds": [
     467.3,
     413.3,
@@ -23586,6 +27048,12 @@
    "kind": "graphic",
    "name": "instance2091",
    "path": "/root1/__mainMc/GameMc/@0/@0/__id3_/@1",
+   "render_bounds": [
+    467.3,
+    413.3,
+    667.3,
+    463.3
+   ],
    "stage_bounds": [
     467.3,
     413.3,
@@ -23626,6 +27094,12 @@
    "kind": "text",
    "name": "instance2092",
    "path": "/root1/__mainMc/GameMc/@0/@0/@0",
+   "render_bounds": [
+    650.0,
+    5.0,
+    750.0,
+    105.0
+   ],
    "stage_bounds": [
     650.0,
     5.0,

@@ -28,6 +28,12 @@
    "label": "UiLoading",
    "name": "root1",
    "path": "/root1",
+   "render_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
    "stage_bounds": [
     -348.5,
     -41.1,
@@ -70,6 +76,12 @@
    "kind": "movie_clip",
    "name": "__mainMc",
    "path": "/root1/__mainMc",
+   "render_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
    "stage_bounds": [
     -348.5,
     -41.1,
@@ -112,6 +124,12 @@
    "kind": "movie_clip",
    "name": "instance5",
    "path": "/root1/__mainMc/@0",
+   "render_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
    "stage_bounds": [
     -348.5,
     -41.1,
@@ -133,6 +151,7 @@
    "blend_mode": "Normal",
    "character_id": 165,
    "class": "flash.display::Shape",
+   "clip_depth": 1279,
    "color_transform": {
     "add": [
      0,
@@ -153,6 +172,12 @@
    "kind": "graphic",
    "name": "instance6",
    "path": "/root1/__mainMc/@0/@1",
+   "render_bounds": [
+    0.0,
+    0.0,
+    701.2,
+    512.15
+   ],
    "stage_bounds": [
     0.0,
     0.0,
@@ -173,6 +198,7 @@
    "blend_mode": "Normal",
    "character_id": 224,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -194,6 +220,12 @@
    "kind": "movie_clip",
    "name": "instance7",
    "path": "/root1/__mainMc/@0/@2",
+   "render_bounds": [
+    -53.1,
+    -41.1,
+    752.3,
+    547.95
+   ],
    "stage_bounds": [
     -53.1,
     -41.1,
@@ -236,6 +268,12 @@
    "kind": "movie_clip",
    "name": "instance8",
    "path": "/root1/__mainMc/@0/@2/@1",
+   "render_bounds": [
+    -4.6,
+    -17.05,
+    744.0,
+    530.3
+   ],
    "stage_bounds": [
     -4.6,
     -17.05,
@@ -277,6 +315,12 @@
    "kind": "graphic",
    "name": "instance9",
    "path": "/root1/__mainMc/@0/@2/@1/@2",
+   "render_bounds": [
+    -4.6,
+    -17.05,
+    744.0,
+    530.3
+   ],
    "stage_bounds": [
     -4.6,
     -17.05,
@@ -317,6 +361,12 @@
    "kind": "graphic",
    "name": "instance10",
    "path": "/root1/__mainMc/@0/@2/@5",
+   "render_bounds": [
+    -6.8,
+    304.65,
+    748.4,
+    547.95
+   ],
    "stage_bounds": [
     -6.8,
     304.65,
@@ -358,6 +408,12 @@
    "kind": "movie_clip",
    "name": "instance11",
    "path": "/root1/__mainMc/@0/@2/@6",
+   "render_bounds": [
+    474.9,
+    392.5,
+    553.55,
+    420.3
+   ],
    "stage_bounds": [
     474.9,
     392.5,
@@ -399,6 +455,12 @@
    "kind": "graphic",
    "name": "instance12",
    "path": "/root1/__mainMc/@0/@2/@6/@1",
+   "render_bounds": [
+    474.9,
+    392.5,
+    553.55,
+    420.3
+   ],
    "stage_bounds": [
     474.9,
     392.5,
@@ -440,6 +502,12 @@
    "kind": "movie_clip",
    "name": "instance13",
    "path": "/root1/__mainMc/@0/@2/@8",
+   "render_bounds": [
+    111.35,
+    403.35,
+    202.9,
+    440.75
+   ],
    "stage_bounds": [
     111.35,
     403.35,
@@ -481,6 +549,12 @@
    "kind": "graphic",
    "name": "instance14",
    "path": "/root1/__mainMc/@0/@2/@8/@1",
+   "render_bounds": [
+    111.35,
+    403.35,
+    202.9,
+    440.75
+   ],
    "stage_bounds": [
     111.35,
     403.35,
@@ -522,6 +596,12 @@
    "kind": "movie_clip",
    "name": "instance15",
    "path": "/root1/__mainMc/@0/@2/@10",
+   "render_bounds": [
+    541.8,
+    328.1,
+    598.35,
+    348.1
+   ],
    "stage_bounds": [
     541.8,
     328.1,
@@ -563,6 +643,12 @@
    "kind": "graphic",
    "name": "instance16",
    "path": "/root1/__mainMc/@0/@2/@10/@1",
+   "render_bounds": [
+    541.8,
+    328.1,
+    598.35,
+    348.1
+   ],
    "stage_bounds": [
     541.8,
     328.1,
@@ -604,6 +690,12 @@
    "kind": "movie_clip",
    "name": "instance17",
    "path": "/root1/__mainMc/@0/@2/@12",
+   "render_bounds": [
+    387.5,
+    432.6,
+    449.3,
+    469.7
+   ],
    "stage_bounds": [
     387.5,
     432.6,
@@ -645,6 +737,12 @@
    "kind": "graphic",
    "name": "instance18",
    "path": "/root1/__mainMc/@0/@2/@12/@1",
+   "render_bounds": [
+    387.5,
+    432.6,
+    449.3,
+    469.7
+   ],
    "stage_bounds": [
     387.5,
     432.6,
@@ -686,6 +784,12 @@
    "kind": "movie_clip",
    "name": "instance19",
    "path": "/root1/__mainMc/@0/@2/@14",
+   "render_bounds": [
+    387.5,
+    420.95,
+    427.85,
+    456.2
+   ],
    "stage_bounds": [
     387.5,
     420.95,
@@ -727,6 +831,12 @@
    "kind": "graphic",
    "name": "instance20",
    "path": "/root1/__mainMc/@0/@2/@14/@1",
+   "render_bounds": [
+    387.5,
+    420.95,
+    427.85,
+    456.2
+   ],
    "stage_bounds": [
     387.5,
     420.95,
@@ -768,6 +878,12 @@
    "kind": "movie_clip",
    "name": "instance21",
    "path": "/root1/__mainMc/@0/@2/@16",
+   "render_bounds": [
+    585.95,
+    405.9,
+    626.3,
+    441.15
+   ],
    "stage_bounds": [
     585.95,
     405.9,
@@ -809,6 +925,12 @@
    "kind": "graphic",
    "name": "instance22",
    "path": "/root1/__mainMc/@0/@2/@16/@1",
+   "render_bounds": [
+    585.95,
+    405.9,
+    626.3,
+    441.15
+   ],
    "stage_bounds": [
     585.95,
     405.9,
@@ -850,6 +972,12 @@
    "kind": "movie_clip",
    "name": "instance23",
    "path": "/root1/__mainMc/@0/@2/@18",
+   "render_bounds": [
+    413.45,
+    374.9,
+    475.25,
+    412.0
+   ],
    "stage_bounds": [
     413.45,
     374.9,
@@ -891,6 +1019,12 @@
    "kind": "graphic",
    "name": "instance24",
    "path": "/root1/__mainMc/@0/@2/@18/@1",
+   "render_bounds": [
+    413.45,
+    374.9,
+    475.25,
+    412.0
+   ],
    "stage_bounds": [
     413.45,
     374.9,
@@ -932,6 +1066,12 @@
    "kind": "movie_clip",
    "name": "instance25",
    "path": "/root1/__mainMc/@0/@2/@20",
+   "render_bounds": [
+    208.25,
+    412.0,
+    270.05,
+    449.1
+   ],
    "stage_bounds": [
     208.25,
     412.0,
@@ -973,6 +1113,12 @@
    "kind": "graphic",
    "name": "instance26",
    "path": "/root1/__mainMc/@0/@2/@20/@1",
+   "render_bounds": [
+    208.25,
+    412.0,
+    270.05,
+    449.1
+   ],
    "stage_bounds": [
     208.25,
     412.0,
@@ -1014,6 +1160,12 @@
    "kind": "movie_clip",
    "name": "instance27",
    "path": "/root1/__mainMc/@0/@2/@22",
+   "render_bounds": [
+    159.85,
+    397.65,
+    200.2,
+    432.9
+   ],
    "stage_bounds": [
     159.85,
     397.65,
@@ -1055,6 +1207,12 @@
    "kind": "graphic",
    "name": "instance28",
    "path": "/root1/__mainMc/@0/@2/@22/@1",
+   "render_bounds": [
+    159.85,
+    397.65,
+    200.2,
+    432.9
+   ],
    "stage_bounds": [
     159.85,
     397.65,
@@ -1096,6 +1254,12 @@
    "kind": "movie_clip",
    "name": "instance29",
    "path": "/root1/__mainMc/@0/@2/@24",
+   "render_bounds": [
+    35.35,
+    432.6,
+    75.7,
+    467.85
+   ],
    "stage_bounds": [
     35.35,
     432.6,
@@ -1137,6 +1301,12 @@
    "kind": "graphic",
    "name": "instance30",
    "path": "/root1/__mainMc/@0/@2/@24/@1",
+   "render_bounds": [
+    35.35,
+    432.6,
+    75.7,
+    467.85
+   ],
    "stage_bounds": [
     35.35,
     432.6,
@@ -1178,6 +1348,12 @@
    "kind": "movie_clip",
    "name": "instance31",
    "path": "/root1/__mainMc/@0/@2/@26",
+   "render_bounds": [
+    105.25,
+    420.95,
+    145.6,
+    456.2
+   ],
    "stage_bounds": [
     105.25,
     420.95,
@@ -1219,6 +1395,12 @@
    "kind": "graphic",
    "name": "instance32",
    "path": "/root1/__mainMc/@0/@2/@26/@1",
+   "render_bounds": [
+    105.25,
+    420.95,
+    145.6,
+    456.2
+   ],
    "stage_bounds": [
     105.25,
     420.95,
@@ -1260,6 +1442,12 @@
    "kind": "movie_clip",
    "name": "instance33",
    "path": "/root1/__mainMc/@0/@2/@28",
+   "render_bounds": [
+    462.4,
+    427.55,
+    496.65,
+    453.1
+   ],
    "stage_bounds": [
     462.4,
     427.55,
@@ -1301,6 +1489,12 @@
    "kind": "graphic",
    "name": "instance34",
    "path": "/root1/__mainMc/@0/@2/@28/@1",
+   "render_bounds": [
+    462.4,
+    427.55,
+    496.65,
+    453.1
+   ],
    "stage_bounds": [
     462.4,
     427.55,
@@ -1342,6 +1536,12 @@
    "kind": "movie_clip",
    "name": "instance35",
    "path": "/root1/__mainMc/@0/@2/@30",
+   "render_bounds": [
+    614.25,
+    451.4,
+    654.6,
+    486.65
+   ],
    "stage_bounds": [
     614.25,
     451.4,
@@ -1383,6 +1583,12 @@
    "kind": "graphic",
    "name": "instance36",
    "path": "/root1/__mainMc/@0/@2/@30/@1",
+   "render_bounds": [
+    614.25,
+    451.4,
+    654.6,
+    486.65
+   ],
    "stage_bounds": [
     614.25,
     451.4,
@@ -1424,6 +1630,12 @@
    "kind": "movie_clip",
    "name": "instance37",
    "path": "/root1/__mainMc/@0/@2/@32",
+   "render_bounds": [
+    654.6,
+    379.7,
+    694.95,
+    414.95
+   ],
    "stage_bounds": [
     654.6,
     379.7,
@@ -1465,6 +1677,12 @@
    "kind": "graphic",
    "name": "instance38",
    "path": "/root1/__mainMc/@0/@2/@32/@1",
+   "render_bounds": [
+    654.6,
+    379.7,
+    694.95,
+    414.95
+   ],
    "stage_bounds": [
     654.6,
     379.7,
@@ -1506,6 +1724,12 @@
    "kind": "movie_clip",
    "name": "instance39",
    "path": "/root1/__mainMc/@0/@2/@34",
+   "render_bounds": [
+    513.0,
+    357.65,
+    553.35,
+    392.9
+   ],
    "stage_bounds": [
     513.0,
     357.65,
@@ -1547,6 +1771,12 @@
    "kind": "graphic",
    "name": "instance40",
    "path": "/root1/__mainMc/@0/@2/@34/@1",
+   "render_bounds": [
+    513.0,
+    357.65,
+    553.35,
+    392.9
+   ],
    "stage_bounds": [
     513.0,
     357.65,
@@ -1588,6 +1818,12 @@
    "kind": "movie_clip",
    "name": "instance41",
    "path": "/root1/__mainMc/@0/@2/@36",
+   "render_bounds": [
+    534.4,
+    447.35,
+    585.9,
+    488.4
+   ],
    "stage_bounds": [
     534.4,
     447.35,
@@ -1629,6 +1865,12 @@
    "kind": "graphic",
    "name": "instance42",
    "path": "/root1/__mainMc/@0/@2/@36/@1",
+   "render_bounds": [
+    534.4,
+    447.35,
+    585.9,
+    488.4
+   ],
    "stage_bounds": [
     534.4,
     447.35,
@@ -1670,6 +1912,12 @@
    "kind": "movie_clip",
    "name": "instance43",
    "path": "/root1/__mainMc/@0/@2/@38",
+   "render_bounds": [
+    215.5,
+    362.25,
+    267.0,
+    403.3
+   ],
    "stage_bounds": [
     215.5,
     362.25,
@@ -1711,6 +1959,12 @@
    "kind": "graphic",
    "name": "instance44",
    "path": "/root1/__mainMc/@0/@2/@38/@1",
+   "render_bounds": [
+    215.5,
+    362.25,
+    267.0,
+    403.3
+   ],
    "stage_bounds": [
     215.5,
     362.25,
@@ -1752,6 +2006,12 @@
    "kind": "movie_clip",
    "name": "instance45",
    "path": "/root1/__mainMc/@0/@2/@40",
+   "render_bounds": [
+    59.7,
+    362.4,
+    98.85,
+    396.45
+   ],
    "stage_bounds": [
     59.7,
     362.4,
@@ -1793,6 +2053,12 @@
    "kind": "graphic",
    "name": "instance46",
    "path": "/root1/__mainMc/@0/@2/@40/@1",
+   "render_bounds": [
+    59.7,
+    362.4,
+    98.85,
+    396.45
+   ],
    "stage_bounds": [
     59.7,
     362.4,
@@ -1834,6 +2100,12 @@
    "kind": "movie_clip",
    "name": "instance47",
    "path": "/root1/__mainMc/@0/@2/@42",
+   "render_bounds": [
+    72.25,
+    447.25,
+    134.05,
+    484.35
+   ],
    "stage_bounds": [
     72.25,
     447.25,
@@ -1875,6 +2147,12 @@
    "kind": "graphic",
    "name": "instance48",
    "path": "/root1/__mainMc/@0/@2/@42/@1",
+   "render_bounds": [
+    72.25,
+    447.25,
+    134.05,
+    484.35
+   ],
    "stage_bounds": [
     72.25,
     447.25,
@@ -1916,6 +2194,12 @@
    "kind": "movie_clip",
    "name": "instance49",
    "path": "/root1/__mainMc/@0/@2/@44",
+   "render_bounds": [
+    284.5,
+    437.85,
+    346.3,
+    474.95
+   ],
    "stage_bounds": [
     284.5,
     437.85,
@@ -1957,6 +2241,12 @@
    "kind": "graphic",
    "name": "instance50",
    "path": "/root1/__mainMc/@0/@2/@44/@1",
+   "render_bounds": [
+    284.5,
+    437.85,
+    346.3,
+    474.95
+   ],
    "stage_bounds": [
     284.5,
     437.85,
@@ -1998,6 +2288,12 @@
    "kind": "movie_clip",
    "name": "instance51",
    "path": "/root1/__mainMc/@0/@2/@46",
+   "render_bounds": [
+    616.95,
+    420.95,
+    693.7,
+    467.0
+   ],
    "stage_bounds": [
     616.95,
     420.95,
@@ -2039,6 +2335,12 @@
    "kind": "graphic",
    "name": "instance52",
    "path": "/root1/__mainMc/@0/@2/@46/@1",
+   "render_bounds": [
+    616.95,
+    420.95,
+    693.7,
+    467.0
+   ],
    "stage_bounds": [
     616.95,
     420.95,
@@ -2080,6 +2382,12 @@
    "kind": "movie_clip",
    "name": "instance53",
    "path": "/root1/__mainMc/@0/@2/@48",
+   "render_bounds": [
+    597.15,
+    317.75,
+    637.5,
+    353.0
+   ],
    "stage_bounds": [
     597.15,
     317.75,
@@ -2121,6 +2429,12 @@
    "kind": "graphic",
    "name": "instance54",
    "path": "/root1/__mainMc/@0/@2/@48/@1",
+   "render_bounds": [
+    597.15,
+    317.75,
+    637.5,
+    353.0
+   ],
    "stage_bounds": [
     597.15,
     317.75,
@@ -2162,6 +2476,12 @@
    "kind": "movie_clip",
    "name": "instance55",
    "path": "/root1/__mainMc/@0/@2/@50",
+   "render_bounds": [
+    139.1,
+    447.35,
+    172.0,
+    480.75
+   ],
    "stage_bounds": [
     139.1,
     447.35,
@@ -2203,6 +2523,12 @@
    "kind": "graphic",
    "name": "instance56",
    "path": "/root1/__mainMc/@0/@2/@50/@1",
+   "render_bounds": [
+    139.1,
+    447.35,
+    172.0,
+    480.75
+   ],
    "stage_bounds": [
     139.1,
     447.35,
@@ -2244,6 +2570,12 @@
    "kind": "movie_clip",
    "name": "instance57",
    "path": "/root1/__mainMc/@0/@2/@52",
+   "render_bounds": [
+    76.7,
+    177.85,
+    111.35,
+    212.7
+   ],
    "stage_bounds": [
     76.7,
     177.85,
@@ -2285,6 +2617,12 @@
    "kind": "graphic",
    "name": "instance58",
    "path": "/root1/__mainMc/@0/@2/@52/@1",
+   "render_bounds": [
+    76.7,
+    177.85,
+    111.35,
+    212.7
+   ],
    "stage_bounds": [
     76.7,
     177.85,
@@ -2326,6 +2664,12 @@
    "kind": "movie_clip",
    "name": "instance59",
    "path": "/root1/__mainMc/@0/@2/@54",
+   "render_bounds": [
+    649.6,
+    88.2,
+    677.75,
+    116.35
+   ],
    "stage_bounds": [
     649.6,
     88.2,
@@ -2367,6 +2711,12 @@
    "kind": "graphic",
    "name": "instance60",
    "path": "/root1/__mainMc/@0/@2/@54/@1",
+   "render_bounds": [
+    649.6,
+    88.2,
+    677.75,
+    116.35
+   ],
    "stage_bounds": [
     649.6,
     88.2,
@@ -2408,6 +2758,12 @@
    "kind": "movie_clip",
    "name": "instance61",
    "path": "/root1/__mainMc/@0/@2/@56",
+   "render_bounds": [
+    569.8,
+    118.45,
+    612.55,
+    155.55
+   ],
    "stage_bounds": [
     569.8,
     118.45,
@@ -2449,6 +2805,12 @@
    "kind": "graphic",
    "name": "instance62",
    "path": "/root1/__mainMc/@0/@2/@56/@1",
+   "render_bounds": [
+    569.8,
+    118.45,
+    612.55,
+    155.55
+   ],
    "stage_bounds": [
     569.8,
     118.45,
@@ -2490,6 +2852,12 @@
    "kind": "movie_clip",
    "name": "instance63",
    "path": "/root1/__mainMc/@0/@2/@58",
+   "render_bounds": [
+    616.95,
+    168.75,
+    643.6,
+    195.55
+   ],
    "stage_bounds": [
     616.95,
     168.75,
@@ -2531,6 +2899,12 @@
    "kind": "graphic",
    "name": "instance64",
    "path": "/root1/__mainMc/@0/@2/@58/@1",
+   "render_bounds": [
+    616.95,
+    168.75,
+    643.6,
+    195.55
+   ],
    "stage_bounds": [
     616.95,
     168.75,
@@ -2572,6 +2946,12 @@
    "kind": "movie_clip",
    "name": "instance65",
    "path": "/root1/__mainMc/@0/@2/@60",
+   "render_bounds": [
+    476.15,
+    149.45,
+    519.0,
+    187.95
+   ],
    "stage_bounds": [
     476.15,
     149.45,
@@ -2613,6 +2993,12 @@
    "kind": "graphic",
    "name": "instance66",
    "path": "/root1/__mainMc/@0/@2/@60/@1",
+   "render_bounds": [
+    476.15,
+    149.45,
+    519.0,
+    187.95
+   ],
    "stage_bounds": [
     476.15,
     149.45,
@@ -2654,6 +3040,12 @@
    "kind": "movie_clip",
    "name": "instance67",
    "path": "/root1/__mainMc/@0/@2/@62",
+   "render_bounds": [
+    490.95,
+    42.0,
+    525.6,
+    76.85
+   ],
    "stage_bounds": [
     490.95,
     42.0,
@@ -2695,6 +3087,12 @@
    "kind": "graphic",
    "name": "instance68",
    "path": "/root1/__mainMc/@0/@2/@62/@1",
+   "render_bounds": [
+    490.95,
+    42.0,
+    525.6,
+    76.85
+   ],
    "stage_bounds": [
     490.95,
     42.0,
@@ -2736,6 +3134,12 @@
    "kind": "movie_clip",
    "name": "instance69",
    "path": "/root1/__mainMc/@0/@2/@64",
+   "render_bounds": [
+    408.95,
+    159.75,
+    437.1,
+    187.9
+   ],
    "stage_bounds": [
     408.95,
     159.75,
@@ -2777,6 +3181,12 @@
    "kind": "graphic",
    "name": "instance70",
    "path": "/root1/__mainMc/@0/@2/@64/@1",
+   "render_bounds": [
+    408.95,
+    159.75,
+    437.1,
+    187.9
+   ],
    "stage_bounds": [
     408.95,
     159.75,
@@ -2818,6 +3228,12 @@
    "kind": "movie_clip",
    "name": "instance71",
    "path": "/root1/__mainMc/@0/@2/@66",
+   "render_bounds": [
+    616.95,
+    37.45,
+    643.6,
+    64.25
+   ],
    "stage_bounds": [
     616.95,
     37.45,
@@ -2859,6 +3275,12 @@
    "kind": "graphic",
    "name": "instance72",
    "path": "/root1/__mainMc/@0/@2/@66/@1",
+   "render_bounds": [
+    616.95,
+    37.45,
+    643.6,
+    64.25
+   ],
    "stage_bounds": [
     616.95,
     37.45,
@@ -2900,6 +3322,12 @@
    "kind": "movie_clip",
    "name": "instance73",
    "path": "/root1/__mainMc/@0/@2/@68",
+   "render_bounds": [
+    643.95,
+    245.0,
+    687.8,
+    280.7
+   ],
    "stage_bounds": [
     643.95,
     245.0,
@@ -2941,6 +3369,12 @@
    "kind": "graphic",
    "name": "instance74",
    "path": "/root1/__mainMc/@0/@2/@68/@1",
+   "render_bounds": [
+    643.95,
+    245.0,
+    687.8,
+    280.7
+   ],
    "stage_bounds": [
     643.95,
     245.0,
@@ -2982,6 +3416,12 @@
    "kind": "movie_clip",
    "name": "instance75",
    "path": "/root1/__mainMc/@0/@2/@70",
+   "render_bounds": [
+    681.4,
+    193.05,
+    708.1,
+    219.75
+   ],
    "stage_bounds": [
     681.4,
     193.05,
@@ -3023,6 +3463,12 @@
    "kind": "graphic",
    "name": "instance76",
    "path": "/root1/__mainMc/@0/@2/@70/@1",
+   "render_bounds": [
+    681.4,
+    193.05,
+    708.1,
+    219.75
+   ],
    "stage_bounds": [
     681.4,
     193.05,
@@ -3064,6 +3510,12 @@
    "kind": "movie_clip",
    "name": "instance77",
    "path": "/root1/__mainMc/@0/@2/@72",
+   "render_bounds": [
+    499.95,
+    238.9,
+    528.1,
+    267.05
+   ],
    "stage_bounds": [
     499.95,
     238.9,
@@ -3105,6 +3557,12 @@
    "kind": "graphic",
    "name": "instance78",
    "path": "/root1/__mainMc/@0/@2/@72/@1",
+   "render_bounds": [
+    499.95,
+    238.9,
+    528.1,
+    267.05
+   ],
    "stage_bounds": [
     499.95,
     238.9,
@@ -3146,6 +3604,12 @@
    "kind": "movie_clip",
    "name": "instance79",
    "path": "/root1/__mainMc/@0/@2/@74",
+   "render_bounds": [
+    462.8,
+    258.3,
+    490.95,
+    286.45
+   ],
    "stage_bounds": [
     462.8,
     258.3,
@@ -3187,6 +3651,12 @@
    "kind": "graphic",
    "name": "instance80",
    "path": "/root1/__mainMc/@0/@2/@74/@1",
+   "render_bounds": [
+    462.8,
+    258.3,
+    490.95,
+    286.45
+   ],
    "stage_bounds": [
     462.8,
     258.3,
@@ -3228,6 +3698,12 @@
    "kind": "movie_clip",
    "name": "instance81",
    "path": "/root1/__mainMc/@0/@2/@76",
+   "render_bounds": [
+    342.55,
+    34.05,
+    379.15,
+    70.65
+   ],
    "stage_bounds": [
     342.55,
     34.05,
@@ -3269,6 +3745,12 @@
    "kind": "graphic",
    "name": "instance82",
    "path": "/root1/__mainMc/@0/@2/@76/@1",
+   "render_bounds": [
+    342.55,
+    34.05,
+    379.15,
+    70.65
+   ],
    "stage_bounds": [
     342.55,
     34.05,
@@ -3310,6 +3792,12 @@
    "kind": "movie_clip",
    "name": "instance83",
    "path": "/root1/__mainMc/@0/@2/@78",
+   "render_bounds": [
+    100.65,
+    50.8,
+    140.8,
+    80.15
+   ],
    "stage_bounds": [
     100.65,
     50.8,
@@ -3351,6 +3839,12 @@
    "kind": "graphic",
    "name": "instance84",
    "path": "/root1/__mainMc/@0/@2/@78/@1",
+   "render_bounds": [
+    100.65,
+    50.8,
+    140.8,
+    80.15
+   ],
    "stage_bounds": [
     100.65,
     50.8,
@@ -3392,6 +3886,12 @@
    "kind": "movie_clip",
    "name": "instance85",
    "path": "/root1/__mainMc/@0/@2/@80",
+   "render_bounds": [
+    145.05,
+    172.55,
+    197.0,
+    224.5
+   ],
    "stage_bounds": [
     145.05,
     172.55,
@@ -3433,6 +3933,12 @@
    "kind": "graphic",
    "name": "instance86",
    "path": "/root1/__mainMc/@0/@2/@80/@1",
+   "render_bounds": [
+    145.05,
+    172.55,
+    197.0,
+    224.5
+   ],
    "stage_bounds": [
     145.05,
     172.55,
@@ -3474,6 +3980,12 @@
    "kind": "movie_clip",
    "name": "instance87",
    "path": "/root1/__mainMc/@0/@2/@82",
+   "render_bounds": [
+    57.75,
+    102.75,
+    85.9,
+    130.9
+   ],
    "stage_bounds": [
     57.75,
     102.75,
@@ -3515,6 +4027,12 @@
    "kind": "graphic",
    "name": "instance88",
    "path": "/root1/__mainMc/@0/@2/@82/@1",
+   "render_bounds": [
+    57.75,
+    102.75,
+    85.9,
+    130.9
+   ],
    "stage_bounds": [
     57.75,
     102.75,
@@ -3556,6 +4074,12 @@
    "kind": "movie_clip",
    "name": "instance89",
    "path": "/root1/__mainMc/@0/@2/@84",
+   "render_bounds": [
+    177.05,
+    43.95,
+    228.8,
+    95.7
+   ],
    "stage_bounds": [
     177.05,
     43.95,
@@ -3597,6 +4121,12 @@
    "kind": "graphic",
    "name": "instance90",
    "path": "/root1/__mainMc/@0/@2/@84/@1",
+   "render_bounds": [
+    177.05,
+    43.95,
+    228.8,
+    95.7
+   ],
    "stage_bounds": [
     177.05,
     43.95,
@@ -3638,6 +4168,12 @@
    "kind": "movie_clip",
    "name": "instance91",
    "path": "/root1/__mainMc/@0/@2/@86",
+   "render_bounds": [
+    45.95,
+    256.3,
+    88.4,
+    292.0
+   ],
    "stage_bounds": [
     45.95,
     256.3,
@@ -3679,6 +4215,12 @@
    "kind": "graphic",
    "name": "instance92",
    "path": "/root1/__mainMc/@0/@2/@86/@1",
+   "render_bounds": [
+    45.95,
+    256.3,
+    88.4,
+    292.0
+   ],
    "stage_bounds": [
     45.95,
     256.3,
@@ -3720,6 +4262,12 @@
    "kind": "movie_clip",
    "name": "instance93",
    "path": "/root1/__mainMc/@0/@2/@88",
+   "render_bounds": [
+    355.1,
+    130.9,
+    389.75,
+    165.75
+   ],
    "stage_bounds": [
     355.1,
     130.9,
@@ -3761,6 +4309,12 @@
    "kind": "graphic",
    "name": "instance94",
    "path": "/root1/__mainMc/@0/@2/@88/@1",
+   "render_bounds": [
+    355.1,
+    130.9,
+    389.75,
+    165.75
+   ],
    "stage_bounds": [
     355.1,
     130.9,
@@ -3802,6 +4356,12 @@
    "kind": "movie_clip",
    "name": "instance95",
    "path": "/root1/__mainMc/@0/@2/@90",
+   "render_bounds": [
+    425.45,
+    238.9,
+    468.2,
+    276.0
+   ],
    "stage_bounds": [
     425.45,
     238.9,
@@ -3843,6 +4403,12 @@
    "kind": "graphic",
    "name": "instance96",
    "path": "/root1/__mainMc/@0/@2/@90/@1",
+   "render_bounds": [
+    425.45,
+    238.9,
+    468.2,
+    276.0
+   ],
    "stage_bounds": [
     425.45,
     238.9,
@@ -3884,6 +4450,12 @@
    "kind": "movie_clip",
    "name": "mc",
    "path": "/root1/__mainMc/@0/@2/mc",
+   "render_bounds": [
+    -53.1,
+    -41.1,
+    752.3,
+    329.95
+   ],
    "stage_bounds": [
     -53.1,
     -41.1,
@@ -3926,6 +4498,12 @@
    "kind": "movie_clip",
    "name": "instance97",
    "path": "/root1/__mainMc/@0/@2/mc/@1",
+   "render_bounds": [
+    -6.45,
+    -6.9,
+    717.55,
+    306.6
+   ],
    "stage_bounds": [
     -6.45,
     -6.9,
@@ -3967,6 +4545,12 @@
    "kind": "graphic",
    "name": "instance98",
    "path": "/root1/__mainMc/@0/@2/mc/@1/@1",
+   "render_bounds": [
+    -6.45,
+    -6.9,
+    717.55,
+    306.6
+   ],
    "stage_bounds": [
     -6.45,
     -6.9,
@@ -4008,6 +4592,12 @@
    "kind": "movie_clip",
    "name": "instance99",
    "path": "/root1/__mainMc/@0/@2/mc/@3",
+   "render_bounds": [
+    -53.1,
+    -41.1,
+    752.3,
+    329.95
+   ],
    "stage_bounds": [
     -53.1,
     -41.1,
@@ -4049,6 +4639,12 @@
    "kind": "graphic",
    "name": "instance100",
    "path": "/root1/__mainMc/@0/@2/mc/@3/@1",
+   "render_bounds": [
+    -53.1,
+    -41.1,
+    752.3,
+    329.95
+   ],
    "stage_bounds": [
     -53.1,
     -41.1,
@@ -4090,6 +4686,12 @@
    "kind": "movie_clip",
    "name": "stars",
    "path": "/root1/__mainMc/@0/@2/stars",
+   "render_bounds": [
+    22.35,
+    43.75,
+    690.45,
+    141.95
+   ],
    "stage_bounds": [
     22.35,
     43.75,
@@ -4132,6 +4734,12 @@
    "kind": "movie_clip",
    "name": "instance101",
    "path": "/root1/__mainMc/@0/@2/stars/@1",
+   "render_bounds": [
+    22.35,
+    43.75,
+    638.8,
+    137.25
+   ],
    "stage_bounds": [
     22.35,
     43.75,
@@ -4173,6 +4781,12 @@
    "kind": "graphic",
    "name": "instance102",
    "path": "/root1/__mainMc/@0/@2/stars/@1/@23",
+   "render_bounds": [
+    22.35,
+    43.75,
+    638.8,
+    137.25
+   ],
    "stage_bounds": [
     22.35,
     43.75,
@@ -4214,6 +4828,12 @@
    "kind": "movie_clip",
    "name": "instance103",
    "path": "/root1/__mainMc/@0/@2/stars/@25",
+   "render_bounds": [
+    74.05,
+    46.25,
+    690.45,
+    141.95
+   ],
    "stage_bounds": [
     74.05,
     46.25,
@@ -4255,6 +4875,12 @@
    "kind": "graphic",
    "name": "instance104",
    "path": "/root1/__mainMc/@0/@2/stars/@25/@17",
+   "render_bounds": [
+    74.05,
+    46.25,
+    690.45,
+    141.95
+   ],
    "stage_bounds": [
     74.05,
     46.25,
@@ -4296,6 +4922,12 @@
    "kind": "movie_clip",
    "name": "instance105",
    "path": "/root1/__mainMc/@0/@2/@122",
+   "render_bounds": [
+    208.75,
+    77.0,
+    244.75,
+    165.85
+   ],
    "stage_bounds": [
     208.75,
     77.0,
@@ -4338,6 +4970,12 @@
    "kind": "movie_clip",
    "name": "instance106",
    "path": "/root1/__mainMc/@0/@2/@122/@1",
+   "render_bounds": [
+    208.75,
+    77.0,
+    244.75,
+    165.85
+   ],
    "stage_bounds": [
     208.75,
     77.0,
@@ -4379,6 +5017,12 @@
    "kind": "graphic",
    "name": "instance107",
    "path": "/root1/__mainMc/@0/@2/@122/@1/@1",
+   "render_bounds": [
+    208.75,
+    77.0,
+    244.75,
+    165.85
+   ],
    "stage_bounds": [
     208.75,
     77.0,
@@ -4420,6 +5064,12 @@
    "kind": "movie_clip",
    "name": "instance108",
    "path": "/root1/__mainMc/@0/@2/@124",
+   "render_bounds": [
+    26.7,
+    137.45,
+    69.55,
+    233.3
+   ],
    "stage_bounds": [
     26.7,
     137.45,
@@ -4462,6 +5112,12 @@
    "kind": "movie_clip",
    "name": "instance109",
    "path": "/root1/__mainMc/@0/@2/@124/@1",
+   "render_bounds": [
+    26.7,
+    137.45,
+    69.55,
+    233.3
+   ],
    "stage_bounds": [
     26.7,
     137.45,
@@ -4503,6 +5159,12 @@
    "kind": "graphic",
    "name": "instance110",
    "path": "/root1/__mainMc/@0/@2/@124/@1/@1",
+   "render_bounds": [
+    26.7,
+    137.45,
+    69.55,
+    233.3
+   ],
    "stage_bounds": [
     26.7,
     137.45,
@@ -4544,6 +5206,12 @@
    "kind": "movie_clip",
    "name": "instance111",
    "path": "/root1/__mainMc/@0/@2/@126",
+   "render_bounds": [
+    549.35,
+    141.95,
+    582.35,
+    205.4
+   ],
    "stage_bounds": [
     549.35,
     141.95,
@@ -4586,6 +5254,12 @@
    "kind": "movie_clip",
    "name": "instance112",
    "path": "/root1/__mainMc/@0/@2/@126/@1",
+   "render_bounds": [
+    549.35,
+    141.95,
+    582.35,
+    205.4
+   ],
    "stage_bounds": [
     549.35,
     141.95,
@@ -4627,6 +5301,12 @@
    "kind": "graphic",
    "name": "instance113",
    "path": "/root1/__mainMc/@0/@2/@126/@1/@1",
+   "render_bounds": [
+    549.35,
+    141.95,
+    582.35,
+    205.4
+   ],
    "stage_bounds": [
     549.35,
     141.95,
@@ -4668,6 +5348,12 @@
    "kind": "movie_clip",
    "name": "instance114",
    "path": "/root1/__mainMc/@0/@2/@128",
+   "render_bounds": [
+    695.75,
+    21.9,
+    722.55,
+    70.0
+   ],
    "stage_bounds": [
     695.75,
     21.9,
@@ -4710,6 +5396,12 @@
    "kind": "movie_clip",
    "name": "instance115",
    "path": "/root1/__mainMc/@0/@2/@128/@1",
+   "render_bounds": [
+    695.75,
+    21.9,
+    722.55,
+    70.0
+   ],
    "stage_bounds": [
     695.75,
     21.9,
@@ -4751,6 +5443,12 @@
    "kind": "graphic",
    "name": "instance116",
    "path": "/root1/__mainMc/@0/@2/@128/@1/@4",
+   "render_bounds": [
+    695.75,
+    21.9,
+    722.55,
+    70.0
+   ],
    "stage_bounds": [
     695.75,
     21.9,
@@ -4792,6 +5490,12 @@
    "kind": "movie_clip",
    "name": "instance117",
    "path": "/root1/__mainMc/@0/@2/@130",
+   "render_bounds": [
+    676.15,
+    176.8,
+    710.6,
+    263.0
+   ],
    "stage_bounds": [
     676.15,
     176.8,
@@ -4834,6 +5538,12 @@
    "kind": "movie_clip",
    "name": "instance118",
    "path": "/root1/__mainMc/@0/@2/@130/@1",
+   "render_bounds": [
+    676.15,
+    176.8,
+    710.6,
+    263.0
+   ],
    "stage_bounds": [
     676.15,
     176.8,
@@ -4875,6 +5585,12 @@
    "kind": "graphic",
    "name": "instance119",
    "path": "/root1/__mainMc/@0/@2/@130/@1/@1",
+   "render_bounds": [
+    676.15,
+    176.8,
+    710.6,
+    263.0
+   ],
    "stage_bounds": [
     676.15,
     176.8,
@@ -4915,6 +5631,12 @@
    "kind": "graphic",
    "name": "instance120",
    "path": "/root1/__mainMc/@0/@2/@141",
+   "render_bounds": [
+    35.6,
+    189.3,
+    107.05,
+    324.0
+   ],
    "stage_bounds": [
     35.6,
     189.3,
@@ -4956,6 +5678,12 @@
    "kind": "movie_clip",
    "name": "instance121",
    "path": "/root1/__mainMc/@0/@2/@142",
+   "render_bounds": [
+    617.55,
+    308.7,
+    663.1,
+    351.2
+   ],
    "stage_bounds": [
     620.55,
     311.7,
@@ -4997,6 +5725,12 @@
    "kind": "graphic",
    "name": "instance122",
    "path": "/root1/__mainMc/@0/@2/@142/@13",
+   "render_bounds": [
+    620.55,
+    311.7,
+    660.1,
+    348.2
+   ],
    "stage_bounds": [
     620.55,
     311.7,
@@ -5038,6 +5772,12 @@
    "kind": "movie_clip",
    "name": "instance123",
    "path": "/root1/__mainMc/@0/@2/@142/@14",
+   "render_bounds": [
+    629.65,
+    325.75,
+    648.75,
+    338.85
+   ],
    "stage_bounds": [
     629.65,
     325.75,
@@ -5079,6 +5819,12 @@
    "kind": "graphic",
    "name": "instance124",
    "path": "/root1/__mainMc/@0/@2/@142/@14/@1",
+   "render_bounds": [
+    629.65,
+    325.75,
+    648.75,
+    338.85
+   ],
    "stage_bounds": [
     629.65,
     325.75,
@@ -5119,6 +5865,12 @@
    "kind": "graphic",
    "name": "instance125",
    "path": "/root1/__mainMc/@0/@2/@142/@18",
+   "render_bounds": [
+    628.75,
+    318.6,
+    650.8,
+    340.25
+   ],
    "stage_bounds": [
     628.75,
     318.6,
@@ -5160,6 +5912,12 @@
    "kind": "movie_clip",
    "name": "instance126",
    "path": "/root1/__mainMc/@0/@2/@161",
+   "render_bounds": [
+    633.9,
+    301.65,
+    672.65,
+    338.05
+   ],
    "stage_bounds": [
     636.9,
     304.65,
@@ -5201,6 +5959,12 @@
    "kind": "graphic",
    "name": "instance127",
    "path": "/root1/__mainMc/@0/@2/@161/@13",
+   "render_bounds": [
+    636.9,
+    304.65,
+    669.65,
+    335.05
+   ],
    "stage_bounds": [
     636.9,
     304.65,
@@ -5242,6 +6006,12 @@
    "kind": "movie_clip",
    "name": "instance128",
    "path": "/root1/__mainMc/@0/@2/@161/@14",
+   "render_bounds": [
+    644.4,
+    316.2,
+    660.25,
+    327.3
+   ],
    "stage_bounds": [
     644.4,
     316.2,
@@ -5283,6 +6053,12 @@
    "kind": "graphic",
    "name": "instance129",
    "path": "/root1/__mainMc/@0/@2/@161/@14/@1",
+   "render_bounds": [
+    644.4,
+    316.2,
+    660.25,
+    327.3
+   ],
    "stage_bounds": [
     644.4,
     316.2,
@@ -5323,6 +6099,12 @@
    "kind": "graphic",
    "name": "instance130",
    "path": "/root1/__mainMc/@0/@2/@161/@18",
+   "render_bounds": [
+    643.7,
+    310.4,
+    662.0,
+    328.4
+   ],
    "stage_bounds": [
     643.7,
     310.4,
@@ -5364,6 +6146,12 @@
    "kind": "movie_clip",
    "name": "instance131",
    "path": "/root1/__mainMc/@0/@2/@180",
+   "render_bounds": [
+    704.65,
+    323.15,
+    721.25,
+    339.75
+   ],
    "stage_bounds": [
     704.65,
     323.15,
@@ -5405,6 +6193,12 @@
    "kind": "graphic",
    "name": "instance132",
    "path": "/root1/__mainMc/@0/@2/@180/@3",
+   "render_bounds": [
+    704.65,
+    323.15,
+    721.25,
+    339.75
+   ],
    "stage_bounds": [
     704.65,
     323.15,
@@ -5446,6 +6240,12 @@
    "kind": "movie_clip",
    "name": "instance133",
    "path": "/root1/__mainMc/@0/@2/@184",
+   "render_bounds": [
+    684.95,
+    339.45,
+    704.7,
+    359.15
+   ],
    "stage_bounds": [
     684.95,
     339.45,
@@ -5487,6 +6287,12 @@
    "kind": "graphic",
    "name": "instance134",
    "path": "/root1/__mainMc/@0/@2/@184/@3",
+   "render_bounds": [
+    684.95,
+    339.45,
+    704.7,
+    359.15
+   ],
    "stage_bounds": [
     684.95,
     339.45,
@@ -5528,6 +6334,12 @@
    "kind": "movie_clip",
    "name": "instance135",
    "path": "/root1/__mainMc/@0/@2/@188",
+   "render_bounds": [
+    552.25,
+    306.25,
+    568.85,
+    322.85
+   ],
    "stage_bounds": [
     552.25,
     306.25,
@@ -5569,6 +6381,12 @@
    "kind": "graphic",
    "name": "instance136",
    "path": "/root1/__mainMc/@0/@2/@188/@3",
+   "render_bounds": [
+    552.25,
+    306.25,
+    568.85,
+    322.85
+   ],
    "stage_bounds": [
     552.25,
     306.25,
@@ -5610,6 +6428,12 @@
    "kind": "movie_clip",
    "name": "instance137",
    "path": "/root1/__mainMc/@0/@2/@192",
+   "render_bounds": [
+    11.2,
+    365.35,
+    33.6,
+    387.75
+   ],
    "stage_bounds": [
     11.2,
     365.35,
@@ -5651,6 +6475,12 @@
    "kind": "graphic",
    "name": "instance138",
    "path": "/root1/__mainMc/@0/@2/@192/@3",
+   "render_bounds": [
+    11.2,
+    365.35,
+    33.6,
+    387.75
+   ],
    "stage_bounds": [
     11.2,
     365.35,
@@ -5692,6 +6522,12 @@
    "kind": "movie_clip",
    "name": "instance139",
    "path": "/root1/__mainMc/@0/@2/@196",
+   "render_bounds": [
+    661.0,
+    390.25,
+    710.5,
+    438.45
+   ],
    "stage_bounds": [
     664.0,
     393.25,
@@ -5733,6 +6569,12 @@
    "kind": "graphic",
    "name": "instance140",
    "path": "/root1/__mainMc/@0/@2/@196/@13",
+   "render_bounds": [
+    664.0,
+    393.25,
+    707.5,
+    435.45
+   ],
    "stage_bounds": [
     664.0,
     393.25,
@@ -5774,6 +6616,12 @@
    "kind": "movie_clip",
    "name": "instance141",
    "path": "/root1/__mainMc/@0/@2/@196/@14",
+   "render_bounds": [
+    673.25,
+    408.1,
+    694.75,
+    425.15
+   ],
    "stage_bounds": [
     673.25,
     408.1,
@@ -5815,6 +6663,12 @@
    "kind": "graphic",
    "name": "instance142",
    "path": "/root1/__mainMc/@0/@2/@196/@14/@1",
+   "render_bounds": [
+    673.25,
+    408.1,
+    694.75,
+    425.15
+   ],
    "stage_bounds": [
     673.25,
     408.1,
@@ -5855,6 +6709,12 @@
    "kind": "graphic",
    "name": "instance143",
    "path": "/root1/__mainMc/@0/@2/@196/@18",
+   "render_bounds": [
+    672.9,
+    401.4,
+    697.6,
+    425.95
+   ],
    "stage_bounds": [
     672.9,
     401.4,
@@ -5896,6 +6756,12 @@
    "kind": "movie_clip",
    "name": "instance144",
    "path": "/root1/__mainMc/@0/@2/@215",
+   "render_bounds": [
+    549.3,
+    353.15,
+    625.35,
+    428.45
+   ],
    "stage_bounds": [
     549.3,
     353.15,
@@ -5937,6 +6803,12 @@
    "kind": "graphic",
    "name": "instance145",
    "path": "/root1/__mainMc/@0/@2/@215/@17",
+   "render_bounds": [
+    549.3,
+    353.15,
+    625.35,
+    428.45
+   ],
    "stage_bounds": [
     549.3,
     353.15,
@@ -5978,6 +6850,12 @@
    "kind": "movie_clip",
    "name": "instance146",
    "path": "/root1/__mainMc/@0/@2/@233",
+   "render_bounds": [
+    73.0,
+    401.7,
+    122.5,
+    447.85
+   ],
    "stage_bounds": [
     76.0,
     404.7,
@@ -6019,6 +6897,12 @@
    "kind": "graphic",
    "name": "instance147",
    "path": "/root1/__mainMc/@0/@2/@233/@13",
+   "render_bounds": [
+    76.0,
+    404.7,
+    119.5,
+    444.85
+   ],
    "stage_bounds": [
     76.0,
     404.7,
@@ -6060,6 +6944,12 @@
    "kind": "movie_clip",
    "name": "instance148",
    "path": "/root1/__mainMc/@0/@2/@233/@14",
+   "render_bounds": [
+    86.0,
+    420.15,
+    107.0,
+    434.55
+   ],
    "stage_bounds": [
     86.0,
     420.15,
@@ -6101,6 +6991,12 @@
    "kind": "graphic",
    "name": "instance149",
    "path": "/root1/__mainMc/@0/@2/@233/@14/@1",
+   "render_bounds": [
+    86.0,
+    420.15,
+    107.0,
+    434.55
+   ],
    "stage_bounds": [
     86.0,
     420.15,
@@ -6141,6 +7037,12 @@
    "kind": "graphic",
    "name": "instance150",
    "path": "/root1/__mainMc/@0/@2/@233/@18",
+   "render_bounds": [
+    85.0,
+    412.3,
+    109.3,
+    436.1
+   ],
    "stage_bounds": [
     85.0,
     412.3,
@@ -6182,6 +7084,12 @@
    "kind": "movie_clip",
    "name": "instance151",
    "path": "/root1/__mainMc/@0/@2/@252",
+   "render_bounds": [
+    653.25,
+    383.6,
+    672.85,
+    403.15
+   ],
    "stage_bounds": [
     653.25,
     383.6,
@@ -6223,6 +7131,12 @@
    "kind": "graphic",
    "name": "instance152",
    "path": "/root1/__mainMc/@0/@2/@252/@3",
+   "render_bounds": [
+    653.25,
+    383.6,
+    672.85,
+    403.15
+   ],
    "stage_bounds": [
     653.25,
     383.6,
@@ -6264,6 +7178,12 @@
    "kind": "movie_clip",
    "name": "instance153",
    "path": "/root1/__mainMc/@0/@2/@256",
+   "render_bounds": [
+    617.5,
+    395.15,
+    637.1,
+    414.7
+   ],
    "stage_bounds": [
     617.5,
     395.15,
@@ -6305,6 +7225,12 @@
    "kind": "graphic",
    "name": "instance154",
    "path": "/root1/__mainMc/@0/@2/@256/@3",
+   "render_bounds": [
+    617.5,
+    395.15,
+    637.1,
+    414.7
+   ],
    "stage_bounds": [
     617.5,
     395.15,
@@ -6346,6 +7272,12 @@
    "kind": "movie_clip",
    "name": "instance155",
    "path": "/root1/__mainMc/@0/@2/@260",
+   "render_bounds": [
+    11.2,
+    323.6,
+    27.05,
+    339.45
+   ],
    "stage_bounds": [
     11.2,
     323.6,
@@ -6387,6 +7319,12 @@
    "kind": "graphic",
    "name": "instance156",
    "path": "/root1/__mainMc/@0/@2/@260/@3",
+   "render_bounds": [
+    11.2,
+    323.6,
+    27.05,
+    339.45
+   ],
    "stage_bounds": [
     11.2,
     323.6,
@@ -6428,6 +7366,12 @@
    "kind": "movie_clip",
    "name": "instance157",
    "path": "/root1/__mainMc/@0/@2/@264",
+   "render_bounds": [
+    381.05,
+    404.7,
+    400.1,
+    423.75
+   ],
    "stage_bounds": [
     381.05,
     404.7,
@@ -6469,6 +7413,12 @@
    "kind": "graphic",
    "name": "instance158",
    "path": "/root1/__mainMc/@0/@2/@264/@3",
+   "render_bounds": [
+    381.05,
+    404.7,
+    400.1,
+    423.75
+   ],
    "stage_bounds": [
     381.05,
     404.7,
@@ -6510,6 +7460,12 @@
    "kind": "movie_clip",
    "name": "instance159",
    "path": "/root1/__mainMc/@0/@2/@268",
+   "render_bounds": [
+    708.1,
+    420.4,
+    730.5,
+    442.8
+   ],
    "stage_bounds": [
     708.1,
     420.4,
@@ -6551,6 +7507,12 @@
    "kind": "graphic",
    "name": "instance160",
    "path": "/root1/__mainMc/@0/@2/@268/@3",
+   "render_bounds": [
+    708.1,
+    420.4,
+    730.5,
+    442.8
+   ],
    "stage_bounds": [
     708.1,
     420.4,
@@ -6592,6 +7554,12 @@
    "kind": "movie_clip",
    "name": "instance161",
    "path": "/root1/__mainMc/@0/@2/@272",
+   "render_bounds": [
+    35.85,
+    302.6,
+    81.4,
+    345.1
+   ],
    "stage_bounds": [
     38.85,
     305.6,
@@ -6633,6 +7601,12 @@
    "kind": "graphic",
    "name": "instance162",
    "path": "/root1/__mainMc/@0/@2/@272/@13",
+   "render_bounds": [
+    38.85,
+    305.6,
+    78.4,
+    342.1
+   ],
    "stage_bounds": [
     38.85,
     305.6,
@@ -6674,6 +7648,12 @@
    "kind": "movie_clip",
    "name": "instance163",
    "path": "/root1/__mainMc/@0/@2/@272/@14",
+   "render_bounds": [
+    47.95,
+    319.65,
+    67.05,
+    332.75
+   ],
    "stage_bounds": [
     47.95,
     319.65,
@@ -6715,6 +7695,12 @@
    "kind": "graphic",
    "name": "instance164",
    "path": "/root1/__mainMc/@0/@2/@272/@14/@1",
+   "render_bounds": [
+    47.95,
+    319.65,
+    67.05,
+    332.75
+   ],
    "stage_bounds": [
     47.95,
     319.65,
@@ -6755,6 +7741,12 @@
    "kind": "graphic",
    "name": "instance165",
    "path": "/root1/__mainMc/@0/@2/@272/@18",
+   "render_bounds": [
+    47.05,
+    312.5,
+    69.1,
+    334.15
+   ],
    "stage_bounds": [
     47.05,
     312.5,
@@ -6796,6 +7788,12 @@
    "kind": "movie_clip",
    "name": "instance166",
    "path": "/root1/__mainMc/@0/@2/@291",
+   "render_bounds": [
+    36.7,
+    331.6,
+    53.3,
+    348.2
+   ],
    "stage_bounds": [
     36.7,
     331.6,
@@ -6837,6 +7835,12 @@
    "kind": "graphic",
    "name": "instance167",
    "path": "/root1/__mainMc/@0/@2/@291/@3",
+   "render_bounds": [
+    36.7,
+    331.6,
+    53.3,
+    348.2
+   ],
    "stage_bounds": [
     36.7,
     331.6,
@@ -6878,6 +7882,12 @@
    "kind": "movie_clip",
    "name": "instance168",
    "path": "/root1/__mainMc/@0/@2/@295",
+   "render_bounds": [
+    0.2,
+    286.4,
+    38.95,
+    322.8
+   ],
    "stage_bounds": [
     3.2,
     289.4,
@@ -6919,6 +7929,12 @@
    "kind": "graphic",
    "name": "instance169",
    "path": "/root1/__mainMc/@0/@2/@295/@13",
+   "render_bounds": [
+    3.2,
+    289.4,
+    35.95,
+    319.8
+   ],
    "stage_bounds": [
     3.2,
     289.4,
@@ -6960,6 +7976,12 @@
    "kind": "movie_clip",
    "name": "instance170",
    "path": "/root1/__mainMc/@0/@2/@295/@14",
+   "render_bounds": [
+    10.7,
+    300.95,
+    26.55,
+    312.05
+   ],
    "stage_bounds": [
     10.7,
     300.95,
@@ -7001,6 +8023,12 @@
    "kind": "graphic",
    "name": "instance171",
    "path": "/root1/__mainMc/@0/@2/@295/@14/@1",
+   "render_bounds": [
+    10.7,
+    300.95,
+    26.55,
+    312.05
+   ],
    "stage_bounds": [
     10.7,
     300.95,
@@ -7041,6 +8069,12 @@
    "kind": "graphic",
    "name": "instance172",
    "path": "/root1/__mainMc/@0/@2/@295/@18",
+   "render_bounds": [
+    10.0,
+    295.15,
+    28.3,
+    313.15
+   ],
    "stage_bounds": [
     10.0,
     295.15,
@@ -7082,6 +8116,12 @@
    "kind": "movie_clip",
    "name": "instance173",
    "path": "/root1/__mainMc/@0/@2/@314",
+   "render_bounds": [
+    50.3,
+    351.15,
+    99.8,
+    399.35
+   ],
    "stage_bounds": [
     53.3,
     354.15,
@@ -7123,6 +8163,12 @@
    "kind": "graphic",
    "name": "instance174",
    "path": "/root1/__mainMc/@0/@2/@314/@13",
+   "render_bounds": [
+    53.3,
+    354.15,
+    96.8,
+    396.35
+   ],
    "stage_bounds": [
     53.3,
     354.15,
@@ -7164,6 +8210,12 @@
    "kind": "movie_clip",
    "name": "instance175",
    "path": "/root1/__mainMc/@0/@2/@314/@14",
+   "render_bounds": [
+    62.55,
+    369.0,
+    84.05,
+    386.05
+   ],
    "stage_bounds": [
     62.55,
     369.0,
@@ -7205,6 +8257,12 @@
    "kind": "graphic",
    "name": "instance176",
    "path": "/root1/__mainMc/@0/@2/@314/@14/@1",
+   "render_bounds": [
+    62.55,
+    369.0,
+    84.05,
+    386.05
+   ],
    "stage_bounds": [
     62.55,
     369.0,
@@ -7245,6 +8303,12 @@
    "kind": "graphic",
    "name": "instance177",
    "path": "/root1/__mainMc/@0/@2/@314/@18",
+   "render_bounds": [
+    62.2,
+    362.3,
+    86.9,
+    386.85
+   ],
    "stage_bounds": [
     62.2,
     362.3,
@@ -7265,6 +8329,7 @@
    "blend_mode": "Normal",
    "character_id": 225,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -7285,6 +8350,12 @@
    "kind": "graphic",
    "name": "instance178",
    "path": "/root1/__mainMc/@0/@335",
+   "render_bounds": [
+    0.0,
+    209.0,
+    669.15,
+    409.85
+   ],
    "stage_bounds": [
     0.0,
     209.0,
@@ -7305,6 +8376,7 @@
    "blend_mode": "Normal",
    "character_id": 228,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -7326,6 +8398,12 @@
    "kind": "movie_clip",
    "name": "instance179",
    "path": "/root1/__mainMc/@0/@336",
+   "render_bounds": [
+    22.6,
+    321.35,
+    47.05,
+    338.15
+   ],
    "stage_bounds": [
     22.6,
     321.35,
@@ -7368,6 +8446,12 @@
    "kind": "movie_clip",
    "name": "instance180",
    "path": "/root1/__mainMc/@0/@336/@1",
+   "render_bounds": [
+    22.6,
+    321.35,
+    47.05,
+    338.15
+   ],
    "stage_bounds": [
     22.6,
     321.35,
@@ -7409,6 +8493,12 @@
    "kind": "graphic",
    "name": "instance181",
    "path": "/root1/__mainMc/@0/@336/@1/@4",
+   "render_bounds": [
+    22.6,
+    321.35,
+    47.05,
+    338.15
+   ],
    "stage_bounds": [
     22.6,
     321.35,
@@ -7429,6 +8519,7 @@
    "blend_mode": "Normal",
    "character_id": 229,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -7449,6 +8540,12 @@
    "kind": "graphic",
    "name": "instance182",
    "path": "/root1/__mainMc/@0/@338",
+   "render_bounds": [
+    30.45,
+    260.7,
+    80.8,
+    280.7
+   ],
    "stage_bounds": [
     30.45,
     260.7,
@@ -7469,6 +8566,7 @@
    "blend_mode": "Normal",
    "character_id": 231,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -7490,6 +8588,12 @@
    "kind": "movie_clip",
    "name": "instance183",
    "path": "/root1/__mainMc/@0/@339",
+   "render_bounds": [
+    25.45,
+    258.4,
+    192.25,
+    339.95
+   ],
    "stage_bounds": [
     30.45,
     261.4,
@@ -7531,6 +8635,12 @@
    "kind": "graphic",
    "name": "instance184",
    "path": "/root1/__mainMc/@0/@339/@3",
+   "render_bounds": [
+    30.45,
+    261.4,
+    187.25,
+    336.95
+   ],
    "stage_bounds": [
     30.45,
     261.4,
@@ -7551,6 +8661,7 @@
    "blend_mode": "Normal",
    "character_id": 239,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -7572,6 +8683,12 @@
    "kind": "movie_clip",
    "name": "bodyMc",
    "path": "/root1/__mainMc/@0/bodyMc",
+   "render_bounds": [
+    24.45,
+    205.2,
+    127.05,
+    310.55
+   ],
    "stage_bounds": [
     24.45,
     205.2,
@@ -7614,6 +8731,12 @@
    "kind": "movie_clip",
    "name": "instance185",
    "path": "/root1/__mainMc/@0/bodyMc/@1",
+   "render_bounds": [
+    88.8,
+    266.6,
+    113.95,
+    294.75
+   ],
    "stage_bounds": [
     88.8,
     266.6,
@@ -7655,6 +8778,12 @@
    "kind": "graphic",
    "name": "instance186",
    "path": "/root1/__mainMc/@0/bodyMc/@1/@10",
+   "render_bounds": [
+    88.8,
+    266.6,
+    113.95,
+    294.75
+   ],
    "stage_bounds": [
     88.8,
     266.6,
@@ -7696,6 +8825,12 @@
    "kind": "movie_clip",
    "name": "instance187",
    "path": "/root1/__mainMc/@0/bodyMc/@12",
+   "render_bounds": [
+    62.25,
+    276.4,
+    87.35,
+    304.55
+   ],
    "stage_bounds": [
     62.25,
     276.4,
@@ -7737,6 +8872,12 @@
    "kind": "graphic",
    "name": "instance188",
    "path": "/root1/__mainMc/@0/bodyMc/@12/@10",
+   "render_bounds": [
+    62.25,
+    276.4,
+    87.35,
+    304.55
+   ],
    "stage_bounds": [
     62.25,
     276.4,
@@ -7777,6 +8918,12 @@
    "kind": "graphic",
    "name": "instance189",
    "path": "/root1/__mainMc/@0/bodyMc/@31",
+   "render_bounds": [
+    73.55,
+    272.9,
+    108.3,
+    310.55
+   ],
    "stage_bounds": [
     73.55,
     272.9,
@@ -7818,6 +8965,12 @@
    "kind": "movie_clip",
    "name": "instance190",
    "path": "/root1/__mainMc/@0/bodyMc/@32",
+   "render_bounds": [
+    24.45,
+    205.2,
+    127.05,
+    298.7
+   ],
    "stage_bounds": [
     24.45,
     205.2,
@@ -7859,6 +9012,12 @@
    "kind": "graphic",
    "name": "instance191",
    "path": "/root1/__mainMc/@0/bodyMc/@32/@15",
+   "render_bounds": [
+    24.45,
+    205.2,
+    127.05,
+    298.7
+   ],
    "stage_bounds": [
     24.45,
     205.2,
@@ -7900,6 +9059,12 @@
    "kind": "movie_clip",
    "name": "instance192",
    "path": "/root1/__mainMc/@0/bodyMc/@48",
+   "render_bounds": [
+    46.4,
+    233.65,
+    112.4,
+    293.05
+   ],
    "stage_bounds": [
     46.4,
     233.65,
@@ -7941,6 +9106,12 @@
    "kind": "graphic",
    "name": "instance193",
    "path": "/root1/__mainMc/@0/bodyMc/@48/@9",
+   "render_bounds": [
+    46.4,
+    233.65,
+    112.4,
+    293.05
+   ],
    "stage_bounds": [
     46.4,
     233.65,
@@ -7961,6 +9132,7 @@
    "blend_mode": "Normal",
    "character_id": 241,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -7982,6 +9154,12 @@
    "kind": "movie_clip",
    "name": "instance194",
    "path": "/root1/__mainMc/@0/@392",
+   "render_bounds": [
+    77.3,
+    245.6,
+    100.9,
+    268.0
+   ],
    "stage_bounds": [
     77.3,
     245.6,
@@ -8023,6 +9201,12 @@
    "kind": "graphic",
    "name": "instance195",
    "path": "/root1/__mainMc/@0/@392/@4",
+   "render_bounds": [
+    77.3,
+    245.6,
+    100.9,
+    268.0
+   ],
    "stage_bounds": [
     77.3,
     245.6,
@@ -8043,6 +9227,7 @@
    "blend_mode": "Normal",
    "character_id": 241,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8064,6 +9249,12 @@
    "kind": "movie_clip",
    "name": "instance196",
    "path": "/root1/__mainMc/@0/@397",
+   "render_bounds": [
+    50.6,
+    252.15,
+    79.5,
+    280.65
+   ],
    "stage_bounds": [
     50.6,
     252.15,
@@ -8105,6 +9296,12 @@
    "kind": "graphic",
    "name": "instance197",
    "path": "/root1/__mainMc/@0/@397/@4",
+   "render_bounds": [
+    50.6,
+    252.15,
+    79.5,
+    280.65
+   ],
    "stage_bounds": [
     50.6,
     252.15,
@@ -8125,6 +9322,7 @@
    "blend_mode": "Normal",
    "character_id": 243,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8146,6 +9344,12 @@
    "kind": "movie_clip",
    "name": "instance198",
    "path": "/root1/__mainMc/@0/@402",
+   "render_bounds": [
+    -0.85,
+    271.7,
+    172.55,
+    374.85
+   ],
    "stage_bounds": [
     4.15,
     274.7,
@@ -8187,6 +9391,12 @@
    "kind": "graphic",
    "name": "instance199",
    "path": "/root1/__mainMc/@0/@402/@16",
+   "render_bounds": [
+    4.15,
+    274.7,
+    167.55,
+    371.85
+   ],
    "stage_bounds": [
     4.15,
     274.7,
@@ -8207,6 +9417,7 @@
    "blend_mode": "Normal",
    "character_id": 244,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8227,6 +9438,12 @@
    "kind": "graphic",
    "name": "instance200",
    "path": "/root1/__mainMc/@0/@430",
+   "render_bounds": [
+    61.9,
+    278.65,
+    111.95,
+    297.65
+   ],
    "stage_bounds": [
     61.9,
     278.65,
@@ -8247,6 +9464,7 @@
    "blend_mode": "Normal",
    "character_id": 217,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8268,6 +9486,12 @@
    "kind": "movie_clip",
    "name": "instance201",
    "path": "/root1/__mainMc/@0/@431",
+   "render_bounds": [
+    151.0,
+    345.8,
+    173.4,
+    368.2
+   ],
    "stage_bounds": [
     151.0,
     345.8,
@@ -8309,6 +9533,12 @@
    "kind": "graphic",
    "name": "instance202",
    "path": "/root1/__mainMc/@0/@431/@3",
+   "render_bounds": [
+    151.0,
+    345.8,
+    173.4,
+    368.2
+   ],
    "stage_bounds": [
     151.0,
     345.8,
@@ -8329,6 +9559,7 @@
    "blend_mode": "Normal",
    "character_id": 213,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8350,6 +9581,12 @@
    "kind": "movie_clip",
    "name": "instance203",
    "path": "/root1/__mainMc/@0/@435",
+   "render_bounds": [
+    191.2,
+    361.5,
+    240.7,
+    409.7
+   ],
    "stage_bounds": [
     194.2,
     364.5,
@@ -8391,6 +9628,12 @@
    "kind": "graphic",
    "name": "instance204",
    "path": "/root1/__mainMc/@0/@435/@13",
+   "render_bounds": [
+    194.2,
+    364.5,
+    237.7,
+    406.7
+   ],
    "stage_bounds": [
     194.2,
     364.5,
@@ -8432,6 +9675,12 @@
    "kind": "movie_clip",
    "name": "instance205",
    "path": "/root1/__mainMc/@0/@435/@14",
+   "render_bounds": [
+    203.45,
+    379.35,
+    224.95,
+    396.4
+   ],
    "stage_bounds": [
     203.45,
     379.35,
@@ -8473,6 +9722,12 @@
    "kind": "graphic",
    "name": "instance206",
    "path": "/root1/__mainMc/@0/@435/@14/@1",
+   "render_bounds": [
+    203.45,
+    379.35,
+    224.95,
+    396.4
+   ],
    "stage_bounds": [
     203.45,
     379.35,
@@ -8513,6 +9768,12 @@
    "kind": "graphic",
    "name": "instance207",
    "path": "/root1/__mainMc/@0/@435/@18",
+   "render_bounds": [
+    203.1,
+    372.65,
+    227.8,
+    397.2
+   ],
    "stage_bounds": [
     203.1,
     372.65,
@@ -8533,6 +9794,7 @@
    "blend_mode": "Normal",
    "character_id": 219,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8554,6 +9816,12 @@
    "kind": "movie_clip",
    "name": "instance208",
    "path": "/root1/__mainMc/@0/@454",
+   "render_bounds": [
+    187.65,
+    313.95,
+    263.7,
+    389.25
+   ],
    "stage_bounds": [
     187.65,
     313.95,
@@ -8595,6 +9863,12 @@
    "kind": "graphic",
    "name": "instance209",
    "path": "/root1/__mainMc/@0/@454/@17",
+   "render_bounds": [
+    187.65,
+    313.95,
+    263.7,
+    389.25
+   ],
    "stage_bounds": [
     187.65,
     313.95,
@@ -8615,6 +9889,7 @@
    "blend_mode": "Normal",
    "character_id": 213,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8636,6 +9911,12 @@
    "kind": "movie_clip",
    "name": "instance210",
    "path": "/root1/__mainMc/@0/@472",
+   "render_bounds": [
+    109.95,
+    355.5,
+    159.45,
+    401.65
+   ],
    "stage_bounds": [
     112.95,
     358.5,
@@ -8677,6 +9958,12 @@
    "kind": "graphic",
    "name": "instance211",
    "path": "/root1/__mainMc/@0/@472/@13",
+   "render_bounds": [
+    112.95,
+    358.5,
+    156.45,
+    398.65
+   ],
    "stage_bounds": [
     112.95,
     358.5,
@@ -8718,6 +10005,12 @@
    "kind": "movie_clip",
    "name": "instance212",
    "path": "/root1/__mainMc/@0/@472/@14",
+   "render_bounds": [
+    122.95,
+    373.95,
+    143.95,
+    388.35
+   ],
    "stage_bounds": [
     122.95,
     373.95,
@@ -8759,6 +10052,12 @@
    "kind": "graphic",
    "name": "instance213",
    "path": "/root1/__mainMc/@0/@472/@14/@1",
+   "render_bounds": [
+    122.95,
+    373.95,
+    143.95,
+    388.35
+   ],
    "stage_bounds": [
     122.95,
     373.95,
@@ -8799,6 +10098,12 @@
    "kind": "graphic",
    "name": "instance214",
    "path": "/root1/__mainMc/@0/@472/@18",
+   "render_bounds": [
+    121.95,
+    366.1,
+    146.25,
+    389.9
+   ],
    "stage_bounds": [
     121.95,
     366.1,
@@ -8819,6 +10124,7 @@
    "blend_mode": "Normal",
    "character_id": 217,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8840,6 +10146,12 @@
    "kind": "movie_clip",
    "name": "instance215",
    "path": "/root1/__mainMc/@0/@491",
+   "render_bounds": [
+    210.65,
+    312.85,
+    230.25,
+    332.4
+   ],
    "stage_bounds": [
     210.65,
     312.85,
@@ -8881,6 +10193,12 @@
    "kind": "graphic",
    "name": "instance216",
    "path": "/root1/__mainMc/@0/@491/@3",
+   "render_bounds": [
+    210.65,
+    312.85,
+    230.25,
+    332.4
+   ],
    "stage_bounds": [
     210.65,
     312.85,
@@ -8901,6 +10219,7 @@
    "blend_mode": "Normal",
    "character_id": 215,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -8922,6 +10241,12 @@
    "kind": "movie_clip",
    "name": "instance217",
    "path": "/root1/__mainMc/@0/@495",
+   "render_bounds": [
+    184.4,
+    336.9,
+    204.0,
+    356.45
+   ],
    "stage_bounds": [
     184.4,
     336.9,
@@ -8963,6 +10288,12 @@
    "kind": "graphic",
    "name": "instance218",
    "path": "/root1/__mainMc/@0/@495/@3",
+   "render_bounds": [
+    184.4,
+    336.9,
+    204.0,
+    356.45
+   ],
    "stage_bounds": [
     184.4,
     336.9,
@@ -8983,6 +10314,7 @@
    "blend_mode": "Normal",
    "character_id": 221,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -9004,6 +10336,12 @@
    "kind": "movie_clip",
    "name": "instance219",
    "path": "/root1/__mainMc/@0/@499",
+   "render_bounds": [
+    191.1,
+    304.85,
+    206.95,
+    320.7
+   ],
    "stage_bounds": [
     191.1,
     304.85,
@@ -9045,6 +10383,12 @@
    "kind": "graphic",
    "name": "instance220",
    "path": "/root1/__mainMc/@0/@499/@3",
+   "render_bounds": [
+    191.1,
+    304.85,
+    206.95,
+    320.7
+   ],
    "stage_bounds": [
     191.1,
     304.85,
@@ -9065,6 +10409,7 @@
    "blend_mode": "Normal",
    "character_id": 217,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -9086,6 +10431,12 @@
    "kind": "movie_clip",
    "name": "instance221",
    "path": "/root1/__mainMc/@0/@503",
+   "render_bounds": [
+    180.25,
+    317.2,
+    199.3,
+    336.25
+   ],
    "stage_bounds": [
     180.25,
     317.2,
@@ -9127,6 +10478,12 @@
    "kind": "graphic",
    "name": "instance222",
    "path": "/root1/__mainMc/@0/@503/@3",
+   "render_bounds": [
+    180.25,
+    317.2,
+    199.3,
+    336.25
+   ],
    "stage_bounds": [
     180.25,
     317.2,
@@ -9147,6 +10504,7 @@
    "blend_mode": "Normal",
    "character_id": 223,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -9168,6 +10526,12 @@
    "kind": "movie_clip",
    "name": "instance223",
    "path": "/root1/__mainMc/@0/@507",
+   "render_bounds": [
+    175.1,
+    350.8,
+    197.5,
+    373.2
+   ],
    "stage_bounds": [
     175.1,
     350.8,
@@ -9209,6 +10573,12 @@
    "kind": "graphic",
    "name": "instance224",
    "path": "/root1/__mainMc/@0/@507/@3",
+   "render_bounds": [
+    175.1,
+    350.8,
+    197.5,
+    373.2
+   ],
    "stage_bounds": [
     175.1,
     350.8,
@@ -9229,6 +10599,7 @@
    "blend_mode": "Normal",
    "character_id": 253,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -9250,6 +10621,12 @@
    "kind": "movie_clip",
    "name": "instance225",
    "path": "/root1/__mainMc/@0/@511",
+   "render_bounds": [
+    493.4,
+    162.25,
+    623.5,
+    366.85
+   ],
    "stage_bounds": [
     498.4,
     167.25,
@@ -9291,6 +10668,12 @@
    "kind": "graphic",
    "name": "instance226",
    "path": "/root1/__mainMc/@0/@511/@3",
+   "render_bounds": [
+    504.35,
+    188.35,
+    612.5,
+    347.2
+   ],
    "stage_bounds": [
     504.35,
     188.35,
@@ -9332,6 +10715,12 @@
    "kind": "movie_clip",
    "name": "instance227",
    "path": "/root1/__mainMc/@0/@511/@4",
+   "render_bounds": [
+    558.4,
+    217.2,
+    577.8,
+    236.65
+   ],
    "stage_bounds": [
     558.4,
     217.2,
@@ -9373,6 +10762,12 @@
    "kind": "graphic",
    "name": "instance228",
    "path": "/root1/__mainMc/@0/@511/@4/@3",
+   "render_bounds": [
+    558.4,
+    217.2,
+    577.8,
+    236.65
+   ],
    "stage_bounds": [
     558.4,
     217.2,
@@ -9414,6 +10809,12 @@
    "kind": "movie_clip",
    "name": "instance229",
    "path": "/root1/__mainMc/@0/@511/@8",
+   "render_bounds": [
+    570.6,
+    206.05,
+    590.0,
+    225.5
+   ],
    "stage_bounds": [
     570.6,
     206.05,
@@ -9455,6 +10856,12 @@
    "kind": "graphic",
    "name": "instance230",
    "path": "/root1/__mainMc/@0/@511/@8/@3",
+   "render_bounds": [
+    570.6,
+    206.05,
+    590.0,
+    225.5
+   ],
    "stage_bounds": [
     570.6,
     206.05,
@@ -9496,6 +10903,12 @@
    "kind": "movie_clip",
    "name": "instance231",
    "path": "/root1/__mainMc/@0/@511/@12",
+   "render_bounds": [
+    539.6,
+    238.55,
+    559.0,
+    258.0
+   ],
    "stage_bounds": [
     539.6,
     238.55,
@@ -9537,6 +10950,12 @@
    "kind": "graphic",
    "name": "instance232",
    "path": "/root1/__mainMc/@0/@511/@12/@3",
+   "render_bounds": [
+    539.6,
+    238.55,
+    559.0,
+    258.0
+   ],
    "stage_bounds": [
     539.6,
     238.55,
@@ -9578,6 +10997,12 @@
    "kind": "movie_clip",
    "name": "instance233",
    "path": "/root1/__mainMc/@0/@511/@16",
+   "render_bounds": [
+    520.15,
+    238.5,
+    539.55,
+    257.95
+   ],
    "stage_bounds": [
     520.15,
     238.5,
@@ -9619,6 +11044,12 @@
    "kind": "graphic",
    "name": "instance234",
    "path": "/root1/__mainMc/@0/@511/@16/@2",
+   "render_bounds": [
+    520.15,
+    238.5,
+    539.55,
+    257.95
+   ],
    "stage_bounds": [
     520.15,
     238.5,
@@ -9660,6 +11091,12 @@
    "kind": "movie_clip",
    "name": "instance235",
    "path": "/root1/__mainMc/@0/@511/@19",
+   "render_bounds": [
+    516.0,
+    219.1,
+    535.4,
+    238.55
+   ],
    "stage_bounds": [
     516.0,
     219.1,
@@ -9701,6 +11138,12 @@
    "kind": "graphic",
    "name": "instance236",
    "path": "/root1/__mainMc/@0/@511/@19/@3",
+   "render_bounds": [
+    516.0,
+    219.1,
+    535.4,
+    238.55
+   ],
    "stage_bounds": [
     516.0,
     219.1,
@@ -9742,6 +11185,12 @@
    "kind": "movie_clip",
    "name": "instance237",
    "path": "/root1/__mainMc/@0/@511/@23",
+   "render_bounds": [
+    535.0,
+    214.75,
+    554.4,
+    234.2
+   ],
    "stage_bounds": [
     535.0,
     214.75,
@@ -9783,6 +11232,12 @@
    "kind": "graphic",
    "name": "instance238",
    "path": "/root1/__mainMc/@0/@511/@23/@2",
+   "render_bounds": [
+    535.0,
+    214.75,
+    554.4,
+    234.2
+   ],
    "stage_bounds": [
     535.0,
     214.75,
@@ -9824,6 +11279,12 @@
    "kind": "movie_clip",
    "name": "instance239",
    "path": "/root1/__mainMc/@0/@511/@26",
+   "render_bounds": [
+    574.85,
+    222.1,
+    594.25,
+    241.55
+   ],
    "stage_bounds": [
     574.85,
     222.1,
@@ -9865,6 +11326,12 @@
    "kind": "graphic",
    "name": "instance240",
    "path": "/root1/__mainMc/@0/@511/@26/@2",
+   "render_bounds": [
+    574.85,
+    222.1,
+    594.25,
+    241.55
+   ],
    "stage_bounds": [
     574.85,
     222.1,
@@ -9906,6 +11373,12 @@
    "kind": "movie_clip",
    "name": "instance241",
    "path": "/root1/__mainMc/@0/@511/@29",
+   "render_bounds": [
+    529.9,
+    228.8,
+    549.3,
+    248.25
+   ],
    "stage_bounds": [
     529.9,
     228.8,
@@ -9947,6 +11420,12 @@
    "kind": "graphic",
    "name": "instance242",
    "path": "/root1/__mainMc/@0/@511/@29/@3",
+   "render_bounds": [
+    529.9,
+    228.8,
+    549.3,
+    248.25
+   ],
    "stage_bounds": [
     529.9,
     228.8,
@@ -9988,6 +11467,12 @@
    "kind": "movie_clip",
    "name": "instance243",
    "path": "/root1/__mainMc/@0/@511/@33",
+   "render_bounds": [
+    555.4,
+    243.5,
+    574.8,
+    262.95
+   ],
    "stage_bounds": [
     555.4,
     243.5,
@@ -10029,6 +11514,12 @@
    "kind": "graphic",
    "name": "instance244",
    "path": "/root1/__mainMc/@0/@511/@33/@2",
+   "render_bounds": [
+    555.4,
+    243.5,
+    574.8,
+    262.95
+   ],
    "stage_bounds": [
     555.4,
     243.5,
@@ -10070,6 +11561,12 @@
    "kind": "movie_clip",
    "name": "instance245",
    "path": "/root1/__mainMc/@0/@511/@36",
+   "render_bounds": [
+    526.15,
+    199.7,
+    545.55,
+    219.15
+   ],
    "stage_bounds": [
     526.15,
     199.7,
@@ -10111,6 +11608,12 @@
    "kind": "graphic",
    "name": "instance246",
    "path": "/root1/__mainMc/@0/@511/@36/@3",
+   "render_bounds": [
+    526.15,
+    199.7,
+    545.55,
+    219.15
+   ],
    "stage_bounds": [
     526.15,
     199.7,
@@ -10152,6 +11655,12 @@
    "kind": "movie_clip",
    "name": "instance247",
    "path": "/root1/__mainMc/@0/@511/@40",
+   "render_bounds": [
+    574.85,
+    238.55,
+    594.25,
+    258.0
+   ],
    "stage_bounds": [
     574.85,
     238.55,
@@ -10193,6 +11702,12 @@
    "kind": "graphic",
    "name": "instance248",
    "path": "/root1/__mainMc/@0/@511/@40/@3",
+   "render_bounds": [
+    574.85,
+    238.55,
+    594.25,
+    258.0
+   ],
    "stage_bounds": [
     574.85,
     238.55,
@@ -10234,6 +11749,12 @@
    "kind": "movie_clip",
    "name": "instance249",
    "path": "/root1/__mainMc/@0/@511/@44",
+   "render_bounds": [
+    539.2,
+    260.8,
+    558.6,
+    280.25
+   ],
    "stage_bounds": [
     539.2,
     260.8,
@@ -10275,6 +11796,12 @@
    "kind": "graphic",
    "name": "instance250",
    "path": "/root1/__mainMc/@0/@511/@44/@3",
+   "render_bounds": [
+    539.2,
+    260.8,
+    558.6,
+    280.25
+   ],
    "stage_bounds": [
     539.2,
     260.8,
@@ -10316,6 +11843,12 @@
    "kind": "movie_clip",
    "name": "instance251",
    "path": "/root1/__mainMc/@0/@511/@48",
+   "render_bounds": [
+    561.3,
+    260.8,
+    580.7,
+    280.25
+   ],
    "stage_bounds": [
     561.3,
     260.8,
@@ -10357,6 +11890,12 @@
    "kind": "graphic",
    "name": "instance252",
    "path": "/root1/__mainMc/@0/@511/@48/@3",
+   "render_bounds": [
+    561.3,
+    260.8,
+    580.7,
+    280.25
+   ],
    "stage_bounds": [
     561.3,
     260.8,
@@ -10398,6 +11937,12 @@
    "kind": "movie_clip",
    "name": "instance253",
    "path": "/root1/__mainMc/@0/@511/@52",
+   "render_bounds": [
+    504.25,
+    248.2,
+    523.65,
+    267.65
+   ],
    "stage_bounds": [
     504.25,
     248.2,
@@ -10439,6 +11984,12 @@
    "kind": "graphic",
    "name": "instance254",
    "path": "/root1/__mainMc/@0/@511/@52/@3",
+   "render_bounds": [
+    504.25,
+    248.2,
+    523.65,
+    267.65
+   ],
    "stage_bounds": [
     504.25,
     248.2,
@@ -10480,6 +12031,12 @@
    "kind": "movie_clip",
    "name": "instance255",
    "path": "/root1/__mainMc/@0/@511/@56",
+   "render_bounds": [
+    591.95,
+    228.9,
+    611.35,
+    248.35
+   ],
    "stage_bounds": [
     591.95,
     228.9,
@@ -10521,6 +12078,12 @@
    "kind": "graphic",
    "name": "instance256",
    "path": "/root1/__mainMc/@0/@511/@56/@3",
+   "render_bounds": [
+    591.95,
+    228.9,
+    611.35,
+    248.35
+   ],
    "stage_bounds": [
     591.95,
     228.9,
@@ -10562,6 +12125,12 @@
    "kind": "movie_clip",
    "name": "instance257",
    "path": "/root1/__mainMc/@0/@511/@60",
+   "render_bounds": [
+    519.5,
+    251.05,
+    538.9,
+    270.5
+   ],
    "stage_bounds": [
     519.5,
     251.05,
@@ -10603,6 +12172,12 @@
    "kind": "graphic",
    "name": "instance258",
    "path": "/root1/__mainMc/@0/@511/@60/@3",
+   "render_bounds": [
+    519.5,
+    251.05,
+    538.9,
+    270.5
+   ],
    "stage_bounds": [
     519.5,
     251.05,
@@ -10644,6 +12219,12 @@
    "kind": "movie_clip",
    "name": "instance259",
    "path": "/root1/__mainMc/@0/@511/@64",
+   "render_bounds": [
+    590.0,
+    209.45,
+    609.4,
+    228.9
+   ],
    "stage_bounds": [
     590.0,
     209.45,
@@ -10685,6 +12266,12 @@
    "kind": "graphic",
    "name": "instance260",
    "path": "/root1/__mainMc/@0/@511/@64/@3",
+   "render_bounds": [
+    590.0,
+    209.45,
+    609.4,
+    228.9
+   ],
    "stage_bounds": [
     590.0,
     209.45,
@@ -10726,6 +12313,12 @@
    "kind": "movie_clip",
    "name": "instance261",
    "path": "/root1/__mainMc/@0/@511/@68",
+   "render_bounds": [
+    513.2,
+    202.6,
+    532.6,
+    222.05
+   ],
    "stage_bounds": [
     513.2,
     202.6,
@@ -10767,6 +12360,12 @@
    "kind": "graphic",
    "name": "instance262",
    "path": "/root1/__mainMc/@0/@511/@68/@2",
+   "render_bounds": [
+    513.2,
+    202.6,
+    532.6,
+    222.05
+   ],
    "stage_bounds": [
     513.2,
     202.6,
@@ -10808,6 +12407,12 @@
    "kind": "movie_clip",
    "name": "instance263",
    "path": "/root1/__mainMc/@0/@511/@71",
+   "render_bounds": [
+    500.75,
+    231.6,
+    520.15,
+    251.05
+   ],
    "stage_bounds": [
     500.75,
     231.6,
@@ -10849,6 +12454,12 @@
    "kind": "graphic",
    "name": "instance264",
    "path": "/root1/__mainMc/@0/@511/@71/@3",
+   "render_bounds": [
+    500.75,
+    231.6,
+    520.15,
+    251.05
+   ],
    "stage_bounds": [
     500.75,
     231.6,
@@ -10890,6 +12501,12 @@
    "kind": "movie_clip",
    "name": "instance265",
    "path": "/root1/__mainMc/@0/@511/@75",
+   "render_bounds": [
+    580.7,
+    260.8,
+    600.1,
+    280.25
+   ],
    "stage_bounds": [
     580.7,
     260.8,
@@ -10931,6 +12548,12 @@
    "kind": "graphic",
    "name": "instance266",
    "path": "/root1/__mainMc/@0/@511/@75/@3",
+   "render_bounds": [
+    580.7,
+    260.8,
+    600.1,
+    280.25
+   ],
    "stage_bounds": [
     580.7,
     260.8,
@@ -10972,6 +12595,12 @@
    "kind": "movie_clip",
    "name": "instance267",
    "path": "/root1/__mainMc/@0/@511/@79",
+   "render_bounds": [
+    574.9,
+    195.4,
+    594.3,
+    214.85
+   ],
    "stage_bounds": [
     574.9,
     195.4,
@@ -11013,6 +12642,12 @@
    "kind": "graphic",
    "name": "instance268",
    "path": "/root1/__mainMc/@0/@511/@79/@3",
+   "render_bounds": [
+    574.9,
+    195.4,
+    594.3,
+    214.85
+   ],
    "stage_bounds": [
     574.9,
     195.4,
@@ -11054,6 +12689,12 @@
    "kind": "movie_clip",
    "name": "instance269",
    "path": "/root1/__mainMc/@0/@511/@83",
+   "render_bounds": [
+    523.65,
+    265.05,
+    543.05,
+    284.5
+   ],
    "stage_bounds": [
     523.65,
     265.05,
@@ -11095,6 +12736,12 @@
    "kind": "graphic",
    "name": "instance270",
    "path": "/root1/__mainMc/@0/@511/@83/@3",
+   "render_bounds": [
+    523.65,
+    265.05,
+    543.05,
+    284.5
+   ],
    "stage_bounds": [
     523.65,
     265.05,
@@ -11136,6 +12783,12 @@
    "kind": "movie_clip",
    "name": "instance271",
    "path": "/root1/__mainMc/@0/@511/@87",
+   "render_bounds": [
+    591.95,
+    248.3,
+    611.35,
+    267.75
+   ],
    "stage_bounds": [
     591.95,
     248.3,
@@ -11177,6 +12830,12 @@
    "kind": "graphic",
    "name": "instance272",
    "path": "/root1/__mainMc/@0/@511/@87/@3",
+   "render_bounds": [
+    591.95,
+    248.3,
+    611.35,
+    267.75
+   ],
    "stage_bounds": [
     591.95,
     248.3,
@@ -11218,6 +12877,12 @@
    "kind": "movie_clip",
    "name": "instance273",
    "path": "/root1/__mainMc/@0/@511/@91",
+   "render_bounds": [
+    565.15,
+    228.85,
+    584.55,
+    248.3
+   ],
    "stage_bounds": [
     565.15,
     228.85,
@@ -11259,6 +12924,12 @@
    "kind": "graphic",
    "name": "instance274",
    "path": "/root1/__mainMc/@0/@511/@91/@3",
+   "render_bounds": [
+    565.15,
+    228.85,
+    584.55,
+    248.3
+   ],
    "stage_bounds": [
     565.15,
     228.85,
@@ -11300,6 +12971,12 @@
    "kind": "movie_clip",
    "name": "instance275",
    "path": "/root1/__mainMc/@0/@511/@95",
+   "render_bounds": [
+    551.1,
+    274.8,
+    570.5,
+    294.25
+   ],
    "stage_bounds": [
     551.1,
     274.8,
@@ -11341,6 +13018,12 @@
    "kind": "graphic",
    "name": "instance276",
    "path": "/root1/__mainMc/@0/@511/@95/@3",
+   "render_bounds": [
+    551.1,
+    274.8,
+    570.5,
+    294.25
+   ],
    "stage_bounds": [
     551.1,
     274.8,
@@ -11382,6 +13065,12 @@
    "kind": "movie_clip",
    "name": "instance277",
    "path": "/root1/__mainMc/@0/@511/@99",
+   "render_bounds": [
+    523.65,
+    280.2,
+    543.05,
+    299.65
+   ],
    "stage_bounds": [
     523.65,
     280.2,
@@ -11423,6 +13112,12 @@
    "kind": "graphic",
    "name": "instance278",
    "path": "/root1/__mainMc/@0/@511/@99/@3",
+   "render_bounds": [
+    523.65,
+    280.2,
+    543.05,
+    299.65
+   ],
    "stage_bounds": [
     523.65,
     280.2,
@@ -11464,6 +13159,12 @@
    "kind": "movie_clip",
    "name": "instance279",
    "path": "/root1/__mainMc/@0/@511/@103",
+   "render_bounds": [
+    538.9,
+    282.15,
+    558.3,
+    301.6
+   ],
    "stage_bounds": [
     538.9,
     282.15,
@@ -11505,6 +13206,12 @@
    "kind": "graphic",
    "name": "instance280",
    "path": "/root1/__mainMc/@0/@511/@103/@3",
+   "render_bounds": [
+    538.9,
+    282.15,
+    558.3,
+    301.6
+   ],
    "stage_bounds": [
     538.9,
     282.15,
@@ -11546,6 +13253,12 @@
    "kind": "movie_clip",
    "name": "instance281",
    "path": "/root1/__mainMc/@0/@511/@107",
+   "render_bounds": [
+    572.5,
+    280.25,
+    591.9,
+    299.7
+   ],
    "stage_bounds": [
     572.5,
     280.25,
@@ -11587,6 +13300,12 @@
    "kind": "graphic",
    "name": "instance282",
    "path": "/root1/__mainMc/@0/@511/@107/@3",
+   "render_bounds": [
+    572.5,
+    280.25,
+    591.9,
+    299.7
+   ],
    "stage_bounds": [
     572.5,
     280.25,
@@ -11628,6 +13347,12 @@
    "kind": "movie_clip",
    "name": "instance283",
    "path": "/root1/__mainMc/@0/@511/@111",
+   "render_bounds": [
+    555.35,
+    284.5,
+    574.75,
+    303.95
+   ],
    "stage_bounds": [
     555.35,
     284.5,
@@ -11669,6 +13394,12 @@
    "kind": "graphic",
    "name": "instance284",
    "path": "/root1/__mainMc/@0/@511/@111/@2",
+   "render_bounds": [
+    555.35,
+    284.5,
+    574.75,
+    303.95
+   ],
    "stage_bounds": [
     555.35,
     284.5,
@@ -11710,6 +13441,12 @@
    "kind": "movie_clip",
    "name": "instance285",
    "path": "/root1/__mainMc/@0/@511/@114",
+   "render_bounds": [
+    549.3,
+    222.05,
+    568.7,
+    241.5
+   ],
    "stage_bounds": [
     549.3,
     222.05,
@@ -11751,6 +13488,12 @@
    "kind": "graphic",
    "name": "instance286",
    "path": "/root1/__mainMc/@0/@511/@114/@3",
+   "render_bounds": [
+    549.3,
+    222.05,
+    568.7,
+    241.5
+   ],
    "stage_bounds": [
     549.3,
     222.05,
@@ -11792,6 +13535,12 @@
    "kind": "movie_clip",
    "name": "instance287",
    "path": "/root1/__mainMc/@0/@511/@118",
+   "render_bounds": [
+    541.9,
+    251.05,
+    561.3,
+    270.5
+   ],
    "stage_bounds": [
     541.9,
     251.05,
@@ -11833,6 +13582,12 @@
    "kind": "graphic",
    "name": "instance288",
    "path": "/root1/__mainMc/@0/@511/@118/@3",
+   "render_bounds": [
+    541.9,
+    251.05,
+    561.3,
+    270.5
+   ],
    "stage_bounds": [
     541.9,
     251.05,
@@ -11874,6 +13629,12 @@
    "kind": "movie_clip",
    "name": "instance289",
    "path": "/root1/__mainMc/@0/@511/@122",
+   "render_bounds": [
+    568.05,
+    248.3,
+    587.45,
+    267.75
+   ],
    "stage_bounds": [
     568.05,
     248.3,
@@ -11915,6 +13676,12 @@
    "kind": "graphic",
    "name": "instance290",
    "path": "/root1/__mainMc/@0/@511/@122/@3",
+   "render_bounds": [
+    568.05,
+    248.3,
+    587.45,
+    267.75
+   ],
    "stage_bounds": [
     568.05,
     248.3,
@@ -11956,6 +13723,12 @@
    "kind": "movie_clip",
    "name": "instance291",
    "path": "/root1/__mainMc/@0/@511/@126",
+   "render_bounds": [
+    558.4,
+    202.65,
+    577.8,
+    222.1
+   ],
    "stage_bounds": [
     558.4,
     202.65,
@@ -11997,6 +13770,12 @@
    "kind": "graphic",
    "name": "instance292",
    "path": "/root1/__mainMc/@0/@511/@126/@3",
+   "render_bounds": [
+    558.4,
+    202.65,
+    577.8,
+    222.1
+   ],
    "stage_bounds": [
     558.4,
     202.65,
@@ -12038,6 +13817,12 @@
    "kind": "movie_clip",
    "name": "instance293",
    "path": "/root1/__mainMc/@0/@511/@130",
+   "render_bounds": [
+    545.7,
+    234.2,
+    565.1,
+    253.65
+   ],
    "stage_bounds": [
     545.7,
     234.2,
@@ -12079,6 +13864,12 @@
    "kind": "graphic",
    "name": "instance294",
    "path": "/root1/__mainMc/@0/@511/@130/@3",
+   "render_bounds": [
+    545.7,
+    234.2,
+    565.1,
+    253.65
+   ],
    "stage_bounds": [
     545.7,
     234.2,
@@ -12120,6 +13911,12 @@
    "kind": "movie_clip",
    "name": "instance295",
    "path": "/root1/__mainMc/@0/@511/@134",
+   "render_bounds": [
+    555.4,
+    245.65,
+    574.8,
+    265.1
+   ],
    "stage_bounds": [
     555.4,
     245.65,
@@ -12161,6 +13958,12 @@
    "kind": "graphic",
    "name": "instance296",
    "path": "/root1/__mainMc/@0/@511/@134/@3",
+   "render_bounds": [
+    555.4,
+    245.65,
+    574.8,
+    265.1
+   ],
    "stage_bounds": [
     555.4,
     245.65,
@@ -12202,6 +14005,12 @@
    "kind": "movie_clip",
    "name": "instance297",
    "path": "/root1/__mainMc/@0/@511/@138",
+   "render_bounds": [
+    532.6,
+    217.15,
+    552.0,
+    236.6
+   ],
    "stage_bounds": [
     532.6,
     217.15,
@@ -12243,6 +14052,12 @@
    "kind": "graphic",
    "name": "instance298",
    "path": "/root1/__mainMc/@0/@511/@138/@3",
+   "render_bounds": [
+    532.6,
+    217.15,
+    552.0,
+    236.6
+   ],
    "stage_bounds": [
     532.6,
     217.15,
@@ -12284,6 +14099,12 @@
    "kind": "movie_clip",
    "name": "instance299",
    "path": "/root1/__mainMc/@0/@511/@142",
+   "render_bounds": [
+    558.4,
+    190.0,
+    577.8,
+    209.45
+   ],
    "stage_bounds": [
     558.4,
     190.0,
@@ -12325,6 +14146,12 @@
    "kind": "graphic",
    "name": "instance300",
    "path": "/root1/__mainMc/@0/@511/@142/@3",
+   "render_bounds": [
+    558.4,
+    190.0,
+    577.8,
+    209.45
+   ],
    "stage_bounds": [
     558.4,
     190.0,
@@ -12366,6 +14193,12 @@
    "kind": "movie_clip",
    "name": "instance301",
    "path": "/root1/__mainMc/@0/@511/@146",
+   "render_bounds": [
+    539.0,
+    190.0,
+    558.4,
+    209.45
+   ],
    "stage_bounds": [
     539.0,
     190.0,
@@ -12407,6 +14240,12 @@
    "kind": "graphic",
    "name": "instance302",
    "path": "/root1/__mainMc/@0/@511/@146/@3",
+   "render_bounds": [
+    539.0,
+    190.0,
+    558.4,
+    209.45
+   ],
    "stage_bounds": [
     539.0,
     190.0,
@@ -12448,6 +14287,12 @@
    "kind": "movie_clip",
    "name": "instance303",
    "path": "/root1/__mainMc/@0/@511/@150",
+   "render_bounds": [
+    541.95,
+    199.7,
+    561.35,
+    219.15
+   ],
    "stage_bounds": [
     541.95,
     199.7,
@@ -12489,6 +14334,12 @@
    "kind": "graphic",
    "name": "instance304",
    "path": "/root1/__mainMc/@0/@511/@150/@3",
+   "render_bounds": [
+    541.95,
+    199.7,
+    561.35,
+    219.15
+   ],
    "stage_bounds": [
     541.95,
     199.7,
@@ -12529,6 +14380,12 @@
    "kind": "graphic",
    "name": "instance305",
    "path": "/root1/__mainMc/@0/@511/@156",
+   "render_bounds": [
+    498.4,
+    167.25,
+    618.5,
+    306.45
+   ],
    "stage_bounds": [
     498.4,
     167.25,
@@ -12570,6 +14427,12 @@
    "kind": "movie_clip",
    "name": "instance306",
    "path": "/root1/__mainMc/@0/@511/@157",
+   "render_bounds": [
+    555.45,
+    168.5,
+    563.35,
+    176.4
+   ],
    "stage_bounds": [
     555.45,
     168.5,
@@ -12611,6 +14474,12 @@
    "kind": "graphic",
    "name": "instance307",
    "path": "/root1/__mainMc/@0/@511/@157/@1",
+   "render_bounds": [
+    555.45,
+    168.5,
+    563.35,
+    176.4
+   ],
    "stage_bounds": [
     555.45,
     168.5,
@@ -12652,6 +14521,12 @@
    "kind": "movie_clip",
    "name": "instance308",
    "path": "/root1/__mainMc/@0/@511/@159",
+   "render_bounds": [
+    573.15,
+    170.75,
+    581.05,
+    178.65
+   ],
    "stage_bounds": [
     573.15,
     170.75,
@@ -12693,6 +14568,12 @@
    "kind": "graphic",
    "name": "instance309",
    "path": "/root1/__mainMc/@0/@511/@159/@1",
+   "render_bounds": [
+    573.15,
+    170.75,
+    581.05,
+    178.65
+   ],
    "stage_bounds": [
     573.15,
     170.75,
@@ -12734,6 +14615,12 @@
    "kind": "movie_clip",
    "name": "instance310",
    "path": "/root1/__mainMc/@0/@511/@161",
+   "render_bounds": [
+    581.9,
+    172.75,
+    589.8,
+    180.65
+   ],
    "stage_bounds": [
     581.9,
     172.75,
@@ -12775,6 +14662,12 @@
    "kind": "graphic",
    "name": "instance311",
    "path": "/root1/__mainMc/@0/@511/@161/@1",
+   "render_bounds": [
+    581.9,
+    172.75,
+    589.8,
+    180.65
+   ],
    "stage_bounds": [
     581.9,
     172.75,
@@ -12816,6 +14709,12 @@
    "kind": "movie_clip",
    "name": "instance312",
    "path": "/root1/__mainMc/@0/@511/@163",
+   "render_bounds": [
+    589.75,
+    177.8,
+    597.65,
+    185.7
+   ],
    "stage_bounds": [
     589.75,
     177.8,
@@ -12857,6 +14756,12 @@
    "kind": "graphic",
    "name": "instance313",
    "path": "/root1/__mainMc/@0/@511/@163/@1",
+   "render_bounds": [
+    589.75,
+    177.8,
+    597.65,
+    185.7
+   ],
    "stage_bounds": [
     589.75,
     177.8,
@@ -12898,6 +14803,12 @@
    "kind": "movie_clip",
    "name": "instance314",
    "path": "/root1/__mainMc/@0/@511/@165",
+   "render_bounds": [
+    521.6,
+    177.95,
+    529.5,
+    185.85
+   ],
    "stage_bounds": [
     521.6,
     177.95,
@@ -12939,6 +14850,12 @@
    "kind": "graphic",
    "name": "instance315",
    "path": "/root1/__mainMc/@0/@511/@165/@1",
+   "render_bounds": [
+    521.6,
+    177.95,
+    529.5,
+    185.85
+   ],
    "stage_bounds": [
     521.6,
     177.95,
@@ -12980,6 +14897,12 @@
    "kind": "movie_clip",
    "name": "instance316",
    "path": "/root1/__mainMc/@0/@511/@167",
+   "render_bounds": [
+    515.15,
+    184.05,
+    523.05,
+    191.95
+   ],
    "stage_bounds": [
     515.15,
     184.05,
@@ -13021,6 +14944,12 @@
    "kind": "graphic",
    "name": "instance317",
    "path": "/root1/__mainMc/@0/@511/@167/@1",
+   "render_bounds": [
+    515.15,
+    184.05,
+    523.05,
+    191.95
+   ],
    "stage_bounds": [
     515.15,
     184.05,
@@ -13062,6 +14991,12 @@
    "kind": "movie_clip",
    "name": "instance318",
    "path": "/root1/__mainMc/@0/@511/@169",
+   "render_bounds": [
+    537.6,
+    171.3,
+    545.5,
+    179.2
+   ],
    "stage_bounds": [
     537.6,
     171.3,
@@ -13103,6 +15038,12 @@
    "kind": "graphic",
    "name": "instance319",
    "path": "/root1/__mainMc/@0/@511/@169/@1",
+   "render_bounds": [
+    537.6,
+    171.3,
+    545.5,
+    179.2
+   ],
    "stage_bounds": [
     537.6,
     171.3,
@@ -13144,6 +15085,12 @@
    "kind": "movie_clip",
    "name": "instance320",
    "path": "/root1/__mainMc/@0/@511/@171",
+   "render_bounds": [
+    546.5,
+    169.35,
+    554.4,
+    177.25
+   ],
    "stage_bounds": [
     546.5,
     169.35,
@@ -13185,6 +15132,12 @@
    "kind": "graphic",
    "name": "instance321",
    "path": "/root1/__mainMc/@0/@511/@171/@1",
+   "render_bounds": [
+    546.5,
+    169.35,
+    554.4,
+    177.25
+   ],
    "stage_bounds": [
     546.5,
     169.35,
@@ -13226,6 +15179,12 @@
    "kind": "movie_clip",
    "name": "instance322",
    "path": "/root1/__mainMc/@0/@511/@173",
+   "render_bounds": [
+    535.6,
+    180.4,
+    543.5,
+    188.3
+   ],
    "stage_bounds": [
     535.6,
     180.4,
@@ -13267,6 +15226,12 @@
    "kind": "graphic",
    "name": "instance323",
    "path": "/root1/__mainMc/@0/@511/@173/@1",
+   "render_bounds": [
+    535.6,
+    180.4,
+    543.5,
+    188.3
+   ],
    "stage_bounds": [
     535.6,
     180.4,
@@ -13308,6 +15273,12 @@
    "kind": "movie_clip",
    "name": "instance324",
    "path": "/root1/__mainMc/@0/@511/@175",
+   "render_bounds": [
+    557.35,
+    176.2,
+    565.25,
+    184.1
+   ],
    "stage_bounds": [
     557.35,
     176.2,
@@ -13349,6 +15320,12 @@
    "kind": "graphic",
    "name": "instance325",
    "path": "/root1/__mainMc/@0/@511/@175/@1",
+   "render_bounds": [
+    557.35,
+    176.2,
+    565.25,
+    184.1
+   ],
    "stage_bounds": [
     557.35,
     176.2,
@@ -13390,6 +15367,12 @@
    "kind": "movie_clip",
    "name": "instance326",
    "path": "/root1/__mainMc/@0/@511/@177",
+   "render_bounds": [
+    566.95,
+    177.25,
+    574.85,
+    185.15
+   ],
    "stage_bounds": [
     566.95,
     177.25,
@@ -13431,6 +15414,12 @@
    "kind": "graphic",
    "name": "instance327",
    "path": "/root1/__mainMc/@0/@511/@177/@1",
+   "render_bounds": [
+    566.95,
+    177.25,
+    574.85,
+    185.15
+   ],
    "stage_bounds": [
     566.95,
     177.25,
@@ -13472,6 +15461,12 @@
    "kind": "movie_clip",
    "name": "instance328",
    "path": "/root1/__mainMc/@0/@511/@179",
+   "render_bounds": [
+    546.4,
+    176.3,
+    554.3,
+    184.2
+   ],
    "stage_bounds": [
     546.4,
     176.3,
@@ -13513,6 +15508,12 @@
    "kind": "graphic",
    "name": "instance329",
    "path": "/root1/__mainMc/@0/@511/@179/@1",
+   "render_bounds": [
+    546.4,
+    176.3,
+    554.3,
+    184.2
+   ],
    "stage_bounds": [
     546.4,
     176.3,
@@ -13554,6 +15555,12 @@
    "kind": "movie_clip",
    "name": "instance330",
    "path": "/root1/__mainMc/@0/@511/@181",
+   "render_bounds": [
+    529.6,
+    174.15,
+    537.5,
+    182.05
+   ],
    "stage_bounds": [
     529.6,
     174.15,
@@ -13595,6 +15602,12 @@
    "kind": "graphic",
    "name": "instance331",
    "path": "/root1/__mainMc/@0/@511/@181/@1",
+   "render_bounds": [
+    529.6,
+    174.15,
+    537.5,
+    182.05
+   ],
    "stage_bounds": [
     529.6,
     174.15,
@@ -13636,6 +15649,12 @@
    "kind": "movie_clip",
    "name": "instance332",
    "path": "/root1/__mainMc/@0/@511/@183",
+   "render_bounds": [
+    564.4,
+    169.2,
+    572.3,
+    177.1
+   ],
    "stage_bounds": [
     564.4,
     169.2,
@@ -13677,6 +15696,12 @@
    "kind": "graphic",
    "name": "instance333",
    "path": "/root1/__mainMc/@0/@511/@183/@1",
+   "render_bounds": [
+    564.4,
+    169.2,
+    572.3,
+    177.1
+   ],
    "stage_bounds": [
     564.4,
     169.2,
@@ -13718,6 +15743,12 @@
    "kind": "movie_clip",
    "name": "instance334",
    "path": "/root1/__mainMc/@0/@511/@185",
+   "render_bounds": [
+    523.05,
+    187.1,
+    530.95,
+    195.0
+   ],
    "stage_bounds": [
     523.05,
     187.1,
@@ -13759,6 +15790,12 @@
    "kind": "graphic",
    "name": "instance335",
    "path": "/root1/__mainMc/@0/@511/@185/@1",
+   "render_bounds": [
+    523.05,
+    187.1,
+    530.95,
+    195.0
+   ],
    "stage_bounds": [
     523.05,
     187.1,
@@ -13800,6 +15837,12 @@
    "kind": "movie_clip",
    "name": "instance336",
    "path": "/root1/__mainMc/@0/@511/@187",
+   "render_bounds": [
+    517.1,
+    192.95,
+    525.0,
+    200.85
+   ],
    "stage_bounds": [
     517.1,
     192.95,
@@ -13841,6 +15884,12 @@
    "kind": "graphic",
    "name": "instance337",
    "path": "/root1/__mainMc/@0/@511/@187/@1",
+   "render_bounds": [
+    517.1,
+    192.95,
+    525.0,
+    200.85
+   ],
    "stage_bounds": [
     517.1,
     192.95,
@@ -13882,6 +15931,12 @@
    "kind": "movie_clip",
    "name": "instance338",
    "path": "/root1/__mainMc/@0/@511/@189",
+   "render_bounds": [
+    578.8,
+    179.8,
+    586.7,
+    187.7
+   ],
    "stage_bounds": [
     578.8,
     179.8,
@@ -13923,6 +15978,12 @@
    "kind": "graphic",
    "name": "instance339",
    "path": "/root1/__mainMc/@0/@511/@189/@1",
+   "render_bounds": [
+    578.8,
+    179.8,
+    586.7,
+    187.7
+   ],
    "stage_bounds": [
     578.8,
     179.8,
@@ -13964,6 +16025,12 @@
    "kind": "movie_clip",
    "name": "instance340",
    "path": "/root1/__mainMc/@0/@511/@191",
+   "render_bounds": [
+    592.2,
+    188.75,
+    600.1,
+    196.65
+   ],
    "stage_bounds": [
     592.2,
     188.75,
@@ -14005,6 +16072,12 @@
    "kind": "graphic",
    "name": "instance341",
    "path": "/root1/__mainMc/@0/@511/@191/@1",
+   "render_bounds": [
+    592.2,
+    188.75,
+    600.1,
+    196.65
+   ],
    "stage_bounds": [
     592.2,
     188.75,
@@ -14046,6 +16119,12 @@
    "kind": "movie_clip",
    "name": "instance342",
    "path": "/root1/__mainMc/@0/@511/@193",
+   "render_bounds": [
+    583.4,
+    187.3,
+    591.3,
+    195.2
+   ],
    "stage_bounds": [
     583.4,
     187.3,
@@ -14087,6 +16166,12 @@
    "kind": "graphic",
    "name": "instance343",
    "path": "/root1/__mainMc/@0/@511/@193/@1",
+   "render_bounds": [
+    583.4,
+    187.3,
+    591.3,
+    195.2
+   ],
    "stage_bounds": [
     583.4,
     187.3,
@@ -14128,6 +16213,12 @@
    "kind": "movie_clip",
    "name": "instance344",
    "path": "/root1/__mainMc/@0/@511/@195",
+   "render_bounds": [
+    571.65,
+    184.5,
+    579.55,
+    192.4
+   ],
    "stage_bounds": [
     571.65,
     184.5,
@@ -14169,6 +16260,12 @@
    "kind": "graphic",
    "name": "instance345",
    "path": "/root1/__mainMc/@0/@511/@195/@1",
+   "render_bounds": [
+    571.65,
+    184.5,
+    579.55,
+    192.4
+   ],
    "stage_bounds": [
     571.65,
     184.5,
@@ -14210,6 +16307,12 @@
    "kind": "movie_clip",
    "name": "instance346",
    "path": "/root1/__mainMc/@0/@511/@197",
+   "render_bounds": [
+    560.75,
+    184.3,
+    568.65,
+    192.2
+   ],
    "stage_bounds": [
     560.75,
     184.3,
@@ -14251,6 +16354,12 @@
    "kind": "graphic",
    "name": "instance347",
    "path": "/root1/__mainMc/@0/@511/@197/@1",
+   "render_bounds": [
+    560.75,
+    184.3,
+    568.65,
+    192.2
+   ],
    "stage_bounds": [
     560.75,
     184.3,
@@ -14292,6 +16401,12 @@
    "kind": "movie_clip",
    "name": "instance348",
    "path": "/root1/__mainMc/@0/@511/@199",
+   "render_bounds": [
+    551.5,
+    183.15,
+    559.4,
+    191.05
+   ],
    "stage_bounds": [
     551.5,
     183.15,
@@ -14333,6 +16448,12 @@
    "kind": "graphic",
    "name": "instance349",
    "path": "/root1/__mainMc/@0/@511/@199/@1",
+   "render_bounds": [
+    551.5,
+    183.15,
+    559.4,
+    191.05
+   ],
    "stage_bounds": [
     551.5,
     183.15,
@@ -14374,6 +16495,12 @@
    "kind": "movie_clip",
    "name": "instance350",
    "path": "/root1/__mainMc/@0/@511/@201",
+   "render_bounds": [
+    541.85,
+    184.2,
+    549.75,
+    192.1
+   ],
    "stage_bounds": [
     541.85,
     184.2,
@@ -14415,6 +16542,12 @@
    "kind": "graphic",
    "name": "instance351",
    "path": "/root1/__mainMc/@0/@511/@201/@1",
+   "render_bounds": [
+    541.85,
+    184.2,
+    549.75,
+    192.1
+   ],
    "stage_bounds": [
     541.85,
     184.2,
@@ -14456,6 +16589,12 @@
    "kind": "movie_clip",
    "name": "instance352",
    "path": "/root1/__mainMc/@0/@511/@203",
+   "render_bounds": [
+    531.65,
+    185.45,
+    539.55,
+    193.35
+   ],
    "stage_bounds": [
     531.65,
     185.45,
@@ -14497,6 +16636,12 @@
    "kind": "graphic",
    "name": "instance353",
    "path": "/root1/__mainMc/@0/@511/@203/@1",
+   "render_bounds": [
+    531.65,
+    185.45,
+    539.55,
+    193.35
+   ],
    "stage_bounds": [
     531.65,
     185.45,
@@ -14538,6 +16683,12 @@
    "kind": "movie_clip",
    "name": "instance354",
    "path": "/root1/__mainMc/@0/@511/@205",
+   "render_bounds": [
+    577.75,
+    346.1,
+    593.5,
+    361.85
+   ],
    "stage_bounds": [
     577.75,
     346.1,
@@ -14579,6 +16730,12 @@
    "kind": "graphic",
    "name": "instance355",
    "path": "/root1/__mainMc/@0/@511/@205/@2",
+   "render_bounds": [
+    577.75,
+    346.1,
+    593.5,
+    361.85
+   ],
    "stage_bounds": [
     577.75,
     346.1,
@@ -14599,6 +16756,7 @@
    "blend_mode": "Normal",
    "character_id": 217,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -14620,6 +16778,12 @@
    "kind": "movie_clip",
    "name": "instance356",
    "path": "/root1/__mainMc/@0/@717",
+   "render_bounds": [
+    565.3,
+    368.1,
+    585.45,
+    388.25
+   ],
    "stage_bounds": [
     565.3,
     368.1,
@@ -14661,6 +16825,12 @@
    "kind": "graphic",
    "name": "instance357",
    "path": "/root1/__mainMc/@0/@717/@3",
+   "render_bounds": [
+    565.3,
+    368.1,
+    585.45,
+    388.25
+   ],
    "stage_bounds": [
     565.3,
     368.1,
@@ -14681,6 +16851,7 @@
    "blend_mode": "Normal",
    "character_id": 217,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -14702,6 +16873,12 @@
    "kind": "movie_clip",
    "name": "instance358",
    "path": "/root1/__mainMc/@0/@721",
+   "render_bounds": [
+    514.1,
+    338.45,
+    531.75,
+    356.1
+   ],
    "stage_bounds": [
     514.1,
     338.45,
@@ -14743,6 +16920,12 @@
    "kind": "graphic",
    "name": "instance359",
    "path": "/root1/__mainMc/@0/@721/@3",
+   "render_bounds": [
+    514.1,
+    338.45,
+    531.75,
+    356.1
+   ],
    "stage_bounds": [
     514.1,
     338.45,
@@ -14763,6 +16946,7 @@
    "blend_mode": "Normal",
    "character_id": 215,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -14784,6 +16968,12 @@
    "kind": "movie_clip",
    "name": "instance360",
    "path": "/root1/__mainMc/@0/@725",
+   "render_bounds": [
+    537.75,
+    360.05,
+    555.4,
+    377.7
+   ],
    "stage_bounds": [
     537.75,
     360.05,
@@ -14825,6 +17015,12 @@
    "kind": "graphic",
    "name": "instance361",
    "path": "/root1/__mainMc/@0/@725/@3",
+   "render_bounds": [
+    537.75,
+    360.05,
+    555.4,
+    377.7
+   ],
    "stage_bounds": [
     537.75,
     360.05,
@@ -14845,6 +17041,7 @@
    "blend_mode": "Normal",
    "character_id": 221,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -14866,6 +17063,12 @@
    "kind": "movie_clip",
    "name": "instance362",
    "path": "/root1/__mainMc/@0/@729",
+   "render_bounds": [
+    535.05,
+    331.3,
+    549.35,
+    345.55
+   ],
    "stage_bounds": [
     535.05,
     331.3,
@@ -14907,6 +17110,12 @@
    "kind": "graphic",
    "name": "instance363",
    "path": "/root1/__mainMc/@0/@729/@3",
+   "render_bounds": [
+    535.05,
+    331.3,
+    549.35,
+    345.55
+   ],
    "stage_bounds": [
     535.05,
     331.3,
@@ -14927,6 +17136,7 @@
    "blend_mode": "Normal",
    "character_id": 217,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -14948,6 +17158,12 @@
    "kind": "movie_clip",
    "name": "instance364",
    "path": "/root1/__mainMc/@0/@733",
+   "render_bounds": [
+    542.0,
+    342.4,
+    559.15,
+    359.5
+   ],
    "stage_bounds": [
     542.0,
     342.4,
@@ -14989,6 +17205,12 @@
    "kind": "graphic",
    "name": "instance365",
    "path": "/root1/__mainMc/@0/@733/@3",
+   "render_bounds": [
+    542.0,
+    342.4,
+    559.15,
+    359.5
+   ],
    "stage_bounds": [
     542.0,
     342.4,
@@ -15009,6 +17231,7 @@
    "blend_mode": "Normal",
    "character_id": 223,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15030,6 +17253,12 @@
    "kind": "movie_clip",
    "name": "instance366",
    "path": "/root1/__mainMc/@0/@737",
+   "render_bounds": [
+    543.6,
+    372.6,
+    563.75,
+    392.75
+   ],
    "stage_bounds": [
     543.6,
     372.6,
@@ -15071,6 +17300,12 @@
    "kind": "graphic",
    "name": "instance367",
    "path": "/root1/__mainMc/@0/@737/@3",
+   "render_bounds": [
+    543.6,
+    372.6,
+    563.75,
+    392.75
+   ],
    "stage_bounds": [
     543.6,
     372.6,
@@ -15091,6 +17326,7 @@
    "blend_mode": "Normal",
    "character_id": 254,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15111,6 +17347,12 @@
    "kind": "graphic",
    "name": "instance368",
    "path": "/root1/__mainMc/@0/@745",
+   "render_bounds": [
+    622.0,
+    210.4,
+    691.5,
+    319.0
+   ],
    "stage_bounds": [
     622.0,
     210.4,
@@ -15131,6 +17373,7 @@
    "blend_mode": "Layer",
    "character_id": 256,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15152,6 +17395,12 @@
    "kind": "movie_clip",
    "name": "instance369",
    "path": "/root1/__mainMc/@0/@746",
+   "render_bounds": [
+    660.1,
+    210.95,
+    671.6,
+    226.15
+   ],
    "stage_bounds": [
     660.1,
     210.95,
@@ -15193,6 +17442,12 @@
    "kind": "graphic",
    "name": "instance370",
    "path": "/root1/__mainMc/@0/@746/@1",
+   "render_bounds": [
+    660.1,
+    210.95,
+    671.6,
+    226.15
+   ],
    "stage_bounds": [
     660.1,
     210.95,
@@ -15213,6 +17468,7 @@
    "blend_mode": "Normal",
    "character_id": 257,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15233,6 +17489,12 @@
    "kind": "graphic",
    "name": "instance371",
    "path": "/root1/__mainMc/@0/@751",
+   "render_bounds": [
+    648.8,
+    212.85,
+    690.55,
+    254.6
+   ],
    "stage_bounds": [
     648.8,
     212.85,
@@ -15253,6 +17515,7 @@
    "blend_mode": "Layer",
    "character_id": 259,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15274,6 +17537,12 @@
    "kind": "movie_clip",
    "name": "instance372",
    "path": "/root1/__mainMc/@0/@752",
+   "render_bounds": [
+    683.2,
+    228.05,
+    691.0,
+    238.3
+   ],
    "stage_bounds": [
     683.2,
     228.05,
@@ -15315,6 +17584,12 @@
    "kind": "graphic",
    "name": "instance373",
    "path": "/root1/__mainMc/@0/@752/@1",
+   "render_bounds": [
+    683.2,
+    228.05,
+    691.0,
+    238.3
+   ],
    "stage_bounds": [
     683.2,
     228.05,
@@ -15335,6 +17610,7 @@
    "blend_mode": "Layer",
    "character_id": 261,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15356,6 +17632,12 @@
    "kind": "movie_clip",
    "name": "instance374",
    "path": "/root1/__mainMc/@0/@754",
+   "render_bounds": [
+    649.85,
+    218.55,
+    658.35,
+    230.35
+   ],
    "stage_bounds": [
     649.85,
     218.55,
@@ -15397,6 +17679,12 @@
    "kind": "graphic",
    "name": "instance375",
    "path": "/root1/__mainMc/@0/@754/@1",
+   "render_bounds": [
+    649.85,
+    218.55,
+    658.35,
+    230.35
+   ],
    "stage_bounds": [
     649.85,
     218.55,
@@ -15417,6 +17705,7 @@
    "blend_mode": "Normal",
    "character_id": 262,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15437,6 +17726,12 @@
    "kind": "graphic",
    "name": "instance376",
    "path": "/root1/__mainMc/@0/@762",
+   "render_bounds": [
+    654.95,
+    233.35,
+    678.05,
+    252.65
+   ],
    "stage_bounds": [
     654.95,
     233.35,
@@ -15457,6 +17752,7 @@
    "blend_mode": "Layer",
    "character_id": 264,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15478,6 +17774,12 @@
    "kind": "movie_clip",
    "name": "instance377",
    "path": "/root1/__mainMc/@0/@763",
+   "render_bounds": [
+    654.85,
+    241.3,
+    672.1,
+    253.15
+   ],
    "stage_bounds": [
     654.85,
     241.3,
@@ -15519,6 +17821,12 @@
    "kind": "graphic",
    "name": "instance378",
    "path": "/root1/__mainMc/@0/@763/@1",
+   "render_bounds": [
+    654.85,
+    241.3,
+    672.1,
+    253.15
+   ],
    "stage_bounds": [
     654.85,
     241.3,
@@ -15539,6 +17847,7 @@
    "blend_mode": "Normal",
    "character_id": 265,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15559,6 +17868,12 @@
    "kind": "graphic",
    "name": "instance379",
    "path": "/root1/__mainMc/@0/@781",
+   "render_bounds": [
+    648.9,
+    220.7,
+    686.9,
+    258.1
+   ],
    "stage_bounds": [
     648.9,
     220.7,
@@ -15579,6 +17894,7 @@
    "blend_mode": "Layer",
    "character_id": 267,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15600,6 +17916,12 @@
    "kind": "movie_clip",
    "name": "instance380",
    "path": "/root1/__mainMc/@0/@782",
+   "render_bounds": [
+    668.4,
+    250.9,
+    679.55,
+    258.85
+   ],
    "stage_bounds": [
     668.4,
     250.9,
@@ -15641,6 +17963,12 @@
    "kind": "graphic",
    "name": "instance381",
    "path": "/root1/__mainMc/@0/@782/@1",
+   "render_bounds": [
+    668.4,
+    250.9,
+    679.55,
+    258.85
+   ],
    "stage_bounds": [
     668.4,
     250.9,
@@ -15661,6 +17989,7 @@
    "blend_mode": "Normal",
    "character_id": 268,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15681,6 +18010,12 @@
    "kind": "graphic",
    "name": "instance382",
    "path": "/root1/__mainMc/@0/@787",
+   "render_bounds": [
+    649.95,
+    245.45,
+    676.25,
+    258.0
+   ],
    "stage_bounds": [
     649.95,
     245.45,
@@ -15701,6 +18036,7 @@
    "blend_mode": "Layer",
    "character_id": 270,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15722,6 +18058,12 @@
    "kind": "movie_clip",
    "name": "instance383",
    "path": "/root1/__mainMc/@0/@788",
+   "render_bounds": [
+    649.65,
+    247.1,
+    660.65,
+    254.3
+   ],
    "stage_bounds": [
     649.65,
     247.1,
@@ -15763,6 +18105,12 @@
    "kind": "graphic",
    "name": "instance384",
    "path": "/root1/__mainMc/@0/@788/@1",
+   "render_bounds": [
+    649.65,
+    247.1,
+    660.65,
+    254.3
+   ],
    "stage_bounds": [
     649.65,
     247.1,
@@ -15783,6 +18131,7 @@
    "blend_mode": "Normal",
    "character_id": 271,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15803,6 +18152,12 @@
    "kind": "graphic",
    "name": "instance385",
    "path": "/root1/__mainMc/@0/@795",
+   "render_bounds": [
+    652.95,
+    238.15,
+    673.5,
+    253.5
+   ],
    "stage_bounds": [
     652.95,
     238.15,
@@ -15823,6 +18178,7 @@
    "blend_mode": "Layer",
    "character_id": 273,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15844,6 +18200,12 @@
    "kind": "movie_clip",
    "name": "instance386",
    "path": "/root1/__mainMc/@0/@796",
+   "render_bounds": [
+    662.95,
+    240.7,
+    670.35,
+    247.2
+   ],
    "stage_bounds": [
     662.95,
     240.7,
@@ -15885,6 +18247,12 @@
    "kind": "graphic",
    "name": "instance387",
    "path": "/root1/__mainMc/@0/@796/@1",
+   "render_bounds": [
+    662.95,
+    240.7,
+    670.35,
+    247.2
+   ],
    "stage_bounds": [
     662.95,
     240.7,
@@ -15905,6 +18273,7 @@
    "blend_mode": "Normal",
    "character_id": 274,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15925,6 +18294,12 @@
    "kind": "graphic",
    "name": "instance388",
    "path": "/root1/__mainMc/@0/@802",
+   "render_bounds": [
+    635.95,
+    235.45,
+    686.0,
+    309.15
+   ],
    "stage_bounds": [
     635.95,
     235.45,
@@ -15945,6 +18320,7 @@
    "blend_mode": "Layer",
    "character_id": 276,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -15966,6 +18342,12 @@
    "kind": "movie_clip",
    "name": "instance389",
    "path": "/root1/__mainMc/@0/@803",
+   "render_bounds": [
+    664.75,
+    271.75,
+    667.4,
+    276.65
+   ],
    "stage_bounds": [
     664.75,
     271.75,
@@ -16007,6 +18389,12 @@
    "kind": "graphic",
    "name": "instance390",
    "path": "/root1/__mainMc/@0/@803/@1",
+   "render_bounds": [
+    664.75,
+    271.75,
+    667.4,
+    276.65
+   ],
    "stage_bounds": [
     664.75,
     271.75,
@@ -16027,6 +18415,7 @@
    "blend_mode": "Normal",
    "character_id": 277,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16047,6 +18436,12 @@
    "kind": "graphic",
    "name": "instance391",
    "path": "/root1/__mainMc/@0/@806",
+   "render_bounds": [
+    657.35,
+    273.1,
+    666.9,
+    278.1
+   ],
    "stage_bounds": [
     657.35,
     273.1,
@@ -16067,6 +18462,7 @@
    "blend_mode": "Layer",
    "character_id": 279,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16088,6 +18484,12 @@
    "kind": "movie_clip",
    "name": "instance392",
    "path": "/root1/__mainMc/@0/@807",
+   "render_bounds": [
+    657.5,
+    273.15,
+    660.15,
+    278.05
+   ],
    "stage_bounds": [
     657.5,
     273.15,
@@ -16129,6 +18531,12 @@
    "kind": "graphic",
    "name": "instance393",
    "path": "/root1/__mainMc/@0/@807/@1",
+   "render_bounds": [
+    657.5,
+    273.15,
+    660.15,
+    278.05
+   ],
    "stage_bounds": [
     657.5,
     273.15,
@@ -16149,6 +18557,7 @@
    "blend_mode": "Normal",
    "character_id": 280,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16169,6 +18578,12 @@
    "kind": "graphic",
    "name": "instance394",
    "path": "/root1/__mainMc/@0/@833",
+   "render_bounds": [
+    651.05,
+    254.9,
+    670.55,
+    278.1
+   ],
    "stage_bounds": [
     651.05,
     254.9,
@@ -16189,6 +18604,7 @@
    "blend_mode": "Normal",
    "character_id": 283,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16210,6 +18626,12 @@
    "kind": "movie_clip",
    "name": "instance395",
    "path": "/root1/__mainMc/@0/@834",
+   "render_bounds": [
+    651.95,
+    289.35,
+    671.5,
+    310.05
+   ],
    "stage_bounds": [
     651.95,
     289.35,
@@ -16252,6 +18674,12 @@
    "kind": "movie_clip",
    "name": "instance396",
    "path": "/root1/__mainMc/@0/@834/@1",
+   "render_bounds": [
+    651.95,
+    289.35,
+    671.5,
+    310.05
+   ],
    "stage_bounds": [
     651.95,
     289.35,
@@ -16293,6 +18721,12 @@
    "kind": "graphic",
    "name": "instance397",
    "path": "/root1/__mainMc/@0/@834/@1/@10",
+   "render_bounds": [
+    651.95,
+    289.35,
+    671.5,
+    310.05
+   ],
    "stage_bounds": [
     651.95,
     289.35,
@@ -16313,6 +18747,7 @@
    "blend_mode": "Normal",
    "character_id": 213,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      128,
@@ -16334,6 +18769,12 @@
    "kind": "movie_clip",
    "name": "instance398",
    "path": "/root1/__mainMc/@0/@836",
+   "render_bounds": [
+    584.4,
+    299.15,
+    629.95,
+    341.65
+   ],
    "stage_bounds": [
     587.4,
     302.15,
@@ -16375,6 +18816,12 @@
    "kind": "graphic",
    "name": "instance399",
    "path": "/root1/__mainMc/@0/@836/@13",
+   "render_bounds": [
+    587.4,
+    302.15,
+    626.95,
+    338.65
+   ],
    "stage_bounds": [
     587.4,
     302.15,
@@ -16416,6 +18863,12 @@
    "kind": "movie_clip",
    "name": "instance400",
    "path": "/root1/__mainMc/@0/@836/@14",
+   "render_bounds": [
+    596.5,
+    316.2,
+    615.6,
+    329.3
+   ],
    "stage_bounds": [
     596.5,
     316.2,
@@ -16457,6 +18910,12 @@
    "kind": "graphic",
    "name": "instance401",
    "path": "/root1/__mainMc/@0/@836/@14/@1",
+   "render_bounds": [
+    596.5,
+    316.2,
+    615.6,
+    329.3
+   ],
    "stage_bounds": [
     596.5,
     316.2,
@@ -16497,6 +18956,12 @@
    "kind": "graphic",
    "name": "instance402",
    "path": "/root1/__mainMc/@0/@836/@18",
+   "render_bounds": [
+    595.6,
+    309.05,
+    617.65,
+    330.7
+   ],
    "stage_bounds": [
     595.6,
     309.05,
@@ -16517,6 +18982,7 @@
    "blend_mode": "Normal",
    "character_id": 213,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16538,6 +19004,12 @@
    "kind": "movie_clip",
    "name": "instance403",
    "path": "/root1/__mainMc/@0/@855",
+   "render_bounds": [
+    600.75,
+    292.1,
+    639.5,
+    328.5
+   ],
    "stage_bounds": [
     603.75,
     295.1,
@@ -16579,6 +19051,12 @@
    "kind": "graphic",
    "name": "instance404",
    "path": "/root1/__mainMc/@0/@855/@13",
+   "render_bounds": [
+    603.75,
+    295.1,
+    636.5,
+    325.5
+   ],
    "stage_bounds": [
     603.75,
     295.1,
@@ -16620,6 +19098,12 @@
    "kind": "movie_clip",
    "name": "instance405",
    "path": "/root1/__mainMc/@0/@855/@14",
+   "render_bounds": [
+    611.25,
+    306.65,
+    627.1,
+    317.75
+   ],
    "stage_bounds": [
     611.25,
     306.65,
@@ -16661,6 +19145,12 @@
    "kind": "graphic",
    "name": "instance406",
    "path": "/root1/__mainMc/@0/@855/@14/@1",
+   "render_bounds": [
+    611.25,
+    306.65,
+    627.1,
+    317.75
+   ],
    "stage_bounds": [
     611.25,
     306.65,
@@ -16701,6 +19191,12 @@
    "kind": "graphic",
    "name": "instance407",
    "path": "/root1/__mainMc/@0/@855/@18",
+   "render_bounds": [
+    610.55,
+    300.85,
+    628.85,
+    318.85
+   ],
    "stage_bounds": [
     610.55,
     300.85,
@@ -16721,6 +19217,7 @@
    "blend_mode": "Normal",
    "character_id": 215,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16742,6 +19239,12 @@
    "kind": "movie_clip",
    "name": "instance408",
    "path": "/root1/__mainMc/@0/@874",
+   "render_bounds": [
+    671.5,
+    313.6,
+    688.1,
+    330.2
+   ],
    "stage_bounds": [
     671.5,
     313.6,
@@ -16783,6 +19286,12 @@
    "kind": "graphic",
    "name": "instance409",
    "path": "/root1/__mainMc/@0/@874/@3",
+   "render_bounds": [
+    671.5,
+    313.6,
+    688.1,
+    330.2
+   ],
    "stage_bounds": [
     671.5,
     313.6,
@@ -16803,6 +19312,7 @@
    "blend_mode": "Normal",
    "character_id": 217,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16824,6 +19334,12 @@
    "kind": "movie_clip",
    "name": "instance410",
    "path": "/root1/__mainMc/@0/@878",
+   "render_bounds": [
+    651.8,
+    329.9,
+    671.55,
+    349.6
+   ],
    "stage_bounds": [
     651.8,
     329.9,
@@ -16865,6 +19381,12 @@
    "kind": "graphic",
    "name": "instance411",
    "path": "/root1/__mainMc/@0/@878/@3",
+   "render_bounds": [
+    651.8,
+    329.9,
+    671.55,
+    349.6
+   ],
    "stage_bounds": [
     651.8,
     329.9,
@@ -16885,6 +19407,7 @@
    "blend_mode": "Normal",
    "character_id": 215,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16906,6 +19429,12 @@
    "kind": "movie_clip",
    "name": "instance412",
    "path": "/root1/__mainMc/@0/@882",
+   "render_bounds": [
+    519.1,
+    296.7,
+    535.7,
+    313.3
+   ],
    "stage_bounds": [
     519.1,
     296.7,
@@ -16947,6 +19476,12 @@
    "kind": "graphic",
    "name": "instance413",
    "path": "/root1/__mainMc/@0/@882/@3",
+   "render_bounds": [
+    519.1,
+    296.7,
+    535.7,
+    313.3
+   ],
    "stage_bounds": [
     519.1,
     296.7,
@@ -16967,6 +19502,7 @@
    "blend_mode": "Normal",
    "character_id": 284,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -16987,6 +19523,12 @@
    "kind": "graphic",
    "name": "instance414",
    "path": "/root1/__mainMc/@0/@887",
+   "render_bounds": [
+    317.25,
+    292.1,
+    347.8,
+    325.95
+   ],
    "stage_bounds": [
     317.25,
     292.1,
@@ -17007,6 +19549,7 @@
    "blend_mode": "Normal",
    "character_id": 286,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17028,6 +19571,12 @@
    "kind": "movie_clip",
    "name": "instance415",
    "path": "/root1/__mainMc/@0/@888",
+   "render_bounds": [
+    353.25,
+    343.85,
+    401.05,
+    400.25
+   ],
    "stage_bounds": [
     353.25,
     343.85,
@@ -17069,6 +19618,12 @@
    "kind": "graphic",
    "name": "instance416",
    "path": "/root1/__mainMc/@0/@888/@5",
+   "render_bounds": [
+    353.25,
+    343.85,
+    401.05,
+    400.25
+   ],
    "stage_bounds": [
     353.25,
     343.85,
@@ -17089,6 +19644,7 @@
    "blend_mode": "Normal",
    "character_id": 286,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17110,6 +19666,12 @@
    "kind": "movie_clip",
    "name": "instance417",
    "path": "/root1/__mainMc/@0/@894",
+   "render_bounds": [
+    330.65,
+    354.35,
+    359.8,
+    403.2
+   ],
    "stage_bounds": [
     330.65,
     354.35,
@@ -17151,6 +19713,12 @@
    "kind": "graphic",
    "name": "instance418",
    "path": "/root1/__mainMc/@0/@894/@5",
+   "render_bounds": [
+    330.65,
+    354.35,
+    359.8,
+    403.2
+   ],
    "stage_bounds": [
     330.65,
     354.35,
@@ -17171,6 +19739,7 @@
    "blend_mode": "Normal",
    "character_id": 293,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17192,6 +19761,12 @@
    "kind": "movie_clip",
    "name": "bodyMc",
    "path": "/root1/__mainMc/@0/bodyMc",
+   "render_bounds": [
+    313.05,
+    293.95,
+    400.1,
+    378.7
+   ],
    "stage_bounds": [
     313.05,
     293.95,
@@ -17233,6 +19808,12 @@
    "kind": "graphic",
    "name": "instance1075",
    "path": "/root1/__mainMc/@0/bodyMc/@2",
+   "render_bounds": [
+    313.05,
+    293.95,
+    400.1,
+    378.7
+   ],
    "stage_bounds": [
     313.05,
     293.95,
@@ -17253,6 +19834,7 @@
    "blend_mode": "Normal",
    "character_id": 294,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17273,6 +19855,12 @@
    "kind": "graphic",
    "name": "instance420",
    "path": "/root1/__mainMc/@0/@1006",
+   "render_bounds": [
+    355.8,
+    301.45,
+    379.6,
+    337.0
+   ],
    "stage_bounds": [
     355.8,
     301.45,
@@ -17293,6 +19881,7 @@
    "blend_mode": "Normal",
    "character_id": 295,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17329,6 +19918,7 @@
    "blend_mode": "Normal",
    "character_id": 295,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17365,6 +19955,7 @@
    "blend_mode": "Normal",
    "character_id": 305,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17386,6 +19977,12 @@
    "kind": "movie_clip",
    "name": "instance421",
    "path": "/root1/__mainMc/@0/@1011",
+   "render_bounds": [
+    233.45,
+    103.25,
+    489.75,
+    348.0
+   ],
    "stage_bounds": [
     233.45,
     103.25,
@@ -17427,6 +20024,12 @@
    "kind": "graphic",
    "name": "instance422",
    "path": "/root1/__mainMc/@0/@1011/@24",
+   "render_bounds": [
+    233.45,
+    131.85,
+    489.75,
+    348.0
+   ],
    "stage_bounds": [
     233.45,
     131.85,
@@ -17468,6 +20071,12 @@
    "kind": "movie_clip",
    "name": "hatMc",
    "path": "/root1/__mainMc/@0/@1011/hatMc",
+   "render_bounds": [
+    250.8,
+    103.25,
+    486.3,
+    285.95
+   ],
    "stage_bounds": [
     250.8,
     103.25,
@@ -17509,6 +20118,12 @@
    "kind": "graphic",
    "name": "instance423",
    "path": "/root1/__mainMc/@0/@1011/hatMc/@31",
+   "render_bounds": [
+    250.8,
+    103.25,
+    486.3,
+    285.95
+   ],
    "stage_bounds": [
     250.8,
     103.25,
@@ -17529,6 +20144,7 @@
    "blend_mode": "Normal",
    "character_id": 307,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17550,6 +20166,12 @@
    "kind": "movie_clip",
    "name": "instance424",
    "path": "/root1/__mainMc/@0/@1037",
+   "render_bounds": [
+    292.55,
+    206.4,
+    427.9,
+    311.8
+   ],
    "stage_bounds": [
     292.55,
     206.4,
@@ -17591,6 +20213,12 @@
    "kind": "graphic",
    "name": "instance425",
    "path": "/root1/__mainMc/@0/@1037/@10",
+   "render_bounds": [
+    292.55,
+    206.4,
+    427.9,
+    311.8
+   ],
    "stage_bounds": [
     292.55,
     206.4,
@@ -17611,6 +20239,7 @@
    "blend_mode": "Normal",
    "character_id": 324,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -17632,6 +20261,12 @@
    "kind": "movie_clip",
    "name": "instance426",
    "path": "/root1/__mainMc/@0/@1048",
+   "render_bounds": [
+    293.2,
+    206.5,
+    350.3,
+    311.65
+   ],
    "stage_bounds": [
     293.2,
     206.5,
@@ -17673,6 +20308,12 @@
    "kind": "graphic",
    "name": "instance427",
    "path": "/root1/__mainMc/@0/@1048/@4",
+   "render_bounds": [
+    293.2,
+    221.15,
+    349.3,
+    279.35
+   ],
    "stage_bounds": [
     293.2,
     221.15,
@@ -17714,6 +20355,12 @@
    "kind": "movie_clip",
    "name": "instance428",
    "path": "/root1/__mainMc/@0/@1048/@5",
+   "render_bounds": [
+    302.95,
+    234.1,
+    346.2,
+    277.35
+   ],
    "stage_bounds": [
     302.95,
     234.1,
@@ -17755,6 +20402,12 @@
    "kind": "graphic",
    "name": "instance429",
    "path": "/root1/__mainMc/@0/@1048/@5/@1",
+   "render_bounds": [
+    302.95,
+    234.1,
+    346.2,
+    277.35
+   ],
    "stage_bounds": [
     302.95,
     234.1,
@@ -17796,6 +20449,12 @@
    "kind": "movie_clip",
    "name": "instance430",
    "path": "/root1/__mainMc/@0/@1048/@5/@2",
+   "render_bounds": [
+    309.1,
+    240.25,
+    340.05,
+    271.25
+   ],
    "stage_bounds": [
     309.1,
     240.25,
@@ -17837,6 +20496,12 @@
    "kind": "graphic",
    "name": "instance431",
    "path": "/root1/__mainMc/@0/@1048/@5/@2/@4",
+   "render_bounds": [
+    309.1,
+    240.25,
+    340.05,
+    271.25
+   ],
    "stage_bounds": [
     309.1,
     240.25,
@@ -17878,6 +20543,12 @@
    "kind": "movie_clip",
    "name": "instance432",
    "path": "/root1/__mainMc/@0/@1048/@8",
+   "render_bounds": [
+    297.15,
+    206.5,
+    350.3,
+    311.65
+   ],
    "stage_bounds": [
     297.15,
     206.5,
@@ -17899,6 +20570,7 @@
    "blend_mode": "Normal",
    "character_id": 313,
    "class": "flash.display::Shape",
+   "clip_depth": 4,
    "color_transform": {
     "add": [
      0,
@@ -17919,6 +20591,12 @@
    "kind": "graphic",
    "name": "instance433",
    "path": "/root1/__mainMc/@0/@1048/@8/@1",
+   "render_bounds": [
+    302.3,
+    233.65,
+    346.45,
+    277.8
+   ],
    "stage_bounds": [
     302.3,
     233.65,
@@ -17939,6 +20617,7 @@
    "blend_mode": "Normal",
    "character_id": 314,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1048/@8/@1",
    "color_transform": {
     "add": [
      0,
@@ -17959,6 +20638,12 @@
    "kind": "graphic",
    "name": "instance1063",
    "path": "/root1/__mainMc/@0/@1048/@8/@3",
+   "render_bounds": [
+    297.15,
+    206.5,
+    350.3,
+    311.65
+   ],
    "stage_bounds": [
     297.15,
     206.5,
@@ -17979,6 +20664,7 @@
    "blend_mode": "Normal",
    "character_id": 324,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18000,6 +20686,12 @@
    "kind": "movie_clip",
    "name": "instance435",
    "path": "/root1/__mainMc/@0/@1057",
+   "render_bounds": [
+    371.1,
+    214.15,
+    429.95,
+    319.25
+   ],
    "stage_bounds": [
     371.1,
     214.15,
@@ -18041,6 +20733,12 @@
    "kind": "graphic",
    "name": "instance436",
    "path": "/root1/__mainMc/@0/@1057/@4",
+   "render_bounds": [
+    373.85,
+    229.5,
+    429.95,
+    287.7
+   ],
    "stage_bounds": [
     373.85,
     229.5,
@@ -18082,6 +20780,12 @@
    "kind": "movie_clip",
    "name": "instance437",
    "path": "/root1/__mainMc/@0/@1057/@5",
+   "render_bounds": [
+    375.95,
+    241.65,
+    419.2,
+    284.9
+   ],
    "stage_bounds": [
     375.95,
     241.65,
@@ -18123,6 +20827,12 @@
    "kind": "graphic",
    "name": "instance438",
    "path": "/root1/__mainMc/@0/@1057/@5/@1",
+   "render_bounds": [
+    375.95,
+    241.65,
+    419.2,
+    284.9
+   ],
    "stage_bounds": [
     375.95,
     241.65,
@@ -18164,6 +20874,12 @@
    "kind": "movie_clip",
    "name": "instance439",
    "path": "/root1/__mainMc/@0/@1057/@5/@2",
+   "render_bounds": [
+    382.05,
+    247.8,
+    413.05,
+    278.8
+   ],
    "stage_bounds": [
     382.05,
     247.8,
@@ -18205,6 +20921,12 @@
    "kind": "graphic",
    "name": "instance440",
    "path": "/root1/__mainMc/@0/@1057/@5/@2/@4",
+   "render_bounds": [
+    382.05,
+    247.8,
+    413.05,
+    278.8
+   ],
    "stage_bounds": [
     382.05,
     247.8,
@@ -18246,6 +20968,12 @@
    "kind": "movie_clip",
    "name": "instance441",
    "path": "/root1/__mainMc/@0/@1057/@8",
+   "render_bounds": [
+    371.1,
+    214.15,
+    424.25,
+    319.25
+   ],
    "stage_bounds": [
     371.1,
     214.15,
@@ -18267,6 +20995,7 @@
    "blend_mode": "Normal",
    "character_id": 313,
    "class": "flash.display::Shape",
+   "clip_depth": 4,
    "color_transform": {
     "add": [
      0,
@@ -18287,6 +21016,12 @@
    "kind": "graphic",
    "name": "instance442",
    "path": "/root1/__mainMc/@0/@1057/@8/@1",
+   "render_bounds": [
+    375.65,
+    241.2,
+    419.8,
+    285.35
+   ],
    "stage_bounds": [
     375.65,
     241.2,
@@ -18307,6 +21042,7 @@
    "blend_mode": "Normal",
    "character_id": 314,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1057/@8/@1",
    "color_transform": {
     "add": [
      0,
@@ -18327,6 +21063,12 @@
    "kind": "graphic",
    "name": "instance1062",
    "path": "/root1/__mainMc/@0/@1057/@8/@3",
+   "render_bounds": [
+    371.1,
+    214.15,
+    424.25,
+    319.25
+   ],
    "stage_bounds": [
     371.1,
     214.15,
@@ -18347,6 +21089,7 @@
    "blend_mode": "Normal",
    "character_id": 325,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18367,6 +21110,12 @@
    "kind": "graphic",
    "name": "instance444",
    "path": "/root1/__mainMc/@0/@1101",
+   "render_bounds": [
+    -348.5,
+    218.65,
+    369.05,
+    373.35
+   ],
    "stage_bounds": [
     -348.5,
     218.65,
@@ -18387,6 +21136,7 @@
    "blend_mode": "Normal",
    "character_id": 213,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18408,6 +21158,12 @@
    "kind": "movie_clip",
    "name": "instance445",
    "path": "/root1/__mainMc/@0/@1102",
+   "render_bounds": [
+    -129.55,
+    309.95,
+    -78.8,
+    357.5
+   ],
    "stage_bounds": [
     -126.55,
     312.95,
@@ -18449,6 +21205,12 @@
    "kind": "graphic",
    "name": "instance446",
    "path": "/root1/__mainMc/@0/@1102/@13",
+   "render_bounds": [
+    -126.55,
+    312.95,
+    -81.8,
+    354.5
+   ],
    "stage_bounds": [
     -126.55,
     312.95,
@@ -18490,6 +21252,12 @@
    "kind": "movie_clip",
    "name": "instance447",
    "path": "/root1/__mainMc/@0/@1102/@14",
+   "render_bounds": [
+    -116.4,
+    328.75,
+    -94.7,
+    343.9
+   ],
    "stage_bounds": [
     -116.4,
     328.75,
@@ -18531,6 +21299,12 @@
    "kind": "graphic",
    "name": "instance448",
    "path": "/root1/__mainMc/@0/@1102/@14/@1",
+   "render_bounds": [
+    -116.4,
+    328.75,
+    -94.7,
+    343.9
+   ],
    "stage_bounds": [
     -116.4,
     328.75,
@@ -18571,6 +21345,12 @@
    "kind": "graphic",
    "name": "instance449",
    "path": "/root1/__mainMc/@0/@1102/@18",
+   "render_bounds": [
+    -117.3,
+    320.8,
+    -92.25,
+    345.4
+   ],
    "stage_bounds": [
     -117.3,
     320.8,
@@ -18591,6 +21371,7 @@
    "blend_mode": "Normal",
    "character_id": 326,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18611,6 +21392,12 @@
    "kind": "graphic",
    "name": "instance450",
    "path": "/root1/__mainMc/@0/@1147",
+   "render_bounds": [
+    -319.7,
+    -2.15,
+    701.05,
+    510.0
+   ],
    "stage_bounds": [
     -319.7,
     -2.15,
@@ -18631,6 +21418,7 @@
    "blend_mode": "Normal",
    "character_id": 176,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18652,6 +21440,12 @@
    "kind": "movie_clip",
    "name": "instance451",
    "path": "/root1/__mainMc/@0/@1148",
+   "render_bounds": [
+    621.15,
+    191.7,
+    664.4,
+    235.0
+   ],
    "stage_bounds": [
     621.15,
     191.7,
@@ -18693,6 +21487,12 @@
    "kind": "graphic",
    "name": "instance452",
    "path": "/root1/__mainMc/@0/@1148/@1",
+   "render_bounds": [
+    621.15,
+    191.7,
+    664.4,
+    235.0
+   ],
    "stage_bounds": [
     621.15,
     191.7,
@@ -18713,6 +21513,7 @@
    "blend_mode": "Normal",
    "character_id": 178,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18734,6 +21535,12 @@
    "kind": "movie_clip",
    "name": "instance453",
    "path": "/root1/__mainMc/@0/@1150",
+   "render_bounds": [
+    541.9,
+    266.8,
+    606.25,
+    322.6
+   ],
    "stage_bounds": [
     541.9,
     266.8,
@@ -18775,6 +21582,12 @@
    "kind": "graphic",
    "name": "instance454",
    "path": "/root1/__mainMc/@0/@1150/@1",
+   "render_bounds": [
+    541.9,
+    266.8,
+    606.25,
+    322.6
+   ],
    "stage_bounds": [
     541.9,
     266.8,
@@ -18795,6 +21608,7 @@
    "blend_mode": "Normal",
    "character_id": 174,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18816,6 +21630,12 @@
    "kind": "movie_clip",
    "name": "instance455",
    "path": "/root1/__mainMc/@0/@1152",
+   "render_bounds": [
+    92.5,
+    384.95,
+    122.0,
+    414.65
+   ],
    "stage_bounds": [
     92.5,
     384.95,
@@ -18857,6 +21677,12 @@
    "kind": "graphic",
    "name": "instance456",
    "path": "/root1/__mainMc/@0/@1152/@1",
+   "render_bounds": [
+    92.5,
+    384.95,
+    122.0,
+    414.65
+   ],
    "stage_bounds": [
     92.5,
     384.95,
@@ -18877,6 +21703,7 @@
    "blend_mode": "Normal",
    "character_id": 174,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18898,6 +21725,12 @@
    "kind": "movie_clip",
    "name": "instance457",
    "path": "/root1/__mainMc/@0/@1154",
+   "render_bounds": [
+    537.65,
+    156.9,
+    576.1,
+    195.5
+   ],
    "stage_bounds": [
     537.65,
     156.9,
@@ -18939,6 +21772,12 @@
    "kind": "graphic",
    "name": "instance458",
    "path": "/root1/__mainMc/@0/@1154/@1",
+   "render_bounds": [
+    537.65,
+    156.9,
+    576.1,
+    195.5
+   ],
    "stage_bounds": [
     537.65,
     156.9,
@@ -18959,6 +21798,7 @@
    "blend_mode": "Normal",
    "character_id": 174,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -18980,6 +21820,12 @@
    "kind": "movie_clip",
    "name": "instance459",
    "path": "/root1/__mainMc/@0/@1156",
+   "render_bounds": [
+    634.85,
+    336.95,
+    664.35,
+    366.65
+   ],
    "stage_bounds": [
     634.85,
     336.95,
@@ -19021,6 +21867,12 @@
    "kind": "graphic",
    "name": "instance460",
    "path": "/root1/__mainMc/@0/@1156/@1",
+   "render_bounds": [
+    634.85,
+    336.95,
+    664.35,
+    366.65
+   ],
    "stage_bounds": [
     634.85,
     336.95,
@@ -19041,6 +21893,7 @@
    "blend_mode": "Normal",
    "character_id": 178,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19062,6 +21915,12 @@
    "kind": "movie_clip",
    "name": "instance461",
    "path": "/root1/__mainMc/@0/@1158",
+   "render_bounds": [
+    523.55,
+    402.3,
+    572.15,
+    441.85
+   ],
    "stage_bounds": [
     523.55,
     402.3,
@@ -19103,6 +21962,12 @@
    "kind": "graphic",
    "name": "instance462",
    "path": "/root1/__mainMc/@0/@1158/@1",
+   "render_bounds": [
+    523.55,
+    402.3,
+    572.15,
+    441.85
+   ],
    "stage_bounds": [
     523.55,
     402.3,
@@ -19123,6 +21988,7 @@
    "blend_mode": "Normal",
    "character_id": 176,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19144,6 +22010,12 @@
    "kind": "movie_clip",
    "name": "instance463",
    "path": "/root1/__mainMc/@0/@1160",
+   "render_bounds": [
+    225.65,
+    383.45,
+    256.85,
+    414.65
+   ],
    "stage_bounds": [
     225.65,
     383.45,
@@ -19185,6 +22057,12 @@
    "kind": "graphic",
    "name": "instance464",
    "path": "/root1/__mainMc/@0/@1160/@1",
+   "render_bounds": [
+    225.65,
+    383.45,
+    256.85,
+    414.65
+   ],
    "stage_bounds": [
     225.65,
     383.45,
@@ -19205,6 +22083,7 @@
    "blend_mode": "Normal",
    "character_id": 176,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19226,6 +22105,12 @@
    "kind": "movie_clip",
    "name": "instance465",
    "path": "/root1/__mainMc/@0/@1162",
+   "render_bounds": [
+    92.5,
+    15.05,
+    123.7,
+    46.25
+   ],
    "stage_bounds": [
     92.5,
     15.05,
@@ -19267,6 +22152,12 @@
    "kind": "graphic",
    "name": "instance466",
    "path": "/root1/__mainMc/@0/@1162/@1",
+   "render_bounds": [
+    92.5,
+    15.05,
+    123.7,
+    46.25
+   ],
    "stage_bounds": [
     92.5,
     15.05,
@@ -19287,6 +22178,7 @@
    "blend_mode": "Normal",
    "character_id": 176,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19308,6 +22200,12 @@
    "kind": "movie_clip",
    "name": "instance467",
    "path": "/root1/__mainMc/@0/@1164",
+   "render_bounds": [
+    357.0,
+    104.65,
+    397.55,
+    145.2
+   ],
    "stage_bounds": [
     357.0,
     104.65,
@@ -19349,6 +22247,12 @@
    "kind": "graphic",
    "name": "instance468",
    "path": "/root1/__mainMc/@0/@1164/@1",
+   "render_bounds": [
+    357.0,
+    104.65,
+    397.55,
+    145.2
+   ],
    "stage_bounds": [
     357.0,
     104.65,
@@ -19369,6 +22273,7 @@
    "blend_mode": "Normal",
    "character_id": 176,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19390,6 +22295,12 @@
    "kind": "movie_clip",
    "name": "instance469",
    "path": "/root1/__mainMc/@0/@1166",
+   "render_bounds": [
+    24.35,
+    266.8,
+    81.7,
+    324.15
+   ],
    "stage_bounds": [
     24.35,
     266.8,
@@ -19431,6 +22342,12 @@
    "kind": "graphic",
    "name": "instance470",
    "path": "/root1/__mainMc/@0/@1166/@1",
+   "render_bounds": [
+    24.35,
+    266.8,
+    81.7,
+    324.15
+   ],
    "stage_bounds": [
     24.35,
     266.8,
@@ -19451,6 +22368,7 @@
    "blend_mode": "Normal",
    "character_id": 174,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19472,6 +22390,12 @@
    "kind": "movie_clip",
    "name": "instance471",
    "path": "/root1/__mainMc/@0/@1168",
+   "render_bounds": [
+    24.35,
+    92.8,
+    62.8,
+    131.4
+   ],
    "stage_bounds": [
     24.35,
     92.8,
@@ -19513,6 +22437,12 @@
    "kind": "graphic",
    "name": "instance472",
    "path": "/root1/__mainMc/@0/@1168/@1",
+   "render_bounds": [
+    24.35,
+    92.8,
+    62.8,
+    131.4
+   ],
    "stage_bounds": [
     24.35,
     92.8,
@@ -19533,6 +22463,7 @@
    "blend_mode": "Normal",
    "character_id": 178,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19554,6 +22485,12 @@
    "kind": "movie_clip",
    "name": "instance473",
    "path": "/root1/__mainMc/@0/@1170",
+   "render_bounds": [
+    15.4,
+    454.85,
+    62.75,
+    495.95
+   ],
    "stage_bounds": [
     15.4,
     454.85,
@@ -19595,6 +22532,12 @@
    "kind": "graphic",
    "name": "instance474",
    "path": "/root1/__mainMc/@0/@1170/@1",
+   "render_bounds": [
+    15.4,
+    454.85,
+    62.75,
+    495.95
+   ],
    "stage_bounds": [
     15.4,
     454.85,
@@ -19615,6 +22558,7 @@
    "blend_mode": "Normal",
    "character_id": 178,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19636,6 +22580,12 @@
    "kind": "movie_clip",
    "name": "instance475",
    "path": "/root1/__mainMc/@0/@1172",
+   "render_bounds": [
+    77.0,
+    191.7,
+    124.35,
+    232.8
+   ],
    "stage_bounds": [
     77.0,
     191.7,
@@ -19677,6 +22627,12 @@
    "kind": "graphic",
    "name": "instance476",
    "path": "/root1/__mainMc/@0/@1172/@1",
+   "render_bounds": [
+    77.0,
+    191.7,
+    124.35,
+    232.8
+   ],
    "stage_bounds": [
     77.0,
     191.7,
@@ -19697,6 +22653,7 @@
    "blend_mode": "Normal",
    "character_id": 178,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19718,6 +22675,12 @@
    "kind": "movie_clip",
    "name": "instance477",
    "path": "/root1/__mainMc/@0/@1174",
+   "render_bounds": [
+    629.35,
+    24.1,
+    676.7,
+    65.2
+   ],
    "stage_bounds": [
     629.35,
     24.1,
@@ -19759,6 +22722,12 @@
    "kind": "graphic",
    "name": "instance478",
    "path": "/root1/__mainMc/@0/@1174/@1",
+   "render_bounds": [
+    629.35,
+    24.1,
+    676.7,
+    65.2
+   ],
    "stage_bounds": [
     629.35,
     24.1,
@@ -19779,6 +22748,7 @@
    "blend_mode": "Normal",
    "character_id": 178,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19800,6 +22770,12 @@
    "kind": "movie_clip",
    "name": "instance479",
    "path": "/root1/__mainMc/@0/@1176",
+   "render_bounds": [
+    397.55,
+    384.95,
+    444.9,
+    426.05
+   ],
    "stage_bounds": [
     397.55,
     384.95,
@@ -19841,6 +22817,12 @@
    "kind": "graphic",
    "name": "instance480",
    "path": "/root1/__mainMc/@0/@1176/@1",
+   "render_bounds": [
+    397.55,
+    384.95,
+    444.9,
+    426.05
+   ],
    "stage_bounds": [
     397.55,
     384.95,
@@ -19861,6 +22843,7 @@
    "blend_mode": "Normal",
    "character_id": 327,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19881,6 +22864,12 @@
    "kind": "graphic",
    "name": "instance481",
    "path": "/root1/__mainMc/@0/@1181",
+   "render_bounds": [
+    -18.2,
+    25.05,
+    715.4,
+    515.5
+   ],
    "stage_bounds": [
     -18.2,
     25.05,
@@ -19901,6 +22890,7 @@
    "blend_mode": "Normal",
    "character_id": 330,
    "class": "translation_108",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -19922,6 +22912,12 @@
    "kind": "movie_clip",
    "name": "loadingMc",
    "path": "/root1/__mainMc/@0/loadingMc",
+   "render_bounds": [
+    250.3,
+    369.7,
+    450.6,
+    424.15
+   ],
    "stage_bounds": [
     252.3,
     371.7,
@@ -19963,6 +22959,12 @@
    "kind": "text",
    "name": "Loading_1",
    "path": "/root1/__mainMc/@0/loadingMc/Loading_1",
+   "render_bounds": [
+    252.3,
+    371.7,
+    448.6,
+    422.15
+   ],
    "stage_bounds": [
     252.3,
     371.7,
@@ -19984,6 +22986,7 @@
    "blend_mode": "Normal",
    "character_id": 338,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -20005,6 +23008,12 @@
    "kind": "movie_clip",
    "name": "instance482",
    "path": "/root1/__mainMc/@0/@1184",
+   "render_bounds": [
+    77.75,
+    18.45,
+    632.05,
+    157.0
+   ],
    "stage_bounds": [
     77.75,
     18.45,
@@ -20046,6 +23055,12 @@
    "kind": "graphic",
    "name": "instance483",
    "path": "/root1/__mainMc/@0/@1184/@33",
+   "render_bounds": [
+    77.75,
+    18.45,
+    535.85,
+    146.4
+   ],
    "stage_bounds": [
     77.75,
     18.45,
@@ -20087,6 +23102,12 @@
    "kind": "movie_clip",
    "name": "instance484",
    "path": "/root1/__mainMc/@0/@1184/@34",
+   "render_bounds": [
+    518.15,
+    24.2,
+    632.05,
+    157.0
+   ],
    "stage_bounds": [
     535.15,
     41.2,
@@ -20128,6 +23149,12 @@
    "kind": "graphic",
    "name": "instance485",
    "path": "/root1/__mainMc/@0/@1184/@34/@1",
+   "render_bounds": [
+    535.15,
+    41.2,
+    614.2,
+    134.55
+   ],
    "stage_bounds": [
     535.15,
     41.2,
@@ -20169,6 +23196,12 @@
    "kind": "movie_clip",
    "name": "instance486",
    "path": "/root1/__mainMc/@0/@1184/@34/@2",
+   "render_bounds": [
+    537.2,
+    42.3,
+    615.05,
+    135.05
+   ],
    "stage_bounds": [
     542.2,
     47.3,
@@ -20210,6 +23243,12 @@
    "kind": "graphic",
    "name": "instance487",
    "path": "/root1/__mainMc/@0/@1184/@34/@2/@2",
+   "render_bounds": [
+    542.2,
+    47.3,
+    610.05,
+    130.05
+   ],
    "stage_bounds": [
     542.2,
     47.3,
@@ -20251,6 +23290,12 @@
    "kind": "movie_clip",
    "name": "instance488",
    "path": "/root1/__mainMc/@0/@1184/@37",
+   "render_bounds": [
+    259.15,
+    68.95,
+    273.15,
+    82.5
+   ],
    "stage_bounds": [
     259.15,
     68.95,
@@ -20292,6 +23337,12 @@
    "kind": "graphic",
    "name": "instance489",
    "path": "/root1/__mainMc/@0/@1184/@37/@1",
+   "render_bounds": [
+    259.15,
+    68.95,
+    273.15,
+    82.5
+   ],
    "stage_bounds": [
     259.15,
     68.95,
@@ -20333,6 +23384,12 @@
    "kind": "movie_clip",
    "name": "instance490",
    "path": "/root1/__mainMc/@0/@1184/@39",
+   "render_bounds": [
+    114.9,
+    116.2,
+    125.6,
+    126.8
+   ],
    "stage_bounds": [
     114.9,
     116.2,
@@ -20374,6 +23431,12 @@
    "kind": "graphic",
    "name": "instance491",
    "path": "/root1/__mainMc/@0/@1184/@39/@1",
+   "render_bounds": [
+    114.9,
+    116.2,
+    125.6,
+    126.8
+   ],
    "stage_bounds": [
     114.9,
     116.2,
@@ -20415,6 +23478,12 @@
    "kind": "movie_clip",
    "name": "instance492",
    "path": "/root1/__mainMc/@0/@1184/@41",
+   "render_bounds": [
+    298.35,
+    77.75,
+    308.1,
+    86.9
+   ],
    "stage_bounds": [
     298.35,
     77.75,
@@ -20456,6 +23525,12 @@
    "kind": "graphic",
    "name": "instance493",
    "path": "/root1/__mainMc/@0/@1184/@41/@1",
+   "render_bounds": [
+    298.35,
+    77.75,
+    308.1,
+    86.9
+   ],
    "stage_bounds": [
     298.35,
     77.75,
@@ -20497,6 +23572,12 @@
    "kind": "movie_clip",
    "name": "instance494",
    "path": "/root1/__mainMc/@0/@1184/@43",
+   "render_bounds": [
+    229.75,
+    64.8,
+    239.5,
+    73.95
+   ],
    "stage_bounds": [
     229.75,
     64.8,
@@ -20538,6 +23619,12 @@
    "kind": "graphic",
    "name": "instance495",
    "path": "/root1/__mainMc/@0/@1184/@43/@1",
+   "render_bounds": [
+    229.75,
+    64.8,
+    239.5,
+    73.95
+   ],
    "stage_bounds": [
     229.75,
     64.8,
@@ -20579,6 +23666,12 @@
    "kind": "movie_clip",
    "name": "instance496",
    "path": "/root1/__mainMc/@0/@1184/@45",
+   "render_bounds": [
+    236.2,
+    80.15,
+    250.05,
+    93.4
+   ],
    "stage_bounds": [
     236.2,
     80.15,
@@ -20620,6 +23713,12 @@
    "kind": "graphic",
    "name": "instance497",
    "path": "/root1/__mainMc/@0/@1184/@45/@1",
+   "render_bounds": [
+    236.2,
+    80.15,
+    250.05,
+    93.4
+   ],
    "stage_bounds": [
     236.2,
     80.15,
@@ -20661,6 +23760,12 @@
    "kind": "movie_clip",
    "name": "instance498",
    "path": "/root1/__mainMc/@0/@1184/@47",
+   "render_bounds": [
+    104.3,
+    80.15,
+    114.05,
+    89.3
+   ],
    "stage_bounds": [
     104.3,
     80.15,
@@ -20702,6 +23807,12 @@
    "kind": "graphic",
    "name": "instance499",
    "path": "/root1/__mainMc/@0/@1184/@47/@1",
+   "render_bounds": [
+    104.3,
+    80.15,
+    114.05,
+    89.3
+   ],
    "stage_bounds": [
     104.3,
     80.15,
@@ -20743,6 +23854,12 @@
    "kind": "movie_clip",
    "name": "instance500",
    "path": "/root1/__mainMc/@0/@1184/@49",
+   "render_bounds": [
+    139.7,
+    112.3,
+    149.45,
+    121.45
+   ],
    "stage_bounds": [
     139.7,
     112.3,
@@ -20784,6 +23901,12 @@
    "kind": "graphic",
    "name": "instance501",
    "path": "/root1/__mainMc/@0/@1184/@49/@1",
+   "render_bounds": [
+    139.7,
+    112.3,
+    149.45,
+    121.45
+   ],
    "stage_bounds": [
     139.7,
     112.3,
@@ -20825,6 +23948,12 @@
    "kind": "movie_clip",
    "name": "instance502",
    "path": "/root1/__mainMc/@0/@1184/@51",
+   "render_bounds": [
+    298.35,
+    51.85,
+    308.1,
+    61.0
+   ],
    "stage_bounds": [
     298.35,
     51.85,
@@ -20866,6 +23995,12 @@
    "kind": "graphic",
    "name": "instance503",
    "path": "/root1/__mainMc/@0/@1184/@51/@1",
+   "render_bounds": [
+    298.35,
+    51.85,
+    308.1,
+    61.0
+   ],
    "stage_bounds": [
     298.35,
     51.85,
@@ -20907,6 +24042,12 @@
    "kind": "movie_clip",
    "name": "instance504",
    "path": "/root1/__mainMc/@0/@1184/@53",
+   "render_bounds": [
+    255.35,
+    46.0,
+    265.1,
+    55.15
+   ],
    "stage_bounds": [
     255.35,
     46.0,
@@ -20948,6 +24089,12 @@
    "kind": "graphic",
    "name": "instance505",
    "path": "/root1/__mainMc/@0/@1184/@53/@1",
+   "render_bounds": [
+    255.35,
+    46.0,
+    265.1,
+    55.15
+   ],
    "stage_bounds": [
     255.35,
     46.0,
@@ -20989,6 +24136,12 @@
    "kind": "movie_clip",
    "name": "instance506",
    "path": "/root1/__mainMc/@0/@1184/@55",
+   "render_bounds": [
+    330.45,
+    64.2,
+    344.45,
+    77.75
+   ],
    "stage_bounds": [
     330.45,
     64.2,
@@ -21030,6 +24183,12 @@
    "kind": "graphic",
    "name": "instance507",
    "path": "/root1/__mainMc/@0/@1184/@55/@1",
+   "render_bounds": [
+    330.45,
+    64.2,
+    344.45,
+    77.75
+   ],
    "stage_bounds": [
     330.45,
     64.2,
@@ -21071,6 +24230,12 @@
    "kind": "movie_clip",
    "name": "instance508",
    "path": "/root1/__mainMc/@0/@1184/@57",
+   "render_bounds": [
+    145.3,
+    86.9,
+    155.05,
+    96.05
+   ],
    "stage_bounds": [
     145.3,
     86.9,
@@ -21112,6 +24277,12 @@
    "kind": "graphic",
    "name": "instance509",
    "path": "/root1/__mainMc/@0/@1184/@57/@1",
+   "render_bounds": [
+    145.3,
+    86.9,
+    155.05,
+    96.05
+   ],
    "stage_bounds": [
     145.3,
     86.9,
@@ -21153,6 +24324,12 @@
    "kind": "movie_clip",
    "name": "instance510",
    "path": "/root1/__mainMc/@0/@1184/@59",
+   "render_bounds": [
+    370.65,
+    73.95,
+    384.5,
+    87.2
+   ],
    "stage_bounds": [
     370.65,
     73.95,
@@ -21194,6 +24371,12 @@
    "kind": "graphic",
    "name": "instance511",
    "path": "/root1/__mainMc/@0/@1184/@59/@1",
+   "render_bounds": [
+    370.65,
+    73.95,
+    384.5,
+    87.2
+   ],
    "stage_bounds": [
     370.65,
     73.95,
@@ -21235,6 +24418,12 @@
    "kind": "movie_clip",
    "name": "instance512",
    "path": "/root1/__mainMc/@0/@1184/@61",
+   "render_bounds": [
+    337.35,
+    41.6,
+    351.35,
+    55.15
+   ],
    "stage_bounds": [
     337.35,
     41.6,
@@ -21276,6 +24465,12 @@
    "kind": "graphic",
    "name": "instance513",
    "path": "/root1/__mainMc/@0/@1184/@61/@1",
+   "render_bounds": [
+    337.35,
+    41.6,
+    351.35,
+    55.15
+   ],
    "stage_bounds": [
     337.35,
     41.6,
@@ -21317,6 +24512,12 @@
    "kind": "movie_clip",
    "name": "instance514",
    "path": "/root1/__mainMc/@0/@1184/@63",
+   "render_bounds": [
+    373.25,
+    42.5,
+    383.0,
+    51.65
+   ],
    "stage_bounds": [
     373.25,
     42.5,
@@ -21358,6 +24559,12 @@
    "kind": "graphic",
    "name": "instance515",
    "path": "/root1/__mainMc/@0/@1184/@63/@1",
+   "render_bounds": [
+    373.25,
+    42.5,
+    383.0,
+    51.65
+   ],
    "stage_bounds": [
     373.25,
     42.5,
@@ -21399,6 +24606,12 @@
    "kind": "movie_clip",
    "name": "instance516",
    "path": "/root1/__mainMc/@0/@1184/@65",
+   "render_bounds": [
+    344.4,
+    80.15,
+    354.15,
+    89.3
+   ],
    "stage_bounds": [
     344.4,
     80.15,
@@ -21440,6 +24653,12 @@
    "kind": "graphic",
    "name": "instance517",
    "path": "/root1/__mainMc/@0/@1184/@65/@1",
+   "render_bounds": [
+    344.4,
+    80.15,
+    354.15,
+    89.3
+   ],
    "stage_bounds": [
     344.4,
     80.15,
@@ -21481,6 +24700,12 @@
    "kind": "movie_clip",
    "name": "instance518",
    "path": "/root1/__mainMc/@0/@1184/@67",
+   "render_bounds": [
+    421.25,
+    85.3,
+    435.1,
+    98.55
+   ],
    "stage_bounds": [
     421.25,
     85.3,
@@ -21522,6 +24747,12 @@
    "kind": "graphic",
    "name": "instance519",
    "path": "/root1/__mainMc/@0/@1184/@67/@1",
+   "render_bounds": [
+    421.25,
+    85.3,
+    435.1,
+    98.55
+   ],
    "stage_bounds": [
     421.25,
     85.3,
@@ -21563,6 +24794,12 @@
    "kind": "movie_clip",
    "name": "instance520",
    "path": "/root1/__mainMc/@0/@1184/@69",
+   "render_bounds": [
+    423.8,
+    50.95,
+    433.55,
+    60.1
+   ],
    "stage_bounds": [
     423.8,
     50.95,
@@ -21604,6 +24841,12 @@
    "kind": "graphic",
    "name": "instance521",
    "path": "/root1/__mainMc/@0/@1184/@69/@1",
+   "render_bounds": [
+    423.8,
+    50.95,
+    433.55,
+    60.1
+   ],
    "stage_bounds": [
     423.8,
     50.95,
@@ -21645,6 +24888,12 @@
    "kind": "movie_clip",
    "name": "instance522",
    "path": "/root1/__mainMc/@0/@1184/@71",
+   "render_bounds": [
+    436.25,
+    61.0,
+    450.25,
+    74.55
+   ],
    "stage_bounds": [
     436.25,
     61.0,
@@ -21686,6 +24935,12 @@
    "kind": "graphic",
    "name": "instance523",
    "path": "/root1/__mainMc/@0/@1184/@71/@1",
+   "render_bounds": [
+    436.25,
+    61.0,
+    450.25,
+    74.55
+   ],
    "stage_bounds": [
     436.25,
     61.0,
@@ -21727,6 +24982,12 @@
    "kind": "movie_clip",
    "name": "instance524",
    "path": "/root1/__mainMc/@0/@1184/@73",
+   "render_bounds": [
+    484.4,
+    89.3,
+    498.25,
+    102.55
+   ],
    "stage_bounds": [
     484.4,
     89.3,
@@ -21768,6 +25029,12 @@
    "kind": "graphic",
    "name": "instance525",
    "path": "/root1/__mainMc/@0/@1184/@73/@1",
+   "render_bounds": [
+    484.4,
+    89.3,
+    498.25,
+    102.55
+   ],
    "stage_bounds": [
     484.4,
     89.3,
@@ -21809,6 +25076,12 @@
    "kind": "movie_clip",
    "name": "instance526",
    "path": "/root1/__mainMc/@0/@1184/@75",
+   "render_bounds": [
+    479.95,
+    55.05,
+    489.7,
+    64.2
+   ],
    "stage_bounds": [
     479.95,
     55.05,
@@ -21850,6 +25123,12 @@
    "kind": "graphic",
    "name": "instance527",
    "path": "/root1/__mainMc/@0/@1184/@75/@1",
+   "render_bounds": [
+    479.95,
+    55.05,
+    489.7,
+    64.2
+   ],
    "stage_bounds": [
     479.95,
     55.05,
@@ -21891,6 +25170,12 @@
    "kind": "movie_clip",
    "name": "instance528",
    "path": "/root1/__mainMc/@0/@1184/@77",
+   "render_bounds": [
+    472.3,
+    73.35,
+    486.3,
+    86.9
+   ],
    "stage_bounds": [
     472.3,
     73.35,
@@ -21932,6 +25217,12 @@
    "kind": "graphic",
    "name": "instance529",
    "path": "/root1/__mainMc/@0/@1184/@77/@1",
+   "render_bounds": [
+    472.3,
+    73.35,
+    486.3,
+    86.9
+   ],
    "stage_bounds": [
     472.3,
     73.35,
@@ -21973,6 +25264,12 @@
    "kind": "movie_clip",
    "name": "instance530",
    "path": "/root1/__mainMc/@0/@1184/@79",
+   "render_bounds": [
+    577.2,
+    93.4,
+    591.2,
+    106.95
+   ],
    "stage_bounds": [
     577.2,
     93.4,
@@ -22014,6 +25311,12 @@
    "kind": "graphic",
    "name": "instance531",
    "path": "/root1/__mainMc/@0/@1184/@79/@1",
+   "render_bounds": [
+    577.2,
+    93.4,
+    591.2,
+    106.95
+   ],
    "stage_bounds": [
     577.2,
     93.4,
@@ -22055,6 +25358,12 @@
    "kind": "movie_clip",
    "name": "instance532",
    "path": "/root1/__mainMc/@0/@1184/@81",
+   "render_bounds": [
+    567.45,
+    66.75,
+    577.2,
+    75.9
+   ],
    "stage_bounds": [
     567.45,
     66.75,
@@ -22096,6 +25405,12 @@
    "kind": "graphic",
    "name": "instance533",
    "path": "/root1/__mainMc/@0/@1184/@81/@1",
+   "render_bounds": [
+    567.45,
+    66.75,
+    577.2,
+    75.9
+   ],
    "stage_bounds": [
     567.45,
     66.75,
@@ -22137,6 +25452,12 @@
    "kind": "movie_clip",
    "name": "instance534",
    "path": "/root1/__mainMc/@0/@1184/@83",
+   "render_bounds": [
+    566.4,
+    112.35,
+    576.15,
+    121.5
+   ],
    "stage_bounds": [
     566.4,
     112.35,
@@ -22178,6 +25499,12 @@
    "kind": "graphic",
    "name": "instance535",
    "path": "/root1/__mainMc/@0/@1184/@83/@1",
+   "render_bounds": [
+    566.4,
+    112.35,
+    576.15,
+    121.5
+   ],
    "stage_bounds": [
     566.4,
     112.35,
@@ -22198,6 +25525,7 @@
    "blend_mode": "Normal",
    "character_id": 354,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -22219,6 +25547,12 @@
    "kind": "movie_clip",
    "name": "processBarMc",
    "path": "/root1/__mainMc/@0/processBarMc",
+   "render_bounds": [
+    143.15,
+    399.05,
+    590.15,
+    470.9
+   ],
    "stage_bounds": [
     143.15,
     403.05,
@@ -22260,6 +25594,12 @@
    "kind": "graphic",
    "name": "instance536",
    "path": "/root1/__mainMc/@0/processBarMc/@4",
+   "render_bounds": [
+    143.15,
+    426.45,
+    578.65,
+    459.6
+   ],
    "stage_bounds": [
     143.15,
     426.45,
@@ -22280,6 +25620,7 @@
    "blend_mode": "Normal",
    "character_id": 353,
    "class": "flash.display::Shape",
+   "clip_depth": 7,
    "color_transform": {
     "add": [
      0,
@@ -22300,6 +25641,12 @@
    "kind": "graphic",
    "name": "instance637",
    "path": "/root1/__mainMc/@0/processBarMc/@5",
+   "render_bounds": [
+    146.6,
+    428.35,
+    576.4,
+    457.6
+   ],
    "stage_bounds": [
     146.6,
     428.35,
@@ -22320,6 +25667,7 @@
    "blend_mode": "Normal",
    "character_id": 341,
    "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/processBarMc/@5",
    "color_transform": {
     "add": [
      0,
@@ -22340,6 +25688,12 @@
    "kind": "graphic",
    "name": "instance538",
    "path": "/root1/__mainMc/@0/processBarMc/@6",
+   "render_bounds": [
+    149.55,
+    433.15,
+    569.05,
+    453.0
+   ],
    "stage_bounds": [
     149.55,
     433.15,
@@ -22381,6 +25735,12 @@
    "kind": "movie_clip",
    "name": "instance539",
    "path": "/root1/__mainMc/@0/processBarMc/@8",
+   "render_bounds": [
+    532.1,
+    399.05,
+    590.15,
+    470.9
+   ],
    "stage_bounds": [
     536.1,
     403.05,
@@ -22422,6 +25782,12 @@
    "kind": "graphic",
    "name": "instance540",
    "path": "/root1/__mainMc/@0/processBarMc/@8/@12",
+   "render_bounds": [
+    538.55,
+    413.65,
+    590.15,
+    470.9
+   ],
    "stage_bounds": [
     538.55,
     413.65,
@@ -22463,6 +25829,12 @@
    "kind": "movie_clip",
    "name": "instance541",
    "path": "/root1/__mainMc/@0/processBarMc/@8/@13",
+   "render_bounds": [
+    532.1,
+    399.05,
+    568.6,
+    435.45
+   ],
    "stage_bounds": [
     536.1,
     403.05,
@@ -22504,6 +25876,12 @@
    "kind": "graphic",
    "name": "instance1074",
    "path": "/root1/__mainMc/@0/processBarMc/@8/@13/@1",
+   "render_bounds": [
+    536.1,
+    403.05,
+    564.6,
+    431.45
+   ],
    "stage_bounds": [
     536.1,
     403.05,
@@ -22544,6 +25922,12 @@
    "kind": "graphic",
    "name": "instance543",
    "path": "/root1/__mainMc/@0/processBarMc/@8/@13/@5",
+   "render_bounds": [
+    537.45,
+    405.7,
+    558.9,
+    427.5
+   ],
    "stage_bounds": [
     537.45,
     405.7,
@@ -22564,6 +25948,7 @@
    "blend_mode": "Normal",
    "character_id": 356,
    "class": "Logos",
+   "clip_mask": "/root1/__mainMc/@0/@1",
    "color_transform": {
     "add": [
      0,
@@ -22585,6 +25970,12 @@
    "kind": "movie_clip",
    "name": "logoMc",
    "path": "/root1/__mainMc/@0/logoMc",
+   "render_bounds": [
+    250.45,
+    459.45,
+    450.45,
+    509.45
+   ],
    "stage_bounds": [
     250.45,
     459.45,
@@ -22626,6 +26017,12 @@
    "kind": "graphic",
    "name": "instance544",
    "path": "/root1/__mainMc/@0/logoMc/@1",
+   "render_bounds": [
+    250.45,
+    459.45,
+    450.45,
+    509.45
+   ],
    "stage_bounds": [
     250.45,
     459.45,
@@ -22667,6 +26064,12 @@
    "kind": "movie_clip",
    "name": "btn_play",
    "path": "/root1/__mainMc/@0/btn_play",
+   "render_bounds": [
+    253.8,
+    411.95,
+    442.5,
+    472.85
+   ],
    "stage_bounds": [
     265.8,
     423.95,
@@ -22709,6 +26112,12 @@
    "kind": "movie_clip",
    "name": "instance545",
    "path": "/root1/__mainMc/@0/btn_play/@1",
+   "render_bounds": [
+    265.8,
+    423.95,
+    429.1,
+    459.45
+   ],
    "stage_bounds": [
     265.8,
     423.95,
@@ -22750,6 +26159,12 @@
    "kind": "graphic",
    "name": "instance546",
    "path": "/root1/__mainMc/@0/btn_play/@1/@4",
+   "render_bounds": [
+    265.8,
+    423.95,
+    429.1,
+    459.45
+   ],
    "stage_bounds": [
     265.8,
     423.95,
@@ -22791,6 +26206,12 @@
    "kind": "movie_clip",
    "name": "instance547",
    "path": "/root1/__mainMc/@0/btn_play/@6",
+   "render_bounds": [
+    268.45,
+    426.45,
+    427.7,
+    458.6
+   ],
    "stage_bounds": [
     271.45,
     429.45,
@@ -22832,6 +26253,12 @@
    "kind": "text",
    "name": "Add_3",
    "path": "/root1/__mainMc/@0/btn_play/@6/Add_3",
+   "render_bounds": [
+    271.45,
+    429.45,
+    424.7,
+    455.6
+   ],
    "stage_bounds": [
     271.45,
     429.45,
@@ -22874,6 +26301,12 @@
    "kind": "movie_clip",
    "name": "preloader",
    "path": "/root1/__mainMc/@0/preloader",
+   "render_bounds": [
+    200.45,
+    127.65,
+    500.45,
+    377.65
+   ],
    "stage_bounds": [
     200.45,
     127.65,
@@ -22915,6 +26348,12 @@
    "kind": "graphic",
    "name": "instance631",
    "path": "/root1/__mainMc/@0/preloader/@1",
+   "render_bounds": [
+    200.45,
+    127.65,
+    500.45,
+    377.65
+   ],
    "stage_bounds": [
     200.45,
     127.65,
@@ -22935,6 +26374,7 @@
    "blend_mode": "Normal",
    "character_id": 366,
    "class": "flash.display::Shape",
+   "clip_depth": 5,
    "color_transform": {
     "add": [
      0,
@@ -22955,6 +26395,12 @@
    "kind": "graphic",
    "name": "instance632",
    "path": "/root1/__mainMc/@0/preloader/@2",
+   "render_bounds": [
+    208.85,
+    136.2,
+    491.85,
+    369.2
+   ],
    "stage_bounds": [
     208.85,
     136.2,
@@ -22975,6 +26421,7 @@
    "blend_mode": "Normal",
    "character_id": 390,
    "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/preloader/@2",
    "color_transform": {
     "add": [
      0,
@@ -22996,6 +26443,12 @@
    "kind": "movie_clip",
    "name": "pmc",
    "path": "/root1/__mainMc/@0/preloader/pmc",
+   "render_bounds": [
+    200.45,
+    127.65,
+    500.45,
+    377.65
+   ],
    "stage_bounds": [
     200.45,
     127.65,
@@ -23037,6 +26490,12 @@
    "kind": "graphic",
    "name": "instance633",
    "path": "/root1/__mainMc/@0/preloader/pmc/@1",
+   "render_bounds": [
+    200.45,
+    127.65,
+    500.45,
+    377.65
+   ],
    "stage_bounds": [
     200.45,
     127.65,
