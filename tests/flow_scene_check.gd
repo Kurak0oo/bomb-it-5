@@ -19,8 +19,10 @@ func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(app.save_path))
 	root.add_child(app)
 	await process_frame
+	await app.screen_opened()
 	_expect(app.current == &"title", "the game opens on the title screen (UILoading)")
 	await _click(_find("btn_play"))
+	await app.screen_opened()
 	_expect(app.current == &"menu", "PLAY opens the main menu")
 	_expect(_find("startGame") != null and _find("howToPlay") != null, "the menu offers START and HOW TO PLAY")
 	_expect(_find("moregames") == null, "MORE GAMES (the portal link) is removed (owner edit)")

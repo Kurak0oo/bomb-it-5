@@ -25,7 +25,9 @@ func _run() -> void:
 	app.save_path = SAVE
 	root.add_child(app)
 	await process_frame
+	await app.screen_opened()
 	await _click(_find("btn_play"))
+	await app.screen_opened()
 	await _click(_find("startGame"))
 	await _click(_find("Next"))
 	_expect(_find("Look1") != null and _find("Look1").disabled, "a fresh save shows every look locked")
@@ -65,7 +67,9 @@ func _run() -> void:
 	app.save_path = SAVE
 	root.add_child(app)
 	await process_frame
+	await app.screen_opened()
 	await _click(_find("btn_play"))
+	await app.screen_opened()
 	await _click(_find("startGame"))
 	await _click(_find("Next"))
 	_expect(not _find("Look1").disabled and not _find("Look2").disabled and _find("Look3").disabled, "unlocks persist across launches")

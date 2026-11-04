@@ -18,14 +18,14 @@ def sha256(path):
 
 
 class ReferenceSession:
-    def __init__(self, executable, swf, output, compact=False, focus=False):
+    def __init__(self, executable, swf, output, compact=False, focus=False, extra_args=()):
         self.output = output.resolve()
         self.compact = compact
         self.focus = focus
         self.output.mkdir(parents=True, exist_ok=False)
         self.stderr = (self.output / 'player-stderr.log').open('w', encoding='utf-8')
         self.log = (self.output / 'commands.jsonl').open('w', encoding='utf-8')
-        self.process = subprocess.Popen([str(executable.resolve()), str(swf.resolve())],
+        self.process = subprocess.Popen([str(executable.resolve()), str(swf.resolve()), *extra_args],
                                         cwd=self.output, stdin=subprocess.PIPE,
                                         stdout=subprocess.PIPE, stderr=self.stderr,
                                         text=True, encoding='utf-8', bufsize=1)

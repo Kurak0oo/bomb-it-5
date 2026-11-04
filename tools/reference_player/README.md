@@ -63,7 +63,7 @@ Protocol (one command per line):
 
 - `step N`: preload, run one frame, then update timers by `1000/frame_rate` milliseconds, N times.
 - `kd KEY` / `ku KEY`: deliver one key-down/up between frames; no synthesized repeat.
-- `click X Y`, `move X Y`: pointer input in the 700×510 viewport.
+- `click X Y`, `move X Y`: pointer input in the 700×510 viewport. `down X Y` / `up X Y` press and release separately (move there first), so a button can be held and released elsewhere.
 - `shot FILE.png`: render and synchronously save the complete viewport. Start the player with `--scale N` to render the 700×510 stage at N× (input coordinates stay in stage units).
 - `cap DIR` / `cap off`: render/capture every stepped frame.
 - `state FILE.json`: bounded native slot graph, available with the observer feature.

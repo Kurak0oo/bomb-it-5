@@ -32,6 +32,8 @@ func _initialize() -> void:
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.handle_input_locally = true
 	root.add_child(_viewport)
+	# Generated screens follow the stepped frames, not the clock (see swf_screen.gd).
+	load("res://scripts/ui/swf_screen.gd").frame_locked = true
 	_viewport.add_child(load(ProjectSettings.get_setting("application/run/main_scene")).instantiate())
 	_run.call_deferred(case)
 

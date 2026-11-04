@@ -41,7 +41,9 @@ func _run() -> void:
 	app.save_path = SAVE
 	root.add_child(app)
 	await process_frame
+	await app.screen_opened()
 	await _click(_find("btn_play"))
+	await app.screen_opened()
 	await _click(_find("howToPlay"))
 	_expect(app.current == &"how_to_play" and _find("Key_bomb").text == "Space", "HOW TO PLAY shows the current controls")
 	await _click(_find("Key_bomb"))

@@ -98,7 +98,9 @@ func _ready() -> void:
 		_open_practice()
 	elif "--screen" in args and args.find("--screen") + 1 < args.size():
 		# Development launch: one generated original screen on its own, for review.
-		_swf_page(StringName(args[args.find("--screen") + 1]))
+		var id := StringName(args[args.find("--screen") + 1])
+		var timeline = SwfScreen.layout_of(id).get("timeline")
+		_swf_page(id, int(timeline.opened_frame) if timeline is Dictionary else 0)
 	else:
 		show_title()
 
@@ -116,24 +118,45 @@ func _draw() -> void:
 		draw_line(at + Vector2(8, -16), at + Vector2(14, -28), Color("3b6f7d"), 3)
 
 
-## `UILoading` after loading: PLAY opens the main menu.
+## `UILoading` after loading: PLAY opens the main menu. Both screens open as many frames
+## late as the original (recorded with their timelines).
 func show_title() -> void:
 	_end_game()
-	var swf := _swf_page(&"title")
-	swf.action.connect(func(name: StringName): if name == &"play": show_main_menu())
+	var timeline = SwfScreen.layout_of(&"title").get("timeline")
+	var swf := _swf_page(&"title", int(timeline.opened_frame) if timeline is Dictionary else 0)
+	swf.action.connect(func(name: StringName): if name == &"play": show_main_menu(true))
 
 
 ## `MainMenuUI`: START → Game Settings, HOW TO PLAY → controls, and the quality, sound and
 ## music switches. The portal's MORE GAMES, promo strip, "Add to your site" and language
 ## bar are removed by owner edits (tools/convert/owner_edits.json).
-func show_main_menu() -> void:
+func show_main_menu(from_title := false) -> void:
 	_end_game()
-	var swf := _swf_page(&"menu")
+	var timeline = SwfScreen.layout_of(&"menu").get("timeline")
+	var delay: int = int(timeline.opened_after_input) if from_title and timeline is Dictionary else 0
+	var swf := _swf_page(&"menu", delay)
 	swf.action.connect(_menu_action)
+	_sync_switches()
 	# `UIManager` starts the menu music on the first menu, and again on returning to it
 	# (`mainMenu` drops the round's music first).
 	audio.null_game_music()
 	audio.create_ui_music()
+
+
+## Wait until the current generated screen has opened (it may open some frames late).
+func screen_opened() -> void:
+	var swf = screen.get_child(0) if is_instance_valid(screen) and screen.get_child_count() > 0 else null
+	if swf is SwfScreen and not swf.is_open: await swf.opened
+
+
+## The switches show the session's settings: quality frames HIGH/MEDIUM/LOW, sound and
+## music frame 1 on, 2 off (docs/evidence/edition-5-quality.md).
+func _sync_switches() -> void:
+	var swf = screen.get_child(0) if is_instance_valid(screen) and screen.get_child_count() > 0 else null
+	if not swf is SwfScreen: return
+	swf.set_frame("quality", Quality.index() + 1)
+	swf.set_frame("sound", 1 if audio.sound_on else 2)
+	swf.set_frame("music", 1 if audio.music_on else 2)
 
 
 func _menu_action(name: StringName) -> void:
@@ -142,11 +165,15 @@ func _menu_action(name: StringName) -> void:
 	elif name == &"quality": _set_quality()
 	elif name == &"sound": audio.set_sound(not audio.sound_on)
 	elif name == &"music": audio.set_music(not audio.music_on)
+	_sync_switches()
 
 
-## A generated original screen, fitted to the window by one scale factor.
-func _swf_page(id: StringName) -> SwfScreen:
-	_clear_screen()
+## A generated original screen, fitted to the window by one scale factor. With a delay the
+## previous screen stays until the new one opens, as the original keeps showing it.
+func _swf_page(id: StringName, delay := 0) -> SwfScreen:
+	var previous := screen
+	if delay <= 0 or not is_instance_valid(previous):
+		_clear_screen()
 	current = id
 	_layout = id
 	_art = false
@@ -155,10 +182,12 @@ func _swf_page(id: StringName) -> SwfScreen:
 	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(screen)
 	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	var swf := SwfScreen.create(id)
+	var swf := SwfScreen.create(id, delay)
 	screen.add_child(swf)
 	swf.fit(screen.size)
 	screen.resized.connect(func(): swf.fit(screen.size))
+	if delay > 0 and is_instance_valid(previous):
+		swf.opened.connect(func(): if is_instance_valid(previous): previous.queue_free())
 	queue_redraw()
 	return swf
 

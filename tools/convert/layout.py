@@ -24,6 +24,9 @@ import json
 from pathlib import Path
 import sys
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from timeline import Timeline  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[2]
 GOLDENS = ROOT / 'tests' / 'goldens'
 OUT = ROOT / 'scenes' / 'swf'
@@ -39,7 +42,10 @@ SCREENS = {
     # MORE GAMES is the portal link; the owner removed it (owner_edits.json).
     'menu': {'golden': ('main-menu', 'menu'), 'root_class': 'UI_MainMenu',
              'interactive': {'startGame': 'start', 'howToPlay': 'how_to_play', 'quality': 'quality',
-                             'sound': 'sound', 'music': 'music', 'moregames': 'more_games'}},
+                             'sound': 'sound', 'music': 'music', 'moregames': 'more_games'},
+             # Clips whose frame is a setting, cycled by clicks (`qualityCtlHandle`, the
+             # sound and music handlers); the others are buttons with hover/press frames.
+             'switches': {'quality': True, 'sound': True, 'music': True}},
 }
 
 EDITS = Path(__file__).resolve().parent / 'owner_edits.json'
@@ -163,6 +169,29 @@ def build(name, spec):
             expanded.add(q)
             q = parent_of(q)
 
+    timeline = Timeline.load(GOLDENS / case / f'{capture}.timeline.json')
+    states_path = GOLDENS / case / f'{capture}.states.json'
+    states = json.loads(states_path.read_text(encoding='utf-8'))['states'] if states_path.is_file() else {}
+    sequences = {}
+    if timeline is not None:
+        # Animation decides how far groups are split: a part whose inside changes is split
+        # into its children while they stay the same; otherwise it is a frame sequence.
+        queue = [n['path'] for n in nodes if parent_of(n['path']) in expanded and n['path'] not in expanded]
+        while queue:
+            path = queue.pop(0)
+            node = by_path.get(path, {})
+            if node.get('clip_depth') or path in interactive:
+                continue
+            looks = timeline.look_changes(path)
+            if not looks:
+                continue
+            kids = [p for p in by_path if parent_of(p) == path]
+            if kids and timeline.children_stable(path):
+                expanded.add(path)
+                queue += kids
+            else:
+                sequences[path] = looks
+
     layout_nodes, warnings = [], []
     for node in nodes:
         path = node['path']
@@ -171,10 +200,19 @@ def build(name, spec):
             continue  # inside a piece
         entry = {'path': path, 'parent': parent}
         entry.update({k: node[k] for k in CARRIED if k in node})
+        if timeline is not None and timeline.changes(path):
+            entry['track'] = timeline.tracks[path]
         if path in expanded:
             entry['role'] = 'group'
         elif node.get('clip_depth'):
             entry['role'] = 'mask'
+        elif path in sequences:
+            entry['role'] = 'sequence'
+            entry['baked'] = True
+            present = [i for i in range(timeline.frames) if (timeline.state(path, i) or [0] * 9)[6]]
+            # Art where the look changes, plus where it first shows and at the capture.
+            points = set(sequences[path]) | {timeline.data['capture_index']} | ({present[0]} if present else set())
+            entry['art_frames'] = sorted(i for i in points if i in set(present))
         else:
             entry['role'] = 'piece'
             entry['baked'] = True
@@ -183,6 +221,12 @@ def build(name, spec):
                                 'rendered alone it will look different')
         if path in interactive:
             entry['action'] = interactive[path]
+            if path in states:
+                entry['states'] = states[path]
+        if timeline is not None and entry.get('role') == 'piece' and not node.get('effective_visible'):
+            first = timeline.first_visible(path)
+            if first is not None:
+                entry['first_visible'] = first
         layout_nodes.append(entry)
     layout_nodes, edits = _apply_owner_edits(name, screen_root, layout_nodes, by_path)
     # A visible node with no bounds draws nothing (an empty sprite: char 295 in the title
@@ -191,7 +235,7 @@ def build(name, spec):
     # silently.
     pieces = []
     for n in layout_nodes:
-        if n['role'] != 'piece' or not n.get('effective_visible'):
+        if n['role'] != 'piece' or not (n.get('effective_visible') or 'first_visible' in n):
             continue
         if n.get('render_bounds') or n.get('stage_bounds'):
             pieces.append(n['path'])
@@ -209,6 +253,8 @@ def build(name, spec):
         'pieces': pieces,
         'warnings': warnings,
         'owner_edits': edits,
+        'timeline': None if timeline is None else {
+            k: timeline.data[k] for k in ('opened_frame', 'opened_after_input', 'capture_index', 'period', 'period_capped')},
         'nodes': layout_nodes,
     }
 
@@ -228,9 +274,11 @@ def main():
                 stale.append(name)
             continue
         target.write_text(text, encoding='utf-8')
-        roles = {r: sum(1 for n in layout['nodes'] if n['role'] == r) for r in ('group', 'piece', 'mask')}
+        roles = {r: sum(1 for n in layout['nodes'] if n['role'] == r) for r in ('group', 'piece', 'mask', 'sequence')}
+        tracked = sum(1 for n in layout['nodes'] if 'track' in n)
         print(f'{name}: {roles["group"]} groups, {len(layout["pieces"])} visible pieces '
-              f'({roles["piece"]} in all), {roles["mask"]} masks -> {target.relative_to(ROOT)}')
+              f'({roles["piece"]} in all), {roles["sequence"]} sequences, {roles["mask"]} masks, '
+              f'{tracked} animated nodes -> {target.relative_to(ROOT)}')
         for warning in layout['warnings']:
             print(f'  warning: {warning}')
     if stale:

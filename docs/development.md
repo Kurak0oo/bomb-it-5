@@ -153,8 +153,11 @@ Converter v1 (static screens) is in place:
   from the local pack `original/screens/<screen>/` (premultiplied alpha, resampled once
   with Lanczos from 3× to the exact screen scale, redone on resize), an
   outline where the pack is missing, hit areas over interactive instances.
-- `tools/convert/render_pieces.py` renders the pieces with the reference player at 3×
-  and checks that, laid back together, they reproduce the player's own frame.
+- `tools/convert/record_screen.py` records, from the reference player: each screen's
+  timeline (every node's stage matrix, visibility, clip frame and character from the
+  frame the screen opens, through one loop period after the capture), its interactive
+  states (hover, press, and each click of a switch), and the art (every piece and
+  sequence frame at 3×, self-checked against the player's own frame).
 - The app opens on the title; PLAY → menu; START, HOW TO PLAY and the quality, sound
   and music switches keep their actions; MORE GAMES is drawn but inert.
   `-- --screen <name>` opens one generated screen for review.
@@ -176,6 +179,14 @@ Owner review of v1 (2026-11-04): the menu looks right. Owner edits, kept in
   "Add to your site" and the language bar (top left); move HOW TO PLAY down half a
   button pitch (half the way to MORE GAMES' place), to balance START.
 
-Not in v1: button hover/press frames, the switches' other frames, and animation (the
-robot `mm`, stars and the promo flip play only their captured frame). Those need the
-frames recorded through input (v2).
+Converter v2 (behaviour), 2026-11-04: the layout splits a part whose inside animates
+into its children while they stay the same, and makes it a frame sequence otherwise.
+Godot plays the recorded tracks and sequences on the 35 fps clock (frame-locked in the
+comparison loop), opens each screen as many frames late as the original, shows the
+recorded hover and press frames, and shows the switches' frames from the session's
+settings. Verified here on a generated test SWF (a tween and a frame-by-frame swap):
+Godot at frame 30 matches the reference exactly (nodes 6/6, SSIM 1.0).
+
+Owner, on the Mac: `RESET=1 tools/reference_player/build.sh` (new `down`/`up`
+commands), then `PYTHON=… tools/convert.sh`. Commit `tests/goldens/` (now with
+`.timeline.json` and `.states.json`) and `scenes/swf/`.

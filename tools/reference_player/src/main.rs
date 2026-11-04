@@ -254,6 +254,18 @@ fn main() -> Result<()> {
                 ev(PlayerEvent::MouseDown { x, y, button: MouseButton::Left, index: None });
                 ev(PlayerEvent::MouseUp { x, y, button: MouseButton::Left });
             }
+            // Separate press and release, so a button's down state can be held and released
+            // away from it (no click).
+            "down" => {
+                let (x, y): (f64, f64) = (t[1].parse::<f64>()? * scale, t[2].parse::<f64>()? * scale);
+                ev(PlayerEvent::MouseMove { x, y });
+                ev(PlayerEvent::MouseDown { x, y, button: MouseButton::Left, index: None });
+            }
+            "up" => {
+                let (x, y): (f64, f64) = (t[1].parse::<f64>()? * scale, t[2].parse::<f64>()? * scale);
+                ev(PlayerEvent::MouseMove { x, y });
+                ev(PlayerEvent::MouseUp { x, y, button: MouseButton::Left });
+            }
             "realtime" => realtime = t[1] == "1",
             "quit" => break,
             _ => return Err(anyhow!("unknown command {}", t[0])),
