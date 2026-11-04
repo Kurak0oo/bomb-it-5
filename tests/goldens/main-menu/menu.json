@@ -27155,6 +27155,12 @@
  ],
  "schema": "bombit5-golden-nodes-v1",
  "stage": {
+  "background": [
+   0,
+   0,
+   0,
+   255
+  ],
   "frame_rate": 35.0,
   "height": 510,
   "width": 700

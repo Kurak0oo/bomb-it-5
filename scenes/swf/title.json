@@ -3436,8 +3436,6 @@
   "/root1/__mainMc/@0/@894",
   "/root1/__mainMc/@0/bodyMc@900",
   "/root1/__mainMc/@0/@1006",
-  "/root1/__mainMc/@0/hand2",
-  "/root1/__mainMc/@0/hand",
   "/root1/__mainMc/@0/@1011",
   "/root1/__mainMc/@0/@1037",
   "/root1/__mainMc/@0/@1048",
@@ -3463,8 +3461,7 @@
   "/root1/__mainMc/@0/@1181",
   "/root1/__mainMc/@0/@1184",
   "/root1/__mainMc/@0/btn_play",
-  "/root1/__mainMc/@0/preloader",
-  "/@0"
+  "/root1/__mainMc/@0/preloader"
  ],
  "schema": "bombit5-swf-layout-v1",
  "screen": "title",
@@ -3472,12 +3469,22 @@
  "source": {
   "frame": 301,
   "golden": "tests/goldens/main-menu/title.json",
-  "golden_sha256": "df328f9be2d1fc9c17f11dc2c9558240d080accc5db47264d2affc24452cbda1"
+  "golden_sha256": "5c1d3e635910bebed72ed7345b3be70cdaf8f1d6c15b88002e7eec4f611aebde"
  },
  "stage": {
+  "background": [
+   0,
+   0,
+   0,
+   255
+  ],
   "frame_rate": 35.0,
   "height": 510,
   "width": 700
  },
- "warnings": []
+ "warnings": [
+  "/root1/__mainMc/@0/hand2: no bounds at this frame (empty clip); not rendered as a piece",
+  "/root1/__mainMc/@0/hand: no bounds at this frame (empty clip); not rendered as a piece",
+  "/@0: no bounds at this frame (empty clip); not rendered as a piece"
+ ]
 }

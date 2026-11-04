@@ -2837,8 +2837,7 @@
   "/root1/__mainMc/GameMc/@0/@0/add_to_site",
   "/root1/__mainMc/GameMc/@0/@0/@1310",
   "/root1/__mainMc/GameMc/@0/@0/__id3_",
-  "/root1/__mainMc/GameMc/@0/@0/@0",
-  "/@0"
+  "/root1/__mainMc/GameMc/@0/@0/@0"
  ],
  "schema": "bombit5-swf-layout-v1",
  "screen": "menu",
@@ -2846,12 +2845,20 @@
  "source": {
   "frame": 541,
   "golden": "tests/goldens/main-menu/menu.json",
-  "golden_sha256": "260919b807ff63e74b205cfa167799ff0b80ade5776ab1aa583008e6541bd65a"
+  "golden_sha256": "cc6422056b1ac896b52218d60e95745a505fe57b2600613a8f8f5ec96fe5f321"
  },
  "stage": {
+  "background": [
+   0,
+   0,
+   0,
+   255
+  ],
   "frame_rate": 35.0,
   "height": 510,
   "width": 700
  },
- "warnings": []
+ "warnings": [
+  "/@0: no bounds at this frame (empty clip); not rendered as a piece"
+ ]
 }

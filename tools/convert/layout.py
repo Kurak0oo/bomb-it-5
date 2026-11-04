@@ -137,7 +137,18 @@ def build(name, spec):
         if path in interactive:
             entry['action'] = interactive[path]
         layout_nodes.append(entry)
-    pieces = [n['path'] for n in layout_nodes if n['role'] == 'piece' and n.get('effective_visible')]
+    # A visible node with no bounds draws nothing (an empty sprite: char 295 in the title
+    # screen is one frame with zero placements). Asking the reference player for such a
+    # piece makes it crop a zero-size rectangle, so skip it and say so; never drop art
+    # silently.
+    pieces = []
+    for n in layout_nodes:
+        if n['role'] != 'piece' or not n.get('effective_visible'):
+            continue
+        if n.get('render_bounds') or n.get('stage_bounds'):
+            pieces.append(n['path'])
+        else:
+            warnings.append(f'{n["path"]}: no bounds at this frame (empty clip); not rendered as a piece')
     return {
         'schema': 'bombit5-swf-layout-v1',
         'screen': name,

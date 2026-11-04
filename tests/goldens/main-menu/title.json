@@ -8682,7 +8682,7 @@
    "frame": 1,
    "kind": "movie_clip",
    "name": "bodyMc",
-   "path": "/root1/__mainMc/@0/bodyMc",
+   "path": "/root1/__mainMc/@0/bodyMc@343",
    "render_bounds": [
     24.45,
     205.2,
@@ -8730,7 +8730,7 @@
    "frame": 1,
    "kind": "movie_clip",
    "name": "instance185",
-   "path": "/root1/__mainMc/@0/bodyMc/@1",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@1",
    "render_bounds": [
     88.8,
     266.6,
@@ -8777,7 +8777,7 @@
    "filters": 0,
    "kind": "graphic",
    "name": "instance186",
-   "path": "/root1/__mainMc/@0/bodyMc/@1/@10",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@1/@10",
    "render_bounds": [
     88.8,
     266.6,
@@ -8824,7 +8824,7 @@
    "frame": 1,
    "kind": "movie_clip",
    "name": "instance187",
-   "path": "/root1/__mainMc/@0/bodyMc/@12",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@12",
    "render_bounds": [
     62.25,
     276.4,
@@ -8871,7 +8871,7 @@
    "filters": 0,
    "kind": "graphic",
    "name": "instance188",
-   "path": "/root1/__mainMc/@0/bodyMc/@12/@10",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@12/@10",
    "render_bounds": [
     62.25,
     276.4,
@@ -8917,7 +8917,7 @@
    "filters": 0,
    "kind": "graphic",
    "name": "instance189",
-   "path": "/root1/__mainMc/@0/bodyMc/@31",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@31",
    "render_bounds": [
     73.55,
     272.9,
@@ -8964,7 +8964,7 @@
    "frame": 1,
    "kind": "movie_clip",
    "name": "instance190",
-   "path": "/root1/__mainMc/@0/bodyMc/@32",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@32",
    "render_bounds": [
     24.45,
     205.2,
@@ -9011,7 +9011,7 @@
    "filters": 0,
    "kind": "graphic",
    "name": "instance191",
-   "path": "/root1/__mainMc/@0/bodyMc/@32/@15",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@32/@15",
    "render_bounds": [
     24.45,
     205.2,
@@ -9058,7 +9058,7 @@
    "frame": 1,
    "kind": "movie_clip",
    "name": "instance192",
-   "path": "/root1/__mainMc/@0/bodyMc/@48",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@48",
    "render_bounds": [
     46.4,
     233.65,
@@ -9105,7 +9105,7 @@
    "filters": 0,
    "kind": "graphic",
    "name": "instance193",
-   "path": "/root1/__mainMc/@0/bodyMc/@48/@9",
+   "path": "/root1/__mainMc/@0/bodyMc@343/@48/@9",
    "render_bounds": [
     46.4,
     233.65,
@@ -19760,7 +19760,7 @@
    "frame": 5,
    "kind": "movie_clip",
    "name": "bodyMc",
-   "path": "/root1/__mainMc/@0/bodyMc",
+   "path": "/root1/__mainMc/@0/bodyMc@900",
    "render_bounds": [
     313.05,
     293.95,
@@ -19807,7 +19807,7 @@
    "filters": 0,
    "kind": "graphic",
    "name": "instance1075",
-   "path": "/root1/__mainMc/@0/bodyMc/@2",
+   "path": "/root1/__mainMc/@0/bodyMc@900/@2",
    "render_bounds": [
     313.05,
     293.95,
@@ -26584,6 +26584,12 @@
  ],
  "schema": "bombit5-golden-nodes-v1",
  "stage": {
+  "background": [
+   0,
+   0,
+   0,
+   255
+  ],
   "frame_rate": 35.0,
   "height": 510,
   "width": 700

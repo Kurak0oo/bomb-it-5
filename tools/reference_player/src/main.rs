@@ -226,10 +226,15 @@ fn main() -> Result<()> {
                 };
                 player.lock().unwrap().reference_restore(piece);
                 let img = rendered.ok_or(anyhow!("no frame"))?;
-                let x0 = (px[0].floor().max(0.0) as u32).min(w);
-                let y0 = (px[1].floor().max(0.0) as u32).min(h);
-                let x1 = (px[2].ceil().max(0.0) as u32).min(w);
-                let y1 = (px[3].ceil().max(0.0) as u32).min(h);
+                // Keep the crop inside the frame. A piece can lie entirely outside the
+                // viewport (char 259 sits at stage x 705.5 on the menu); clamping x0 to w
+                // then leaves zero columns and the PNG encoder rejects the image. Pin x0 to
+                // the last column and x1 at least one past it, so a fully off-stage piece
+                // becomes the 1x1 transparent image the .max(1) below was already asking for.
+                let x0 = (px[0].floor().max(0.0) as u32).min(w.saturating_sub(1));
+                let y0 = (px[1].floor().max(0.0) as u32).min(h.saturating_sub(1));
+                let x1 = (px[2].ceil().max(0.0) as u32).min(w).max(x0 + 1);
+                let y1 = (px[3].ceil().max(0.0) as u32).min(h).max(y0 + 1);
                 let crop = image::imageops::crop_imm(&img, x0, y0, (x1 - x0).max(1), (y1 - y0).max(1)).to_image();
                 crop.save(t[2])?;
                 std::fs::write(format!("{}.json", t[2]), serde_json::to_vec(&serde_json::json!({
