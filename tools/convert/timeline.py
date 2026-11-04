@@ -82,7 +82,9 @@ class Timeline:
         own = self.tracks.get(path, [])
         for k in range(1, len(own)):
             prev, cur = own[k - 1][1], own[k][1]
-            if prev is None or cur is None or prev[7:9] != cur[7:9] or prev[10:11] != cur[10:11]:
+            # Its own alpha too: Flash applies a clip's alpha to each shape inside it, so
+            # overlaps compound and one image cannot be faded to match (the heart balloon).
+            if prev is None or cur is None or prev[7:10] != cur[7:10] or prev[10:11] != cur[10:11]:
                 points.add(own[k][0])
         candidates = set()
         for d in inside:

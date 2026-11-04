@@ -520,9 +520,11 @@ func _apply(i_screen: int) -> void:
 		var cap: String = rec.entry.get("timeline_of", "")
 		if not cap.is_empty() and _by_path_rec.get(rec.parent, {}).get("entry", {}).get("timeline_of", "") != cap:
 			if vis and parent_shown:
-				# As a screen made by input (see _created_frame): the frame that shows it
-				# is its first in the original only from the next frame on.
-				if not _extra_shown_at.has(cap): _extra_shown_at[cap] = _t + 1
+				# Shown later by input (a robot after its icon's click): as a screen made by
+				# input (see _created_frame), its first frame is the next one. A part shown as
+				# the screen opens (the unlock tip) starts with the screen, which already
+				# skipped its creation frame.
+				if not _extra_shown_at.has(cap): _extra_shown_at[cap] = _t + (1 if _t > 0 else 0)
 			else:
 				_extra_shown_at.erase(cap)
 		if rec.hit != null: rec.hit.visible = vis and parent_shown
@@ -540,6 +542,8 @@ func _apply(i_screen: int) -> void:
 			node.set_meta("swf_alpha", alpha)
 			var base := float(rec.alpha_at_capture)
 			var ratio := alpha / base if base > 0.0 else alpha
+			# A sequence's frames were rendered with its alpha at each frame.
+			if rec.entry.get("role", "") == "sequence": ratio = 1.0
 			# The art is premultiplied: colour scales with alpha, or a fade-in stays dark.
 			node.modulate = Color(ratio, ratio, ratio, ratio)
 		_show_art(rec, i, frame)
