@@ -29,7 +29,9 @@ func _run() -> void:
 	await process_frame
 	_expect(root.canvas_item_default_texture_filter == Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_LINEAR and Quality.edges,
 		"the app applies HIGH at start")
-	var switch: Button = app.find_child("QualitySwitch", true, false)
+	app.show_main_menu()
+	await process_frame
+	var switch: Button = app.find_child("quality", true, false)
 	_expect(switch != null, "the main menu has the quality switch")
 	switch.pressed.emit()
 	_expect(Quality.level == &"medium" and Quality.edges
@@ -43,8 +45,8 @@ func _run() -> void:
 	await process_frame
 	app.show_main_menu()
 	await process_frame
-	var again: Button = app.find_child("QualitySwitch", true, false)
-	_expect(again.frame == 1, "the switch keeps the session's level on returning to the menu")
+	_expect(Quality.level == &"medium" and app.find_child("quality", true, false) != null,
+		"the switch keeps the session's level on returning to the menu")
 	_expect(not FileAccess.file_exists(SAVE) or not FileAccess.get_file_as_string(SAVE).contains("quality"),
 		"the level is not saved, as `GameModel.quality` is not in `Cookie`")
 	app.queue_free()

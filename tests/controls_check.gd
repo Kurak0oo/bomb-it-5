@@ -41,7 +41,8 @@ func _run() -> void:
 	app.save_path = SAVE
 	root.add_child(app)
 	await process_frame
-	await _click(_find("HowToPlay"))
+	await _click(_find("btn_play"))
+	await _click(_find("howToPlay"))
 	_expect(app.current == &"how_to_play" and _find("Key_bomb").text == "Space", "HOW TO PLAY shows the current controls")
 	await _click(_find("Key_bomb"))
 	_expect(_find("Message").text == "Select a key with your keyboard", "clicking a control waits for a key")
@@ -52,14 +53,14 @@ func _run() -> void:
 	_expect(_find("Message").text.begins_with("This key is not possible") and _find("Key_up").text == "↑",
 		"a reserved key is refused with the original message")
 	await _click(_find("Back"))
-	await _click(_find("HowToPlay"))
+	await _click(_find("howToPlay"))
 	_expect(_find("Key_bomb").text == "Space", "leaving without SAVE discards changes")
 	await _click(_find("Key_bomb"))
 	await _press(KEY_Q)
 	await _click(_find("SaveKeys"))
 	_expect(_find("Message").text == "Custom controls saved.", "SAVE confirms with the original message")
 	await _click(_find("Back"))
-	await _click(_find("HowToPlay"))
+	await _click(_find("howToPlay"))
 	_expect(_find("Key_bomb").text == "Q", "saved controls persist")
 	await _click(_find("PowerUpsTab"))
 	_expect(_find_text("SPORT CAR") != null and _find_text("LIGHTNING GUN") != null and _find_text("INVINCIBILITY") != null,
@@ -68,7 +69,7 @@ func _run() -> void:
 	_expect(gloves == Fidelity.original, "the glove items are described exactly where rounds drop them (#85)")
 	await _click(_find("Back"))
 
-	await _click(_find("Start"))
+	await _click(_find("startGame"))
 	await _click(_find("Next"))
 	await _click(_find("StartGame"))
 	var game: Node2D = app.game

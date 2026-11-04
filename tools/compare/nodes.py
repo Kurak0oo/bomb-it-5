@@ -38,6 +38,10 @@ def normalize_reference(dump):
         raise ValueError('not a reference display-list dump')
     if dump.get('truncated'):
         raise ValueError('reference display list is truncated; raise the player limits')
+    paths = [n['path'] for n in dump['nodes']]
+    if len(paths) != len(set(paths)):
+        duplicate = next(p for p in paths if paths.count(p) > 1)
+        raise ValueError(f'duplicate display-list path {duplicate}; rebuild the reference player')
     nodes = []
     for node in dump['nodes']:
         nodes.append({k: _round(node[k]) for k in GOLDEN_FIELDS if node.get(k) is not None})

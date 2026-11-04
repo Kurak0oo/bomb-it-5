@@ -1,6 +1,8 @@
 extends Control
 ## Main scene: the edition 5 screen flow (`UIManager`) around the round host.
-## Main menu → Game Settings → character select → levels → score screen → game win/over.
+## Title (`UILoading`) → main menu → Game Settings → character select → levels → score
+## screen → game win/over. Title and main menu are generated original screens
+## (scripts/ui/swf_screen.gd); the later screens are still placeholders (checkpoint 3).
 ## `--practice` after `--` opens the development practice board directly.
 
 const Game = preload("res://scripts/game.gd")
@@ -17,6 +19,7 @@ const Looks = preload("res://scripts/looks.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 const Audio = preload("res://scripts/original_audio.gd")
 const Quality = preload("res://scripts/quality.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -90,14 +93,22 @@ func _ready() -> void:
 		store.music_on = music
 	add_child(audio)
 	Quality.apply(get_viewport())
-	if "--practice" in OS.get_cmdline_user_args():
+	var args := OS.get_cmdline_user_args()
+	if "--practice" in args:
 		_open_practice()
+	elif "--screen" in args and args.find("--screen") + 1 < args.size():
+		# Development launch: one generated original screen on its own, for review.
+		_swf_page(StringName(args[args.find("--screen") + 1]))
 	else:
-		show_main_menu()
+		show_title()
 
 
 func _draw() -> void:
 	if is_instance_valid(game): return
+	if current in [&"title", &"menu"]:
+		# Outside the original stage there is nothing: letterbox black.
+		draw_rect(Rect2(Vector2.ZERO, size), Color.BLACK)
+		return
 	draw_rect(Rect2(Vector2.ZERO, size), Color("102c3b"))
 	for index in 9:
 		var at := Vector2(80 + index * 150, 650 - (index % 3) * 18)
@@ -105,29 +116,50 @@ func _draw() -> void:
 		draw_line(at + Vector2(8, -16), at + Vector2(14, -28), Color("3b6f7d"), 3)
 
 
+## `UILoading` after loading: PLAY opens the main menu.
+func show_title() -> void:
+	_end_game()
+	var swf := _swf_page(&"title")
+	swf.action.connect(func(name: StringName): if name == &"play": show_main_menu())
+
+
+## `MainMenuUI`: START → Game Settings, HOW TO PLAY → controls, and the quality, sound and
+## music switches. MORE GAMES (the portal link) is drawn but inert.
 func show_main_menu() -> void:
 	_end_game()
-	var page := _page(&"menu")
-	_label(page, &"title", "BOMB IT 5", Rect2(0, 120, 1280, 0), 76, UiKit.ACCENT, HORIZONTAL_ALIGNMENT_CENTER)
-	_label(page, &"local_arcade", "LOCAL ARCADE", Rect2(0, 215, 1280, 0), 22, Color("9acbd3"), HORIZONTAL_ALIGNMENT_CENTER)
-	# `MainMenuUI` prints `Root.VERSION_NUM` at (650, 5) in black Tahoma 11 bold over the sheet.
-	if _art: _label(page, &"version", "v.1.6.1", Rect2(), 15, Color.BLACK, HORIZONTAL_ALIGNMENT_LEFT, true)
-	var start := _button(page, &"Start", "START", Rect2(490, 330, 300, 62), show_settings, 26)
-	_button(page, &"HowToPlay", "HOW TO PLAY", Rect2(490, 410, 300, 62), show_how_to_play, 26)
-	# `UI_MainMenu`'s quality, sound and music switches; the music switch also stops or starts
-	# the menu music.
-	var quality := UiKit.switch(page, &"QualitySwitch", "QUALITY", _rect(&"quality", Rect2(1110, 24, 150, 40)), Quality.index(),
-		Quality.TITLES.values(), func(_frame: int): _set_quality(), skin, "ui.quality_switch")
-	var sound := UiKit.switch(page, &"SoundSwitch", "SOUND", _rect(&"sound", Rect2(1110, 72, 150, 40)), 0 if audio.sound_on else 1,
-		["ON", "OFF"], func(frame: int): audio.set_sound(frame == 0), skin, "ui.sound_switch")
-	var music := UiKit.switch(page, &"MusicSwitch", "MUSIC", _rect(&"music", Rect2(1110, 120, 150, 40)), 0 if audio.music_on else 1,
-		["ON", "OFF"], func(frame: int): audio.set_music(frame == 0), skin, "ui.music_switch")
-	for widget in [quality, sound, music]: _gate(widget, {&"QualitySwitch": &"quality", &"SoundSwitch": &"sound", &"MusicSwitch": &"music"}[widget.name])
+	var swf := _swf_page(&"menu")
+	swf.action.connect(_menu_action)
 	# `UIManager` starts the menu music on the first menu, and again on returning to it
 	# (`mainMenu` drops the round's music first).
 	audio.null_game_music()
 	audio.create_ui_music()
-	start.grab_focus.call_deferred()
+
+
+func _menu_action(name: StringName) -> void:
+	if name == &"start": show_settings()
+	elif name == &"how_to_play": show_how_to_play()
+	elif name == &"quality": _set_quality()
+	elif name == &"sound": audio.set_sound(not audio.sound_on)
+	elif name == &"music": audio.set_music(not audio.music_on)
+
+
+## A generated original screen, fitted to the window by one scale factor.
+func _swf_page(id: StringName) -> SwfScreen:
+	_clear_screen()
+	current = id
+	_layout = id
+	_art = false
+	screen = Control.new()
+	screen.name = "Screen_" + id
+	screen.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(screen)
+	screen.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var swf := SwfScreen.create(id)
+	screen.add_child(swf)
+	swf.fit(screen.size)
+	screen.resized.connect(func(): swf.fit(screen.size))
+	queue_redraw()
+	return swf
 
 
 func show_how_to_play(page_name: StringName = &"controls") -> void:

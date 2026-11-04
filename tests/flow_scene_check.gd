@@ -19,11 +19,14 @@ func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(app.save_path))
 	root.add_child(app)
 	await process_frame
-	_expect(app.current == &"menu", "the game opens on the main menu")
-	_expect(_find("Start") != null and _find("HowToPlay") != null, "the menu offers START and HOW TO PLAY")
-	_expect(_find_text("MORE GAMES") == null, "the publisher's MORE GAMES link is not offered")
+	_expect(app.current == &"title", "the game opens on the title screen (UILoading)")
+	await _click(_find("btn_play"))
+	_expect(app.current == &"menu", "PLAY opens the main menu")
+	_expect(_find("startGame") != null and _find("howToPlay") != null, "the menu offers START and HOW TO PLAY")
+	await _click(_find("moregames"))
+	_expect(app.current == &"menu", "MORE GAMES (the portal link) is drawn but inert")
 
-	await _click(_find("Start"))
+	await _click(_find("startGame"))
 	_expect(app.current == &"settings", "START opens Game Settings")
 	_expect(not _find("Mode_arcade").disabled, "Arcade is selectable")
 	await _click(_find_text("5"))
@@ -102,7 +105,7 @@ func _run() -> void:
 	await process_frame
 	_expect(app.current == &"menu" and not is_instance_valid(app.game), "MAIN MENU leaves the level")
 
-	await _click(_find("Start"))
+	await _click(_find("startGame"))
 	await _click(_find("Mode_kill"))
 	_expect(app.session.mode == &"kill" and _find_text("Be the 1st to kill 10 enemies!") != null, "Battle Royale can be chosen")
 	await _click(_find("Next"))

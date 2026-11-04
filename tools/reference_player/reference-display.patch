@@ -51,10 +51,10 @@ index 295bcb48..9d22fcc5 100644
              crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
 diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
 new file mode 100644
-index 00000000..6623746c
+index 00000000..fb2809e0
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,246 @@
+@@ -0,0 +1,253 @@
 +//! Research-only display-list dump for the comparison loop, and isolated piece renders.
 +//! The dump reads native display state only: no ActionScript getters or methods run and
 +//! nothing is written. `isolate` temporarily hides other display objects (native
@@ -71,7 +71,8 @@ index 00000000..6623746c
 +const MAX_DEPTH: usize = 64;
 +
 +/// A stable path segment: the instance name, unless it is a Flash auto name
-+/// (`instanceN`, whose N depends on creation order), in which case the depth.
++/// (`instanceN`, whose N depends on creation order), in which case the depth. A name
++/// that several siblings share gets its depth appended (`name@depth`) to stay unique.
 +fn segment(display: DisplayObject<'_>) -> String {
 +    if let Some(name) = display.name() {
 +        let name = name.to_utf8_lossy().into_owned();
@@ -79,7 +80,12 @@ index 00000000..6623746c
 +            .strip_prefix("instance")
 +            .is_some_and(|rest| !rest.is_empty() && rest.bytes().all(|b| b.is_ascii_digit()));
 +        if !name.is_empty() && !auto {
-+            return name;
++            let shared = display.parent().is_some_and(|parent| {
++                children(parent).into_iter().filter(|s| {
++                    s.name().is_some_and(|n| n.to_utf8_lossy() == name.as_str())
++                }).count() > 1
++            });
++            return if shared { format!("{name}@{}", display.depth()) } else { name };
 +        }
 +    }
 +    format!("@{}", display.depth())
@@ -205,7 +211,8 @@ index 00000000..6623746c
 +    }
 +    json!({
 +        "schema": "bombit5-display-list-v1",
-+        "stage": {"width": 700, "height": 510, "frame_rate": *context.frame_rate},
++        "stage": {"width": 700, "height": 510, "frame_rate": *context.frame_rate,
++            "background": stage.background_color().map(|c| json!([c.r, c.g, c.b, c.a]))},
 +        "units": "stage pixels; matrix = [a, b, c, d, tx, ty]",
 +        "truncated": truncated,
 +        "nodes": nodes,

@@ -114,6 +114,7 @@ def run_godot(name, case_path, godot, fps):
     out.mkdir(parents=True)
     command = [godot, '--path', str(ROOT), '--fixed-fps', str(int(round(fps))), '--resolution', '700x510',
                '--script', 'res://tools/compare/godot_capture.gd', '--', '--case', str(case_path), '--out', str(out)]
+    command += json.loads(Path(case_path).read_text(encoding='utf-8')).get('godot_args', [])
     if platform.system() == 'Linux' and not os.environ.get('DISPLAY') and shutil.which('xvfb-run'):
         command = ['xvfb-run', '-a', '-s', '-screen 0 1280x720x24'] + command
     result = subprocess.run(command, capture_output=True, text=True, timeout=600)

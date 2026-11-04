@@ -138,8 +138,34 @@ Checkpoint 2 is in progress. Owner decisions on 2026-11-04:
 - **Pixel pass line lowered, comparison kept at 1×:** SSIM ≥ 0.95 and region ΔE ≤ 8,
   from route A's measured 0.9676 / 7.44. The owner judges the rest from the heatmap.
 
-The display dump now records mask relationships (`clip_depth`, `mask`, `scroll_rect`)
-and filter-inclusive `render_bounds`; goldens derive `clip_mask`, and the node diff
-requires all three mask fields to match. The `main-menu` goldens predate this and must
-be re-recorded on the owner's Mac. Next: the display-list → Godot scene converter for
-the title screen and the main menu, then hover and press captures for the menu buttons.
+The display dump records mask relationships (`clip_depth`, `mask`, `scroll_rect`),
+filter-inclusive `render_bounds` and the stage colour; a name shared by siblings becomes
+`name@depth`, so every path is unique.
+
+Converter v1 (static screens) is in place:
+
+- `tools/convert/layout.py` turns a golden into `scenes/swf/<screen>.json` (committed,
+  generated): groups down to the screen's root clip and its interactive instances, a
+  *piece* for everything else, timeline masks as undrawn nodes. Interactive instances
+  and their actions are the port of `UILoading` and `MainMenuUI` (sources in the file).
+- `scripts/ui/swf_screen.gd` builds the screen in Godot: one Node2D per layout node at
+  its stage matrix, the whole stage fitted to the window by one scale factor, piece art
+  from the local pack `original/screens/<screen>/` (premultiplied alpha, mipmapped), an
+  outline where the pack is missing, hit areas over interactive instances.
+- `tools/convert/render_pieces.py` renders the pieces with the reference player at 3×
+  and checks that, laid back together, they reproduce the player's own frame.
+- The app opens on the title; PLAY → menu; START, HOW TO PLAY and the quality, sound
+  and music switches keep their actions; MORE GAMES is drawn but inert.
+  `-- --screen <name>` opens one generated screen for review.
+- Node diff here (no SWF): menu 76/76, title 90/90 apart from the old golden's
+  duplicate `bodyMc`, which re-recording fixes. Verified end to end on a Ruffle test
+  SWF: pieces recompose to the reference frame exactly; Godot drawing them scores SSIM
+  0.969 against the 1× original.
+
+Owner, on the Mac: `RESET=1 tools/reference_player/build.sh`, then `tools/convert.sh`
+(record, layout, pieces, check). Commit `tests/goldens/` and `scenes/swf/`; `original/`
+stays local. Then review with `-- --screen title` / `-- --screen menu` or by playing.
+
+Not in v1: button hover/press frames, the switches' other frames, and animation (the
+robot `mm`, stars and the promo flip play only their captured frame). Those need the
+frames recorded through input (v2).

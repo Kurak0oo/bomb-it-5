@@ -1,0 +1,2857 @@
+{
+ "nodes": [
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "Root",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 3,
+   "kind": "movie_clip",
+   "label": "Main",
+   "name": "root1",
+   "parent": "",
+   "path": "/root1",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "role": "group",
+   "stage_bounds": [
+    0.0,
+    0.0,
+    700.0,
+    510.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 3
+  },
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "flash.display::Sprite",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 0,
+   "kind": "movie_clip",
+   "name": "__mainMc",
+   "parent": "/root1",
+   "path": "/root1/__mainMc",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "role": "group",
+   "stage_bounds": [
+    0.0,
+    0.0,
+    700.0,
+    510.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "flash.display::Sprite",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 0,
+   "kind": "movie_clip",
+   "name": "GameMc",
+   "parent": "/root1/__mainMc",
+   "path": "/root1/__mainMc/GameMc",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "role": "group",
+   "stage_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "flash.display::Sprite",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 0,
+   "kind": "movie_clip",
+   "name": "instance1543",
+   "parent": "/root1/__mainMc/GameMc",
+   "path": "/root1/__mainMc/GameMc/@0",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "role": "group",
+   "stage_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 3909,
+   "class": "UI_MainMenu",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1545",
+   "parent": "/root1/__mainMc/GameMc/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0",
+   "render_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "role": "group",
+   "stage_bounds": [
+    -71.65,
+    -311.95,
+    750.0,
+    551.05
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 224,
+   "class": "flash.display::MovieClip",
+   "depth": 1,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "bg",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/bg",
+   "render_bounds": [
+    -71.65,
+    -43.9,
+    741.8,
+    551.05
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -71.65,
+    -43.9,
+    741.8,
+    551.05
+   ],
+   "stage_matrix": [
+    1.01,
+    0.0,
+    0.0,
+    1.01,
+    -46.35,
+    -57.5
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3820,
+   "class": "flash.display::Shape",
+   "depth": 317,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1716",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@317",
+   "render_bounds": [
+    118.15,
+    314.8,
+    529.05,
+    503.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    118.15,
+    314.8,
+    529.05,
+    503.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 253,
+   "class": "flash.display::MovieClip",
+   "depth": 318,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1717",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@318",
+   "render_bounds": [
+    132.1,
+    147.35,
+    268.0,
+    361.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    137.1,
+    152.35,
+    263.0,
+    356.25
+   ],
+   "stage_matrix": [
+    0.9086,
+    0.001,
+    -0.001,
+    0.9086,
+    137.3,
+    126.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3821,
+   "class": "flash.display::Shape",
+   "depth": 528,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1848",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@528",
+   "render_bounds": [
+    644.3,
+    214.7,
+    713.8,
+    323.3
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    644.3,
+    214.7,
+    713.8,
+    323.3
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 256,
+   "class": "flash.display::MovieClip",
+   "depth": 529,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1849",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@529",
+   "render_bounds": [
+    682.4,
+    215.25,
+    693.9,
+    230.45
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    682.4,
+    215.25,
+    693.9,
+    230.45
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    693.9,
+    217.3
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3822,
+   "class": "flash.display::Shape",
+   "depth": 534,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1851",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@534",
+   "render_bounds": [
+    671.1,
+    217.15,
+    712.85,
+    258.9
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    671.1,
+    217.15,
+    712.85,
+    258.9
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 259,
+   "class": "flash.display::MovieClip",
+   "depth": 535,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1852",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@535",
+   "render_bounds": [
+    705.5,
+    232.35,
+    713.3,
+    242.6
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    705.5,
+    232.35,
+    713.3,
+    242.6
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    713.3,
+    233.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 261,
+   "class": "flash.display::MovieClip",
+   "depth": 537,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1854",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@537",
+   "render_bounds": [
+    672.15,
+    222.85,
+    680.65,
+    234.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    672.15,
+    222.85,
+    680.65,
+    234.65
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    680.65,
+    224.3
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3823,
+   "class": "flash.display::Shape",
+   "depth": 545,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1856",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@545",
+   "render_bounds": [
+    677.25,
+    237.65,
+    700.35,
+    256.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    677.25,
+    237.65,
+    700.35,
+    256.95
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 264,
+   "class": "flash.display::MovieClip",
+   "depth": 546,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1857",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@546",
+   "render_bounds": [
+    677.15,
+    245.6,
+    694.4,
+    257.45
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    677.15,
+    245.6,
+    694.4,
+    257.45
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    694.4,
+    249.4
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3824,
+   "class": "flash.display::Shape",
+   "depth": 564,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1859",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@564",
+   "render_bounds": [
+    671.2,
+    225.0,
+    709.2,
+    262.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    671.2,
+    225.0,
+    709.2,
+    262.4
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 267,
+   "class": "flash.display::MovieClip",
+   "depth": 565,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1860",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@565",
+   "render_bounds": [
+    690.7,
+    255.2,
+    701.85,
+    263.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    690.7,
+    255.2,
+    701.85,
+    263.15
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    701.85,
+    257.65
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3825,
+   "class": "flash.display::Shape",
+   "depth": 570,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1862",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@570",
+   "render_bounds": [
+    672.25,
+    249.75,
+    698.55,
+    262.3
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    672.25,
+    249.75,
+    698.55,
+    262.3
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 270,
+   "class": "flash.display::MovieClip",
+   "depth": 571,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1863",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@571",
+   "render_bounds": [
+    671.95,
+    251.4,
+    682.95,
+    258.6
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    671.95,
+    251.4,
+    682.95,
+    258.6
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    682.95,
+    253.85
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3826,
+   "class": "flash.display::Shape",
+   "depth": 578,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1865",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@578",
+   "render_bounds": [
+    675.25,
+    242.45,
+    695.8,
+    257.8
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    675.25,
+    242.45,
+    695.8,
+    257.8
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.1719,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 273,
+   "class": "flash.display::MovieClip",
+   "depth": 579,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1866",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@579",
+   "render_bounds": [
+    685.25,
+    245.0,
+    692.65,
+    251.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    685.25,
+    245.0,
+    692.65,
+    251.5
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    692.65,
+    246.55
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3827,
+   "class": "flash.display::Shape",
+   "depth": 585,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1868",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@585",
+   "render_bounds": [
+    658.25,
+    239.75,
+    708.3,
+    313.45
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    658.25,
+    239.75,
+    708.3,
+    313.45
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.1914,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 276,
+   "class": "flash.display::MovieClip",
+   "depth": 586,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1869",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@586",
+   "render_bounds": [
+    687.05,
+    276.05,
+    689.7,
+    280.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    687.05,
+    276.05,
+    689.7,
+    280.95
+   ],
+   "stage_matrix": [
+    -0.063,
+    0.0134,
+    0.0137,
+    0.0645,
+    688.75,
+    276.05
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3828,
+   "class": "flash.display::Shape",
+   "depth": 589,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1871",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@589",
+   "render_bounds": [
+    679.65,
+    277.4,
+    689.2,
+    282.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    679.65,
+    277.4,
+    689.2,
+    282.4
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.1914,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 279,
+   "class": "flash.display::MovieClip",
+   "depth": 590,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1872",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@590",
+   "render_bounds": [
+    679.8,
+    277.45,
+    682.45,
+    282.35
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    679.8,
+    277.45,
+    682.45,
+    282.35
+   ],
+   "stage_matrix": [
+    -0.063,
+    0.0134,
+    0.0137,
+    0.0645,
+    681.5,
+    277.45
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3829,
+   "class": "flash.display::Shape",
+   "depth": 616,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1874",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@616",
+   "render_bounds": [
+    673.35,
+    259.2,
+    692.85,
+    282.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    673.35,
+    259.2,
+    692.85,
+    282.4
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 283,
+   "class": "flash.display::MovieClip",
+   "depth": 617,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1875",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@617",
+   "render_bounds": [
+    674.25,
+    293.65,
+    693.8,
+    314.35
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    674.25,
+    293.65,
+    693.8,
+    314.35
+   ],
+   "stage_matrix": [
+    -0.2655,
+    0.1357,
+    0.1357,
+    0.2655,
+    686.4,
+    293.65
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3830,
+   "class": "flash.display::Shape",
+   "depth": 623,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1878",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@623",
+   "render_bounds": [
+    -4.2,
+    302.45,
+    34.45,
+    347.85
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -4.2,
+    302.45,
+    34.45,
+    347.85
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.3008,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3832,
+   "class": "flash.display::MovieClip",
+   "depth": 624,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1879",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@624",
+   "render_bounds": [
+    561.8,
+    28.2,
+    596.65,
+    87.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    561.8,
+    28.2,
+    596.65,
+    87.95
+   ],
+   "stage_matrix": [
+    0.8189,
+    0.0828,
+    -0.0828,
+    0.8189,
+    567.55,
+    28.2
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.3008,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3834,
+   "class": "flash.display::MovieClip",
+   "depth": 629,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1881",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@629",
+   "render_bounds": [
+    40.0,
+    13.0,
+    83.3,
+    66.55
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    40.0,
+    13.0,
+    83.3,
+    66.55
+   ],
+   "stage_matrix": [
+    0.7911,
+    -0.3959,
+    0.3959,
+    0.7911,
+    40.0,
+    24.05
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 192,
+   "class": "flash.display::MovieClip",
+   "depth": 634,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 14,
+   "kind": "movie_clip",
+   "name": "instance1883",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@634",
+   "render_bounds": [
+    314.65,
+    118.4,
+    350.65,
+    208.45
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    314.65,
+    118.4,
+    350.65,
+    208.45
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    314.65,
+    127.95
+   ],
+   "total_frames": 40
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 200,
+   "class": "flash.display::MovieClip",
+   "depth": 636,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 14,
+   "kind": "movie_clip",
+   "name": "instance1886",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@636",
+   "render_bounds": [
+    397.75,
+    186.7,
+    430.75,
+    249.8
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    397.75,
+    186.7,
+    430.75,
+    249.8
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    397.75,
+    186.85
+   ],
+   "total_frames": 25
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 203,
+   "class": "flash.display::MovieClip",
+   "depth": 638,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 14,
+   "kind": "movie_clip",
+   "name": "instance1889",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@638",
+   "render_bounds": [
+    103.0,
+    200.8,
+    129.85,
+    248.9
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    103.0,
+    200.8,
+    129.85,
+    248.9
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    108.7,
+    255.75
+   ],
+   "total_frames": 80
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 207,
+   "class": "flash.display::MovieClip",
+   "depth": 640,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 14,
+   "kind": "movie_clip",
+   "name": "instance1892",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@640",
+   "render_bounds": [
+    125.4,
+    29.25,
+    165.75,
+    117.55
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    125.4,
+    29.25,
+    165.75,
+    117.55
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    131.75,
+    30.2
+   ],
+   "total_frames": 60
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3835,
+   "class": "flash.display::Shape",
+   "depth": 651,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1895",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@651",
+   "render_bounds": [
+    10.7,
+    302.75,
+    234.85,
+    390.75
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    10.7,
+    302.75,
+    234.85,
+    390.75
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 227,
+   "class": "flash.display::MovieClip",
+   "depth": 652,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1896",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@652",
+   "render_bounds": [
+    20.65,
+    348.9,
+    47.2,
+    367.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    20.65,
+    348.9,
+    47.2,
+    367.25
+   ],
+   "stage_matrix": [
+    -0.8033,
+    1.7753,
+    -1.7753,
+    -0.8033,
+    46.75,
+    359.65
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "depth": 657,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1898",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@657",
+   "render_bounds": [
+    153.05,
+    366.75,
+    175.45,
+    389.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    153.05,
+    366.75,
+    175.45,
+    389.15
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    153.05,
+    366.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "depth": 661,
+   "effective_visible": true,
+   "filters": 2,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1900",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@661",
+   "render_bounds": [
+    193.25,
+    382.45,
+    242.75,
+    430.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    196.25,
+    385.45,
+    239.75,
+    427.65
+   ],
+   "stage_matrix": [
+    0.6669,
+    0.5235,
+    -0.5235,
+    0.6669,
+    212.75,
+    385.45
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 219,
+   "class": "flash.display::MovieClip",
+   "depth": 680,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1905",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@680",
+   "render_bounds": [
+    189.7,
+    334.9,
+    265.75,
+    410.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    189.7,
+    334.9,
+    265.75,
+    410.2
+   ],
+   "stage_matrix": [
+    0.4901,
+    0.5347,
+    -0.5347,
+    0.4901,
+    233.55,
+    335.9
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "depth": 698,
+   "effective_visible": true,
+   "filters": 2,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1907",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@698",
+   "render_bounds": [
+    112.0,
+    376.45,
+    161.5,
+    422.6
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    115.0,
+    379.45,
+    158.5,
+    419.6
+   ],
+   "stage_matrix": [
+    0.7715,
+    0.3906,
+    -0.3906,
+    0.7715,
+    127.3,
+    379.45
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "depth": 717,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1912",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@717",
+   "render_bounds": [
+    212.7,
+    333.8,
+    232.3,
+    353.35
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    212.7,
+    333.8,
+    232.3,
+    353.35
+   ],
+   "stage_matrix": [
+    0.8578,
+    -0.0166,
+    0.0166,
+    0.8578,
+    212.7,
+    334.15
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 215,
+   "class": "flash.display::MovieClip",
+   "depth": 721,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1914",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@721",
+   "render_bounds": [
+    186.45,
+    357.85,
+    206.05,
+    377.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    186.45,
+    357.85,
+    206.05,
+    377.4
+   ],
+   "stage_matrix": [
+    0.8578,
+    -0.0166,
+    0.0166,
+    0.8578,
+    186.45,
+    358.2
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 221,
+   "class": "flash.display::MovieClip",
+   "depth": 725,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1916",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@725",
+   "render_bounds": [
+    193.15,
+    325.8,
+    209.0,
+    341.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    193.15,
+    325.8,
+    209.0,
+    341.65
+   ],
+   "stage_matrix": [
+    0.6948,
+    -0.0134,
+    0.0134,
+    0.6948,
+    193.15,
+    326.1
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "depth": 729,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1918",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@729",
+   "render_bounds": [
+    182.3,
+    338.15,
+    201.35,
+    357.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    182.3,
+    338.15,
+    201.35,
+    357.2
+   ],
+   "stage_matrix": [
+    0.8337,
+    -0.0161,
+    0.0161,
+    0.8337,
+    182.3,
+    338.5
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 223,
+   "class": "flash.display::MovieClip",
+   "depth": 733,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1920",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@733",
+   "render_bounds": [
+    177.15,
+    371.75,
+    199.55,
+    394.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    177.15,
+    371.75,
+    199.55,
+    394.15
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    177.15,
+    371.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3836,
+   "class": "flash.display::Shape",
+   "depth": 737,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1922",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@737",
+   "render_bounds": [
+    27.7,
+    278.8,
+    83.65,
+    301.05
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    27.7,
+    278.8,
+    83.65,
+    301.05
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 231,
+   "class": "flash.display::MovieClip",
+   "depth": 738,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1923",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@738",
+   "render_bounds": [
+    22.85,
+    276.4,
+    207.2,
+    366.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    27.85,
+    279.4,
+    202.2,
+    363.4
+   ],
+   "stage_matrix": [
+    1.0008,
+    0.0,
+    0.0,
+    1.0008,
+    27.85,
+    279.4
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 239,
+   "class": "flash.display::MovieClip",
+   "depth": 742,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1925",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@742",
+   "render_bounds": [
+    21.15,
+    216.9,
+    135.2,
+    334.1
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    21.15,
+    216.9,
+    135.2,
+    334.1
+   ],
+   "stage_matrix": [
+    -2.2837,
+    0.8403,
+    0.8401,
+    2.2837,
+    108.15,
+    218.4
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 241,
+   "class": "flash.display::MovieClip",
+   "depth": 791,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 14,
+   "kind": "movie_clip",
+   "name": "instance1935",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@791",
+   "render_bounds": [
+    81.15,
+    263.15,
+    104.95,
+    285.75
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    81.15,
+    263.15,
+    104.95,
+    285.75
+   ],
+   "stage_matrix": [
+    0.7955,
+    -0.09,
+    0.09,
+    0.7955,
+    82.25,
+    266.35
+   ],
+   "total_frames": 85
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 241,
+   "class": "flash.display::MovieClip",
+   "depth": 796,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 14,
+   "kind": "movie_clip",
+   "name": "instance1937",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@796",
+   "render_bounds": [
+    52.0,
+    269.15,
+    81.7,
+    298.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    52.0,
+    269.15,
+    81.7,
+    298.65
+   ],
+   "stage_matrix": [
+    0.6229,
+    -0.503,
+    0.503,
+    0.6229,
+    53.4,
+    282.9
+   ],
+   "total_frames": 85
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 243,
+   "class": "flash.display::MovieClip",
+   "depth": 801,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1939",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@801",
+   "render_bounds": [
+    -6.4,
+    291.0,
+    185.3,
+    405.05
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -1.4,
+    294.0,
+    180.3,
+    402.05
+   ],
+   "stage_matrix": [
+    1.0008,
+    0.0,
+    0.0,
+    1.0008,
+    -1.4,
+    294.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3837,
+   "class": "flash.display::Shape",
+   "depth": 829,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1941",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@829",
+   "render_bounds": [
+    63.05,
+    298.65,
+    118.35,
+    319.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    63.05,
+    298.65,
+    118.35,
+    319.95
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 387,
+   "class": "flash.display::MovieClip",
+   "depth": 830,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 14,
+   "kind": "movie_clip",
+   "name": "mm",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/mm",
+   "render_bounds": [
+    140.45,
+    161.0,
+    480.6,
+    442.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    140.45,
+    161.0,
+    480.6,
+    442.5
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    310.65,
+    305.75
+   ],
+   "total_frames": 100
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3838,
+   "class": "flash.display::Shape",
+   "depth": 1037,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1974",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1037",
+   "render_bounds": [
+    216.05,
+    417.75,
+    267.9,
+    461.7
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    216.05,
+    417.75,
+    267.9,
+    461.7
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "depth": 1038,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1975",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1038",
+   "render_bounds": [
+    427.35,
+    399.3,
+    483.1,
+    451.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    430.35,
+    402.3,
+    480.1,
+    448.5
+   ],
+   "stage_matrix": [
+    0.8668,
+    0.4666,
+    -0.4666,
+    0.8668,
+    445.05,
+    402.3
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3839,
+   "class": "flash.display::Shape",
+   "depth": 1082,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1980",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1082",
+   "render_bounds": [
+    226.55,
+    410.8,
+    452.65,
+    485.1
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    226.55,
+    410.8,
+    452.65,
+    485.1
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "depth": 1083,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1981",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1083",
+   "render_bounds": [
+    457.7,
+    437.8,
+    480.1,
+    460.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    457.7,
+    437.8,
+    480.1,
+    460.2
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    457.7,
+    437.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 215,
+   "class": "flash.display::MovieClip",
+   "depth": 1087,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1983",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1087",
+   "render_bounds": [
+    181.1,
+    423.8,
+    200.7,
+    443.35
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    181.1,
+    423.8,
+    200.7,
+    443.35
+   ],
+   "stage_matrix": [
+    0.8578,
+    -0.0166,
+    0.0166,
+    0.8578,
+    181.1,
+    424.15
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 223,
+   "class": "flash.display::MovieClip",
+   "depth": 1091,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1985",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1091",
+   "render_bounds": [
+    424.0,
+    483.6,
+    446.4,
+    506.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    424.0,
+    483.6,
+    446.4,
+    506.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    424.0,
+    483.6
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "depth": 1095,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance1987",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1095",
+   "render_bounds": [
+    128.75,
+    446.2,
+    151.15,
+    468.6
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    128.75,
+    446.2,
+    151.15,
+    468.6
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    128.75,
+    446.2
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3840,
+   "class": "flash.display::Shape",
+   "depth": 1099,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance1989",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1099",
+   "render_bounds": [
+    491.1,
+    463.55,
+    492.5,
+    464.9
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    491.1,
+    463.55,
+    492.5,
+    464.9
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "action": "start",
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3846,
+   "class": "flash.display::MovieClip",
+   "depth": 1100,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "startGame",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/startGame",
+   "render_bounds": [
+    440.2,
+    164.1,
+    673.3,
+    241.3
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    450.2,
+    174.1,
+    663.3,
+    231.3
+   ],
+   "stage_matrix": [
+    0.9,
+    0.0,
+    0.0,
+    0.9,
+    458.75,
+    178.85
+   ],
+   "total_frames": 3
+  },
+  {
+   "action": "how_to_play",
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3852,
+   "class": "flash.display::MovieClip",
+   "depth": 1115,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "howToPlay",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/howToPlay",
+   "render_bounds": [
+    439.3,
+    236.7,
+    673.75,
+    313.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    449.3,
+    246.7,
+    663.75,
+    303.15
+   ],
+   "stage_matrix": [
+    0.9,
+    0.0,
+    0.0,
+    0.9,
+    453.8,
+    251.2
+   ],
+   "total_frames": 3
+  },
+  {
+   "action": "quality",
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3797,
+   "class": "flash.display::MovieClip",
+   "depth": 1125,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "quality",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/quality",
+   "render_bounds": [
+    639.8,
+    19.45,
+    695.0,
+    74.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    647.8,
+    27.45,
+    687.0,
+    66.65
+   ],
+   "stage_matrix": [
+    0.8,
+    0.0,
+    0.0,
+    0.8,
+    651.0,
+    30.65
+   ],
+   "total_frames": 3
+  },
+  {
+   "action": "sound",
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3802,
+   "class": "flash.display::MovieClip",
+   "depth": 1135,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "sound",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/sound",
+   "render_bounds": [
+    639.8,
+    66.3,
+    695.0,
+    121.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    647.8,
+    74.3,
+    687.0,
+    113.5
+   ],
+   "stage_matrix": [
+    0.8,
+    0.0,
+    0.0,
+    0.8,
+    651.0,
+    77.5
+   ],
+   "total_frames": 3
+  },
+  {
+   "action": "music",
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3807,
+   "class": "flash.display::MovieClip",
+   "depth": 1137,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "music",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/music",
+   "render_bounds": [
+    639.8,
+    113.15,
+    695.0,
+    168.35
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    647.8,
+    121.15,
+    687.0,
+    160.35
+   ],
+   "stage_matrix": [
+    0.8,
+    0.0,
+    0.0,
+    0.8,
+    651.0,
+    124.35
+   ],
+   "total_frames": 3
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3853,
+   "class": "flash.display::Shape",
+   "depth": 1184,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance2012",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1184",
+   "render_bounds": [
+    36.9,
+    383.05,
+    491.1,
+    451.8
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    36.9,
+    383.05,
+    491.1,
+    451.8
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 338,
+   "class": "flash.display::MovieClip",
+   "depth": 1185,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance2013",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1185",
+   "render_bounds": [
+    42.45,
+    9.1,
+    630.05,
+    167.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    59.1,
+    19.1,
+    595.55,
+    147.05
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    74.95,
+    43.95
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3895,
+   "class": "flash.display::MovieClip",
+   "depth": 1269,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "flip",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/flip",
+   "render_bounds": [
+    27.15,
+    392.35,
+    133.15,
+    502.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    29.15,
+    394.35,
+    128.15,
+    500.95
+   ],
+   "stage_matrix": [
+    0.672,
+    0.0,
+    0.0,
+    0.672,
+    30.85,
+    397.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "action": "more_games",
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3902,
+   "class": "MoreGames",
+   "depth": 1293,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "moregames",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/moregames",
+   "render_bounds": [
+    441.25,
+    305.7,
+    673.55,
+    382.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    451.25,
+    315.7,
+    663.55,
+    372.4
+   ],
+   "stage_matrix": [
+    0.9,
+    0.0,
+    0.0,
+    0.9,
+    455.75,
+    320.2
+   ],
+   "total_frames": 3
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 906,
+   "class": "Art_CountriesBox",
+   "depth": 1303,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance2084",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1303",
+   "render_bounds": [
+    1.45,
+    -311.95,
+    152.15,
+    22.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    1.45,
+    -311.95,
+    152.15,
+    22.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    2.15,
+    1.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3906,
+   "class": "flash.display::MovieClip",
+   "depth": 1306,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "add_to_site",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/add_to_site",
+   "render_bounds": [
+    464.55,
+    478.6,
+    570.5,
+    498.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    464.55,
+    478.7,
+    566.5,
+    495.25
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    466.4,
+    479.7
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 3908,
+   "class": "Copyright",
+   "depth": 1310,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance2089",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@1310",
+   "render_bounds": [
+    580.2,
+    478.7,
+    680.35,
+    499.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    585.2,
+    483.7,
+    675.35,
+    494.25
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    582.6,
+    480.2
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 356,
+   "class": "Logos",
+   "depth": 1312,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "__id3_",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/__id3_",
+   "render_bounds": [
+    467.3,
+    413.3,
+    667.3,
+    463.3
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    467.3,
+    413.3,
+    667.3,
+    463.3
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    466.9,
+    413.3
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "flash.text::TextField",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "text",
+   "name": "instance2092",
+   "parent": "/root1/__mainMc/GameMc/@0/@0",
+   "path": "/root1/__mainMc/GameMc/@0/@0/@0",
+   "render_bounds": [
+    650.0,
+    5.0,
+    750.0,
+    105.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    650.0,
+    5.0,
+    750.0,
+    105.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    650.0,
+    5.0
+   ],
+   "text": "v.1.6.1"
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "com.spilgames.api::SpilGamesServices",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 0,
+   "kind": "movie_clip",
+   "name": "instance3",
+   "parent": "",
+   "path": "/@0",
+   "role": "piece",
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  }
+ ],
+ "note": "Generated by tools/convert/layout.py from the golden; do not edit.",
+ "pieces": [
+  "/root1/__mainMc/GameMc/@0/@0/bg",
+  "/root1/__mainMc/GameMc/@0/@0/@317",
+  "/root1/__mainMc/GameMc/@0/@0/@318",
+  "/root1/__mainMc/GameMc/@0/@0/@528",
+  "/root1/__mainMc/GameMc/@0/@0/@529",
+  "/root1/__mainMc/GameMc/@0/@0/@534",
+  "/root1/__mainMc/GameMc/@0/@0/@535",
+  "/root1/__mainMc/GameMc/@0/@0/@537",
+  "/root1/__mainMc/GameMc/@0/@0/@545",
+  "/root1/__mainMc/GameMc/@0/@0/@546",
+  "/root1/__mainMc/GameMc/@0/@0/@564",
+  "/root1/__mainMc/GameMc/@0/@0/@565",
+  "/root1/__mainMc/GameMc/@0/@0/@570",
+  "/root1/__mainMc/GameMc/@0/@0/@571",
+  "/root1/__mainMc/GameMc/@0/@0/@578",
+  "/root1/__mainMc/GameMc/@0/@0/@579",
+  "/root1/__mainMc/GameMc/@0/@0/@585",
+  "/root1/__mainMc/GameMc/@0/@0/@586",
+  "/root1/__mainMc/GameMc/@0/@0/@589",
+  "/root1/__mainMc/GameMc/@0/@0/@590",
+  "/root1/__mainMc/GameMc/@0/@0/@616",
+  "/root1/__mainMc/GameMc/@0/@0/@617",
+  "/root1/__mainMc/GameMc/@0/@0/@623",
+  "/root1/__mainMc/GameMc/@0/@0/@624",
+  "/root1/__mainMc/GameMc/@0/@0/@629",
+  "/root1/__mainMc/GameMc/@0/@0/@634",
+  "/root1/__mainMc/GameMc/@0/@0/@636",
+  "/root1/__mainMc/GameMc/@0/@0/@638",
+  "/root1/__mainMc/GameMc/@0/@0/@640",
+  "/root1/__mainMc/GameMc/@0/@0/@651",
+  "/root1/__mainMc/GameMc/@0/@0/@652",
+  "/root1/__mainMc/GameMc/@0/@0/@657",
+  "/root1/__mainMc/GameMc/@0/@0/@661",
+  "/root1/__mainMc/GameMc/@0/@0/@680",
+  "/root1/__mainMc/GameMc/@0/@0/@698",
+  "/root1/__mainMc/GameMc/@0/@0/@717",
+  "/root1/__mainMc/GameMc/@0/@0/@721",
+  "/root1/__mainMc/GameMc/@0/@0/@725",
+  "/root1/__mainMc/GameMc/@0/@0/@729",
+  "/root1/__mainMc/GameMc/@0/@0/@733",
+  "/root1/__mainMc/GameMc/@0/@0/@737",
+  "/root1/__mainMc/GameMc/@0/@0/@738",
+  "/root1/__mainMc/GameMc/@0/@0/@742",
+  "/root1/__mainMc/GameMc/@0/@0/@791",
+  "/root1/__mainMc/GameMc/@0/@0/@796",
+  "/root1/__mainMc/GameMc/@0/@0/@801",
+  "/root1/__mainMc/GameMc/@0/@0/@829",
+  "/root1/__mainMc/GameMc/@0/@0/mm",
+  "/root1/__mainMc/GameMc/@0/@0/@1037",
+  "/root1/__mainMc/GameMc/@0/@0/@1038",
+  "/root1/__mainMc/GameMc/@0/@0/@1082",
+  "/root1/__mainMc/GameMc/@0/@0/@1083",
+  "/root1/__mainMc/GameMc/@0/@0/@1087",
+  "/root1/__mainMc/GameMc/@0/@0/@1091",
+  "/root1/__mainMc/GameMc/@0/@0/@1095",
+  "/root1/__mainMc/GameMc/@0/@0/@1099",
+  "/root1/__mainMc/GameMc/@0/@0/startGame",
+  "/root1/__mainMc/GameMc/@0/@0/howToPlay",
+  "/root1/__mainMc/GameMc/@0/@0/quality",
+  "/root1/__mainMc/GameMc/@0/@0/sound",
+  "/root1/__mainMc/GameMc/@0/@0/music",
+  "/root1/__mainMc/GameMc/@0/@0/@1184",
+  "/root1/__mainMc/GameMc/@0/@0/@1185",
+  "/root1/__mainMc/GameMc/@0/@0/flip",
+  "/root1/__mainMc/GameMc/@0/@0/moregames",
+  "/root1/__mainMc/GameMc/@0/@0/@1303",
+  "/root1/__mainMc/GameMc/@0/@0/add_to_site",
+  "/root1/__mainMc/GameMc/@0/@0/@1310",
+  "/root1/__mainMc/GameMc/@0/@0/__id3_",
+  "/root1/__mainMc/GameMc/@0/@0/@0",
+  "/@0"
+ ],
+ "schema": "bombit5-swf-layout-v1",
+ "screen": "menu",
+ "screen_root": "/root1/__mainMc/GameMc/@0/@0",
+ "source": {
+  "frame": 541,
+  "golden": "tests/goldens/main-menu/menu.json",
+  "golden_sha256": "260919b807ff63e74b205cfa167799ff0b80ade5776ab1aa583008e6541bd65a"
+ },
+ "stage": {
+  "frame_rate": 35.0,
+  "height": 510,
+  "width": 700
+ },
+ "warnings": []
+}

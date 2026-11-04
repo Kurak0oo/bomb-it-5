@@ -1,0 +1,3483 @@
+{
+ "nodes": [
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "Root",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 2,
+   "kind": "movie_clip",
+   "label": "UiLoading",
+   "name": "root1",
+   "parent": "",
+   "path": "/root1",
+   "render_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "role": "group",
+   "stage_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 3
+  },
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "flash.display::Sprite",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 0,
+   "kind": "movie_clip",
+   "name": "__mainMc",
+   "parent": "/root1",
+   "path": "/root1/__mainMc",
+   "render_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "role": "group",
+   "stage_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 392,
+   "class": "UI_loading",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance5",
+   "parent": "/root1/__mainMc",
+   "path": "/root1/__mainMc/@0",
+   "render_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "role": "group",
+   "stage_bounds": [
+    -348.5,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "blend_mode": "Normal",
+   "character_id": 165,
+   "class": "flash.display::Shape",
+   "clip_depth": 1279,
+   "depth": 1,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance6",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1",
+   "render_bounds": [
+    0.0,
+    0.0,
+    701.2,
+    512.15
+   ],
+   "role": "mask",
+   "stage_bounds": [
+    0.0,
+    0.0,
+    701.2,
+    512.15
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 224,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 2,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance7",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@2",
+   "render_bounds": [
+    -53.1,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -53.1,
+    -41.1,
+    752.3,
+    547.95
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    -28.05,
+    -54.6
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 225,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 335,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance178",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@335",
+   "render_bounds": [
+    0.0,
+    209.0,
+    669.15,
+    409.85
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    0.0,
+    209.0,
+    669.15,
+    409.85
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 228,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 336,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 11,
+   "kind": "movie_clip",
+   "name": "instance179",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@336",
+   "render_bounds": [
+    22.6,
+    321.35,
+    47.05,
+    338.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    22.6,
+    321.35,
+    47.05,
+    338.15
+   ],
+   "stage_matrix": [
+    0.1728,
+    1.7452,
+    -1.7452,
+    0.1728,
+    35.2,
+    328.9
+   ],
+   "total_frames": 24
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 229,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 338,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance182",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@338",
+   "render_bounds": [
+    30.45,
+    260.7,
+    80.8,
+    280.7
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    30.45,
+    260.7,
+    80.8,
+    280.7
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 231,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 339,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance183",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@339",
+   "render_bounds": [
+    25.45,
+    258.4,
+    192.25,
+    339.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    30.45,
+    261.4,
+    187.25,
+    336.95
+   ],
+   "stage_matrix": [
+    0.9,
+    0.0,
+    0.0,
+    0.9,
+    30.45,
+    261.4
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 239,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 343,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "bodyMc",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/bodyMc@343",
+   "render_bounds": [
+    24.45,
+    205.2,
+    127.05,
+    310.55
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    24.45,
+    205.2,
+    127.05,
+    310.55
+   ],
+   "stage_matrix": [
+    -2.0536,
+    0.7556,
+    0.7555,
+    2.0536,
+    102.65,
+    206.5
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 241,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 392,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 44,
+   "kind": "movie_clip",
+   "name": "instance194",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@392",
+   "render_bounds": [
+    77.3,
+    245.6,
+    100.9,
+    268.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    77.3,
+    245.6,
+    100.9,
+    268.0
+   ],
+   "stage_matrix": [
+    0.7154,
+    -0.0809,
+    0.0809,
+    0.7154,
+    79.35,
+    249.55
+   ],
+   "total_frames": 85
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 241,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 397,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 44,
+   "kind": "movie_clip",
+   "name": "instance196",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@397",
+   "render_bounds": [
+    50.6,
+    252.15,
+    79.5,
+    280.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    50.6,
+    252.15,
+    79.5,
+    280.65
+   ],
+   "stage_matrix": [
+    0.6027,
+    -0.3921,
+    0.3921,
+    0.6027,
+    53.1,
+    264.25
+   ],
+   "total_frames": 85
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 243,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 402,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance198",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@402",
+   "render_bounds": [
+    -0.85,
+    271.7,
+    172.55,
+    374.85
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    4.15,
+    274.7,
+    167.55,
+    371.85
+   ],
+   "stage_matrix": [
+    0.9,
+    0.0,
+    0.0,
+    0.9,
+    4.15,
+    274.7
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 244,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 430,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance200",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@430",
+   "render_bounds": [
+    61.9,
+    278.65,
+    111.95,
+    297.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    61.9,
+    278.65,
+    111.95,
+    297.65
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 431,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance201",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@431",
+   "render_bounds": [
+    151.0,
+    345.8,
+    173.4,
+    368.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    151.0,
+    345.8,
+    173.4,
+    368.2
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    151.0,
+    345.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 435,
+   "effective_visible": true,
+   "filters": 2,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance203",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@435",
+   "render_bounds": [
+    191.2,
+    361.5,
+    240.7,
+    409.7
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    194.2,
+    364.5,
+    237.7,
+    406.7
+   ],
+   "stage_matrix": [
+    0.6669,
+    0.5235,
+    -0.5235,
+    0.6669,
+    210.7,
+    364.5
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 219,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 454,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance208",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@454",
+   "render_bounds": [
+    187.65,
+    313.95,
+    263.7,
+    389.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    187.65,
+    313.95,
+    263.7,
+    389.25
+   ],
+   "stage_matrix": [
+    0.4901,
+    0.5347,
+    -0.5347,
+    0.4901,
+    231.5,
+    314.95
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 472,
+   "effective_visible": true,
+   "filters": 2,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance210",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@472",
+   "render_bounds": [
+    109.95,
+    355.5,
+    159.45,
+    401.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    112.95,
+    358.5,
+    156.45,
+    398.65
+   ],
+   "stage_matrix": [
+    0.7715,
+    0.3906,
+    -0.3906,
+    0.7715,
+    125.25,
+    358.5
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 491,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance215",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@491",
+   "render_bounds": [
+    210.65,
+    312.85,
+    230.25,
+    332.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    210.65,
+    312.85,
+    230.25,
+    332.4
+   ],
+   "stage_matrix": [
+    0.8578,
+    -0.0166,
+    0.0166,
+    0.8578,
+    210.65,
+    313.2
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 215,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 495,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance217",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@495",
+   "render_bounds": [
+    184.4,
+    336.9,
+    204.0,
+    356.45
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    184.4,
+    336.9,
+    204.0,
+    356.45
+   ],
+   "stage_matrix": [
+    0.8578,
+    -0.0166,
+    0.0166,
+    0.8578,
+    184.4,
+    337.25
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 221,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 499,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance219",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@499",
+   "render_bounds": [
+    191.1,
+    304.85,
+    206.95,
+    320.7
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    191.1,
+    304.85,
+    206.95,
+    320.7
+   ],
+   "stage_matrix": [
+    0.6948,
+    -0.0134,
+    0.0134,
+    0.6948,
+    191.1,
+    305.15
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 503,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance221",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@503",
+   "render_bounds": [
+    180.25,
+    317.2,
+    199.3,
+    336.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    180.25,
+    317.2,
+    199.3,
+    336.25
+   ],
+   "stage_matrix": [
+    0.8337,
+    -0.0161,
+    0.0161,
+    0.8337,
+    180.25,
+    317.55
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 223,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 507,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance223",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@507",
+   "render_bounds": [
+    175.1,
+    350.8,
+    197.5,
+    373.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    175.1,
+    350.8,
+    197.5,
+    373.2
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    175.1,
+    350.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 253,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 511,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance225",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@511",
+   "render_bounds": [
+    493.4,
+    162.25,
+    623.5,
+    366.85
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    498.4,
+    167.25,
+    618.5,
+    361.85
+   ],
+   "stage_matrix": [
+    0.8671,
+    0.0009,
+    -0.0009,
+    0.8671,
+    498.55,
+    142.9
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 717,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance356",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@717",
+   "render_bounds": [
+    565.3,
+    368.1,
+    585.45,
+    388.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    565.3,
+    368.1,
+    585.45,
+    388.25
+   ],
+   "stage_matrix": [
+    -0.9,
+    0.0,
+    0.0,
+    0.9,
+    585.45,
+    368.1
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 721,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance358",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@721",
+   "render_bounds": [
+    514.1,
+    338.45,
+    531.75,
+    356.1
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    514.1,
+    338.45,
+    531.75,
+    356.1
+   ],
+   "stage_matrix": [
+    -0.772,
+    -0.0149,
+    -0.0149,
+    0.772,
+    531.75,
+    338.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 215,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 725,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance360",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@725",
+   "render_bounds": [
+    537.75,
+    360.05,
+    555.4,
+    377.7
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    537.75,
+    360.05,
+    555.4,
+    377.7
+   ],
+   "stage_matrix": [
+    -0.772,
+    -0.0149,
+    -0.0149,
+    0.772,
+    555.4,
+    360.4
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 221,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 729,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance362",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@729",
+   "render_bounds": [
+    535.05,
+    331.3,
+    549.35,
+    345.55
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    535.05,
+    331.3,
+    549.35,
+    345.55
+   ],
+   "stage_matrix": [
+    -0.6253,
+    -0.0121,
+    -0.0121,
+    0.6253,
+    549.35,
+    331.55
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 733,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance364",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@733",
+   "render_bounds": [
+    542.0,
+    342.4,
+    559.15,
+    359.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    542.0,
+    342.4,
+    559.15,
+    359.5
+   ],
+   "stage_matrix": [
+    -0.7504,
+    -0.0145,
+    -0.0145,
+    0.7504,
+    559.15,
+    342.7
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 223,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 737,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance366",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@737",
+   "render_bounds": [
+    543.6,
+    372.6,
+    563.75,
+    392.75
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    543.6,
+    372.6,
+    563.75,
+    392.75
+   ],
+   "stage_matrix": [
+    -0.9,
+    0.0,
+    0.0,
+    0.9,
+    563.75,
+    372.6
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 254,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 745,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance368",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@745",
+   "render_bounds": [
+    622.0,
+    210.4,
+    691.5,
+    319.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    622.0,
+    210.4,
+    691.5,
+    319.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 256,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 746,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance369",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@746",
+   "render_bounds": [
+    660.1,
+    210.95,
+    671.6,
+    226.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    660.1,
+    210.95,
+    671.6,
+    226.15
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    671.6,
+    213.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 257,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 751,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance371",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@751",
+   "render_bounds": [
+    648.8,
+    212.85,
+    690.55,
+    254.6
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    648.8,
+    212.85,
+    690.55,
+    254.6
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 259,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 752,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance372",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@752",
+   "render_bounds": [
+    683.2,
+    228.05,
+    691.0,
+    238.3
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    683.2,
+    228.05,
+    691.0,
+    238.3
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    691.0,
+    229.45
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 261,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 754,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance374",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@754",
+   "render_bounds": [
+    649.85,
+    218.55,
+    658.35,
+    230.35
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    649.85,
+    218.55,
+    658.35,
+    230.35
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    658.35,
+    220.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 262,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 762,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance376",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@762",
+   "render_bounds": [
+    654.95,
+    233.35,
+    678.05,
+    252.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    654.95,
+    233.35,
+    678.05,
+    252.65
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 264,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 763,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance377",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@763",
+   "render_bounds": [
+    654.85,
+    241.3,
+    672.1,
+    253.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    654.85,
+    241.3,
+    672.1,
+    253.15
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    672.1,
+    245.1
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 265,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 781,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance379",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@781",
+   "render_bounds": [
+    648.9,
+    220.7,
+    686.9,
+    258.1
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    648.9,
+    220.7,
+    686.9,
+    258.1
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 267,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 782,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance380",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@782",
+   "render_bounds": [
+    668.4,
+    250.9,
+    679.55,
+    258.85
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    668.4,
+    250.9,
+    679.55,
+    258.85
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    679.55,
+    253.35
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 268,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 787,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance382",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@787",
+   "render_bounds": [
+    649.95,
+    245.45,
+    676.25,
+    258.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    649.95,
+    245.45,
+    676.25,
+    258.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.2305,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 270,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 788,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance383",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@788",
+   "render_bounds": [
+    649.65,
+    247.1,
+    660.65,
+    254.3
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    649.65,
+    247.1,
+    660.65,
+    254.3
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    660.65,
+    249.55
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 271,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 795,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance385",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@795",
+   "render_bounds": [
+    652.95,
+    238.15,
+    673.5,
+    253.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    652.95,
+    238.15,
+    673.5,
+    253.5
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.1719,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 273,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 796,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance386",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@796",
+   "render_bounds": [
+    662.95,
+    240.7,
+    670.35,
+    247.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    662.95,
+    240.7,
+    670.35,
+    247.2
+   ],
+   "stage_matrix": [
+    -0.1201,
+    -0.0301,
+    -0.0301,
+    0.1201,
+    670.35,
+    242.25
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 274,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 802,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance388",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@802",
+   "render_bounds": [
+    635.95,
+    235.45,
+    686.0,
+    309.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    635.95,
+    235.45,
+    686.0,
+    309.15
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.1914,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 276,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 803,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance389",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@803",
+   "render_bounds": [
+    664.75,
+    271.75,
+    667.4,
+    276.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    664.75,
+    271.75,
+    667.4,
+    276.65
+   ],
+   "stage_matrix": [
+    -0.063,
+    0.0134,
+    0.0137,
+    0.0645,
+    666.45,
+    271.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 277,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 806,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance391",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@806",
+   "render_bounds": [
+    657.35,
+    273.1,
+    666.9,
+    278.1
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    657.35,
+    273.1,
+    666.9,
+    278.1
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.1914,
+   "baked": true,
+   "blend_mode": "Layer",
+   "character_id": 279,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 807,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance392",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@807",
+   "render_bounds": [
+    657.5,
+    273.15,
+    660.15,
+    278.05
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    657.5,
+    273.15,
+    660.15,
+    278.05
+   ],
+   "stage_matrix": [
+    -0.063,
+    0.0134,
+    0.0137,
+    0.0645,
+    659.2,
+    273.15
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 280,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 833,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance394",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@833",
+   "render_bounds": [
+    651.05,
+    254.9,
+    670.55,
+    278.1
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    651.05,
+    254.9,
+    670.55,
+    278.1
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 283,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 834,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance395",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@834",
+   "render_bounds": [
+    651.95,
+    289.35,
+    671.5,
+    310.05
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    651.95,
+    289.35,
+    671.5,
+    310.05
+   ],
+   "stage_matrix": [
+    -0.2655,
+    0.1357,
+    0.1357,
+    0.2655,
+    664.1,
+    289.35
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 836,
+   "effective_visible": true,
+   "filters": 2,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance398",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@836",
+   "render_bounds": [
+    584.4,
+    299.15,
+    629.95,
+    341.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    587.4,
+    302.15,
+    626.95,
+    338.65
+   ],
+   "stage_matrix": [
+    0.7014,
+    0.3551,
+    -0.3551,
+    0.7014,
+    598.6,
+    302.15
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.3984,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 855,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance403",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@855",
+   "render_bounds": [
+    600.75,
+    292.1,
+    639.5,
+    328.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    603.75,
+    295.1,
+    636.5,
+    325.5
+   ],
+   "stage_matrix": [
+    0.5698,
+    0.3067,
+    -0.3067,
+    0.5698,
+    613.45,
+    295.1
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.5,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 215,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 874,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance408",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@874",
+   "render_bounds": [
+    671.5,
+    313.6,
+    688.1,
+    330.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    671.5,
+    313.6,
+    688.1,
+    330.2
+   ],
+   "stage_matrix": [
+    0.7277,
+    -0.0141,
+    0.0141,
+    0.7277,
+    671.5,
+    313.9
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 217,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 878,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance410",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@878",
+   "render_bounds": [
+    651.8,
+    329.9,
+    671.55,
+    349.6
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    651.8,
+    329.9,
+    671.55,
+    349.6
+   ],
+   "stage_matrix": [
+    0.8645,
+    -0.0167,
+    0.0167,
+    0.8645,
+    651.8,
+    330.25
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.5,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 215,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 882,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance412",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@882",
+   "render_bounds": [
+    519.1,
+    296.7,
+    535.7,
+    313.3
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    519.1,
+    296.7,
+    535.7,
+    313.3
+   ],
+   "stage_matrix": [
+    0.7277,
+    -0.0141,
+    0.0141,
+    0.7277,
+    519.1,
+    297.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 284,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 887,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance414",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@887",
+   "render_bounds": [
+    317.25,
+    292.1,
+    347.8,
+    325.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    317.25,
+    292.1,
+    347.8,
+    325.95
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 286,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 888,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance415",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@888",
+   "render_bounds": [
+    353.25,
+    343.85,
+    401.05,
+    400.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    353.25,
+    343.85,
+    401.05,
+    400.25
+   ],
+   "stage_matrix": [
+    -0.7142,
+    0.365,
+    0.365,
+    0.7142,
+    378.55,
+    349.7
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 286,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 894,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance417",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@894",
+   "render_bounds": [
+    330.65,
+    354.35,
+    359.8,
+    403.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    330.65,
+    354.35,
+    359.8,
+    403.2
+   ],
+   "stage_matrix": [
+    -0.8042,
+    -0.0035,
+    -0.0035,
+    0.8042,
+    356.75,
+    359.5
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 293,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 900,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 5,
+   "kind": "movie_clip",
+   "name": "bodyMc",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/bodyMc@900",
+   "render_bounds": [
+    313.05,
+    293.95,
+    400.1,
+    378.7
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    313.05,
+    293.95,
+    400.1,
+    378.7
+   ],
+   "stage_matrix": [
+    0.8002,
+    -0.0777,
+    0.0777,
+    0.8002,
+    311.15,
+    291.45
+   ],
+   "total_frames": 6
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 294,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1006,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance420",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1006",
+   "render_bounds": [
+    355.8,
+    301.45,
+    379.6,
+    337.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    355.8,
+    301.45,
+    379.6,
+    337.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 295,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1007,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "hand2",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/hand2",
+   "role": "piece",
+   "stage_matrix": [
+    5.8786,
+    -0.0253,
+    0.0253,
+    5.8786,
+    354.9,
+    326.05
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 295,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1009,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "hand",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/hand",
+   "role": "piece",
+   "stage_matrix": [
+    5.8786,
+    -0.0253,
+    0.0253,
+    5.8786,
+    300.15,
+    335.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 305,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1011,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance421",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1011",
+   "render_bounds": [
+    233.45,
+    103.25,
+    489.75,
+    348.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    233.45,
+    103.25,
+    489.75,
+    348.0
+   ],
+   "stage_matrix": [
+    0.7997,
+    0.0817,
+    -0.0817,
+    0.7997,
+    274.65,
+    131.9
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 307,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1037,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance424",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1037",
+   "render_bounds": [
+    292.55,
+    206.4,
+    427.9,
+    311.8
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    292.55,
+    206.4,
+    427.9,
+    311.8
+   ],
+   "stage_matrix": [
+    0.7997,
+    0.0817,
+    -0.0817,
+    0.7997,
+    307.25,
+    216.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 324,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1048,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance426",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1048",
+   "render_bounds": [
+    293.2,
+    206.5,
+    350.3,
+    311.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    293.2,
+    206.5,
+    350.3,
+    311.65
+   ],
+   "stage_matrix": [
+    0.7197,
+    0.0735,
+    -0.0735,
+    0.7197,
+    308.55,
+    236.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 324,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1057,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance435",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1057",
+   "render_bounds": [
+    371.1,
+    214.15,
+    429.95,
+    319.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    371.1,
+    214.15,
+    429.95,
+    319.25
+   ],
+   "stage_matrix": [
+    -0.7197,
+    -0.0735,
+    -0.0735,
+    0.7197,
+    417.2,
+    247.2
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 325,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1101,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance444",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1101",
+   "render_bounds": [
+    -348.5,
+    218.65,
+    369.05,
+    373.35
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -348.5,
+    218.65,
+    369.05,
+    373.35
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 213,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1102,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance445",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1102",
+   "render_bounds": [
+    -129.55,
+    309.95,
+    -78.8,
+    357.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -126.55,
+    312.95,
+    -81.8,
+    354.5
+   ],
+   "stage_matrix": [
+    0.7788,
+    0.4193,
+    -0.4193,
+    0.7788,
+    -113.3,
+    312.95
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 326,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1147,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance450",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1147",
+   "render_bounds": [
+    -319.7,
+    -2.15,
+    701.05,
+    510.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -319.7,
+    -2.15,
+    701.05,
+    510.0
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 176,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1148,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance451",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1148",
+   "render_bounds": [
+    621.15,
+    191.7,
+    664.4,
+    235.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    621.15,
+    191.7,
+    664.4,
+    235.0
+   ],
+   "stage_matrix": [
+    0.6472,
+    0.0,
+    0.0,
+    0.6472,
+    621.15,
+    191.7
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 178,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1150,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance453",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1150",
+   "render_bounds": [
+    541.9,
+    266.8,
+    606.25,
+    322.6
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    541.9,
+    266.8,
+    606.25,
+    322.6
+   ],
+   "stage_matrix": [
+    -0.7638,
+    -0.4087,
+    -0.4087,
+    0.7638,
+    606.25,
+    292.65
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 174,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1152,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance455",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1152",
+   "render_bounds": [
+    92.5,
+    384.95,
+    122.0,
+    414.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    92.5,
+    384.95,
+    122.0,
+    414.65
+   ],
+   "stage_matrix": [
+    0.4936,
+    -0.1049,
+    0.1049,
+    0.4936,
+    93.5,
+    387.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.3008,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 174,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1154,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance457",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1154",
+   "render_bounds": [
+    537.65,
+    156.9,
+    576.1,
+    195.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    537.65,
+    156.9,
+    576.1,
+    195.5
+   ],
+   "stage_matrix": [
+    0.6417,
+    -0.1363,
+    0.1363,
+    0.6417,
+    539.0,
+    160.55
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.3008,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 174,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1156,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance459",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1156",
+   "render_bounds": [
+    634.85,
+    336.95,
+    664.35,
+    366.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    634.85,
+    336.95,
+    664.35,
+    366.65
+   ],
+   "stage_matrix": [
+    0.4936,
+    -0.1049,
+    0.1049,
+    0.4936,
+    635.85,
+    339.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.3008,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 178,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1158,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance461",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1158",
+   "render_bounds": [
+    523.55,
+    402.3,
+    572.15,
+    441.85
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    523.55,
+    402.3,
+    572.15,
+    441.85
+   ],
+   "stage_matrix": [
+    -0.6177,
+    -0.2422,
+    -0.2422,
+    0.6177,
+    572.15,
+    417.65
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 176,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1160,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance463",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1160",
+   "render_bounds": [
+    225.65,
+    383.45,
+    256.85,
+    414.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    225.65,
+    383.45,
+    256.85,
+    414.65
+   ],
+   "stage_matrix": [
+    0.4664,
+    0.0,
+    0.0,
+    0.4664,
+    225.65,
+    383.45
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 176,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1162,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance465",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1162",
+   "render_bounds": [
+    92.5,
+    15.05,
+    123.7,
+    46.25
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    92.5,
+    15.05,
+    123.7,
+    46.25
+   ],
+   "stage_matrix": [
+    0.4664,
+    0.0,
+    0.0,
+    0.4664,
+    92.5,
+    15.05
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6992,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 176,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1164,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance467",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1164",
+   "render_bounds": [
+    357.0,
+    104.65,
+    397.55,
+    145.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    357.0,
+    104.65,
+    397.55,
+    145.2
+   ],
+   "stage_matrix": [
+    0.6064,
+    0.0,
+    0.0,
+    0.6064,
+    357.0,
+    104.65
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.5,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 176,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1166,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance469",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1166",
+   "render_bounds": [
+    24.35,
+    266.8,
+    81.7,
+    324.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    24.35,
+    266.8,
+    81.7,
+    324.15
+   ],
+   "stage_matrix": [
+    0.4269,
+    0.4306,
+    -0.4306,
+    0.4269,
+    53.15,
+    266.8
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.3008,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 174,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1168,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance471",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1168",
+   "render_bounds": [
+    24.35,
+    92.8,
+    62.8,
+    131.4
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    24.35,
+    92.8,
+    62.8,
+    131.4
+   ],
+   "stage_matrix": [
+    0.6417,
+    -0.1363,
+    0.1363,
+    0.6417,
+    25.7,
+    96.45
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 178,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1170,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance473",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1170",
+   "render_bounds": [
+    15.4,
+    454.85,
+    62.75,
+    495.95
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    15.4,
+    454.85,
+    62.75,
+    495.95
+   ],
+   "stage_matrix": [
+    0.5621,
+    -0.3008,
+    0.3008,
+    0.5621,
+    15.4,
+    473.9
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 178,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1172,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance475",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1172",
+   "render_bounds": [
+    77.0,
+    191.7,
+    124.35,
+    232.8
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    77.0,
+    191.7,
+    124.35,
+    232.8
+   ],
+   "stage_matrix": [
+    0.5621,
+    -0.3008,
+    0.3008,
+    0.5621,
+    77.0,
+    210.75
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 178,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1174,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance477",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1174",
+   "render_bounds": [
+    629.35,
+    24.1,
+    676.7,
+    65.2
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    629.35,
+    24.1,
+    676.7,
+    65.2
+   ],
+   "stage_matrix": [
+    0.5621,
+    -0.3008,
+    0.3008,
+    0.5621,
+    629.35,
+    43.15
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 0.6016,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 178,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1176,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance479",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1176",
+   "render_bounds": [
+    397.55,
+    384.95,
+    444.9,
+    426.05
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    397.55,
+    384.95,
+    444.9,
+    426.05
+   ],
+   "stage_matrix": [
+    0.5621,
+    -0.3008,
+    0.3008,
+    0.5621,
+    397.55,
+    404.0
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 327,
+   "class": "flash.display::Shape",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1181,
+   "effective_visible": true,
+   "filters": 0,
+   "kind": "graphic",
+   "name": "instance481",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1181",
+   "render_bounds": [
+    -18.2,
+    25.05,
+    715.4,
+    515.5
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    -18.2,
+    25.05,
+    715.4,
+    515.5
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 330,
+   "class": "translation_108",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1182,
+   "effective_visible": false,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "loadingMc",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/loadingMc",
+   "render_bounds": [
+    250.3,
+    369.7,
+    450.6,
+    424.15
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    252.3,
+    371.7,
+    448.6,
+    422.15
+   ],
+   "stage_matrix": [
+    1.7189,
+    0.0,
+    0.0,
+    1.7189,
+    252.3,
+    371.7
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 338,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1184,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "instance482",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/@1184",
+   "render_bounds": [
+    77.75,
+    18.45,
+    632.05,
+    157.0
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    77.75,
+    18.45,
+    614.2,
+    146.4
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    93.6,
+    43.3
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 354,
+   "class": "flash.display::MovieClip",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1268,
+   "effective_visible": false,
+   "filters": 0,
+   "frame": 100,
+   "kind": "movie_clip",
+   "name": "processBarMc",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/processBarMc",
+   "render_bounds": [
+    143.15,
+    399.05,
+    590.15,
+    470.9
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    143.15,
+    403.05,
+    590.15,
+    470.9
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    144.1,
+    405.45
+   ],
+   "total_frames": 100
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 356,
+   "class": "Logos",
+   "clip_mask": "/root1/__mainMc/@0/@1",
+   "depth": 1277,
+   "effective_visible": false,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "logoMc",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/logoMc",
+   "render_bounds": [
+    250.45,
+    459.45,
+    450.45,
+    509.45
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    250.45,
+    459.45,
+    450.45,
+    509.45
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    250.05,
+    459.45
+   ],
+   "total_frames": 1
+  },
+  {
+   "action": "play",
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 364,
+   "class": "flash.display::MovieClip",
+   "depth": 1280,
+   "effective_visible": true,
+   "filters": 1,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "btn_play",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/btn_play",
+   "render_bounds": [
+    253.8,
+    411.95,
+    442.5,
+    472.85
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    265.8,
+    423.95,
+    429.1,
+    459.45
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    254.5,
+    412.65
+   ],
+   "total_frames": 3
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 391,
+   "class": "flash.display::MovieClip",
+   "depth": 1678,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 1,
+   "kind": "movie_clip",
+   "name": "preloader",
+   "parent": "/root1/__mainMc/@0",
+   "path": "/root1/__mainMc/@0/preloader",
+   "render_bounds": [
+    200.45,
+    127.65,
+    500.45,
+    377.65
+   ],
+   "role": "piece",
+   "stage_bounds": [
+    200.45,
+    127.65,
+    500.45,
+    377.65
+   ],
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    200.45,
+    127.65
+   ],
+   "total_frames": 1
+  },
+  {
+   "alpha": 1.0,
+   "baked": true,
+   "blend_mode": "Normal",
+   "character_id": 0,
+   "class": "com.spilgames.api::SpilGamesServices",
+   "depth": 0,
+   "effective_visible": true,
+   "filters": 0,
+   "frame": 0,
+   "kind": "movie_clip",
+   "name": "instance3",
+   "parent": "",
+   "path": "/@0",
+   "role": "piece",
+   "stage_matrix": [
+    1.0,
+    0.0,
+    0.0,
+    1.0,
+    0.0,
+    0.0
+   ],
+   "total_frames": 1
+  }
+ ],
+ "note": "Generated by tools/convert/layout.py from the golden; do not edit.",
+ "pieces": [
+  "/root1/__mainMc/@0/@2",
+  "/root1/__mainMc/@0/@335",
+  "/root1/__mainMc/@0/@336",
+  "/root1/__mainMc/@0/@338",
+  "/root1/__mainMc/@0/@339",
+  "/root1/__mainMc/@0/bodyMc@343",
+  "/root1/__mainMc/@0/@392",
+  "/root1/__mainMc/@0/@397",
+  "/root1/__mainMc/@0/@402",
+  "/root1/__mainMc/@0/@430",
+  "/root1/__mainMc/@0/@431",
+  "/root1/__mainMc/@0/@435",
+  "/root1/__mainMc/@0/@454",
+  "/root1/__mainMc/@0/@472",
+  "/root1/__mainMc/@0/@491",
+  "/root1/__mainMc/@0/@495",
+  "/root1/__mainMc/@0/@499",
+  "/root1/__mainMc/@0/@503",
+  "/root1/__mainMc/@0/@507",
+  "/root1/__mainMc/@0/@511",
+  "/root1/__mainMc/@0/@717",
+  "/root1/__mainMc/@0/@721",
+  "/root1/__mainMc/@0/@725",
+  "/root1/__mainMc/@0/@729",
+  "/root1/__mainMc/@0/@733",
+  "/root1/__mainMc/@0/@737",
+  "/root1/__mainMc/@0/@745",
+  "/root1/__mainMc/@0/@746",
+  "/root1/__mainMc/@0/@751",
+  "/root1/__mainMc/@0/@752",
+  "/root1/__mainMc/@0/@754",
+  "/root1/__mainMc/@0/@762",
+  "/root1/__mainMc/@0/@763",
+  "/root1/__mainMc/@0/@781",
+  "/root1/__mainMc/@0/@782",
+  "/root1/__mainMc/@0/@787",
+  "/root1/__mainMc/@0/@788",
+  "/root1/__mainMc/@0/@795",
+  "/root1/__mainMc/@0/@796",
+  "/root1/__mainMc/@0/@802",
+  "/root1/__mainMc/@0/@803",
+  "/root1/__mainMc/@0/@806",
+  "/root1/__mainMc/@0/@807",
+  "/root1/__mainMc/@0/@833",
+  "/root1/__mainMc/@0/@834",
+  "/root1/__mainMc/@0/@836",
+  "/root1/__mainMc/@0/@855",
+  "/root1/__mainMc/@0/@874",
+  "/root1/__mainMc/@0/@878",
+  "/root1/__mainMc/@0/@882",
+  "/root1/__mainMc/@0/@887",
+  "/root1/__mainMc/@0/@888",
+  "/root1/__mainMc/@0/@894",
+  "/root1/__mainMc/@0/bodyMc@900",
+  "/root1/__mainMc/@0/@1006",
+  "/root1/__mainMc/@0/hand2",
+  "/root1/__mainMc/@0/hand",
+  "/root1/__mainMc/@0/@1011",
+  "/root1/__mainMc/@0/@1037",
+  "/root1/__mainMc/@0/@1048",
+  "/root1/__mainMc/@0/@1057",
+  "/root1/__mainMc/@0/@1101",
+  "/root1/__mainMc/@0/@1102",
+  "/root1/__mainMc/@0/@1147",
+  "/root1/__mainMc/@0/@1148",
+  "/root1/__mainMc/@0/@1150",
+  "/root1/__mainMc/@0/@1152",
+  "/root1/__mainMc/@0/@1154",
+  "/root1/__mainMc/@0/@1156",
+  "/root1/__mainMc/@0/@1158",
+  "/root1/__mainMc/@0/@1160",
+  "/root1/__mainMc/@0/@1162",
+  "/root1/__mainMc/@0/@1164",
+  "/root1/__mainMc/@0/@1166",
+  "/root1/__mainMc/@0/@1168",
+  "/root1/__mainMc/@0/@1170",
+  "/root1/__mainMc/@0/@1172",
+  "/root1/__mainMc/@0/@1174",
+  "/root1/__mainMc/@0/@1176",
+  "/root1/__mainMc/@0/@1181",
+  "/root1/__mainMc/@0/@1184",
+  "/root1/__mainMc/@0/btn_play",
+  "/root1/__mainMc/@0/preloader",
+  "/@0"
+ ],
+ "schema": "bombit5-swf-layout-v1",
+ "screen": "title",
+ "screen_root": "/root1/__mainMc/@0",
+ "source": {
+  "frame": 301,
+  "golden": "tests/goldens/main-menu/title.json",
+  "golden_sha256": "df328f9be2d1fc9c17f11dc2c9558240d080accc5db47264d2affc24452cbda1"
+ },
+ "stage": {
+  "frame_rate": 35.0,
+  "height": 510,
+  "width": 700
+ },
+ "warnings": []
+}

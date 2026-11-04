@@ -84,13 +84,16 @@ func _dump(node: Node, dump: Dictionary) -> void:
 					"kind": String(item.get_meta("swf_kind", "")),
 					"baked": bool(item.get_meta("swf_baked", false)),
 					"effective_visible": item.is_visible_in_tree(),
-					"alpha": item.modulate.a * item.self_modulate.a,
+					# A generated screen draws alpha inside its piece art, so it reports it as a meta.
+					"alpha": float(item.get_meta("swf_alpha", item.modulate.a * item.self_modulate.a)),
 					"stage_matrix": [t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y]}
 				for key in ["frame", "button_state", "text", "clip_depth", "clip_mask", "mask"]:
 					if item.has_meta("swf_" + key): entry[key] = item.get_meta("swf_" + key)
 				if not entry.has("frame") and item is AnimatedSprite2D:
 					entry.frame = (item as AnimatedSprite2D).frame + 1
 				dump.nodes.append(entry)
+			elif item.has_meta("swf_art"):
+				continue  # art, outlines and hit areas of a generated screen
 			elif item.is_visible_in_tree() and (item is Control or item is Sprite2D or item is Polygon2D):
 				dump.unmapped_visible += 1
 		_dump(child, dump)
