@@ -101,6 +101,7 @@ func _run() -> void:
 	_expect(score.is_shown("nextLevel") and not score.is_shown("restartBtn"), "a won level offers NEXT, not RESTART")
 	# 2,500 points also unlock the first look; its tip covers the score screen until OK.
 	_expect(score.is_shown("UI_UNLOCK_TIP"), "crossing an unlock score opens the unlock tip")
+	await _tip_landed(score)
 	await _click(_find("okBt"))
 	_expect(not score.is_shown("UI_UNLOCK_TIP"), "OK closes the unlock tip")
 	await _click(_find("nextLevel"))
@@ -154,6 +155,14 @@ func _lose_level(game: Node2D) -> void:
 	bomb.pressed = false
 	root.push_input(bomb, true)
 	await process_frame
+
+
+## The unlock tip flies in on its own timeline; OK is where it lands once the clip is on
+## its last frame (as in the original, it cannot be hit on the way in).
+func _tip_landed(score: Node2D) -> void:
+	for wait in 120:
+		if score.get_frame("UI_UNLOCK_TIP") >= score.get_total_frames("UI_UNLOCK_TIP"): return
+		await process_frame
 
 
 func _click(control: Control) -> void:

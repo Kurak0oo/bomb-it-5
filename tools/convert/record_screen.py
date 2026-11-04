@@ -221,6 +221,7 @@ def _record_extra_timeline(case_name, case, screen, root, capture, selectors, pl
     inside = [n for n in golden['nodes'] if any(n['path'] == top or n['path'].startswith(top + '/') for top in tops)]
     lengths = {int(n['total_frames']) for n in inside if (n.get('total_frames') or 1) > 1}
     period = min(reduce(lambda a, b: a * b // math.gcd(a, b), lengths, 1), MAX_PERIOD)
+    top_class = {n['path']: n.get('class') for n in golden['nodes'] if n['path'] in tops}
     p = Player(player_path, swf)
     tracks, first_present = {}, None
 
@@ -237,7 +238,11 @@ def _record_extra_timeline(case_name, case, screen, root, capture, selectors, pl
             p.command(line)
             if line.startswith('step'):
                 nodes = p.display()['nodes']
-                if any(n['path'] in tops for n in nodes):
+                # Shown once all its tops are, each with its class: the clothes panel slot
+                # (/@0) is on screen from the first robot on (another robot's panel), the
+                # robot only after its icon is clicked.
+                present = {(n['path'], n.get('class')) for n in nodes}
+                if all((top, top_class[top]) in present for top in tops):
                     if first_present is None:
                         first_present, tracks = p.frame, {}  # shown (again): its timeline starts
                     sample(nodes, p.frame - first_present)
@@ -442,8 +447,8 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
         # A part timed from when it shows (from_shown) renders its sequence frames from then:
         # the frames before its capture while the case is replayed, the rest after it.
         from_shown = bool(own and own.get('from_shown')) and where != capture
-        tops = [PLAYER_PATHS.get(n['path'], n['path']) for n in layout['nodes'] if n.get('from_capture') == where
-                and next((m for m in layout['nodes'] if m['path'] == n['parent']), {}).get('from_capture') != where]
+        tops = {(PLAYER_PATHS.get(n['path'], n['path']), n.get('class')) for n in layout['nodes'] if n.get('from_capture') == where
+                and next((m for m in layout['nodes'] if m['path'] == n['parent']), {}).get('from_capture') != where}
         shown_at = None
 
         def render_sequences(index):
@@ -458,7 +463,7 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
             for line in single_steps(case, where):
                 p.command(line)
                 if from_shown and sequences and line.startswith('step'):
-                    if any(n['path'] in tops for n in p.display()['nodes']):
+                    if tops <= {(n['path'], n.get('class')) for n in p.display()['nodes']}:
                         shown_at = shown_at or p.frame
                         render_sequences(p.frame - shown_at)
                     else:

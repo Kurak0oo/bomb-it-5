@@ -50,10 +50,12 @@ func _run() -> void:
 		"crossing unlock scores opens the unlock tip")
 	_expect(score.get_text("UI_UNLOCK_TIP/containerMc/scoreText") == "7300", "the tip shows the total score")
 	_expect(SaveStore.new(SAVE).unlocks.get("0", []) == [1, 2], "unlocks are saved at once")
+	await _tip_landed(score)
 	await _click(_find("okBt"))
 	_expect(not score.is_shown("UI_UNLOCK_TIP"), "OK closes the tip")
 	await _click(_find("dressUpBtn"))
 	_expect(app.current == &"score" and score.is_shown("UI_UNLOCK_TIP"), "DRESS UP opens the tip to change looks")
+	await _tip_landed(score)
 	var panel := "UI_UNLOCK_TIP/containerMc/Art_clothPanel0/"
 	_expect(score.get_frame(panel + "hat2") == 1 and score.get_frame(panel + "hat3") == 5, "DRESS UP offers the unlocked looks only")
 	await _click(_find("hat2"))
@@ -96,6 +98,14 @@ func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))
 	print("%s: %d looks checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
+
+
+## The unlock tip flies in on its own timeline; OK is where it lands once the clip is on
+## its last frame (as in the original, it cannot be hit on the way in).
+func _tip_landed(score: Node2D) -> void:
+	for wait in 120:
+		if score.get_frame("UI_UNLOCK_TIP") >= score.get_total_frames("UI_UNLOCK_TIP"): return
+		await process_frame
 
 
 func _click(control: Control) -> void:

@@ -236,7 +236,15 @@ func set_enabled(instance: String, enabled: bool) -> void:
 func set_text(instance: String, text: String) -> void:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty(): return
-	if not rec.has("label") and text == String(rec.entry.get("text", "")): return  # unchanged: keep the art
+	if text == String(rec.entry.get("text", "")):
+		# The recorded text again: its art (with the field's filters) shows, not live text.
+		if rec.has("label"):
+			rec.label.queue_free()
+			rec.erase("label")
+			rec.erase("live_text")
+			rec.node.set_meta("swf_text", text)
+			_apply(index)
+		return
 	rec["live_text"] = text
 	if not rec.has("label"): rec["label"] = _make_label(rec)
 	rec.label.text = text
@@ -437,7 +445,9 @@ func _apply(i_screen: int) -> void:
 			var alpha := float(s[9])
 			node.set_meta("swf_alpha", alpha)
 			var base := float(rec.alpha_at_capture)
-			node.modulate.a = alpha / base if base > 0.0 else alpha
+			var ratio := alpha / base if base > 0.0 else alpha
+			# The art is premultiplied: colour scales with alpha, or a fade-in stays dark.
+			node.modulate = Color(ratio, ratio, ratio, ratio)
 		_show_art(rec, i, frame)
 
 
@@ -699,6 +709,12 @@ class HitArea extends Button:
 		var art: Dictionary = {}
 		for candidate: Dictionary in rec.art:
 			if candidate.sprite.visible: art = candidate
+		# A controller's widget is hit on its recorded frame's shape: other frames may show
+		# parts that take no mouse (ClothesPanel's info panel, `mouseEnabled = false`), which
+		# would cover the neighbouring icons.
+		if rec.entry.has("widget_frames"):
+			for candidate: Dictionary in rec.art:
+				if int(candidate.get("state", -1)) == int(rec.entry.get("frame", 1)): art = candidate
 		if art.is_empty(): return true  # no art (outline placeholder): the bounds decide
 		var image: Image = screen._image(art.file)
 		if image == null: return true
@@ -723,7 +739,11 @@ func _hit(rec: Dictionary) -> Button:
 		hit.add_theme_stylebox_override(style, StyleBoxEmpty.new())
 	# The area covers every state's art (a hovered button may draw larger than at rest).
 	var area := Rect2(Vector2(bounds[0], bounds[1]) + rec.offset, Vector2(bounds[2] - bounds[0], bounds[3] - bounds[1]))
+	# Not a sequence's frames: they follow the clip's recorded motion (the unlock tip flying in).
 	for art: Dictionary in rec.art:
+		if entry.role == "sequence" and not art.has("state"): continue
+		# A controller's widget is hit on its recorded frame's shape (see HitArea).
+		if entry.has("widget_frames") and int(art.get("state", -1)) != int(entry.get("frame", 1)): continue
 		if art.size != Vector2.ZERO: area = area.merge(Rect2(art.origin, art.size / art.scale))
 	hit.position = area.position
 	hit.size = area.size
