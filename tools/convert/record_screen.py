@@ -385,7 +385,7 @@ def record_art(case_name, player_path, swf):
             for line in single_steps(case, capture):
                 p.command(line)
                 if line.startswith('step') and opened is None:
-                    if (any(n['path'] == layout['screen_root'] for n in p.display()['nodes']) if on_clock
+                    if (root_path(p.display(), spec) == layout['screen_root'] if on_clock
                             else timeline.get('opened_frame') == p.frame):
                         opened = p.frame
                 if opened is not None and line.startswith('step'):

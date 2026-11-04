@@ -2,10 +2,10 @@
  "controller": "one_p_score_ui",
  "extra_timelines": {
   "loss-score": {
-   "capture_index": 149,
+   "capture_index": 150,
    "from_shown": true,
    "period": 1,
-   "shown_before_capture": 149
+   "shown_before_capture": 150
   },
   "unlock-tip": {
    "capture_index": 153,
@@ -19811,6 +19811,29 @@
        71
       ]
      ]
+    ],
+    [
+     772,
+     [
+      1.01,
+      0.0,
+      0.0,
+      1.01,
+      192.8,
+      83.35,
+      1,
+      12,
+      192,
+      1.0,
+      [
+       0.7188,
+       0.7188,
+       0.7188,
+       71,
+       71,
+       71
+      ]
+     ]
     ]
    ]
   },
@@ -37133,6 +37156,29 @@
       1.0374,
       192.8,
       75.9,
+      1,
+      1,
+      191,
+      1.0,
+      [
+       1.0,
+       1.0,
+       1.0,
+       0,
+       0,
+       0
+      ]
+     ]
+    ],
+    [
+     772,
+     [
+      1.01,
+      0.0,
+      0.0,
+      1.0402,
+      192.8,
+      75.2,
       1,
       1,
       191,
@@ -54917,6 +54963,29 @@
        13
       ]
      ]
+    ],
+    [
+     772,
+     [
+      1.01,
+      0.0,
+      0.0,
+      1.01,
+      5.05,
+      138.8,
+      1,
+      22,
+      196,
+      1.0,
+      [
+       0.9492,
+       0.9492,
+       0.9492,
+       13,
+       13,
+       13
+      ]
+     ]
     ]
    ]
   },
@@ -72450,6 +72519,29 @@
       1,
       195,
       0.9258,
+      [
+       1.0,
+       1.0,
+       1.0,
+       0,
+       0,
+       0
+      ]
+     ]
+    ],
+    [
+     772,
+     [
+      1.0095,
+      -0.0275,
+      0.0275,
+      1.0095,
+      -1.4,
+      124.7,
+      1,
+      1,
+      195,
+      0.918,
       [
        1.0,
        1.0,
@@ -90230,6 +90322,29 @@
        87
       ]
      ]
+    ],
+    [
+     772,
+     [
+      1.01,
+      0.0,
+      0.0,
+      1.01,
+      536.8,
+      141.5,
+      1,
+      22,
+      200,
+      1.0,
+      [
+       0.6602,
+       0.6602,
+       0.6602,
+       87,
+       87,
+       87
+      ]
+     ]
     ]
    ]
   },
@@ -107299,6 +107414,29 @@
       0.9751,
       553.7,
       201.5,
+      1,
+      1,
+      199,
+      1.0,
+      [
+       1.0,
+       1.0,
+       1.0,
+       0,
+       0,
+       0
+      ]
+     ]
+    ],
+    [
+     772,
+     [
+      1.01,
+      0.0,
+      0.0,
+      0.9838,
+      553.7,
+      202.55,
       1,
       1,
       199,
@@ -125083,6 +125221,29 @@
        0
       ]
      ]
+    ],
+    [
+     772,
+     [
+      1.01,
+      0.0,
+      0.0,
+      1.01,
+      686.95,
+      83.35,
+      1,
+      52,
+      203,
+      1.0,
+      [
+       1.0,
+       1.0,
+       1.0,
+       0,
+       0,
+       0
+      ]
+     ]
     ]
    ]
   },
@@ -142639,6 +142800,29 @@
       1,
       202,
       0.7422,
+      [
+       1.0,
+       1.0,
+       1.0,
+       0,
+       0,
+       0
+      ]
+     ]
+    ],
+    [
+     772,
+     [
+      1.0095,
+      0.027,
+      -0.027,
+      1.0095,
+      699.15,
+      59.2,
+      1,
+      1,
+      202,
+      0.7617,
       [
        1.0,
        1.0,
@@ -160419,6 +160603,29 @@
        84
       ]
      ]
+    ],
+    [
+     772,
+     [
+      1.01,
+      0.0,
+      0.0,
+      1.01,
+      664.9,
+      176.55,
+      1,
+      52,
+      207,
+      1.0,
+      [
+       0.6719,
+       0.6719,
+       0.6719,
+       84,
+       84,
+       84
+      ]
+     ]
     ]
    ]
   },
@@ -177915,6 +178122,29 @@
        0
       ]
      ]
+    ],
+    [
+     772,
+     [
+      1.0079,
+      0.0621,
+      -0.0621,
+      1.0079,
+      670.15,
+      174.15,
+      1,
+      1,
+      206,
+      1.0,
+      [
+       1.0,
+       1.0,
+       1.0,
+       0,
+       0,
+       0
+      ]
+     ]
     ]
    ]
   },
@@ -180342,7 +180572,8 @@
     768,
     769,
     770,
-    771
+    771,
+    772
    ],
    "baked": true,
    "blend_mode": "Normal",
@@ -180560,49 +180791,6 @@
    }
   },
   {
-   "action": "moregames",
-   "alpha": 1.0,
-   "baked": true,
-   "blend_mode": "Normal",
-   "character_id": 3107,
-   "class": "BTN_MOREGAME_0",
-   "depth": 682,
-   "effective_visible": true,
-   "filters": 1,
-   "frame": 1,
-   "kind": "movie_clip",
-   "name": "moregames",
-   "parent": "/root1/__mainMc/GameMc/@0/@0",
-   "path": "/root1/__mainMc/GameMc/@0/@0/moregames",
-   "render_bounds": [
-    71.45,
-    393.15,
-    246.0,
-    450.9
-   ],
-   "role": "piece",
-   "stage_bounds": [
-    81.45,
-    403.15,
-    236.0,
-    440.9
-   ],
-   "stage_matrix": [
-    0.815,
-    0.0,
-    0.0,
-    0.815,
-    81.35,
-    403.05
-   ],
-   "total_frames": 3,
-   "widget_frames": [
-    1,
-    2,
-    3
-   ]
-  },
-  {
    "action": "restartBtn",
    "alpha": 1.0,
    "art_from": "loss-score",
@@ -180688,43 +180876,6 @@
     2,
     3
    ]
-  },
-  {
-   "alpha": 1.0,
-   "baked": true,
-   "blend_mode": "Normal",
-   "character_id": 356,
-   "class": "Logos",
-   "depth": 703,
-   "effective_visible": true,
-   "filters": 0,
-   "frame": 1,
-   "kind": "movie_clip",
-   "name": "__id12_",
-   "parent": "/root1/__mainMc/GameMc/@0/@0",
-   "path": "/root1/__mainMc/GameMc/@0/@0/__id12_",
-   "render_bounds": [
-    252.35,
-    459.6,
-    452.35,
-    509.6
-   ],
-   "role": "piece",
-   "stage_bounds": [
-    252.35,
-    459.6,
-    452.35,
-    509.6
-   ],
-   "stage_matrix": [
-    1.0,
-    0.0,
-    0.0,
-    1.0,
-    251.95,
-    459.6
-   ],
-   "total_frames": 1
   },
   {
    "alpha": 1.0,
@@ -286482,7 +286633,26 @@
  "note": "Generated by tools/convert/layout.py from the golden; do not edit.",
  "owner_edits": {
   "moved": {},
-  "removed": {}
+  "removed": {
+   "/root1/__mainMc/GameMc/@0/@0/__id12_": {
+    "render_bounds": [
+     252.35,
+     459.6,
+     452.35,
+     509.6
+    ],
+    "why": "Logos: the publisher logo at the bottom (owner decision, 2026-11-04)"
+   },
+   "/root1/__mainMc/GameMc/@0/@0/moregames": {
+    "render_bounds": [
+     71.45,
+     393.15,
+     246.0,
+     450.9
+    ],
+    "why": "MORE GAMES, the portal link (owner decision, 2026-11-04)"
+   }
+  }
  },
  "pieces": [
   "/root1/__mainMc/GameMc/@0/@0/bg/@1",
@@ -286581,9 +286751,7 @@
   "/root1/__mainMc/GameMc/@0/@0/total",
   "/root1/__mainMc/GameMc/@0/@0/dressUpBtn",
   "/root1/__mainMc/GameMc/@0/@0/title/title/LevelOver_1",
-  "/root1/__mainMc/GameMc/@0/@0/moregames",
   "/root1/__mainMc/GameMc/@0/@0/nextLevel",
-  "/root1/__mainMc/GameMc/@0/@0/__id12_",
   "/root1/__mainMc/GameMc/@0/@0/UI_UNLOCK_TIP/@1",
   "/root1/__mainMc/GameMc/@0/@0/UI_UNLOCK_TIP/containerMc/@1/@13",
   "/root1/__mainMc/GameMc/@0/@0/UI_UNLOCK_TIP/containerMc/@1/@14",
@@ -286662,14 +286830,14 @@
   "width": 700
  },
  "timeline": {
-  "capture_index": 171,
+  "capture_index": 172,
   "capture_index_of": {
    "loss-score": 74,
    "unlock-tip": 75,
    "win-score": 95
   },
-  "opened_after_input": -151,
-  "opened_frame": 870,
+  "opened_after_input": -152,
+  "opened_frame": 869,
   "period": 600,
   "period_capped": true
  },
