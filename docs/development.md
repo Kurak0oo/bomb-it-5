@@ -240,6 +240,10 @@ ceiling (SSIM 0.9747 / 0.9765). Generic fixes from these screens:
   click on the moved HOW TO PLAY); the goldens' case hash ignores `godot_*` fields;
 - the reference player's `piece` deadlocked on a path absent at that frame (the error
   branch re-locked the player); it now writes the `missing` marker;
+- owner edit: How to Play's two 2-player key columns are removed (the empty right panel
+  is part of one shape with the others and stays; owner to review);
+- a piece that sticks out of the viewport is rendered with the stage content shifted by
+  whole stage units so it fits, so a balloon drifting in from off-stage is no longer cut;
 - unnamed siblings at one depth (the game board, the unlock tip's panels) get `#k`
   segments, their order among those siblings.
 

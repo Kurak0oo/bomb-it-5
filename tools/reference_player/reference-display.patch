@@ -54,7 +54,7 @@ new file mode 100644
 index 00000000..04be4327
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,330 @@
+@@ -0,0 +1,369 @@
 +//! Research-only display-list dump for the comparison loop, and isolated piece renders.
 +//! The dump reads native display state only: no ActionScript getters or methods run and
 +//! nothing is written. `isolate` temporarily hides other display objects (native
@@ -65,6 +65,7 @@ index 00000000..04be4327
 +    BoundsMode, DisplayObject, TDisplayObject, TDisplayObjectContainer, WindowMode,
 +};
 +use ruffle_render::matrix::Matrix;
++use swf::Twips;
 +use serde_json::{json, Value as Json};
 +
 +const MAX_NODES: usize = 20000;
@@ -260,6 +261,10 @@ index 00000000..04be4327
 +    blend: Option<(String, ruffle_render::blend::ExtendedBlendMode)>,
 +    /// A clip moved to another frame for this render: path, frame and play state to restore.
 +    goto: Option<(String, u16, bool)>,
++    /// The stage's top clip moved so the piece fits the viewport: its path and matrix to restore.
++    shifted: Option<(String, Matrix)>,
++    /// That move in viewport pixels (subtract it from the image's pixel origin).
++    pub shift_px: [f64; 2],
 +    /// Render bounds of the piece in stage units (filters included): x_min, y_min, x_max, y_max.
 +    pub render_bounds: [f64; 4],
 +    /// The same bounds in viewport pixels (through the stage view matrix, filters scaled
@@ -337,7 +342,33 @@ index 00000000..04be4327
 +    }
 +    let b = target.render_bounds_with_transform(&target.local_to_global_matrix(), true, &Matrix::IDENTITY);
 +    let view = stage.view_matrix();
-+    let p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++    let mut p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++    // A piece partly outside the viewport would be cut where the viewport ends, and show
++    // the cut once it moves on stage (a balloon drifting in from the left). Shift the whole
++    // stage content by whole stage units so the piece fits, if it can; the shift is
++    // reported so the consumer puts the image back where it belongs.
++    let unit = view.a as f64; // viewport pixels per stage unit
++    let (sw, sh) = stage.stage_size();
++    let (vw, vh) = (sw as f64 * unit, sh as f64 * unit);
++    let fit = |lo: f64, hi: f64, size: f64| -> f64 {
++        if hi - lo > size - unit { return 0.0; }
++        if lo < 0.0 { (-lo / unit).ceil() } else if hi > size { -((hi - size) / unit).ceil() } else { 0.0 }
++    };
++    let (px0, py0, px1, py1) = (p.x_min.to_pixels(), p.y_min.to_pixels(), p.x_max.to_pixels(), p.y_max.to_pixels());
++    let shift_units = [fit(px0, px1, vw), fit(py0, py1, vh)];
++    let shifted = if shift_units != [0.0, 0.0] {
++        let root = chain[0];
++        let original = root.base().matrix();
++        let mut moved = original;
++        moved.tx += Twips::from_pixels(shift_units[0]);
++        moved.ty += Twips::from_pixels(shift_units[1]);
++        root.set_matrix(moved);
++        root.invalidate_cached_bitmap();
++        p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++        Some((path.split('/').take(2).collect::<Vec<_>>().join("/"), original))
++    } else {
++        None
++    };
 +    let window_mode = stage.window_mode();
 +    stage.set_window_mode(WindowMode::Transparent);
 +    use ruffle_render::blend::ExtendedBlendMode;
@@ -349,6 +380,8 @@ index 00000000..04be4327
 +        None
 +    };
 +    Ok(ReferencePiece {
++        shifted,
++        shift_px: [shift_units[0] * unit, shift_units[1] * unit],
 +        hidden,
 +        window_mode,
 +        blend,
@@ -370,6 +403,12 @@ index 00000000..04be4327
 +        }
 +    }
 +    stage.set_window_mode(piece.window_mode);
++    if let Some((path, matrix)) = &piece.shifted {
++        if let Some(chain) = resolve(stage.into(), path) {
++            chain[0].set_matrix(*matrix);
++            chain[0].invalidate_cached_bitmap();
++        }
++    }
 +    if let Some((path, frame, playing)) = &piece.goto {
 +        if let Some(clip) = resolve(stage.into(), path).and_then(|c| c.last().unwrap().as_movie_clip()) {
 +            clip.goto_frame(context, crate::display_object::GotoInfo {

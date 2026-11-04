@@ -29,5 +29,40 @@
   "remove": {
    "/playersTwo": "the 2-player option: the replica has one player (owner review, 2026-11-04)"
   }
+ },
+ "controls": {
+  "remove": {
+   "/ctrlField/twoPOneUp": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneUpMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneLeft": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneLeftMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneDown": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneDownMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneRight": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneRightMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneBomb": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneBombMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoUp": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoUpMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoLeft": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoLeftMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoDown": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoDownMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoRight": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoRightMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoBomb": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoBombMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/@92": "2-player key column (the replica has one player; owner review, 2026-11-04): a shape over the S cap",
+   "/@456/p2head@133": "2-player key column (the replica has one player; owner review, 2026-11-04): its robot head",
+   "/@456/@9": "2-player key column (the replica has one player; owner review, 2026-11-04): its 1P label",
+   "/@456/p2head@255": "2-player key column (the replica has one player; owner review, 2026-11-04): its robot head",
+   "/@456/@3": "2-player key column (the replica has one player; owner review, 2026-11-04): its P2 label"
+  }
+ },
+ "score": {
+  "remove": {
+   "/moregames": "MORE GAMES, the portal link (owner decision, 2026-11-04)",
+   "/__id12_": "Logos: the publisher logo at the bottom (owner decision, 2026-11-04)"
+  }
  }
 }

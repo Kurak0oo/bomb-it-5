@@ -232,7 +232,7 @@ fn main() -> Result<()> {
                         continue;
                     }
                 };
-                let (bounds, px) = (piece.render_bounds, piece.pixel_bounds);
+                let (bounds, px, shift) = (piece.render_bounds, piece.pixel_bounds, piece.shift_px);
                 let rendered = {
                     let mut pl = player.lock().unwrap();
                     pl.render();
@@ -254,8 +254,8 @@ fn main() -> Result<()> {
                 crop.save(t[2])?;
                 std::fs::write(format!("{}.json", t[2]), serde_json::to_vec(&serde_json::json!({
                     "path": t[1], "scale": scale, "render_bounds": bounds,
-                    "pixel_origin": [x0, y0], "pixel_size": [crop.width(), crop.height()],
-                    "pixel_bounds": px,
+                    "pixel_origin": [x0 as i64 - shift[0].round() as i64, y0 as i64 - shift[1].round() as i64], "pixel_size": [crop.width(), crop.height()],
+                    "pixel_bounds": [px[0] - shift[0], px[1] - shift[1], px[2] - shift[0], px[3] - shift[1]], "shifted_px": shift,
                     "clipped_by_viewport": px[0] < 0.0 || px[1] < 0.0 || px[2] > w as f64 || px[3] > h as f64,
                 }))?)?;
             }
