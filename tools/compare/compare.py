@@ -152,7 +152,11 @@ def owner_edits(case, capture):
     the stage rectangles they change: original and new places, excluded from pixels."""
     for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
         layout = json.loads(layout_path.read_text(encoding='utf-8'))
-        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+        golden = layout.get('source', {}).get('golden', '')
+        # The screen's main capture, or another capture of the same screen (a dropdown open).
+        other = golden.startswith(f'tests/goldens/{case}/') and any(
+            n.get('from_capture') == capture for n in layout.get('nodes', []))
+        if golden == f'tests/goldens/{case}/{capture}.json' or other:
             edits = layout.get('owner_edits', {})
             masks = []
             for info in edits.get('removed', {}).values():
