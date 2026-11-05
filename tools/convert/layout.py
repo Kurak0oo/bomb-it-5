@@ -399,6 +399,8 @@ def build(name, spec):
             # Its own colour tween is baked into its art (pieces render with their
             # ancestors' colour), so it plays as rendered frames too.
             composites = composites or tl(path).colour_changes(key(path))
+            # Likewise its own fade: Flash fades each shape inside, so overlaps compound.
+            composites = composites or tl(path).alpha_changes(key(path))
             if kids and not composites and tl(path).children_stable(key(path)):
                 expanded.add(path)
                 queue += kids

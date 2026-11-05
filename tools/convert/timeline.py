@@ -106,6 +106,11 @@ class Timeline:
         own = [s for _, s in self.tracks.get(path, []) if s is not None]
         return len({json.dumps(s[10:11]) for s in own}) > 1
 
+    def alpha_changes(self, path):
+        """Whether the node's own alpha changes (a fade)."""
+        own = [s for _, s in self.tracks.get(path, []) if s is not None]
+        return len({s[9] for s in own if len(s) > 9}) > 1
+
     def children_stable(self, path):
         for child in self.children(path):
             if any(state is None for _, state in self.tracks[child]):
