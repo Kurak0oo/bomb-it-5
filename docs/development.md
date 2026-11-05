@@ -260,3 +260,17 @@ actions end each round with the points its golden shows, through the app's own r
 path. The original opens this screen on the wall clock, so each recording opens it at a
 different frame: the layout reads each capture's *capture phase* from its golden.
 `-- --screen score --capture loss-score` opens it for review.
+
+Checkpoint 3 status (2026-11-05): every case passes nodes and pixels (pixels at the
+measured 3×→1× ceiling): main-menu, game-settings, character-select (8 robots),
+how-to-play, results (unlock tip, level complete, level failed), game-over, game-win;
+tools/run_checks.sh passes end to end. Later fixes:
+- a node whose own alpha or colour changes plays as rendered frames (Flash fades each
+  shape inside a clip, so overlaps compound);
+- an extra part's clock starts with its capture's first frame (all its tops shown; the
+  frame after a click shows it);
+- a widget frame that animates in another capture (a selected robot icon blinking) plays
+  that capture's sequence (`frame_sequences`);
+- live text uses the SWF font's ascent and draws a TextField's GlowFilter;
+- controllers are released with their screen (listeners cleared, fields nulled).
+Awaiting owner review of the checkpoint 3 screens.
