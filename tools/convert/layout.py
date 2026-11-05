@@ -144,6 +144,12 @@ SCREENS = {
                  'interactive': {n: n for n in ('back', 'moregames')},
                  'widgets': ('back', 'moregames'),
                  'live_text': ('score',),
+                 # FallSnow (PlayerGameOver.initView, GAME_WIN; scripts/ui/fall_snow.gd): the
+                 # confetti Bitmaps it adds to the stage at random (`creatSnow`) are made by
+                 # the port at run time, not laid out. Their art is every frame of the
+                 # library clip `fallSnow` drawn into a 25x25 BitmapData (`FallSnow.init`).
+                 'effects': {'FallSnow': {'class': 'flash.display::Bitmap', 'art_class': 'fallSnow',
+                                          'bitmap_size': [25, 25]}},
                  'states': False},
 }
 
@@ -234,7 +240,8 @@ def _shift(bounds, dx, dy):
 
 def _apply_owner_edits(name, screen_root, layout_nodes, by_path):
     """Remove and move nodes as tools/convert/owner_edits.json says. A move is expressed in
-    the original's own quantities (a fraction of the way to another node's position)."""
+    the original's own quantities: a fraction of the way from the node (or from another
+    node, `from`, so that a row moves by one step) to another node's position."""
     spec = json.loads(EDITS.read_text(encoding='utf-8')).get(name, {})
     removed, moved = {}, {}
     for rel, why in spec.get('remove', {}).items():
@@ -244,9 +251,10 @@ def _apply_owner_edits(name, screen_root, layout_nodes, by_path):
         removed[path] = {'why': why, 'render_bounds': by_path[path].get('render_bounds') or by_path[path].get('stage_bounds')}
     for rel, how in spec.get('move', {}).items():
         path, target = screen_root + rel, screen_root + how['toward']
-        if path not in by_path or target not in by_path:
-            raise SystemExit(f'{name}: owner edit moves {rel} toward {how["toward"]}, not both in the golden')
-        a, b = by_path[path]['stage_matrix'], by_path[target]['stage_matrix']
+        origin = screen_root + how.get('from', rel)
+        if path not in by_path or target not in by_path or origin not in by_path:
+            raise SystemExit(f'{name}: owner edit moves {rel} toward {how["toward"]}, not all in the golden')
+        a, b = by_path[origin]['stage_matrix'], by_path[target]['stage_matrix']
         axis = how.get('axis', 'xy')
         delta = [round((b[4] - a[4]) * how['fraction'], 4) if 'x' in axis else 0.0,
                  round((b[5] - a[5]) * how['fraction'], 4) if 'y' in axis else 0.0]
@@ -375,6 +383,10 @@ def build(name, spec):
     def key(path):
         return by_path.get(path, {}).get('golden_path', path)
 
+    # Parts of a split group that are on its timeline but off the display list at the
+    # capture (robot 7's first arms, swapped for others during its entrance) are added
+    # from their tracks, so the whole entrance plays.
+    _add_absent_at_capture(nodes, by_path, expanded, screen_root, tl, key)
     if timeline is not None or any(extra_timelines.values()):
         # Animation decides how far groups are split: a part whose inside changes is split
         # into its children while they stay the same; otherwise it is a frame sequence.
@@ -396,6 +408,7 @@ def build(name, spec):
             # A group Flash composites on its own (filters or a blend: p2head's outline)
             # cannot be split without losing that pass; it plays as a sequence.
             composites = node.get('filters') or node.get('blend_mode', 'Normal') != 'Normal'
+            composites = composites or tl(path).has_filters(key(path))
             # Its own colour tween is baked into its art (pieces render with their
             # ancestors' colour), so it plays as rendered frames too.
             composites = composites or tl(path).colour_changes(key(path))
@@ -447,9 +460,17 @@ def build(name, spec):
                 points = (looks | {present[0], x.data['capture_index']}) & set(present)
                 frame_sequences.setdefault(path, {})[str(f)] = {'capture': c, 'art_frames': sorted(points)}
     layout_nodes, warnings, covered = [], [], {}
+    effects = {e: dict(how, nodes={}) for e, how in spec.get('effects', {}).items()}
     for node in nodes:
         path = node['path']
         parent = parent_of(path)
+        effect = next((e for e, how in spec.get('effects', {}).items()
+                       if parent == '' and node.get('class') == how['class']), None)
+        if effect:
+            # Made at random by a ported effect: the comparison checks them by its rules.
+            effects[effect]['nodes'][node.get('golden_path', path)] = {
+                k: node[k] for k in ('stage_matrix', 'render_bounds', 'color_transform', 'effective_visible') if k in node}
+            continue
         if path not in expanded and parent not in expanded and parent != '':
             continue  # inside a piece
         if parent in group_widgets and path not in expanded:
@@ -508,6 +529,10 @@ def build(name, spec):
                 # original's MOUSE_DOWN handlers do (no press frame could be recorded).
                 if states[path].get('kind') == 'button':
                     entry['states']['acts_on'] = 'press' if states[path].get('press') is None else 'release'
+        if own is not None and entry.get('role') == 'piece':
+            index = _art_index(own, path, screen_root, by_path, tl, key)
+            if index is not None:
+                entry['art_index'] = index
         if own is not None and entry.get('role') == 'piece' and not node.get('effective_visible'):
             first = own.first_visible(key(path))
             if first is not None:
@@ -561,7 +586,89 @@ def build(name, spec):
             {k: timeline.data[k] for k in ('opened_frame', 'opened_after_input', 'capture_index', 'period', 'period_capped')},
             **({'capture_index_of': phases} if phases else {})),
         'nodes': layout_nodes,
+        **({'effects': effects} if effects else {}),
     }
+
+
+def _add_absent_at_capture(nodes, by_path, expanded, screen_root, tl, key):
+    """Children of a split group that its timeline shows at some frame but that are off the
+    display list at the capture, so the golden has no node for them. Each becomes a node
+    from its track (its first shown state), in painter's order among its siblings by depth;
+    it plays as a sequence whose art is rendered while it shows."""
+    by_key = {key(p): p for p in by_path}
+    for group in sorted(expanded):
+        if group != screen_root and not group.startswith(screen_root + '/'):
+            continue
+        own = tl(group)
+        if own is None or group not in by_path:
+            continue
+        for child in own.children(key(group)):
+            if child in by_key:
+                continue
+            shown = [(i, st) for i, st in own.tracks[child] if st is not None and st[6]]
+            if not shown:
+                continue  # never on screen (robotStage2's robots)
+            segment = child.rsplit('/', 1)[1]
+            try:
+                depth = int(segment.rsplit('@', 1)[1])
+            except (IndexError, ValueError):
+                print(f'  warning: {child} is absent at the capture and has no depth; left out')
+                continue
+            first = shown[0][1]
+            parent = by_path[group]
+            node = {'path': group + '/' + segment, 'kind': 'movie_clip' if first[7] else 'graphic', 'depth': depth,
+                    'character_id': first[8], 'effective_visible': False, 'alpha': first[9] if len(first) > 9 else 1.0,
+                    'stage_matrix': list(first[:6]), 'absent_at_capture': True}
+            if first[7]:
+                node['frame'] = first[7]
+            if child != node['path']:
+                node['golden_path'] = child
+            if parent.get('from_capture'):
+                node.update(from_capture=parent['from_capture'], parent_frame_there=parent.get('frame'))
+            # After the last sibling (and its subtree) drawn below it.
+            at = nodes.index(parent) + 1
+            for k in range(at, len(nodes)):
+                q = nodes[k]['path']
+                if not q.startswith(group + '/'):
+                    break
+                if parent_of(q) == group and nodes[k].get('depth', 0) > depth:
+                    break
+                at = k + 1
+            nodes.insert(at, node)
+            by_path[node['path']] = node
+            by_key[child] = node['path']
+
+
+def _art_index(own, path, screen_root, by_path, tl, key):
+    """Where a still piece is rendered, when not at the capture: pieces render with their
+    ancestors' alpha and filters, so one whose group is faded out or blurred at the capture
+    (robot 5's head, mid entrance) would render empty or smeared. It renders at the first
+    frame from the capture on where the alpha along its chain (on its own timeline) is
+    highest and the chain's filters are as they settle (at the last recorded frame); None
+    if that is the capture."""
+    chain, q = [], path
+    while q.startswith(screen_root + '/') and q in by_path:
+        if tl(q) is own:
+            chain.append(key(q))
+        q = parent_of(q)
+
+    def filters(i):
+        return [(own.state(k, i) or [])[11:12] for k in chain]
+
+    settled = filters(own.frames - 1)
+
+    def look(i):
+        out = 1.0
+        for k in chain:
+            st = own.state(k, i)
+            if st is None or not st[6]:
+                return (-1.0, False)
+            out *= st[9] if len(st) > 9 else 1.0
+        return (round(out, 4), filters(i) == settled)
+
+    capture = own.data['capture_index']
+    best = max(range(capture, own.frames), key=lambda i: (look(i), -i))
+    return best if look(best) > look(capture) else None
 
 
 def _capture_phases(spec, case, timeline, screen_root):

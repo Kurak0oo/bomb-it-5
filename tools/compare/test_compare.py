@@ -109,6 +109,22 @@ class NodeDiff(unittest.TestCase):
         report = nodes.diff(nodes.apply_owner_edits(g, edits), godot(ref_node('/m', 5, 35), ref_node('/m/c', 6, 36)))
         self.assertTrue(report['passed'], report)
 
+    def test_effects_are_checked_by_their_rules_not_one_to_one(self):
+        # /@0#4 of the game-win golden: a FallSnow confetti Bitmap.
+        pink = {'add': [255, 0, 102, 0], 'mult': [0.0, 0.0, 0.0, 1.0]}
+        snow = ref_node('/@0#4', kind='bitmap', color_transform=pink, render_bounds=[165.3, 19.0, 186.85, 40.5])
+        snow['stage_matrix'] = [0.7676, 0.0931, -0.0931, 0.7676, 167.65, 19.0]
+        g = golden(ref_node('/root1'), snow)
+        effects = {'FallSnow': {'nodes': {'/@0#4': {}}}}
+        mine = dict(snow, path='/FallSnow#1', effect='FallSnow', stage_matrix=[0.5, 0.0, 0.0, 0.5, 300.0, 40.0])
+        g2, got, report = nodes.split_effects(g, godot(ref_node('/root1'), mine), effects)
+        self.assertTrue(report['FallSnow']['passed'], report)
+        self.assertTrue(nodes.diff(g2, got)['passed'])
+        self.assertEqual(len(report['FallSnow']['bounds']), 2)
+        off = dict(mine, color_transform={'add': [1, 2, 3, 0], 'mult': [0.0, 0.0, 0.0, 1.0]})
+        _, _, report = nodes.split_effects(g, godot(ref_node('/root1'), off, mine), effects)
+        self.assertFalse(report['FallSnow']['passed'])  # a colour not in _colorArr, and one too many
+
     def test_decompose_reads_flash_matrix(self):
         angle = math.radians(30)
         m = [2 * math.cos(angle), 2 * math.sin(angle), -3 * math.sin(angle), 3 * math.cos(angle), 5, 6]

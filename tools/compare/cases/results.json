@@ -140,7 +140,9 @@
    "command": "realtime 0"
   },
   {
-   "command": "click 543.3 422.0"
+   "command": "click 543.3 422.0",
+   "godot_command": "click 446.6 422.0",
+   "godot_why": "owner edit: the score screen moves NEXT left by 96.7, half the way from DRESS UP to MORE GAMES (tools/convert/owner_edits.json)"
   },
   {
    "command": "move 2 2"

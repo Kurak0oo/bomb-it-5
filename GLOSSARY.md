@@ -42,6 +42,12 @@ How many frames a screen had been open when a capture was taken, read from that 
 The screen that closes a one-player session with its final score and TRY AGAIN: Game Over after the last heart, congratulations (GAME COMPLETE!) after the last level.
 _Avoid_: results screen, score screen
 
+**Owner edit**:
+A change the owner made on top of a faithful screen (a part removed or moved), applied by the converter and treated by the comparison as an expected difference.
+
+**Run-time effect**:
+Display objects a ported screen makes at random while it runs (the congratulations screen's falling confetti), checked against the original by the effect's rules rather than node by node.
+
 **Original pack**:
 The art and audio taken from the user's own SWF, kept on their machine and never committed.
 _Avoid_: assets, candidate art

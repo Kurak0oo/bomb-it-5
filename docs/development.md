@@ -277,3 +277,9 @@ Owner review (2026-11-05): all checkpoint 3 screens accepted; the empty How to P
 panel stays. Asked for: TRY AGAIN centred on the end screens and the game-complete
 confetti (FallSnow) ported; fixes for robot 6's missing head while dressing up, robot 8's
 arm missing at the start of its entrance, and the pause when switching robots.
+- End screens (2026-11-05, owner to review): TRY AGAIN moves half the way to MORE GAMES'
+  place, the middle of the original row (owner edit); on the score screen DRESS UP and
+  NEXT/RESTART move left by half a button pitch (a move may now be measured `from`
+  another node). `FallSnow` is ported (`scripts/ui/fall_snow.gd`, Flash `Math.random`
+  port, frames from FFDec at zoom 1 in the pack); its confetti are a *run-time effect*:
+  the comparison checks them by FallSnow's rules and count, and masks them from pixels.

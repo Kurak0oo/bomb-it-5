@@ -149,7 +149,27 @@ def state_of(node):
     # The colour transform's RGB part (a balloon's brightness tween); alpha is index 9.
     colour = [round(v, 4) for v in (ct.get('mult', [1, 1, 1])[:3] + ct.get('add', [0, 0, 0])[:3])]
     return [round(v, 4) for v in m] + [1 if node.get('effective_visible') else 0, node.get('frame') or 0,
-                                        node.get('character_id') or 0, round(node.get('alpha', 1.0), 4), colour]
+                                        node.get('character_id') or 0, round(node.get('alpha', 1.0), 4), colour,
+                                        filters_of(node)]
+
+
+def filters_of(node):
+    """The node's filters (index 11 of a state): a tweened blur (robot 5's entrance) changes
+    how it looks, so its art is rendered again where they change. Each filter is its type
+    and its numeric parameters, in name order."""
+    out = []
+    for f in node.get('filter_list') or ():
+        values = [f.get('type', '')]
+        for k in sorted(f):
+            v = f[k]
+            if isinstance(v, bool):
+                values.append(int(v))
+            elif isinstance(v, (int, float)):
+                values.append(round(v, 3))
+            elif isinstance(v, list):
+                values += [round(x, 3) for x in v]
+        out.append(values)
+    return out
 
 
 # ------------------------------------------------------------------ timeline
@@ -198,7 +218,7 @@ def record_timeline(case_name, player_path, swf):
         out = {'schema': 'bombit5-screen-timeline-v1', 'screen': screen, 'case': case_name, 'capture': capture,
                'root': root, 'opened_frame': opened, 'opened_after_input': opened - last_input,
                'capture_index': capture_index, 'period': period, 'period_capped': capped,
-               'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character', 'alpha'],
+               'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character', 'alpha', 'colour', 'filters'],
                'note': 'Changes only: [frame index since the screen opened, state or null when absent].',
                'tracks': tracks}
         target = GOLDENS / case_name / f'{capture}.timeline.json'
@@ -233,12 +253,19 @@ def _record_extra_timeline(case_name, case, screen, spec, root, capture, selecto
     tracks, first_present = {}, None
 
     def sample(nodes, index):
+        seen = set()
         for node in nodes:
             if any(node['path'] == top or node['path'].startswith(top + '/') for top in tops + widgets):
+                seen.add(node['path'])
                 value = state_of(node)
                 track = tracks.setdefault(node['path'], [])
                 if not track or track[-1][1] != value:
                     track.append([index, value])
+        # A part removed from the display list (robot 7's first arms, swapped for others
+        # during its entrance) is absent from then on, as in the screen's own timeline.
+        for path, track in tracks.items():
+            if path not in seen and track[-1][1] is not None:
+                track.append([index, None])
 
     try:
         for line in single_steps(case, capture):
@@ -266,7 +293,7 @@ def _record_extra_timeline(case_name, case, screen, spec, root, capture, selecto
     out = {'schema': 'bombit5-screen-timeline-v2', 'screen': screen, 'case': case_name, 'capture': capture,
            'root': root, 'extra': True, 'tops': tops, 'widgets': widgets, 'from_shown': True, 'capture_index': capture_index,
            'period': period, 'shown_before_capture': capture_index,
-           'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character', 'alpha'],
+           'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character', 'alpha', 'colour', 'filters'],
            'note': 'An extra part, from the frame it shows (index 0) through its capture and one period '
                    'after it with no input.',
            'tracks': tracks}
@@ -383,6 +410,8 @@ def record_art(case_name, player_path, swf):
         wanted = {}
         for path, node in statics.items():
             index = timeline.get('capture_index', 0) if node.get('effective_visible') else node.get('first_visible', 0)
+            # Faded out with its group at the capture: rendered where it shows (layout.py _art_index).
+            index = node.get('art_index', index)
             wanted.setdefault(index, []).append(path)
         frames = timeline.get('capture_index', 0) + timeline.get('period', 0)
         p = Player(player_path, swf)
@@ -424,6 +453,8 @@ def record_art(case_name, player_path, swf):
                     'sequences': {k: v['frames'] for k, v in pieces.items() if isinstance(v, dict) and 'frames' in v},
                     'states': json.loads(states.read_text(encoding='utf-8')) if states.is_file() else {},
                     'frames': frames, 'frame_sequences': frame_sequences}
+        if layout.get('effects'):
+            manifest['effects'] = _record_effects(layout, target, swf)
         check = _self_check(layout, manifest, target)
         manifest['self_check'] = check
         (target / 'manifest.json').write_text(json.dumps(manifest, indent=1) + '\n', encoding='utf-8')
@@ -460,6 +491,8 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
         tmp = Path(tempfile.mkdtemp(prefix='bombit5-frames-'))
         own = (layout.get('extra_timelines') or {}).get(where)
         sequences = [n for n in nodes if n['role'] == 'sequence' and n.get('from_capture')]
+        # Still pieces faded out at the capture render later on its timeline (layout.py _art_index).
+        late = [n for n in nodes if n['role'] == 'piece' and n.get('from_capture') and 'art_index' in n]
         widget_seqs = frame_seqs.get(where, [])
         # A part timed from when it shows (from_shown) renders its sequence frames from then:
         # the frames before its capture while the case is replayed, the rest after it.
@@ -469,6 +502,11 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
         shown_at = None
 
         def render_sequences(index):
+            for node in late:
+                if index == node['art_index']:
+                    stored = _store(p, node['path'], target, tmp, seen)
+                    if stored:
+                        pieces[node['path']] = dict(stored, index=index)
             for node in sequences:
                 if index in node.get('art_frames', []):
                     entry = pieces.setdefault(node['path'], {'frames': {}})
@@ -487,7 +525,7 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
         try:
             for line in single_steps(case, where):
                 p.command(line)
-                if from_shown and (sequences or widget_seqs) and line.startswith('step'):
+                if from_shown and (sequences or widget_seqs or late) and line.startswith('step'):
                     if tops <= {(n['path'], n.get('class')) for n in p.display()['nodes']}:
                         shown_at = shown_at or p.frame
                         render_sequences(p.frame - shown_at)
@@ -500,17 +538,18 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
             present = {n['path'] for n in p.display()['nodes']}
             for node in nodes:
                 path = node['path']
-                if node.get('from_capture') and node['role'] == 'piece' and PLAYER_PATHS.get(path, path) in present:
+                if (node.get('from_capture') and node['role'] == 'piece' and 'art_index' not in node
+                        and PLAYER_PATHS.get(path, path) in present):
                     stored = _store(p, path, target, tmp, seen)
                     if stored:
                         pieces[path] = dict(stored, index=base)
-            if (sequences or widget_seqs) and own and from_shown:
+            if (sequences or widget_seqs or late) and own and from_shown:
                 start = index
                 for index in range(start, int(own['capture_index']) + int(own['period']) + 1):
                     if index > start:
                         p.command('step 1')
                     render_sequences(index)
-            elif (sequences or widget_seqs) and own:
+            elif (sequences or widget_seqs or late) and own:
                 for index in range(own['period'] + 1):
                     if index:
                         p.command('step 1')
@@ -593,7 +632,7 @@ def _self_check(layout, manifest, target):
         entry = None
         if node.get('from_capture'):
             continue  # recorded in another capture (e.g. a closed dropdown)
-        if node['role'] == 'piece' and node.get('effective_visible'):
+        if node['role'] == 'piece' and node.get('effective_visible') and 'art_index' not in node:
             entry = manifest['pieces'].get(node['path'])
         elif node['role'] == 'sequence' and node.get('effective_visible'):
             entry = manifest['sequences'].get(node['path'], {}).get(index)
@@ -610,9 +649,62 @@ def _self_check(layout, manifest, target):
     # Owner edits (removed nodes) are absent from the composite on purpose; leave them out.
     masks = [[v * SCALE for v in info['render_bounds']] for info in layout.get('owner_edits', {}).get('removed', {}).values()
              if info.get('render_bounds')]
+    # So are the random effects' nodes (FallSnow's confetti), which the port makes at run time.
+    masks += [[v * SCALE for v in n['render_bounds']] for e in layout.get('effects', {}).values()
+              for n in e['nodes'].values() if n.get('render_bounds')]
     result = pixels.compare(target / 'reference-3x.png', target / 'composite.png', target / 'composite-heatmap.png',
                             masks=masks)
     return {k: result.get(k) for k in ('ssim', 'max_region_delta_e', 'regions_over', 'worst_region')}
+
+
+def _record_effects(layout, target, swf):
+    """The art of a screen's run-time effects (`effects`, layout.py), into the local pack:
+    FallSnow draws each frame of the library clip `fallSnow` into a BitmapData(25, 25)
+    at the identity matrix (`FallSnow.init`), so each frame is exported with FFDec at zoom 1
+    (the SWF's symbol class names the sprite) and the clip's area from its origin to the
+    bitmap size is kept. Godot draws them at that source resolution (scripts/ui/fall_snow.gd)."""
+    import re
+    import subprocess
+    sys.path.insert(0, str(HERE.parent / 'bakeoff'))
+    import bakeoff
+    jar = bakeoff.ensure_ffdec()
+    out = {}
+    tmp = Path(tempfile.mkdtemp(prefix='bombit5-effects-'))
+    try:
+        subprocess.run(['java', '-jar', str(jar), '-export', 'symbolClass', str(tmp / 'symbols'), str(swf)],
+                       check=True, capture_output=True, timeout=600)
+        symbols = {}
+        for line in (tmp / 'symbols' / 'symbols.csv').read_text(encoding='utf-8').splitlines():
+            ident, _, cls = line.partition(';')
+            symbols[cls.strip().strip('"')] = int(ident)
+        for effect, how in layout['effects'].items():
+            ident = symbols[how['art_class']]
+            for fmt in ('png', 'svg'):
+                subprocess.run(['java', '-jar', str(jar), '-selectid', str(ident), '-zoom', '1', '-format', f'sprite:{fmt}',
+                                '-export', 'sprite', str(tmp / fmt), str(swf)], check=True, capture_output=True, timeout=600)
+            folder = target / 'effects'
+            shutil.rmtree(folder, ignore_errors=True)
+            folder.mkdir(parents=True)
+            frames = []
+            w, h = how['bitmap_size']
+            pngs = sorted(next((tmp / 'png').iterdir()).glob('*.png'), key=lambda f: int(f.stem))
+            for png in pngs:
+                svg = next((tmp / 'svg').iterdir()) / f'{png.stem}.svg'
+                # The frame image starts at the sprite's bounds; its SVG's first group says
+                # where the clip's origin lies in it.
+                m = re.search(r'<g transform="matrix\(([^)]*)\)"', svg.read_text(encoding='utf-8'))
+                tx, ty = (float(v) for v in m.group(1).split(',')[4:6])
+                bitmap = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+                bitmap.paste(Image.open(png).convert('RGBA'), (round(-tx), round(-ty)))
+                name = f'{how["art_class"]}-{png.stem}.png'
+                bitmap.save(folder / name)
+                frames.append(f'effects/{name}')
+            out[effect] = {'art_class': how['art_class'], 'character_id': ident, 'bitmap_size': [w, h],
+                           'frames': frames, 'source': 'FFDec sprite frames at zoom 1'}
+            print(f'{effect}: {len(frames)} frames of {how["art_class"]} (character {ident})')
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return out
 
 
 def record_fonts(_case_name, _player_path, swf):

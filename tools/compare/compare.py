@@ -181,6 +181,15 @@ def owner_edits(case, capture):
     return {}, []
 
 
+def effects_of(case, capture):
+    """The run-time effects (`effects`, layout.py) of the screen this capture records."""
+    for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
+        layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+            return layout.get('effects', {})
+    return {}
+
+
 def check(name, godot):
     case_path, case, captures = load_case(name)
     golden_dir = GOLDENS / name
@@ -199,7 +208,14 @@ def check(name, godot):
         actual = json.loads((out / f'{capture}.nodes.json').read_text(encoding='utf-8'))
         edits, masks = owner_edits(name, capture)
         golden = nodes.apply_owner_edits(golden, edits)
+        # A screen's random effects (FallSnow's confetti) are checked by their rules, and
+        # where either side draws one is left out of the pixel score.
+        golden, actual, effects = nodes.split_effects(golden, actual, effects_of(name, capture))
+        masks = masks + [b for e in effects.values() for b in e['bounds']]
         entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
+        if effects:
+            entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
+            entry['node']['passed'] &= all(e['passed'] for e in effects.values())
         if edits.get('removed') or edits.get('moved'):
             entry['owner_edits'] = {'removed': sorted(edits.get('removed', {})), 'moved': sorted(edits.get('moved', {}))}
         reference_png = WORK / name / 'reference' / f'{capture}.png'
@@ -243,6 +259,9 @@ def print_report(report):
             print(f'    {item["path"]}: {"; ".join(item["problems"])}')
         for path in n['missing'][:5]:
             print(f'    missing {path}')
+        for effect, e in entry.get('effects', {}).items():
+            print(f'  {capture}: {effect}: {e["godot"]} in Godot, {e["original"]} in the original, '
+                  f'{"by its rules" if e["passed"] else "off: " + "; ".join(e["problems"][:5])} (excluded from the pixel score)')
         if p.get('skipped'):
             print(f'    pixels skipped: {p["skipped"]}')
         elif 'error' in p:

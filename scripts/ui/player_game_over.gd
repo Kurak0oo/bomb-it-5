@@ -6,12 +6,15 @@ extends "res://scripts/ui/abstract_ui.gd"
 ## opens Game Settings (`UIEvent.GAME_SETTING` -> `UIManager.gameStart_start`), as observed
 ## in docs/evidence/edition-5-results-runtime-probes.md ("Hearts, Game Over and fresh session").
 ##
-## Not ported: `FallSnow` (the confetti a GAME_WIN drops over the stage: bitmaps drawn from
-## the `fallSnow` clip on a 300 ms timer; it needs its own art slot) and `deleFallSnowCartoon`
-## beyond a stub, the `display` setter (UIManager), and MORE GAMES' publisher link (its
-## handler only plays the press sound in the AS3 too).
+## A GAME_WIN drops `FallSnow`'s confetti over the stage (scripts/ui/fall_snow.gd); the
+## generated screen is `_root.stage`.
+##
+## Not ported: the `display` setter (UIManager; its `reAddDisPlay` call is ported in
+## FallSnow) and MORE GAMES' publisher link (its handler only plays the press sound in the
+## AS3 too).
 
 const UtilsButton = preload("res://scripts/ui/button.gd")  # zlong.bombit5.utils.Button
+const FallSnow = preload("res://scripts/ui/fall_snow.gd")  # zlong.bombit5.ui.FallSnow
 ## `zlong.bombit5.data.GameResult`
 const GameResult := {"LEVEL_WIN": 1, "GAME_WIN": 2, "LEVEL_RESTART": 3, "GAME_OVER": 4}
 
@@ -35,7 +38,7 @@ func initView() -> void:
 	_moreGamesBtn = "moregames"
 	simpleButtons.append(UtilsButton.new(_mc, _events, _moreGamesBtn))
 	if _gameResult == GameResult.GAME_WIN:
-		pass  # TODO(art): this._fallSnowCartoon = new FallSnow(_root.stage) (see the header)
+		_fallSnowCartoon = FallSnow.new(_mc, _root.math_random)  # new FallSnow(_root.stage)
 
 
 ## `initListener` (ROLL_OVER on `back`, MOUSE_OVER on `moregames`: both the screen's &"over")
@@ -91,9 +94,11 @@ func moreOverHandle(_t: String) -> void:
 	_sound("menuTouch")
 
 
-## `deleFallSnowCartoon` (`FallSnow.deleSnow`; FallSnow is not ported)
+## `deleFallSnowCartoon`
 func deleFallSnowCartoon() -> void:
 	if _fallSnowCartoon != null:
+		# (freed already when the app dropped the screen without destroy)
+		if is_instance_valid(_fallSnowCartoon): _fallSnowCartoon.deleSnow()
 		_fallSnowCartoon = null
 
 

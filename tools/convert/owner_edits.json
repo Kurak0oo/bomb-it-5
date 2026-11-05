@@ -63,18 +63,56 @@
   "remove": {
    "/moregames": "MORE GAMES, the portal link (owner decision, 2026-11-04)",
    "/__id12_": "Logos: the publisher logo at the bottom (owner decision, 2026-11-04)"
+  },
+  "move": {
+   "/dressUpBtn": {
+    "toward": "/moregames",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES gone, DRESS UP and NEXT/RESTART move left by half a button pitch (half the way from DRESS UP to MORE GAMES' place), so the pair sits in the middle of the original three-button row (owner review, 2026-11-05)"
+   },
+   "/nextLevel": {
+    "toward": "/moregames",
+    "from": "/dressUpBtn",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES gone, DRESS UP and NEXT/RESTART move left by half a button pitch (half the way from DRESS UP to MORE GAMES' place), so the pair sits in the middle of the original three-button row (owner review, 2026-11-05)"
+   },
+   "/restartBtn": {
+    "toward": "/moregames",
+    "from": "/dressUpBtn",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES gone, DRESS UP and NEXT/RESTART move left by half a button pitch (half the way from DRESS UP to MORE GAMES' place), so the pair sits in the middle of the original three-button row (owner review, 2026-11-05)"
+   }
   }
  },
  "game_over": {
   "remove": {
    "/moregames": "MORE GAMES, the portal link (owner preference: portal links removed on every screen, 2026-11-04)",
    "/__id10_": "Logos: the publisher logos at the bottom (owner preference: portal links removed on every screen, 2026-11-04)"
+  },
+  "move": {
+   "/back": {
+    "toward": "/moregames",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES and the logos gone, TRY AGAIN moves half the way to MORE GAMES' place, to the middle of the original button row (owner review, 2026-11-05)"
+   }
   }
  },
  "game_win": {
   "remove": {
    "/moregames": "MORE GAMES, the portal link (owner preference: portal links removed on every screen, 2026-11-04)",
    "/__id8_": "Logos: the publisher logos at the bottom (owner preference: portal links removed on every screen, 2026-11-04)"
+  },
+  "move": {
+   "/back": {
+    "toward": "/moregames",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES and the logos gone, TRY AGAIN moves half the way to MORE GAMES' place, to the middle of the original button row (owner review, 2026-11-05)"
+   }
   }
  }
 }

@@ -47,13 +47,20 @@ const BLEND_MODES := {"Multiply": 1, "Screen": 2, "Lighten": 3, "Darken": 4, "Di
 ## Godot frame instead of by elapsed time, as the reference player is stepped.
 static var frame_locked := false
 
-## Decoded art, shared by every build of every screen: returning to a screen reuses it.
-## `warm` fills it from a background thread, so opening a screen does not wait on disk.
-static var _images := {}
+## Art resampled to the screen scale, shared by every build of every screen (returning to a
+## screen reuses it), filled from background threads (`warm`, `_request`) so the main thread
+## never waits on decoding or resampling. Bounded: least recently shown dropped first.
+const ART_BUDGET := 256 * 1024 * 1024
 static var _resized := {}
+static var _resized_order: Array[String] = []
+static var _resized_bytes := 0
+static var _queued := {}
+## 3× sources kept for hit tests only (`_image`).
+static var _sources := {}
 static var _cache_lock := Mutex.new()
 static var _fonts := {}
 static var _warm_tasks: Array[int] = []
+static var _cancel_warm := false
 
 var screen_name: StringName
 var layout: Dictionary
@@ -76,6 +83,10 @@ var _timeline: Dictionary = {}
 var _hits: Node2D
 var press_count := 0
 var _created_frame := -1
+## Nodes whose wanted art is still being resampled (path -> record).
+var _waiting := {}
+var _warm_started := false
+var _apply_queued := false
 
 
 static func create(screen: StringName, delay := 0) -> Node2D:
@@ -177,7 +188,7 @@ func set_frame(instance: String, frame: int) -> void:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty(): return
 	rec.override = frame
-	_apply(index)
+	_queue_apply()
 
 
 ## `play()` on an instance stopped by `set_frame`: the clip runs on as the recording shows
@@ -186,7 +197,7 @@ func play(instance: String) -> void:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty(): return
 	rec.override = -1
-	_apply(index)
+	_queue_apply()
 
 
 ## `addFrameScript(frame - 1, script)`: `script` runs (deferred, after the frame is drawn
@@ -218,7 +229,7 @@ func set_shown(instance: String, shown: bool) -> void:
 	if rec.is_empty(): return
 	rec.shown = shown
 	rec.made_visible = shown
-	_apply(index)
+	_queue_apply()
 
 
 func is_shown(instance: String) -> bool:
@@ -245,14 +256,14 @@ func set_text(instance: String, text: String) -> void:
 			rec.erase("label")
 			rec.erase("live_text")
 			rec.node.set_meta("swf_text", text)
-			_apply(index)
+			_queue_apply()
 		return
 	rec["live_text"] = text
 	if not rec.has("label"): rec["label"] = _make_label(rec)
 	rec.label.text = text
 	rec.node.set_meta("swf_text", text)
 	_fit_label(rec)
-	_apply(index)
+	_queue_apply()
 
 
 func get_text(instance: String) -> String:
@@ -426,6 +437,8 @@ func _emit_stage_down(press: int) -> void:
 
 
 func _process(delta: float) -> void:
+	_reap_tasks()
+	_show_ready()
 	# A screen made by input (a click) during this frame has not run a frame yet: in the
 	# original, input lands between frames and the next frame is the screen's first.
 	if _created_frame > 0 and Engine.get_process_frames() == _created_frame: return
@@ -497,7 +510,20 @@ func _global_at(rec: Dictionary, i: int) -> Transform2D:
 	return rec.static
 
 
+## Changes made by a controller (often dozens in one handler: a clothes panel sets every
+## icon) are applied once, at the end of the frame, instead of once each.
+func _queue_apply() -> void:
+	if _apply_queued: return
+	_apply_queued = true
+	_flush_apply.call_deferred()
+
+
+func _flush_apply() -> void:
+	if _apply_queued: _apply(index)
+
+
 func _apply(i_screen: int) -> void:
+	_apply_queued = false
 	index = i_screen
 	var globals := {}
 	var shown := {}
@@ -550,50 +576,157 @@ func _apply(i_screen: int) -> void:
 			if rec.entry.get("role", "") == "sequence": ratio = 1.0
 			# The art is premultiplied: colour scales with alpha, or a fade-in stays dark.
 			node.modulate = Color(ratio, ratio, ratio, ratio)
-		_show_art(rec, i, frame)
+		# Art is picked (and resampled) only for what shows: hidden robots and panels wait.
+		if vis and parent_shown: _show_art(rec, i, frame)
 
 
 func _show_art(rec: Dictionary, i: int, _frame: int) -> void:
 	# (`_frame` is the clip frame the node shows at timeline index `i`)
 	if rec.art.is_empty(): return
 	if rec.has("live_text"):
-		for art: Dictionary in rec.art: art.sprite.visible = false
+		_switch_art(rec, -1)
 		return
+	if not rec.has("art_table"): rec.art_table = _art_table(rec.art)
+	var table: Dictionary = rec.art_table
+	var by_state: Dictionary = table.by_state
 	var pick := -1
 	var wanted: int = rec.override if rec.override > 0 else int(rec.get("state_frame", -1))
 	# At its recorded frame a widget plays its recorded art (a sequence when it animates).
 	if wanted == int(rec.frame) and rec.entry.role == "sequence": wanted = -1
 	if wanted > 0:
-		for k in rec.art.size():
-			if int(rec.art[k].get("state", -1)) == wanted and not rec.art[k].has("of"): pick = k
+		pick = by_state.get(wanted, -1)
 		# A frame that animates at another capture (the selected robot's icon) plays that
 		# capture's sequence on its clock while that capture's part shows (layout.py
 		# `frame_sequences`): its latest art at or before that clock's index.
-		var seq := -1
-		for k in rec.art.size():
-			var art: Dictionary = rec.art[k]
-			if int(art.get("state", -1)) != wanted or not art.has("of"): continue
-			if not _extra_shown_at.has(art.of): continue
-			if seq < 0 or int(art.index) <= _capture_index(art.of, index): seq = k
-		if seq >= 0: pick = seq
+		var seq: Dictionary = table.of.get(wanted, {})
+		if not seq.is_empty() and _extra_shown_at.has(seq.of):
+			pick = _latest(seq, _capture_index(seq.of, index))
 	if pick < 0 and rec.entry.role == "group":
 		# A group widget's art is its frame art, for the frame it shows now.
-		for k in rec.art.size():
-			if int(rec.art[k].get("state", -1)) == _frame and not rec.art[k].has("of"): pick = k
-	if pick < 0:
-		for k in rec.art.size():
-			var art: Dictionary = rec.art[k]
-			if art.has("state"): continue
-			# A sequence shows its latest art at or before this frame; a static piece its one image.
-			if pick < 0 or int(art.index) <= i: pick = k
+		pick = by_state.get(_frame, -1)
+	if pick < 0 and not table.plain.k.is_empty():
+		# A sequence shows its latest art at or before this frame; a static piece its one image.
+		pick = _latest(table.plain, i)
 	if pick < 0:
 		# A widget with no art at rest (hidden at its capture) shows its frame's art.
-		for k in rec.art.size():
-			if int(rec.art[k].get("state", -1)) == _frame and not rec.art[k].has("of"): pick = k
-	for k in rec.art.size():
-		var art: Dictionary = rec.art[k]
-		art.sprite.visible = k == pick
-		if k == pick: _ensure(art)
+		pick = by_state.get(_frame, -1)
+	_switch_art(rec, pick)
+
+
+## Lookup tables over a node's art, so a frame picks its image without scanning them all:
+## `plain` (sequence frames and still pieces, by timeline index), `by_state` (clip frame ->
+## its art) and `of` (clip frame -> a sequence on another capture's clock).
+static func _art_table(arts: Array) -> Dictionary:
+	var plain := {"i": PackedInt32Array(), "k": PackedInt32Array()}
+	var by_state := {}
+	var of := {}
+	var order := range(arts.size())
+	order.sort_custom(func(a, b): return int(arts[a].index) < int(arts[b].index) or (int(arts[a].index) == int(arts[b].index) and a < b))
+	for k in order:
+		var art: Dictionary = arts[k]
+		if not art.has("state"):
+			plain.i.append(int(art.index))
+			plain.k.append(k)
+		elif art.has("of"):
+			var seq: Dictionary = of.get_or_add(int(art.state), {"of": art.of, "i": PackedInt32Array(), "k": PackedInt32Array()})
+			seq.i.append(int(art.index))
+			seq.k.append(k)
+	for k in arts.size():
+		if arts[k].has("state") and not arts[k].has("of"): by_state[int(arts[k].state)] = k
+	return {"plain": plain, "by_state": by_state, "of": of}
+
+
+## The latest art of a sorted table at or before index `i` (its first when none is).
+static func _latest(table: Dictionary, i: int) -> int:
+	var j: int = (table.i as PackedInt32Array).bsearch(i, false) - 1
+	return table.k[maxi(j, 0)]
+
+
+## Show art `pick` of a node (-1: none). Its image is resampled off the main thread: until
+## it is ready the node keeps the art it shows (a sequence lags a frame), then `_process`
+## swaps it in. The comparison loop (frame-locked) resamples it at once instead.
+func _switch_art(rec: Dictionary, pick: int) -> void:
+	rec.want_art = pick
+	if pick < 0:
+		if rec.get("shown_art", -1) >= 0:
+			rec.sprite.visible = false
+			rec.sprite.texture = null
+			rec.erase("placed")
+		rec.shown_art = -1
+		return
+	# (before the screen is fitted its scale is unknown: `_refresh_art` places the art)
+	if _px <= 0.0 and not frame_locked: return
+	if not _ensure(rec.art[pick]):
+		_waiting[rec.path] = rec
+		return
+	if _place(rec, pick): rec.shown_art = pick
+	else: _waiting[rec.path] = rec  # (dropped from the cache meanwhile: made again)
+
+
+## The node's one art sprite, made when it first shows art. It draws beneath the node's
+## children (as the art was laid out before them), after the screen copy of a blend.
+func _sprite(rec: Dictionary) -> Sprite2D:
+	if rec.has("sprite"): return rec.sprite
+	var sprite := Sprite2D.new()
+	sprite.name = "Art"
+	sprite.set_meta("swf_art", true)
+	sprite.centered = false
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	sprite.visible = false
+	var blend: int = BLEND_MODES.get(String(rec.entry.get("blend_mode", "Normal")), 0)
+	if blend > 0:
+		# A piece that blends with what lies below it (Flash blend mode), via the screen.
+		# The screen is copied right before it, so it sees everything already drawn.
+		var copy := BackBufferCopy.new()
+		copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
+		copy.set_meta("swf_art", true)
+		rec.node.add_child(copy)
+		rec.node.move_child(copy, 0)
+		var shader := ShaderMaterial.new()
+		shader.shader = BLEND_SHADER
+		shader.set_shader_parameter("mode", blend)
+		sprite.material = shader
+	else:
+		var material := CanvasItemMaterial.new()
+		material.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA
+		sprite.material = material
+	rec.node.add_child(sprite)
+	rec.node.move_child(sprite, 1 if blend > 0 else 0)
+	rec.sprite = sprite
+	return sprite
+
+
+## Put art `k` (its image ready) on the node's sprite, at the screen scale.
+func _place(rec: Dictionary, k: int) -> bool:
+	var sprite := _sprite(rec)
+	var px := _px if _px > 0.0 else pixels_per_unit()
+	if sprite.texture != null and int(rec.get("placed", -1)) == k and is_equal_approx(float(rec.get("placed_px", -1.0)), px):
+		sprite.visible = true
+		return true
+	var art: Dictionary = rec.art[k]
+	var fit := _fit_of(art, px)
+	var image := _cached(fit.key)
+	if image == null:
+		if not frame_locked: _request(art.file, fit, true)
+		return false
+	sprite.texture = ImageTexture.create_from_image(image)
+	sprite.transform = fit.transform
+	sprite.self_modulate = art.get("modulate", Color.WHITE)
+	sprite.visible = true
+	rec.placed = k
+	rec.placed_px = px
+	return true
+
+
+## Nodes waiting for an image: each shows its wanted art as soon as it is ready.
+func _show_ready() -> void:
+	if _waiting.is_empty(): return
+	for path in _waiting.keys():
+		var rec: Dictionary = _waiting[path]
+		var pick: int = rec.get("want_art", -1)
+		if pick < 0 or rec.get("shown_art", -1) == pick or _ensure(rec.art[pick]):
+			_waiting.erase(path)
+			if pick >= 0 and rec.get("shown_art", -1) != pick: _switch_art(rec, pick)
 
 
 # ------------------------------------------------------------------ art
@@ -646,44 +779,37 @@ func _add_piece_art(rec: Dictionary, manifest: Dictionary) -> void:
 
 ## One rendered image of a piece. It was rendered in stage space at timeline `at`: its sprite
 ## undoes the node's transform at that frame, so later motion of the node carries the art.
-## The image itself is decoded only when the art is first shown (or by `warm`).
+## The image is decoded and resampled only when the art is first shown (or by `warm`).
 func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> Dictionary:
 	var file := ProjectSettings.globalize_path((PACK % screen_name).get_base_dir().path_join(piece.file))
 	if not FileAccess.file_exists(file): return {}
-	var sprite := Sprite2D.new()
-	sprite.name = "Art"
-	sprite.set_meta("swf_art", true)
-	sprite.centered = false
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
-	var blend: int = BLEND_MODES.get(String(rec.entry.get("blend_mode", "Normal")), 0)
-	if blend > 0:
-		# A piece that blends with what lies below it (Flash blend mode), via the screen.
-		# The screen is copied right before it, so it sees everything already drawn.
-		var copy := BackBufferCopy.new()
-		copy.copy_mode = BackBufferCopy.COPY_MODE_VIEWPORT
-		copy.set_meta("swf_art", true)
-		rec.node.add_child(copy)
-		var shader := ShaderMaterial.new()
-		shader.shader = BLEND_SHADER
-		shader.set_shader_parameter("mode", blend)
-		sprite.material = shader
-	else:
-		var material := CanvasItemMaterial.new()
-		material.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA
-		sprite.material = material
-	sprite.visible = false
-	rec.node.add_child(sprite)
 	var size: Array = piece.get("pixel_size", [])
-	var art := {"sprite": sprite, "file": file, "scale": float(piece.scale), "index": at,
+	var art := {"file": file, "scale": float(piece.scale), "index": at,
 		"size": Vector2(size[0], size[1]) if size.size() == 2 else Vector2.ZERO,
 		"at": _global_at(rec, at),
 		"origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) / float(piece.scale) + rec.offset,
-		"pixel_origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]),
-		"px": -1.0}
+		"pixel_origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1])}
 	if state > 0: art["state"] = state
+	if state <= 0 and rec.entry.has("art_index"): art["modulate"] = _undo_art_alpha(rec, at)
 	rec.art.append(art)
 	art_loaded += 1
 	return art
+
+
+## A still piece rendered away from the capture (layout.py `art_index`: its group was faded
+## out there) carries its chain's alpha at that frame, while `_apply` scales each node of the
+## chain by its alpha relative to the capture: the sprite undoes the difference.
+func _undo_art_alpha(rec: Dictionary, at: int) -> Color:
+	var fix := 1.0
+	var r := rec
+	var cap: String = rec.entry.get("timeline_of", "")
+	while not r.is_empty() and String(r.entry.get("timeline_of", "")) == cap:
+		var s = _state(r, at)
+		if s is Array and s.size() > 9 and float(s[9]) > 0.0:
+			var base := float(r.alpha_at_capture)
+			fix *= (base if base > 0.0 else 1.0) / float(s[9])
+		r = _by_path_rec.get(r.parent, {})
+	return Color(fix, fix, fix, fix)
 
 
 func _refresh_art() -> void:
@@ -691,27 +817,51 @@ func _refresh_art() -> void:
 	for rec: Dictionary in _records:
 		if rec.has("label"): _fit_label(rec)
 	for rec: Dictionary in _records:
-		for art: Dictionary in rec.art:
-			if art.sprite.visible: _ensure(art)
+		if int(rec.get("want_art", -1)) >= 0: _switch_art(rec, rec.want_art)
+	# Resample the rest of this screen's art in the background, entrances first, so later
+	# frames and other robots show without waiting.
+	if not frame_locked and not _warm_started:
+		_warm_started = true
+		warm(screen_name, _px)
 
 
-## Resample once, from the 3× source to the current screen scale.
-func _ensure(art: Dictionary) -> void:
+## Whether the art's image is ready at the screen scale; if not, it is resampled in the
+## background (at once when frame-locked: the comparison loop needs every frame drawn).
+func _ensure(art: Dictionary) -> bool:
 	var px := _px if _px > 0.0 else pixels_per_unit()
-	if is_equal_approx(px, art.px): return
-	art.px = px
-	var source := _image(art.file)
-	if source == null: return
-	var pads := _pads(art.pixel_origin, Vector2(source.get_width(), source.get_height()), art.scale, px)
-	var padded: Vector2 = Vector2(source.get_width(), source.get_height()) + pads[0] + pads[1]
-	var w := maxi(1, roundi(padded.x * px / art.scale))
-	var h := maxi(1, roundi(padded.y * px / art.scale))
-	var sprite: Sprite2D = art.sprite
-	sprite.texture = ImageTexture.create_from_image(_resized_image(art.file, source, w, h, pads))
-	# Stage units per texture pixel, per axis (the rounded size keeps the exact extent).
-	var unit := Vector2(padded.x / art.scale / w, padded.y / art.scale / h)
-	var origin: Vector2 = art.origin - (pads[0] as Vector2) / art.scale
-	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, origin)
+	if art.size == Vector2.ZERO:
+		# (no recorded pixel size: read it from the image)
+		var source := _decode(art.file)
+		if source == null: return false
+		art.size = Vector2(source.get_width(), source.get_height())
+	var fit := _fit_of(art, px)
+	if _has_cached(fit.key): return true
+	if frame_locked:
+		_make(art.file, fit.w, fit.h, fit.pads, fit.key)
+		return _has_cached(fit.key)
+	_request(art.file, fit, true)
+	return false
+
+
+## How art shows at screen scale `px`: the resampled size, its cache key, and the sprite
+## transform (stage units per texture pixel; the rounded size keeps the exact extent).
+static func _fit_of(art: Dictionary, px: float) -> Dictionary:
+	if art.has("fit") and is_equal_approx(float(art.fit_px), px): return art.fit
+	var fit := _fit(art.file, art.pixel_origin, art.size, art.scale, px)
+	var origin: Vector2 = art.origin - (fit.pads[0] as Vector2) / art.scale
+	fit.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, fit.unit, 0.0, origin)
+	art.fit = fit
+	art.fit_px = px
+	return fit
+
+
+static func _fit(file: String, pixel_origin: Vector2, size: Vector2, scale: float, px: float) -> Dictionary:
+	var pads := _pads(pixel_origin, size, scale, px)
+	var padded: Vector2 = size + pads[0] + pads[1]
+	var w := maxi(1, roundi(padded.x * px / scale))
+	var h := maxi(1, roundi(padded.y * px / scale))
+	return {"key": "%s|%d|%d|%s|%s" % [file, w, h, pads[0], pads[1]], "w": w, "h": h, "pads": pads,
+		"unit": Vector2(padded.x / scale / w, padded.y / scale / h)}
 
 
 ## Transparent source pixels to add before ([0]) and after ([1]) a piece, per axis, so its
@@ -740,75 +890,152 @@ static func _pads(pixel_origin: Vector2, size: Vector2, scale: float, px: float)
 	return [before, after]
 
 
-## The premultiplied 3× image of a piece file, decoded once.
-static func _image(file: String) -> Image:
-	_cache_lock.lock()
-	var image: Image = _images.get(file)
-	_cache_lock.unlock()
-	if image != null: return image
-	image = Image.load_from_file(file)
+## The premultiplied 3× image of a piece file (not kept: see `_image`).
+static func _decode(file: String) -> Image:
+	var image := Image.load_from_file(file)
 	if image == null: return null
 	# Premultiplied alpha, so resampling does not bleed the black of transparent pixels
 	# into edges (dark fringes on thin lines).
 	image.premultiply_alpha()
-	_cache_lock.lock()
-	_images[file] = image
-	_cache_lock.unlock()
 	return image
 
 
-static func _resized_image(file: String, source: Image, w: int, h: int, pads: Array = [Vector2.ZERO, Vector2.ZERO]) -> Image:
-	var key := "%s|%d|%d|%s|%s" % [file, w, h, pads[0], pads[1]]
+## The 3× image of a piece a hit area tests, decoded once and kept (hit areas only: every
+## piece at 3× would take over a gigabyte).
+static func _image(file: String) -> Image:
 	_cache_lock.lock()
-	var image: Image = _resized.get(key)
+	var image: Image = _sources.get(file)
 	_cache_lock.unlock()
 	if image != null: return image
-	if pads[0] != Vector2.ZERO or pads[1] != Vector2.ZERO:
-		var before: Vector2 = pads[0]
-		var size := Vector2i(Vector2(source.get_width(), source.get_height()) + before + (pads[1] as Vector2))
-		image = Image.create_empty(size.x, size.y, false, source.get_format())
-		image.blit_rect(source, Rect2i(0, 0, source.get_width(), source.get_height()), Vector2i(before))
-	else:
-		image = source.duplicate()
-	if w != image.get_width() or h != image.get_height():
-		image.resize(w, h, Image.INTERPOLATE_LANCZOS)
+	image = _decode(file)
+	if image == null: return null
 	_cache_lock.lock()
-	_resized[key] = image
+	_sources[file] = image
 	_cache_lock.unlock()
 	return image
 
 
-## Decode (and, for screen scale `px`, resample) a screen's art in a background thread,
-## while another screen is showing.
+## Resample a piece file to w×h with its pads, into the cache (any thread).
+static func _make(file: String, w: int, h: int, pads: Array, key: String) -> void:
+	var source := _decode(file) if not _cancel_warm else null
+	if source != null:
+		var image: Image
+		if pads[0] != Vector2.ZERO or pads[1] != Vector2.ZERO:
+			var before: Vector2 = pads[0]
+			var size := Vector2i(Vector2(source.get_width(), source.get_height()) + before + (pads[1] as Vector2))
+			image = Image.create_empty(size.x, size.y, false, source.get_format())
+			image.blit_rect(source, Rect2i(0, 0, source.get_width(), source.get_height()), Vector2i(before))
+		else:
+			image = source
+		if w != image.get_width() or h != image.get_height():
+			image.resize(w, h, Image.INTERPOLATE_LANCZOS)
+		_cache_put(key, image)
+	_cache_lock.lock()
+	_queued.erase(key)
+	_cache_lock.unlock()
+
+
+## Resampled art, shared by every build of every screen (returning to a screen reuses it),
+## least recently shown dropped first beyond ART_BUDGET bytes.
+static func _cache_put(key: String, image: Image) -> void:
+	_cache_lock.lock()
+	if not _resized.has(key):
+		_resized[key] = image
+		_resized_order.append(key)
+		_resized_bytes += image.get_data_size()
+		while _resized_bytes > ART_BUDGET and _resized_order.size() > 1:
+			var old: String = _resized_order.pop_front()
+			_resized_bytes -= (_resized[old] as Image).get_data_size()
+			_resized.erase(old)
+	_cache_lock.unlock()
+
+
+static func _has_cached(key: String) -> bool:
+	_cache_lock.lock()
+	var has := _resized.has(key)
+	_cache_lock.unlock()
+	return has
+
+
+static func _cached(key: String) -> Image:
+	_cache_lock.lock()
+	var image: Image = _resized.get(key)
+	if image != null:
+		_resized_order.erase(key)
+		_resized_order.append(key)
+	_cache_lock.unlock()
+	return image
+
+
+## Resample one piece in the background (once, however often it is asked for).
+static func _request(file: String, fit: Dictionary, urgent: bool) -> void:
+	_cache_lock.lock()
+	var known: bool = _queued.has(fit.key) or _resized.has(fit.key)
+	if not known: _queued[fit.key] = true
+	_cache_lock.unlock()
+	if known: return
+	var w: int = fit.w
+	var h: int = fit.h
+	var pads: Array = fit.pads
+	var key: String = fit.key
+	_warm_tasks.append(WorkerThreadPool.add_task(func(): _make(file, w, h, pads, key), urgent))
+
+
+## Resample a screen's art for screen scale `px` in a background thread, in timeline order
+## (what shows first, first), up to part of the cache budget so warming never pushes out
+## art in use. Called for the next screen while another shows, and by each screen for
+## its own remaining art.
 static func warm(screen: StringName, px: float) -> void:
 	var file := PACK % screen
-	if not FileAccess.file_exists(file): return
+	if not FileAccess.file_exists(file) or px <= 0.0: return
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(file))
 	var base := ProjectSettings.globalize_path(file.get_base_dir())
 	var jobs := []
-	for piece in manifest.get("pieces", {}).values(): jobs.append(piece)
-	for states in manifest.get("states", {}).values():
-		for piece in states.values(): jobs.append(piece)
+	for piece in manifest.get("pieces", {}).values(): jobs.append([int(piece.get("index", 0)), piece])
+	for source in ["states", "frames"]:
+		for by_frame in manifest.get(source, {}).values():
+			for piece in by_frame.values(): jobs.append([int(piece.get("index", 0)), piece])
 	for frames in manifest.get("sequences", {}).values():
-		for piece in frames.values(): jobs.append(piece)
+		for at in frames: jobs.append([int(at), frames[at]])
 	for by_frame in manifest.get("frame_sequences", {}).values():
 		for seq in by_frame.values():
-			for piece in seq.frames.values(): jobs.append(piece)
+			for at in seq.frames: jobs.append([int(at), seq.frames[at]])
+	jobs.sort_custom(func(a, b): return a[0] < b[0])
 	_warm_tasks.append(WorkerThreadPool.add_task(func():
-		for piece in jobs:
+		for job in jobs:
+			if _cancel_warm: return
+			_cache_lock.lock()
+			var full := _resized_bytes > ART_BUDGET * 3 / 4
+			_cache_lock.unlock()
+			if full: return
+			var piece: Dictionary = job[1]
+			var size: Array = piece.get("pixel_size", [])
+			if size.size() != 2: continue
 			var path: String = base.path_join(piece.file)
-			var image := _image(path)
-			if image != null and px > 0.0:
-				var s := float(piece.scale)
-				var pads := _pads(Vector2(piece.pixel_origin[0], piece.pixel_origin[1]), Vector2(image.get_width(), image.get_height()), s, px)
-				var padded: Vector2 = Vector2(image.get_width(), image.get_height()) + pads[0] + pads[1]
-				_resized_image(path, image, maxi(1, roundi(padded.x * px / s)), maxi(1, roundi(padded.y * px / s)), pads)))
+			var fit := _fit(path, Vector2(piece.pixel_origin[0], piece.pixel_origin[1]), Vector2(size[0], size[1]),
+				float(piece.scale), px)
+			_cache_lock.lock()
+			var known: bool = _queued.has(fit.key) or _resized.has(fit.key)
+			if not known: _queued[fit.key] = true
+			_cache_lock.unlock()
+			if not known: _make(path, fit.w, fit.h, fit.pads, fit.key), false))
 
 
-## Wait for background decoding before the program exits.
+## Collect finished background tasks (each must be waited for once).
+static func _reap_tasks() -> void:
+	var running: Array[int] = []
+	for task in _warm_tasks:
+		if WorkerThreadPool.is_task_completed(task): WorkerThreadPool.wait_for_task_completion(task)
+		else: running.append(task)
+	_warm_tasks = running
+
+
+## Stop background work and wait for it before the program exits.
 static func finish_warming() -> void:
+	_cancel_warm = true
 	for task in _warm_tasks: WorkerThreadPool.wait_for_task_completion(task)
 	_warm_tasks.clear()
+	_cancel_warm = false
 
 
 func _add_outline(rec: Dictionary, bounds: Array) -> void:
@@ -834,9 +1061,8 @@ class HitArea extends Button:
 		if not Rect2(Vector2.ZERO, size).has_point(point): return false
 		# A TextField is hit anywhere in its box (Flash tests its bounds, not its glyphs).
 		if rec.entry.get("kind", "") == "text": return true
-		var art: Dictionary = {}
-		for candidate: Dictionary in rec.art:
-			if candidate.sprite.visible: art = candidate
+		var shown: int = rec.get("shown_art", -1)
+		var art: Dictionary = rec.art[shown] if shown >= 0 else {}
 		# A controller's widget is hit on its recorded frame's shape: other frames may show
 		# parts that take no mouse (ClothesPanel's info panel, `mouseEnabled = false`), which
 		# would cover the neighbouring icons.
@@ -905,7 +1131,7 @@ func _state_frame(rec: Dictionary, frame) -> void:
 		rec.erase("state_frame")
 	else:
 		rec["state_frame"] = int(frame)
-	_apply(index)
+	_queue_apply()
 
 
 # ------------------------------------------------------------------ helpers

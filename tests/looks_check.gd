@@ -21,6 +21,8 @@ func _run() -> void:
 	_expect(Looks.newly_unlocked(2, 7200, []) == [1, 2] and Looks.newly_unlocked(2, 7200, [1]) == [2], "thresholds unlock each look once")
 	_expect(Looks.newly_unlocked(2, 2499, []).is_empty() and Looks.newly_unlocked(2, 48000, []).size() == 8, "2,500 to 48,000 points cover all eight looks")
 
+	_check_robot_parts()
+
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))
 	root.size = Vector2i(1280, 720)
 	app = load("res://scenes/main.tscn").instantiate()
@@ -108,6 +110,64 @@ func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))
 	print("%s: %d looks checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
+
+
+## Character select draws every robot from its recorded parts (scenes/swf/character.json):
+## - every part the robot's timeline shows (tests/goldens/character-select/char<N>.timeline.json,
+##   its entrance included) is a node of the screen or inside one drawn whole (robot 7's
+##   first arms are off the display list at its capture);
+## - with the local art pack: its hat and body clips have art for every look frame, and
+##   none of its still parts is an empty image (robot 5's head was rendered while faded out).
+func _check_robot_parts() -> void:
+	var layout: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scenes/swf/character.json"))
+	var pack_file := "res://original/screens/character/manifest.json"
+	var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(pack_file)) if FileAccess.file_exists(pack_file) else {}
+	var nodes := {}
+	for node: Dictionary in layout.nodes: nodes[String(node.get("golden_path", node.path))] = node
+	for robot in 8:
+		var top := String(layout.screen_root) + "/robotStage1/robotMc/robot%d" % robot
+		var capture := "char%d" % robot
+		var timeline: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
+			"res://tests/goldens/character-select/%s.timeline.json" % capture))
+		var missing := []
+		for path: String in timeline.tracks:
+			if not path.begins_with(top + "/") or nodes.has(path): continue
+			var shown := false
+			for change: Array in timeline.tracks[path]:
+				if change[1] != null and bool(change[1][6]): shown = true
+			if not shown: continue
+			# Drawn whole by an ancestor (a piece or a sequence renders its subtree, a widget
+			# group its frames).
+			var baked := false
+			var up := path.get_base_dir()
+			while up.begins_with(top) and not baked:
+				baked = nodes.has(up) and (String(nodes[up].role) in ["piece", "sequence"] or nodes[up].has("frames_hide"))
+				up = up.get_base_dir()
+			if not baked: missing.append(path.substr(top.length()))
+		_expect(missing.is_empty(), "robot %d: every part of its timeline is drawn (missing %s)" % [robot, missing])
+		if pack.is_empty(): continue
+		for clip: String in ["bodyMc", "hatMc"]:
+			var kind := &"body" if clip == "bodyMc" else &"hat"
+			var path := ""
+			for p: String in nodes:
+				if p.begins_with(top + "/") and p.get_file() == clip: path = String(nodes[p].path)
+			var frames: Dictionary = pack.get("frames", {}).get(path, {})
+			var missing_frames := []
+			for frame in range(1, Looks.count(robot, kind) + 2):
+				if not frames.has(str(frame)): missing_frames.append(frame)
+			_expect(not path.is_empty() and missing_frames.is_empty(),
+				"robot %d: %s has art for every look (missing frames %s)" % [robot, clip, missing_frames])
+		var empty := []
+		for p: String in nodes:
+			var node: Dictionary = nodes[p]
+			if not p.begins_with(top + "/") or node.role != "piece" or node.has("widget_frames"): continue
+			var piece = pack.pieces.get(node.path)
+			if not piece is Dictionary: continue
+			var file := ProjectSettings.globalize_path(pack_file.get_base_dir().path_join(piece.file))
+			var image := Image.load_from_file(file) if FileAccess.file_exists(file) else null
+			if image != null and image.detect_alpha() != Image.ALPHA_NONE and image.get_used_rect().size == Vector2i.ZERO:
+				empty.append(p.substr(top.length()))
+		_expect(empty.is_empty(), "robot %d: no still part is an empty image (%s)" % [robot, empty])
 
 
 ## The unlock tip flies in on its own timeline; OK is where it lands once the clip is on

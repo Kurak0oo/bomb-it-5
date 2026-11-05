@@ -80,9 +80,13 @@ func _run(case: Dictionary) -> void:
 					var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
 					_viewport.get_child(0).settle_as_recorded(golden, words[1], _frames_until(actions, step_index, words[1]))
 				"seed":
-					# The replica's RNG (scripts/simulation/avm_random.gd) is not wired into
-					# the screens yet; record it so the report shows the case expected one.
-					log.append({"frame": _frame, "note": "seed %s not applied (no seeded RNG hook yet)" % words[1]})
+					# The app's Flash `Math.random` (scripts/simulation/avm_random.gd) takes
+					# the case's seed, as the reference player's does. Only the screens' own
+					# draws use it (FallSnow); the round's RNG is not wired to it yet.
+					var app_node := _viewport.get_child(0)
+					if app_node.has_method("seed_math_random"):
+						app_node.seed_math_random(int(words[1]))
+					log.append({"frame": _frame, "note": "seed %s applied to the screens' Math.random only" % words[1]})
 				_:
 					log.append({"frame": _frame, "note": "ignored command " + " ".join(words)})
 		if action.has("capture"):
@@ -112,6 +116,13 @@ func _dump(node: Node, dump: Dictionary) -> void:
 					"alpha": float(item.get_meta("swf_alpha", item.modulate.a * item.self_modulate.a)),
 					"stage_matrix": [t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y]}
 				if item.has_meta("swf_covers"): entry.covers = item.get_meta("swf_covers")
+				# Made at random by a ported effect (FallSnow): compare.py checks it by rules.
+				if item.has_meta("swf_effect"):
+					entry.effect = String(item.get_meta("swf_effect"))
+					entry.color_transform = item.get_meta("swf_color_transform", {})
+					if item is Sprite2D and (item as Sprite2D).texture != null:
+						var r := t * Rect2(Vector2.ZERO, (item as Sprite2D).texture.get_size())
+						entry.render_bounds = [r.position.x, r.position.y, r.end.x, r.end.y]
 				for key in ["frame", "button_state", "text", "clip_depth", "clip_mask", "mask"]:
 					if item.has_meta("swf_" + key): entry[key] = item.get_meta("swf_" + key)
 				if not entry.has("frame") and item is AnimatedSprite2D:

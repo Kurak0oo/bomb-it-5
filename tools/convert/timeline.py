@@ -1,9 +1,9 @@
 """Read a recorded screen timeline (record_screen.py timeline) and answer layout questions.
 
 A track is a list of changes `[index, state]` where index counts frames since the screen
-opened and state is `[a, b, c, d, tx, ty, visible, frame, character, alpha, colour]` (colour: the RGB
-multipliers and offsets of the colour transform; older timelines stop at alpha), or null while the node is
-absent. Indices run from 0 to capture_index + period.
+opened and state is `[a, b, c, d, tx, ty, visible, frame, character, alpha, colour, filters]` (colour: the RGB
+multipliers and offsets of the colour transform; filters: each filter's type and parameters;
+older timelines stop at alpha or colour), or null while the node is absent. Indices run from 0 to capture_index + period.
 """
 import bisect
 import json
@@ -70,8 +70,8 @@ class Timeline:
         rel = _compose(inverse, c[:6]) if inverse else c[:6]
         # A descendant's own alpha is played back as a transform-like change, so it is not
         # a change of look (index 9 is alpha; older timelines have none).
-        # A descendant's colour (index 10) is part of how the parent looks.
-        return [round(v, 3) for v in rel] + list(c[6:9]) + list(c[10:11])
+        # A descendant's colour (index 10) and filters (11) are part of how the parent looks.
+        return [round(v, 3) for v in rel] + list(c[6:9]) + list(c[10:12])
 
     def look_changes(self, path):
         """Frame indices where anything inside `path` changes relative to `path` itself
@@ -84,7 +84,8 @@ class Timeline:
             prev, cur = own[k - 1][1], own[k][1]
             # Its own alpha too: Flash applies a clip's alpha to each shape inside it, so
             # overlaps compound and one image cannot be faded to match (the heart balloon).
-            if prev is None or cur is None or prev[7:10] != cur[7:10] or prev[10:11] != cur[10:11]:
+            # Its own filters as well (a blur tween is rendered into the art).
+            if prev is None or cur is None or prev[7:10] != cur[7:10] or prev[10:12] != cur[10:12]:
                 points.add(own[k][0])
         candidates = set()
         for d in inside:
@@ -110,6 +111,10 @@ class Timeline:
         """Whether the node's own alpha changes (a fade)."""
         own = [s for _, s in self.tracks.get(path, []) if s is not None]
         return len({s[9] for s in own if len(s) > 9}) > 1
+
+    def has_filters(self, path):
+        """Whether the node has filters at any recorded frame (index 11; older timelines have none)."""
+        return any(s is not None and len(s) > 11 and s[11] for _, s in self.tracks.get(path, []))
 
     def children_stable(self, path):
         for child in self.children(path):

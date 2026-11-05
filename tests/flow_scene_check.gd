@@ -86,6 +86,7 @@ func _run() -> void:
 	var over = app.screen.get_child(0)
 	_expect(over.get_text("score") == str(app.session.total_score), "Game Over shows the final total (OnePGameOverUI.initData)")
 	_expect(_find("moregames") == null, "MORE GAMES (the portal link) is removed from Game Over (owner edit)")
+	_expect(not over.has_node("FallSnow"), "Game Over drops no confetti (FallSnow only for GAME_WIN)")
 	await _click(_find("back"))
 	await app.screen_opened()
 	_expect(app.current == &"settings", "TRY AGAIN after game over returns to Game Settings")
@@ -117,6 +118,12 @@ func _run() -> void:
 		"NEXT after the last level opens the generated congratulations screen (UI_CONGRATULATIONSONEP)")
 	await app.screen_opened()
 	_expect(app.screen.get_child(0).get_text("score") == "2500", "the congratulations screen shows the final total")
+	var win: Node2D = app.screen.get_child(0)
+	_expect(win.has_node("FallSnow"), "the congratulations screen starts FallSnow (PlayerGameOver.initView, GAME_WIN)")
+	for wait in 900:
+		if not _snow(win).is_empty(): break
+		await process_frame
+	_expect(not _snow(win).is_empty(), "FallSnow drops confetti on its 300 ms timer (creatSnow)")
 
 	await _click(_find("back"))
 	await app.screen_opened()
@@ -174,6 +181,10 @@ func _tip_landed(score: Node2D) -> void:
 	for wait in 120:
 		if score.get_frame("UI_UNLOCK_TIP") >= score.get_total_frames("UI_UNLOCK_TIP"): return
 		await process_frame
+
+
+func _snow(screen: Node2D) -> Array:
+	return screen.get_children().filter(func(n): return n.has_meta("swf_effect"))
 
 
 func _click(control: Control) -> void:

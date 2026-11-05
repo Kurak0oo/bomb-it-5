@@ -95,6 +95,59 @@ def apply_owner_edits(golden, edits):
     return dict(golden, nodes=nodes)
 
 
+# Rules of the run-time effects a screen's port makes at random, which cannot match the
+# original one to one (its Math.random state at the screen is not reproducible).
+# FallSnow (zlong.bombit5.ui.FallSnow, scripts/ui/fall_snow.gd): `creatSnow` gives each
+# Bitmap a colour from `_colorArr` (ColorTransform.color: multipliers 0, offsets the
+# colour), x int(random * 710), y int(random * 20), rotation random * 180 and one random
+# scale; `enterFrameHandle` adds 1 to y each frame and removes it past y 500 or x 710.
+EFFECT_RULES = {
+    'FallSnow': {'colours': (10089983, 16777113, 16711782, 6736998, 26367, 11796326),
+                 'max_x': 710, 'max_y': 500},
+}
+
+
+def split_effects(golden, godot, effects):
+    """Take the nodes of a screen's random effects out of both sides, and check each side's
+    against the effect's rules (from the AS3) and the two counts against each other.
+    `effects` is the layout's: {effect: {'nodes': {golden path: ...}}}; Godot marks its
+    effect nodes with `effect`."""
+    report = {}
+    paths = {p for how in effects.values() for p in how.get('nodes', {})}
+    ref_nodes = [n for n in golden['nodes'] if n['path'] in paths]
+    got_nodes = [n for n in godot['nodes'] if n.get('effect')]
+    for effect in effects:
+        rules = EFFECT_RULES[effect]
+        ref = [n for n in ref_nodes if n['path'] in effects[effect].get('nodes', {})]
+        got = [n for n in got_nodes if n['effect'] == effect and n.get('effective_visible')]
+        problems = [f'{side} {n["path"]}: {p}' for side, group in (('original', ref), ('godot', got))
+                    for n in group for p in _effect_problems(n, rules)]
+        if len(ref) != len(got):
+            problems.append(f'{len(got)} shown in Godot, {len(ref)} in the original')
+        report[effect] = {'original': len(ref), 'godot': len(got), 'problems': problems, 'passed': not problems,
+                          'bounds': [n['render_bounds'] for n in ref + got if n.get('render_bounds')]}
+    golden = dict(golden, nodes=[n for n in golden['nodes'] if n['path'] not in paths])
+    godot = dict(godot, nodes=[n for n in godot['nodes'] if not n.get('effect')])
+    return golden, godot, report
+
+
+def _effect_problems(node, rules):
+    problems = []
+    m = decompose(node['stage_matrix'])
+    ct = node.get('color_transform') or {}
+    add, mult = ct.get('add', [0, 0, 0, 0]), ct.get('mult', [1, 1, 1, 1])
+    colour = (int(add[0]) << 16) | (int(add[1]) << 8) | int(add[2])
+    if any(abs(v) > 1e-6 for v in mult[:3]) or colour not in rules['colours']:
+        problems.append(f'colour transform {ct} is not one of _colorArr')
+    if not (0.0 <= m['sx'] < 1.0) or abs(m['sx'] - abs(m['sy'])) > 1e-3:
+        problems.append(f'scale {m["sx"]:.4g} x {m["sy"]:.4g} is not one random scale in [0, 1)')
+    if m['sx'] > 1e-3 and not (-1e-3 <= m['rotation'] % 360 < 180 + 1e-3):
+        problems.append(f'rotation {m["rotation"]:.4g} is not in [0, 180)')
+    if not (0 <= m['y'] <= rules['max_y']) or m['x'] > rules['max_x']:
+        problems.append(f'at ({m["x"]:.4g}, {m["y"]:.4g}), where it would have been removed')
+    return problems
+
+
 def diff(golden, godot, tolerances=None):
     """Return a report: matched/missing/extra paths and every out-of-tolerance field."""
     tol = dict(DEFAULT_TOLERANCES, **(tolerances or {}))

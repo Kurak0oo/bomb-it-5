@@ -27,6 +27,7 @@ const HowToPlayUI = preload("res://scripts/ui/how_to_play_ui.gd")
 const PowerUpsUI = preload("res://scripts/ui/power_ups_ui.gd")
 const OnePScoreUI = preload("res://scripts/ui/one_p_score_ui.gd")
 const OnePGameOverUI = preload("res://scripts/ui/one_p_game_over_ui.gd")
+const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -64,6 +65,9 @@ const DIFFICULTIES: Array[StringName] = [&"easy", &"normal", &"hard"]
 static var playable_difficulties: Array[StringName] = [&"easy", &"normal", &"hard"]
 
 var session: RefCounted = Session.new()
+## The Flash `Math.random` the ported screens draw from (FallSnow). Flash seeds it from the
+## clock; the comparison loop gives it the case's seed (`seed_math_random`).
+var math_random: RefCounted = AvmRandom.new(maxi(1, int(Time.get_unix_time_from_system() * 1000.0) & 0xFFFFFFFF))
 var screen: Control
 var game: Node2D
 var skin: RefCounted
@@ -117,6 +121,11 @@ func _ready() -> void:
 		_swf_page(id, int(timeline.opened_frame) if timeline is Dictionary else 0)
 	else:
 		show_title()
+
+
+## The reference player's `seed N` for the screens' `Math.random` (tools/compare/godot_capture.gd).
+func seed_math_random(seed: int) -> void:
+	math_random = AvmRandom.new(seed)
 
 
 func _exit_tree() -> void:
