@@ -283,3 +283,10 @@ arm missing at the start of its entrance, and the pause when switching robots.
   another node). `FallSnow` is ported (`scripts/ui/fall_snow.gd`, Flash `Math.random`
   port, frames from FFDec at zoom 1 in the pack); its confetti are a *run-time effect*:
   the comparison checks them by FallSnow's rules and count, and masks them from pixels.
+- Dress-up (2026-11-05, owner to review): timelines record filters, so art is rendered
+  where a blur changes; a still part faded or blurred at its capture is rendered at the
+  first frame its parents settle (robot 6's head). Parts removed before the capture are
+  added from their tracks (robot 8's first arms). Switching robots no longer stalls: one
+  update per frame, art looked up by table, decode and resize on worker threads, a
+  256 MB cache. Known gap: robot 6's head misses the group blur for about 6 entrance
+  frames. The results unlock-tip timeline should be re-recorded with the new recorder.
