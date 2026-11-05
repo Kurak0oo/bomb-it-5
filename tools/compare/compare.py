@@ -190,6 +190,17 @@ def effects_of(case, capture):
     return {}
 
 
+def dynamic_of(case, capture):
+    """The moving actors of the gameplay screen this capture records (layout.py `board`,
+    `dynamic`: robots, bombs, items, flames): paths and render bounds. Until they are
+    converted (checkpoint 4, slice b) they are left out of the node diff and the pixels."""
+    for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
+        layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+            return (layout.get('board') or {}).get('dynamic', {})
+    return {}
+
+
 def check(name, godot):
     case_path, case, captures = load_case(name)
     golden_dir = GOLDENS / name
@@ -212,10 +223,17 @@ def check(name, godot):
         # where either side draws one is left out of the pixel score.
         golden, actual, effects = nodes.split_effects(golden, actual, effects_of(name, capture))
         masks = masks + [b for e in effects.values() for b in e['bounds']]
+        dynamic = dynamic_of(name, capture)
+        if dynamic:
+            golden = dict(golden, nodes=[n for n in golden['nodes']
+                                         if not any(n['path'] == d or n['path'].startswith(d + '/') for d in dynamic)])
+            masks = masks + [d['render_bounds'] for d in dynamic.values() if d.get('render_bounds')]
         entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
         if effects:
             entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
             entry['node']['passed'] &= all(e['passed'] for e in effects.values())
+        if dynamic:
+            entry['dynamic'] = {'left_out': len(dynamic), 'why': 'moving actors: checkpoint 4 slice (b)'}
         if edits.get('removed') or edits.get('moved'):
             entry['owner_edits'] = {'removed': sorted(edits.get('removed', {})), 'moved': sorted(edits.get('moved', {}))}
         reference_png = WORK / name / 'reference' / f'{capture}.png'
@@ -259,6 +277,9 @@ def print_report(report):
             print(f'    {item["path"]}: {"; ".join(item["problems"])}')
         for path in n['missing'][:5]:
             print(f'    missing {path}')
+        if entry.get('dynamic'):
+            print(f'  {capture}: {entry["dynamic"]["left_out"]} moving actors left out of nodes and pixels '
+                  f'({entry["dynamic"]["why"]})')
         for effect, e in entry.get('effects', {}).items():
             print(f'  {capture}: {effect}: {e["godot"]} in Godot, {e["original"]} in the original, '
                   f'{"by its rules" if e["passed"] else "off: " + "; ".join(e["problems"][:5])} (excluded from the pixel score)')

@@ -28,6 +28,8 @@ const PowerUpsUI = preload("res://scripts/ui/power_ups_ui.gd")
 const OnePScoreUI = preload("res://scripts/ui/one_p_score_ui.gd")
 const OnePGameOverUI = preload("res://scripts/ui/one_p_game_over_ui.gd")
 const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
+const GameInterFace = preload("res://scripts/ui/game_inter_face.gd")
+const GameBoard = preload("res://scripts/ui/game_board.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -83,6 +85,8 @@ var screen_layout_override := 0
 var _layout: StringName = &""
 var _art := false
 var _page_fill := Color("214c60")
+## The comparison loop's recorded round (`round_as_recorded`): the next level starts on it.
+var recorded_round: Dictionary = {}
 
 
 func _ready() -> void:
@@ -384,7 +388,23 @@ func show_character_select() -> void:
 
 func start_session() -> void:
 	session.begin()
+	if not recorded_round.is_empty():
+		# The recorded round's robots (seat order) and stage set.
+		session.ai_robots.assign(recorded_round.robots.slice(1).map(func(r): return int(r)))
+		session.current_set = &"cinema"
 	_start_level()
+
+
+## The comparison loop only (tools/compare/godot_capture.gd `round CAPTURE`): Godot does
+## not reproduce the original's `Math.random` draws before the map, so the next level starts
+## on the round the gameplay screen's capture CAPTURE recorded (its board, its robots),
+## from that screen's layout (scenes/swf/game.json `board`, tools/convert/layout.py).
+func round_as_recorded(capture: String) -> void:
+	var screen_layout := SwfScreen.layout_of(&"game")
+	if not String(screen_layout.source.golden).ends_with("/%s.json" % capture):
+		push_error("the gameplay screen was not converted from capture %s" % capture)
+		return
+	recorded_round = screen_layout.board
 
 
 func _start_level() -> void:
@@ -401,9 +421,41 @@ func _start_level() -> void:
 		game.main_menu_requested.connect(show_main_menu)
 		add_child(game)
 	game.visible = true
+	game.detach_swf()
+	var recorded := not recorded_round.is_empty()
+	game.recorded_board = recorded_round
+	recorded_round = {}
 	game.play_level()
+	if _has_game_screen(session.current_set): _game_screen(recorded)
 	current = &"playing"
 	queue_redraw()
+
+
+## Rounds on a stage set whose gameplay screen is converted (checkpoint 4: Cinema) show the
+## generated original screen; the others keep the placeholder page until theirs is.
+func _has_game_screen(set_id: StringName) -> bool:
+	return set_id == &"cinema" and FileAccess.file_exists("res://scenes/swf/game.json")
+
+
+## The gameplay screen (scenes/swf/game.json): `GameInterFace` on its HUD, the round's map
+## laid out on its board (scripts/ui/game_board.gd), the round's actors as placeholders in
+## its board container, and the round held for as many frames as the original takes to
+## load the map (`round_start_after_input`).
+func _game_screen(recorded: bool) -> void:
+	var swf := _swf_page(&"game")
+	var board_layout: Dictionary = swf.layout.board
+	var board := GameBoard.new(swf, board_layout)
+	board.build(game.get_snapshot(), recorded)
+	var hud := GameInterFace.new(swf, self, game)
+	swf.set_meta("controller", hud)
+	swf.set_meta("board", board)
+	game.attach_swf(swf.node_for(board_layout.container), board.view_transform(GameView.ORIGIN, GameView.PITCH),
+		func(snapshot: Dictionary):
+			board.update(snapshot)
+			hud.present(snapshot))
+	game.start_delay = int(board_layout.round_start_after_input)
+	# The round's pause screen (still the placeholder page's) draws over the screen.
+	move_child(game, -1)
 
 
 func _on_level_settled(snapshot: Dictionary, delay := 0) -> void:

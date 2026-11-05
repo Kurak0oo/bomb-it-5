@@ -48,6 +48,12 @@ A change the owner made on top of a faithful screen (a part removed or moved), a
 **Run-time effect**:
 Display objects a ported screen makes at random while it runs (the congratulations screen's falling confetti), checked against the original by the effect's rules rather than node by node.
 
+**Board tile**:
+The art of one box kind on the gameplay screen: a `_brick5` frame, shrunk and centred or not as a breakable box is, rendered once and placed on any cell of the round's board.
+
+**Recorded round**:
+The board and robots a gameplay capture recorded, which the comparison loop starts its Godot round on because the original's random draws before the map are not reproduced yet.
+
 **Original pack**:
 The art and audio taken from the user's own SWF, kept on their machine and never committed.
 _Avoid_: assets, candidate art

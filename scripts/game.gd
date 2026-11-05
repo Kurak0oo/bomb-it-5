@@ -66,6 +66,22 @@ var pause_after := -1
 ## Wall clock in milliseconds for paused time; checks inject one.
 static var msec_source: Callable
 var _paused_at_msec := 0
+## The generated gameplay screen (App._game_screen): its placeholder actors view, drawn in
+## the screen's board container, and what the screen reads from each snapshot (the
+## board's boxes, GameInterFace's fields).
+var swf_view: Node2D
+var _swf_present: Callable
+## Frames before the round's first step: the original builds the map one row per
+## Timer(100) tick under its loading screen and starts the round 100 ms after
+## (`MapMaster.timerHandle`, `Game.firstMapLoadOver`); the recorded number of frames
+## (layout `board.round_start_after_input`).
+var start_delay := 0:
+	set(frames):
+		start_delay = frames
+		_delay_from = Engine.get_process_frames()
+var _delay_from := -1
+## A recorded board for the next round (the comparison loop's `round` action).
+var recorded_board: Dictionary = {}
 
 
 func _ready() -> void:
@@ -175,6 +191,11 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	var board: Dictionary
 	if practice:
 		board = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
+	elif not recorded_board.is_empty():
+		board = Layouts.recorded(recorded_board.template, recorded_board.boxes)
+		stage_set = board.skin
+		mode.stage_set = stage_set
+		recorded_board = {}
 	else:
 		var rng := RandomNumberGenerator.new()
 		rng.seed = session_seed
@@ -368,8 +389,44 @@ func _notification(what: int) -> void:
 
 func _process(delta: float) -> void:
 	fit_page()
+	if start_delay > 0:
+		# The frame the round was made in (by START's press) is not one of them: input lands
+		# between the original's frames, so its next frame is the first (as SwfScreen).
+		if Engine.get_process_frames() != _delay_from: start_delay -= 1
+		return
 	if is_instance_valid(scheduler):
 		advance_time(delta)
+
+
+## Back to the page's own view (a round without a generated screen).
+func detach_swf() -> void:
+	if is_instance_valid(swf_view): swf_view.queue_free()
+	swf_view = null
+	_swf_present = Callable()
+	start_delay = 0
+	view.visible = true
+	if is_instance_valid(scenery): scenery.visible = true
+	if is_instance_valid(hud): hud.pause_only = false
+	touch_controls.visible = true
+
+
+## Draw the round on the generated gameplay screen: the placeholder actors in `parent`
+## (its board container) through `transform`, `present` called with every snapshot. The
+## page's own board, scenery, HUD and touch controls stand down; the pause screen stays.
+func attach_swf(parent: Node2D, transform_in_parent: Transform2D, present: Callable) -> void:
+	swf_view = GameView.new()
+	swf_view.name = "PlaceholderActors"
+	swf_view.skin = visual_skin
+	swf_view.compact = true
+	swf_view.actors_only = true
+	swf_view.transform = transform_in_parent
+	parent.add_child(swf_view)
+	_swf_present = present
+	view.visible = false
+	if is_instance_valid(scenery): scenery.visible = false
+	if is_instance_valid(hud): hud.pause_only = true
+	touch_controls.visible = false
+	_refresh()
 
 
 ## Centres the 1280×720 page on the screen; the replica also keeps it inside the safe area,
@@ -449,6 +506,9 @@ func _refresh() -> void:
 		var snapshot := get_snapshot()
 		var between: float = scheduler.interpolation() if replica and not paused and is_instance_valid(scheduler) else 1.0
 		view.present(snapshot, practice, paused, previous_state, between)
+		if is_instance_valid(swf_view):
+			swf_view.present(snapshot, practice, paused, previous_state, between)
+			_swf_present.call(snapshot)
 		if replica:
 			hud.present(snapshot, paused)
 			var weapon: StringName = snapshot.actors[&"human"].get("weapon", &"")

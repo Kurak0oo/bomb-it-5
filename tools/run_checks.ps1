@@ -20,6 +20,7 @@ $suites = @(
     @{ Script = 'res://tests/mode_seam_check.gd'; Success = '^PASS: \d+ mode seam checks$' }
     @{ Script = 'res://tests/layout_check.gd'; Success = '^PASS: \d+ layout checks$' }
     @{ Script = 'res://tests/session_check.gd'; Success = '^PASS: \d+ session checks$' }
+    @{ Script = 'res://tests/game_board_check.gd'; Success = '^PASS: \d+ game board checks$' }
     @{ Script = 'res://tests/flow_scene_check.gd'; Success = '^PASS: \d+ flow scene checks$' }
     @{ Script = 'res://tests/difficulty_check.gd'; Success = '^PASS: \d+ difficulty checks$' }
     @{ Script = 'res://tests/controls_check.gd'; Success = '^PASS: \d+ controls checks$' }

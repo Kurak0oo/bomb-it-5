@@ -151,6 +151,39 @@ SCREENS = {
                  'effects': {'FallSnow': {'class': 'flash.display::Bitmap', 'art_class': 'fallSnow',
                                           'bitmap_size': [25, 25]}},
                  'states': False},
+    # The gameplay screen (checkpoint 4): the Game's two containers under GameMc
+    # (`Game.displayReInit`, `UIManager.mainMC`). The UI container holds GameInterFace's
+    # UI_interface (scripts/ui/game_inter_face.gd): the frame bitmap, the level and time
+    # fields, one panel `robotUI<N>` per robot (frames: 1 enemy, 2 P1, 3 P2, 4 no robot) with
+    # its live counters, and PAUSE (a zlong Button). The board container (gameMainContainer,
+    # scaled 32/30) holds the BackGround bitmap and one row sprite per map row, each with
+    # five layers; `board` below splits those out (`_split_board`): the box layer and the
+    # platforms on layer 0 become tiles the board view lays out from the round
+    # (scripts/ui/game_board.gd), everything else in the row layers is a moving actor
+    # (robots, bombs, items, flames: slice b) and is left out of this layout.
+    'game': {'golden': ('gameplay-cinema-start', 'cinema-start'), 'root_path': '/root1/__mainMc/GameMc',
+             'controller': 'game_inter_face',
+             'board': {
+                 # gameMainContainer: GameMc's first child (`stageContainer.addChildAt(..., 0)`).
+                 'container': '@0#0',
+                 # bgContainer at 0, an empty Sprite at 1, then one row Sprite per map row
+                 # (`addChildAt(row, y + 2)`), each with its layers in child order:
+                 # 0 platforms and flames (AbstractPlatForm, Bomb.blast), 1 boxes (Box.init),
+                 # 2 bombs and pickups (Bomb), 3 robots, 4 effects.
+                 'first_row': 2,
+                 'layers': ('platform', 'box', 'bomb', 'robot', 'effect'),
+                 # Classes on the platform layer that are part of the board (Portal.setMc
+                 # `Art_Portal_<colorId>`); anything else there (a blast's flames) moves.
+                 'features': ('Art_Portal_',),
+                 # CinemaMapData: `beginNum` 49; MapMaster.createRow draws every Cinema box
+                 # from `_brick5` frames beginNum .. beginNum + 23 (the wall and centre at +23).
+                 'begin_num': 49},
+             'interactive': {'pause': 'pause'},
+             'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),
+             'live_text': ('currentLevel', 'totalLevel', 'time', 'lifeTf', 'bombTf', 'powerTf', 'speedTf',
+                           'scoreTf'),
+             'timeline': False,
+             'states': False},
 }
 
 EDITS = Path(__file__).resolve().parent / 'owner_edits.json'
@@ -301,6 +334,9 @@ def build(name, spec):
     # addressable. The original path stays as `golden_path` for the comparison.
     prefixes = tuple(spec.get('class_segments', ()))
     nodes = _class_segments(nodes, prefixes)
+    board = None
+    if spec.get('board'):
+        nodes, board = _split_board(name, spec, case, capture, nodes, screen_root)
     by_path = {n['path']: n for n in nodes}
 
     # Parts that are off the display list at the capture (a dropdown added on demand, the
@@ -342,6 +378,9 @@ def build(name, spec):
     while path:
         expanded.add(path)
         path = parent_of(path)
+    if board:
+        # The board's containers stay groups: the board view adds its tiles to the layers.
+        expanded |= set(board['groups'])
     # Interactive instances, widgets and parts from other captures each stay their own
     # node, so every group above them is split.
     keep = set(interactive) | {p for p in by_path if p.startswith(screen_root + '/')
@@ -587,7 +626,180 @@ def build(name, spec):
             **({'capture_index_of': phases} if phases else {})),
         'nodes': layout_nodes,
         **({'effects': effects} if effects else {}),
+        **({'board': {k: v for k, v in board.items() if k != 'groups'}} if board else {}),
     }
+
+
+def _segment_index(path):
+    """`@0#5` -> 5: the order of an unnamed child among its same-depth siblings (0 if alone)."""
+    last = path.rsplit('/', 1)[-1]
+    return int(last.split('#')[1]) if '#' in last else 0
+
+
+def _local_point(matrix, x, y):
+    """Stage point -> the local space of a node with stage matrix `matrix`."""
+    a, b, c, d, tx, ty = matrix
+    det = a * d - b * c
+    x, y = x - tx, y - ty
+    return ((d * x - c * y) / det, (-b * x + a * y) / det)
+
+
+def _union(bounds):
+    bounds = [b for b in bounds if b]
+    if not bounds:
+        return None
+    return [min(b[0] for b in bounds), min(b[1] for b in bounds), max(b[2] for b in bounds), max(b[3] for b in bounds)]
+
+
+def _split_board(name, spec, case, capture, nodes, screen_root):
+    """Take the map out of the gameplay screen's golden (`board` in the spec).
+
+    The board container and its row and layer Sprites stay in the layout as groups. Their
+    contents are not laid out: the board view makes them from the round (scripts/ui/
+    game_board.gd), so the layout describes them instead:
+
+    - `boxes`: every Box (`Box.init`: a Sprite per box on its row's box layer, created in
+      column order by `MapMaster.createRow`) with its cell, `_brick5` frame, whether its clip
+      shows (`setBoxVisible`: the centre's hold cells keep an empty Sprite) and whether it is
+      a breakable box (`isExist`: `Box.setItem` shrinks its clip to 0.9 and centres it);
+    - `features`: the platforms on layer 0 that belong to the map (Portal), by class;
+    - `dynamic`: everything else in the row layers (robots, bombs, pickups, flames), with its
+      render bounds, which the comparison leaves out of the node diff and the pixel score;
+    - `excursion` and `grid`: where cell (x, y) lies in the board container, fitted to the
+      recorded boxes (the AS3 sets `x = xN * GRID_WIDTH + EXCURSION_X`, `AbstractObject`);
+    - `robots` and `robot_ui_slots`: the recorded round's robots in seat order and the HUD
+      panel positions (`GameInterFace.initView` moves robotUI<robot> to slot k), read from the
+      panels that show;
+    - `template`: the stage-set layout (assets/maps/layouts.json) this round was rolled from,
+      the one whose fixed cells, centre and portals the recorded boxes match;
+    - `round_start_after_input`: frames from the last input (START) to the capture, which the
+      case takes on the round's first frame (no map-loading screen, UI_reading, left).
+    """
+    how = spec['board']
+    container = f'{screen_root}/{how["container"]}'
+    by_path = {n['path']: n for n in nodes}
+    if container not in by_path:
+        raise SystemExit(f'{name}: board container {container} not in the golden')
+    if any(n.get('class') == 'UI_reading' for n in nodes):
+        raise SystemExit(f'{name}: the map-loading screen still shows at the capture; capture the round\'s first frame')
+    kids = sorted((p for p in by_path if parent_of(p) == container), key=_segment_index)
+    rows = [p for p in kids if _segment_index(p) >= how['first_row']]
+    layers = {}
+    for y, row in enumerate(rows):
+        own = sorted((p for p in by_path if parent_of(p) == row), key=_segment_index)
+        if len(own) != len(how['layers']):
+            raise SystemExit(f'{name}: row {row} has {len(own)} layers, expected {len(how["layers"])}')
+        for k, layer in enumerate(own):
+            layers[layer] = (y, how['layers'][k])
+    cm = by_path[container]['stage_matrix']
+
+    def subtree(path):
+        return [n for n in nodes if n['path'] == path or n['path'].startswith(path + '/')]
+
+    boxes, features, dynamic, robots = [], [], {}, []
+    for layer, (y, role) in layers.items():
+        for child in sorted((p for p in by_path if parent_of(p) == layer), key=_segment_index):
+            tree = subtree(child)
+            classes = [n.get('class') or '' for n in tree]
+            node = by_path[child]
+            local = _local_point(cm, node['stage_matrix'][4], node['stage_matrix'][5])
+            if role == 'box':
+                brick = next((n for n in tree if n.get('class') == '_brick5'), None)
+                mc = by_path.get(child + '/@0')
+                exist = bool(mc) and abs(mc['stage_matrix'][0] / node['stage_matrix'][0] - 0.9) < 1e-3
+                boxes.append({'path': child, 'row': y, 'local': [round(local[0], 3), round(local[1], 3)],
+                              'frame': brick['frame'] if brick else None, 'shown': brick is not None,
+                              'exist': exist, 'brick': brick['path'] if brick else None})
+            elif role == 'platform' and any(c.startswith(tuple(how['features'])) for c in classes):
+                features.append({'path': child, 'row': y, 'local': [round(local[0], 3), round(local[1], 3)],
+                                 'class': next(c for c in classes if c.startswith(tuple(how['features'])))})
+            else:
+                dynamic[child] = {'role': role, 'render_bounds': _union([n.get('render_bounds') for n in tree]),
+                                  'class': next((c for c in classes if c and not c.startswith('flash.')), None)}
+                robot = next((c for c in classes if c.startswith('_r') and c[2:].split('_')[0].isdigit()), None)
+                if role == 'robot' and robot:
+                    robots.append(int(robot[2:].split('_')[0]))
+    # The cell grid: rows from the row Sprites, columns from the outer ring's left column.
+    grid = 30
+    # (Golden matrices carry 4 decimals, so local positions agree to about 0.01.)
+    origin_x = [b['local'][0] - grid * round((b['local'][0] - min(c['local'][0] for c in boxes)) / grid) for b in boxes]
+    origin_y = [b['local'][1] - grid * b['row'] for b in boxes]
+    if max(origin_x) - min(origin_x) > 0.05 or max(origin_y) - min(origin_y) > 0.05:
+        raise SystemExit(f'{name}: boxes do not sit on one grid')
+    excursion = [round(sum(origin_x) / len(origin_x), 1), round(sum(origin_y) / len(origin_y), 1)]
+    for item in boxes + features:
+        cx = (item['local'][0] - excursion[0]) / grid
+        cy = (item['local'][1] - excursion[1]) / grid
+        if abs(cx - round(cx)) > 0.01 or abs(cy - round(cy)) > 0.01 or round(cy) != item['row']:
+            raise SystemExit(f'{name}: {item["path"]} is off the cell grid ({cx}, {cy})')
+        item['cell'] = [int(round(cx)), int(round(cy))]
+        del item['local'], item['row']
+    # HUD: the panels that show, in seat order (GameConfig.ROBOT_UI_Y_k grows with k).
+    panels = sorted((n for n in nodes if n['path'].startswith(screen_root + '/')
+                     and (n.get('name') or '').startswith('robotUI') and n.get('effective_visible')),
+                    key=lambda n: n['stage_matrix'][5])
+    seats = [int(n['name'][len('robotUI'):]) for n in panels]
+    if sorted(seats) != sorted(robots):
+        raise SystemExit(f'{name}: HUD panels {seats} do not match the robots on the board {robots}')
+    begin = how['begin_num']
+    template = _match_template(name, boxes, features, begin)
+    groups = [container] + [p for p in kids if _segment_index(p) < how['first_row'] and not subtree(p)[1:]]
+    groups += rows + list(layers)
+    keep = [n for n in nodes if not any(n['path'].startswith(layer + '/') for layer in layers)]
+    board = {
+        'container': container, 'container_matrix': cm, 'grid': grid, 'excursion': excursion,
+        'size': [17, len(rows)], 'rows': rows,
+        'layers': {role: [p for p, (y, r) in sorted(layers.items(), key=lambda kv: kv[1][0]) if r == role]
+                   for role in how['layers']},
+        'begin_num': begin, 'template': template,
+        'boxes': [{k: b[k] for k in ('cell', 'path', 'frame', 'shown', 'exist', 'brick')} for b in boxes],
+        'features': [{k: f[k] for k in ('cell', 'path', 'class')} for f in features],
+        'dynamic': dynamic, 'robots': seats,
+        'robot_ui_slots': [n['stage_matrix'][4:6] for n in panels],
+        'round_start_after_input': _frames_after_input(case, capture),
+        'groups': groups,
+    }
+    return keep, board
+
+
+def _frames_after_input(case, capture):
+    """Frames the case steps between its last input and the capture."""
+    actions = json.loads((ROOT / 'tools' / 'compare' / 'cases' / f'{case}.json').read_text(encoding='utf-8'))['actions']
+    frames = 0
+    for action in actions:
+        if action.get('capture') == capture:
+            return frames
+        words = action.get('command', '').split()
+        if words and words[0] == 'step':
+            frames += int(words[1])
+        elif words or 'fixture' in action:
+            frames = 0
+    raise SystemExit(f'{case}: no capture {capture}')
+
+
+def _match_template(name, boxes, features, begin):
+    """The layout (assets/maps/layouts.json) whose fixed cells, centre, hold cells and portals
+    are exactly where the recorded round has its fixed boxes and portals."""
+    layouts = json.loads((ROOT / 'assets' / 'maps' / 'layouts.json').read_text(encoding='utf-8'))['layouts']
+    fixed = {tuple(b['cell']) for b in boxes if not b['exist']}
+    soft = {tuple(b['cell']) for b in boxes if b['exist']}
+    portals = {tuple(f['cell']) for f in features}
+    found = []
+    for layout_name, layout in sorted(layouts.items()):
+        want_fixed, want_soft, want_portals = set(), set(), set()
+        for y, row in enumerate(layout['rows']):
+            for x, cell in enumerate(row):
+                if cell.startswith('fixedProp') or cell in ('centerProp', 'holdProp'):
+                    want_fixed.add((x, y))
+                elif cell == 'unfixedProp_r':
+                    want_soft.add((x, y))
+                elif cell.startswith('portal_'):
+                    want_portals.add((x, y))
+        if fixed == want_fixed and soft <= want_soft and portals == want_portals:
+            found.append(layout_name)
+    if len(found) != 1:
+        raise SystemExit(f'{name}: the recorded board matches {len(found)} layouts ({found})')
+    return found[0]
 
 
 def _add_absent_at_capture(nodes, by_path, expanded, screen_root, tl, key):

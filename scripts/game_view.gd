@@ -39,6 +39,10 @@ var skin: RefCounted = VisualSkin.new()
 ## Replica page (ReplicaLayout): only the board and its sprites; the HUD, scenery and
 ## controls are separate nodes, and no titles, captions or hints are drawn.
 var compact := false
+## On the generated gameplay screen (scenes/swf/game.json): the board, its boxes and
+## features are the screen's own (scripts/ui/game_board.gd); this view draws only what
+## moves (robots, bombs, items, flames), as placeholders until slice (b).
+var actors_only := false
 
 
 ## Drawing between steps (#79): `previous` is the step before `snapshot` and `between` how far
@@ -99,13 +103,14 @@ func _draw() -> void:
 ## The board, its sprites and the outcome/pause overlay over the board.
 func _board_layer() -> void:
 	if state.is_empty(): return
-	for cell in state.board:
-		_tile(cell, &"floor")
-	# Boxes after every floor, row by row, so overhanging props cover the row above.
-	for cell in state.board:
-		if state.board[cell] != &"floor": _tile(cell, state.board[cell], false)
-	_marquee()
-	_features()
+	if not actors_only:
+		for cell in state.board:
+			_tile(cell, &"floor")
+		# Boxes after every floor, row by row, so overhanging props cover the row above.
+		for cell in state.board:
+			if state.board[cell] != &"floor": _tile(cell, state.board[cell], false)
+		_marquee()
+		_features()
 	for cell in state.pickups:
 		var at := _center(cell)
 		if skin.draw(self, "item." + state.pickups[cell], ArtCatalog.rect("item." + state.pickups[cell], at), state.tick): continue

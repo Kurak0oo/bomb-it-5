@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-cinema-start",
+ "case_sha256": "2da9668a5c9356cb7d03d6cab90f47b91d1d641ecbe8c953129af27f63f74a8b",
+ "fps": 35.0,
+ "frames": {
+  "cinema-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "239eff90fd17d57721e88b9e38c132c4dd3bf83b07ffcefeb782008154c2cf1f",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

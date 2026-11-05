@@ -243,6 +243,87 @@ func set_enabled(instance: String, enabled: bool) -> void:
 	rec.hit.mouse_filter = Control.MOUSE_FILTER_STOP if enabled else Control.MOUSE_FILTER_IGNORE
 
 
+## Move an instance and everything inside it by `delta` stage units (`x`/`y` set by its
+## controller: GameInterFace puts each robot's panel at its seat's slot). Its art and live
+## text go with it.
+func move_instance(instance: String, delta: Vector2) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty() or delta == Vector2.ZERO: return
+	var root: String = rec.path
+	for r: Dictionary in _records:
+		if r.path == root or String(r.path).begins_with(root + "/"):
+			r.static = Transform2D(r.static.x, r.static.y, r.static.origin + delta)
+	_queue_apply()
+
+
+## The stage position of an instance (its matrix's translation).
+func instance_position(instance: String) -> Vector2:
+	var rec: Dictionary = _by_name.get(instance, {})
+	return Vector2.ZERO if rec.is_empty() else (rec.static as Transform2D).origin
+
+
+## A node its controller lays out at run time under a layout group (the board's boxes and
+## portals, scripts/ui/game_board.gd). `entry` is shaped like a layout node (`path`,
+## `parent`, `stage_matrix`, `role`, ...); `art`, if any, is an image of the local pack
+## (manifest `tiles` / `features`) rendered on another node at stage matrix `art.at`: the
+## sprite undoes that matrix, so the image lands on this node wherever it is.
+func add_node(entry: Dictionary, art: Dictionary = {}) -> Dictionary:
+	var path: String = entry.path
+	var parent: Node2D = by_path.get(entry.parent, self)
+	var node := Node2D.new()
+	node.name = _node_name(path)
+	parent.add_child(node)
+	by_path[path] = node
+	var rec := {"entry": entry, "node": node, "parent": entry.parent, "path": path,
+		"static": _matrix(entry.stage_matrix), "visible": bool(entry.get("effective_visible", true)),
+		"frame": entry.get("frame", 0), "offset": Vector2.ZERO, "track_index": PackedInt32Array(),
+		"track": [], "art": [], "override": -1, "shown": true, "hit": null, "alpha_at_capture": 1.0}
+	node.set_meta("swf_path", path)
+	node.set_meta("swf_kind", entry.get("kind", "movie_clip"))
+	node.set_meta("swf_alpha", 1.0)
+	node.set_meta("swf_baked", entry.get("role", "piece") == "piece")
+	node.set_meta("swf_frame", int(entry.get("frame", 0)))
+	_records.append(rec)
+	_by_path_rec[path] = rec
+	if not art.is_empty():
+		var added := _add_art(rec, art, 0, -1)
+		if not added.is_empty(): added["at"] = _matrix(art.at)
+	elif entry.get("render_bounds") is Array:
+		_add_outline(rec, entry.render_bounds)
+	_queue_apply()
+	return rec
+
+
+## Take a run-time node (and its art) off the screen: `removeChild` of a box that broke.
+func remove_node(path: String) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	_records.erase(rec)
+	_by_path_rec.erase(path)
+	by_path.erase(path)
+	_waiting.erase(path)
+	rec.node.queue_free()
+
+
+## A run-time node's display-list path changes (`@0#k` of the boxes after a removed one).
+func rename_node(path: String, new_path: String) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty() or path == new_path: return
+	_by_path_rec.erase(path)
+	by_path.erase(path)
+	rec.path = new_path
+	rec.entry.path = new_path
+	_by_path_rec[new_path] = rec
+	by_path[new_path] = rec.node
+	rec.node.set_meta("swf_path", new_path)
+
+
+## The local pack's manifest of this screen (art the controllers lay out themselves).
+func pack() -> Dictionary:
+	if not has_meta("pack"): set_meta("pack", _manifest())
+	return get_meta("pack")
+
+
 ## `TextField.text = text`: the field's recorded art gives way to live text, drawn in the
 ## SWF's own font (original/fonts/, exported by record_screen.py fonts) with its format.
 func set_text(instance: String, text: String) -> void:

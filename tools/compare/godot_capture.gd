@@ -18,7 +18,8 @@ extends SceneTree
 ## the original's round, so the app ends the current round with the points the original
 ## showed at CAPTURE (its golden) and opens the score screen so that, when CAPTURE is
 ## taken, the screen is as far into its timeline as the original's was
-## (`App.settle_as_recorded`).
+## (`App.settle_as_recorded`). `round CAPTURE` starts the next round on the board and robots
+## the gameplay capture CAPTURE recorded (`App.round_as_recorded`), for the same reason.
 
 const STAGE := Vector2i(700, 510)
 
@@ -79,6 +80,10 @@ func _run(case: Dictionary) -> void:
 					var golden_path := "res://tests/goldens/%s/%s.json" % [case.name, words[1]]
 					var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
 					_viewport.get_child(0).settle_as_recorded(golden, words[1], _frames_until(actions, step_index, words[1]))
+				"round":
+					# The next round starts on the board and robots the gameplay screen's
+					# capture recorded (App.round_as_recorded).
+					_viewport.get_child(0).round_as_recorded(words[1])
 				"seed":
 					# The app's Flash `Math.random` (scripts/simulation/avm_random.gd) takes
 					# the case's seed, as the reference player's does. Only the screens' own

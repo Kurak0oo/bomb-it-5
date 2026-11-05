@@ -48,6 +48,9 @@ var state: Dictionary = {}
 var paused := false
 ## The pause control; a Button so desktop clicks and touch both reach it.
 var pause_button: Button
+## On the generated gameplay screen the HUD is the original's (GameInterFace): this node
+## draws only the placeholder pause screen.
+var pause_only := false
 
 
 func _ready() -> void:
@@ -67,6 +70,7 @@ func present(snapshot: Dictionary, is_paused: bool) -> void:
 	state = snapshot
 	paused = is_paused
 	pause_button.disabled = state.is_empty() or state.outcome != &"running" or state.get("round_stage") == &"ending"
+	pause_button.visible = not pause_only
 	queue_redraw()
 
 
@@ -114,6 +118,9 @@ func pause_art() -> bool:
 
 func _draw() -> void:
 	if state.is_empty() or not state.actors.has(&"human"): return
+	if pause_only:
+		if paused: _pause_screen()
+		return
 	_cartoon()
 	_status(state.actors[&"human"])
 	_timer()

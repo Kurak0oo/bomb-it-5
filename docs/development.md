@@ -298,3 +298,21 @@ chrome and the Cinema board at the round's first frame, generated from the displ
 (b) robots, bombs, flames and items drawn from SWF clips at their registration points,
 driven by simulation snapshots; (c) frame-matched cases against seeded recordings;
 (d) the replica_* placeholders removed; then the owner plays it.
+
+Slice (a), 2026-11-05 (owner to review): case `gameplay-cinema-start` (seed 42, Arcade,
+Normal, Cinema, robot 0, through the real menus) captures the round's first frame, 61
+frames after START: the map-loading screen (`LoadingMapUI`, UI_reading) is gone and TIME
+still reads 180. `scenes/swf/game.json` is generated from it: the HUD (`GameInterFace`,
+ported in `scripts/ui/game_inter_face.gd`) and the board background as pieces; the board's
+row layers as empty groups, with a `board` section read from the golden (every box's cell,
+`_brick5` frame and kind, the portals, the grid, the round's robots and HUD slots, its
+template, CinemaStage3). The art pass renders a *board tile* per frame and box kind;
+`scripts/ui/game_board.gd` ports `MapMaster.createRow` / `Box.setItem` to lay the round's own
+board out of them, and `tests/game_board_check.gd` checks that port against the recorded
+board. Robots, bombs, items and flames (the other row layers) are slice (b): left out of
+the node diff and masked from pixels; the old view draws them as placeholders. Godot starts
+the case on the *recorded round* (Godot-only `round` action) and holds the round for the
+recorded 61 frames. Result: nodes 378/378, SSIM 0.942 (ceiling 0.935), max region ΔE 5.0.
+Known gaps: no loading screen yet; portals, the centre marquee and the TIME flash are still;
+HUD panels of robots not in the recording (1, 3, 4, 7) have no art; other stage sets keep the
+placeholder page.

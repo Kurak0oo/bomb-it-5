@@ -7,13 +7,16 @@ const ORDER: Array[StringName] = [&"birthday_party", &"candy_factory", &"cinema"
 	&"luxury_stores", &"magic_library"]
 ## `fixed_choices` and `soft_choices` are the art lists `<Set>MapData.init` draws two from each
 ## round (`_fixedArr`, `_unfixedArr`); see docs/evidence/edition-5-stage-tiles.md.
+## `begin_num` and `fixed_prop_num` are each `<Set>MapData`'s `beginNum` and `fixedPropNum`:
+## `MapMaster.createRow` draws a box from `_brick5` frame `beginNum - 1 + fixed choice`,
+## `soft choice + beginNum + fixedPropNum - 1`, or `beginNum + 23` (wall and centre).
 const SETS := {
-	&"birthday_party": {"title": "BIRTHDAY PARTY", "prefix": "BirthdayParty", "vehicles": [&"horse", &"moto"], "features": [&"toy_hand"], "fixed_choices": [1, 2, 3], "soft_choices": [1, 2, 3, 4, 5, 6, 7, 8]},
-	&"candy_factory": {"title": "CANDY FACTORY", "prefix": "CandyFactory", "vehicles": [&"moto", &"car"], "features": [&"belt"], "fixed_choices": [1, 2, 4], "soft_choices": [1, 2, 3, 4, 5, 6]},
-	&"cinema": {"title": "CINEMA", "prefix": "Cinema", "vehicles": [&"moto", &"car"], "features": [&"portal"], "fixed_choices": [1, 3], "soft_choices": [1, 2, 3, 4]},
-	&"zoo": {"title": "ZOO", "prefix": "Zoo", "vehicles": [&"horse", &"dragon"], "features": [&"crocodile"], "fixed_choices": [1, 5], "soft_choices": [1, 2, 3, 4]},
-	&"luxury_stores": {"title": "LUXURY SHOP", "prefix": "LuxuryStores", "vehicles": [&"car"], "features": [], "fixed_choices": [1, 3], "soft_choices": [1, 2, 3, 4, 5, 6]},
-	&"magic_library": {"title": "MAGIC LIBRARY", "prefix": "MagicLibrary", "vehicles": [&"horse", &"moto"], "features": [&"spellbook"], "fixed_choices": [1, 2, 4], "soft_choices": [1, 2, 3]},
+	&"birthday_party": {"begin_num": 1, "fixed_prop_num": 4, "title": "BIRTHDAY PARTY", "prefix": "BirthdayParty", "vehicles": [&"horse", &"moto"], "features": [&"toy_hand"], "fixed_choices": [1, 2, 3], "soft_choices": [1, 2, 3, 4, 5, 6, 7, 8]},
+	&"candy_factory": {"begin_num": 25, "fixed_prop_num": 4, "title": "CANDY FACTORY", "prefix": "CandyFactory", "vehicles": [&"moto", &"car"], "features": [&"belt"], "fixed_choices": [1, 2, 4], "soft_choices": [1, 2, 3, 4, 5, 6]},
+	&"cinema": {"begin_num": 49, "fixed_prop_num": 4, "title": "CINEMA", "prefix": "Cinema", "vehicles": [&"moto", &"car"], "features": [&"portal"], "fixed_choices": [1, 3], "soft_choices": [1, 2, 3, 4]},
+	&"zoo": {"begin_num": 73, "fixed_prop_num": 7, "title": "ZOO", "prefix": "Zoo", "vehicles": [&"horse", &"dragon"], "features": [&"crocodile"], "fixed_choices": [1, 5], "soft_choices": [1, 2, 3, 4]},
+	&"luxury_stores": {"begin_num": 97, "fixed_prop_num": 4, "title": "LUXURY SHOP", "prefix": "LuxuryStores", "vehicles": [&"car"], "features": [], "fixed_choices": [1, 3], "soft_choices": [1, 2, 3, 4, 5, 6]},
+	&"magic_library": {"begin_num": 121, "fixed_prop_num": 5, "title": "MAGIC LIBRARY", "prefix": "MagicLibrary", "vehicles": [&"horse", &"moto"], "features": [&"spellbook"], "fixed_choices": [1, 2, 4], "soft_choices": [1, 2, 3]},
 }
 ## Features the round implements; a set needing anything else stays unavailable.
 const SUPPORTED_FEATURES: Array[StringName] = [&"portal", &"belt", &"toy_hand", &"crocodile", &"spellbook"]

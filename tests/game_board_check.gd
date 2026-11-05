@@ -1,0 +1,61 @@
+extends SceneTree
+## The gameplay screen's board (checkpoint 4, slice a): the port of `MapMaster.createRow` /
+## `Box.setItem` in scripts/ui/game_board.gd, fed the round the original recorded
+## (scenes/swf/game.json `board`, read back by `Layouts.recorded`), must lay out the same
+## boxes, frames, kinds, display order and features as the original's display list, and
+## place each cell where the original placed its Sprite. (A hold cell's Sprite has no clip,
+## so no frame to compare.)
+
+const GameBoard = preload("res://scripts/ui/game_board.gd")
+const Layouts = preload("res://scripts/simulation/layouts.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
+var failures := 0
+var checks := 0
+
+
+func _initialize() -> void:
+	var layout := SwfScreen.layout_of(&"game")
+	var recorded: Dictionary = layout.board
+	var board := Layouts.recorded(recorded.template, recorded.boxes)
+	_expect(board.skin == &"cinema" and board.layout == recorded.template, "the recorded round is a %s layout" % recorded.template)
+	var soft := 0
+	for cell in board.cells:
+		if board.cells[cell] == &"soft": soft += 1
+	_expect(soft == recorded.boxes.filter(func(b): return b.exist).size(), "every recorded breakable box is a soft block (%d)" % soft)
+	var snapshot := {"board": board.cells, "board_meta": {"skin": board.skin, "variants": board.variants,
+		"center": board.center, "portal_ids": board.portal_ids}}
+	var view := GameBoard.new(null, recorded)
+	var items: Dictionary = view._items_of(snapshot)
+	var want: Array = recorded.boxes.map(func(b): return [_cell(b.cell), int(b.frame) if b.shown else 0, b.shown, b.exist])
+	var got: Array = items.boxes.map(func(b): return [_cell(b.cell), int(b.frame) if b.shown else 0, b.shown, b.exist])
+	_expect(got == want, "createRow lays out the original's %d boxes in its order, frames, visibility and kinds" % want.size())
+	var features: Array = recorded.features.map(func(f): return [_cell(f.cell), f["class"]])
+	var got_features: Array = items.features.map(func(f): return [_cell(f.cell), f["class"]])
+	features.sort()
+	got_features.sort()
+	_expect(got_features == features, "portals are Art_Portal_<pair> on their cells")
+	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://" + String(layout.source.golden)))
+	var matrices := {}
+	for node: Dictionary in golden.nodes: matrices[node.path] = node.stage_matrix
+	var worst := 0.0
+	for box: Dictionary in recorded.boxes:
+		var m: Array = view.cell_matrix(Vector2(box.cell[0], box.cell[1]))
+		var g: Array = matrices[box.path]
+		worst = maxf(worst, Vector2(m[4] - g[4], m[5] - g[5]).length())
+	# (Flash positions in twips, and the golden keeps 4 decimals of the 32/30 scale.)
+	_expect(worst < 0.05, "each cell's Sprite sits where the original's does (worst %.4f units)" % worst)
+	_expect(GameBoard._child_path("/a", 0, 1) == "/a/@0" and GameBoard._child_path("/a", 2, 5) == "/a/@0#2",
+		"an only child is `@0`, siblings `@0#k`")
+	print("%s: %d game board checks" % ["PASS" if failures == 0 else "FAIL", checks])
+	quit(1 if failures else 0)
+
+
+func _cell(cell: Array) -> Vector2i:
+	return Vector2i(int(cell[0]), int(cell[1]))
+
+
+func _expect(condition: bool, label: String) -> void:
+	checks += 1
+	if not condition:
+		failures += 1
+		push_error("FAIL: " + label)

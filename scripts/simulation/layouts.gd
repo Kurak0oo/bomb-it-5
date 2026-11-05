@@ -93,3 +93,58 @@ static func _feature_kind(instance: String) -> StringName:
 		"slidePlat": return &"slide_platform"
 		"toyHand": return &"toy_hand"
 	return StringName(instance)
+
+
+## The board of a recorded round (the gameplay screen's layout, `board` in
+## scenes/swf/game.json, from tools/convert/layout.py): the template it was rolled from with
+## the soft blocks the original rolled and every box's art choice, read back from its
+## `_brick5` frame through `MapMaster.createRow`'s frame rules (`StageSets` begin_num and
+## fixed_prop_num). The comparison loop starts its round on it (`App.round_as_recorded`),
+## since the original's `Math.random` draws before the map are not reproduced.
+static func recorded(name: String, boxes: Array) -> Dictionary:
+	var layout: Dictionary = all()[name]
+	var entry: Dictionary = StageSets.SETS[StringName(layout.set)]
+	var begin: int = entry.begin_num
+	var frame_at := {}
+	for box: Dictionary in boxes:
+		if box.shown: frame_at[Vector2i(int(box.cell[0]), int(box.cell[1]))] = int(box.frame)
+	var cells: Dictionary = {}
+	var features: Dictionary = {}
+	var variants: Dictionary = {}
+	var pairs: Dictionary = {}
+	var fixed_choices := []
+	var soft_choices := []
+	for y in layout.rows.size():
+		var row: Array = layout.rows[y]
+		for x in row.size():
+			var cell := Vector2i(x, y)
+			var instance: String = row[x]
+			var tile: StringName = &"floor"
+			if instance == "unfixedProp_r" and frame_at.has(cell):
+				tile = &"soft"
+				variants[cell] = frame_at[cell] - begin - int(entry.fixed_prop_num) + 1
+				if not soft_choices.has(variants[cell]): soft_choices.append(variants[cell])
+			elif instance.begins_with("fixedProp"):
+				tile = &"solid"
+				variants[cell] = frame_at.get(cell, begin) - begin + 1
+				# The ring's numbered props show the round's first choice (`_fixedArr[0]`).
+				if not fixed_choices.has(variants[cell]):
+					if instance != "fixedProp_r": fixed_choices.push_front(variants[cell])
+					else: fixed_choices.append(variants[cell])
+			elif instance in ["centerProp", "holdProp"]:
+				tile = &"solid"
+			elif instance.begins_with("portal_"):
+				tile = &"portal"
+				pairs.get_or_add(instance.get_slice("_", 1), []).append(cell)
+			elif instance != "" and not instance.begins_with("unfixedProp"):
+				var kind := _feature_kind(instance)
+				tile = &"solid" if kind == &"toy_hand" else kind
+				features[cell] = {"kind": kind, "detail": instance.get_slice("_", 1)}
+			cells[cell] = tile
+	var board := BoardData.make(cells, BoardData._link(pairs), StringName(layout.set), features, name)
+	board.variants = variants
+	board.fixed_choices = fixed_choices
+	board.soft_choices = soft_choices
+	board.portal_ids = BoardData.pair_ids(pairs)
+	board.center = CENTER if layout.rows[CENTER.y][CENTER.x] == "centerProp" else null
+	return board

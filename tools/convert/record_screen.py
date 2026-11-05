@@ -177,6 +177,11 @@ def filters_of(node):
 def record_timeline(case_name, player_path, swf):
     case = load_case(case_name)
     for capture, (screen, spec) in screens_of(case_name).items():
+        if spec.get('timeline') is False:
+            # The gameplay screen: its round moves on by itself, so it has no loop to record;
+            # what it shows is laid out from the round (layout.py `board`).
+            print(f'{screen}: no timeline (the round drives it)')
+            continue
         golden = json.loads((GOLDENS / case_name / f'{capture}.json').read_text(encoding='utf-8'))
         p = Player(player_path, swf)
         try:
@@ -455,6 +460,8 @@ def record_art(case_name, player_path, swf):
                     'frames': frames, 'frame_sequences': frame_sequences}
         if layout.get('effects'):
             manifest['effects'] = _record_effects(layout, target, swf)
+        if layout.get('board'):
+            manifest['tiles'], manifest['features'] = _record_tiles(case, capture, layout, player_path, swf, seen, target)
         check = _self_check(layout, manifest, target)
         manifest['self_check'] = check
         (target / 'manifest.json').write_text(json.dumps(manifest, indent=1) + '\n', encoding='utf-8')
@@ -554,13 +561,19 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
                     if index:
                         p.command('step 1')
                     render_sequences(index)
-            present = {n['path'] for n in p.display()['nodes']}
+            dump = p.display()['nodes']
+            present = {n['path'] for n in dump}
+            shown = {n['path'] for n in dump if n.get('effective_visible')}
             for node in nodes:
                 path = node['path']
                 if not node.get('widget_frames'):
                     continue
                 if PLAYER_PATHS.get(path, path) not in present:
                     print(f'  warning: {path} not on the display list at the {where} capture; no art')
+                    continue
+                if PLAYER_PATHS.get(path, path) not in shown and not node.get('art_from'):
+                    # A hidden clip renders nothing (the HUD panel of a robot not in this round).
+                    print(f'  note: {path} is hidden at the {where} capture; no frame art')
                     continue
                 for frame in node['widget_frames']:
                     stored = _store(p, path, target, tmp, seen, frame, node.get('frames_hide'))
@@ -570,6 +583,72 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
             p.close()
             shutil.rmtree(tmp, ignore_errors=True)
     return frames
+
+
+# Box._SKIP_FRAMES: `_brick5` frames that are not box art (beginNum + 23, the wall and the
+# centre, is one of them but MapMaster.createRow draws it all the same).
+SKIP_FRAMES = (24, 61, 62, 63, 64, 72, 86, 96, 112, 113)
+
+
+def _record_tiles(case, capture, layout, player_path, swf, seen, target):
+    """The board's tile art (layout.py `board`), at the capture: one image per `_brick5`
+    frame the stage set draws (`beginNum` .. `beginNum + 23`) and per box kind (`Box.setItem`:
+    a breakable box, `isExist`, shrinks its clip to 0.9 and centres it in the 32-unit cell),
+    and one per board feature class (a Portal). A box recorded with that frame and kind is
+    rendered whole; any other frame is rendered by sending a recorded box's `_brick5` there,
+    and its clip moved to where `setItem` centres that frame (from the frame's width and
+    height). Each image keeps the stage matrix of the box it was rendered in (`at`), so the
+    board view can place it on any cell."""
+    board = layout['board']
+    tiles, features = {}, {}
+    p = Player(player_path, swf)
+    tmp = Path(tempfile.mkdtemp(prefix='bombit5-tiles-'))
+    try:
+        for line in single_steps(case, capture):
+            p.command(line)
+        dump = {n['path']: n for n in p.display()['nodes']}
+        begin = board['begin_num']
+        frames = [f for f in range(begin, begin + 24) if f not in SKIP_FRAMES or f == begin + 23]
+        for exist in (False, True):
+            hosts = [b for b in board['boxes'] if b['shown'] and b['exist'] == exist]
+            if not hosts:
+                print(f'  warning: no {"breakable" if exist else "fixed"} box at the capture; no such tiles')
+                continue
+            for frame in frames:
+                key = f'{frame}|{int(exist)}'
+                same = next((b for b in hosts if b['frame'] == frame), None)
+                if same:
+                    stored = _store(p, same['path'], target, tmp, seen)
+                    if stored:
+                        tiles[key] = dict(stored, at=dump[same['path']]['stage_matrix'], source=same['path'])
+                    continue
+                host = hosts[0]
+                stored = _store(p, host['brick'], target, tmp, seen, frame)
+                if not stored:
+                    continue
+                box, mc = dump[host['path']]['stage_matrix'], dump[host['path'] + '/@0']['stage_matrix']
+                shift = [0.0, 0.0]
+                if exist:
+                    # Box.setItem: `_mc.x = (32 - _mc.width) / 2` (and y), in the box's units.
+                    cs = box[0]
+                    rb = stored['render_bounds']
+                    for k in (0, 1):
+                        new = (32 - (rb[2 + k] - rb[k]) / cs) / 2
+                        old = (mc[4 + k] - box[4 + k]) / cs
+                        shift[k] = (new - old) * cs
+                origin = [stored['pixel_origin'][k] + round(shift[k] * SCALE) for k in (0, 1)]
+                tiles[key] = dict(stored, pixel_origin=origin, at=box, source=host['brick'], frame_sent=frame)
+        for feature in board['features']:
+            if feature['class'] in features:
+                continue
+            stored = _store(p, feature['path'], target, tmp, seen)
+            if stored:
+                features[feature['class']] = dict(stored, at=dump[feature['path']]['stage_matrix'], source=feature['path'])
+    finally:
+        p.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+    print(f'board: {len(tiles)} tile images, {len(features)} feature images')
+    return tiles, features
 
 
 def _render_frame(p, index, wanted, sequences, pieces, seen, target, tmp):
@@ -623,13 +702,43 @@ def _blend(below, layer, mode):
     return Image.fromarray(np.dstack([out * 255, np.full(out.shape[:2], 255.0)]).round().astype(np.uint8), 'RGBA')
 
 
+def _paste_board(composite, layout, manifest, target):
+    """The recorded round's boxes and features, from their tile art (_record_tiles)."""
+    board = layout['board']
+    cm = board['container_matrix']
+    items = [(b, manifest.get('tiles', {}).get(f'{b["frame"]}|{int(b["exist"])}')) for b in board['boxes'] if b['shown']]
+    items += [(f, manifest.get('features', {}).get(f['class'])) for f in board['features']]
+    # Painter's order: row by row, the platforms under the boxes (Game.displayReInit).
+    items.sort(key=lambda it: (it[0]['cell'][1], 0 if 'class' in it[0] else 1))
+    for item, art in items:
+        if not art:
+            continue
+        x = cm[4] + cm[0] * (board['excursion'][0] + board['grid'] * item['cell'][0])
+        y = cm[5] + cm[3] * (board['excursion'][1] + board['grid'] * item['cell'][1])
+        dx, dy = round((x - art['at'][4]) * SCALE), round((y - art['at'][5]) * SCALE)
+        image = Image.open(target / art['file']).convert('RGBA')
+        layer = Image.new('RGBA', composite.size, (0, 0, 0, 0))
+        layer.paste(image, (art['pixel_origin'][0] + dx, art['pixel_origin'][1] + dy))
+        composite = Image.alpha_composite(composite, layer)
+    return composite
+
+
 def _self_check(layout, manifest, target):
     timeline = layout.get('timeline') or {}
     index = str(timeline.get('capture_index', 0))
     bg = tuple(layout['stage'].get('background') or [255, 255, 255, 255])
     composite = Image.new('RGBA', (700 * SCALE, 510 * SCALE), tuple(bg[:3]) + (255,))
+    board = layout.get('board')
+    in_board = pasted = False
     for node in layout['nodes']:
         entry = None
+        if board:
+            under = node['path'] == board['container'] or node['path'].startswith(board['container'] + '/')
+            if in_board and not under and not pasted:
+                # The board's tiles lie in its row layers, under everything after the board.
+                composite = _paste_board(composite, layout, manifest, target)
+                pasted = True
+            in_board = in_board or under
         if node.get('from_capture'):
             continue  # recorded in another capture (e.g. a closed dropdown)
         if node['role'] == 'piece' and node.get('effective_visible') and 'art_index' not in node:
@@ -652,6 +761,9 @@ def _self_check(layout, manifest, target):
     # So are the random effects' nodes (FallSnow's confetti), which the port makes at run time.
     masks += [[v * SCALE for v in n['render_bounds']] for e in layout.get('effects', {}).values()
               for n in e['nodes'].values() if n.get('render_bounds')]
+    # And the board's moving actors (slice b: robots, bombs, items, flames).
+    masks += [[v * SCALE for v in d['render_bounds']] for d in (layout.get('board') or {}).get('dynamic', {}).values()
+              if d.get('render_bounds')]
     result = pixels.compare(target / 'reference-3x.png', target / 'composite.png', target / 'composite-heatmap.png',
                             masks=masks)
     return {k: result.get(k) for k in ('ssim', 'max_region_delta_e', 'regions_over', 'worst_region')}
