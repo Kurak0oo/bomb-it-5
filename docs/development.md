@@ -273,4 +273,7 @@ tools/run_checks.sh passes end to end. Later fixes:
   that capture's sequence (`frame_sequences`);
 - live text uses the SWF font's ascent and draws a TextField's GlowFilter;
 - controllers are released with their screen (listeners cleared, fields nulled).
-Awaiting owner review of the checkpoint 3 screens.
+Owner review (2026-11-05): all checkpoint 3 screens accepted; the empty How to Play
+panel stays. Asked for: TRY AGAIN centred on the end screens and the game-complete
+confetti (FallSnow) ported; fixes for robot 6's missing head while dressing up, robot 8's
+arm missing at the start of its entrance, and the pause when switching robots.
