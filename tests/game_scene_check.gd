@@ -1,7 +1,6 @@
 extends SceneTree
 
 const Fidelity = preload("res://scripts/fidelity.gd")
-const TouchControls = preload("res://scripts/touch_controls.gd")
 var failures := 0
 var checks := 0
 
@@ -19,61 +18,6 @@ func _run() -> void:
 	if scene.has_method("get_snapshot"):
 		_expect(scene.get_snapshot().board.size() == 255, "practice loads the recorded full board")
 		scene.set_process(false)
-		var touch := InputEventScreenTouch.new()
-		touch.index = 0
-		touch.position = TouchControls.STICK
-		touch.pressed = true
-		root.push_input(touch, true)
-		Fidelity.original = false
-		var drag := InputEventScreenDrag.new()
-		drag.index = 0
-		drag.position = TouchControls.STICK + Vector2(55, 55)
-		root.push_input(drag, true)
-		scene.advance_time(1.0 / 35.0)
-		var direction: Vector2 = scene.get_snapshot().commands[0].direction
-		_expect(direction.x > 0.6 and direction.y > 0.6, "adapted: stick produces a normalized diagonal through the real command path")
-		touch.pressed = false
-		root.push_input(touch, true)
-		for sector in [Vector2.RIGHT, Vector2(1, 1), Vector2.DOWN, Vector2(-1, 1),
-			Vector2.LEFT, Vector2(-1, -1), Vector2.UP, Vector2(1, -1)]:
-			touch.pressed = true
-			root.push_input(touch, true)
-			drag.position = touch.position + sector.normalized() * 100
-			root.push_input(drag, true)
-			scene.advance_time(1.0 / 35.0)
-			_expect(scene.get_snapshot().commands[0].direction.is_equal_approx(sector.normalized()),
-				"adapted: each stick sector requests its normal-speed direction")
-			touch.pressed = false
-			root.push_input(touch, true)
-		Fidelity.original = true
-		# Original profile (decision E): the stick still requests eight directions.
-		for row in [[Vector2(1, 0.3), Vector2.RIGHT], [Vector2(0.9, 1), Vector2(1, 1).normalized()], [Vector2(-1, -0.4), Vector2.LEFT],
-			[Vector2(-0.8, -1), Vector2(-1, -1).normalized()]]:
-			touch.pressed = true
-			root.push_input(touch, true)
-			drag.position = touch.position + row[0].normalized() * 100
-			root.push_input(drag, true)
-			scene.advance_time(1.0 / 35.0)
-			_expect(scene.get_snapshot().commands[0].direction.is_equal_approx(row[1]), "original: the stick requests eight directions (E)")
-			touch.pressed = false
-			root.push_input(touch, true)
-		touch.pressed = true
-		root.push_input(touch, true)
-		drag.position = touch.position + Vector2(9, 0)
-		root.push_input(drag, true)
-		scene.advance_time(1.0 / 35.0)
-		_expect(scene.get_snapshot().commands[0].direction == Vector2.ZERO, "the stick central deadzone requests idle")
-		touch.pressed = false
-		root.push_input(touch, true)
-		touch.position = Vector2(500, 300)
-		touch.pressed = true
-		root.push_input(touch, true)
-		scene.advance_time(1.0 / 35.0)
-		_expect(scene.get_snapshot().commands[0].direction == Vector2.ZERO and scene.get_snapshot().commands[0].bomb_events.is_empty(),
-			"unrelated board touches do not create gameplay commands")
-		touch.pressed = false
-		root.push_input(touch, true)
-		drag.position = TouchControls.STICK + Vector2(55, 55)
 		scene.start_session(false, 42)
 		for index in 20:
 			scene.advance_time(1.0 / 35.0)
@@ -134,24 +78,6 @@ func _run() -> void:
 		scene.propagate_notification(Node.NOTIFICATION_APPLICATION_FOCUS_IN)
 		_expect(scene.get_snapshot().paused, "focus return does not automatically resume the scene")
 		scene.toggle_pause()
-		scene.start_session(true, 42)
-		touch.position = TouchControls.STICK
-		touch.pressed = true
-		root.push_input(touch, true)
-		root.push_input(drag, true)
-		var action_touch := InputEventScreenTouch.new()
-		action_touch.index = 1
-		action_touch.position = TouchControls.BOMB
-		action_touch.pressed = true
-		root.push_input(action_touch, true)
-		scene.advance_time(1.0 / 35)
-		_expect(scene.get_snapshot().commands[0].bomb_events == [&"down"] and scene.get_snapshot().commands[0].direction.length() > 0.99, "independent touches move and press bomb concurrently")
-		scene.advance_time(1.0 / 35)
-		_expect(scene.get_snapshot().commands[0].bomb_events.is_empty(), "held touch does not synthesize another bomb press")
-		action_touch.pressed = false
-		root.push_input(action_touch, true)
-		scene.advance_time(1.0 / 35)
-		_expect(scene.get_snapshot().commands[0].bomb_events == [&"up"], "touch release supplies one up event")
 	scene.queue_free()
 	await process_frame
 	print("%s: %d game scene checks" % ["PASS" if failures == 0 else "FAIL", checks])

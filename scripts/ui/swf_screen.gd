@@ -339,7 +339,8 @@ func rename_node(path: String, new_path: String) -> void:
 			r.entry.parent = r.parent
 		_by_path_rec[renamed] = r
 		by_path[renamed] = r.node
-		r.node.set_meta("swf_path", renamed)
+		# (A node that only draws inside a baked clip has no display-list path to report.)
+		if r.node.has_meta("swf_path"): r.node.set_meta("swf_path", renamed)
 		if r.node.has_meta("swf_covers"):
 			var covers: Array = []
 			for covered: String in r.node.get_meta("swf_covers"):

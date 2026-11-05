@@ -40,6 +40,11 @@ func _init(seed_value: int = -1) -> void:
 
 
 ## START on character select: fresh lives, totals and AI robots, first stage set.
+## The original's `Math.random` (the app's, scripts/simulation/avm_random.gd): with it, the AI
+## robots are drawn as `CharacterSelectUI.startFunc` draws them.
+var math_random: RefCounted
+
+
 func begin() -> void:
 	level = 1
 	lives = START_LIVES
@@ -49,12 +54,28 @@ func begin() -> void:
 		if index != robot: others.append(index)
 	ai_robots.clear()
 	ai_looks.clear()
+	if math_random != null:
+		_start_func(others)
+		_rotation = StageSets.available_sets()
+		current_set = stage if stage != &"random" else _draw_set()
+		return
 	for seat in 3:
 		var ai_robot: int = others.pop_at(_rng.randi_range(0, others.size() - 1))
 		ai_robots.append(ai_robot)
 		ai_looks.append([_rng.randi_range(0, Looks.count(ai_robot, &"hat")), _rng.randi_range(0, Looks.count(ai_robot, &"body"))])
 	_rotation = StageSets.available_sets()
 	current_set = stage if stage != &"random" else _draw_set()
+
+
+## `CharacterSelectUI.startFunc` (one player): P2, P3 and P4 from the other seven robots, each
+## `list[int(Math.random() * list.length)]`, taken out of the list. Their looks are drawn per
+## level (`AbstractGameMode.createAIPlayer`, Game._create_ai_players); until then the default.
+func _start_func(others: Array[int]) -> void:
+	for seat in 3:
+		var at := int(math_random.random() * others.size())
+		ai_robots.append(others[at])
+		others.remove_at(at)
+		ai_looks.append([0, 0])
 
 
 ## Records a settled level; `lives_after` is the human's retry hearts after settlement.

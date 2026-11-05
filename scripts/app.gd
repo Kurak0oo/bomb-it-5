@@ -2,8 +2,7 @@ extends Control
 ## Main scene: the edition 5 screen flow (`UIManager`) around the round host.
 ## Title (`UILoading`) → main menu → Game Settings → character select → levels → score
 ## screen → game win/over. Every screen is a generated original screen
-## (scripts/ui/swf_screen.gd). `--practice` after `--` opens the development practice board
-## directly; `--screen NAME` one generated screen (`--screen score --capture loss-score`: the
+## (scripts/ui/swf_screen.gd). `--screen NAME` one generated screen (`--screen score --capture loss-score`: the
 ## score screen with a recorded capture's points; `--screen game_over` / `game_win`: the end
 ## screens with their recorded final score).
 
@@ -113,9 +112,7 @@ func _ready() -> void:
 	add_child(audio)
 	Quality.apply(get_viewport())
 	var args := OS.get_cmdline_user_args()
-	if "--practice" in args:
-		_open_practice()
-	elif "--screen" in args and args.find("--screen") + 1 < args.size():
+	if "--screen" in args and args.find("--screen") + 1 < args.size():
 		# Development launch: one generated original screen on its own, for review.
 		var id := StringName(args[args.find("--screen") + 1])
 		if id == &"score":
@@ -392,6 +389,7 @@ func show_character_select() -> void:
 
 
 func start_session() -> void:
+	session.math_random = math_random
 	session.begin()
 	if not recorded_round.is_empty():
 		# The recorded round's robots (seat order) and stage set.
@@ -436,15 +434,9 @@ func _start_level() -> void:
 	game.recorded_board = recorded_round
 	recorded_round = {}
 	game.play_level()
-	if _has_game_screen(session.current_set): _game_screen(recorded)
+	_game_screen(recorded)
 	current = &"playing"
 	queue_redraw()
-
-
-## Rounds on a stage set whose gameplay screen is converted (checkpoint 4: Cinema) show the
-## generated original screen; the others keep the placeholder page until theirs is.
-func _has_game_screen(set_id: StringName) -> bool:
-	return set_id == &"cinema" and FileAccess.file_exists("res://scenes/swf/game.json")
 
 
 ## The gameplay screen (scenes/swf/game.json): `GameInterFace` on its HUD, the round's map
@@ -456,6 +448,10 @@ func _game_screen(recorded: bool) -> void:
 	var swf := _swf_page(&"game")
 	var board_layout: Dictionary = swf.layout.board
 	var board := GameBoard.new(swf, board_layout)
+	# Only Cinema's board art is in the pack (checkpoint 4): another stage set's boxes and
+	# features are drawn by the placeholder layer over Cinema's floor, without outlines.
+	var own_art: bool = session.current_set == &"cinema"
+	board.outline_missing = own_art
 	var loading := _loading_map(swf)
 	board.build(game.get_snapshot(), recorded, loading == null)
 	# The recorded round's robots wear the recorded looks; a rolled round's the session's.
@@ -472,7 +468,7 @@ func _game_screen(recorded: bool) -> void:
 			if not robots_made.done: return
 			board.update(snapshot)
 			actors.update(snapshot)
-			hud.present(snapshot))
+			hud.present(snapshot), not own_art)
 	game.start_delay = int(board_layout.round_start_after_input)
 	if FileAccess.file_exists("res://scenes/swf/pause.json"):
 		game.swf_pause = true
@@ -501,8 +497,6 @@ func _game_screen(recorded: bool) -> void:
 				loading.get_meta("controller").destroy()
 				loading.queue_free()
 				swf.rename_node(hud_path.get_base_dir().path_join("@0#0"), hud_path))
-	# The round's pause screen (still the placeholder page's) draws over the screen.
-	move_child(game, -1)
 
 
 ## `UIManager.loadingMap`: LoadingMapUI over the gameplay screen, from START until the round
@@ -529,7 +523,7 @@ func _pause_screen(is_paused: bool) -> void:
 	if not is_instance_valid(game_swf): return
 	var hud_path := _hud_path(game_swf)
 	var board: String = game_swf.layout.board.container
-	var shown: Node2D = game_swf.get_meta("pause", null)
+	var shown: Node2D = game_swf.get_meta("pause") if game_swf.has_meta("pause") else null
 	if is_paused and not is_instance_valid(shown):
 		var pause := SwfScreen.create(&"pause", 0)
 		screen.add_child(pause)
@@ -713,14 +707,6 @@ func show_end(won: bool, delay := -1) -> void:
 	if score_ui != null: score_ui.destroy()
 
 
-func _open_practice() -> void:
-	_clear_screen()
-	game = Game.new()
-	game.visual_skin = skin
-	add_child(game)
-	current = &"practice"
-
-
 func _end_game() -> void:
 	if is_instance_valid(game):
 		game.queue_free()
@@ -857,6 +843,10 @@ func _shade() -> ColorRect:
 
 ## A pickup icon: the workbench `item.<kind>` slot or the native badge.
 class ItemIcon extends Control:
+	const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
+		&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
+		&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●",
+		&"horse": "HRS", &"dragon": "DRG", &"kick": "K", &"boxing": "G"}
 	var kind: StringName
 	var skin: RefCounted
 
@@ -865,6 +855,6 @@ class ItemIcon extends Control:
 		if skin != null and skin.draw(self, "item." + kind, rect): return
 		draw_circle(size / 2, size.x / 2 - 2, Color("d1fff0"))
 		draw_arc(size / 2, size.x / 2 - 2, 0, TAU, 28, Color("60b4a4"), 2, Quality.edges)
-		var text: String = GameView.ITEM_NAMES.get(kind, "?")
+		var text: String = ITEM_NAMES.get(kind, "?")
 		draw_string(ThemeDB.fallback_font, size / 2 + Vector2(-text.length() * 4.5, 6), text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, 15, Color("173c40"))

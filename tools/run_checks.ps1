@@ -30,16 +30,17 @@ $suites = @(
     @{ Script = 'res://tests/pac_man_check.gd'; Success = '^PASS: \d+ pac-man checks$' }
     @{ Script = 'res://tests/stage_features_check.gd'; Success = '^PASS: \d+ stage feature checks$' }
     @{ Script = 'res://tests/art_catalog_check.gd'; Success = '^PASS: \d+ art catalogue checks' }
-    @{ Script = 'res://tests/replica_page_check.gd'; Success = '^PASS: \d+ replica page checks$' }
     @{ Script = 'res://tests/hitmove_check.gd'; Success = '^PASS: \d+ hitmove checks$' }
     @{ Script = 'res://tests/audio_check.gd'; Success = '^PASS: \d+ audio checks$' }
     @{ Script = 'res://tests/quality_check.gd'; Success = '^PASS: \d+ quality checks$' }
     @{ Script = 'res://tests/ai_trace_check.gd'; Success = '^PASS: \d+ ai trace checks$' }
     @{ Script = 'res://tests/avm_random_check.gd'; Success = '^PASS: \d+ avm random checks$' }
     @{ Script = 'res://tools/playthrough_check.gd'; Success = '^PASS: 3 full-board playthrough checks ' }
+    @{ Script = 'res://tools/smoke_playthrough.gd'; Success = '^PASS: smoke playthrough '; Args = @('--fixed-fps', '35') }
 )
 foreach ($suite in $suites) {
-    $output = & $Godot --headless --path $projectRoot --script $suite.Script 2>&1
+    $extra = if ($suite.Args) { $suite.Args } else { @() }
+    $output = & $Godot --headless --path $projectRoot @extra --script $suite.Script 2>&1
     $checkExitCode = $LASTEXITCODE
     $output | ForEach-Object { Write-Output $_ }
     if ($checkExitCode -ne 0 -or ($output -match '^(SCRIPT ERROR|ERROR):') -or

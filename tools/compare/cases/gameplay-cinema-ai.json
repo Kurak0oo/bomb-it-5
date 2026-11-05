@@ -1,0 +1,98 @@
+{
+ "name": "gameplay-cinema-ai",
+ "screen": "game",
+ "origin": "The AI running (checkpoint 4, slice c): the round of gameplay-cinema-start (seed 42, Arcade, Normal, Cinema, robot 0) with its three AI robots left alone and the player standing still. Godot's AI draws from the round's Math.random (the original's place, tests/goldens/gameplay-cinema-start/math_random.json). Every robot, bomb and frame matches through ai-30 (frame 731). The original's AI is not reproducible further: its callbacks run on the host clock (Action.setAction's TweenMax.delayedCall(0.1), AbstractState's Timer(2000), AbstractAttackState's setTimeout), so two recordings of this case already differ at round frame 10 (robot 5 turned up in one, down in the other); recorded to ai-360, Godot first differs from this recording between ai-30 and ai-60 (robot 6, Mint: another row). The goldens are this recording's first two captures.",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does.",
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ },
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "capture": "ai-10"
+  },
+  {
+   "command": "step 20"
+  },
+  {
+   "capture": "ai-30"
+  }
+ ],
+ "thresholds": {
+  "ssim": 0.915,
+  "delta_e": 8
+ },
+ "thresholds_note": "No 3x frame of this recording exists (another run of the original's AI differs from frame 10), so the pixel pass line is the gameplay screen's measured 3x->1x ceiling (SSIM 0.935, as gameplay-cinema-bomb) minus 0.02, and region dE 8."
+}

@@ -1,0 +1,131 @@
+{
+ "name": "gameplay-cinema-ride",
+ "screen": "game",
+ "origin": "A ride on the gameplay screen (checkpoint 4, slice c): the round of gameplay-cinema-bomb (AI robots stopped at its first frame); the pickup fixture gives the player a CarProp on its cell, collected on the next engine frame (mount: CarProp.changeStage, resetRobotMc: _r0_Car_Down at frame 1), the player drives down (drive: the clip playing). Recorded further (released after 10 frames, parked at frame 715), the original's ride clip advances once more after the release than Godot's (frame 2, Godot 1): not explained yet, so the case ends at drive; its goldens are that recording's.",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ },
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "pickup",
+    "kind": "car"
+   },
+   "godot_command": "pickup car",
+   "godot_note": "The pickup fixture makes the original's own pickup class on the player's cell (AbstractItem.init), collected by GetItemCommand on the next engine frame; Godot puts the same pickup on the player's cell (Game.give_pickup)."
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "capture": "mount"
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "capture": "drive"
+  }
+ ]
+}

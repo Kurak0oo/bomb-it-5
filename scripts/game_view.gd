@@ -1,5 +1,10 @@
 extends Node2D
-## Original vector artwork. Receives snapshots; never owns or advances gameplay.
+## The gameplay screen's placeholder layer (App._game_screen, in the board container): what the
+## round shows that has no original art in the pack yet. Weapon actions other than the hammer's
+## and their shots, mode objects (Green Zone's flag) and, for a stage set other than Cinema, the
+## board itself (its `_brick5` tiles, background and features are not rendered yet). Robots,
+## bombs, blasts and pickups are the original's (scripts/ui/game_actors.gd). Receives
+## snapshots; never owns or advances gameplay.
 
 const PITCH := 36.0
 ## Portal transit length in steps (`BombSimulation`, `SendRobotCommand` totalFrame).
@@ -7,18 +12,12 @@ const TRANSIT_TICKS := 29
 const ORIGIN := Vector2(334, 86)
 ## Art slots and native colours per robot r0-r7 (Session.ROBOTS order).
 const ROBOT_SLOTS := [&"human", &"ruby", &"lime", &"gold", &"violet", &"slate", &"mint", &"snow"]
-const ROBOT_TITLES := ["BLUE", "RUBY", "LIME", "GOLD", "VIOLET", "SLATE", "MINT", "SNOW"]
 const ROBOT_COLORS := [Color("66d8ff"), Color("ed86c6"), Color("b6e36a"), Color("ffd470"),
 	Color("b394f0"), Color("9aa6b4"), Color("8ce2b5"), Color("f2f4f7")]
-const LOOK_COLORS := [Color("e35d6a"), Color("4f8fe0"), Color("f2b84b"), Color("5cc48d"), Color("a66ce0"), Color("ef8a3c"), Color("3fb7c9")]
 ## Cinema soft choices 1-4 (`_brick5` frames 53-56); the first and third keep their older slot ids.
 const CINEMA_SOFT := ["board.clapper", "board.popcorn_box", "board.popcorn", "board.clapperboard"]
 ## Standalone seat robots when an actor carries no explicit robot.
 const SEAT_ROBOTS := {&"human": 0, &"ruby": 1, &"mint": 6, &"gold": 3}
-const ITEM_NAMES := {&"capacity": "B+", &"power": "P+", &"speed": "S+", &"life": "♥",
-	&"shield": "O", &"invincible": "★", &"car": "CAR", &"moto": "RIDE", &"landmine": "M",
-	&"hammer": "H", &"flamer": "F", &"laser": "L", &"triple": "3", &"shotgun": "●",
-	&"horse": "HRS", &"dragon": "DRG", &"kick": "K", &"boxing": "G"}
 const Quality = preload("res://scripts/quality.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
@@ -36,13 +35,10 @@ var state: Dictionary = {}
 var practice := true
 var paused := false
 var skin: RefCounted = VisualSkin.new()
-## Replica page (ReplicaLayout): only the board and its sprites; the HUD, scenery and
-## controls are separate nodes, and no titles, captions or hints are drawn.
-var compact := false
-## On the generated gameplay screen (scenes/swf/game.json): the board, its boxes and
-## features are the screen's own (scripts/ui/game_board.gd); this view draws only what
-## scripts/ui/game_actors.gd does not draw yet (weapon attacks, projectiles, mode objects).
-var actors_only := false
+## The board's boxes and features too (a stage set whose board art is not in the pack).
+var draw_board := false
+## Weapon actions GameActors draws from their own clips (HammerProp's `sinker*_Play`).
+const ORIGINAL_ATTACKS: Array[StringName] = [&"hammer"]
 
 
 ## Drawing between steps (#79): `previous` is the step before `snapshot` and `between` how far
@@ -61,49 +57,8 @@ func present(snapshot: Dictionary, is_practice: bool, is_paused: bool, previous_
 
 
 func _draw() -> void:
-	if compact:
-		_board_layer()
-		return
-	if not skin.draw(self, "ui.background", Rect2(Vector2.ZERO, Vector2(1280, 720))):
-		draw_rect(Rect2(-position - get_parent().position, get_viewport_rect().size + Vector2(100, 100)), Color("102c3b"))
-	if not skin.draw(self, "ui.frame", Rect2(10, 10, 1260, 700)):
-		_box(Rect2(10, 10, 1260, 700), Color("163e51"), Color("39798a"), 18)
-	_label(Vector2(30, 49), "LOCAL ARCADE", 29, Color("ffd989"))
-	_label(Vector2(335, 43), _board_title(), 27, Color("ffe6ad"))
-	_label(Vector2(336, 67), "PRACTICE" if practice else _mode_caption(), 13, Color("9acbd3"))
-	if state.is_empty():
-		return
-	if not skin.draw(self, "ui.timer", Rect2(805, 25, 141, 42)):
-		_box(Rect2(805, 25, 141, 42), Color("102c3b"), Color("568d98"), 10)
-	_label(Vector2(818, 52), "TIME  %03d" % ceili(state.remaining / 35.0), 21, Color("ffd989"))
-	if not skin.draw(self, "ui.board_frame", Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554))):
-		_box(Rect2(ORIGIN - Vector2.ONE * 7, Vector2(626, 554)), Color("164957"), Color("a7d5c5"), 9)
-	_board_layer()
-	_label(Vector2(1010, 339), "HOW TO PLAY", 17, Color("ffd989"))
-	var keys: Dictionary = state.get("bindings", {})
-	var arrows: bool = keys.is_empty() or (keys.up == KEY_UP and keys.left == KEY_LEFT and keys.down == KEY_DOWN and keys.right == KEY_RIGHT)
-	_label(Vector2(1010, 367), "Arrows to move" if arrows else "%s %s %s %s to move" % [_key(keys.up), _key(keys.left), _key(keys.down), _key(keys.right)], 17)
-	_label(Vector2(1010, 393), "%s: bomb / item" % ("Space" if keys.is_empty() else _key(keys.bomb)), 17)
-	_label(Vector2(1010, 419), "P: pause", 17)
-	_label(Vector2(30, 658), "MOVE", 15, Color("a9d4de"))
-	_label(Vector2(30, 681), "Eight directions · equal speed", 13, Color("8cb1bb"))
-	_label(Vector2(1020, 653), "Tap to place / use", 15, Color("b9cdd2"))
-	_label(Vector2(340, 658), "CONTROLLED ACTION PREVIEW" if state.get("comparison_fixture", false) else _board_caption(), 14, Color("a9d4de"))
-	var hint: String = "Reset restores the board. Start Match adds three rivals." if practice else {
-		&"kill": "Be the first to kill 10 enemies!",
-		&"green_zone": "Stay on the green zone to occupy it. First to 10 wins!",
-		&"pac_man": "Avoid the enemies and collect all of the coins!"}.get(state.get("mode", &"arcade"), "Eliminate every rival before time runs out.")
-	if practice and not state.actors[&"human"].alive:
-		hint = "Actor eliminated. Choose RESET to try again."
-	_label(Vector2(340, 684), hint, 15, Color("ffd989"))
-	if paused or state.outcome != &"running" or state.get("round_stage") == &"ending":
-		_overlay()
-
-
-## The board, its sprites and the outcome/pause overlay over the board.
-func _board_layer() -> void:
 	if state.is_empty(): return
-	if not actors_only:
+	if draw_board:
 		for cell in state.board:
 			_tile(cell, &"floor")
 		# Boxes after every floor, row by row, so overhanging props cover the row above.
@@ -111,49 +66,17 @@ func _board_layer() -> void:
 			if state.board[cell] != &"floor": _tile(cell, state.board[cell], false)
 		_marquee()
 		_features()
-	# The generated gameplay screen draws its pickups from their original clips (GameActors).
-	for cell in state.pickups if not actors_only else {}:
-		var at := _center(cell)
-		if skin.draw(self, "item." + state.pickups[cell], ArtCatalog.rect("item." + state.pickups[cell], at), state.tick): continue
-		if state.pickups[cell] == &"coin":
-			draw_circle(at, 6, Color("f6c94a"))
-			draw_arc(at, 6, 0, TAU, 16, Color("a8741c"), 1.5, Quality.edges)
-			continue
-		draw_circle(at + Vector2(1, 2), 14, Color(0, 0, 0, 0.3))
-		draw_circle(at, 13, Color("d1fff0"))
-		draw_arc(at, 13, 0, TAU, 28, Color("60b4a4"), 2, Quality.edges)
-		var text: String = ITEM_NAMES.get(state.pickups[cell], "?")
-		_label(at + Vector2(-text.length() * 4.0, 5), text, 13, Color("173c40"))
 	_mode_objects()
-	for bomb in state.bombs if not actors_only else []:
-		var bomb_at: Vector2 = ORIGIN + (_blend(_was_bomb(bomb), bomb.position) + Vector2.ONE * 0.5) * PITCH if bomb.has("position") else _center(bomb.cell)
-		_bomb(bomb_at, bomb.get("kind", &"bomb") == &"mine")
-	for flame in state.flames if not actors_only else []:
-		for cell in flame.cells:
-			var at := _center(cell)
-			if skin.draw(self, "effect.flame", ArtCatalog.rect("effect.flame", at), state.tick,
-				Vector2.DOWN, minf(1, flame.get("count", 0) / 17.0)): continue
-			var size_factor := clampf((17.0 - flame.get("count", 0)) / 5.0, 0.15, 1.0)
-			draw_circle(at, 17 * size_factor, Color("ed7040"))
-			draw_circle(at + Vector2(0, -2), 12 * size_factor, Color("ffd473"))
-			draw_circle(at + Vector2(-2, -4), 6 * size_factor, Color("fff1b6"))
 	for attack in state.attacks:
-		if attack.get("layer") == &"behind": _attack(attack)
+		if attack.get("layer") == &"behind" and attack.kind not in ORIGINAL_ATTACKS: _attack(attack)
 	for projectile in state.projectiles:
 		if projectile.get("phase") == &"cleanup": continue
 		var at: Vector2 = ORIGIN + (_blend(_was_projectile(projectile), projectile.position) + Vector2.ONE * 0.5) * PITCH
 		if skin.draw(self, "projectile." + projectile.kind, ArtCatalog.rect("projectile." + projectile.kind, at), state.tick, projectile.direction): continue
 		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, Quality.edges)
 		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
-	var seat := 0
-	for id in state.actors:
-		var actor: Dictionary = state.actors[id]
-		var robot: int = actor.get("robot", SEAT_ROBOTS.get(id, seat))
-		if not actors_only: _actor(actor, robot, id)
-		if not compact: _hud(actor, seat, robot)
-		seat += 1
 	for attack in state.attacks:
-		if attack.get("layer") != &"behind": _attack(attack)
+		if attack.get("layer") != &"behind" and attack.kind not in ORIGINAL_ATTACKS: _attack(attack)
 	_mode_overlays()
 
 
@@ -162,17 +85,6 @@ func _board_layer() -> void:
 func _blend(was: Variant, now: Vector2) -> Vector2:
 	if between >= 1.0 or was == null or (was as Vector2).distance_to(now) > 1.5: return now
 	return (was as Vector2).lerp(now, between)
-
-
-func _was_actor(id: StringName) -> Variant:
-	var actor: Dictionary = previous.get("actors", {}).get(id, {})
-	return actor.position if actor.get("alive", false) else null
-
-
-func _was_bomb(bomb: Dictionary) -> Variant:
-	for old in previous.get("bombs", []):
-		if old.actor_id == bomb.actor_id and old.has("position") and (old.position as Vector2).distance_to(bomb.position) <= 1.5: return old.position
-	return null
 
 
 func _was_projectile(projectile: Dictionary) -> Variant:
@@ -189,14 +101,6 @@ func _portal_pair(cell: Vector2i) -> int:
 
 func _board_skin() -> StringName:
 	return state.get("board_meta", {}).get("skin", &"cinema") if not state.is_empty() else &"cinema"
-
-
-func _points_label() -> String:
-	return {&"kill": "KILLS", &"green_zone": "FLAGS", &"pac_man": "COINS"}.get(state.get("mode", &""), "SCORE")
-
-
-func _points_goal() -> int:
-	return state.get("points_goal", 10)
 
 
 ## Green Zone flag with each holder's progress (`Flag`, `r<robot>_progress`).
@@ -226,29 +130,6 @@ func _mode_overlays() -> void:
 			draw_rect(bar, Color(0, 0, 0, 0.5))
 			if not skin.draw(self, "mode.progress", filled, state.tick): draw_rect(filled, ROBOT_COLORS[robot])
 			row += 1
-
-
-func _key(keycode: int) -> String:
-	return {KEY_UP: "↑", KEY_DOWN: "↓", KEY_LEFT: "←", KEY_RIGHT: "→"}.get(keycode, OS.get_keycode_string(keycode))
-
-
-func _mode_caption() -> String:
-	if state.is_empty(): return ""
-	var mode_title: String = {&"kill": "BATTLE ROYALE", &"pac_man": "PAC-MAN"}.get(state.get("mode", &"arcade"), str(state.get("mode", &"arcade")).to_upper().replace("_", " "))
-	var caption := "%s  /  %s" % [mode_title, str(state.get("difficulty", &"normal")).to_upper()]
-	var level: String = state.get("session", {}).get("level", "")
-	return caption + ("  /  LEVEL " + level if level != "" else "")
-
-
-func _board_caption() -> String:
-	var layout: String = state.get("board_meta", {}).get("layout", "")
-	if layout == "": return "RECORDED CINEMA BOARD  /  PAIRED PORTALS"
-	return "%s  /  LAYOUT %s" % [StageSets.title(_board_skin()), layout.right(1)]
-
-
-func _board_title() -> String:
-	var set_id := _board_skin()
-	return "CINEMA CLUB" if set_id == &"cinema" else StageSets.title(set_id)
 
 
 func _tile(cell: Vector2i, kind: StringName, floor := true) -> void:
@@ -425,153 +306,6 @@ func _marquee() -> void:
 		draw_circle(at + Vector2(12 + n * 12, 18), 3, Color("ffe4a3"))
 
 
-func _bomb(at: Vector2, mine: bool) -> void:
-	var slot := "effect.mine" if mine else "effect.bomb"
-	if skin.draw(self, slot, ArtCatalog.rect(slot, at), state.tick): return
-	if mine:
-		_box(Rect2(at - Vector2(12, 7), Vector2(24, 14)), Color("bd9e74"), Color("e5d3a3"), 5)
-		draw_circle(at, 3, Color("ec7869"))
-	else:
-		draw_circle(at + Vector2(1, 3), 13, Color("262b3d"))
-		draw_circle(at, 11, Color("465b71"))
-		draw_circle(at + Vector2(-4, -4), 3, Color("92a7b3"))
-		draw_line(at + Vector2(3, -9), at + Vector2(8, -16), Color("e8bd78"), 3, Quality.edges)
-		draw_circle(at + Vector2(8, -16), 3 + sin(state.tick * 0.8), Color("ffe49e"))
-
-
-func _actor(actor: Dictionary, robot: int, id: StringName) -> void:
-	var at: Vector2 = ORIGIN + (_blend(_was_actor(id), actor.position) + Vector2.ONE * 0.5) * PITCH
-	var color: Color = ROBOT_COLORS[robot]
-	if not actor.alive:
-		if actor.get("removed", false): return
-		var progress := clampf(actor.get("death_frame", 1) / 60.0, 0.0, 1.0)
-		at.y -= sin(progress * PI) * 25
-		if skin.draw(self, "actor.%s.death" % ROBOT_SLOTS[robot], ArtCatalog.rect("actor.%s.death" % ROBOT_SLOTS[robot], at), state.tick, actor.facing, progress,
-			Color(1, 1, 1, 1.0 - progress * 0.7)): return
-		var skull := Color("e4f4e8")
-		skull.a = 1.0 - progress * 0.7
-		draw_circle(at, 13 * (1.0 - progress * 0.35), skull)
-		draw_circle(at + Vector2(-4, -1), 3, color.darkened(0.8))
-		draw_circle(at + Vector2(4, -1), 3, color.darkened(0.8))
-		draw_line(at + Vector2(-5, 8), at + Vector2(5, 8), skull, 4, Quality.edges)
-		return
-	if actor.transit_until > 0:
-		if compact:
-			# `SendRobotCommand` only fades the robot: alpha = 1 - frame / 35, no overlay art.
-			color.a = clampf(1.0 - float(state.tick - (actor.transit_until - TRANSIT_TICKS)) / 35.0, 0.0, 1.0)
-		else:
-			if not skin.draw(self, "effect.transit", ArtCatalog.rect("effect.transit", at), state.tick):
-				draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, color, 3, Quality.edges)
-			color.a = clampf(float(actor.transit_until - state.tick + 5) / 35.0, 0.14, 1.0)
-	if actor.vehicle != &"":
-		var recovering: bool = actor.get("vehicle_recovery_until", 0) > state.tick
-		var ride_color := Color("d77f68") if recovering else Color("3c8890")
-		var shake := sin(state.tick * 2.0) * 3.0 if recovering else 0.0
-		var ride_slot: String = "effect." + actor.vehicle
-		if recovering and skin.texture(ride_slot + "_recovery") != null: ride_slot += "_recovery"
-		if not skin.draw(self, ride_slot, ArtCatalog.rect(ride_slot, at, state.tick), state.tick, actor.facing):
-			_box(Rect2(at + Vector2(-16 + shake, 1), Vector2(32, 17)), ride_color, Color("b9dfca"), 6)
-			draw_circle(at + Vector2(-10, 15), 5, Color("203347"))
-			draw_circle(at + Vector2(10, 15), 5, Color("203347"))
-	if actor.shield > 0 or actor.protected_until > state.tick:
-		if not skin.draw(self, "effect.shield", ArtCatalog.rect("effect.shield", at), state.tick):
-			draw_arc(at, 19, 0, TAU, 32, Color("d2eeb1"), 2, Quality.edges)
-	if actor.invincible_until > state.tick:
-		var introducing: bool = actor.get("protection_stage") == &"introduction"
-		var aura := "effect.invincible_intro" if introducing and skin.texture("effect.invincible_intro") != null else "effect.invincible"
-		if not skin.draw(self, aura, ArtCatalog.rect(aura, at), state.tick):
-			draw_arc(at, 21 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color("ffd778"), 3, Quality.edges)
-	if (actor.blink_until > state.tick or actor.get("protection_stage") == &"blink") and not compact:
-		skin.draw(self, "effect.blink", ArtCatalog.rect("effect.blink", at), state.tick)
-		color = color.lightened(0.35 if state.tick % 6 < 3 else 0.0)
-	var bob := sin(state.tick * 0.8) * 1.5 if actor.velocity.length() > 0.02 and not paused else 0.0
-	at.y += bob
-	var requested: bool = state.get("commands", []).any(func(command): return command.actor_id == id and command.direction != Vector2.ZERO)
-	var action_progress := -1.0
-	for attack in state.attacks:
-		if attack.actor_id == id:
-			action_progress = _attack_progress(attack)
-			break
-	var pose := "action" if action_progress >= 0 else "walk" if requested and actor.velocity.length() > 0.02 else "idle"
-	var modulation := Color(1, 1, 1, color.a)
-	if actor.blink_until > state.tick and _blink_bright(actor): modulation = Color(1.35, 1.35, 1.35, color.a)
-	var slot := "actor.%s.%s" % [ROBOT_SLOTS[robot], pose]
-	var replaced: bool = skin.draw(self, slot, ArtCatalog.rect(slot, at), state.tick, actor.facing, action_progress, modulation)
-	if not replaced and pose != "idle":
-		replaced = skin.draw(self, "actor.%s.idle" % ROBOT_SLOTS[robot], ArtCatalog.rect("actor.%s.idle" % ROBOT_SLOTS[robot], at), state.tick, actor.facing, -1, modulation)
-	if replaced:
-		_looks(actor, at, robot)
-		if actor.weapon not in [&"", &"none"]:
-			if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
-				_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
-		return
-	draw_circle(at + Vector2(0, 7), 13, Color(0.05, 0.1, 0.17, 0.5))
-	_box(Rect2(at + Vector2(-10, 1), Vector2(20, 13)), color.darkened(0.25), color.lightened(0.15), 6)
-	_box(Rect2(at + Vector2(-14, -16), Vector2(28, 25)), color, color.lightened(0.35), 10)
-	_box(Rect2(at + Vector2(-10, -10), Vector2(20, 11)), Color("244357"), Color("498090"), 4)
-	var facing: Vector2 = actor.facing
-	draw_circle(at + Vector2(-5, -5) + facing * 1.5, 2.5, Color("e1fff3"))
-	draw_circle(at + Vector2(5, -5) + facing * 1.5, 2.5, Color("e1fff3"))
-	draw_line(at + Vector2(0, -16), at + Vector2(0, -20), color, 2)
-	draw_circle(at + Vector2(0, -21), 2, Color("fff1b6"))
-	_looks(actor, at, robot)
-	if actor.weapon not in [&"", &"none"]:
-		if not skin.draw(self, "held." + actor.weapon, ArtCatalog.rect("held." + actor.weapon, at), state.tick, actor.facing):
-			_label(at + Vector2(11, 8), ITEM_NAMES.get(actor.weapon, "?"), 12, Color("fff1b6"))
-
-
-## Protection blink. The replica follows `InvincibilityCommand`: every 4th frame toggles a
-## +50 colour offset (drawn as a 1.35 brightness), with no overlay art. Otherwise it is a 3-on,
-## 3-off flash.
-func _blink_bright(actor: Dictionary) -> bool:
-	if compact: return int(floor(float(actor.blink_until - state.tick) / 4.0)) % 2 == 0
-	return state.tick % 6 < 3
-
-
-## Unlocked hat and outfit over a robot: `look.<robot>.hat<k>`/`body<k>` slots or native shapes.
-func _looks(actor: Dictionary, at: Vector2, robot: int) -> void:
-	var body: int = actor.get("body", 0)
-	var hat: int = actor.get("hat", 0)
-	if body > 0 and not skin.draw(self, "look.%s.body%d" % [ROBOT_SLOTS[robot], body], Rect2(at + Vector2(-12, -1), Vector2(24, 17)), state.get("tick", 0), actor.facing):
-		var cloth: Color = LOOK_COLORS[(body + robot) % LOOK_COLORS.size()]
-		_box(Rect2(at + Vector2(-10, 2), Vector2(20, 11)), cloth, cloth.lightened(0.35), 4)
-		draw_line(at + Vector2(0, 3), at + Vector2(0, 12), cloth.darkened(0.3), 2)
-	if hat > 0 and not skin.draw(self, "look.%s.hat%d" % [ROBOT_SLOTS[robot], hat], Rect2(at + Vector2(-15, -33), Vector2(30, 20)), state.get("tick", 0), actor.facing):
-		var felt: Color = LOOK_COLORS[(hat * 2 + robot) % LOOK_COLORS.size()]
-		match (hat - 1) % 4:
-			0: # cap
-				_box(Rect2(at + Vector2(-13, -23), Vector2(26, 8)), felt, felt.lightened(0.3), 4)
-				draw_rect(Rect2(at + Vector2(-2, -18), Vector2(17, 3)), felt.darkened(0.25))
-			1: # top hat
-				draw_rect(Rect2(at + Vector2(-15, -19), Vector2(30, 3)), felt.darkened(0.3))
-				_box(Rect2(at + Vector2(-8, -33), Vector2(16, 15)), felt, felt.lightened(0.3), 3)
-			2: # tricorn
-				draw_colored_polygon(PackedVector2Array([at + Vector2(-16, -17), at + Vector2(16, -17), at + Vector2(0, -31)]), felt)
-				draw_circle(at + Vector2(0, -23), 3, Color("fff1b6"))
-			_: # crown
-				draw_colored_polygon(PackedVector2Array([at + Vector2(-12, -17), at + Vector2(12, -17), at + Vector2(12, -29),
-					at + Vector2(6, -23), at + Vector2(0, -31), at + Vector2(-6, -23), at + Vector2(-12, -29)]), Color("ffd470"))
-
-
-func _hud(actor: Dictionary, index: int, robot: int) -> void:
-	var at := Vector2(28, 90 + index * 85)
-	if not skin.draw(self, "ui.roster", Rect2(at, Vector2(251, 76))):
-		_box(Rect2(at, Vector2(251, 76)), Color("234e62"), ROBOT_COLORS[robot].darkened(0.25), 12)
-	if not skin.draw(self, "actor.%s.portrait" % ROBOT_SLOTS[robot], Rect2(at + Vector2(11, 11), Vector2.ONE * 38)):
-		draw_circle(at + Vector2(30, 30), 19, ROBOT_COLORS[robot].darkened(0.1))
-		_label(at + Vector2(17, 36), "P1" if index == 0 else "AI", 17, Color("173649"))
-	_label(at + Vector2(61, 23), "YOU" if index == 0 else ROBOT_TITLES[robot], 17, ROBOT_COLORS[robot])
-	var status := "" if actor.alive else " …" if actor.get("respawn_at", 0) > 0 or (actor.get("base_weapon", &"") != &"" and not actor.get("removed", false)) else " OUT"
-	_label(at + Vector2(177, 23), "♥%d%s" % [actor.lives, status], 15, Color("ffe4ad"))
-	_label(at + Vector2(61, 44), "B %d   P %d   S %d" % [actor.capacity, actor.power, roundi((actor.speed - 1.6) / 0.1) + 1], 14)
-	var points: int = actor.get("points", -1)
-	if points < 0: _label(at + Vector2(61, 64), "SCORE %d" % actor.score, 14, Color("b4d2d7"))
-	else: _label(at + Vector2(61, 64), "%s %d/%d" % [_points_label(), points, _points_goal()], 14, Color("ffe4ad"))
-	if actor.weapon not in [&"", &"none"]:
-		var uses: String = " ×%d" % actor.ammo if actor.ammo >= 0 else ""
-		_label(at + Vector2(174, 64), ITEM_NAMES.get(actor.weapon, "?") + uses, 13, Color("ffd989"))
-
-
 func _attack_animation_end(kind: StringName) -> float:
 	# Laser stops on animation frame 11 while its separate recovery lock continues.
 	# See docs/evidence/edition-5-weapon-action-recovery.md and Weapons.advance.
@@ -619,31 +353,6 @@ func _attack(attack: Dictionary) -> void:
 		draw_line(at, at + direction * (23 - kick), Color("b7d7d4"), 8, Quality.edges)
 	elif not attack.fired:
 		draw_arc(at, 22, -PI / 2, -PI / 2 + TAU * minf(1.0, float(state.tick - attack.started + 1) / maxf(1, attack.ready - attack.started)), 24, Color("ffd989"), 3, Quality.edges)
-
-
-func _overlay() -> void:
-	draw_rect(Rect2(ORIGIN, Vector2(612, 540)), Color(0.04, 0.10, 0.17, 0.82))
-	if not skin.draw(self, "ui.results", Rect2(418, 242, 444, 228)):
-		_box(Rect2(418, 242, 444, 228), Color("214c60"), Color("c9c7a0"), 18)
-	var outcome: StringName = state.pending_outcome if state.get("round_stage") == &"ending" else state.outcome
-	var title := "PAUSED" if paused else "YOU WIN!" if outcome == &"won" else "TIME'S UP" if outcome == &"timeout" else "YOU LOSE"
-	if not paused and state.session.game_over:
-		title = "GAME OVER"
-	var illustration := "paused" if paused else "game_over" if state.session.game_over else str(outcome)
-	skin.draw(self, "outcome." + illustration, Rect2(782, 251, 64, 64), state.tick)
-	_label(Vector2(455, 296), title, 34, Color("ffe2a0"))
-	if paused:
-		_label(Vector2(455, 347), "Choose RESUME to continue.", 21)
-		_label(Vector2(455, 387), "Fresh input is required after resuming.", 17, Color("abcbd2"))
-	elif state.get("round_stage") == &"ending":
-		var progress: float = state.get("ending_progress", 0.0)
-		draw_arc(Vector2(640, 367), 34, -PI / 2, -PI / 2 + TAU * maxf(0.01, progress), 48, Color("ffd989"), 5, Quality.edges)
-		_label(Vector2(455, 442), "ROUND COMPLETE", 20, Color("ffe2a0"))
-	else:
-		_label(Vector2(455, 340), "ENEMIES KILLED   %d" % state.actors[&"human"].kills, 19)
-		_label(Vector2(455, 371), "ROUND SCORE      %d" % state.result_score, 19)
-		_label(Vector2(455, 402), "TOTAL SCORE       %d" % state.session.total_score, 19, Color("ffe2a0"))
-		_label(Vector2(455, 442), "Choose the next action on the right.", 17, Color("abcbd2"))
 
 
 func _center(cell: Vector2i) -> Vector2:

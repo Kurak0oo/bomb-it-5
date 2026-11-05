@@ -8,7 +8,9 @@ extends RefCounted
 ## Ports (zlong.bombit5):
 ## - `RobotView`: a robot is a Sprite (`_container`) at `xPos + EXCURSION_X`, `yPos +
 ##   EXCURSION_Y` holding its clip `_r<robot><vehicle><direction>` (`setRobotMc`, the look
-##   set on its innermost `bodyMc`/`hatMc`); it starts on row 0's layer 3 (the constructor,
+##   set on its innermost `bodyMc`/`hatMc`, the vehicle `_Car` or `_Skateboard` on a ride);
+##   a loop the clip plays on its own (eyes blinking) is a node of its own over it, at the
+##   place the art pass recorded for each root frame; it starts on row 0's layer 3 (the constructor,
 ##   yN 0) and `resetMainContainer` moves it to its row's layer `robotRow` (3 for AI, 4 for
 ##   the player) on the engine tick, from where it stood before that tick's move;
 ##   `robotTurn` makes a new clip and plays it, `RobotController.robot_turnHandler` plays it,
@@ -21,6 +23,12 @@ extends RefCounted
 ##   flame row's layer 0 (frames 2/3 up, 8/9 down, 6/7 left, 4/5 right, the odd one at the
 ##   bomb's full power), which stay on the display list; `ended` removes the bomb after 16
 ##   blast ticks (`_continueTime > 15`).
+##
+## - `AbstractWeapon` (slice c): a weapon pickup adds `showTimes` (its count left) and the held
+##   clip `<name><direction>` at the robot's hand, in front of or behind the robot clip in its
+##   container; HammerProp's `bombDown` swaps the held clip for `sinker<direction>_Play`, which
+##   `HammerPlayCommand` takes off at the blow, when `robotMoveStart` makes the robot's clip
+##   again. The other weapons' action clips and shots are still the placeholder view's.
 ##
 ## Frame timing recorded in the reference player (gameplay-cinema-bomb): a clip made between
 ## frames (a key press turning the robot, a bomb dropped by key) shows its first frame on the
@@ -46,9 +54,27 @@ extends RefCounted
 ## (original/screens/game/items/, record_screen.py items).
 
 const DIRECTIONS := {Vector2i(0, 1): "_Down", Vector2i(-1, 0): "_Left", Vector2i(1, 0): "_Right", Vector2i(0, -1): "_Up"}
+## `RobotModel.vehicle` per ride (CarProp `_Car`, MotoCycleProp `_Skateboard`, HorseProp
+## `_forg`, DragonProp `_Elephant`): the robot's clip is `_r<robot><vehicle><direction>`.
+const VEHICLE_CLIPS := {&"car": "_Car", &"moto": "_Skateboard", &"horse": "_forg", &"dragon": "_Elephant"}
+## `AbstractWeapon._weaponName` per weapon (HammerProp sinker, FlamerProp thrower, LaserGunProp
+## lasergun, TripleShootGunProp shotgun, ShotGunProp fireball, LandmineProp mine, BoxingProp boxing).
+const WEAPON_NAMES := {&"hammer": "sinker", &"flamer": "thrower", &"laser": "lasergun", &"triple": "shotgun",
+	&"shotgun": "fireball", &"landmine": "mine", &"boxing": "boxing"}
+## `updateWeaponDisplay`: these go behind the robot facing left only; the others facing up or left.
+const BEHIND_LEFT_ONLY := ["shotgun", "lasergun", "thrower", "boxing"]
+## `HammerProp.initPlayPos`: where `bombDown` puts the `_Play` clip in the robot's container.
+const HAMMER_PLAY_POS := {"_Left": Vector2(10, -15), "_Right": Vector2(-10, -15), "_Up": Vector2(15, -15), "_Down": Vector2(0, 0)}
+## `bombDown` adds the `_Play` clip at the container's bottom facing up or left.
+const PLAY_BEHIND := ["_Up", "_Left"]
+## `setWeaponTimesMc`: showTimes at (mc.x, mc.y - 40) in the robot's container.
+const TIMES_AT := Vector2(0, -40)
+## `TryToKillCommandChain`: a ride's clip goes to `dead` and tweens to its last frame in 1 s.
+const VEHICLE_HIT_TICKS := 35
 ## `Bomb.blast`'s exp0 frames per ray (middle, end).
 const ARM_FRAMES := {Vector2i(0, -1): [2, 3], Vector2i(0, 1): [8, 9], Vector2i(-1, 0): [6, 7], Vector2i(1, 0): [4, 5]}
 const INVINCIBILITY_FRAMES := 80
+const ROUND_START_LOOP_AGE := 4
 const BLAST_TICKS := 16
 
 var _screen: Node2D
@@ -59,6 +85,7 @@ var _looks: Array
 var _robots: Dictionary = {}
 var _bombs: Array = []
 var _tick := -1
+var _now := 0
 var _bomb_art: Dictionary = {}
 var _exp_art: Dictionary = {}
 var _items: Dictionary = {}
@@ -95,6 +122,7 @@ func update(snapshot: Dictionary) -> void:
 	if tick <= _tick:
 		return
 	for step in tick - _tick:
+		_now = _tick + step + 1
 		_step(snapshot, step == tick - _tick - 1)
 	_tick = tick
 
@@ -105,13 +133,21 @@ func _create_robots(snapshot: Dictionary) -> void:
 		var actor: Dictionary = snapshot.actors[id]
 		var look: Array = _looks[seat] if seat < _looks.size() else [int(actor.get("body", 0)), int(actor.get("hat", 0))]
 		var view := {"id": id, "robot": int(actor.get("robot", seat)), "cloth": maxi(0, int(look[0])), "hat": maxi(0, int(look[1])),
-			"robot_row": 4 if id == &"human" else 3, "row": 0, "layer": "", "item": {}, "class": "", "frame": 1,
-			"playing": false, "fresh": false, "direction": Vector2i.ZERO, "blink": 0, "bright": false, "blinking": true,
-			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO), "blink_until": int(actor.get("blink_until", 0))}
+			"robot_row": 4 if id == &"human" else 3, "row": 0, "layer": "", "item": {}, "children": [], "class": "", "suffix": "_Down",
+			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": 0, "bright": false, "blinking": true,
+			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO), "blink_until": int(actor.get("blink_until", 0)),
+			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "loop_age": 0, "loop_count": 0,
+			"weapon": &"", "ammo": 0, "weapon_class": "", "weapon_frame": 1, "weapon_playing": false, "weapon_fresh": 0,
+			"play_class": "", "play_started": -1}
 		_robots[id] = view
 		# RobotView(): `_mainContainer = getDisArr(yN).getChildAt(3)` while yPos is still 0.
 		_place(view, 0, 3)
 		_set_robot_mc(view, "_Down")
+		# Made before the round starts (`initStage`), the clip's loops stand at their fourth
+		# frame on the round's first frame (recorded, gameplay-cinema-start); a frame further
+		# per frame from there.
+		view.loop_age = ROUND_START_LOOP_AGE
+		view.fresh = 0
 		_show(view)
 		seat += 1
 
@@ -120,6 +156,9 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 	var commands := {}
 	for command in snapshot.get("commands", []):
 		commands[command.actor_id] = command.direction
+	var attacks := {}
+	for attack in snapshot.get("attacks", []):
+		attacks[attack.actor_id] = attack
 	for id in _robots:
 		var view: Dictionary = _robots[id]
 		if view.removed: continue
@@ -134,13 +173,21 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		# A key press reaches the robot between frames (robot_turnHandler).
 		if human and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
 		# The frame's timeline advance.
-		if view.playing and not view.fresh:
-			view.frame = view.frame % _total(view.class) + 1
-		view.fresh = false
+		if view.playing and view.fresh == 0:
+			view.frame = _next_frame(view.class, view.frame)
+		view.fresh = maxi(0, view.fresh - 1)
+		if view.weapon_playing and view.weapon_fresh == 0 and view.weapon_class != "":
+			view.weapon_frame = view.weapon_frame % _weapon_total("held", view.weapon_class) + 1
+		view.weapon_fresh = maxi(0, view.weapon_fresh - 1)
+		view.loop_age += 1
 		# The engine tick: resetMainContainer (from where it stood), the AI's turns, moveStop.
 		_reset_main_container(view)
 		if not human and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
-		if direction == Vector2i.ZERO: view.playing = false
+		_vehicle(view, actor)
+		_weapon(view, actor, attacks.get(id, {}))
+		if direction == Vector2i.ZERO:
+			view.playing = false
+			view.weapon_playing = false
 		view.direction = direction
 		if int(actor.get("blink_until", 0)) > view.blink_until:
 			# robotRelive: a new InvincibilityCommand.
@@ -162,21 +209,32 @@ static func _direction(v: Vector2) -> Vector2i:
 	return Vector2i(int(signf(v.x)), 0) if absf(v.x) >= absf(v.y) else Vector2i(0, int(signf(v.y)))
 
 
-## `RobotView.robotTurn` (a new clip, playing) or, facing that way already,
-## `robot_turnHandler`'s `mc.play()`.
-func _turn(view: Dictionary, direction: Vector2i) -> void:
+## `RobotView.robotTurn` (a new clip, playing, its weapon playing too) or, facing that way
+## already, `robot_turnHandler`'s `mc.play()` (the weapon stays as it is).
+## The new clip shows its first frame on the next frame and plays from the one after (a key
+## press between frames, and the AI's turn alike: recorded, gameplay-cinema-ai).
+func _turn(view: Dictionary, direction: Vector2i, hold := 1) -> void:
 	var suffix: String = DIRECTIONS[direction]
-	if view.class != "_r%d%s" % [view.robot, suffix]:
+	if view.suffix != suffix:
 		_set_robot_mc(view, suffix)
-		view.fresh = true
+		view.fresh = hold
+		view.weapon_playing = true
+		view.weapon_fresh = hold
 	view.playing = true
 
 
-## `RobotView.setRobotMc`: the clip of this robot and direction, with its look. The look is
-## set by sending the innermost `bodyMc` to clothID + 1 and `hatMc` to hatID + 1; a clip
-## without them takes those frames itself (the `_Dead` clips, `_r0_Down` with no hat).
+func _clip_class(view: Dictionary, suffix: String) -> String:
+	return "_r%d%s%s" % [view.robot, "" if suffix == "_Dead" else VEHICLE_CLIPS.get(view.vehicle, ""), suffix]
+
+
+## `RobotView.setRobotMc`: the clip of this robot, ride and direction, with its look, stopped
+## at its first frame and put at the bottom of the robot's container (`addChildAt(_mc, 0)`).
+## The look is set by sending the innermost `bodyMc` to clothID + 1 and `hatMc` to hatID + 1;
+## a clip without them takes those frames itself (the `_Dead` clips, `_r0_Down` with no hat).
+## Then the weapon's clip is made again (`updateWeaponDisplay`).
 func _set_robot_mc(view: Dictionary, suffix: String) -> void:
-	view.class = "_r%d%s" % [view.robot, suffix]
+	view.suffix = suffix
+	view.class = _clip_class(view, suffix)
 	var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
 	view.frame = 1
 	if not clip.is_empty():
@@ -184,16 +242,37 @@ func _set_robot_mc(view: Dictionary, suffix: String) -> void:
 		elif not clip.body: view.frame = view.cloth + 1
 		view.frame = clampi(view.frame, 1, int(clip.frames))
 	view.playing = false
+	# Made during the frame's scripts, the clip shows its first frame on the next frame too
+	# (a ride's clip after the pickup, the robot after a swing; recorded).
+	view.fresh = 1
+	view.loop_age = 0
+	var mc: Dictionary = _child(view, "mc")
+	if not mc.is_empty():
+		view.children.erase(mc)
+		view.children.insert(0, mc)
+		_arrange(view)
+	if view.weapon != &"" and suffix != "_Dead":
+		_update_weapon_display(view)
+
+
+## The frame after `frame` of a playing robot clip, as the art pass saw it play (a ride's clip
+## loops over its driving frames only); else the next frame, wrapping.
+func _next_frame(cls: String, frame: int) -> int:
+	var nxt: Dictionary = _art.get("robots", {}).get(cls, {}).get("next", {})
+	if nxt.has(str(frame)): return int(nxt[str(frame)])
+	return frame % _total(cls) + 1
 
 
 func _total(cls: String) -> int:
 	return int(_art.get("robots", {}).get(cls, {}).get("frames", 24))
 
 
-## `AbstractRobot.kill`: the `_Dead` clip, stopped; RobotDeadCommand advances it.
+## `AbstractRobot.kill`: the `_Dead` clip, stopped; RobotDeadCommand advances it. The robot's
+## weapon goes with it (`clearWeapon`).
 func _kill(view: Dictionary) -> void:
 	view.dead = true
 	view.offset = false
+	_clear_weapon(view)
 	_set_robot_mc(view, "_Dead")
 
 
@@ -218,6 +297,103 @@ func _invincibility(view: Dictionary) -> void:
 	if view.blink % 4 == 0: view.bright = not view.bright
 
 
+## Rides (`CarProp.changeStage` / `MotoCycleProp.changeStage`: `resetStage`, the vehicle, then
+## `resetRobotMc`); a hit (`TryToKillCommandChain`: `gotoAndStop("dead")`, then a 1 s TweenMax
+## to the clip's last frame, on the host's clock) and `vehicleComplete`'s `resetStage` (on foot).
+func _vehicle(view: Dictionary, actor: Dictionary) -> void:
+	var vehicle := StringName(actor.get("vehicle", &""))
+	if vehicle != view.vehicle:
+		view.vehicle = vehicle
+		view.vehicle_hit = -1
+		_set_robot_mc(view, view.suffix)
+		return
+	if vehicle == &"": return
+	var recovery := int(actor.get("vehicle_recovery_until", 0))
+	if recovery > 0 and view.vehicle_hit < 0:
+		view.vehicle_hit = 0
+		view.playing = false
+		view.weapon_playing = false
+	if view.vehicle_hit >= 0:
+		var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
+		var dead := int(clip.get("labels", {}).get("dead", clip.get("frames", 1)))
+		var total := int(clip.get("frames", dead))
+		view.frame = dead + roundi((total - dead) * minf(1.0, float(view.vehicle_hit) / VEHICLE_HIT_TICKS))
+		view.vehicle_hit += 1
+
+
+# ------------------------------------------------------------------ weapons
+
+## The robot's weapon (`AbstractWeapon`): a pickup's `changeStage` (showTimes, then the held
+## clip), `bombDown` (the held clip goes, the `_Play` clip comes; the count goes down), the end
+## of the action (`HammerPlayCommand`: the `_Play` clip goes, `robotMoveStart` makes the robot's
+## clip again; the last use's `initWeapon` takes the weapon off).
+func _weapon(view: Dictionary, actor: Dictionary, attack: Dictionary) -> void:
+	var kind := StringName(actor.get("weapon", &""))
+	if not WEAPON_NAMES.has(kind): kind = &""
+	var ammo := int(actor.get("ammo", 0))
+	var acting: bool = not attack.is_empty()
+	if view.play_class != "" and (not acting or int(attack.started) != view.play_started):
+		# The action is over: the `_Play` clip goes and the robot's clip is made again.
+		_remove_child(view, "play")
+		view.play_class = ""
+		view.play_started = -1
+		if kind != view.weapon or ammo <= 0: _clear_weapon(view)
+		_set_robot_mc(view, view.suffix)
+	if kind != view.weapon and not acting:
+		_clear_weapon(view)
+		if kind != &"":
+			# `AbstractWeapon.changeStage`: `setWeaponTimesMc` (showTimes on top), `setWeaponMc`.
+			view.weapon = kind
+			view.ammo = ammo
+			_add_child(view, {"kind": "times"}, -1)
+			_update_weapon_display(view)
+	if acting and view.play_class == "" and view.weapon != &"" and attack.get("kind", &"") == view.weapon:
+		view.ammo = ammo
+		if view.weapon == &"hammer":
+			# `bombDown`: `robotMoveStop(true)` (the robot's clip stops, the held clip goes), the
+			# `_Play` clip at `_playPos` (under the robot facing up or left).
+			view.playing = false
+			view.weapon_playing = false
+			_remove_child(view, "weapon")
+			view.weapon_class = ""
+			view.play_class = "%s%s_Play" % [WEAPON_NAMES[view.weapon], view.suffix]
+			view.play_started = int(attack.started)
+			_add_child(view, {"kind": "play"}, 0 if view.suffix in PLAY_BEHIND else -1)
+	if view.weapon != &"" and ammo != view.ammo and not acting:
+		view.ammo = ammo
+
+
+## `updateWeaponDisplay`: a new held clip `<name><direction>` at the robot's hand (where the
+## new robot clip's `hand` is at its first frame), playing from the robot's frame; on a ride it
+## is made but not added. Its place in the container depends on the weapon and direction.
+func _update_weapon_display(view: Dictionary) -> void:
+	_remove_child(view, "weapon")
+	view.weapon_class = ""
+	var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
+	if not clip.has("hand") or view.vehicle != &"": return
+	var name: String = WEAPON_NAMES[view.weapon]
+	view.weapon_class = name + view.suffix
+	view.weapon_frame = clampi(view.frame, 1, maxi(1, _weapon_total("held", view.weapon_class)))
+	view.weapon_playing = false
+	var behind: bool = view.suffix == "_Left" or (name not in BEHIND_LEFT_ONLY and view.suffix == "_Up")
+	_add_child(view, {"kind": "weapon"}, 0 if behind else -1)
+
+
+## `clearWeapon` / `initWeapon`: the weapon's clips and counter leave the robot.
+func _clear_weapon(view: Dictionary) -> void:
+	for kind in ["weapon", "play", "times"]: _remove_child(view, kind)
+	view.weapon = &""
+	view.weapon_class = ""
+	view.play_class = ""
+	view.play_started = -1
+
+
+func _weapon_total(bucket: String, cls: String) -> int:
+	return int(_art.get("weapons", {}).get(bucket, {}).get(cls, {}).get("frames", 1))
+
+
+# ------------------------------------------------------------------ the robot's container
+
 ## `resetMainContainer`: on its row's `robotRow` layer, judged from where it stood.
 func _reset_main_container(view: Dictionary) -> void:
 	var row := floori((view.position as Vector2).y + 0.5)
@@ -225,25 +401,159 @@ func _reset_main_container(view: Dictionary) -> void:
 		_place(view, row, view.robot_row)
 
 
+## The robot's container (`_container`) on a row layer, with its children in their order.
 func _place(view: Dictionary, row: int, layer_index: int) -> void:
 	if view.layer != "": _board.detach(view.layer, view.item)
 	view.row = row
 	view.layer = _board.layer_of(row, layer_index)
 	view.item = {}
 	_board.attach(view.layer, view.item, _board.cell_matrix(view.position))
-	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(view.position),
-		"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": view.frame})
-	view.erase("shown_key")
+	if view.children.is_empty(): view.children.append({"kind": "mc"})
+	for child in view.children:
+		child.erase("rel")
+	view.loop_count = 0
+	_arrange(view)
+
+
+func _child(view: Dictionary, kind: String) -> Dictionary:
+	for child in view.children:
+		if child.kind == kind: return child
+	return {}
+
+
+## `addChild` (index -1) or `addChildAt(child, index)` in the robot's container.
+func _add_child(view: Dictionary, child: Dictionary, index: int) -> void:
+	if index < 0: view.children.append(child)
+	else: view.children.insert(index, child)
+	_arrange(view)
+
+
+func _remove_child(view: Dictionary, kind: String) -> void:
+	var child := _child(view, kind)
+	if child.is_empty(): return
+	if child.has("rel"): _screen.remove_node(_path(view, child))
+	if kind == "mc": view.loop_count = 0
+	view.children.erase(child)
+	_arrange(view)
+
+
+## A child's path on the screen: the container's (renamed when its row layer changes) and its
+## own name in the container.
+static func _path(view: Dictionary, child: Dictionary) -> String:
+	return "%s/%s" % [view.item.path, child.rel]
+
+
+## The container's children on the screen: each at its display-list path (`@0` alone, `@0#k`
+## among several) and drawn in that order.
+func _arrange(view: Dictionary) -> void:
+	if view.item.is_empty(): return
+	var base: String = view.item.path
+	var n: int = view.children.size()
+	# Two passes, so a child can take a path another one leaves.
+	for k in n:
+		var child: Dictionary = view.children[k]
+		if child.has("rel"):
+			_screen.rename_node(_path(view, child), "%s/~%d" % [base, k])
+			child.rel = "~%d" % k
+	for k in n:
+		var child: Dictionary = view.children[k]
+		var rel := "@0" if n == 1 else "@0#%d" % k
+		var path := "%s/%s" % [base, rel]
+		if child.has("rel"):
+			_screen.rename_node(_path(view, child), path)
+			child.rel = rel
+		else:
+			child.rel = rel
+			var matrix: Array = _board.cell_matrix(view.position)
+			_screen.add_node({"path": path, "parent": base, "stage_matrix": matrix, "role": "piece", "kind": "movie_clip",
+				"effective_visible": true, "frame": 1})
+			if child.kind == "mc":
+				view.loop_count = 0
+			elif child.kind == "times":
+				# showTimes draws its showWeaponMc in its art; its count is a node of its own.
+				_add_art_node(path + "/~count", path, matrix)
+		var node: Node2D = _screen.by_path.get(path)
+		if node != null: node.get_parent().move_child(node, k)
+
+
+## A node that only draws (no display-list path of its own: drawn inside a baked clip).
+func _add_art_node(path: String, parent: String, matrix: Array) -> void:
+	_screen.add_node({"path": path, "parent": parent, "stage_matrix": matrix, "role": "piece", "kind": "movie_clip",
+		"effective_visible": true})
+	var node: Node2D = _screen.by_path.get(path)
+	if node != null:
+		node.remove_meta("swf_path")
+		node.set_meta("swf_art", true)
 
 
 func _show(view: Dictionary) -> void:
-	if view.removed: return
+	if view.removed or view.item.is_empty(): return
 	var matrix: Array = _board.cell_matrix(view.position)
+	var at := _m(matrix)
 	_screen.move_node(view.item.path, matrix)
-	_screen.move_node(view.item.path + "/@0", matrix)
-	_screen.set_node_art(view.item.path + "/@0", _robot_art(view), view.frame)
 	var on: bool = view.bright and not view.dead
-	_screen.set_node_offset(view.item.path + "/@0", Color(50.0 / 255, 50.0 / 255, 50.0 / 255, 1) if on else Color(0, 0, 0, 0))
+	var offset := Color(50.0 / 255, 50.0 / 255, 50.0 / 255, 1) if on else Color(0, 0, 0, 0)
+	var art_at := _m(_art.get("at", matrix))
+	for child in view.children:
+		var path := _path(view, child)
+		# InvincibilityCommand's offset is on the robot's container: every child takes it.
+		_screen.set_node_offset(path, offset)
+		match child.kind:
+			"mc":
+				_screen.move_node(path, matrix)
+				var art := _robot_art(view)
+				_screen.set_node_art(path, art, view.frame)
+				_show_loops(view, path, at, art, offset)
+			"weapon":
+				# The hand where the robot clip's first frame was rendered (its own `at`).
+				var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
+				var first: Dictionary = clip.get("looks", {}).values()[0].get("1", {}) if not clip.get("looks", {}).is_empty() else {}
+				var clip_at := _m(first.get("at", _a(art_at)))
+				var hand: Vector2 = (clip_at.affine_inverse() * _m(clip.get("hand", _a(clip_at)))).origin
+				_screen.move_node(path, _a(at * Transform2D(0.0, hand)))
+				var images: Dictionary = _art.get("weapons", {}).get("held", {}).get(view.weapon_class, {}).get("images", {})
+				_screen.set_node_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
+			"play":
+				var frame: int = clampi(_tick_now() - view.play_started + 1, 1, maxi(1, _weapon_total("play", view.play_class)))
+				_screen.move_node(path, _a(at * Transform2D(0.0, HAMMER_PLAY_POS.get(view.suffix, Vector2.ZERO))))
+				var images: Dictionary = _art.get("weapons", {}).get("play", {}).get(view.play_class, {}).get("images", {})
+				_screen.set_node_art(path, images.get(str(frame), {}), frame)
+			"times":
+				var times := at * Transform2D(0.0, TIMES_AT)
+				_screen.move_node(path, _a(times))
+				_screen.set_node_art(path, _art.get("weapons", {}).get("times", {}).get(String(view.weapon), {}), 1)
+				var digit: Dictionary = _art.get("weapons", {}).get("digits", {}).get(str(view.ammo), {})
+				if not digit.is_empty():
+					_screen.move_node(path + "/~count", _a(times * _m(digit.times_at).affine_inverse() * _m(digit.at)))
+				_screen.set_node_art(path + "/~count", digit)
+				_screen.set_node_offset(path + "/~count", offset)
+
+
+## The robot clip's own loops (eyes blinking, a feather): each its own node over the clip,
+## where the art pass found it at this root frame, at its own frame (made with the clip, it
+## shows its first frame twice, then one frame per frame).
+func _show_loops(view: Dictionary, mc_path: String, at: Transform2D, art: Dictionary, offset: Color) -> void:
+	var loops: Array = art.get("loops", [])
+	while view.loop_count < loops.size():
+		_add_art_node("%s/~loop%d" % [mc_path, view.loop_count], mc_path, _a(at))
+		view.loop_count += 1
+	var robot_at := _m(art.get("at", _a(at)))
+	for k in view.loop_count:
+		var path := "%s/~loop%d" % [mc_path, k]
+		if k >= loops.size():
+			_screen.set_node_art(path, {})
+			continue
+		var loop: Dictionary = loops[k]
+		var frames: Dictionary = _art.get("loop_art", {}).get(loop.art, {})
+		var frame: int = maxi(0, view.loop_age - 1) % maxi(1, frames.size()) + 1
+		_screen.move_node(path, _a(at * robot_at.affine_inverse() * _m(loop.at)))
+		_screen.set_node_art(path, frames.get(str(frame), {}))
+		_screen.set_node_offset(path, offset)
+
+
+## The tick being shown (`update` steps through the ticks since the last snapshot).
+func _tick_now() -> int:
+	return _now
 
 
 func _robot_art(view: Dictionary) -> Dictionary:
@@ -255,6 +565,14 @@ func _robot_art(view: Dictionary) -> Dictionary:
 	# shows the robot's default look.
 	var frames: Dictionary = looks.get(key, looks.get("%d|%d" % [0 if clip.body else -1, 0 if clip.hat else -1], {}))
 	return frames.get(str(view.frame), {})
+
+
+static func _m(m: Array) -> Transform2D:
+	return Transform2D(Vector2(m[0], m[1]), Vector2(m[2], m[3]), Vector2(m[4], m[5]))
+
+
+static func _a(t: Transform2D) -> Array:
+	return [t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y]
 
 
 # ------------------------------------------------------------------ bombs
@@ -299,7 +617,9 @@ func _update_bombs(snapshot: Dictionary) -> void:
 	for key in live:
 		if _bombs.any(func(v): return v.key == key): continue
 		var bomb: Dictionary = live[key]
-		var view := {"key": key, "cell": bomb.cell, "power": int(bomb.power), "age": 0, "blasted": false,
+		# A bomb the AI drops during the frame's scripts shows its first frame once more than
+		# one dropped by key between frames (recorded, gameplay-cinema-ai).
+		var view := {"key": key, "cell": bomb.cell, "power": int(bomb.power), "age": 0 if bomb.actor_id == &"human" else -1, "blasted": false,
 			"position": bomb.get("position", Vector2(bomb.cell)), "arms": []}
 		# Bomb.init: a Sprite on its row's bomb layer (2).
 		view.layer = _board.layer_of(int(bomb.cell.y), 2)
@@ -337,8 +657,9 @@ func _show_bomb(view: Dictionary) -> void:
 	_screen.move_node(view.item.path, matrix)
 	_screen.move_node(view.item.path + "/@0", matrix)
 	if not view.blasted:
-		var key := "%d|%d" % [view.age % 27 + 1, view.age % 14 + 1]
-		_screen.set_node_art(view.item.path + "/@0", _bomb_art.get(key, {}), view.age % 27 + 1)
+		var age := maxi(0, int(view.age))
+		var key := "%d|%d" % [age % 27 + 1, age % 14 + 1]
+		_screen.set_node_art(view.item.path + "/@0", _bomb_art.get(key, {}), age % 27 + 1)
 		return
 	_screen.set_node_art(view.item.path + "/@0", _exp(1, maxi(1, view.age + 1)), 1)
 	for arm in view.arms:

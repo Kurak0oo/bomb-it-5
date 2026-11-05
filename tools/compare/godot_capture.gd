@@ -21,7 +21,8 @@ extends SceneTree
 ## (`App.settle_as_recorded`). `round CAPTURE` starts the next round on the board and robots
 ## the gameplay capture CAPTURE recorded (`App.round_as_recorded`), for the same reason;
 ## `ai-stop N` stops the round's AI robot of seat N (`Game.stop_ai`), where the case stops the
-## original's with the `ai-control` fixture.
+## original's with the `ai-control` fixture; `pickup KIND` puts a pickup on the player's cell, where
+## the case gives the original's player one with the `pickup` fixture.
 
 const STAGE := Vector2i(700, 510)
 
@@ -100,6 +101,10 @@ func _run(case: Dictionary) -> void:
 					# The original's AI robot at Game.players index N stopped (the case's
 					# `ai-control stop` fixture): Godot's gives no more commands.
 					_viewport.get_child(0).game.stop_ai(int(words[1]))
+				"pickup":
+					# The case's `pickup` fixture (the original's pickup class made on the
+					# player's cell): the same pickup on the player's cell (Game.give_pickup).
+					_viewport.get_child(0).game.give_pickup(StringName(words[1]))
 				"seed":
 					# The app's Flash `Math.random` (scripts/simulation/avm_random.gd) takes
 					# the case's seed, as the reference player's does. The screens' draws

@@ -1,9 +1,10 @@
 extends Node2D
-## Scene host: one scheduler, committed state, original procedural presentation.
+## Scene host: one scheduler, committed state, keyboard input and the round's flow. It draws
+## nothing itself: the app shows the round on the generated gameplay screen (App._game_screen),
+## with `swf_view` (scripts/game_view.gd) for what has no original art yet.
 
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const Scheduler = preload("res://scripts/simulation/tick_scheduler.gd")
-const TouchControls = preload("res://scripts/touch_controls.gd")
 const GameView = preload("res://scripts/game_view.gd")
 const AIController = preload("res://scripts/simulation/ai_controller.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
@@ -15,12 +16,8 @@ const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
-const ReplicaLayout = preload("res://scripts/replica_layout.gd")
-const ReplicaScenery = preload("res://scripts/replica_scenery.gd")
-const ReplicaHud = preload("res://scripts/replica_hud.gd")
+const Looks = preload("res://scripts/looks.gd")
 const Audio = preload("res://scripts/original_audio.gd")
-const UiKit = preload("res://scripts/ui_kit.gd")
-const Quality = preload("res://scripts/quality.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -38,13 +35,10 @@ var state: Dictionary
 var practice := true
 var paused := false
 var held: Array[int] = []
-var buttons: Dictionary = {}
-var touch_controls: Node2D
 var ai: RefCounted
 var session_lives := 3
 var total_score := 0
 var result_credited := false
-var view: Node2D
 var visual_skin: RefCounted
 var stage_set: StringName = &""
 ## Set before entering the tree: a session drives levels and hides development controls.
@@ -52,12 +46,9 @@ var session: RefCounted = null
 var auto_start := true
 ## Desktop key per action (up/left/down/right/bomb); the app supplies saved bindings.
 var bindings: Dictionary = SaveStore.DEFAULT_KEYS.duplicate()
-## The replica page (ReplicaLayout) under the `original` profile, fixed when the node is ready.
+## The `original` fidelity profile (frame-driven steps, HitMove, the Date clock), fixed when
+## the node is ready.
 var replica := false
-var scenery: Node2D
-var hud: Node2D
-## Tests pin the safe area; otherwise it is read from the display every frame.
-var safe_area_override := Rect2()
 ## The step before `state`, for drawing between steps (#79); never fed back to the round.
 var previous_state: Dictionary = {}
 ## The replica round clock's second source (#80): the wall clock unless checks inject one.
@@ -96,60 +87,7 @@ const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
 
 func _ready() -> void:
 	if visual_skin == null: visual_skin = VisualSkin.new()
-	view = GameView.new()
-	view.skin = visual_skin
-	add_child(view)
 	replica = Fidelity.original
-	if replica:
-		view.compact = true
-		view.scale = Vector2.ONE * ReplicaLayout.view_scale()
-		view.position = ReplicaLayout.view_position()
-		scenery = ReplicaScenery.new()
-		scenery.name = "Scenery"
-		scenery.skin = visual_skin
-		add_child(scenery)
-	touch_controls = TouchControls.new()
-	touch_controls.skin = visual_skin
-	touch_controls.replica = Fidelity.original
-	add_child(touch_controls)
-	touch_controls.direction_changed.connect(func(direction: Vector2):
-		if is_instance_valid(scheduler): scheduler.set_direction(&"human", direction))
-	touch_controls.bomb_event.connect(func(event: StringName):
-		if is_instance_valid(scheduler): scheduler.enqueue_bomb_event(&"human", event))
-	if replica:
-		hud = ReplicaHud.new()
-		hud.name = "Hud"
-		hud.skin = visual_skin
-		hud.pause_pressed.connect(toggle_pause)
-		add_child(hud)
-	_make_button("match", "START MATCH", Vector2(1010, 100), func(): start_session(false))
-	_make_button("practice", "PRACTICE", Vector2(1010, 148), func(): start_session(true))
-	_make_button("pause", "PAUSE", Vector2(1010, 220), toggle_pause)
-	_make_button("reset", "RESET", Vector2(1010, 268), retry_round)
-	_make_button("menu", "MAIN MENU", Vector2(1010, 268), func(): main_menu_requested.emit())
-	buttons.menu.visible = false
-	if session != null or replica:
-		for key in ["match", "practice", "reset"]: buttons[key].visible = false
-	if replica:
-		# Development and caption-free page: pause comes from the pause icon (#91) and P;
-		# RESUME and MAIN MENU appear only on the pause overlay over the map centre.
-		buttons.pause.visible = false
-		_place_pause_button(buttons.pause, hud.pause_to_page(hud.PAUSE_RESUME))
-		_place_pause_button(buttons.menu, hud.pause_to_page(hud.PAUSE_MENU))
-		# The pause screen's own sound and music switches (`PauseUI`); its music switch only
-		# sets the flag, so a resumed round stays silent until music is on again.
-		var audio := Audio.current
-		buttons.quality = UiKit.switch(self, &"PauseQuality", "QUALITY", hud.pause_to_page(hud.PAUSE_QUALITY), Quality.index(),
-			Quality.TITLES.values(), func(_frame: int):
-				Quality.cycle()
-				Quality.apply(get_viewport()), visual_skin, "ui.quality_switch")
-		buttons.sound = UiKit.switch(self, &"PauseSound", "SOUND", hud.pause_to_page(hud.PAUSE_SOUND), 0 if audio == null or audio.sound_on else 1,
-			["ON", "OFF"], func(frame: int): if Audio.current != null: Audio.current.set_sound(frame == 0), visual_skin, "ui.sound_switch")
-		buttons.music = UiKit.switch(self, &"PauseMusic", "MUSIC", hud.pause_to_page(hud.PAUSE_MUSIC), 0 if audio == null or audio.music_on else 1,
-			["ON", "OFF"], func(frame: int): if Audio.current != null: Audio.current.set_music(frame == 0, false), visual_skin, "ui.music_switch")
-		for key in ["quality", "sound", "music"]:
-			if hud.pause_art(): UiKit.ghost(buttons[key])
-			buttons[key].visible = false
 	if auto_start: start_session(true)
 
 
@@ -201,6 +139,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	var board: Dictionary
 	var draws: Array = []
 	var round_random: RefCounted = math_random
+	var rolled := false
 	if practice:
 		board = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
 	elif not recorded_board.is_empty():
@@ -213,6 +152,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		mode.stage_set = stage_set
 		recorded_board = {}
 	else:
+		rolled = true
 		var rng := RandomNumberGenerator.new()
 		rng.seed = session_seed
 		var choices := StageSets.available_sets()
@@ -241,21 +181,36 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	add_child(scheduler)
 	scheduler.set_process(false)
 	ai = AIController.new(session_seed, [], profile)
+	# The AI draws from the round's `Math.random` when the round has the original's.
+	if round_random != null and not practice: ai.math_random = round_random
+	if rolled and round_random != null and session != null and session.math_random != null:
+		_create_ai_players(round_random, roster)
 	if not practice:
 		for id in roster.slice(1):
 			scheduler.set_controller(id, _ai_command.bind(id))
 	state = simulation.snapshot()
 	previous_state = {}
-	if replica: scenery.set_stage(board.skin)
-	touch_controls.enabled = true
-	touch_controls.reset()
-	buttons.pause.text = "PAUSE"
-	buttons.pause.disabled = false
-	if replica: buttons.pause.visible = false
-	buttons.menu.visible = false
-	buttons.reset.text = "RESET" if practice else "TRY AGAIN"
-	buttons.reset.disabled = not practice
 	_refresh()
+
+
+## A rolled round's draws after the map, in the original's order: the player's `updateUI`
+## (`AbstractPlayer.set scoreData`, two draws, traced: tools/compare/round_draws.py), then
+## `AbstractGameMode.createAIPlayer` per AI: clothID `int(random * 7)`, hatID `int(random * 7)`,
+## and its AI from the difficulty's list (`_xml.ai[difficulty].split("|")`; one profile in
+## every mode, so the draw picks nothing). The map's own draws (`MapMaster`, `<Set>MapData`)
+## are still Godot's (Layouts.roll_set), so these do not land on the original's ordinals.
+func _create_ai_players(random: RefCounted, roster: Array[StringName]) -> void:
+	random.random()
+	random.random()
+	for id in roster.slice(1):
+		var cloth := int(random.random() * 7)
+		var hat := int(random.random() * 7)
+		random.random()
+		var actor: Dictionary = simulation.actors()[id]
+		# `setRobotMc` sends the look clips to id + 1; past a clip's last frame Flash stays on
+		# its last frame, so a robot with fewer looks wears its last one.
+		actor.body = mini(cloth, Looks.count(int(actor.get("robot", 0)), &"body"))
+		actor.hat = mini(hat, Looks.count(int(actor.get("robot", 0)), &"hat"))
 
 
 ## Where the original's `Math.random` stands at a recorded round (tests/goldens/<case>/
@@ -308,6 +263,14 @@ func stop_ai(seat: int) -> void:
 	scheduler.set_controller(roster[seat], func() -> Dictionary: return {"direction": Vector2.ZERO, "bomb_events": []})
 
 
+## The comparison loop only (`pickup KIND`, where the case uses the reference player's `pickup`
+## fixture: the original's pickup class made on the player's cell, `AbstractItem.init`): the
+## pickup lies on the player's cell, and the round's next step collects it.
+func give_pickup(kind: StringName) -> void:
+	var human: Dictionary = simulation.actors()[&"human"]
+	simulation.pickups()[human.cell] = kind
+
+
 func _ai_command(id: StringName) -> Dictionary:
 	return ai.command(simulation.snapshot(), id)
 
@@ -325,19 +288,12 @@ func advance_time(seconds: float) -> void:
 				_begin_original_pause()
 				return
 		if state.get("round_stage") == &"ending":
-			touch_controls.enabled = false
-			touch_controls.reset()
 			held.clear()
 		if not practice and state.outcome != &"running" and not result_credited:
 			result_credited = true
 			session_lives = state.actors[&"human"].lives
 			total_score += state.result_score
-			touch_controls.enabled = false
-			touch_controls.reset()
 			held.clear()
-			buttons.pause.disabled = true
-			buttons.reset.disabled = false
-			buttons.reset.text = "NEW SESSION" if session_lives == 0 else "PLAY AGAIN" if state.outcome == &"won" else "TRY AGAIN"
 			if session != null:
 				level_settled.emit(get_snapshot())
 				return
@@ -368,11 +324,6 @@ func toggle_pause() -> void:
 		scheduler.pause()
 		paused = true
 	held.clear()
-	touch_controls.enabled = not paused
-	touch_controls.reset()
-	buttons.pause.text = "RESUME" if paused else "PAUSE"
-	buttons.menu.visible = paused and session != null and not swf_pause
-	if replica: buttons.pause.visible = paused and not swf_pause
 	_refresh()
 	pause_changed.emit(paused)
 
@@ -401,11 +352,6 @@ func _begin_original_pause() -> void:
 	simulation.hold_movement()
 	_paused_at_msec = _now_msec()
 	held.clear()
-	touch_controls.enabled = false
-	touch_controls.reset()
-	buttons.pause.text = "RESUME"
-	buttons.pause.visible = not swf_pause
-	buttons.menu.visible = session != null and not swf_pause
 	_refresh()
 	pause_changed.emit(true)
 
@@ -431,17 +377,11 @@ func _notification(what: int) -> void:
 		scheduler.pause()
 		paused = true
 		held.clear()
-		touch_controls.enabled = false
-		touch_controls.reset()
-		buttons.pause.text = "RESUME"
-		buttons.menu.visible = session != null and not swf_pause
-		if replica: buttons.pause.visible = not swf_pause
 		_refresh()
 		pause_changed.emit(true)
 
 
 func _process(delta: float) -> void:
-	fit_page()
 	if start_delay > 0:
 		# The frame the round was made in (by START's press) is not one of them: input lands
 		# between the original's frames, so its next frame is the first (as SwfScreen).
@@ -451,49 +391,30 @@ func _process(delta: float) -> void:
 		advance_time(delta)
 
 
-## Back to the page's own view (a round without a generated screen).
+## Before a new round's screen: the previous one's placeholder layer goes.
 func detach_swf() -> void:
 	if is_instance_valid(swf_view): swf_view.queue_free()
 	swf_view = null
 	_swf_present = Callable()
 	start_delay = 0
 	swf_pause = false
-	if is_instance_valid(hud): hud.visible = true
-	view.visible = true
-	if is_instance_valid(scenery): scenery.visible = true
-	if is_instance_valid(hud): hud.pause_only = false
-	touch_controls.visible = true
 
 
-## Draw the round on the generated gameplay screen: the placeholder actors in `parent`
-## (its board container) through `transform`, `present` called with every snapshot. The
-## page's own board, scenery, HUD and touch controls stand down; the pause screen stays.
-func attach_swf(parent: Node2D, transform_in_parent: Transform2D, present: Callable) -> void:
+## Draw the round on the generated gameplay screen: `present` is called with every snapshot,
+## and the placeholder layer (scripts/game_view.gd: what has no original art yet; the board
+## itself for a stage set whose art is not in the pack) sits in `parent`, the screen's board
+## container, through `transform`.
+func attach_swf(parent: Node2D, transform_in_parent: Transform2D, present: Callable, draw_board := false) -> void:
 	swf_view = GameView.new()
-	swf_view.name = "PlaceholderActors"
+	swf_view.name = "PlaceholderLayer"
 	swf_view.skin = visual_skin
-	swf_view.compact = true
-	swf_view.actors_only = true
+	swf_view.draw_board = draw_board
 	swf_view.transform = transform_in_parent
 	parent.add_child(swf_view)
+	# A board drawn here goes under the row layers (its boxes, robots and bombs).
+	if draw_board: parent.move_child(swf_view, 0)
 	_swf_present = present
-	view.visible = false
-	if is_instance_valid(scenery): scenery.visible = false
-	if is_instance_valid(hud): hud.pause_only = true
-	touch_controls.visible = false
 	_refresh()
-
-
-## Centres the 1280×720 page on the screen; the replica also keeps it inside the safe area,
-## re-read every frame so rotation re-lays it out.
-func fit_page(viewport: Vector2 = get_viewport_rect().size) -> void:
-	if not replica:
-		position = (viewport - ReplicaLayout.PAGE) * 0.5
-		return
-	var safe := safe_area_override if safe_area_override.has_area() else ReplicaLayout.safe_area(viewport)
-	var placement := ReplicaLayout.fit(viewport, safe)
-	position = placement.offset
-	scale = Vector2.ONE * placement.scale
 
 
 func _input(event: InputEvent) -> void:
@@ -513,62 +434,12 @@ func _input(event: InputEvent) -> void:
 			scheduler.set_direction(&"human", Vector2.ZERO if held.is_empty() else directions[held.back()])
 
 
-func _make_button(key: String, caption: String, position_at: Vector2, action: Callable) -> void:
-	var button := Button.new()
-	button.name = key.capitalize()
-	button.text = caption
-	button.position = position_at
-	button.size = Vector2(210, 40)
-	button.focus_mode = Control.FOCUS_NONE
-	button.add_theme_font_size_override("font_size", 18)
-	for state_name in ["normal", "hover", "pressed", "disabled"]:
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color("285768") if state_name == "normal" else Color("39788a") if state_name == "hover" else Color("1b4052")
-		style.border_color = Color("7fb6b7") if state_name != "disabled" else Color("3b616a")
-		style.set_border_width_all(1)
-		style.set_corner_radius_all(9)
-		button.add_theme_stylebox_override(state_name, style)
-		var replacement: Texture2D = visual_skin.button_texture("ui.button_" + state_name)
-		if replacement != null:
-			var texture_style := StyleBoxTexture.new()
-			texture_style.texture = replacement
-			texture_style.modulate_color = Color(visual_skin.entry("ui.button_" + state_name).get("tint", "ffffffff"))
-			button.add_theme_stylebox_override(state_name, texture_style)
-	button.pressed.connect(action)
-	add_child(button)
-	buttons[key] = button
-
-
-
-## RESUME and MAIN MENU on the replica's pause screen: ghosts over the painted buttons when
-## the original art is shown (ADR 0009), native buttons otherwise.
-func _place_pause_button(button: Button, rect: Rect2) -> void:
-	button.position = rect.position
-	button.size = rect.size
-	if hud.pause_art():
-		var clear := StyleBoxEmpty.new()
-		for name in ["normal", "hover", "pressed", "disabled", "focus"]: button.add_theme_stylebox_override(name, clear)
-		button.add_theme_color_override("font_color", Color.TRANSPARENT)
-		button.add_theme_color_override("font_hover_color", Color.TRANSPARENT)
-		button.add_theme_color_override("font_pressed_color", Color.TRANSPARENT)
-
-
 func _refresh() -> void:
-	for key in ["quality", "sound", "music"]:
-		if buttons.has(key): buttons[key].visible = paused and not swf_pause
-	if is_instance_valid(hud) and swf_pause: hud.visible = false
-	if is_instance_valid(view) and not state.is_empty():
-		touch_controls.enabled = _can_control()
+	if is_instance_valid(swf_view) and not state.is_empty():
 		var snapshot := get_snapshot()
 		var between: float = scheduler.interpolation() if replica and not paused and is_instance_valid(scheduler) else 1.0
-		view.present(snapshot, practice, paused, previous_state, between)
-		if is_instance_valid(swf_view):
-			swf_view.present(snapshot, practice, paused, previous_state, between)
-			_swf_present.call(snapshot)
-		if replica:
-			hud.present(snapshot, paused)
-			var weapon: StringName = snapshot.actors[&"human"].get("weapon", &"")
-			touch_controls.item = &"" if weapon in [&"", &"none"] else weapon
+		swf_view.present(snapshot, practice, paused, previous_state, between)
+		_swf_present.call(snapshot)
 
 
 func _can_control() -> bool:

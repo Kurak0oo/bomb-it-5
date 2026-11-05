@@ -65,7 +65,7 @@ func _run() -> void:
 	_expect(snapshot.actors.size() == 2, "the roster follows the enemy count")
 	_expect(snapshot.actors[&"human"].robot == 5, "the player plays the chosen robot")
 	_expect(snapshot.board_meta.skin == chosen_set, "the level uses the chosen arena")
-	_expect(not game.buttons.match.visible and not game.buttons.practice.visible, "development buttons are hidden in a session")
+	_expect(app.screen != null and app.screen.get_child(0).screen_name == &"game", "the level shows on the generated gameplay screen")
 
 	for attempt in 3:
 		await _lose_level(game)
@@ -134,8 +134,9 @@ func _run() -> void:
 	game.set_process(false)
 	game.toggle_pause()
 	for step in game.PAUSE_DELAY_STEPS: game.advance_time(1.0 / 35)
-	_expect(game.buttons.menu.visible, "pause offers MAIN MENU")
-	await _click(game.buttons.menu)
+	await process_frame
+	_expect(_find("mainMenu") != null and _find("mainMenu").is_visible_in_tree(), "pause opens the original pause screen with MAIN MENU (PauseUI)")
+	await _click(_find("mainMenu"))
 	await process_frame
 	_expect(app.current == &"menu" and not is_instance_valid(app.game), "MAIN MENU leaves the level")
 
@@ -151,11 +152,9 @@ func _run() -> void:
 		"a Battle Royale level starts with the hammer")
 	app.game.toggle_pause()
 	for step in app.game.PAUSE_DELAY_STEPS: app.game.advance_time(1.0 / 35)
-	await _click(app.game.buttons.menu)
-
-	app._open_practice()
 	await process_frame
-	_expect(app.game.practice and app.game.get_snapshot().board.size() == 255, "the development launch opens the practice board")
+	await _click(_find("mainMenu"))
+	_expect(app.current == &"menu", "MAIN MENU on the pause screen leaves a Battle Royale level too")
 	app.queue_free()
 	await process_frame
 	print("%s: %d flow scene checks" % ["PASS" if failures == 0 else "FAIL", checks])

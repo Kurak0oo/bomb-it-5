@@ -26,18 +26,22 @@ suites=(
 	"res://tests/pac_man_check.gd|^PASS: [0-9]+ pac-man checks$"
 	"res://tests/stage_features_check.gd|^PASS: [0-9]+ stage feature checks$"
 	"res://tests/art_catalog_check.gd|^PASS: [0-9]+ art catalogue checks"
-	"res://tests/replica_page_check.gd|^PASS: [0-9]+ replica page checks$"
 	"res://tests/hitmove_check.gd|^PASS: [0-9]+ hitmove checks$"
 	"res://tests/audio_check.gd|^PASS: [0-9]+ audio checks$"
 	"res://tests/quality_check.gd|^PASS: [0-9]+ quality checks$"
 	"res://tests/ai_trace_check.gd|^PASS: [0-9]+ ai trace checks$"
 	"res://tests/avm_random_check.gd|^PASS: [0-9]+ avm random checks$"
 	"res://tools/playthrough_check.gd|^PASS: 3 full-board playthrough checks "
+	"res://tools/smoke_playthrough.gd|^PASS: smoke playthrough |--fixed-fps 35"
 )
 for suite in "${suites[@]}"; do
 	script="${suite%%|*}"
 	pattern="${suite#*|}"
-	output="$("$godot" --headless --path "$root" --script "$script" 2>&1)"
+	# An optional third field: extra Godot arguments (the smoke playthrough runs at the SWF rate).
+	extra=""
+	if [[ "$pattern" == *"|"* ]]; then extra="${pattern#*|}"; pattern="${pattern%%|*}"; fi
+	# shellcheck disable=SC2086
+	output="$("$godot" --headless --path "$root" $extra --script "$script" 2>&1)"
 	code=$?
 	printf '%s\n' "$output"
 	if [[ $code -ne 0 ]] || grep -qE '^(SCRIPT ERROR|ERROR):' <<<"$output" || ! grep -qE "$pattern" <<<"$output"; then

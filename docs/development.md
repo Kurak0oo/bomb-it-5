@@ -360,3 +360,33 @@ Results: every case passes; gameplay-cinema-item nodes 382/391/389/389/386, pixe
 Known gaps: robots' own eye/hat loops (85-131 frames inside each clip) still show frame 1;
 vehicles, weapon clips and the portal fade are still placeholders; AI and the session's AI
 robots/looks do not draw from the Flash generator, so cases stop the AI.
+
+Slice (c) and (d), 2026-11-05 (owner to review):
+- Rides and weapons from their SWF clips (`scripts/ui/game_actors.gd`): a ride swaps the robot's
+  clip for `_r<n>_Car_*` / `_r<n>_Skateboard_*` (`CarProp`/`MotoCycleProp.changeStage`), a hit
+  sends it to `dead` and tweens to its last frame; a weapon pickup adds `showTimes` with its count
+  and the held clip at the hand (`AbstractWeapon.changeStage`, `updateWeaponDisplay`, in front of
+  or behind the robot as the AS3 orders them); the hammer's `sinker*_Play` swing and recovery
+  (`HammerProp.bombDown`, `HammerPlayCommand`). Other weapons' swings and shots stay on the
+  placeholder layer. Art: `record_screen.py actors --parts robots,plays,weapons` (every robot
+  clip on foot and on both rides, how each plays, every weapon clip; ~20 min).
+- Robots' own loops (eyes, feathers) are *clip loops*: left out of the clip's images and drawn as
+  their own node at their recorded place per root frame (cost: root + loop frames).
+- New cases (the `pickup` fixture; Godot `pickup KIND`): `gameplay-cinema-ride` (mount, drive),
+  `gameplay-cinema-hammer` (held, turned, swing, swing-late, after), `gameplay-cinema-ai` (AI
+  running: every node matches through round frame 30). All pass: nodes 385-391 each, SSIM
+  0.936-0.938 at the 3×→1× ceiling. Known: after a key release the ride's clip advances once
+  more in the original than in Godot (recorded, not explained), so the ride case ends at drive.
+- AI draws: the AI's choices draw from the round's `Math.random`; `CharacterSelectUI.startFunc`
+  draws the AI robots and `createAIPlayer` each AI's look per level, in the original's order
+  (the map's own draws are still Godot's). The original's AI cannot be frame-matched further:
+  its callbacks run on the host clock (`Action.setAction`'s `TweenMax.delayedCall(0.1)`,
+  `AbstractState`'s `Timer(2000)`, `setTimeout` weapon delays), so two recordings of one case
+  differ from round frame 10; Godot first leaves this recording between frames 30 and 60
+  (robot 6 on another row).
+- Removed: the mobile page (`replica_layout/hud/scenery.gd`), touch controls, the 1280×720 page
+  view and its buttons, `--practice`, the Art Workbench and the page capture tools. Every stage
+  set now plays on the generated screen; a set other than Cinema has no board art in the pack,
+  so its boxes and features are drawn by the placeholder layer over Cinema's floor (known gap).
+- `tools/smoke_playthrough.gd` (in run_checks) plays a normal launch with keyboard events:
+  menus by clicks, Cinema levels, pause/resume, score screens, game over, a Zoo level.

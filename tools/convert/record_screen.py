@@ -705,14 +705,14 @@ def _render_frame(p, index, wanted, sequences, pieces, seen, target, tmp):
 PLAYER_PATHS = {}
 
 
-def _store(p, path, target, tmp, seen, frame=None, hide=None):
+def _store(p, path, target, tmp, seen, frame=None, hide=None, prefix='piece'):
     raw = tmp / 'piece.png'
     meta = p.piece(PLAYER_PATHS.get(path, path), raw, frame, hide)
     if meta.get('missing'):
         return None  # not on the display list at this frame
     digest = hashlib.sha256(raw.read_bytes() + json.dumps(meta['pixel_origin']).encode()).hexdigest()
     if digest not in seen:
-        name = f'piece-{len(seen):05d}.png'
+        name = f'{prefix}-{sum(1 for v in seen.values() if v.startswith(prefix + "-")):05d}.png'
         Image.open(raw).save(target / name)
         seen[digest] = name
     return {'file': seen[digest], **_piece_meta(meta)}
@@ -869,17 +869,247 @@ NESTED = {'exp0': {'roots': range(1, 10), 'ages': 22}}
 STILL = ('brickExp',)
 
 
-def record_actors(case_name, player_path, swf, all_looks=False):
+# `RobotModel.vehicle` of Cinema's rides: CarProp `_Car`, MotoCycleProp `_Skateboard`.
+VEHICLES = ('', '_Car', '_Skateboard')
+DIRECTIONS = ('_Down', '_Left', '_Right', '_Up')
+# Children of a robot clip that RobotView itself sends to a frame (the look, the feet) or
+# places things at: never a loop of the clip's own.
+ROBOT_DRIVEN = ('bodyMc', 'hatMc', 'rightfoot', 'leftfoot', 'hand', 'hand2')
+
+
+def _robot_classes(robot):
+    yield from (f'_r{robot}{v}{d}' for v in VEHICLES for d in DIRECTIONS)
+    yield f'_r{robot}_Dead'
+
+
+def _record_robots(p, target, seen, looks, all_looks, out):
+    """Every robot clip a Cinema round shows, at every frame, per look (see record_actors).
+
+    A nested clip that plays on its own while the robot clip stands still (found by stepping
+    two frames: its frame moves) is a *loop*: the robot's images leave it out (`piece … HIDE`)
+    and it is rendered alone at each of its frames, once per symbol (`loop_art`), with its
+    stage matrix at every root frame (`loops` of each image). Godot draws it as its own node
+    over the robot (scripts/ui/game_actors.gd), so a clip costs root frames + loop frames,
+    not their product. The hand (`hand`, where `AbstractWeapon.updateWeaponDisplay` puts the
+    weapon) is kept at frame 1, as setRobotMc leaves the new clip there. Frame labels are
+    kept (`TryToKillCommandChain`: a vehicle hit sends the clip to `dead`).
+
+    The clips are made on the main timeline (`/root1`), not on a board row: the player takes
+    commands of at most 256 bytes, and a clip with four loops to hide needs short paths. Each
+    image keeps the stage matrix it was rendered at, so Godot places it all the same."""
+    name = '/root1/r'
+    tmp = Path(tempfile.mkdtemp(prefix='b5', dir='/tmp'))
+
+    def add(cls, frame, cloth=-1, hat=-1):
+        p.command(f'symbol /root1 {cls} r 400 200 {frame} {cloth} {hat}')
+
+    def nodes():
+        return {n['path'][len(name):]: n for n in p.display()['nodes'] if n['path'] == name or n['path'].startswith(name + '/')}
+
+    def store(at, hide=None):
+        stored = _store(p, name, target, tmp, seen, None, hide, 'robot')
+        if stored:
+            stored['file'] = 'actors/' + stored['file']
+            stored['at'] = at
+        return stored
+
+    out['robots'] = {}
+    out['loop_art'] = {}
+    for robot in ROBOTS:
+        for cls in _robot_classes(robot):
+            add(cls, 1)
+            tree = nodes()
+            p.command(f'unsymbol {name}')
+            if '' not in tree:
+                continue
+            # RobotView.setRobotMc's descent: bodyMc from the clip, hatMc from bodyMc when it holds one.
+            body = '/bodyMc' in tree
+            hat_from = '/bodyMc' if body and '/bodyMc/hatMc' in tree else ''
+            hat = f'{hat_from}/hatMc' in tree
+            entry = {'frames': tree['']['total_frames'], 'body': body, 'hat': hat, 'looks': {}, 'labels': {}}
+            at = tree['']['stage_matrix']
+            if '/hand' in tree:
+                entry['hand'] = tree['/hand']['stage_matrix']
+            if all_looks:
+                def innermost(start, child):
+                    path = f'{start}/{child}'
+                    while f'{path}/{child}' in tree:
+                        path += f'/{child}'
+                    return tree[path]['total_frames']
+                bodies = range(innermost('', 'bodyMc')) if body else [0]
+                hats = range(innermost(hat_from, 'hatMc')) if hat else [0]
+                wanted = {(c, h) for c in bodies for h in hats}
+            else:
+                wanted = looks[robot]
+            for cloth, hat_id in sorted({(c if body else -1, h if hat else -1) for c, h in wanted}):
+                # Its loops: nested clips whose frame moves while the root stands still.
+                add(cls, 1, cloth, hat_id)
+                before = nodes()
+                p.command('step 2')  # (a nested clip made with its parent shows frame 1 twice)
+                after = nodes()
+                p.command(f'unsymbol {name}')
+                loops = sorted(k for k, n in before.items() if k and n.get('total_frames', 1) > 1
+                               and k.rsplit('/', 1)[-1] not in ROBOT_DRIVEN
+                               and k in after and after[k].get('frame') != n.get('frame'))
+                loops = [k for k in loops if not any(k.startswith(o + '/') for o in loops)]
+                loop_keys = {}
+                for k in loops:
+                    key = f'{before[k].get("character_id")}x{before[k]["total_frames"]}'
+                    loop_keys[k] = key
+                    if key in out['loop_art']:
+                        continue
+                    add(cls, 1, cloth, hat_id)
+                    frames = {}
+                    for f in range(1, before[k]['total_frames'] + 1):
+                        stored = _store(p, name + k, target, tmp, seen, f, None, 'robot')
+                        if stored:
+                            stored['file'] = 'actors/' + stored['file']
+                            stored['at'] = before[k]['stage_matrix']
+                            frames[str(f)] = stored
+                    p.command(f'unsymbol {name}')
+                    out['loop_art'][key] = frames
+                frames = {}
+                for frame in range(1, entry['frames'] + 1):
+                    add(cls, frame, cloth, hat_id)
+                    tree = nodes() if loops or frame == 1 or not entry['labels'] else None
+                    # (only the loops on the display list at this frame: hiding a path the
+                    # frame lacks can stop the player)
+                    stored = store(at, [name + k for k in loops if k in tree] or None)
+                    p.command(f'unsymbol {name}')
+                    if tree and tree[''].get('label'):
+                        entry['labels'].setdefault(tree['']['label'], frame)
+                    if stored:
+                        if loops:
+                            stored['loops'] = [{'art': loop_keys[k], 'at': tree[k]['stage_matrix']}
+                                               for k in loops if k in tree and tree[k].get('effective_visible', True)]
+                        frames[str(frame)] = stored
+                entry['looks'][f'{cloth}|{hat_id}'] = frames
+                entry['loops'] = len(loops)
+            out['robots'][cls] = entry
+        print(f'  robot {robot}: {len(seen)} images so far')
+
+
+def _record_plays(p, out):
+    """How each robot clip plays: made playing (`symbol … p`) and stepped, the frame after each
+    frame (`next`). A ride's clip loops over its driving frames only (frame scripts send it
+    back before its `dead` frames), which its frame count alone does not tell."""
+    for cls, entry in out['robots'].items():
+        p.command(f'symbol /root1 {cls} r 400 200 p')
+        seen_frames = []
+        for _ in range(int(entry['frames']) + 3):
+            p.command('step 1')
+            seen_frames.append(next(n for n in p.display()['nodes'] if n['path'] == '/root1/r')['frame'])
+        p.command('unsymbol /root1/r')
+        nxt = {}
+        for a, b in zip(seen_frames, seen_frames[1:]):
+            if a != b:
+                nxt[str(a)] = b
+        entry['next'] = nxt
+
+
+# `AbstractWeapon._weaponName` and `_showWeaponMcNum` of each weapon a Cinema round can drop,
+# by the simulation's name (HammerProp, FlamerProp, LaserGunProp, TripleShootGunProp,
+# ShotGunProp, LandmineProp, BoxingProp).
+WEAPONS = {'hammer': ('sinker', 12), 'flamer': ('thrower', 5), 'laser': ('lasergun', 16), 'triple': ('shotgun', 15),
+           'shotgun': ('fireball', 17), 'landmine': ('mine', 6), 'boxing': ('boxing', 14)}
+
+
+# The action clips `bombDown` makes (`createWeaponPlay`: `<name><Direction>_Play`; LaserGunProp
+# one `lasergun_Play`; BoxingProp `_Play`, `_Play_2`, `_Play_3` by reach; TripleShootGunProp
+# and LandmineProp an empty MovieClip).
+PLAY_CLASSES = [f'{w}{d}_Play' for w in ('sinker', 'thrower', 'fireball') for d in DIRECTIONS] + ['lasergun_Play'] + \
+    [f'boxing{d}_Play{v}' for d in DIRECTIONS for v in ('', '_2', '_3')]
+
+
+def _record_weapons(p, add, nodes, name, target, tmp, seen, at, out, xy):
+    """The weapons' clips: the held clip `<name><Direction>` (`updateWeaponDisplay`, at the
+    robot's hand) and the action clip `<name><Direction>_Play` (`bombDown`) at every frame,
+    rendered where the robots are; `showTimes` (`setWeaponTimesMc`) per weapon with its
+    `showWeaponMc` frame and its count left out, and the count's digits from the live round:
+    the `pickup` fixture gives the player a hammer ("2"), one blow leaves "1"."""
+    out['weapons'] = {'held': {}, 'play': {}, 'times': {}, 'digits': {}}
+
+    def frames_of(cls, kind):
+        add(cls, 1)
+        tree = nodes()
+        p.command(f'unsymbol {name}')
+        if '' not in tree:
+            return None
+        frames = {}
+        for frame in range(1, tree['']['total_frames'] + 1):
+            add(cls, frame)
+            stored = _store(p, name, target, tmp, seen, None, None, 'weapon')
+            p.command(f'unsymbol {name}')
+            if stored:
+                stored['file'] = 'actors/' + stored['file']
+                stored['at'] = at
+                frames[str(frame)] = stored
+        return {'frames': tree['']['total_frames'], 'images': frames}
+
+    for cls in PLAY_CLASSES:
+        got = frames_of(cls, 'play')
+        if got:
+            out['weapons']['play'][cls] = got
+    for kind, (weapon, show) in WEAPONS.items():
+        for d in DIRECTIONS:
+            got = frames_of(f'{weapon}{d}', 'held')
+            if got:
+                out['weapons']['held'][f'{weapon}{d}'] = got
+        p.command(f'symbol {name.rsplit("/", 1)[0]} showTimes refsym {xy} 1 -1 -1 showWeaponMc={show}')
+        stored = _store(p, name, target, tmp, seen, None, [name + '/timesNum'], 'weapon')
+        p.command(f'unsymbol {name}')
+        if stored:
+            stored['file'] = 'actors/' + stored['file']
+            stored['at'] = at
+            out['weapons']['times'][kind] = stored
+        print(f'  weapon {kind}: {len(seen)} images so far')
+    # The count's digits, from the round itself.
+    p.command('fixture ' + json.dumps({'op': 'pickup', 'kind': 'hammer'}))
+    p.command('step 2')
+    for digit in ('2', '1'):
+        dump = {n['path']: n for n in p.display()['nodes']}
+        times = next((path for path, n in dump.items() if n.get('class') == 'showTimes'), None)
+        if times and times + '/timesNum' in dump:
+            stored = _store(p, times + '/timesNum', target, tmp, seen, None, None, 'weapon')
+            if stored:
+                stored['file'] = 'actors/' + stored['file']
+                stored['at'] = dump[times + '/timesNum']['stage_matrix']
+                stored['times_at'] = dump[times]['stage_matrix']
+                out['weapons']['digits'][digit] = stored
+        if digit == '2':
+            p.command('kd space')
+            p.command('step 1')
+            p.command('ku space')
+            p.command('step 1')
+    print(f'  weapon digits: {sorted(out["weapons"]["digits"])}')
+
+
+def _write_actors(target, out, done, previous):
+    """actors.json with the parts recorded so far (`done`); the others as they were."""
+    keys = {'robots': ('robots', 'loop_art'), 'weapons': ('weapons',), 'clips': ('played', 'nested', 'still', 'loops')}
+    merged = dict(out)
+    for part, names in keys.items():
+        if part not in done:
+            for key in names:
+                if key in previous:
+                    merged[key] = previous[key]
+    (target / 'actors.json').write_text(json.dumps(merged, indent=1) + '\n', encoding='utf-8')
+
+
+def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots', 'plays', 'weapons', 'clips')):
     """The moving actors' art (checkpoint 4 slice b), into original/screens/<screen>/actors/:
     each library clip the round makes at run time is constructed by its own class with the
     reference player's `symbol` (art pass only), put on the board's first row layer, and
     rendered alone with `piece`:
 
-    - robots `_r<n>_<Down|Left|Right|Up|Dead>` at every frame, with each look a round uses
-      (`RobotView.setRobotMc`: innermost `bodyMc` at clothID + 1, `hatMc` at hatID + 1): the
-      default look of every robot and the recorded round's looks (layout `board.looks`), or
-      every look with --looks all. A nested loop the clip runs on its own (eyes blinking)
-      shows its first frame;
+    - robots `_r<n><vehicle><Down|Left|Right|Up|Dead>` at every frame (`RobotView.setRobotMc`:
+      vehicle '' on foot, `_Car` (CarProp) and `_Skateboard` (MotoCycleProp), Cinema's rides),
+      with each look a round uses (innermost `bodyMc` at clothID + 1, `hatMc` at hatID + 1):
+      the default look of every robot and the recorded round's looks (layout `board.looks`),
+      or every look with --looks all. A nested loop the clip plays on its own (eyes blinking,
+      a hat's feather) is left out of the clip's images and rendered alone at each of its
+      frames, with its place at each root frame (`_record_robots`);
+    - each weapon's held clip, its `_Play` clip and the `showTimes` counter (`_record_weapons`);
     - bomb0 and the portals by age (their timelines play, as made with `new`), exp0 at each
       root frame by age of its nested clip (the root is stopped), brickExp at each frame;
     - a box running loops of its own (the centre's marquee), on stage at every combination.
@@ -892,13 +1122,21 @@ def record_actors(case_name, player_path, swf, all_looks=False):
     board = layout['board']
     capture = Path(layout['source']['golden']).stem
     target = PACK / screen / 'actors'
-    shutil.rmtree(target, ignore_errors=True)
-    target.mkdir(parents=True)
+    parts = set(parts)
+    previous = {}
+    if parts >= {'robots', 'weapons', 'clips'}:
+        shutil.rmtree(target, ignore_errors=True)
+    elif (target / 'actors.json').is_file():
+        previous = json.loads((target / 'actors.json').read_text(encoding='utf-8'))
+        for part in parts:
+            for old in target.glob(f'{ {"robots": "robot", "weapons": "weapon", "clips": "piece", "plays": "-"}[part]}-*.png'):
+                old.unlink()
+    target.mkdir(parents=True, exist_ok=True)
     host = board['layers']['robot'][0]
     m = board['container_matrix']
     x, y = board['excursion'][0] + 7 * board['grid'], board['excursion'][1] + 6 * board['grid']
     at = [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
-    looks = {r: {(0, 0)} for r in ROBOTS}
+    looks = {r: {(0, 0)} for r in range(8)}
     for robot, look in zip(board['robots'], board.get('looks', [])):
         looks[robot].add(tuple(max(0, v) for v in look))  # -1: the clip has none; its default
     p = Player(player_path, swf)
@@ -908,8 +1146,8 @@ def record_actors(case_name, player_path, swf, all_looks=False):
            'scale': SCALE, 'host': host, 'at': at, 'robots': {}, 'played': {}, 'nested': {}, 'still': {}}
     name = f'{host}/refsym'
 
-    def store(frame=None):
-        stored = _store(p, name, target, tmp, seen)
+    def store(frame=None, hide=None, prefix='piece'):
+        stored = _store(p, name, target, tmp, seen, frame, hide, prefix)
         if stored:
             stored['file'] = 'actors/' + stored['file']
             stored['at'] = at
@@ -926,40 +1164,22 @@ def record_actors(case_name, player_path, swf, all_looks=False):
             p.command(line)
         for actor in (1, 2, 3):
             p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
-        for robot in ROBOTS:
-            for suffix in ROBOT_CLASSES:
-                cls = f'_r{robot}{suffix}'
-                add(cls, 1)
-                tree = nodes()
-                p.command(f'unsymbol {name}')
-                # RobotView.setRobotMc's descent: bodyMc from the clip, hatMc from bodyMc when it holds one.
-                body = '/bodyMc' in tree
-                hat_from = '/bodyMc' if body and '/bodyMc/hatMc' in tree else ''
-                hat = f'{hat_from}/hatMc' in tree
-                entry = {'frames': tree['']['total_frames'], 'body': body, 'hat': hat, 'looks': {}}
-                if all_looks:
-                    def innermost(start, child):
-                        path = f'{start}/{child}'
-                        while f'{path}/{child}' in tree:
-                            path += f'/{child}'
-                        return tree[path]['total_frames']
-                    bodies = range(innermost('', 'bodyMc')) if body else [0]
-                    hats = range(innermost(hat_from, 'hatMc')) if hat else [0]
-                    wanted = {(c, h) for c in bodies for h in hats}
-                else:
-                    wanted = looks[robot]
-                for cloth, hat_id in sorted({(c if body else -1, h if hat else -1) for c, h in wanted}):
-                    frames = {}
-                    for frame in range(1, entry['frames'] + 1):
-                        add(cls, frame, cloth, hat_id)
-                        stored = store()
-                        p.command(f'unsymbol {name}')
-                        if stored:
-                            frames[str(frame)] = stored
-                    entry['looks'][f'{cloth}|{hat_id}'] = frames
-                out['robots'][cls] = entry
-            print(f'  robot {robot}: {len(seen)} images so far')
-        for cls, how in PLAYED.items():
+        # The weapons first: their count's digits come from the live round, which the robots'
+        # many stepped frames would run out of time (180 s).
+        if 'weapons' in parts:
+            _record_weapons(p, add, nodes, name, target, tmp, seen, at, out, f'{x} {y}')
+            _write_actors(target, out, parts & {'weapons'}, previous)
+            # 3× frames of the cases that show rides and weapons (the pixel score's ceiling).
+            for other in CASES_WITH_RIDES:
+                _shots(load_case(other), other, player_path, swf, PACK / screen)
+        if 'robots' in parts:
+            _record_robots(p, target, seen, looks, all_looks, out)
+            _write_actors(target, out, parts & {'weapons', 'robots'}, previous)
+        if 'plays' in parts:
+            if 'robots' not in parts:
+                out['robots'] = previous.get('robots', {})
+            _record_plays(p, out)
+        for cls, how in (PLAYED.items() if 'clips' in parts else ()):
             add(cls, how['frame'])
             ages, tree = {}, None
             for age in range(how['ages']):
@@ -971,7 +1191,7 @@ def record_actors(case_name, player_path, swf, all_looks=False):
                 p.command('step 1')
             p.command(f'unsymbol {name}')
             out['played'][cls] = ages
-        for cls, how in NESTED.items():
+        for cls, how in (NESTED.items() if 'clips' in parts else ()):
             roots = {}
             for root in how['roots']:
                 add(cls, root)
@@ -987,7 +1207,7 @@ def record_actors(case_name, player_path, swf, all_looks=False):
                 p.command(f'unsymbol {name}')
                 roots[str(root)] = by_nested
             out['nested'][cls] = roots
-        for cls in STILL:
+        for cls in (STILL if 'clips' in parts else ()):
             add(cls, 1)
             total = nodes()['']['total_frames']
             p.command(f'unsymbol {name}')
@@ -1002,7 +1222,7 @@ def record_actors(case_name, player_path, swf, all_looks=False):
         # A box whose frame runs nested loops of its own (the centre's marquee: lights and a
         # screen): the recorded box rendered on stage at every combination, stepping the round.
         out['loops'] = {}
-        for box in board['boxes']:
+        for box in (board['boxes'] if 'clips' in parts else ()):
             if not box.get('loop_frames') or str(box['frame']) in out['loops']:
                 continue
             dump = {n['path']: n for n in p.display()['nodes']}
@@ -1020,15 +1240,20 @@ def record_actors(case_name, player_path, swf, all_looks=False):
             out['loops'][str(box['frame'])] = {'periods': periods, 'frames': frames}
             print(f'  box frame {box["frame"]}: {len(frames)} loop images')
         # 3× frames of the gameplay cases' other captures: the pixel score's resampling ceiling.
-        for other in sorted(CASES_WITH_ACTORS):
+        for other in sorted(CASES_WITH_ACTORS if 'clips' in parts else ()):
             if other == case_name:
                 continue
             _shots(load_case(other), other, player_path, swf, PACK / screen)
     finally:
         p.close()
         shutil.rmtree(tmp, ignore_errors=True)
-    (target / 'actors.json').write_text(json.dumps(out, indent=1) + '\n', encoding='utf-8')
-    print(f'actors: {len(out["robots"])} robot clips, {len(seen)} distinct images in {target.relative_to(ROOT)}')
+    # A partial run (--parts) keeps the other parts of the previous actors.json.
+    if 'plays' in parts and 'robots' not in parts:
+        parts = parts | {'robots'}  # (out['robots'] now holds the previous clips with `next`)
+        if 'loop_art' in previous:
+            out['loop_art'] = previous['loop_art']
+    _write_actors(target, out, parts, previous)
+    print(f'actors: {len(out["robots"])} robot clips, {len(seen)} distinct images in {target}')
 
 
 # ------------------------------------------------------------------ items
@@ -1207,6 +1432,7 @@ def record_panels(_case_name, player_path, swf):
 # Cases whose captures show the gameplay screen past its first frame (their 3× frames give
 # the pixel score's ceiling, compare.py resampling_ceiling).
 CASES_WITH_ACTORS = ('gameplay-cinema-bomb',)
+CASES_WITH_RIDES = ('gameplay-cinema-ride', 'gameplay-cinema-hammer')
 
 
 def _shots(case, case_name, player_path, swf, target):
@@ -1254,11 +1480,13 @@ def main():
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
+    parser.add_argument('--parts', default='robots,plays,weapons,clips',
+                        help='actors: which parts to record again (robots, plays, weapons, clips); the others are kept')
     parser.add_argument('--looks', choices=['round', 'all'], default='round',
                         help='actors: the default and recorded looks (round), or every look of every robot (all)')
     args = parser.parse_args()
     if args.what == 'actors':
-        record_actors(args.case, args.player.resolve(), args.swf, args.looks == 'all')
+        record_actors(args.case, args.player.resolve(), args.swf, args.looks == 'all', args.parts.split(','))
         return 0
     if args.what == 'items':
         record_items(args.case, args.player.resolve(), args.swf)

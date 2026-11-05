@@ -54,6 +54,12 @@ The art of one box kind on the gameplay screen: a `_brick5` frame, shrunk and ce
 **Actor art**:
 The images of a library clip the round makes at run time (a robot in a direction and look, a bomb, a blast), rendered alone by the reference player at every frame the round can show, and placed by the clip's registration point.
 
+**Clip loop**:
+A nested clip that an actor's library clip plays on its own while the clip itself stands still (a robot's blinking eyes), rendered apart from the clip and drawn as its own node over it, so a clip costs its root frames plus its loop frames.
+
+**Placeholder layer**:
+What the gameplay screen draws without original art yet (most weapon actions and shots, mode objects, and the board of a stage set other than Cinema), in the screen's board container.
+
 **Recorded round**:
 The board and robots a gameplay capture recorded, which the comparison loop starts its Godot round on because the original's random draws before the map are not reproduced yet.
 

@@ -40,6 +40,9 @@ var _tick := -1
 ## The moving actors' art (original/screens/game/actors/actors.json), shared with GameActors.
 var actor_art: Dictionary = {}
 var _portal_loop: Dictionary = {}
+## A box whose tile is not in the pack shows an outline (off where the placeholder layer draws
+## the board: a stage set other than Cinema).
+var outline_missing := true
 ## Rows made so far (`show_row`).
 var _built: Array = []
 
@@ -96,7 +99,7 @@ func show_row(y: int) -> void:
 	var tiles: Dictionary = _screen.pack().get("tiles", {})
 	for box: Dictionary in _rows[y]:
 		var art: Dictionary = tiles.get("%d|%d" % [int(box.frame), int(box.exist)], {}) if box.shown else {}
-		attach(_board.layers.box[y], box, cell_matrix(Vector2(box.cell[0], box.cell[1])), art, "piece", art.is_empty() and box.shown)
+		attach(_board.layers.box[y], box, cell_matrix(Vector2(box.cell[0], box.cell[1])), art, "piece", art.is_empty() and box.shown and outline_missing)
 	_portals()
 
 
