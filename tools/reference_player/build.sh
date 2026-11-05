@@ -12,7 +12,7 @@ revision=45366370ed7d1a59c89aa3cf7b765c7a274407cd
 patches=(reference-observer reference-fixtures reference-events reference-compact reference-focus
 	reference-actors reference-geometry reference-drops reference-session-state reference-class-names
 	reference-actor-bombs reference-ai-returns reference-move-step reference-active-pickups reference-platforms reference-rides
-	reference-display)
+	reference-display reference-symbol)
 if [[ ! -d "$checkout/.git" ]]; then
 	git init -q "$checkout"
 	git -C "$checkout" remote add origin https://github.com/ruffle-rs/ruffle

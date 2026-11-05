@@ -15,6 +15,10 @@ states: the case is replayed to the capture; then each interactive instance is h
 pressed and released away from it (so nothing navigates), and each switch is clicked
 through its frames. The clip frame shown in each state is recorded, and its art rendered.
 
+actors (after art): the gameplay screen's moving actors (robots, bombs, flames, box breaks,
+portals), each library clip made by its own class (`symbol`) and rendered alone at every
+frame the round can show.
+
 art (after tools/convert/layout.py): every piece is rendered at 3× with `piece`: static
 pieces once, sequence pieces at every recorded frame (identical images stored once).
 Everything is self-checked: at the capture frame the pieces, laid back together, must
@@ -819,6 +823,179 @@ def _record_effects(layout, target, swf):
     return out
 
 
+# ------------------------------------------------------------------ moving actors
+
+ROBOTS = range(8)
+ROBOT_CLASSES = ('_Down', '_Left', '_Right', '_Up', '_Dead')
+# Library clips the round makes at run time (Bomb.createMC, Bomb.blast, Tool.CreateBoxExpMovie,
+# Portal) whose art is keyed by how long they have been on the display list: their own
+# timeline plays (bomb0) or a nested clip plays under a stopped root (exp0, the portal).
+PLAYED = {'bomb0': {'frame': 'p', 'ages': 378},  # lcm of its 27 and its fuse spark's 14 frames
+          'Art_Portal_1': {'frame': 'p', 'ages': 40}, 'Art_Portal_2': {'frame': 'p', 'ages': 40}}
+NESTED = {'exp0': {'roots': range(1, 10), 'ages': 22}}
+STILL = ('brickExp',)
+
+
+def record_actors(case_name, player_path, swf, all_looks=False):
+    """The moving actors' art (checkpoint 4 slice b), into original/screens/<screen>/actors/:
+    each library clip the round makes at run time is constructed by its own class with the
+    reference player's `symbol` (art pass only), put on the board's first row layer, and
+    rendered alone with `piece`:
+
+    - robots `_r<n>_<Down|Left|Right|Up|Dead>` at every frame, with each look a round uses
+      (`RobotView.setRobotMc`: innermost `bodyMc` at clothID + 1, `hatMc` at hatID + 1): the
+      default look of every robot and the recorded round's looks (layout `board.looks`), or
+      every look with --looks all. A nested loop the clip runs on its own (eyes blinking)
+      shows its first frame;
+    - bomb0 and the portals by age (their timelines play, as made with `new`), exp0 at each
+      root frame by age of its nested clip (the root is stopped), brickExp at each frame.
+
+    Each image keeps the stage matrix it was rendered at (`at`). The art session stops the
+    AI first (fixture) so the round cannot end while it renders."""
+    case = load_case(case_name)
+    screen = 'game'
+    layout = json.loads((ROOT / 'scenes' / 'swf' / f'{screen}.json').read_text(encoding='utf-8'))
+    board = layout['board']
+    capture = Path(layout['source']['golden']).stem
+    target = PACK / screen / 'actors'
+    shutil.rmtree(target, ignore_errors=True)
+    target.mkdir(parents=True)
+    host = board['layers']['robot'][0]
+    m = board['container_matrix']
+    x, y = board['excursion'][0] + 7 * board['grid'], board['excursion'][1] + 6 * board['grid']
+    at = [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
+    looks = {r: {(0, 0)} for r in ROBOTS}
+    for robot, look in zip(board['robots'], board.get('looks', [])):
+        looks[robot].add(tuple(max(0, v) for v in look))  # -1: the clip has none; its default
+    p = Player(player_path, swf)
+    seen = {}
+    tmp = Path(tempfile.mkdtemp(prefix='bombit5-actors-'))
+    out = {'schema': 'bombit5-original-actors-v1', 'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path),
+           'scale': SCALE, 'host': host, 'at': at, 'robots': {}, 'played': {}, 'nested': {}, 'still': {}}
+    name = f'{host}/refsym'
+
+    def store(frame=None):
+        stored = _store(p, name, target, tmp, seen)
+        if stored:
+            stored['file'] = 'actors/' + stored['file']
+            stored['at'] = at
+        return stored
+
+    def add(cls, frame, cloth=-1, hat=-1):
+        p.command(f'symbol {host} {cls} refsym {x} {y} {frame} {cloth} {hat}')
+
+    def nodes():
+        return {n['path'][len(name):]: n for n in p.display()['nodes'] if n['path'] == name or n['path'].startswith(name + '/')}
+
+    try:
+        for line in single_steps(case, capture):
+            p.command(line)
+        for actor in (1, 2, 3):
+            p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
+        for robot in ROBOTS:
+            for suffix in ROBOT_CLASSES:
+                cls = f'_r{robot}{suffix}'
+                add(cls, 1)
+                tree = nodes()
+                p.command(f'unsymbol {name}')
+                # RobotView.setRobotMc's descent: bodyMc from the clip, hatMc from bodyMc when it holds one.
+                body = '/bodyMc' in tree
+                hat_from = '/bodyMc' if body and '/bodyMc/hatMc' in tree else ''
+                hat = f'{hat_from}/hatMc' in tree
+                entry = {'frames': tree['']['total_frames'], 'body': body, 'hat': hat, 'looks': {}}
+                if all_looks:
+                    def innermost(start, child):
+                        path = f'{start}/{child}'
+                        while f'{path}/{child}' in tree:
+                            path += f'/{child}'
+                        return tree[path]['total_frames']
+                    bodies = range(innermost('', 'bodyMc')) if body else [0]
+                    hats = range(innermost(hat_from, 'hatMc')) if hat else [0]
+                    wanted = {(c, h) for c in bodies for h in hats}
+                else:
+                    wanted = looks[robot]
+                for cloth, hat_id in sorted({(c if body else -1, h if hat else -1) for c, h in wanted}):
+                    frames = {}
+                    for frame in range(1, entry['frames'] + 1):
+                        add(cls, frame, cloth, hat_id)
+                        stored = store()
+                        p.command(f'unsymbol {name}')
+                        if stored:
+                            frames[str(frame)] = stored
+                    entry['looks'][f'{cloth}|{hat_id}'] = frames
+                out['robots'][cls] = entry
+            print(f'  robot {robot}: {len(seen)} images so far')
+        for cls, how in PLAYED.items():
+            add(cls, how['frame'])
+            ages, tree = {}, None
+            for age in range(how['ages']):
+                tree = nodes()
+                stored = store()
+                if stored:
+                    stored['frames'] = {k or '/': v.get('frame') for k, v in tree.items() if v.get('total_frames', 1) > 1}
+                    ages[str(age)] = stored
+                p.command('step 1')
+            p.command(f'unsymbol {name}')
+            out['played'][cls] = ages
+        for cls, how in NESTED.items():
+            roots = {}
+            for root in how['roots']:
+                add(cls, root)
+                by_nested = {}
+                for age in range(how['ages']):
+                    tree = nodes()
+                    nested = [v.get('frame') for k, v in tree.items() if k and v.get('total_frames', 1) > 1]
+                    key = str(nested[0] if nested else 0)
+                    if key not in by_nested:
+                        stored = store()
+                        by_nested[key] = stored or {}
+                    p.command('step 1')
+                p.command(f'unsymbol {name}')
+                roots[str(root)] = by_nested
+            out['nested'][cls] = roots
+        for cls in STILL:
+            add(cls, 1)
+            total = nodes()['']['total_frames']
+            p.command(f'unsymbol {name}')
+            frames = {}
+            for frame in range(1, total + 1):
+                add(cls, frame)
+                stored = store()
+                p.command(f'unsymbol {name}')
+                if stored:
+                    frames[str(frame)] = stored
+            out['still'][cls] = frames
+        # 3× frames of the gameplay cases' other captures: the pixel score's resampling ceiling.
+        for other in sorted(CASES_WITH_ACTORS):
+            if other == case_name:
+                continue
+            _shots(load_case(other), other, player_path, swf, PACK / screen)
+    finally:
+        p.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+    (target / 'actors.json').write_text(json.dumps(out, indent=1) + '\n', encoding='utf-8')
+    print(f'actors: {len(out["robots"])} robot clips, {len(seen)} distinct images in {target.relative_to(ROOT)}')
+
+
+# Cases whose captures show the gameplay screen past its first frame (their 3× frames give
+# the pixel score's ceiling, compare.py resampling_ceiling).
+CASES_WITH_ACTORS = ('gameplay-cinema-bomb',)
+
+
+def _shots(case, case_name, player_path, swf, target):
+    p = Player(player_path, swf)
+    try:
+        for action in case['actions']:
+            if 'fixture' in action:
+                p.command('fixture ' + json.dumps(action['fixture']))
+            if 'command' in action:
+                p.command(action['command'])
+            if 'capture' in action:
+                p.shot(target / f'reference-3x-{case_name}-{action["capture"]}.png')
+    finally:
+        p.close()
+
+
 def record_fonts(_case_name, _player_path, swf):
     """The SWF's embedded fonts as TTF (FFDec), for live text, in the local pack:
     original/fonts/ with fonts.json mapping each family to its files, largest first (the
@@ -846,11 +1023,16 @@ def record_fonts(_case_name, _player_path, swf):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts'])
+    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
+    parser.add_argument('--looks', choices=['round', 'all'], default='round',
+                        help='actors: the default and recorded looks (round), or every look of every robot (all)')
     args = parser.parse_args()
+    if args.what == 'actors':
+        record_actors(args.case, args.player.resolve(), args.swf, args.looks == 'all')
+        return 0
     if not args.swf.is_file():
         raise SystemExit(f'needs the SWF at {args.swf}')
     if not args.player.is_file():

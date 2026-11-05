@@ -259,6 +259,24 @@ fn main() -> Result<()> {
                     "clipped_by_viewport": px[0] < 0.0 || px[1] < 0.0 || px[2] > w as f64 || px[3] > h as f64,
                 }))?)?;
             }
+            #[cfg(feature = "reference-display")]
+            "symbol" => {
+                // Art pass only: `symbol PARENT CLASS NAME X Y FRAME [CLOTH HAT [CHILD=FRAME,...]]`
+                // constructs a library class and adds it under PARENT as NAME, so `piece
+                // PARENT/NAME` renders it; `unsymbol PARENT/NAME` takes it off again.
+                // FRAME: a frame to stop at, `-` to stop where it is, `p` to leave it playing.
+                let frame: Option<i32> = t.get(6).filter(|f| **f != "-").map(|f| if *f == "p" { Ok(0) } else { f.parse() }).transpose()?;
+                let cloth: i32 = t.get(7).map(|f| f.parse()).transpose()?.unwrap_or(-1);
+                let hat: i32 = t.get(8).map(|f| f.parse()).transpose()?.unwrap_or(-1);
+                let children: Vec<(String, i32)> = t.get(9).map(|s| s.split(',').filter_map(|kv| {
+                    let (k, v) = kv.split_once('=')?; Some((k.to_string(), v.parse().ok()?)) }).collect()).unwrap_or_default();
+                player.lock().unwrap().reference_symbol_add(t[1], t[2], t[3], t[4].parse()?, t[5].parse()?, frame, cloth, hat, &children)
+                    .map_err(|e| anyhow!(e))?;
+            }
+            #[cfg(feature = "reference-display")]
+            "unsymbol" => {
+                player.lock().unwrap().reference_symbol_remove(t[1]).map_err(|e| anyhow!(e))?;
+            }
             "shot" => shot(&player, t[1])?,
             "kd" => ev(PlayerEvent::KeyDown { key: key(t[1])? }),
             "ku" => ev(PlayerEvent::KeyUp { key: key(t[1])? }),

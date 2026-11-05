@@ -17,7 +17,7 @@ python tools/replay_reference.py --observe --output .scratch/edition-5-research/
 The build script uses a task-owned Ruffle checkout under ignored storage. It copies
 this package into that workspace and applies the recorded research patch chain:
 observer → fixtures → events → compact → focus → actors → geometry → drops →
-session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups → platforms → rides → display.
+session-state → class-names → actor-bombs → ai-returns → move-step → active-pickups → platforms → rides → display → symbol.
 It first reverses exact matching installed
 patches in reverse order and rejects other core changes. The default probe exposes
 full observation; fixture commands require `-Fixtures`, event/seed commands require
@@ -69,6 +69,7 @@ Protocol (one command per line):
 - `state FILE.json`: bounded native slot graph, available with the observer feature.
 - `display FILE.json`: the stage display list for the comparison loop (`-Display` / `build.sh`): per node its path (instance name, or `@depth` for unnamed and auto-named children; a button's shown state is `<button>/@state`), kind, class, character id, visibility, alpha, colour transform, local and stage matrices, stage bounds, clip frame/label, button state and text, plus mask relationships (`clip_depth` for timeline masks, `mask` naming an AS3 mask by path, `scroll_rect`) and `render_bounds` (stage units, filter spread included).
 - `piece PATH FILE.png`: render one display-list path alone at the player's `--scale`, with its own masks, filters and blends, on a transparent stage, cropped to its render bounds; `FILE.png.json` records the bounds and pixel origin. A 4th word renders a clip at that frame (`-` for none); a 5th, comma-separated paths, leaves those parts out (rendered separately). Other objects are hidden through native visibility flags only and restored afterwards (no ActionScript runs, focus is untouched).
+- `symbol PARENT CLASS NAME X Y FRAME [CLOTH HAT]` / `unsymbol PATH` (art pass only, `-Display`): construct a library class with its own constructor, set its look as `RobotView.setRobotMc` does (innermost `bodyMc` at CLOTH+1, `hatMc` at HAT+1; −1 skips), stop it at FRAME (`-`: where it is; `p`: leave it playing), and add it under PARENT as NAME at (X, Y), so `piece PARENT/NAME` renders it; `unsymbol` takes it off again. It changes the display list, so never use it in a recording whose state is evidence.
 - `trace DIR` / `trace off`: save a state graph after each stepped frame.
 - `compact FILE.json`, `trace-compact DIR` / `trace-compact off`: omit native painting trees, retaining logical objects and directly referenced animation frame numbers. `--observe --compact` selects compact snapshots in the driver.
 - `focus FILE.json`, `trace-focus DIR` / `trace-focus off`: explicit game/actor/AI/callback/cell/bomb/map-feature projection (`platforms`: each `maps.platform` object a Grid slot references) with physical-slot layouts, available with `-Focus`. `--observe --focus` selects this mode. An expensive initial full-graph bootstrap is explicitly marked.

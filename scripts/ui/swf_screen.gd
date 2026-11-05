@@ -35,6 +35,7 @@ const PACK := "res://original/screens/%s/manifest.json"
 const FPS := 35.0
 const BLEND_SHADER := preload("res://scripts/ui/swf_blend.gdshader")
 const GLOW_SHADER := preload("res://scripts/ui/swf_glow.gdshader")
+const OFFSET_SHADER := preload("res://scripts/ui/swf_color_add.gdshader")
 const FlashKeys = preload("res://scripts/ui/flash_keys.gd")
 const FONTS := "res://original/fonts/fonts.json"
 ## Flash's TextField draws its text 2 units inside its bounds.
@@ -294,28 +295,96 @@ func add_node(entry: Dictionary, art: Dictionary = {}) -> Dictionary:
 	return rec
 
 
-## Take a run-time node (and its art) off the screen: `removeChild` of a box that broke.
+## Take a run-time node (and its art, and the run-time nodes inside it) off the screen:
+## `removeChild` of a box that broke, a robot leaving its row.
 func remove_node(path: String) -> void:
 	var rec: Dictionary = _by_path_rec.get(path, {})
 	if rec.is_empty(): return
-	_records.erase(rec)
-	_by_path_rec.erase(path)
-	by_path.erase(path)
-	_waiting.erase(path)
+	for r: Dictionary in _records.duplicate():
+		if r.path == path or String(r.path).begins_with(path + "/"):
+			_records.erase(r)
+			_by_path_rec.erase(r.path)
+			by_path.erase(r.path)
+			_waiting.erase(r.path)
 	rec.node.queue_free()
 
 
-## A run-time node's display-list path changes (`@0#k` of the boxes after a removed one).
+## A run-time node's display-list path changes (`@0#k` of the boxes after a removed one);
+## the run-time nodes inside it follow.
 func rename_node(path: String, new_path: String) -> void:
 	var rec: Dictionary = _by_path_rec.get(path, {})
 	if rec.is_empty() or path == new_path: return
-	_by_path_rec.erase(path)
-	by_path.erase(path)
-	rec.path = new_path
-	rec.entry.path = new_path
-	_by_path_rec[new_path] = rec
-	by_path[new_path] = rec.node
-	rec.node.set_meta("swf_path", new_path)
+	for r: Dictionary in _records:
+		var old: String = r.path
+		if old != path and not old.begins_with(path + "/"): continue
+		var renamed := new_path + old.substr(path.length())
+		_by_path_rec.erase(old)
+		by_path.erase(old)
+		_waiting.erase(old)
+		r.path = renamed
+		r.entry.path = renamed
+		if old != path:
+			r.parent = new_path + String(r.parent).substr(path.length())
+			r.entry.parent = r.parent
+		_by_path_rec[renamed] = r
+		by_path[renamed] = r.node
+		r.node.set_meta("swf_path", renamed)
+
+
+## A run-time node moves (a robot walking): its stage matrix.
+func move_node(path: String, stage_matrix: Array) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	rec.static = _matrix(stage_matrix)
+	_queue_apply()
+
+
+## A run-time node shows another image (a robot's clip at another frame): `art` as for
+## `add_node` (an image of the local pack and the stage matrix it was rendered at), or none.
+## `frame` is the clip frame it reports.
+func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	if frame > 0:
+		rec.frame = frame
+		rec.node.set_meta("swf_frame", frame)
+	var key := "%s|%s" % [art.get("file", ""), art.get("at", "")]
+	if rec.get("art_key", "") == key: return
+	rec.art_key = key
+	rec.art.clear()
+	rec.erase("art_table")
+	rec.erase("placed")
+	rec.shown_art = -1
+	if rec.has("sprite"): rec.sprite.visible = false
+	if not art.is_empty():
+		var added := _add_art(rec, art, 0, -1)
+		if not added.is_empty(): added["at"] = _matrix(art.at)
+	_queue_apply()
+
+
+## Flash colour offsets on a run-time node's art (`InvincibilityCommand`'s +50 blink),
+## added to every pixel it draws.
+func set_node_offset(path: String, offset: Color) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	rec.color_offset = offset
+	if rec.has("sprite"): _offset_material(rec)
+
+
+func _offset_material(rec: Dictionary) -> void:
+	var offset: Color = rec.get("color_offset", Color(0, 0, 0, 0))
+	var sprite: Sprite2D = rec.sprite
+	if offset == Color(0, 0, 0, 0):
+		if sprite.material is ShaderMaterial and (sprite.material as ShaderMaterial).shader == OFFSET_SHADER:
+			var material := CanvasItemMaterial.new()
+			material.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA
+			sprite.material = material
+		return
+	if not (sprite.material is ShaderMaterial and (sprite.material as ShaderMaterial).shader == OFFSET_SHADER):
+		var shader := ShaderMaterial.new()
+		shader.shader = OFFSET_SHADER
+		sprite.material = shader
+	(sprite.material as ShaderMaterial).set_shader_parameter("offset", Vector3(offset.r, offset.g, offset.b))
 
 
 ## The local pack's manifest of this screen (art the controllers lay out themselves).
@@ -774,6 +843,7 @@ func _sprite(rec: Dictionary) -> Sprite2D:
 	rec.node.add_child(sprite)
 	rec.node.move_child(sprite, 1 if blend > 0 else 0)
 	rec.sprite = sprite
+	if rec.has("color_offset"): _offset_material(rec)
 	return sprite
 
 

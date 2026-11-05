@@ -1,0 +1,158 @@
+{
+ "name": "gameplay-cinema-bomb",
+ "origin": "Moving actors on the gameplay screen (checkpoint 4, slice b): the round of gameplay-cinema-start (seed 42, Arcade, Normal, Cinema, robot 0) with the three AI robots stopped at its first frame (AIControl.stop through the fixture), so only the player's robot acts. It walks down two cells (capture walk: frame 707, the walk clip playing, InvincibilityCommand's +50 colour offset on), drops a bomb at (1,3) and walks back up (bomb: frame 744, bomb0 pulsing, _r0_Up walking), the bomb blasts (blast: frame 806: exp0 centre, arm ends up and down, the soft block at (1,4) breaking with brickExp) and the box is about to go (box-break: frame 812). Captures stop before the box's drop roll (Box.createProp, frame 815), which Godot's round does not draw from the original's Math.random.",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 6"
+  },
+  {
+   "capture": "walk"
+  },
+  {
+   "command": "step 24"
+  },
+  {
+   "command": "ku down"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "kd up"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "capture": "bomb"
+  },
+  {
+   "command": "step 20"
+  },
+  {
+   "command": "ku up"
+  },
+  {
+   "command": "step 42"
+  },
+  {
+   "capture": "blast"
+  },
+  {
+   "command": "step 6"
+  },
+  {
+   "capture": "box-break"
+  }
+ ]
+}

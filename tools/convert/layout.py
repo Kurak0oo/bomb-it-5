@@ -667,6 +667,8 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
       render bounds, which the comparison leaves out of the node diff and the pixel score;
     - `excursion` and `grid`: where cell (x, y) lies in the board container, fitted to the
       recorded boxes (the AS3 sets `x = xN * GRID_WIDTH + EXCURSION_X`, `AbstractObject`);
+    - `looks`: each seat's [clothID, hatID] (`RobotView.setRobotMc`: the innermost `bodyMc`
+      shows clothID + 1, the innermost `hatMc` hatID + 1; -1 where the clip has none);
     - `robots` and `robot_ui_slots`: the recorded round's robots in seat order and the HUD
       panel positions (`GameInterFace.initView` moves robotUI<robot> to slot k), read from the
       panels that show;
@@ -696,7 +698,7 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     def subtree(path):
         return [n for n in nodes if n['path'] == path or n['path'].startswith(path + '/')]
 
-    boxes, features, dynamic, robots = [], [], {}, []
+    boxes, features, dynamic, robots, looks = [], [], {}, [], {}
     for layer, (y, role) in layers.items():
         for child in sorted((p for p in by_path if parent_of(p) == layer), key=_segment_index):
             tree = subtree(child)
@@ -719,6 +721,7 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
                 robot = next((c for c in classes if c.startswith('_r') and c[2:].split('_')[0].isdigit()), None)
                 if role == 'robot' and robot:
                     robots.append(int(robot[2:].split('_')[0]))
+                    looks[robots[-1]] = _robot_look(by_path, f'{child}/@0')
     # The cell grid: rows from the row Sprites, columns from the outer ring's left column.
     grid = 30
     # (Golden matrices carry 4 decimals, so local positions agree to about 0.01.)
@@ -754,12 +757,26 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
         'begin_num': begin, 'template': template,
         'boxes': [{k: b[k] for k in ('cell', 'path', 'frame', 'shown', 'exist', 'brick')} for b in boxes],
         'features': [{k: f[k] for k in ('cell', 'path', 'class')} for f in features],
-        'dynamic': dynamic, 'robots': seats,
+        'dynamic': dynamic, 'robots': seats, 'looks': [looks[r] for r in seats],
         'robot_ui_slots': [n['stage_matrix'][4:6] for n in panels],
         'round_start_after_input': _frames_after_input(case, capture),
         'groups': groups,
     }
     return keep, board
+
+
+def _robot_look(by_path, mc):
+    """[clothID, hatID] of a robot clip as `RobotView.setRobotMc` set them: the innermost
+    `bodyMc` from the clip, the innermost `hatMc` from `bodyMc` when that holds one."""
+    def innermost(path, child):
+        if f'{path}/{child}' not in by_path:
+            return None
+        while f'{path}/{child}' in by_path:
+            path = f'{path}/{child}'
+        return by_path[path].get('frame', 1) - 1
+    cloth = innermost(mc, 'bodyMc')
+    hat = innermost(f'{mc}/bodyMc' if f'{mc}/bodyMc/hatMc' in by_path else mc, 'hatMc')
+    return [-1 if cloth is None else cloth, -1 if hat is None else hat]
 
 
 def _frames_after_input(case, capture):

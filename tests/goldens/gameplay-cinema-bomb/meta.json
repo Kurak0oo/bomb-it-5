@@ -1,0 +1,14 @@
+{
+ "case": "gameplay-cinema-bomb",
+ "case_sha256": "c724767f41348ca4e6947eb0c0176e212302c96c8459789d5c4024b31b1011be",
+ "fps": 35.0,
+ "frames": {
+  "blast": 806,
+  "bomb": 744,
+  "box-break": 812,
+  "walk": 707
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "99caf1ab248b1aaab0d54b297fba2e563df1010b9eb6ddb25da3dd0dae8b0ee1",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}
