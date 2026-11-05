@@ -356,6 +356,11 @@ func destroy() -> void:
 	for field in _text_fields: field.destroy()
 	# delView nulls the fields; each holds this UI, so keeping them would be a cycle.
 	_text_fields.clear()
+	_onePOneUp = null
+	_onePOneLeft = null
+	_onePOneDown = null
+	_onePOneRight = null
+	_onePOneBomb = null
 	if _mc.mouse_event.is_connected(_mouseFocusChange): _mc.mouse_event.disconnect(_mouseFocusChange)
 	if _mc.stage_down.is_connected(_stageFocusHandle): _mc.stage_down.disconnect(_stageFocusHandle)
 	if _mc.key_down.is_connected(_stageKeyHandle): _mc.key_down.disconnect(_stageKeyHandle)

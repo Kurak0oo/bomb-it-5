@@ -9,6 +9,14 @@ var _table := {}
 
 func _init(screen: Node2D) -> void:
 	screen.mouse_event.connect(dispatch)
+	# Handlers are bound to the controller, which holds this table: drop them when the
+	# screen goes, or the two keep each other alive.
+	screen.tree_exited.connect(clear)
+
+
+## Every listener removed (the screen is gone).
+func clear() -> void:
+	_table.clear()
 
 
 func add(instance: String, kind: StringName, handler: Callable) -> void:
