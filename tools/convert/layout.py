@@ -608,6 +608,13 @@ def _add_absent_at_capture(nodes, by_path, expanded, screen_root, tl, key):
             shown = [(i, st) for i, st in own.tracks[child] if st is not None and st[6]]
             if not shown:
                 continue  # never on screen (robotStage2's robots)
+            if own.state(child, own.data['capture_index']) is not None:
+                # The golden has no such node at the capture, but the track says it is
+                # there: a part timeline recorded before removals were marked (record_screen.py
+                # extra timelines) keeps a removed node's last state. Re-record it to add them.
+                print(f'  note: {child} is absent at the capture but its track does not say so; '
+                      're-record that timeline to play it')
+                continue
             segment = child.rsplit('/', 1)[1]
             try:
                 depth = int(segment.rsplit('@', 1)[1])
