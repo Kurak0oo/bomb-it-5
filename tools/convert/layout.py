@@ -151,6 +151,28 @@ SCREENS = {
                  'effects': {'FallSnow': {'class': 'flash.display::Bitmap', 'art_class': 'fallSnow',
                                           'bitmap_size': [25, 25]}},
                  'states': False},
+    # LoadingMapUI (class UI_reading, scripts/ui/loading_map_ui.gd): the map-loading screen
+    # START opens over the gameplay screen while MapMaster builds the board one row per
+    # Timer(100) tick; `gameStartHandler` destroys it when the round starts. Its progress
+    # bar follows the rows (`progress`, a TweenMax on processBarMc's frame); the mode clips
+    # show the mode's frame (`initData`).
+    'loading_map': {'golden': ('gameplay-cinema-item', 'loading'), 'root_class': 'UI_reading',
+                    'controller': 'loading_map_ui',
+                    'interactive': {},
+                    # processBarMc follows `progress` (ported): every frame is rendered.
+                    'widgets': ('modeMc', 'mode_dec', 'modePaint', 'processBarMc'),
+                    # Recorded until the screen is gone (the round's first frame), not looped.
+                    'until_gone': True,
+                    'states': False},
+    # PauseUI (class UI_pause, scripts/ui/pause_ui.gd): `Game.doGamePause` adds it to the UI
+    # container over the gameplay screen (whose board container it hides): RESUME and MAIN
+    # MENU (zlong Buttons), the quality, sound and music switches, and a robot whose body and
+    # hat frames are drawn at random (`bodyMc`, `head/hatMc`).
+    'pause': {'golden': ('gameplay-cinema-pause', 'pause'), 'root_class': 'UI_pause',
+              'controller': 'pause_ui',
+              'interactive': {n: n for n in ('resume', 'mainMenu', 'quality', 'sound', 'music')},
+              'widgets': ('resume', 'mainMenu', 'quality', 'sound', 'music', 'bodyMc', 'hatMc'),
+              'states': False},
     # The gameplay screen (checkpoint 4): the Game's two containers under GameMc
     # (`Game.displayReInit`, `UIManager.mainMC`). The UI container holds GameInterFace's
     # UI_interface (scripts/ui/game_inter_face.gd): the frame bitmap, the level and time
@@ -622,7 +644,8 @@ def build(name, spec):
         'controller': spec.get('controller'),
         'extra_timelines': _extra_shown_before(spec, case, extra_timelines, phases),
         'timeline': None if timeline is None else dict(
-            {k: timeline.data[k] for k in ('opened_frame', 'opened_after_input', 'capture_index', 'period', 'period_capped')},
+            {k: timeline.data[k] for k in ('opened_frame', 'opened_after_input', 'capture_index', 'period', 'period_capped',
+                                           'closed_index', 'game_schedule') if k in timeline.data},
             **({'capture_index_of': phases} if phases else {})),
         'nodes': layout_nodes,
         **({'effects': effects} if effects else {}),

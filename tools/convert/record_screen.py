@@ -15,6 +15,12 @@ states: the case is replayed to the capture; then each interactive instance is h
 pressed and released away from it (so nothing navigates), and each switch is clicked
 through its frames. The clip frame shown in each state is recorded, and its art rendered.
 
+panels (after art): the HUD panels of robots the gameplay capture lacks, from the art-only
+case tools/convert/cases/hud-robots.json.
+
+items (after actors): the pickups' PixelClip bitmaps, each pickup made by its own class
+(`pickup` fixture), and 3× frames of the cases that show them.
+
 actors (after art): the gameplay screen's moving actors (robots, bombs, flames, box breaks,
 portals), each library clip made by its own class (`symbol`) and rendered alone at every
 frame the round can show.
@@ -192,8 +198,22 @@ def record_timeline(case_name, player_path, swf):
             opened, last_input, tracks, t = None, 0, {}, 0
             root = None
 
+            game_board = (json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))['board']
+                          if spec.get('until_gone') else None)
+            schedule = {'rows': {}, 'robots': None}
+
             def sample(index):
                 dump = p.display()
+                if game_board:
+                    # What the screen covers: the frame each board row gets its boxes
+                    # (MapMaster.createRow on its Timer) and the robots theirs (robotInit).
+                    paths = {n['path'] for n in dump['nodes']}
+                    for y, row in enumerate(game_board['rows']):
+                        if str(y) not in schedule['rows'] and any(q.startswith(row + '/@0#1/') for q in paths):
+                            schedule['rows'][str(y)] = index
+                    if schedule['robots'] is None and any(n.get('class', '').startswith('_r') for n in dump['nodes']
+                                                          if n['path'].startswith(game_board['container'] + '/')):
+                        schedule['robots'] = index
                 nodes = {n['path']: n for n in dump['nodes'] if n['path'] == root or n['path'].startswith(root + '/')}
                 for path, node in nodes.items():
                     value = state_of(node)
@@ -218,15 +238,28 @@ def record_timeline(case_name, player_path, swf):
             if root is None:
                 raise SystemExit(f'{screen}: its root clip never appeared before the {capture} capture')
             capture_index = p.frame - opened
-            period, capped = period_of(golden, root)
-            for _ in range(period):
-                p.command('step 1')
-                sample(p.frame - opened)
+            if spec.get('until_gone'):
+                # A screen the game takes down by itself (the map-loading screen): recorded
+                # until its root is gone; `closed_index` is the first frame without it.
+                period, capped = 0, False
+                while period < MAX_PERIOD:
+                    p.command('step 1')
+                    if root not in {n['path'] for n in p.display()['nodes']}:
+                        break
+                    period += 1
+                    sample(p.frame - opened)
+            else:
+                period, capped = period_of(golden, root)
+                for _ in range(period):
+                    p.command('step 1')
+                    sample(p.frame - opened)
+            p_closed = p.frame - opened
         finally:
             p.close()
         out = {'schema': 'bombit5-screen-timeline-v1', 'screen': screen, 'case': case_name, 'capture': capture,
                'root': root, 'opened_frame': opened, 'opened_after_input': opened - last_input,
                'capture_index': capture_index, 'period': period, 'period_capped': capped,
+               **({'closed_index': p_closed, 'game_schedule': schedule} if spec.get('until_gone') else {}),
                'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character', 'alpha', 'colour', 'filters'],
                'note': 'Changes only: [frame index since the screen opened, state or null when absent].',
                'tracks': tracks}
@@ -998,6 +1031,179 @@ def record_actors(case_name, player_path, swf, all_looks=False):
     print(f'actors: {len(out["robots"])} robot clips, {len(seen)} distinct images in {target.relative_to(ROOT)}')
 
 
+# ------------------------------------------------------------------ items
+
+# The pickups the reference player's `pickup` fixture can make (each an original class made by
+# its own constructor, `AbstractItem.init`), by the simulation's name for them.
+ITEM_FIXTURES = {'capacity': 'capacity', 'power': 'power', 'speed': 'speed', 'life': 'life', 'shield': 'shield',
+                 'invincible': 'invincibility', 'car': 'car', 'moto': 'moto', 'landmine': 'landmine',
+                 'hammer': 'hammer', 'flamer': 'flamer', 'laser': 'laser', 'triple': 'triple', 'shotgun': 'fireball',
+                 'kick': 'kick', 'boxing': 'boxing'}  # (patch reference-item-kinds)
+MAX_ITEM_IMAGES = 60
+
+
+def record_items(case_name, player_path, swf):
+    """The pickups' art (checkpoint 4 slice b2), into original/screens/game/items/: on the
+    round's first frame (the AI stopped), each pickup is made by its own class through the
+    `pickup` fixture on the player's cell, the player moved on (`reposition`) before the
+    engine runs, so all of them stand on the board from the same frame. An item draws a
+    `PixelClip`: `PixelList.checkOut` drew every third frame of its `prop` clip into a bitmap
+    and `playArr` shows bitmap k from age 4k + 1, wrapping before the last one. Each bitmap
+    is rendered (`piece`, after a full render that dispatches the RENDER event the Bitmap
+    waits for) once it shows (bitmap 0 at age 2), until the sequence wraps; `cycle` is the number of bitmaps shown. Then 3× frames of the cases
+    whose captures show items (the pixel score's ceiling)."""
+    case = load_case(case_name)
+    layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
+    board = layout['board']
+    capture = Path(layout['source']['golden']).stem
+    target = PACK / 'game' / 'items'
+    shutil.rmtree(target, ignore_errors=True)
+    target.mkdir(parents=True)
+    m, grid, ex = board['container_matrix'], board['grid'], board['excursion']
+
+    def at(cell):
+        x, y = ex[0] + cell[0] * grid, ex[1] + cell[1] * grid
+        return [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
+
+    taken = {tuple(b['cell']) for b in board['boxes']} | {tuple(f['cell']) for f in board['features']}
+    w, h = board['size']
+    free = [(x, y) for y in range(1, h - 1) for x in range(1, w - 1) if (x, y) not in taken]
+    p = Player(player_path, swf)
+    seen = {}
+    tmp = Path(tempfile.mkdtemp(prefix='bombit5-items-'))
+    out = {'schema': 'bombit5-original-items-v1', 'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path),
+           'scale': SCALE, 'items': {}}
+    try:
+        for line in single_steps(case, capture):
+            p.command(line)
+        for actor in (1, 2, 3):
+            p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
+        # Where the robots stand (the layout's robots, by the centre of their bounds): a
+        # reposition onto another robot's footprint is refused, which ends the session.
+        robots = []
+        for info in board['dynamic'].values():
+            b = info['render_bounds']
+            x = ((b[0] + b[2]) / 2 - m[4]) / m[0] - ex[0]
+            y = (b[3] - 4 - m[5]) / m[3] - ex[1]
+            robots.append((int(x // grid), int(y // grid)))
+        free = [c for c in free if all(abs(c[0] - r[0]) > 1 or abs(c[1] - r[1]) > 1 for r in robots)]
+        placed = {}
+        for kind, cell in zip(ITEM_FIXTURES, free):
+            p.command('fixture ' + json.dumps({'op': 'reposition', 'x': cell[0], 'y': cell[1]}))
+            p.command('fixture ' + json.dumps({'op': 'pickup', 'kind': ITEM_FIXTURES[kind]}))
+            placed[kind] = cell
+        rest = free[len(placed)]
+        p.command('fixture ' + json.dumps({'op': 'reposition', 'x': rest[0], 'y': rest[1]}))
+        images = {kind: [] for kind in placed}
+        done = set()
+        age = 0
+        while len(done) < len(placed) and age < 4 * MAX_ITEM_IMAGES + 2:
+            p.command('step 1')
+            age += 1
+            # Bitmap k shows from age 4k + 1; bitmap 0 is rendered at age 2 (see above).
+            k = 0 if age == 2 else (age - 1) // 4 if age > 2 and (age - 1) % 4 == 0 else None
+            if k is None:
+                continue
+            # A full render first: it dispatches the RENDER event that hands PixelClip's
+            # Bitmap its bitmapData (`renderhandler`), which `piece` alone does not.
+            p.shot(tmp / 'frame.png')
+            dump = p.display()['nodes']
+            for kind, cell in placed.items():
+                if kind in done:
+                    continue
+                row = board['rows'][cell[1]]
+                want = at(cell)
+                node = next((n for n in dump if n['path'].rsplit('/', 1)[0] == row and n['kind'] != 'shape'
+                             and abs(n["stage_matrix"][4] - want[4]) < 0.1 and abs(n["stage_matrix"][5] - want[5]) < 0.1
+                             and int(n['path'].rsplit('#', 1)[-1] if '#' in n['path'].rsplit('/', 1)[-1] else 0) >= 5), None)
+                if node is None:
+                    raise SystemExit(f'item {kind} at {cell} is not on the board')
+                stored = _store(p, node['path'], target, tmp, seen)
+                stored['file'] = 'items/' + stored['file']
+                stored['at'] = want
+                shown = images[kind]
+                if k >= 2 and shown[k - 1]['file'] == shown[0]['file'] and stored['file'] == shown[1]['file']:
+                    shown.pop()
+                    done.add(kind)
+                    continue
+                shown.append(stored)
+        for kind, shown in images.items():
+            out['items'][kind] = {'cycle': len(shown), 'bitmaps': shown}
+            print(f'  {kind}: {len(shown)} bitmaps')
+        for other in sorted(CASES_WITH_ITEMS):
+            _shots(load_case(other), other, player_path, swf, PACK / 'game')
+    finally:
+        p.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+    (target / 'items.json').write_text(json.dumps(out, indent=1) + '\n', encoding='utf-8')
+    print(f'items: {len(out["items"])} kinds, {len(seen)} distinct images in {target.relative_to(ROOT)}')
+
+
+# Cases whose captures show pickups (3× frames for the pixel score's ceiling).
+CASES_WITH_ITEMS = ('gameplay-cinema-item',)
+
+
+# ------------------------------------------------------------------ HUD panels
+
+def record_panels(_case_name, player_path, swf):
+    """The HUD panels of the robots the gameplay screen's capture does not show
+    (`robotUI<N>`, hidden there), into original/screens/game/panels/ and the game manifest
+    (after `art`, which rewrites the manifest): the art-only case tools/convert/cases/
+    hud-robots.json plays a round with other robots, and each panel shown there is rendered
+    as the main capture's panels are (every frame of the panel with its counters hidden,
+    every frame of its face clip, its fields)."""
+    case = json.loads((HERE / 'cases' / 'hud-robots.json').read_text(encoding='utf-8'))
+    layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
+    manifest_path = PACK / 'game' / 'manifest.json'
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    # A re-run replaces what an earlier one added.
+    for source in ('frames', 'pieces'):
+        for path in [k for k, v in manifest[source].items()
+                     if any(str(x.get('file', '')).startswith('panels/') for x in (v.values() if 'file' not in v else [v]))]:
+            del manifest[source][path]
+    target = PACK / 'game' / 'panels'
+    shutil.rmtree(target, ignore_errors=True)
+    target.mkdir(parents=True)
+    panels = [n for n in layout['nodes'] if n.get('widget_frames') and n['path'].rsplit('/', 1)[-1].startswith('robotUI')
+              and n['path'] not in manifest['frames']]
+    p = Player(player_path, swf)
+    seen = {}
+    tmp = Path(tempfile.mkdtemp(prefix='bombit5-panels-'))
+    done = []
+    try:
+        for action in case['actions']:
+            if 'command' in action:
+                p.command(action['command'])
+        dump = {n['path']: n for n in p.display()['nodes']}
+        shown = {path for path, n in dump.items() if n.get('effective_visible')}
+
+        def keep(stored, path):
+            # Rendered where this round placed the panel (another slot than the layout's).
+            stored['file'] = 'panels/' + stored['file']
+            return dict(stored, index=0, at=dump[path]['stage_matrix'])
+
+        for panel in panels:
+            if panel['path'] not in shown:
+                continue
+            for node in [n for n in layout['nodes'] if n['path'] == panel['path'] or n['path'].startswith(panel['path'] + '/')]:
+                if node.get('widget_frames'):
+                    for frame in node['widget_frames']:
+                        stored = _store(p, node['path'], target, tmp, seen, frame, node.get('frames_hide'))
+                        if stored:
+                            manifest['frames'].setdefault(node['path'], {})[str(frame)] = keep(stored, node['path'])
+                elif node['role'] == 'piece':
+                    stored = _store(p, node['path'], target, tmp, seen)
+                    if stored:
+                        manifest['pieces'][node['path']] = keep(stored, node['path'])
+            done.append(panel['path'].rsplit('/', 1)[-1])
+    finally:
+        p.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+    manifest['panels_from'] = {'case': 'tools/convert/cases/hud-robots.json', 'panels': done}
+    manifest_path.write_text(json.dumps(manifest, indent=1) + '\n', encoding='utf-8')
+    print(f'panels: {", ".join(done) or "none"} ({len(seen)} distinct images) -> {target.relative_to(ROOT)}')
+
+
 # Cases whose captures show the gameplay screen past its first frame (their 3× frames give
 # the pixel score's ceiling, compare.py resampling_ceiling).
 CASES_WITH_ACTORS = ('gameplay-cinema-bomb',)
@@ -1044,7 +1250,7 @@ def record_fonts(_case_name, _player_path, swf):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors'])
+    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
@@ -1053,6 +1259,12 @@ def main():
     args = parser.parse_args()
     if args.what == 'actors':
         record_actors(args.case, args.player.resolve(), args.swf, args.looks == 'all')
+        return 0
+    if args.what == 'items':
+        record_items(args.case, args.player.resolve(), args.swf)
+        return 0
+    if args.what == 'panels':
+        record_panels(args.case, args.player.resolve(), args.swf)
         return 0
     if not args.swf.is_file():
         raise SystemExit(f'needs the SWF at {args.swf}')

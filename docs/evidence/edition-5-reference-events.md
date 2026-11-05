@@ -131,3 +131,19 @@ The separate [geometry patch](../../tools/reference_player/reference-geometry.pa
 The pinned player's `core/src/display_object.rs:TDisplayObject.width`/`height` are exactly `local_bounds(BoundsMode::Script).width/height.to_pixels()`. `avm2/globals/flash/display/display_object.rs:get_width`/`get_height` use those same native methods. `bounds(Script)` gives untransformed child-inclusive bounds, `local_bounds(Script)` gives parent-space bounds, and `world_bounds(Script)` gives stage-space bounds. The proposal uses **Script bounds only**. In `display_object/morph_shape.rs:self_bounds`, Engine bounds call `get_frame`, which can populate the interpolated-frame cache; Script bounds directly read the start-shape metadata and match the original AS3 dimension access. `base().matrix()` and `local_to_global_matrix()` expose native affine transforms with translation converted from twips to pixels. These reads do not execute AS3 getters or methods. Native scale/rotation accessors are also avoided because they update transform-decomposition caches; the raw matrices are reported without inventing a signed scale decomposition.
 
 The original `items/weapons/FlamerProp.as:bombDown` stores the current `weaponPlay` and `_fireMc` (`fire_Play`) clips; `commands/weapon/FlamerPlayCommand.as` advances the action. `bombs/FlamerFire.as:xN`/`yN` use `firePlay.width`/`height` multiplied by `weaponPlay.scaleX`/`scaleY`, and `shootFire` can clamp those scales against a blocking box. Native script dimensions, per-frame clip identity, local/stage transforms and bounds therefore supply the missing geometry evidence through the original player. This proposal does not substitute painted-pixel dimensions or a new rectangle simulation for those reads. Exact signed AS3 scale semantics, blocker cases, four facings and target-hit boundaries still require scenario-specific observation.
+
+## Round draws of the seeded Cinema round (2026-11-05)
+
+`tools/compare/round_draws.py gameplay-cinema-start` replays that case (seed 42, Arcade,
+Normal, Cinema, robot 0) with the event collector and writes
+[math_random.json](../../tests/goldens/gameplay-cinema-start/math_random.json): every draw's
+raw value and innermost original method up to the round's first frame (701). 411 draws come
+first: frame 1 (1), `UILoading.initDis` (2), `SoundManger.createMusicOrder` (2),
+`MainMenuUI.initView` (2), `GASender.sendMainScene` (3), `CharacterSelectUI.startFunc` (3, the
+AI robots), `AbstractGameMode.initMap` (15-17, the drop pool's three Vehicle entries), the map
+(`MapMaster.init`, `CinemaMapData`, then `MapMaster.createRow` once per Timer tick, 644-693)
+and `AbstractPlayer.scoreData` / `createAIPlayer` (401-411, 697). The Godot port of the
+generator reproduces all 411 raw values. With the AI stopped at the first frame (fixture),
+the next draws are `Box.createProp` at frame 815 (412 = 0.3131 < `propProb` 0.5, 413 = 0.6074:
+index 58 of the 97-entry pool, `SpeedProp`), or, when the round is paused first,
+`PauseUI`'s body and hat frames.

@@ -608,6 +608,11 @@ func draw_random() -> float:
 	return _draw_random()
 
 
+## The original's generator the round draws from (`math_random`), if it has one.
+func random_source() -> RefCounted:
+	return _rules.get("math_random") if _rules.get("math_random") is RefCounted else null
+
+
 func free_cells(margin: int = 0) -> Array[Vector2i]:
 	return _free_cells().filter(func(cell: Vector2i):
 		# containerMove(map, m, m, m, m): x in 1+m .. width-1-m, y likewise.
@@ -943,8 +948,13 @@ func _spawn_pickup(cell: Vector2i, quota: bool) -> void:
 		_spawned_drops += 1
 
 
+## The round's `Math.random`: given draws first, then the original's generator when the round
+## has one (`math_random`, scripts/simulation/avm_random.gd), else Godot's.
 func _draw_random() -> float:
-	var value: float = _random_draws[_random_index] if _random_index < _random_draws.size() else _rng.randf()
+	var value: float
+	if _random_index < _random_draws.size(): value = _random_draws[_random_index]
+	elif _rules.get("math_random") is RefCounted: value = _rules.math_random.random()
+	else: value = _rng.randf()
 	_random_index += 1
 	return clampf(value, 0.0, 0.9999999999999999)
 

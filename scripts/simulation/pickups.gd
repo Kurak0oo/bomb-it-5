@@ -8,13 +8,22 @@ const WEIGHTS := {&"capacity": 28, &"power": 24, &"speed": 22, &"life": 1, &"shi
 
 
 const VEHICLES: Array[StringName] = [&"car", &"moto", &"horse", &"dragon"]
+## `AbstractGameMode.initMap`'s class order (NumProp, PowProp, SpeedProp, LifeProp, ShieldProp,
+## BombShoesProp, InvincibilityProp, LaserGunProp, FlamerProp, HammerProp, ShotGunProp,
+## LandmineProp, TripleShootGunProp, BoxingProp, Vehicle): a drop's index into the pool
+## (`Box.createProp`) picks by this order.
+const ORDER: Array[StringName] = [&"capacity", &"power", &"speed", &"life", &"shield", &"reserved_kick",
+	&"invincible", &"laser", &"flamer", &"hammer", &"shotgun", &"landmine", &"triple", &"reserved_boxing", &"vehicle"]
 
 
 ## Each vehicle entry draws its class from the stage set's list, even a one-item list
 ## (`AbstractGameMode.initMap`).
 static func build_pool(draw: Callable, weights: Dictionary = WEIGHTS, vehicles: Array = [&"moto", &"car"]) -> Array[StringName]:
 	var pool: Array[StringName] = []
+	var kinds: Array = ORDER.filter(func(k): return weights.has(k))
 	for kind in weights:
+		if kind not in kinds: kinds.append(kind)
+	for kind in kinds:
 		for index in weights[kind]:
 			pool.append(vehicles[int(draw.call() * vehicles.size())] if kind == &"vehicle" else kind)
 	return pool

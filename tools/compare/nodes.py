@@ -75,13 +75,32 @@ def _angle(a, b):
     return abs((a - b + 180) % 360 - 180)
 
 
+def _segments_equal(a, b):
+    """`@N` names an only child at depth N; when another child joins that depth (the
+    map-loading screen next to the HUD) the same child is `@N#0`."""
+    return a == b or (a.startswith('@') and '#' not in a and b == a + '#0') or \
+        (b.startswith('@') and '#' not in b and a == b + '#0')
+
+
+def _under(path, top):
+    """`path` is `top` or inside it, by display-list segments."""
+    p, t = path.split('/'), top.split('/')
+    return len(p) >= len(t) and all(_segments_equal(x, y) for x, y in zip(p, t))
+
+
+def path_endswith(path, suffix):
+    """`path` ends with the display-list segments of `suffix` (`@N` matching `@N#0`)."""
+    p, t = path.split('/'), suffix.lstrip('/').split('/')
+    return len(p) >= len(t) and all(_segments_equal(x, y) for x, y in zip(p[-len(t):], t))
+
+
 def apply_owner_edits(golden, edits):
     """The golden as the owner wants it: removed subtrees dropped, moved ones shifted."""
     removed, moved = edits.get('removed', {}), edits.get('moved', {})
     nodes = []
     for node in golden['nodes']:
         path = node['path']
-        if any(path == r or path.startswith(r + '/') for r in removed):
+        if any(_under(path, r) for r in removed):
             continue
         for m, info in moved.items():
             if path == m or path.startswith(m + '/'):

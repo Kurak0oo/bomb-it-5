@@ -102,12 +102,13 @@ func _run(case: Dictionary) -> void:
 					_viewport.get_child(0).game.stop_ai(int(words[1]))
 				"seed":
 					# The app's Flash `Math.random` (scripts/simulation/avm_random.gd) takes
-					# the case's seed, as the reference player's does. Only the screens' own
-					# draws use it (FallSnow); the round's RNG is not wired to it yet.
+					# the case's seed, as the reference player's does. The screens' draws
+					# (FallSnow) and a rolled round's use it; a recorded round continues from
+					# where the original's stood (tests/goldens/<case>/math_random.json).
 					var app_node := _viewport.get_child(0)
 					if app_node.has_method("seed_math_random"):
 						app_node.seed_math_random(int(words[1]))
-					log.append({"frame": _frame, "note": "seed %s applied to the screens' Math.random only" % words[1]})
+					log.append({"frame": _frame, "note": "seed %s applied to the app's Math.random" % words[1]})
 				_:
 					log.append({"frame": _frame, "note": "ignored command " + " ".join(words)})
 		if action.has("capture"):

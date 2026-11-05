@@ -332,3 +332,31 @@ frame has run (it applied one frame early). Known gaps: items/pickups, vehicles,
 clips and the map-loading screen are still placeholders or absent; robots' own blink loops
 show their first frame; looks the pack lacks show the robot's default look; TIME follows the
 host's Date in the reference player, so it is not compared frame for frame.
+
+Slice (b2), 2026-11-05 (owner to review): pickups, the map-loading and pause screens, every
+robot's HUD panel and the TIME flash.
+- Pickups are ports of `AbstractItem`/`PixelClip`: the bitmaps are the original's own, made
+  per kind by the `pickup` fixture (`record_screen.py items`, all 16 Cinema kinds; patch
+  `reference-item-kinds` adds BombShoesProp and BoxingProp to the fixture). Recorded: bitmap
+  k shows from age 4k + 1; eaten on the frame the robot enters the cell. Fixes from the longer case: blast arms play to their empty last frame
+  after the bomb is gone, and the centre's art is one nested key ahead.
+- The round draws from the Flash `Math.random` port: a recorded round continues where the
+  original's stood (`tools/compare/round_draws.py` -> `tests/goldens/gameplay-cinema-start/
+  math_random.json`: 411 draws before the round, the drop pool's vehicles at 15-17), and the
+  drop pool follows `AbstractGameMode.initMap`'s class order (it did not). Case
+  `gameplay-cinema-item` matches the drop roll at frame 815 (draws 412-413: a SpeedProp),
+  its pickup at 848 and the HUD after it; `gameplay-cinema-pause` matches PauseUI's random
+  robot (draws 412-413 again, no drop before it).
+- `LoadingMapUI` and `PauseUI` are generated screens over the gameplay screen
+  (`loading_map`, `pause`); under the loading screen the rows are built on the recorded Timer
+  ticks and the robots and counters appear at `firstMapLoadOver`. Its progress bar (TweenMax)
+  and TIME follow the host clock in the reference player, so neither is compared frame for
+  frame (`wall_clock_frame`, `wall_clock_text`).
+- HUD panels of robots 1, 3, 4, 7 come from the art-only case `tools/convert/cases/
+  hud-robots.json` (`record_screen.py panels`, after `art`); TIME turns red/white every 4th
+  engine tick under 10 s (`changeTimeCol`), not frame-checked (TIME is on the wall clock).
+Results: every case passes; gameplay-cinema-item nodes 382/391/389/389/386, pixels at the
+3×→1× ceiling (SSIM 0.935, ΔE 5.0; loading 0.974); gameplay-cinema-pause nodes 515/515.
+Known gaps: robots' own eye/hat loops (85-131 frames inside each clip) still show frame 1;
+vehicles, weapon clips and the portal fade are still placeholders; AI and the session's AI
+robots/looks do not draw from the Flash generator, so cases stop the AI.

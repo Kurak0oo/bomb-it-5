@@ -27,7 +27,23 @@ extends RefCounted
 ## next frame and advances from the one after; `play()` on a key press advances the clip on
 ## the next frame; a key release stops it on the next engine tick, after that frame's advance.
 ## Nested clips: bomb0's spark loops (14 frames) with its root (27); exp0's nested blast
-## shows frames 1, 1, 2, … at the centre and 1, 2, 3, … on an arm.
+## shows frames 1, 1, 2, … at the centre and 1, 2, 3, … on an arm. The centre's art is the
+## recording's next nested key (the art pass's exp0, made by `new`, shows its first nested
+## frame twice): checked against the original through frame 817 (gameplay-cinema-item).
+## The arms stay on the display list after the bomb is gone and play to their last, empty
+## frame.
+##
+## Pickups (slice b2), ports of `AbstractItem` and `PixelClip`: `init` adds the item's Sprite
+## to its row itself (`getDisArr(yN)`, after the five layers) at the cell; `getMc` hands the
+## `prop` clip's frames to a PixelClip, a Sprite at (int(15 - tx / 2) + xOffset, int(15 - ty / 2)
+## + yOffset) holding a Bitmap at (-15, -15), with tx 10, ty 20, xOffset 2, yOffset 0;
+## `playArr` shows bitmap i every 4th frame and wraps before the last bitmap
+## (`i >= totalFrame`, totalFrame = bitmaps - 1). Recorded (gameplay-cinema-item): made on
+## the engine frame (age 0) the Bitmap is empty; `playArr` first runs on the next frame,
+## so bitmap k shows from age 4k + 1. `eatProp` takes the Sprite off its row; `deleProp` (a blast)
+## swaps the PixelClip for `brickExp`, removed when it reaches its last frame
+## (`countBrickExp`: `currentFrame == totalFrames`). The bitmaps are the reference player's
+## (original/screens/game/items/, record_screen.py items).
 
 const DIRECTIONS := {Vector2i(0, 1): "_Down", Vector2i(-1, 0): "_Left", Vector2i(1, 0): "_Right", Vector2i(0, -1): "_Up"}
 ## `Bomb.blast`'s exp0 frames per ray (middle, end).
@@ -45,6 +61,11 @@ var _bombs: Array = []
 var _tick := -1
 var _bomb_art: Dictionary = {}
 var _exp_art: Dictionary = {}
+var _items: Dictionary = {}
+var _spent_arms: Array = []
+var _item_art: Dictionary = {}
+## `AbstractItem.getMc`'s PixelClip arguments (tx, ty, xOffset, yOffset).
+const PIXEL_CLIP := [10, 20, 2, 0]
 
 
 func _init(screen: Node2D, board: RefCounted, looks: Array = []) -> void:
@@ -59,6 +80,9 @@ func _init(screen: Node2D, board: RefCounted, looks: Array = []) -> void:
 		var key := "%d|%d" % [int(frames.get("/", 1)), int(frames.values().back() if frames.size() > 1 else 1)]
 		if not _bomb_art.has(key): _bomb_art[key] = art
 	_exp_art = _art.get("nested", {}).get("exp0", {})
+	var items := ProjectSettings.globalize_path("res://original/screens/game/items/items.json")
+	if FileAccess.file_exists(items):
+		_item_art = JSON.parse_string(FileAccess.get_file_as_string(items)).get("items", {})
 
 
 ## Every snapshot; the clips advance once per tick.
@@ -130,6 +154,7 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		for view in _robots.values():
 			if view.dead and not view.removed: _show(view)
 	_update_bombs(snapshot)
+	_update_items(snapshot)
 
 
 static func _direction(v: Vector2) -> Vector2i:
@@ -236,6 +261,10 @@ func _robot_art(view: Dictionary) -> Dictionary:
 
 ## `Bomb`: placed bombs, their blasts (the snapshot's flames) and `ended`.
 func _update_bombs(snapshot: Dictionary) -> void:
+	for arm in _spent_arms.duplicate():
+		arm.age += 1
+		_screen.set_node_art(arm.item.path, _exp(arm.frame, arm.age + 1), arm.frame)
+		if arm.age + 1 >= _exp_art.get(str(arm.frame), {}).size(): _spent_arms.erase(arm)
 	var live := {}
 	for bomb in snapshot.get("bombs", []):
 		live[_key(bomb.actor_id, bomb.cell)] = bomb
@@ -250,6 +279,11 @@ func _update_bombs(snapshot: Dictionary) -> void:
 			if view.age >= BLAST_TICKS:
 				_board.detach(view.layer, view.item)
 				_bombs.erase(view)
+				# The flames stay on the display list (`deleFire` takes no clip off), their nested
+				# blast playing on to its last, empty frame (recorded: frame 18 at age 17).
+				for arm in view.arms:
+					arm.age = view.age
+					_spent_arms.append(arm)
 				continue
 		elif flames.has(view.key) and not live.has(view.key):
 			_blast(view, flames[view.key])
@@ -306,7 +340,7 @@ func _show_bomb(view: Dictionary) -> void:
 		var key := "%d|%d" % [view.age % 27 + 1, view.age % 14 + 1]
 		_screen.set_node_art(view.item.path + "/@0", _bomb_art.get(key, {}), view.age % 27 + 1)
 		return
-	_screen.set_node_art(view.item.path + "/@0", _exp(1, maxi(1, view.age)), 1)
+	_screen.set_node_art(view.item.path + "/@0", _exp(1, maxi(1, view.age + 1)), 1)
 	for arm in view.arms:
 		_screen.set_node_art(arm.item.path, _exp(arm.frame, view.age + 1), arm.frame)
 
@@ -316,3 +350,82 @@ func _exp(root: int, nested: int) -> Dictionary:
 	var by_nested: Dictionary = _exp_art.get(str(root), {})
 	if by_nested.is_empty(): return {}
 	return by_nested.get(str(mini(nested, by_nested.size())), {})
+
+
+# ------------------------------------------------------------------ pickups
+
+## `AbstractItem` per pickup of the snapshot (`pickups`: cell -> kind), once per tick.
+func _update_items(snapshot: Dictionary) -> void:
+	var pickups: Dictionary = snapshot.get("pickups", {})
+	var burning := {}
+	for flame in snapshot.get("flames", []):
+		for cell in flame.get("cells", []): burning[cell] = true
+	for cell in _items.keys():
+		var view: Dictionary = _items[cell]
+		view.age += 1
+		if view.has("brick"):
+			_count_brick_exp(view)
+		elif pickups.get(cell, &"") != view.kind:
+			if burning.has(cell): _dele_prop(view)
+			else: _eat_prop(view)
+		else:
+			_play_arr(view)
+	for cell in pickups:
+		if _items.has(cell) or pickups[cell] == &"coin": continue
+		_init_item(cell, pickups[cell])
+
+
+## `AbstractItem.init` / `setProp` / `getMc`: the Sprite on its row at the cell, the
+## PixelClip's Sprite and empty Bitmap inside it.
+func _init_item(cell: Vector2i, kind: StringName) -> void:
+	var view := {"cell": cell, "kind": kind, "age": 0, "item": {}, "row": _board.row_of(cell.y), "shown": -1}
+	var at: Array = _board.cell_matrix(Vector2(cell))
+	_board.attach(view.row, view.item, at)
+	var holder := _translate(at, Vector2(int(15 - PIXEL_CLIP[0] / 2.0) + PIXEL_CLIP[2], int(15 - PIXEL_CLIP[1] / 2.0) + PIXEL_CLIP[3]))
+	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": holder,
+		"role": "group", "kind": "movie_clip", "effective_visible": true, "frame": 0})
+	_screen.add_node({"path": view.item.path + "/@0/@0", "parent": view.item.path + "/@0", "stage_matrix": _translate(holder, Vector2(-15, -15)),
+		"role": "piece", "kind": "bitmap", "effective_visible": true})
+	_items[cell] = view
+
+
+## `PixelClip.playArr`: the bitmap shown at this age (see the header for the recorded start).
+func _play_arr(view: Dictionary) -> void:
+	var art: Dictionary = _item_art.get(String(view.kind), {})
+	if view.age < 1 or art.is_empty(): return
+	var index: int = ((view.age - 1) / 4) % maxi(1, int(art.cycle))
+	if index == view.shown: return
+	view.shown = index
+	# The bitmaps were rendered as the item's Sprite (record_screen.py items): drawn on it.
+	_screen.set_node_art(view.item.path, art.bitmaps[index])
+
+
+## `eatProp`: the Sprite leaves its row.
+func _eat_prop(view: Dictionary) -> void:
+	_board.detach(view.row, view.item)
+	_items.erase(view.cell)
+
+
+## `deleProp` -> `brickExp`: the PixelClip goes, `brickExp` plays in the Sprite.
+func _dele_prop(view: Dictionary) -> void:
+	_screen.remove_node(view.item.path + "/@0")
+	view.brick = 0
+	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(Vector2(view.cell)),
+		"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": 1})
+	_count_brick_exp(view)
+
+
+## `countBrickExp`, once per frame after the swap: off its row on the clip's last frame.
+func _count_brick_exp(view: Dictionary) -> void:
+	var frames: Dictionary = _art.get("still", {}).get("brickExp", {})
+	var total := frames.size() if not frames.is_empty() else 11
+	view.brick += 1
+	var frame := maxi(1, int(view.brick) - 1)
+	if frame >= total:
+		_eat_prop(view)
+		return
+	_screen.set_node_art(view.item.path + "/@0", frames.get(str(frame), {}), frame)
+
+
+static func _translate(m: Array, by: Vector2) -> Array:
+	return [m[0], m[1], m[2], m[3], m[4] + m[0] * by.x + m[2] * by.y, m[5] + m[1] * by.x + m[3] * by.y]

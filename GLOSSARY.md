@@ -152,3 +152,9 @@ _Avoid_: Bomb shoes, glove
 **Boxing glove**:
 The edition 5 weapon pickup (`BoxingProp`) that punches up to two cells ahead.
 _Avoid_: Fist, glove
+
+**Map-loading screen**:
+The screen START shows while the board is built row by row (`LoadingMapUI`), gone when the round starts.
+
+**Round draws**:
+The original's `Math.random` calls made before a round starts; a recorded round's own draws continue after them.

@@ -1,0 +1,15 @@
+{
+ "case": "gameplay-cinema-item",
+ "case_sha256": "11934de68dcb0f64a2933917dc669777e2ac181f733c67e8ab04532fa8808ba5",
+ "fps": 35.0,
+ "frames": {
+  "approach": 847,
+  "drop": 817,
+  "idle": 826,
+  "loading": 670,
+  "pickup": 848
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "99caf1ab248b1aaab0d54b297fba2e563df1010b9eb6ddb25da3dd0dae8b0ee1",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

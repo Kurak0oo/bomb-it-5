@@ -1,0 +1,12 @@
+{
+ "case": "gameplay-cinema-pause",
+ "case_sha256": "17b0037ce388b2c680101d94ffcdaa3fd0ad8abedd6955e098286c43fc6bb3d1",
+ "fps": 35.0,
+ "frames": {
+  "pause": 719,
+  "paused": 749
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "99caf1ab248b1aaab0d54b297fba2e563df1010b9eb6ddb25da3dd0dae8b0ee1",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

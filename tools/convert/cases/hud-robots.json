@@ -1,0 +1,81 @@
+{
+ "name": "hud-robots",
+ "origin": "Art only (record_screen.py panels), not a comparison case: the HUD panels of the robots seed 42 does not bring (robotUI1, 3, 4, 7). The gameplay-cinema-start path with seed 1 and robot 1 chosen on character select (its icon, as in the character-select case): CharacterSelectUI.startFunc draws P2-P4 from Math.random draws 12-14, which for seed 1 are robots 4, 7 and 3. The capture is the round's first frame, every panel shown.",
+ "actions": [
+  {
+   "command": "seed 1"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "command": "click 174.5 149.5"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "capture": "robots"
+  }
+ ]
+}

@@ -8,9 +8,12 @@ extends "res://scripts/ui/abstract_ui.gd"
 ## counters are written by the players' setters in the AS3 (`AbstractPlayer.lifeData` ...,
 ## `Game.countTime`); `present` ports those setters over each snapshot of the round.
 ##
-## Not ported yet: `changeTimeCol` / `changeCol` (the time and score fields flashing red in
-## the last 10 seconds and at the points goal: a TextField colour the generated screen does
-## not set yet), `stopMC` (generated screens show recorded frames only) and the `gameFrame`
+## `changeTimeCol`: once TIME reads under 10 (`Game.countTime` dispatches TIME_COUNT_DOWN,
+## `timeCountDownHandle` adds it to the engine's tween handlers), TIME turns red, white, red …
+## on every tween tick (`GameEngine.enterFrameHandle` runs them every 4th engine tick).
+## `changeCol` / `defaultCol` are ported for the modes that flash a score; Arcade does not.
+##
+## Not ported yet: `stopMC` (generated screens show recorded frames only) and the `gameFrame`
 ## bitmap copy in `initData` (the layout already holds it as the screen's first piece).
 
 const UtilsButton = preload("res://scripts/ui/button.gd")
@@ -41,6 +44,13 @@ var game: Node
 var _slots: Array = []
 ## What the fields show, so a field is written only when its text changes.
 var _shown := {}
+## `changeTimeCol` is on the engine's tween handlers (after TIME_COUNT_DOWN).
+var _time_flashing := false
+var _tween_tick := -1
+## The score fields that flash (`colorChangeArray`): uiId -> on.
+var colorChangeArray := {}
+const RED := Color8(255, 0, 0)  # 16711680
+const WHITE := Color8(255, 255, 255)  # 16777215
 
 
 ## `GameInterFace(root, game, soundManager)`
@@ -93,6 +103,9 @@ func initView() -> void:
 		_scoreTextArr.push_back(face + "/scoreTf")
 		_faceMcArr.push_back(face + "/faceMc")
 		_mc.set_shown(panel, true)
+		# A panel the capture had hidden recorded its parts hidden with it: they show with it.
+		for part in ["/lifeTf", "/bombTf", "/powerTf", "/speedTf", "/scoreTf", "/faceMc"]:
+			_mc.set_shown(face + part, true)
 		_uiArr.push_back(panel)
 		if i < _slots.size():
 			# `_loc11_.x = GameConfig["ROBOT_UI_X_" + i]`, and y.
@@ -209,7 +222,11 @@ func setScore(uiId: int, value: int) -> void:
 func present(snapshot: Dictionary) -> void:
 	if snapshot.is_empty(): return
 	set_current_level(int(_root.session.level))
-	set_time(str(int(snapshot.get("remaining", 0)) / 35))
+	var time := int(snapshot.get("remaining", 0)) / 35
+	set_time(str(time))
+	# `countTime`: `if (gameTime - pastTime < 10)` dispatch TIME_COUNT_DOWN.
+	if time < 10 and not _time_flashing: timeCountDownHandle()
+	_tween_handlers(int(snapshot.get("tick", 0)))
 	var uiId := 0
 	for id in snapshot.actors:
 		if uiId >= _lifeTextArr.size(): break
@@ -223,6 +240,44 @@ func present(snapshot: Dictionary) -> void:
 		# `score`); the other modes show the level's points.
 		setScore(uiId, int(actor.get("score", 0)) if _root.session.mode == ARCADE_MODE else int(actor.get("points", 0)))
 		uiId += 1
+
+
+## `timeCountDownHandle`: `changeTimeCol` joins the engine's tween handlers.
+func timeCountDownHandle() -> void:
+	_time_flashing = true
+
+
+## The engine's tween handlers, every 4th engine tick (`GameEngine.enterFrameHandle`: `count`
+## reaches 4 on the 5th tick, then every 4th).
+func _tween_handlers(tick: int) -> void:
+	if _tween_tick < 0: _tween_tick = tick
+	while _tween_tick < tick:
+		_tween_tick += 1
+		if _tween_tick % 4 != 0: continue
+		if _time_flashing: changeTimeCol()
+		for uiId in colorChangeArray: _flip(_scoreTextArr[uiId])
+
+
+## `changeTimeCol`: red unless red, then white.
+func changeTimeCol() -> void:
+	_flip(_time)
+
+
+## `changeCol(index)`: that score field flashes on the tween handlers.
+func changeCol(index: int) -> void:
+	colorChangeArray[index] = true
+
+
+## `defaultCol(index)`: the score field back to 6634002, no longer flashing.
+func defaultCol(index: int) -> void:
+	colorChangeArray.erase(index)
+	_mc.set_text_color(_scoreTextArr[index], Color8(101, 58, 18))
+
+
+func _flip(field: String) -> void:
+	var red: bool = _shown.get(field + "|colour") == RED
+	_shown[field + "|colour"] = WHITE if red else RED
+	_mc.set_text_color(field, WHITE if red else RED)
 
 
 func _put(field: String, text: String) -> void:

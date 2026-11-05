@@ -28,6 +28,9 @@ const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
 ## A session-driven level finished its ending; the host shows the score screen.
 signal level_settled(snapshot: Dictionary)
 signal main_menu_requested
+## The round paused or resumed (`doGamePause` / `gameResume`): the generated gameplay
+## screen shows the original pause screen (App, scripts/ui/pause_ui.gd).
+signal pause_changed(is_paused: bool)
 
 var simulation: RefCounted
 var scheduler: Node
@@ -82,6 +85,13 @@ var start_delay := 0:
 var _delay_from := -1
 ## A recorded board for the next round (the comparison loop's `round` action).
 var recorded_board: Dictionary = {}
+## The original's `Math.random` (scripts/simulation/avm_random.gd) the round draws from; the
+## app shares its own (`App.math_random`). Unset, the round uses Godot's generator.
+var math_random: RefCounted
+## The generated gameplay screen shows the original pause screen: the page's own pause
+## art and buttons stay hidden.
+var swf_pause := false
+const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
 
 
 func _ready() -> void:
@@ -189,10 +199,16 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	var session_seed := Time.get_ticks_msec() if seed_value < 0 else seed_value
 	var mode: RefCounted = Modes.create(mode_name, difficulty, &"cinema")
 	var board: Dictionary
+	var draws: Array = []
+	var round_random: RefCounted = math_random
 	if practice:
 		board = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
 	elif not recorded_board.is_empty():
 		board = Layouts.recorded(recorded_board.template, recorded_board.boxes)
+		if recorded_board.has("math_random"):
+			var place := _recorded_draws(recorded_board.math_random)
+			draws = place.pool
+			round_random = place.random
 		stage_set = board.skin
 		mode.stage_set = stage_set
 		recorded_board = {}
@@ -214,7 +230,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 			actors[roster[index]].speed = mode.player_speed()
 	simulation = Simulation.new(roster, actors, board.cells,
 		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
-		"drops": true, "seed": session_seed, "mode": mode, "seconds": _seconds_source() if replica else null, "hit_move": replica, "glove_items": replica,
+		"drops": true, "seed": session_seed, "random_draws": draws, "math_random": round_random, "mode": mode, "seconds": _seconds_source() if replica else null, "hit_move": replica, "glove_items": replica,
 		"vehicles": StageSets.vehicles(board.skin),
 		"features": board.get("features", {}), "center": board.get("center"), "skin": board.skin,
 		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,
@@ -240,6 +256,32 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	buttons.reset.text = "RESET" if practice else "TRY AGAIN"
 	buttons.reset.disabled = not practice
 	_refresh()
+
+
+## Where the original's `Math.random` stands at a recorded round (tests/goldens/<case>/
+## math_random.json, tools/compare/round_draws.py): the drop pool's Vehicle entries were drawn
+## at `pool_draws` (`AbstractGameMode.initMap`), and the round's own draws continue after
+## `draws_before_round` (the menus', the map's and the AI players' draws, which Godot takes
+## from the recording instead). The same seed's generator replays them (checked against the
+## recorded raw draws).
+static func _recorded_draws(record: Dictionary) -> Dictionary:
+	var random: RefCounted = AvmRandom.new(int(record.seed))
+	var pool := []
+	var pool_draws: Array = record.pool_draws.map(func(n): return int(n))
+	var raw: Array = record.get("raw", [])
+	for ordinal in range(1, int(record.draws_before_round) + 1):
+		var value: int = random.next_raw()
+		if ordinal <= raw.size() and int(raw[ordinal - 1]) != value:
+			push_error("the original's draw %d does not match the Math.random port" % ordinal)
+		if ordinal in pool_draws: pool.append(float(value) / 2147483648.0)
+	return {"pool": pool, "random": random}
+
+
+## The `Math.random` the round draws from (the original's, for a recorded round from where
+## it stood), shared by the screens made during the round (PauseUI).
+func round_random() -> RefCounted:
+	var source: RefCounted = simulation.random_source() if simulation != null else null
+	return source if source != null else math_random
 
 
 ## `Game.countTime` polls `new Date().getSeconds()`; checks inject a deterministic source.
@@ -329,9 +371,10 @@ func toggle_pause() -> void:
 	touch_controls.enabled = not paused
 	touch_controls.reset()
 	buttons.pause.text = "RESUME" if paused else "PAUSE"
-	buttons.menu.visible = paused and session != null
-	if replica: buttons.pause.visible = paused
+	buttons.menu.visible = paused and session != null and not swf_pause
+	if replica: buttons.pause.visible = paused and not swf_pause
 	_refresh()
+	pause_changed.emit(paused)
 
 
 ## The step's sounds, and the win or lose jingle when the ending begins (`win`/`lose`:
@@ -361,9 +404,10 @@ func _begin_original_pause() -> void:
 	touch_controls.enabled = false
 	touch_controls.reset()
 	buttons.pause.text = "RESUME"
-	buttons.pause.visible = true
-	buttons.menu.visible = session != null
+	buttons.pause.visible = not swf_pause
+	buttons.menu.visible = session != null and not swf_pause
 	_refresh()
+	pause_changed.emit(true)
 
 
 ## TweenMax timers kept running while the engine was stopped.
@@ -390,9 +434,10 @@ func _notification(what: int) -> void:
 		touch_controls.enabled = false
 		touch_controls.reset()
 		buttons.pause.text = "RESUME"
-		buttons.menu.visible = session != null
-		if replica: buttons.pause.visible = true
+		buttons.menu.visible = session != null and not swf_pause
+		if replica: buttons.pause.visible = not swf_pause
 		_refresh()
+		pause_changed.emit(true)
 
 
 func _process(delta: float) -> void:
@@ -412,6 +457,8 @@ func detach_swf() -> void:
 	swf_view = null
 	_swf_present = Callable()
 	start_delay = 0
+	swf_pause = false
+	if is_instance_valid(hud): hud.visible = true
 	view.visible = true
 	if is_instance_valid(scenery): scenery.visible = true
 	if is_instance_valid(hud): hud.pause_only = false
@@ -508,7 +555,8 @@ func _place_pause_button(button: Button, rect: Rect2) -> void:
 
 func _refresh() -> void:
 	for key in ["quality", "sound", "music"]:
-		if buttons.has(key): buttons[key].visible = paused
+		if buttons.has(key): buttons[key].visible = paused and not swf_pause
+	if is_instance_valid(hud) and swf_pause: hud.visible = false
 	if is_instance_valid(view) and not state.is_empty():
 		touch_controls.enabled = _can_control()
 		var snapshot := get_snapshot()

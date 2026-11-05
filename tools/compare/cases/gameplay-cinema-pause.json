@@ -1,0 +1,132 @@
+{
+ "name": "gameplay-cinema-pause",
+ "screen": "game",
+ "origin": "The pause screen (checkpoint 4, slice b2): the round of gameplay-cinema-start (seed 42, Arcade, Normal, Cinema, robot 0) with the AI robots stopped at its first frame (fixture, as gameplay-cinema-bomb). Ten frames in, P (keyCode 80) calls Game.gamePause, which waits 100 ms (setTimeout doGamePause): PauseUI (class UI_pause) then joins the UI container, the board container is hidden and the engine stops. pause: 8 frames after P; paused: 30 frames later (its loops play on).",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) and stops its AI robots with the Godot-only ai-stop action.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "kd p"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku p"
+  },
+  {
+   "command": "step 7"
+  },
+  {
+   "capture": "pause"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "paused"
+  }
+ ],
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ }
+}

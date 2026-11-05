@@ -41,7 +41,7 @@ var skin: RefCounted = VisualSkin.new()
 var compact := false
 ## On the generated gameplay screen (scenes/swf/game.json): the board, its boxes and
 ## features are the screen's own (scripts/ui/game_board.gd); this view draws only what
-## what scripts/ui/game_actors.gd does not draw yet (pickups, weapon attacks, projectiles).
+## scripts/ui/game_actors.gd does not draw yet (weapon attacks, projectiles, mode objects).
 var actors_only := false
 
 
@@ -111,7 +111,8 @@ func _board_layer() -> void:
 			if state.board[cell] != &"floor": _tile(cell, state.board[cell], false)
 		_marquee()
 		_features()
-	for cell in state.pickups:
+	# The generated gameplay screen draws its pickups from their original clips (GameActors).
+	for cell in state.pickups if not actors_only else {}:
 		var at := _center(cell)
 		if skin.draw(self, "item." + state.pickups[cell], ArtCatalog.rect("item." + state.pickups[cell], at), state.tick): continue
 		if state.pickups[cell] == &"coin":

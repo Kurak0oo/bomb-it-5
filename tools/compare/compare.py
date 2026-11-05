@@ -222,13 +222,24 @@ def check(name, godot):
         wall_clock = case.get('wall_clock_text', {})
         for side in (golden, actual):
             for n in side['nodes']:
-                if any(n['path'].endswith(suffix) for suffix in wall_clock):
+                if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_clock):
                     n.pop('text', None)
+                    if side is golden and n.get('render_bounds'):
+                        masks = masks + [n['render_bounds']]
+        # Likewise a clip frame the original drives on the host's clock (TweenMax: the
+        # map-loading screen's progress bar): present and placed, its frame not compared.
+        wall_frames = case.get('wall_clock_frame', {})
+        for side in (golden, actual):
+            for n in side['nodes']:
+                if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_frames):
+                    n.pop('frame', None)
                     if side is golden and n.get('render_bounds'):
                         masks = masks + [n['render_bounds']]
         entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
         if wall_clock:
             entry['wall_clock_text'] = sorted(wall_clock)
+        if wall_frames:
+            entry['wall_clock_frame'] = sorted(wall_frames)
         if effects:
             entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
             entry['node']['passed'] &= all(e['passed'] for e in effects.values())
@@ -277,6 +288,8 @@ def print_report(report):
             print(f'    missing {path}')
         if entry.get('wall_clock_text'):
             print(f'  {capture}: text on the wall clock not compared: {", ".join(entry["wall_clock_text"])}')
+        if entry.get('wall_clock_frame'):
+            print(f'  {capture}: clip frame on the wall clock not compared: {", ".join(entry["wall_clock_frame"])}')
         for effect, e in entry.get('effects', {}).items():
             print(f'  {capture}: {effect}: {e["godot"]} in Godot, {e["original"]} in the original, '
                   f'{"by its rules" if e["passed"] else "off: " + "; ".join(e["problems"][:5])} (excluded from the pixel score)')

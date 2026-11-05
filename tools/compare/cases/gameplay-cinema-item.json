@@ -1,0 +1,186 @@
+{
+ "name": "gameplay-cinema-item",
+ "screen": "game",
+ "origin": "An item drop and its pickup (checkpoint 4, slice b2), on the round of gameplay-cinema-bomb (seed 42, Arcade, Normal, Cinema, robot 0; the AI robots stopped at the round's first frame): the map-loading screen half way (loading: frame 670, LoadingMapUI's UI_reading 30 frames after START), the same walk, bomb and blast, then the broken box's drop roll (Box.createProp at frame 815: Math.random draws 412 and 413, SpeedProp) and its PixelClip (drop: frame 817, the first bitmap; idle: frame 826), the robot walking down onto it (approach: 847) and GetItemCommand eating it (pickup: 848).",
+ "godot_note": "Godot starts on the recorded round with the original's Math.random place (tests/goldens/gameplay-cinema-start/math_random.json), so the box's drop roll draws the same numbers.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "loading"
+  },
+  {
+   "command": "step 31"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 6"
+  },
+  {
+   "command": "step 24"
+  },
+  {
+   "command": "ku down"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "kd up"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "step 20"
+  },
+  {
+   "command": "ku up"
+  },
+  {
+   "command": "step 42"
+  },
+  {
+   "command": "step 6"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "capture": "drop"
+  },
+  {
+   "command": "step 9"
+  },
+  {
+   "capture": "idle"
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 21"
+  },
+  {
+   "capture": "approach"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "capture": "pickup"
+  }
+ ],
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ },
+ "wall_clock_frame": {
+  "/@0#1/@0#1/processBarMc": "LoadingMapUI.progress tweens processBarMc's frame with TweenMax, which the reference player runs on the host's clock, not its stepped frames: in one recording the bar reads 24 at frame 670, in another 46"
+ }
+}

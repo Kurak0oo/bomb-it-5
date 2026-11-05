@@ -31,6 +31,8 @@ const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
 const GameInterFace = preload("res://scripts/ui/game_inter_face.gd")
 const GameBoard = preload("res://scripts/ui/game_board.gd")
 const GameActors = preload("res://scripts/ui/game_actors.gd")
+const LoadingMapUI = preload("res://scripts/ui/loading_map_ui.gd")
+const PauseUI = preload("res://scripts/ui/pause_ui.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -88,6 +90,8 @@ var _art := false
 var _page_fill := Color("214c60")
 ## The comparison loop's recorded round (`round_as_recorded`): the next level starts on it.
 var recorded_round: Dictionary = {}
+## The generated gameplay screen of the current round (its pause screen goes over it).
+var _game_swf: Node2D
 
 
 func _ready() -> void:
@@ -405,7 +409,11 @@ func round_as_recorded(capture: String) -> void:
 	if not String(screen_layout.source.golden).ends_with("/%s.json" % capture):
 		push_error("the gameplay screen was not converted from capture %s" % capture)
 		return
-	recorded_round = screen_layout.board
+	recorded_round = screen_layout.board.duplicate()
+	# Where the original's Math.random stood then (tools/compare/round_draws.py).
+	var draws := String(screen_layout.source.golden).get_base_dir().path_join("math_random.json")
+	if FileAccess.file_exists("res://" + draws):
+		recorded_round.math_random = JSON.parse_string(FileAccess.get_file_as_string("res://" + draws))
 
 
 func _start_level() -> void:
@@ -424,6 +432,7 @@ func _start_level() -> void:
 	game.visible = true
 	game.detach_swf()
 	var recorded := not recorded_round.is_empty()
+	game.math_random = math_random
 	game.recorded_board = recorded_round
 	recorded_round = {}
 	game.play_level()
@@ -447,22 +456,106 @@ func _game_screen(recorded: bool) -> void:
 	var swf := _swf_page(&"game")
 	var board_layout: Dictionary = swf.layout.board
 	var board := GameBoard.new(swf, board_layout)
-	board.build(game.get_snapshot(), recorded)
+	var loading := _loading_map(swf)
+	board.build(game.get_snapshot(), recorded, loading == null)
 	# The recorded round's robots wear the recorded looks; a rolled round's the session's.
 	var actors := GameActors.new(swf, board, board_layout.get("looks", []) if recorded else [])
-	actors.update(game.get_snapshot())
 	var hud := GameInterFace.new(swf, self, game)
 	swf.set_meta("controller", hud)
 	swf.set_meta("board", board)
 	swf.set_meta("actors", actors)
+	# Under the map-loading screen the robots and their counters wait for `firstMapLoadOver`.
+	var robots_made := {"done": loading == null}
+	if loading == null: actors.update(game.get_snapshot())
 	game.attach_swf(swf.node_for(board_layout.container), board.view_transform(GameView.ORIGIN, GameView.PITCH),
 		func(snapshot: Dictionary):
+			if not robots_made.done: return
 			board.update(snapshot)
 			actors.update(snapshot)
 			hud.present(snapshot))
 	game.start_delay = int(board_layout.round_start_after_input)
+	if FileAccess.file_exists("res://scenes/swf/pause.json"):
+		game.swf_pause = true
+		_game_swf = swf
+		if not game.pause_changed.is_connected(_pause_screen): game.pause_changed.connect(_pause_screen)
+	if loading != null:
+		var plan: Dictionary = loading.get_meta("controller").schedule()
+		# UI_reading is the UI container's second child while it shows: the HUD is `@0#0`.
+		var hud_path := _hud_path(swf)
+		swf.rename_node(hud_path, hud_path.get_base_dir().path_join("@0#0"))
+		var cover: RefCounted = loading.get_meta("controller")
+		loading.advanced.connect(func(t: int):
+			cover.tick()
+			for row in plan.rows:
+				if t >= int(plan.rows[row]) and not board.has_row(int(row)):
+					# `MapMaster.createRow`: `mapProgress(row / MAP_HEIGHT)`, then the row.
+					cover.progress(float(row) / float(plan.rows.size()))
+					board.show_row(int(row))
+			if t >= plan.robots and not robots_made.done:
+				robots_made.done = true
+				actors.update(game.get_snapshot())
+				hud.present(game.get_snapshot())
+			if t >= plan.closed:
+				# `gameStartHandler`: the loading screen is destroyed as the round starts.
+				loading.visible = false
+				loading.get_meta("controller").destroy()
+				loading.queue_free()
+				swf.rename_node(hud_path.get_base_dir().path_join("@0#0"), hud_path))
 	# The round's pause screen (still the placeholder page's) draws over the screen.
 	move_child(game, -1)
+
+
+## `UIManager.loadingMap`: LoadingMapUI over the gameplay screen, from START until the round
+## starts (scenes/swf/loading_map.json); none when its layout is absent.
+func _loading_map(game_swf: Node2D) -> Node2D:
+	if not FileAccess.file_exists("res://scenes/swf/loading_map.json"): return null
+	var loading := SwfScreen.create(&"loading_map", _open_delay(&"loading_map"))
+	screen.add_child(loading)
+	loading.fit(screen.size)
+	screen.resized.connect(func(): if is_instance_valid(loading): loading.fit(screen.size))
+	loading.set_meta("controller", LoadingMapUI.new(loading, self))
+	# Its containers above UI_reading (the stage, GameMc, the UI container) are the gameplay
+	# screen's own: only that screen reports them.
+	var root: String = loading.layout.screen_root
+	for path: String in loading.by_path:
+		if path != root and not path.begins_with(root + "/"): loading.by_path[path].remove_meta("swf_path")
+	return loading
+
+
+## `Game.doGamePause` / `gameResume`: PauseUI over the gameplay screen, whose board container
+## is hidden (`gameMainContainer.visible = false`) while it shows.
+func _pause_screen(is_paused: bool) -> void:
+	var game_swf: Node2D = _game_swf
+	if not is_instance_valid(game_swf): return
+	var hud_path := _hud_path(game_swf)
+	var board: String = game_swf.layout.board.container
+	var shown: Node2D = game_swf.get_meta("pause", null)
+	if is_paused and not is_instance_valid(shown):
+		var pause := SwfScreen.create(&"pause", 0)
+		screen.add_child(pause)
+		pause.fit(screen.size)
+		screen.resized.connect(func(): if is_instance_valid(pause): pause.fit(screen.size))
+		var root: String = pause.layout.screen_root
+		for path: String in pause.by_path:
+			if path != root and not path.begins_with(root + "/"): pause.by_path[path].remove_meta("swf_path")
+		pause.set_meta("controller", PauseUI.new(pause, self, game, game.round_random()))
+		game_swf.set_meta("pause", pause)
+		game_swf.set_path_shown(board, false)
+		game_swf.rename_node(hud_path, hud_path.get_base_dir().path_join("@0#0"))
+	elif not is_paused and is_instance_valid(shown):
+		var controller = shown.get_meta("controller")
+		if controller.game != null: controller.destroy()
+		shown.queue_free()
+		game_swf.remove_meta("pause")
+		game_swf.set_path_shown(board, true)
+		game_swf.rename_node(hud_path.get_base_dir().path_join("@0#0"), hud_path)
+
+
+## The path of UI_interface, GameInterFace's clip, on the gameplay screen.
+static func _hud_path(game_swf: Node2D) -> String:
+	for entry: Dictionary in game_swf.layout.nodes:
+		if entry.get("class", "") == "UI_interface": return entry.path
+	return ""
 
 
 func _on_level_settled(snapshot: Dictionary, delay := 0) -> void:

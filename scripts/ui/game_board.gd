@@ -40,6 +40,8 @@ var _tick := -1
 ## The moving actors' art (original/screens/game/actors/actors.json), shared with GameActors.
 var actor_art: Dictionary = {}
 var _portal_loop: Dictionary = {}
+## Rows made so far (`show_row`).
+var _built: Array = []
 
 
 func _init(screen: Node2D, board: Dictionary) -> void:
@@ -62,7 +64,7 @@ func _init(screen: Node2D, board: Dictionary) -> void:
 ## Lay out the round's map. `recorded`: the boxes and features as the layout recorded
 ## them (the comparison loop's round, `App.round_as_recorded`); otherwise from the round's
 ## own board (`snapshot.board`, `board_meta`).
-func build(snapshot: Dictionary, recorded: bool) -> void:
+func build(snapshot: Dictionary, recorded: bool, all_rows := true) -> void:
 	_rows.clear()
 	for y in int(_board.size[1]): _rows.append([])
 	var items := _recorded_items() if recorded else _items_of(snapshot)
@@ -70,15 +72,31 @@ func build(snapshot: Dictionary, recorded: bool) -> void:
 		_rows[int(box.cell[1])].append(box)
 	_features = items.features
 	_tick = int(snapshot.get("tick", 0))
-	var tiles: Dictionary = _screen.pack().get("tiles", {})
+	_built.clear()
+	# The platforms (portals) are made with the map (`AbstractMapSet.create`), before any row.
 	var looks: Dictionary = _screen.pack().get("features", {})
-	for y in _rows.size():
-		for box: Dictionary in _rows[y]:
-			var art: Dictionary = tiles.get("%d|%d" % [int(box.frame), int(box.exist)], {}) if box.shown else {}
-			attach(_board.layers.box[y], box, cell_matrix(Vector2(box.cell[0], box.cell[1])), art, "piece", art.is_empty() and box.shown)
 	for feature: Dictionary in _features:
 		var art: Dictionary = looks.get(String(feature["class"]), {})
 		attach(_board.layers.platform[int(feature.cell[1])], feature, cell_matrix(Vector2(feature.cell[0], feature.cell[1])), art, "piece", art.is_empty())
+	if all_rows:
+		for y in _rows.size(): show_row(y)
+	_portals()
+
+
+func has_row(y: int) -> bool:
+	return y in _built
+
+
+## `MapMaster.createRow(y)`: row y's boxes, left to right, go on the row's box layer. The
+## map-loading screen calls it on the recorded Timer ticks (scripts/ui/loading_map_ui.gd);
+## `build` makes every row at once otherwise.
+func show_row(y: int) -> void:
+	if y in _built or y < 0 or y >= _rows.size(): return
+	_built.append(y)
+	var tiles: Dictionary = _screen.pack().get("tiles", {})
+	for box: Dictionary in _rows[y]:
+		var art: Dictionary = tiles.get("%d|%d" % [int(box.frame), int(box.exist)], {}) if box.shown else {}
+		attach(_board.layers.box[y], box, cell_matrix(Vector2(box.cell[0], box.cell[1])), art, "piece", art.is_empty() and box.shown)
 	_portals()
 
 
@@ -102,7 +120,7 @@ func update(snapshot: Dictionary) -> void:
 		var row: Array = _rows[y]
 		for k in range(row.size() - 1, -1, -1):
 			var box: Dictionary = row[k]
-			if box.exist and not box.get("breaking", false) and cells.get(Vector2i(int(box.cell[0]), int(box.cell[1])), &"floor") != &"soft":
+			if box.has("path") and box.exist and not box.get("breaking", false) and cells.get(Vector2i(int(box.cell[0]), int(box.cell[1])), &"floor") != &"soft":
 				box.breaking = true
 				var breaking := {"box": box, "age": 0, "row": y}
 				_screen.set_node_art(box.path, {})
@@ -134,7 +152,7 @@ func _show_brick(breaking: Dictionary) -> bool:
 func _portals() -> void:
 	for row: Array in _rows:
 		for box: Dictionary in row:
-			if box.get("loop_frames", []).is_empty() or box.get("breaking", false): continue
+			if not box.has("path") or box.get("loop_frames", []).is_empty() or box.get("breaking", false): continue
 			var loop: Dictionary = actor_art.get("loops", {}).get(str(int(box.frame)), {})
 			if loop.is_empty(): continue
 			var key := PackedStringArray()
@@ -144,7 +162,7 @@ func _portals() -> void:
 			if not art.is_empty(): _screen.set_node_art(box.path, art)
 	for feature: Dictionary in _features:
 		var loop: Dictionary = _portal_loop.get(String(feature["class"]), {})
-		if loop.is_empty() or feature.get("loop_frame") == null: continue
+		if not feature.has("path") or loop.is_empty() or feature.get("loop_frame") == null: continue
 		var frame := posmod(int(feature.loop_frame) - 1 + _tick, loop.size()) + 1
 		var art: Dictionary = loop.get(frame, {})
 		if not art.is_empty(): _screen.set_node_art(feature.path, art)
@@ -196,6 +214,17 @@ func cell_matrix(cell: Vector2) -> Array:
 func layer_of(y: int, layer: int) -> String:
 	var row: String = _board.rows[clampi(y, 0, _board.rows.size() - 1)]
 	return "%s/@0#%d" % [row, layer]
+
+
+## The row Sprite of row y (`Game.getDisArr(y)`): its five layers are its first children,
+## so a pickup added to the row itself (`AbstractItem.init`) is its child 5 on.
+func row_of(y: int) -> String:
+	var row: String = _board.rows[clampi(y, 0, _board.rows.size() - 1)]
+	if not _children.has(row):
+		var layers := []
+		for k in _board.layers.size(): layers.append({"path": "%s/@0#%d" % [row, k]})
+		_children[row] = layers
+	return row
 
 
 ## The transform, in the board container, of a view that draws cell (x, y) at

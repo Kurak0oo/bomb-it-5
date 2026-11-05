@@ -22,6 +22,8 @@ extends Node2D
 
 signal action(name: StringName)
 signal opened
+## One frame of the screen's timeline has been shown (index `t` since it opened).
+signal advanced(t: int)
 ## For screens driven by a ported controller: over / out / down / up / click on an instance.
 signal mouse_event(instance: String, kind: StringName)
 ## Any mouse press on the stage, after the instances' own handlers (AS3 bubbling to the
@@ -233,6 +235,15 @@ func set_shown(instance: String, shown: bool) -> void:
 	_queue_apply()
 
 
+## `visible` of a node addressed by its path (a container the screen's controller hides).
+func set_path_shown(path: String, shown: bool) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	rec.shown = shown
+	rec.made_visible = shown
+	_queue_apply()
+
+
 func is_shown(instance: String) -> bool:
 	return bool(_by_name.get(instance, {}).get("shown", false))
 
@@ -329,6 +340,11 @@ func rename_node(path: String, new_path: String) -> void:
 		_by_path_rec[renamed] = r
 		by_path[renamed] = r.node
 		r.node.set_meta("swf_path", renamed)
+		if r.node.has_meta("swf_covers"):
+			var covers: Array = []
+			for covered: String in r.node.get_meta("swf_covers"):
+				covers.append(new_path + covered.substr(path.length()) if covered.begins_with(path + "/") else covered)
+			r.node.set_meta("swf_covers", covers)
 
 
 ## A run-time node moves (a robot walking): its stage matrix.
@@ -398,7 +414,8 @@ func pack() -> Dictionary:
 func set_text(instance: String, text: String) -> void:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty(): return
-	if text == String(rec.entry.get("text", "")):
+	# (A field with no art of its own, hidden at the capture, always draws live text.)
+	if text == String(rec.entry.get("text", "")) and not rec.has("text_color") and not rec.art.is_empty():
 		# The recorded text again: its art (with the field's filters) shows, not live text.
 		if rec.has("label"):
 			# (with the CanvasGroup that draws its filters, when it has one)
@@ -416,6 +433,15 @@ func set_text(instance: String, text: String) -> void:
 	_queue_apply()
 
 
+## `TextField.textColor = colour`: the field draws as live text in that colour.
+func set_text_color(instance: String, colour: Color) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty() or rec.get("text_color") == colour: return
+	rec.text_color = colour
+	if rec.has("label"): rec.label.add_theme_color_override("font_color", colour)
+	else: set_text(instance, get_text(instance))
+
+
 func get_text(instance: String) -> String:
 	var rec: Dictionary = _by_name.get(instance, {})
 	return String(rec.get("live_text", rec.get("entry", {}).get("text", "")))
@@ -430,7 +456,7 @@ func _make_label(rec: Dictionary) -> Label:
 	var font := _font(String(f.get("font", "")), bool(f.get("bold", false)))
 	if font != null: label.add_theme_font_override("font", font)
 	var colour: Array = f.get("color", [0, 0, 0])
-	label.add_theme_color_override("font_color", Color8(int(colour[0]), int(colour[1]), int(colour[2])))
+	label.add_theme_color_override("font_color", rec.get("text_color", Color8(int(colour[0]), int(colour[1]), int(colour[2]))))
 	label.horizontal_alignment = {"Left": HORIZONTAL_ALIGNMENT_LEFT, "Center": HORIZONTAL_ALIGNMENT_CENTER,
 		"Right": HORIZONTAL_ALIGNMENT_RIGHT, "Justify": HORIZONTAL_ALIGNMENT_FILL}.get(String(f.get("align", "Left")), HORIZONTAL_ALIGNMENT_LEFT)
 	label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
@@ -606,6 +632,7 @@ func _process(delta: float) -> void:
 			opened.emit()
 		_t = t
 		_apply(_timeline_index(t))
+		advanced.emit(t)
 
 
 ## Timeline index of one node: the screen's, or for a part from another capture its own
@@ -937,7 +964,8 @@ func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> Dictio
 	var size: Array = piece.get("pixel_size", [])
 	var art := {"file": file, "scale": float(piece.scale), "index": at,
 		"size": Vector2(size[0], size[1]) if size.size() == 2 else Vector2.ZERO,
-		"at": _global_at(rec, at),
+		# Rendered where another capture placed the node (record_screen.py panels): that matrix.
+		"at": _matrix(piece.at) if piece.get("at") is Array else _global_at(rec, at),
 		"origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1]) / float(piece.scale) + rec.offset,
 		"pixel_origin": Vector2(piece.pixel_origin[0], piece.pixel_origin[1])}
 	if state > 0: art["state"] = state
