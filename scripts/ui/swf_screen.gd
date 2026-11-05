@@ -1092,7 +1092,8 @@ func _hit(rec: Dictionary) -> Button:
 	for style in ["normal", "hover", "pressed", "disabled", "focus"]:
 		hit.add_theme_stylebox_override(style, StyleBoxEmpty.new())
 	# The area covers every state's art (a hovered button may draw larger than at rest).
-	var area := Rect2(Vector2(bounds[0], bounds[1]) + rec.offset, Vector2(bounds[2] - bounds[0], bounds[3] - bounds[1]))
+	# (A moved node's stage_bounds are already shifted by layout.py's owner edit.)
+	var area := Rect2(Vector2(bounds[0], bounds[1]), Vector2(bounds[2] - bounds[0], bounds[3] - bounds[1]))
 	# Not a sequence's frames: they follow the clip's recorded motion (the unlock tip flying in).
 	for art: Dictionary in rec.art:
 		if entry.role == "sequence" and not art.has("state"): continue
