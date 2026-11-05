@@ -661,7 +661,8 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     - `boxes`: every Box (`Box.init`: a Sprite per box on its row's box layer, created in
       column order by `MapMaster.createRow`) with its cell, `_brick5` frame, whether its clip
       shows (`setBoxVisible`: the centre's hold cells keep an empty Sprite) and whether it is
-      a breakable box (`isExist`: `Box.setItem` shrinks its clip to 0.9 and centres it);
+      a breakable box (`isExist`: `Box.setItem` shrinks its clip to 0.9 and centres it), and
+      the frames its own nested loops show at the capture (`loop_frames`: the centre's marquee);
     - `features`: the platforms on layer 0 that belong to the map (Portal), by class, with the
       frame its own loop shows at the capture (`loop_frame`: the portal's glow);
     - `dynamic`: everything else in the row layers (robots, bombs, pickups, flames), with its
@@ -710,9 +711,12 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
                 brick = next((n for n in tree if n.get('class') == '_brick5'), None)
                 mc = by_path.get(child + '/@0')
                 exist = bool(mc) and abs(mc['stage_matrix'][0] / node['stage_matrix'][0] - 0.9) < 1e-3
+                # Loops a box's frame runs on its own (the centre's marquee lights and screen).
+                loops = [n['frame'] for n in tree if brick and n['path'].startswith(brick['path'] + '/')
+                         and n.get('total_frames', 1) > 1]
                 boxes.append({'path': child, 'row': y, 'local': [round(local[0], 3), round(local[1], 3)],
                               'frame': brick['frame'] if brick else None, 'shown': brick is not None,
-                              'exist': exist, 'brick': brick['path'] if brick else None})
+                              'exist': exist, 'brick': brick['path'] if brick else None, 'loop_frames': loops})
             elif role == 'platform' and any(c.startswith(tuple(how['features'])) for c in classes):
                 # Its own loop (the portal's glow, a nested clip that plays from map load).
                 loop = next((n for n in tree[1:] if n.get('total_frames', 1) > 1), None)
@@ -759,7 +763,8 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
         'layers': {role: [p for p, (y, r) in sorted(layers.items(), key=lambda kv: kv[1][0]) if r == role]
                    for role in how['layers']},
         'begin_num': begin, 'template': template,
-        'boxes': [{k: b[k] for k in ('cell', 'path', 'frame', 'shown', 'exist', 'brick')} for b in boxes],
+        'boxes': [dict({k: b[k] for k in ('cell', 'path', 'frame', 'shown', 'exist', 'brick')},
+                       **({'loop_frames': b['loop_frames']} if b['loop_frames'] else {})) for b in boxes],
         'features': [{k: f[k] for k in ('cell', 'path', 'class', 'loop_frame')} for f in features],
         'dynamic': dynamic, 'robots': seats, 'looks': [looks[r] for r in seats],
         'robot_ui_slots': [n['stage_matrix'][4:6] for n in panels],

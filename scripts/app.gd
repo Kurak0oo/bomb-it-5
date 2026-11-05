@@ -30,6 +30,7 @@ const OnePGameOverUI = preload("res://scripts/ui/one_p_game_over_ui.gd")
 const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
 const GameInterFace = preload("res://scripts/ui/game_inter_face.gd")
 const GameBoard = preload("res://scripts/ui/game_board.gd")
+const GameActors = preload("res://scripts/ui/game_actors.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -439,19 +440,25 @@ func _has_game_screen(set_id: StringName) -> bool:
 
 ## The gameplay screen (scenes/swf/game.json): `GameInterFace` on its HUD, the round's map
 ## laid out on its board (scripts/ui/game_board.gd), the round's actors as placeholders in
-## its board container, and the round held for as many frames as the original takes to
+## its board container (robots, bombs and blasts from their original clips, GameActors;
+## pickups and weapon effects still placeholders), and the round held for as many frames as the original takes to
 ## load the map (`round_start_after_input`).
 func _game_screen(recorded: bool) -> void:
 	var swf := _swf_page(&"game")
 	var board_layout: Dictionary = swf.layout.board
 	var board := GameBoard.new(swf, board_layout)
 	board.build(game.get_snapshot(), recorded)
+	# The recorded round's robots wear the recorded looks; a rolled round's the session's.
+	var actors := GameActors.new(swf, board, board_layout.get("looks", []) if recorded else [])
+	actors.update(game.get_snapshot())
 	var hud := GameInterFace.new(swf, self, game)
 	swf.set_meta("controller", hud)
 	swf.set_meta("board", board)
+	swf.set_meta("actors", actors)
 	game.attach_swf(swf.node_for(board_layout.container), board.view_transform(GameView.ORIGIN, GameView.PITCH),
 		func(snapshot: Dictionary):
 			board.update(snapshot)
+			actors.update(snapshot)
 			hud.present(snapshot))
 	game.start_delay = int(board_layout.round_start_after_input)
 	# The round's pause screen (still the placeholder page's) draws over the screen.

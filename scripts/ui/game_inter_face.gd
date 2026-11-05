@@ -218,8 +218,10 @@ func present(snapshot: Dictionary) -> void:
 		setBomb(uiId, int(actor.get("capacity", 1)))
 		setPower(uiId, int(actor.get("power", 1)))
 		setSpeed(uiId, roundi((float(actor.get("speed", 1.6)) - 1.6) / 0.1) + 1)
-		# Arcade keeps 0 (`AbstractPlayer.init`); the other modes show the level's points.
-		setScore(uiId, 0 if _root.session.mode == ARCADE_MODE else int(actor.get("points", 0)))
+		# Arcade starts at 0 (`AbstractPlayer.updateUI`) and adds BOX_POINT, PROP_POINT and
+		# ROBOT_POINT as they come (`boxPoint`, `itemPoint`, `modePoint` setters: the round's
+		# `score`); the other modes show the level's points.
+		setScore(uiId, int(actor.get("score", 0)) if _root.session.mode == ARCADE_MODE else int(actor.get("points", 0)))
 		uiId += 1
 
 

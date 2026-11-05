@@ -51,6 +51,9 @@ Display objects a ported screen makes at random while it runs (the congratulatio
 **Board tile**:
 The art of one box kind on the gameplay screen: a `_brick5` frame, shrunk and centred or not as a breakable box is, rendered once and placed on any cell of the round's board.
 
+**Actor art**:
+The images of a library clip the round makes at run time (a robot in a direction and look, a bomb, a blast), rendered alone by the reference player at every frame the round can show, and placed by the clip's registration point.
+
 **Recorded round**:
 The board and robots a gameplay capture recorded, which the comparison loop starts its Godot round on because the original's random draws before the map are not reproduced yet.
 

@@ -19,13 +19,17 @@ extends SceneTree
 ## showed at CAPTURE (its golden) and opens the score screen so that, when CAPTURE is
 ## taken, the screen is as far into its timeline as the original's was
 ## (`App.settle_as_recorded`). `round CAPTURE` starts the next round on the board and robots
-## the gameplay capture CAPTURE recorded (`App.round_as_recorded`), for the same reason.
+## the gameplay capture CAPTURE recorded (`App.round_as_recorded`), for the same reason;
+## `ai-stop N` stops the round's AI robot of seat N (`Game.stop_ai`), where the case stops the
+## original's with the `ai-control` fixture.
 
 const STAGE := Vector2i(700, 510)
 
 var _viewport: SubViewport
 var _out := ""
 var _frame := 0
+## The current frame has run (a key was pushed after its draw); cleared by `step`.
+var _between_frames := false
 
 
 func _initialize() -> void:
@@ -64,6 +68,7 @@ func _run(case: Dictionary) -> void:
 			var words: PackedStringArray = String(action.get("godot_command", action.get("command"))).split(" ", false)
 			match words[0]:
 				"step":
+					_between_frames = false
 					for i in int(words[1]):
 						await process_frame
 						_frame += 1
@@ -75,6 +80,13 @@ func _run(case: Dictionary) -> void:
 				"move":
 					_mouse_move(Vector2(float(words[1]), float(words[2])))
 				"kd", "ku":
+					# After the current frame has run (`await process_frame` resumes before the
+					# frame's nodes process): the key lands between frames and the round sees it
+					# on the next one, as in the original.
+					# (Once between two frames: a second wait would run another frame.)
+					if not _between_frames:
+						await RenderingServer.frame_post_draw
+						_between_frames = true
 					_key(words[1], words[0] == "kd")
 				"settle":
 					var golden_path := "res://tests/goldens/%s/%s.json" % [case.name, words[1]]
@@ -84,6 +96,10 @@ func _run(case: Dictionary) -> void:
 					# The next round starts on the board and robots the gameplay screen's
 					# capture recorded (App.round_as_recorded).
 					_viewport.get_child(0).round_as_recorded(words[1])
+				"ai-stop":
+					# The original's AI robot at Game.players index N stopped (the case's
+					# `ai-control stop` fixture): Godot's gives no more commands.
+					_viewport.get_child(0).game.stop_ai(int(words[1]))
 				"seed":
 					# The app's Flash `Math.random` (scripts/simulation/avm_random.gd) takes
 					# the case's seed, as the reference player's does. Only the screens' own
@@ -95,7 +111,8 @@ func _run(case: Dictionary) -> void:
 				_:
 					log.append({"frame": _frame, "note": "ignored command " + " ".join(words)})
 		if action.has("capture"):
-			await RenderingServer.frame_post_draw
+			if not _between_frames: await RenderingServer.frame_post_draw
+			_between_frames = true
 			var name: String = action.capture
 			_viewport.get_texture().get_image().save_png(_out.path_join(name + ".png"))
 			var dump := {"schema": "bombit5-godot-nodes-v1", "frame": _frame,

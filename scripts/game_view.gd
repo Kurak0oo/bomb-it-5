@@ -41,7 +41,7 @@ var skin: RefCounted = VisualSkin.new()
 var compact := false
 ## On the generated gameplay screen (scenes/swf/game.json): the board, its boxes and
 ## features are the screen's own (scripts/ui/game_board.gd); this view draws only what
-## moves (robots, bombs, items, flames), as placeholders until slice (b).
+## what scripts/ui/game_actors.gd does not draw yet (pickups, weapon attacks, projectiles).
 var actors_only := false
 
 
@@ -124,10 +124,10 @@ func _board_layer() -> void:
 		var text: String = ITEM_NAMES.get(state.pickups[cell], "?")
 		_label(at + Vector2(-text.length() * 4.0, 5), text, 13, Color("173c40"))
 	_mode_objects()
-	for bomb in state.bombs:
+	for bomb in state.bombs if not actors_only else []:
 		var bomb_at: Vector2 = ORIGIN + (_blend(_was_bomb(bomb), bomb.position) + Vector2.ONE * 0.5) * PITCH if bomb.has("position") else _center(bomb.cell)
 		_bomb(bomb_at, bomb.get("kind", &"bomb") == &"mine")
-	for flame in state.flames:
+	for flame in state.flames if not actors_only else []:
 		for cell in flame.cells:
 			var at := _center(cell)
 			if skin.draw(self, "effect.flame", ArtCatalog.rect("effect.flame", at), state.tick,
@@ -148,7 +148,7 @@ func _board_layer() -> void:
 	for id in state.actors:
 		var actor: Dictionary = state.actors[id]
 		var robot: int = actor.get("robot", SEAT_ROBOTS.get(id, seat))
-		_actor(actor, robot, id)
+		if not actors_only: _actor(actor, robot, id)
 		if not compact: _hud(actor, seat, robot)
 		seat += 1
 	for attack in state.attacks:

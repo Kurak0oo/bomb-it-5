@@ -129,8 +129,19 @@ func _show_brick(breaking: Dictionary) -> bool:
 
 
 ## The portals' glow: `Art_Portal_<n>`'s nested loop, recorded at the capture frame
-## (`loop_frame`) and one frame further per tick.
+## (`loop_frame`) and one frame further per tick. Likewise a box whose `_brick5` frame runs
+## loops of its own (the centre's marquee lights and screen, `loop_frames`).
 func _portals() -> void:
+	for row: Array in _rows:
+		for box: Dictionary in row:
+			if box.get("loop_frames", []).is_empty() or box.get("breaking", false): continue
+			var loop: Dictionary = actor_art.get("loops", {}).get(str(int(box.frame)), {})
+			if loop.is_empty(): continue
+			var key := PackedStringArray()
+			for k in box.loop_frames.size():
+				key.append(str(posmod(int(box.loop_frames[k]) - 1 + _tick, int(loop.periods[k])) + 1))
+			var art: Dictionary = loop.frames.get("|".join(key), {})
+			if not art.is_empty(): _screen.set_node_art(box.path, art)
 	for feature: Dictionary in _features:
 		var loop: Dictionary = _portal_loop.get(String(feature["class"]), {})
 		if loop.is_empty() or feature.get("loop_frame") == null: continue
@@ -144,8 +155,8 @@ func _portals() -> void:
 func attach(layer: String, item: Dictionary, stage_matrix: Array, art: Dictionary = {}, role := "group", outline := false) -> void:
 	var list: Array = _children.get_or_add(layer, [])
 	list.append(item)
-	if list.size() == 2: _repath(layer)
 	item.path = _child_path(layer, list.size() - 1, list.size())
+	if list.size() == 2: _repath(layer)
 	var entry := _entry(item.path, layer, stage_matrix, role)
 	if outline:
 		var size := float(_board.grid) * float(stage_matrix[0])
@@ -215,7 +226,8 @@ static func _child_path(layer: String, k: int, count: int) -> String:
 func _recorded_items() -> Dictionary:
 	var boxes := []
 	for box: Dictionary in _board.boxes:
-		boxes.append({"cell": box.cell, "frame": box.frame if box.frame != null else 0, "shown": box.shown, "exist": box.exist})
+		boxes.append({"cell": box.cell, "frame": box.frame if box.frame != null else 0, "shown": box.shown, "exist": box.exist,
+			"loop_frames": box.get("loop_frames", [])})
 	var features := []
 	for feature: Dictionary in _board.features:
 		features.append({"cell": feature.cell, "class": feature["class"], "loop_frame": feature.get("loop_frame")})
@@ -235,6 +247,9 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 	var features := []
 	# (A rolled round's portals start their glow where the recorded one's was at its first frame.)
 	var loop_frame = _board.features[0].get("loop_frame") if not _board.features.is_empty() else null
+	var centre_loops: Array = []
+	for box: Dictionary in _board.boxes:
+		if box.has("loop_frames"): centre_loops = box.loop_frames
 	for y in int(size[1]):
 		for x in int(size[0]):
 			var cell := Vector2i(x, y)
@@ -242,7 +257,8 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 			var hold: bool = center is Vector2i and x >= center.x and x < center.x + 3 and y >= center.y and y < center.y + 3
 			if hold:
 				# `getMidBox == 3` (the centre) shows `beginNum + 23`; `== 2` is a hidden box.
-				boxes.append({"cell": [x, y], "frame": begin + 23, "shown": cell == center, "exist": false})
+				boxes.append({"cell": [x, y], "frame": begin + 23, "shown": cell == center, "exist": false,
+					"loop_frames": centre_loops if cell == center else []})
 			elif kind == &"solid" and variants.has(cell):
 				boxes.append({"cell": [x, y], "frame": begin - 1 + int(variants[cell]), "shown": true, "exist": false})
 			elif kind == &"soft":

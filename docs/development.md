@@ -316,3 +316,19 @@ recorded 61 frames. Result: nodes 378/378, SSIM 0.942 (ceiling 0.935), max regio
 Known gaps: no loading screen yet; portals, the centre marquee and the TIME flash are still;
 HUD panels of robots not in the recording (1, 3, 4, 7) have no art; other stage sets keep the
 placeholder page.
+
+Slice (b), 2026-11-05 (owner to review): robots, bombs, blasts, box breaks, the portals' glow
+and the centre marquee are drawn from their own SWF clips (`scripts/ui/game_actors.gd`, ports
+of `RobotView`, `InvincibilityCommand`, `RobotDeadCommand`, `Bomb`; `Box.brickExp` in
+`game_board.gd`). Their art comes from `record_screen.py actors`: the reference player's new
+`symbol` command (patch `reference-symbol`, art pass only) constructs each library class and
+renders it at every frame, robots with the round's looks (`--looks all` for every look, ~40
+min). Clip timing (first frame shown twice, key press vs engine stop, nested blast frames) was
+recorded and is cited in the port. New case `gameplay-cinema-bomb` (AI stopped by fixture /
+Godot-only `ai-stop`; the player walks, drops a bomb, it blasts a box): every actor node
+matches; `gameplay-cinema-start` now includes the robots. Owner edit: the publisher logo
+(`Logo2`) is removed from the gameplay screen. Harness fix: a case's key lands after the
+frame has run (it applied one frame early). Known gaps: items/pickups, vehicles, weapon
+clips and the map-loading screen are still placeholders or absent; robots' own blink loops
+show their first frame; looks the pack lacks show the robot's default look; TIME follows the
+host's Date in the reference player, so it is not compared frame for frame.

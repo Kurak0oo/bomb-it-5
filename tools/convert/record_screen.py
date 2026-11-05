@@ -848,7 +848,8 @@ def record_actors(case_name, player_path, swf, all_looks=False):
       every look with --looks all. A nested loop the clip runs on its own (eyes blinking)
       shows its first frame;
     - bomb0 and the portals by age (their timelines play, as made with `new`), exp0 at each
-      root frame by age of its nested clip (the root is stopped), brickExp at each frame.
+      root frame by age of its nested clip (the root is stopped), brickExp at each frame;
+    - a box running loops of its own (the centre's marquee), on stage at every combination.
 
     Each image keeps the stage matrix it was rendered at (`at`). The art session stops the
     AI first (fixture) so the round cannot end while it renders."""
@@ -965,6 +966,26 @@ def record_actors(case_name, player_path, swf, all_looks=False):
                 if stored:
                     frames[str(frame)] = stored
             out['still'][cls] = frames
+        # A box whose frame runs nested loops of its own (the centre's marquee: lights and a
+        # screen): the recorded box rendered on stage at every combination, stepping the round.
+        out['loops'] = {}
+        for box in board['boxes']:
+            if not box.get('loop_frames') or str(box['frame']) in out['loops']:
+                continue
+            dump = {n['path']: n for n in p.display()['nodes']}
+            loops = [n for n in dump.values() if n['path'].startswith(box['brick'] + '/') and n.get('total_frames', 1) > 1]
+            periods = [n['total_frames'] for n in loops]
+            frames = {}
+            for age in range(math.lcm(*periods)):
+                key = '|'.join(str((n['frame'] - 1 + age) % n['total_frames'] + 1) for n in loops)
+                stored = _store(p, box['path'], target, tmp, seen)
+                if stored:
+                    stored['file'] = 'actors/' + stored['file']
+                    stored['at'] = dump[box['path']]['stage_matrix']
+                    frames[key] = stored
+                p.command('step 1')
+            out['loops'][str(box['frame'])] = {'periods': periods, 'frames': frames}
+            print(f'  box frame {box["frame"]}: {len(frames)} loop images')
         # 3× frames of the gameplay cases' other captures: the pixel score's resampling ceiling.
         for other in sorted(CASES_WITH_ACTORS):
             if other == case_name:

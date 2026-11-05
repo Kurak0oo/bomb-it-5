@@ -258,6 +258,14 @@ func get_snapshot() -> Dictionary:
 	return result
 
 
+## The comparison loop only (`ai-stop N`, where the case stops the original's AI with the
+## `ai-control stop` fixture, `AIControl.stop`): the AI robot of seat N gets no more commands.
+func stop_ai(seat: int) -> void:
+	var roster: Array = state.get("actors", {}).keys()
+	if seat <= 0 or seat >= roster.size(): return
+	scheduler.set_controller(roster[seat], func() -> Dictionary: return {"direction": Vector2.ZERO, "bomb_events": []})
+
+
 func _ai_command(id: StringName) -> Dictionary:
 	return ai.command(simulation.snapshot(), id)
 

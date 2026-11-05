@@ -1,7 +1,7 @@
 {
  "name": "gameplay-cinema-start",
  "origin": "The gameplay screen at the round's first frame (checkpoint 4, slice a): seed 42, Arcade, Normal, Cinema, robot 0, through the real menus as in the results case. START on character select makes the Game (GameMc) at once, under the map-loading screen (LoadingMapUI, class UI_reading) while MapMaster.createRow builds one row per Timer(100) tick; Game.firstMapLoadOver then starts the round 100 ms later (setTimeout gameStartHandler), which destroys the loading screen. With the player's timers on frame time (realtime 0) that is 61 frames after the click: the capture is the first frame without UI_reading, TIME still reads 180 (Game.countTime has not ticked).",
- "godot_note": "Robots, bombs, items and flames (the row layers other than the box layer) are slice (b): the layout lists them as dynamic, the node diff leaves them out and the pixel score masks them.",
+ "godot_note": "Robots are drawn from their original clips (scripts/ui/game_actors.gd); the node diff and the pixel score include them.",
  "actions": [
   {
    "command": "seed 42"
