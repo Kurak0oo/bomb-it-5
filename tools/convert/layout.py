@@ -662,7 +662,8 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
       column order by `MapMaster.createRow`) with its cell, `_brick5` frame, whether its clip
       shows (`setBoxVisible`: the centre's hold cells keep an empty Sprite) and whether it is
       a breakable box (`isExist`: `Box.setItem` shrinks its clip to 0.9 and centres it);
-    - `features`: the platforms on layer 0 that belong to the map (Portal), by class;
+    - `features`: the platforms on layer 0 that belong to the map (Portal), by class, with the
+      frame its own loop shows at the capture (`loop_frame`: the portal's glow);
     - `dynamic`: everything else in the row layers (robots, bombs, pickups, flames), with its
       render bounds, which the comparison leaves out of the node diff and the pixel score;
     - `excursion` and `grid`: where cell (x, y) lies in the board container, fitted to the
@@ -713,8 +714,11 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
                               'frame': brick['frame'] if brick else None, 'shown': brick is not None,
                               'exist': exist, 'brick': brick['path'] if brick else None})
             elif role == 'platform' and any(c.startswith(tuple(how['features'])) for c in classes):
+                # Its own loop (the portal's glow, a nested clip that plays from map load).
+                loop = next((n for n in tree[1:] if n.get('total_frames', 1) > 1), None)
                 features.append({'path': child, 'row': y, 'local': [round(local[0], 3), round(local[1], 3)],
-                                 'class': next(c for c in classes if c.startswith(tuple(how['features'])))})
+                                 'class': next(c for c in classes if c.startswith(tuple(how['features']))),
+                                 'loop_frame': loop['frame'] if loop else None})
             else:
                 dynamic[child] = {'role': role, 'render_bounds': _union([n.get('render_bounds') for n in tree]),
                                   'class': next((c for c in classes if c and not c.startswith('flash.')), None)}
@@ -756,7 +760,7 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
                    for role in how['layers']},
         'begin_num': begin, 'template': template,
         'boxes': [{k: b[k] for k in ('cell', 'path', 'frame', 'shown', 'exist', 'brick')} for b in boxes],
-        'features': [{k: f[k] for k in ('cell', 'path', 'class')} for f in features],
+        'features': [{k: f[k] for k in ('cell', 'path', 'class', 'loop_frame')} for f in features],
         'dynamic': dynamic, 'robots': seats, 'looks': [looks[r] for r in seats],
         'robot_ui_slots': [n['stage_matrix'][4:6] for n in panels],
         'round_start_after_input': _frames_after_input(case, capture),
