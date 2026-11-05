@@ -422,6 +422,30 @@ def build(name, spec):
                 if p not in shown:
                     raise SystemExit(f'{name}: {p} does not show at the {other} capture either')
                 art_from[p] = other
+    # A widget frame shown animated in another capture (robotIcon3 selected, eyes blinking,
+    # at char3) plays that capture's sequence there, on that capture's clock; its other
+    # frames stay single images (widget_frames). Each frame takes the first capture, in
+    # the spec's order, where it shows and animates.
+    frame_sequences = {}
+    for path in by_path:
+        node = by_path[path]
+        if (path in expanded or node.get('from_capture') or not path.startswith(screen_root + '/')
+                or segment_name(path) not in spec.get('widgets', ()) or (node.get('total_frames') or 1) <= 1):
+            continue
+        for c, x in extra_timelines.items():
+            if x is None or key(path) not in x.tracks:
+                continue
+            looks = set(x.look_changes(key(path)))
+            shown = {}
+            for i in range(x.frames):
+                s = x.state(key(path), i)
+                if s and s[6] and (s[7] or 0) != (node.get('frame') or 0):
+                    shown.setdefault(int(s[7]), []).append(i)
+            for f, present in shown.items():
+                if str(f) in frame_sequences.get(path, {}) or not looks & set(present):
+                    continue
+                points = (looks | {present[0], x.data['capture_index']}) & set(present)
+                frame_sequences.setdefault(path, {})[str(f)] = {'capture': c, 'art_frames': sorted(points)}
     layout_nodes, warnings, covered = [], [], {}
     for node in nodes:
         path = node['path']
@@ -472,6 +496,8 @@ def build(name, spec):
             # Every frame of a widget clip is rendered (selected, disabled, …): its screen
             # controller shows them with set_frame, as the AS3 does with gotoAndStop.
             entry['widget_frames'] = list(range(1, int(node['total_frames']) + 1))
+        if path in frame_sequences:
+            entry['frame_sequences'] = frame_sequences[path]
         if path in art_from:
             entry['art_from'] = art_from[path]
         if path in interactive:

@@ -208,17 +208,24 @@ def record_timeline(case_name, player_path, swf):
               f'period {period}{" (capped)" if capped else ""}; {moving}/{len(tracks)} nodes change '
               f'-> {target.relative_to(ROOT)}')
         for extra_capture, selectors in spec.get('extra', {}).items():
-            _record_extra_timeline(case_name, case, screen, root, extra_capture, selectors, player_path, swf)
+            _record_extra_timeline(case_name, case, screen, spec, root, extra_capture, selectors, player_path, swf)
 
 
-def _record_extra_timeline(case_name, case, screen, root, capture, selectors, player_path, swf):
+def _record_extra_timeline(case_name, case, screen, spec, root, capture, selectors, player_path, swf):
     """A part from another capture (a robot shown after its icon was clicked, the unlock tip)
     plays on its own timeline: recorded from the frame it shows (index 0), through its
-    capture (`capture_index`), and one period after it with no further input, which loops."""
+    capture (`capture_index`), and one period after it with no further input, which loops.
+    The screen's widget clips are recorded on that timeline too (`widgets`): a widget may
+    show another frame there that animates (the selected robot's icon), which plays on this
+    capture's clock (layout.py `frame_sequences`)."""
     golden = json.loads((GOLDENS / case_name / f'{capture}.json').read_text(encoding='utf-8'))
     tops = [n['path'] for n in golden['nodes'] if n['path'].startswith(root + '/') and any(
         layouts._matches(n, n['path'][len(root) + 1:], s) for s in selectors)]
-    inside = [n for n in golden['nodes'] if any(n['path'] == top or n['path'].startswith(top + '/') for top in tops)]
+    widgets = [n['path'] for n in golden['nodes'] if n['path'].startswith(root + '/')
+               and n['path'].rsplit('/', 1)[-1].split('@')[0] in spec.get('widgets', ())
+               and (n.get('total_frames') or 1) > 1
+               and not any(n['path'] == top or n['path'].startswith(top + '/') for top in tops)]
+    inside = [n for n in golden['nodes'] if any(n['path'] == top or n['path'].startswith(top + '/') for top in tops + widgets)]
     lengths = {int(n['total_frames']) for n in inside if (n.get('total_frames') or 1) > 1}
     period = min(reduce(lambda a, b: a * b // math.gcd(a, b), lengths, 1), MAX_PERIOD)
     top_class = {n['path']: n.get('class') for n in golden['nodes'] if n['path'] in tops}
@@ -227,7 +234,7 @@ def _record_extra_timeline(case_name, case, screen, root, capture, selectors, pl
 
     def sample(nodes, index):
         for node in nodes:
-            if any(node['path'] == top or node['path'].startswith(top + '/') for top in tops):
+            if any(node['path'] == top or node['path'].startswith(top + '/') for top in tops + widgets):
                 value = state_of(node)
                 track = tracks.setdefault(node['path'], [])
                 if not track or track[-1][1] != value:
@@ -257,7 +264,7 @@ def _record_extra_timeline(case_name, case, screen, root, capture, selectors, pl
     finally:
         p.close()
     out = {'schema': 'bombit5-screen-timeline-v2', 'screen': screen, 'case': case_name, 'capture': capture,
-           'root': root, 'extra': True, 'tops': tops, 'from_shown': True, 'capture_index': capture_index,
+           'root': root, 'extra': True, 'tops': tops, 'widgets': widgets, 'from_shown': True, 'capture_index': capture_index,
            'period': period, 'shown_before_capture': capture_index,
            'state': ['a', 'b', 'c', 'd', 'tx', 'ty', 'visible', 'frame', 'character', 'alpha'],
            'note': 'An extra part, from the frame it shows (index 0) through its capture and one period '
@@ -407,7 +414,8 @@ def record_art(case_name, player_path, swf):
                 _render_frame(p, p.frame - opened, wanted, sequences, pieces, seen, target, tmp)
         finally:
             p.close()
-        frames = _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, seen, target)
+        frame_sequences = {}
+        frames = _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, seen, target, frame_sequences)
         states = target / 'states' / 'states.json'
         manifest = {'schema': 'bombit5-original-screen-v2', 'screen': screen,
                     'golden_sha256': layout['source']['golden_sha256'], 'swf_sha256': sha256(swf),
@@ -415,7 +423,7 @@ def record_art(case_name, player_path, swf):
                     'pieces': {k: v for k, v in pieces.items() if not isinstance(v, dict) or 'frames' not in v},
                     'sequences': {k: v['frames'] for k, v in pieces.items() if isinstance(v, dict) and 'frames' in v},
                     'states': json.loads(states.read_text(encoding='utf-8')) if states.is_file() else {},
-                    'frames': frames}
+                    'frames': frames, 'frame_sequences': frame_sequences}
         check = _self_check(layout, manifest, target)
         manifest['self_check'] = check
         (target / 'manifest.json').write_text(json.dumps(manifest, indent=1) + '\n', encoding='utf-8')
@@ -425,12 +433,20 @@ def record_art(case_name, player_path, swf):
         shutil.rmtree(tmp, ignore_errors=True)
 
 
-def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, seen, target):
+def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, seen, target, frame_sequences):
     """Widget frames and parts from other captures, each in a fresh run up to its capture,
     so going to other frames never disturbs the timeline recording. Parts with their own
-    timeline (record_screen.py timeline) render their sequences over its period first;
-    widget frames come last, since they go to other frames."""
+    timeline (record_screen.py timeline) render their sequences over its period first,
+    with the widget frames that animate at that capture (layout.py `frame_sequences`, into
+    `frame_sequences`: path -> frame -> {capture, frames}); widget frames come last, since
+    they go to other frames."""
     by_capture = {}
+    # (node, frame) whose frame plays as a sequence on another capture's timeline.
+    frame_seqs = {}
+    for node in layout['nodes']:
+        for frame, seq in (node.get('frame_sequences') or {}).items():
+            frame_seqs.setdefault(seq['capture'], []).append((node, frame, set(seq['art_frames'])))
+            by_capture.setdefault(seq['capture'], [])
     for node in layout['nodes']:
         # Parts from another capture, and widgets hidden at this one (art_from), render there.
         where = node.get('from_capture') or node.get('art_from') or capture
@@ -444,6 +460,7 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
         tmp = Path(tempfile.mkdtemp(prefix='bombit5-frames-'))
         own = (layout.get('extra_timelines') or {}).get(where)
         sequences = [n for n in nodes if n['role'] == 'sequence' and n.get('from_capture')]
+        widget_seqs = frame_seqs.get(where, [])
         # A part timed from when it shows (from_shown) renders its sequence frames from then:
         # the frames before its capture while the case is replayed, the rest after it.
         from_shown = bool(own and own.get('from_shown')) and where != capture
@@ -458,11 +475,19 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
                     stored = _store(p, node['path'], target, tmp, seen)
                     if stored:
                         entry['frames'][str(index)] = stored
+            # A widget at the frame it shows there, as it plays (no gotoAndStop).
+            for node, frame, art_frames in widget_seqs:
+                if index in art_frames:
+                    entry = frame_sequences.setdefault(node['path'], {}).setdefault(
+                        frame, {'capture': where, 'frames': {}})
+                    stored = _store(p, node['path'], target, tmp, seen)
+                    if stored:
+                        entry['frames'][str(index)] = stored
 
         try:
             for line in single_steps(case, where):
                 p.command(line)
-                if from_shown and sequences and line.startswith('step'):
+                if from_shown and (sequences or widget_seqs) and line.startswith('step'):
                     if tops <= {(n['path'], n.get('class')) for n in p.display()['nodes']}:
                         shown_at = shown_at or p.frame
                         render_sequences(p.frame - shown_at)
@@ -479,13 +504,13 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
                     stored = _store(p, path, target, tmp, seen)
                     if stored:
                         pieces[path] = dict(stored, index=base)
-            if sequences and own and from_shown:
+            if (sequences or widget_seqs) and own and from_shown:
                 start = index
                 for index in range(start, int(own['capture_index']) + int(own['period']) + 1):
                     if index > start:
                         p.command('step 1')
                     render_sequences(index)
-            elif sequences and own:
+            elif (sequences or widget_seqs) and own:
                 for index in range(own['period'] + 1):
                     if index:
                         p.command('step 1')

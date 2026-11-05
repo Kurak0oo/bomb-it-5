@@ -449,7 +449,11 @@ func _process(delta: float) -> void:
 ## loop, counted from when it was shown so that the recorded capture comes as many frames
 ## after showing as it did in the original.
 func _local_index(rec: Dictionary, i_screen: int) -> int:
-	var cap: String = rec.entry.get("timeline_of", "")
+	return _capture_index(rec.entry.get("timeline_of", ""), i_screen)
+
+
+## Timeline index on capture `cap`'s own loop ("" is the screen's), at screen index `i_screen`.
+func _capture_index(cap: String, i_screen: int) -> int:
 	if cap.is_empty(): return i_screen
 	var own: Dictionary = layout.get("extra_timelines", {}).get(cap, {})
 	var period: int = maxi(1, int(own.get("period", 1)))
@@ -561,11 +565,21 @@ func _show_art(rec: Dictionary, i: int, _frame: int) -> void:
 	if wanted == int(rec.frame) and rec.entry.role == "sequence": wanted = -1
 	if wanted > 0:
 		for k in rec.art.size():
-			if int(rec.art[k].get("state", -1)) == wanted: pick = k
+			if int(rec.art[k].get("state", -1)) == wanted and not rec.art[k].has("of"): pick = k
+		# A frame that animates at another capture (the selected robot's icon) plays that
+		# capture's sequence on its clock while that capture's part shows (layout.py
+		# `frame_sequences`): its latest art at or before that clock's index.
+		var seq := -1
+		for k in rec.art.size():
+			var art: Dictionary = rec.art[k]
+			if int(art.get("state", -1)) != wanted or not art.has("of"): continue
+			if not _extra_shown_at.has(art.of): continue
+			if seq < 0 or int(art.index) <= _capture_index(art.of, index): seq = k
+		if seq >= 0: pick = seq
 	if pick < 0 and rec.entry.role == "group":
 		# A group widget's art is its frame art, for the frame it shows now.
 		for k in rec.art.size():
-			if int(rec.art[k].get("state", -1)) == _frame: pick = k
+			if int(rec.art[k].get("state", -1)) == _frame and not rec.art[k].has("of"): pick = k
 	if pick < 0:
 		for k in rec.art.size():
 			var art: Dictionary = rec.art[k]
@@ -575,7 +589,7 @@ func _show_art(rec: Dictionary, i: int, _frame: int) -> void:
 	if pick < 0:
 		# A widget with no art at rest (hidden at its capture) shows its frame's art.
 		for k in rec.art.size():
-			if int(rec.art[k].get("state", -1)) == _frame: pick = k
+			if int(rec.art[k].get("state", -1)) == _frame and not rec.art[k].has("of"): pick = k
 	for k in rec.art.size():
 		var art: Dictionary = rec.art[k]
 		art.sprite.visible = k == pick
@@ -616,14 +630,26 @@ func _add_piece_art(rec: Dictionary, manifest: Dictionary) -> void:
 		var by_frame = manifest.get(source, {}).get(path)
 		if by_frame is Dictionary:
 			for frame in by_frame: _add_art(rec, by_frame[frame], int(by_frame[frame].get("index", capture)), int(frame))
+	# A widget frame that plays as a sequence on another capture's clock (`frame_sequences`):
+	# each image is indexed on that capture's timeline. The widget itself is on this
+	# screen's timeline, so the art undoes its transform at the capture.
+	var frame_seqs = manifest.get("frame_sequences", {}).get(path)
+	if frame_seqs is Dictionary:
+		for frame in frame_seqs:
+			var seq: Dictionary = frame_seqs[frame]
+			for key in seq.frames:
+				var art := _add_art(rec, seq.frames[key], int(key), int(frame))
+				if art.is_empty(): continue
+				art["of"] = String(seq.capture)
+				art["at"] = _global_at(rec, capture)
 
 
 ## One rendered image of a piece. It was rendered in stage space at timeline `at`: its sprite
 ## undoes the node's transform at that frame, so later motion of the node carries the art.
 ## The image itself is decoded only when the art is first shown (or by `warm`).
-func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
+func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> Dictionary:
 	var file := ProjectSettings.globalize_path((PACK % screen_name).get_base_dir().path_join(piece.file))
-	if not FileAccess.file_exists(file): return
+	if not FileAccess.file_exists(file): return {}
 	var sprite := Sprite2D.new()
 	sprite.name = "Art"
 	sprite.set_meta("swf_art", true)
@@ -657,6 +683,7 @@ func _add_art(rec: Dictionary, piece: Dictionary, at: int, state: int) -> void:
 	if state > 0: art["state"] = state
 	rec.art.append(art)
 	art_loaded += 1
+	return art
 
 
 func _refresh_art() -> void:
@@ -764,6 +791,9 @@ static func warm(screen: StringName, px: float) -> void:
 		for piece in states.values(): jobs.append(piece)
 	for frames in manifest.get("sequences", {}).values():
 		for piece in frames.values(): jobs.append(piece)
+	for by_frame in manifest.get("frame_sequences", {}).values():
+		for seq in by_frame.values():
+			for piece in seq.frames.values(): jobs.append(piece)
 	_warm_tasks.append(WorkerThreadPool.add_task(func():
 		for piece in jobs:
 			var path: String = base.path_join(piece.file)
