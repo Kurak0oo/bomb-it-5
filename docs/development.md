@@ -290,3 +290,11 @@ arm missing at the start of its entrance, and the pause when switching robots.
   update per frame, art looked up by table, decode and resize on worker threads, a
   256 MB cache. Known gap: robot 6's head misses the group blur for about 6 entrance
   frames. The results unlock-tip timeline should be re-recorded with the new recorder.
+Checkpoint 3 is done: accepted by the owner on 2026-11-05, including the dress-up fixes,
+the centred buttons and the confetti.
+
+Checkpoint 4 (gameplay screen, Cinema set) started 2026-11-05. Slices: (a) the screen's
+chrome and the Cinema board at the round's first frame, generated from the display list;
+(b) robots, bombs, flames and items drawn from SWF clips at their registration points,
+driven by simulation snapshots; (c) frame-matched cases against seeded recordings;
+(d) the replica_* placeholders removed; then the owner plays it.
