@@ -126,7 +126,7 @@ func _run() -> void:
 	await _until(func(): return app.current == &"character", "character select for Zoo")
 	await _click("startBtn")
 	await _until(func(): return app.current == &"playing", "a Zoo level starts")
-	_expect(app.screen.get_child(0).screen_name == &"game" and app.game.swf_view.draw_board,
+	_expect(app.screen.get_child(0).screen_name == &"game" and is_instance_valid(app.game.swf_board_view),
 		"Zoo plays on the generated gameplay screen with its board on the placeholder layer")
 	for frame in 400:
 		if app.current != &"playing": break
