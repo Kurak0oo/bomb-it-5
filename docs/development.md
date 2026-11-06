@@ -100,25 +100,6 @@ runs on every change.
 Known for checkpoint 2: the art pipeline auto-installs Java only via apt (on macOS,
 `brew install openjdk`).
 
-## Starting a session
-
-Git does not carry the SWF, the decompiled AS3, the art pack (`original/`) or the
-reference captures (`.scratch/compare/*/reference`). They travel in a private bundle
-that is never committed or published: `tools/bootstrap.sh pack OUT.zip` writes it.
-
-1. `tools/bootstrap.sh --bundle URL|ZIP` (or set `BOMBIT5_BUNDLE_URL`) unpacks it,
-   installs Godot 4.5.1 if none is found, and reports what the session can do. Without
-   the bundle, `run_checks.sh` and the node comparison still run.
-2. `--player` builds the reference player (only to record goldens or render art);
-   `--check` runs `tools/run_checks.sh`.
-3. Read the status below; work only on the current checkpoint.
-
-Working rules learned in checkpoints 1–4: hand each case to a fresh subagent with a
-short brief instead of growing one context; give parallel subagents separate git
-worktrees; record timing traces (capture frame, clock start, nested clip phases) before
-porting a screen; parts of the original that run on the host clock (TIME, the loading
-bar, the AI's timers, menu balloons) are masked, not matched frame for frame.
-
 ## Branches and structure
 
 Separate art, logic and UI by folder and interface, on one trunk.
@@ -409,8 +390,3 @@ Slice (c) and (d), 2026-11-05 (owner to review):
   so its boxes and features are drawn by the placeholder layer over Cinema's floor (known gap).
 - `tools/smoke_playthrough.gd` (in run_checks) plays a normal launch with keyboard events:
   menus by clicks, Cinema levels, pause/resume, score screens, game over, a Zoo level.
-
-Current (2026-11-06): checkpoint 4 is built and waits for the owner's play test. All 14
-compare cases and run_checks pass. Open gaps: other weapons' swings and shots, the shield,
-the portal-transit fade, HUD portrait loops, the ride clip's extra frame after a key
-release, board art for sets other than Cinema, the map's own draws on `Math.random`.
