@@ -196,11 +196,20 @@ SCREENS = {
                  'first_row': 2,
                  'layers': ('platform', 'box', 'bomb', 'robot', 'effect'),
                  # Classes on the platform layer that are part of the board (Portal.setMc
-                 # `Art_Portal_<colorId>`); anything else there (a blast's flames) moves.
-                 'features': ('Art_Portal_',),
-                 # CinemaMapData: `beginNum` 49; MapMaster.createRow draws every Cinema box
-                 # from `_brick5` frames beginNum .. beginNum + 23 (the wall and centre at +23).
-                 'begin_num': 49},
+                 # `Art_Portal_<colorId>`, Crocodile.setMc `Art_Crocodile`); anything else
+                 # there (a blast's flames) moves.
+                 'features': ('Art_Portal_', 'Art_Crocodile'),
+                 # The stage set of the screen's own capture (StageSets id). CinemaMapData:
+                 # `beginNum` 49; MapMaster.createRow draws every Cinema box from `_brick5`
+                 # frames beginNum .. beginNum + 23 (the wall and centre at +23).
+                 'set': 'cinema',
+                 'begin_num': 49,
+                 # Other stage sets, each from its own round's first frame: the same screen and
+                 # board geometry, its own floor (`AbstractMapSet.init`'s BackGround_<Set>
+                 # bitmap, the container's children before the rows), boxes and features
+                 # (`_set_board`; art by record_screen.py `sets`).
+                 # ZooMapData: `beginNum` 73.
+                 'sets': {'zoo': {'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73}}},
              'interactive': {'pause': 'pause'},
              'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),
              'live_text': ('currentLevel', 'totalLevel', 'time', 'lifeTf', 'bombTf', 'powerTf', 'speedTf',
@@ -384,6 +393,9 @@ def build(name, spec):
     board = None
     if spec.get('board'):
         nodes, board = _split_board(name, spec, case, capture, nodes, screen_root)
+        board['set'] = spec['board']['set']
+        board['sets'] = {set_id: _set_board(name, spec, set_id, how, screen_root, board, nodes)
+                         for set_id, how in spec['board'].get('sets', {}).items()}
     by_path = {n['path']: n for n in nodes}
 
     # Parts that are off the display list at the capture (a dropdown added on demand, the
@@ -825,6 +837,45 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     return keep, board
 
 
+# What a stage set's round has of its own on the gameplay screen (`board.sets.<set>`); the
+# rest of `board` (container, rows, layers, grid, excursion) is the screen's and every set's.
+SET_FIELDS = ('begin_num', 'template', 'boxes', 'features', 'dynamic', 'robots', 'looks', 'robot_ui_slots',
+              'round_start_after_input')
+SHARED_FIELDS = ('container', 'container_matrix', 'grid', 'excursion', 'size', 'rows', 'layers')
+
+
+def _set_board(name, spec, set_id, how, screen_root, board, screen_nodes):
+    """Another stage set's board on the same gameplay screen, from its own round's first
+    frame (`how['golden']`): `_split_board` on that golden, which must lay the board out in
+    the same container, rows, layers and grid as the screen's own capture. Its `floor` is
+    the board container's children before the first row (bgContainer with the set's
+    `BackGround_<Set>` bitmap, `AbstractMapSet.init`): the screen's own pieces there, which
+    show this set's art (record_screen.py `sets`) at the matrix recorded here."""
+    case, capture = how['golden']
+    golden_path = GOLDENS / case / f'{capture}.json'
+    golden_bytes = golden_path.read_bytes()
+    nodes = _unique_paths([n for n in json.loads(golden_bytes)['nodes'] if n.get('kind') != 'stage'])
+    nodes = _class_segments(nodes, tuple(spec.get('class_segments', ())))
+    own = dict(spec, board=dict(spec['board'], begin_num=how['begin_num']))
+    nodes, other = _split_board(f'{name} ({set_id})', own, case, capture, nodes, screen_root)
+    for field in SHARED_FIELDS:
+        if other[field] != board[field]:
+            raise SystemExit(f'{name}: the {set_id} board differs from the screen\'s in {field}')
+    by_path = {n['path']: n for n in nodes}
+    container = board['container']
+    floor = {}
+    for n in screen_nodes:
+        under = n['path'].startswith(container + '/')
+        first = n['path'][len(container) + 1:].split('/')[0] if under else ''
+        if under and _segment_index(f'/{first}') < spec['board']['first_row'] and n['path'] in by_path:
+            there = by_path[n['path']]
+            floor[n['path']] = {k: there.get(k) for k in ('class', 'stage_matrix', 'render_bounds', 'effective_visible')}
+    entry = {k: other[k] for k in SET_FIELDS}
+    entry.update(golden=str(golden_path.relative_to(ROOT)), golden_sha256=hashlib.sha256(golden_bytes).hexdigest(),
+                 floor=floor)
+    return entry
+
+
 def _robot_look(by_path, mc):
     """[clothID, hatID] of a robot clip as `RobotView.setRobotMc` set them: the innermost
     `bodyMc` from the clip, the innermost `hatMc` from `bodyMc` when that holds one."""
@@ -855,8 +906,8 @@ def _frames_after_input(case, capture):
 
 
 def _match_template(name, boxes, features, begin):
-    """The layout (assets/maps/layouts.json) whose fixed cells, centre, hold cells and portals
-    are exactly where the recorded round has its fixed boxes and portals."""
+    """The layout (assets/maps/layouts.json) whose fixed cells, centre, hold cells and platforms
+    (portals, crocodiles) are exactly where the recorded round has its fixed boxes and features."""
     layouts = json.loads((ROOT / 'assets' / 'maps' / 'layouts.json').read_text(encoding='utf-8'))['layouts']
     fixed = {tuple(b['cell']) for b in boxes if not b['exist']}
     soft = {tuple(b['cell']) for b in boxes if b['exist']}
@@ -870,7 +921,8 @@ def _match_template(name, boxes, features, begin):
                     want_fixed.add((x, y))
                 elif cell == 'unfixedProp_r':
                     want_soft.add((x, y))
-                elif cell.startswith('portal_'):
+                elif cell.startswith('portal_') or cell == 'crocodile':
+                    # The platforms: Portal (`portal_<n>`), Crocodile (ZooMapData: `crocodile`).
                     want_portals.add((x, y))
         if fixed == want_fixed and soft <= want_soft and portals == want_portals:
             found.append(layout_name)

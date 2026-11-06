@@ -3,6 +3,7 @@ extends SceneTree
 ## levels, score screens, game over, pause to main menu (#59).
 
 const Session = preload("res://scripts/session.gd")
+const GameBoard = preload("res://scripts/ui/game_board.gd")
 var failures := 0
 var checks := 0
 var app: Control
@@ -189,8 +190,9 @@ func _run() -> void:
 
 	# A stage set whose board art is not in the pack: the placeholder board goes over the
 	# floor art and under the row layers; the effects layer stays over every row.
+	# (Magic Library: no set's art under original/screens/game/sets/ but Zoo's.)
 	app.session.mode = &"arcade"
-	app.session.stage = &"zoo"
+	app.session.stage = &"magic_library"
 	app.start_session()
 	await process_frame
 	app.game.set_process(false)
@@ -199,9 +201,22 @@ func _run() -> void:
 	var board_view: Node = app.game.swf_board_view
 	_expect(is_instance_valid(board_view) and board_view.get_parent() == first_row.get_parent()
 		and board_view.get_index() == first_row.get_index() - 1 and board_view.get_index() > 0,
-		"a Zoo board is drawn just under the first row, over the floor art")
+		"a Magic Library board is drawn just under the first row, over the floor art")
 	_expect(app.game.swf_view.get_index() == app.game.swf_view.get_parent().get_child_count() - 1,
 		"weapon and protection effects are drawn over every row")
+	# A stage set whose board art is in the pack (Zoo, record_screen.py sets) draws its own
+	# floor, boxes and crocodiles: no placeholder board.
+	if FileAccess.file_exists(GameBoard.SET_PACK % "zoo"):
+		app.show_main_menu()
+		await process_frame
+		app.session.mode = &"arcade"
+		app.session.stage = &"zoo"
+		app.start_session()
+		await process_frame
+		app.game.set_process(false)
+		var zoo_board: RefCounted = app.screen.get_child(0).get_meta("board")
+		_expect(zoo_board.has_art() and zoo_board.set_id == &"zoo" and not is_instance_valid(app.game.swf_board_view),
+			"a Zoo board with its art in the pack is drawn from it, without the placeholder board")
 	app.queue_free()
 	await process_frame
 	print("%s: %d flow scene checks" % ["PASS" if failures == 0 else "FAIL", checks])

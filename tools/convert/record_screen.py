@@ -18,6 +18,10 @@ through its frames. The clip frame shown in each state is recorded, and its art 
 panels (after art): the HUD panels of robots the gameplay capture lacks, from the art-only
 case tools/convert/cases/hud-robots.json.
 
+sets (after art): each other stage set's floor, tiles and features on the gameplay screen
+(layout `board.sets`), from that set's own round (e.g. gameplay-zoo-start), into
+original/screens/game/sets/<set>/; the CASE argument is ignored (use game's: gameplay-cinema-start).
+
 cartoons (after art): the round's end cartoons (`GameEndCartoon`: winCartoon, loseCartoon,
 timeUpCartoon), each made by its own class (`symbol`) in the UI container and rendered at
 every frame, its text localised in full.
@@ -644,7 +648,7 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
 SKIP_FRAMES = (24, 61, 62, 63, 64, 72, 86, 96, 112, 113)
 
 
-def _record_tiles(case, capture, layout, player_path, swf, seen, target):
+def _record_tiles(case, capture, layout, player_path, swf, seen, target, p=None):
     """The board's tile art (layout.py `board`), at the capture: one image per `_brick5`
     frame the stage set draws (`beginNum` .. `beginNum + 23`) and per box kind (`Box.setItem`:
     a breakable box, `isExist`, shrinks its clip to 0.9 and centres it in the 32-unit cell),
@@ -655,11 +659,14 @@ def _record_tiles(case, capture, layout, player_path, swf, seen, target):
     board view can place it on any cell."""
     board = layout['board']
     tiles, features = {}, {}
-    p = Player(player_path, swf)
+    own = p is None
+    if own:
+        p = Player(player_path, swf)
     tmp = Path(tempfile.mkdtemp(prefix='bombit5-tiles-'))
     try:
-        for line in single_steps(case, capture):
-            p.command(line)
+        if own:
+            for line in single_steps(case, capture):
+                p.command(line)
         dump = {n['path']: n for n in p.display()['nodes']}
         begin = board['begin_num']
         frames = [f for f in range(begin, begin + 24) if f not in SKIP_FRAMES or f == begin + 23]
@@ -699,7 +706,8 @@ def _record_tiles(case, capture, layout, player_path, swf, seen, target):
             if stored:
                 features[feature['class']] = dict(stored, at=dump[feature['path']]['stage_matrix'], source=feature['path'])
     finally:
-        p.close()
+        if own:
+            p.close()
         shutil.rmtree(tmp, ignore_errors=True)
     print(f'board: {len(tiles)} tile images, {len(features)} feature images')
     return tiles, features
@@ -886,8 +894,9 @@ NESTED = {'exp0': {'roots': range(1, 10), 'ages': 22}}
 STILL = ('brickExp',)
 
 
-# `RobotModel.vehicle` of Cinema's rides: CarProp `_Car`, MotoCycleProp `_Skateboard`.
-VEHICLES = ('', '_Car', '_Skateboard')
+# `RobotModel.vehicle` of the rides: CarProp `_Car`, MotoCycleProp `_Skateboard` (Cinema),
+# HorseProp `_forg`, DragonProp `_Elephant` (Zoo).
+VEHICLES = ('', '_Car', '_Skateboard', '_forg', '_Elephant')
 DIRECTIONS = ('_Down', '_Left', '_Right', '_Up')
 # Children of a robot clip that RobotView itself sends to a frame (the look, the feet) or
 # places things at: never a loop of the clip's own.
@@ -1154,8 +1163,10 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
     x, y = board['excursion'][0] + 7 * board['grid'], board['excursion'][1] + 6 * board['grid']
     at = [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
     looks = {r: {(0, 0)} for r in range(8)}
-    for robot, look in zip(board['robots'], board.get('looks', [])):
-        looks[robot].add(tuple(max(0, v) for v in look))  # -1: the clip has none; its default
+    # The recorded rounds' looks: the screen's own and each other stage set's (`board.sets`).
+    for own in [board] + list(board.get('sets', {}).values()):
+        for robot, look in zip(own['robots'], own.get('looks', [])):
+            looks[robot].add(tuple(max(0, v) for v in look))  # -1: the clip has none; its default
     p = Player(player_path, swf)
     seen = {}
     tmp = Path(tempfile.mkdtemp(prefix='bombit5-actors-'))
@@ -1271,6 +1282,119 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
             out['loop_art'] = previous['loop_art']
     _write_actors(target, out, parts, previous)
     print(f'actors: {len(out["robots"])} robot clips, {len(seen)} distinct images in {target}')
+
+
+# ------------------------------------------------------------------ stage sets
+
+def record_sets(_case_name, player_path, swf, only=None):
+    """Each other stage set's board art on the gameplay screen (layout `board.sets`, after
+    art), into original/screens/game/sets/<set>/manifest.json, from that set's own round's
+    first frame (its case and capture, e.g. gameplay-zoo-start):
+
+    - `pieces`: the floor, the board container's children before the rows (bgContainer with
+      `BackGround_<Set>`, `AbstractMapSet.init`), each with the matrix it was rendered at;
+    - `tiles` and `features`: as the screen's own (`_record_tiles`), from that round's boxes;
+    - `played`: each feature class made by its own class (`symbol`) at frame 1 and rendered at
+      every frame its nested loops play through (Crocodile.setMc: `Art_Crocodile` stopped at
+      1, its water loop playing), by the nested loop's frame;
+    - `frames`: each other frame of a feature class (Crocodile: frame 2, mouth open), its
+      body without its nested clips, and each nested clip alone at each of its frames
+      (`mouthOpen_mc`, sent one frame per tick by `Crocodile.runEngine`; the water loop).
+    Also the player's own 3× frame of the capture (the comparison's resampling ceiling)."""
+    layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
+    board = layout['board']
+    pieces_of_screen = {n['path'] for n in layout['nodes'] if n['role'] == 'piece'}
+    for set_id, entry in board.get('sets', {}).items():
+        if only and set_id not in only:
+            continue
+        golden = Path(entry['golden'])
+        case_name, capture = golden.parent.name, golden.stem
+        case = load_case(case_name)
+        merged = dict(board, **{k: entry[k] for k in layouts.SET_FIELDS})
+        target = PACK / 'game' / 'sets' / set_id
+        shutil.rmtree(target, ignore_errors=True)
+        target.mkdir(parents=True)
+        prefix = f'sets/{set_id}/'
+        out = {'schema': 'bombit5-original-set-v1', 'set': set_id, 'golden_sha256': entry['golden_sha256'],
+               'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path), 'scale': SCALE,
+               'pieces': {}, 'played': {}, 'frames': {}}
+        seen = {}
+        p = Player(player_path, swf)
+        tmp = Path(tempfile.mkdtemp(prefix='bombit5-sets-'))
+        try:
+            for line in single_steps(case, capture):
+                p.command(line)
+            p.shot(PACK / 'game' / f'reference-3x-{case_name}-{capture}.png')
+            for path, node in entry['floor'].items():
+                if path in pieces_of_screen and node.get('effective_visible'):
+                    stored = _store(p, path, target, tmp, seen)
+                    if stored:
+                        out['pieces'][path] = dict(stored, at=node['stage_matrix'])
+            out['tiles'], out['features'] = _record_tiles(case, capture, {'board': merged}, player_path, swf, seen,
+                                                          target, p)
+            # The features' own frames, each made by its class on the first row's robot layer
+            # (the round's AI stopped, as in `actors`, so the round cannot end meanwhile).
+            for actor in (1, 2, 3):
+                p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
+            host = board['layers']['robot'][0]
+            m = board['container_matrix']
+            x, y = board['excursion'][0] + 7 * board['grid'], board['excursion'][1] + 6 * board['grid']
+            at = [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
+            name = f'{host}/refsym'
+
+            def tree():
+                return {n['path'][len(name):]: n for n in p.display()['nodes']
+                        if n['path'] == name or n['path'].startswith(name + '/')}
+
+            def store(path=name, frame=None, hide=None):
+                stored = _store(p, path, target, tmp, seen, frame, hide)
+                return dict(stored, at=at) if stored else None
+
+            for cls in sorted({f['class'] for f in entry['features']}):
+                p.command(f'symbol {host} {cls} refsym {x} {y} 1')
+                nodes = tree()
+                total = nodes['']['total_frames']
+                loops = [n['total_frames'] for k, n in nodes.items() if k and n.get('total_frames', 1) > 1]
+                ages = {}
+                for age in range(math.lcm(*loops) if loops else 1):
+                    nodes = tree()
+                    stored = store()
+                    if stored:
+                        stored['frames'] = {k: n.get('frame') for k, n in nodes.items()
+                                            if k and n.get('total_frames', 1) > 1}
+                        ages[str(age)] = stored
+                    p.command('step 1')
+                p.command(f'unsymbol {name}')
+                out['played'][cls] = ages
+                for frame in range(2, total + 1):
+                    p.command(f'symbol {host} {cls} refsym {x} {y} {frame}')
+                    nodes = tree()
+                    # Nested clips directly under the root (each a clip of its own).
+                    nested = sorted(k for k, n in nodes.items() if k and k.count('/') == 1
+                                    and n.get('total_frames', 1) > 1)
+                    body = store(hide=[name + k for k in nested]) if nested else store()
+                    parts = {}
+                    for k in nested:
+                        parts[k] = {}
+                        for f in range(1, nodes[k]['total_frames'] + 1):
+                            stored = store(name + k, f)
+                            if stored:
+                                parts[k][str(f)] = stored
+                    p.command(f'unsymbol {name}')
+                    out['frames'].setdefault(cls, {})[str(frame)] = {
+                        'body': body, 'parts': parts, 'order': [k for k in nodes if k in nested]}
+        finally:
+            p.close()
+            shutil.rmtree(tmp, ignore_errors=True)
+
+        def prefixed(value):
+            if isinstance(value, dict):
+                return {k: (prefix + v if k == 'file' else prefixed(v)) for k, v in value.items()}
+            return value
+        out = prefixed(out)
+        (target / 'manifest.json').write_text(json.dumps(out, indent=1) + '\n', encoding='utf-8')
+        print(f'set {set_id}: {len(out["pieces"])} floor pieces, {len(out["tiles"])} tiles, '
+              f'{len(out["features"])} features, {len(seen)} distinct images in {target}')
 
 
 # ------------------------------------------------------------------ end cartoons
@@ -1555,7 +1679,8 @@ def record_fonts(_case_name, _player_path, swf):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels', 'cartoons'])
+    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels', 'cartoons',
+                                         'sets'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
@@ -1572,6 +1697,9 @@ def main():
         return 0
     if args.what == 'cartoons':
         record_cartoons(args.case, args.player.resolve(), args.swf)
+        return 0
+    if args.what == 'sets':
+        record_sets(args.case, args.player.resolve(), args.swf)
         return 0
     if args.what == 'panels':
         record_panels(args.case, args.player.resolve(), args.swf)

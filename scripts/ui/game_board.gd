@@ -20,15 +20,29 @@ extends RefCounted
 ## Each box's art is the pack's tile for its frame and kind (record_screen.py tiles),
 ## rendered on a recorded box and placed on this cell.
 ##
+## Stage sets: the layout's `board` is the screen's own set (`board.set`, Cinema) and
+## `board.sets.<set>` another set's round on the same board geometry (its boxes, features,
+## robots, floor). A set's art is the screen's pack for its own set, and
+## `original/screens/game/sets/<set>/manifest.json` (record_screen.py sets) for another: the
+## floor (`AbstractMapSet.init`'s BackGround_<Set> bitmap, on the container's first child),
+## its tiles and features, and its features' own frames (`Crocodile`). A set whose art is
+## not in the pack has none here (`has_art`): the placeholder layer draws it.
+##
 ## Every row layer's children are unnamed Sprites at depth 0, so their display-list paths
 ## are `@0#k` by display order (`@0` for an only child, the reference player's rule): the
 ## board keeps each layer's children in order (`attach` / `detach`) for the moving actors
 ## too (scripts/ui/game_actors.gd).
 
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
+const SET_PACK := "res://original/screens/game/sets/%s/manifest.json"
 
 var _screen: Node2D
 var _board: Dictionary
+## The stage set shown (StageSets id), its board fields (`board` with `board.sets.<set>` over
+## it) and its art (tiles, features, floor `pieces`, features' `played` and `frames`).
+var set_id: StringName
+var set_data: Dictionary
+var _art: Dictionary
 ## Per row: the box records in display order, each {cell, frame, shown, exist, path}.
 var _rows: Array = []
 var _features: Array = []
@@ -47,21 +61,51 @@ var outline_missing := true
 var _built: Array = []
 
 
-func _init(screen: Node2D, board: Dictionary) -> void:
+func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"") -> void:
 	_screen = screen
 	_board = board
+	set_id = stage_set if stage_set != &"" else StringName(board.get("set", "cinema"))
+	set_data = board.duplicate()
+	set_data.erase("sets")
+	set_data.merge(board.get("sets", {}).get(String(set_id), {}), true)
+	_art = art_of(screen, board, set_id)
 	var file := ProjectSettings.globalize_path("res://original/screens/game/actors/actors.json")
 	if FileAccess.file_exists(file):
 		actor_art = JSON.parse_string(FileAccess.get_file_as_string(file))
-		for cls in actor_art.get("played", {}):
-			if not String(cls).begins_with("Art_Portal"): continue
+	# Each feature's own loop by its nested clip's frame: the portals' glow (actors pass),
+	# another set's features (its pack's `played`: the crocodile's water).
+	for played: Dictionary in [actor_art.get("played", {}), _art.get("played", {})]:
+		for cls in played:
+			if not String(cls).begins_with("Art_Portal") and not String(cls).begins_with("Art_Crocodile"): continue
 			var by_frame := {}
-			for age in actor_art.played[cls]:
-				var art: Dictionary = actor_art.played[cls][age]
-				var nested = art.get("frames", {}).values()
-				var key: int = int(nested[0]) if nested.size() > 0 and nested[0] != null else 1
+			for age in played[cls]:
+				var art: Dictionary = played[cls][age]
+				var nested := []
+				for k in art.get("frames", {}):
+					if k != "/" and art.frames[k] != null: nested.append(art.frames[k])
+				var key: int = int(nested[0]) if nested.size() > 0 else 1
 				if not by_frame.has(key): by_frame[key] = art
 			_portal_loop[cls] = by_frame
+
+
+## The art of stage set `stage_set` on the gameplay screen: the screen's own pack for its own
+## set, else that set's pack (record_screen.py sets); empty when the pack has none.
+static func art_of(screen: Node2D, board: Dictionary, stage_set: StringName) -> Dictionary:
+	if String(stage_set) == String(board.get("set", "cinema")):
+		var own: Dictionary = screen.pack() if screen != null else {}
+		return own if own.has("tiles") else {}
+	if not board.get("sets", {}).has(String(stage_set)): return {}
+	var file := SET_PACK % stage_set
+	if not FileAccess.file_exists(file): return {}
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(file))
+	if manifest.get("golden_sha256", "") != board.sets[String(stage_set)].golden_sha256:
+		push_warning("original pack for the %s board was rendered from another golden; run record_screen.py sets" % stage_set)
+	return manifest
+
+
+## Whether this set's board art is in the pack (otherwise the placeholder layer draws it).
+func has_art() -> bool:
+	return not _art.is_empty()
 
 
 ## Lay out the round's map. `recorded`: the boxes and features as the layout recorded
@@ -76,8 +120,13 @@ func build(snapshot: Dictionary, recorded: bool, all_rows := true) -> void:
 	_features = items.features
 	_tick = int(snapshot.get("tick", 0))
 	_built.clear()
-	# The platforms (portals) are made with the map (`AbstractMapSet.create`), before any row.
-	var looks: Dictionary = _screen.pack().get("features", {})
+	# `AbstractMapSet.init`: the set's BackGround_<Set> bitmap beneath the grid (the screen's
+	# floor pieces show another set's art).
+	if String(set_id) != String(_board.get("set", "cinema")):
+		var floor: Dictionary = _art.get("pieces", {})
+		for path in floor: _screen.set_node_art(path, floor[path])
+	# The platforms (portals, crocodiles) are made with the map (`AbstractMapSet.create`), before any row.
+	var looks: Dictionary = _art.get("features", {})
 	for feature: Dictionary in _features:
 		var art: Dictionary = looks.get(String(feature["class"]), {})
 		attach(_board.layers.platform[int(feature.cell[1])], feature, cell_matrix(Vector2(feature.cell[0], feature.cell[1])), art, "piece", art.is_empty())
@@ -96,7 +145,7 @@ func has_row(y: int) -> bool:
 func show_row(y: int) -> void:
 	if y in _built or y < 0 or y >= _rows.size(): return
 	_built.append(y)
-	var tiles: Dictionary = _screen.pack().get("tiles", {})
+	var tiles: Dictionary = _art.get("tiles", {})
 	for box: Dictionary in _rows[y]:
 		var art: Dictionary = tiles.get("%d|%d" % [int(box.frame), int(box.exist)], {}) if box.shown else {}
 		attach(_board.layers.box[y], box, cell_matrix(Vector2(box.cell[0], box.cell[1])), art, "piece", art.is_empty() and box.shown and outline_missing)
@@ -131,6 +180,7 @@ func update(snapshot: Dictionary) -> void:
 				if not _show_brick(breaking): continue
 				_breaking.append(breaking)
 	_portals()
+	_crocodiles(snapshot)
 
 
 ## `brickExp` at age `age` (frames since `Box.brickExp`): made with `new`, it shows its first
@@ -166,9 +216,54 @@ func _portals() -> void:
 	for feature: Dictionary in _features:
 		var loop: Dictionary = _portal_loop.get(String(feature["class"]), {})
 		if not feature.has("path") or loop.is_empty() or feature.get("loop_frame") == null: continue
+		if feature.get("own_clock", false): continue  # a crocodile past its first opening (_crocodiles)
 		var frame := posmod(int(feature.loop_frame) - 1 + _tick, loop.size()) + 1
 		var art: Dictionary = loop.get(frame, {})
 		if not art.is_empty(): _screen.set_node_art(feature.path, art)
+
+
+## `Crocodile.runEngine`, display side. Closed, the clip stays on frame 1 (`_mc.gotoAndStop(1)`),
+## whose water loop plays on its own (`_portals`, from `loop_frame` at the round's first frame);
+## at the 240th closed tick `gotoAndStop(2)` with `mouthOpen_mc.gotoAndStop(1)`, then one mouth
+## frame per tick (`ACTION_OPEN`) until the label `openComplete` (frame 25), held while it eats
+## (`OPEN_CLOSE`, 60 ticks), one frame per tick again (`ACTION_CLOSE`) to its last (46), then
+## frame 1. The simulation's crocodile `frame` (scripts/simulation/features/crocodile.gd) counts
+## those ticks: 240 -> mouth 1, 264 -> 25, 265-324 -> 25, 325 -> 26, 345 -> 46. Frame 2's own
+## clips (its water `@3`, made when the clip enters frame 2, and `mouthOpen_mc`) are drawn as
+## nodes of their own over its body (record_screen.py sets `frames`); frame 1 made again on
+## the way back starts its water loop over (`own_clock`).
+func _crocodiles(snapshot: Dictionary) -> void:
+	var frames: Dictionary = _art.get("frames", {}).get("Art_Crocodile", {}).get("2", {})
+	var closed: Dictionary = _portal_loop.get("Art_Crocodile", {})
+	var by_cell := {}
+	for state: Dictionary in snapshot.get("features", []):
+		if state.get("kind") == &"crocodile": by_cell[Vector2i(state.cell)] = int(state.frame)
+	for feature: Dictionary in _features:
+		if feature["class"] != "Art_Crocodile" or not feature.has("path"): continue
+		var cell := Vector2i(int(feature.cell[0]), int(feature.cell[1]))
+		if not by_cell.has(cell): continue
+		var f: int = by_cell[cell]
+		var mouth := 0
+		if f >= 240 and f <= 264: mouth = f - 239
+		elif f > 264 and f <= 324: mouth = 25
+		elif f > 324: mouth = f - 299
+		if mouth > 0 and not frames.is_empty():
+			feature.own_clock = true
+			_screen.set_node_art(feature.path, frames.body, 2)
+			var water := posmod(f - 240, int(frames.parts["/@3"].size())) + 1
+			var shown := {"/@3": water, "/mouthOpen_mc": mini(mouth, int(frames.parts["/mouthOpen_mc"].size()))}
+			for part: String in frames.order:
+				var path: String = feature.path + "/@0" + part
+				if not feature.get("parts", {}).has(part):
+					feature.get_or_add("parts", {})[part] = path
+					_screen.add_node(_entry(path, feature.path, cell_matrix(Vector2(cell)), "piece"))
+				_screen.set_node_art(path, frames.parts[part].get(str(shown.get(part, 1)), {}), int(shown.get(part, 1)))
+		elif feature.get("own_clock", false):
+			for part in feature.get("parts", {}):
+				_screen.remove_node(feature.parts[part])
+			feature.erase("parts")
+			var art: Dictionary = closed.get(posmod(f - 1, closed.size()) + 1, {}) if not closed.is_empty() else {}
+			if not art.is_empty(): _screen.set_node_art(feature.path, art, 1)
 
 
 ## Add `item` as the last child of `layer` (`addChild`): its path is `@0#k` among the layer's
@@ -257,11 +352,11 @@ static func _child_path(layer: String, k: int, count: int) -> String:
 
 func _recorded_items() -> Dictionary:
 	var boxes := []
-	for box: Dictionary in _board.boxes:
+	for box: Dictionary in set_data.boxes:
 		boxes.append({"cell": box.cell, "frame": box.frame if box.frame != null else 0, "shown": box.shown, "exist": box.exist,
 			"loop_frames": box.get("loop_frames", [])})
 	var features := []
-	for feature: Dictionary in _board.features:
+	for feature: Dictionary in set_data.features:
 		features.append({"cell": feature.cell, "class": feature["class"], "loop_frame": feature.get("loop_frame")})
 	return {"boxes": boxes, "features": features}
 
@@ -277,10 +372,13 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 	var size: Array = _board.size
 	var boxes := []
 	var features := []
-	# (A rolled round's portals start their glow where the recorded one's was at its first frame.)
-	var loop_frame = _board.features[0].get("loop_frame") if not _board.features.is_empty() else null
+	# (A rolled round's features start their loops where the recorded ones' were at its first
+	# frame, by class; likewise the centre's.)
+	var loop_frames := {}
+	for feature: Dictionary in set_data.features:
+		loop_frames[String(feature["class"]).rstrip("0123456789")] = feature.get("loop_frame")
 	var centre_loops: Array = []
-	for box: Dictionary in _board.boxes:
+	for box: Dictionary in set_data.boxes:
 		if box.has("loop_frames"): centre_loops = box.loop_frames
 	for y in int(size[1]):
 		for x in int(size[0]):
@@ -298,5 +396,8 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 					"shown": true, "exist": true})
 			elif kind == &"portal":
 				features.append({"cell": [x, y], "class": "Art_Portal_%d" % int(meta.get("portal_ids", {}).get(cell, 1)),
-					"loop_frame": loop_frame})
+					"loop_frame": loop_frames.get("Art_Portal_")})
+			elif kind == &"crocodile":
+				# `ZooMapData`: a `crocodile` cell makes a Crocodile (`Crocodile.setMc`: Art_Crocodile).
+				features.append({"cell": [x, y], "class": "Art_Crocodile", "loop_frame": loop_frames.get("Art_Crocodile")})
 	return {"boxes": boxes, "features": features}

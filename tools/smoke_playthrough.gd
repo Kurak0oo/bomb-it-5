@@ -118,16 +118,18 @@ func _run() -> void:
 		await _wait(60)
 		await _click("back")
 		await _until(func(): return app.current == &"settings", "TRY AGAIN returns to Game Settings")
-	# Session C: a stage set without board art in the pack (Zoo) on the same generated
-	# screen, its board from the placeholder layer; a few hundred frames of keyboard play.
+	# Session C: another stage set (Zoo) on the same generated screen, its board from its
+	# own art when the pack has it (original/screens/game/sets/zoo/), else from the
+	# placeholder layer; a few hundred frames of keyboard play (crocodiles open at 240).
 	await _click("mapMenu")
 	await _click("weddingStages")
 	await _click("confirm")
 	await _until(func(): return app.current == &"character", "character select for Zoo")
 	await _click("startBtn")
 	await _until(func(): return app.current == &"playing", "a Zoo level starts")
-	_expect(app.screen.get_child(0).screen_name == &"game" and is_instance_valid(app.game.swf_board_view),
-		"Zoo plays on the generated gameplay screen with its board on the placeholder layer")
+	var zoo_art: bool = app.screen.get_child(0).get_meta("board").has_art()
+	_expect(app.screen.get_child(0).screen_name == &"game" and is_instance_valid(app.game.swf_board_view) != zoo_art,
+		"Zoo plays on the generated gameplay screen with its board from %s" % ("its own art" if zoo_art else "the placeholder layer"))
 	for frame in 400:
 		if app.current != &"playing": break
 		_drive(app.game.get_snapshot())

@@ -57,8 +57,11 @@ The images of a library clip the round makes at run time (a robot in a direction
 **Clip loop**:
 A nested clip that an actor's library clip plays on its own while the clip itself stands still (a robot's blinking eyes), rendered apart from the clip and drawn as its own node over it, so a clip costs its root frames plus its loop frames.
 
+**Set art**:
+A stage set's board art on the one gameplay screen: its floor bitmap, board tiles and features, from that set's own recorded round; Cinema's is in the screen's pack, every other set's in its own pack folder.
+
 **Placeholder layer**:
-What the gameplay screen draws without original art yet (most weapon actions and shots, mode objects, and the board of a stage set other than Cinema), in the screen's board container.
+What the gameplay screen draws without original art yet (most weapon actions and shots, mode objects, and the board of a stage set whose art is not in the pack), in the screen's board container.
 
 **Recorded round**:
 The board and robots a gameplay capture recorded, which the comparison loop starts its Godot round on because the original's random draws before the map are not reproduced yet.

@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-zoo-start",
+ "case_sha256": "436d2c76cc1469e9202eeadb4b1e87a6c73d3f98deff74850e63ff8bf6904997",
+ "fps": 35.0,
+ "frames": {
+  "zoo-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

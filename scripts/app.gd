@@ -395,22 +395,35 @@ func start_session() -> void:
 	if not recorded_round.is_empty():
 		# The recorded round's robots (seat order) and stage set.
 		session.ai_robots.assign(recorded_round.robots.slice(1).map(func(r): return int(r)))
-		session.current_set = &"cinema"
+		session.current_set = StringName(recorded_round.set)
 	_start_level()
 
 
 ## The comparison loop only (tools/compare/godot_capture.gd `round CAPTURE`): Godot does
 ## not reproduce the original's `Math.random` draws before the map, so the next level starts
 ## on the round the gameplay screen's capture CAPTURE recorded (its board, its robots),
-## from that screen's layout (scenes/swf/game.json `board`, tools/convert/layout.py).
+## from that screen's layout (scenes/swf/game.json `board`, tools/convert/layout.py): the
+## screen's own capture, or another stage set's (`board.sets.<set>`, its fields over `board`).
 func round_as_recorded(capture: String) -> void:
 	var screen_layout := SwfScreen.layout_of(&"game")
-	if not String(screen_layout.source.golden).ends_with("/%s.json" % capture):
-		push_error("the gameplay screen was not converted from capture %s" % capture)
-		return
+	var golden := String(screen_layout.source.golden)
 	recorded_round = screen_layout.board.duplicate()
+	recorded_round.erase("sets")
+	if not golden.ends_with("/%s.json" % capture):
+		var found := false
+		for set_id in screen_layout.board.get("sets", {}):
+			var entry: Dictionary = screen_layout.board.sets[set_id]
+			if String(entry.golden).ends_with("/%s.json" % capture):
+				recorded_round.merge(entry, true)
+				recorded_round.set = set_id
+				golden = entry.golden
+				found = true
+		if not found:
+			push_error("the gameplay screen has no board from capture %s" % capture)
+			recorded_round = {}
+			return
 	# Where the original's Math.random stood then (tools/compare/round_draws.py).
-	var draws := String(screen_layout.source.golden).get_base_dir().path_join("math_random.json")
+	var draws := golden.get_base_dir().path_join("math_random.json")
 	if FileAccess.file_exists("res://" + draws):
 		recorded_round.math_random = JSON.parse_string(FileAccess.get_file_as_string("res://" + draws))
 
@@ -449,15 +462,16 @@ func _start_level() -> void:
 func _game_screen(recorded: bool) -> void:
 	var swf := _swf_page(&"game")
 	var board_layout: Dictionary = swf.layout.board
-	var board := GameBoard.new(swf, board_layout)
-	# Only Cinema's board art is in the pack (checkpoint 4): another stage set's boxes and
-	# features are drawn by the placeholder layer over Cinema's floor, without outlines.
-	var own_art: bool = session.current_set == &"cinema"
+	var board := GameBoard.new(swf, board_layout, game.stage_set)
+	# A stage set whose board art is in the pack (its floor, boxes and features: Cinema's in
+	# the screen's own, others' under sets/) draws it; the others' boxes and features are
+	# drawn by the placeholder layer over the screen's floor, without outlines.
+	var own_art: bool = board.has_art()
 	board.outline_missing = own_art
 	var loading := _loading_map(swf)
 	board.build(game.get_snapshot(), recorded, loading == null)
 	# The recorded round's robots wear the recorded looks; a rolled round's the session's.
-	var actors := GameActors.new(swf, board, board_layout.get("looks", []) if recorded else [])
+	var actors := GameActors.new(swf, board, board.set_data.get("looks", []) if recorded else [])
 	var hud := GameInterFace.new(swf, self, game)
 	swf.set_meta("controller", hud)
 	swf.set_meta("board", board)
@@ -474,7 +488,7 @@ func _game_screen(recorded: bool) -> void:
 			actors.update(snapshot)
 			hud.present(snapshot)
 			cartoon.update(snapshot), not own_art, swf.node_for(board_layout.rows[0]))
-	game.start_delay = int(board_layout.round_start_after_input)
+	game.start_delay = int(board.set_data.round_start_after_input)
 	_game_swf = swf
 	if FileAccess.file_exists("res://scenes/swf/pause.json"):
 		game.swf_pause = true

@@ -439,3 +439,39 @@ Play-test fixes, 2026-11-06:
   of children beside it (`SwfScreen.add_ui_child` / `remove_ui_child`): `@0#0` while any is up,
   `@0` when it is alone again (also with a pause during the end cartoon). Checked in
   `tests/flow_scene_check.gd`.
+
+Checkpoint 5 (each mode × stage set) started 2026-11-06 with the stage sets' board art.
+
+Zoo slice, 2026-11-06 (owner to review):
+- Case `gameplay-zoo-start`: gameplay-cinema-start with Zoo picked in Game Settings' stage list
+  (`weddingStages`, the centre of its bounds in the dropdown golden); 61 frames after START as
+  for Cinema; `round_draws.py` gives its `math_random.json` (409 draws before the round).
+- One gameplay screen carries every set: `game.json` `board` stays the screen's own (Cinema,
+  `board.set`) and gains `board.sets.<set>` (layout.py `_set_board`): that set's golden, its
+  `begin_num`, matched template (crocodile cells count as platforms), boxes, features
+  (`Art_Crocodile` beside `Art_Portal_`), robots, looks, round start and `floor` (the board
+  container's children before the rows). The shared geometry (container, rows, layers, grid,
+  excursion) must equal the screen's or the converter stops.
+- Art: `record_screen.py sets` (after art) renders, from the set's own round, the floor
+  (bgContainer with `BackGround_Zoo`), the 46 tiles of `_brick5` 73-96 (the ZOO centre at 96 has
+  no loops), and each feature class by `symbol`: Art_Crocodile frame 1 at its water loop's 20
+  frames, frame 2's body and its own clips (`@3` splash 20, `mouthOpen_mc` 46) apart, into
+  `original/screens/game/sets/zoo/`. The actors pass now renders every set's recorded looks and
+  the Zoo rides' clips (`_forg`, `_Elephant`).
+- Godot: `GameBoard.new(screen, board, set)` merges the set's fields, takes its art (`art_of`:
+  the screen's pack for its own set, `sets/<set>/` for another), puts the set's floor on the
+  floor piece, and lays rolled rounds out with the set's `begin_num` (crocodile cells become
+  Art_Crocodile). `own_art` is `board.has_art()`: sets without a pack keep the placeholder layer.
+  Crocodiles follow the simulation's crocodile frame (`Crocodile.runEngine`: mouth 1 at the 240th
+  closed tick, 25 at `openComplete`, held while eating, 26-46 closing). `round CAPTURE` finds the
+  set whose golden it is (`App.round_as_recorded`).
+- Results: gameplay-zoo-start nodes 383/383, SSIM 0.941 (ceiling 0.939), ΔE 5.0; every other case
+  passes. Rolled Zoo rounds (three runs, frames 150-400) show both ring choices, the soft
+  variants, the ZOO centre and open crocodiles as in the reference capture
+  (`docs/evidence/reference-2026-10-21/features/zoo-crocodiles-open.png`).
+Known gaps: crocodile timing is mapped from the source, not frame-matched (no case runs to tick
+240); the water loop's phase after the first opening is inferred (frame 1 made again); horse and
+dragon rides draw their clips but their jump and crash are not checked against recordings;
+other sets still use the placeholder layer. The next set needs its own case and `board.sets`
+entry, plus its features' classes (toy hands, belt, spellbook) and any behaviour they drive
+on screen (Candy's belt moves the robots' clips; Birthday's hands throw).
