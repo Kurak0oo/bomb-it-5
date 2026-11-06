@@ -151,6 +151,27 @@ func _run() -> void:
 	app.game.set_process(false)
 	_expect(app.game.get_snapshot().mode == &"kill" and app.game.get_snapshot().actors[&"human"].weapon == &"hammer",
 		"a Battle Royale level starts with the hammer")
+	# `robotRelive`: a robot that died comes back on the board (it vanished for good before).
+	var sim = app.game.simulation
+	var hurt: Dictionary = sim._actors[&"human"]
+	hurt.protected_until = 0
+	hurt.shield = 0
+	hurt.vehicle = &""
+	sim._hurt(&"human", &"")
+	var actor_views = app.screen.get_child(0).get_meta("actors")
+	for wait in 600:
+		if actor_views._robots.has(&"human"): break
+		await process_frame
+	var gone := false
+	for step in 400:
+		app.game.advance_time(1.0 / 35)
+		var view: Dictionary = actor_views._robots[&"human"]
+		if view.removed: gone = true
+		if gone and sim._actors[&"human"].alive and not view.removed: break
+	var back: Dictionary = actor_views._robots[&"human"]
+	var back_node: Node = app.screen.get_child(0).node_for(back.item.get("path", "")) if not back.item.is_empty() else null
+	_expect(gone and sim._actors[&"human"].alive and not back.dead and back_node != null and back_node.is_visible_in_tree(),
+		"a robot that respawns is shown again (AbstractPlayer.robotRelive)")
 	app.game.toggle_pause()
 	for step in app.game.PAUSE_DELAY_STEPS: app.game.advance_time(1.0 / 35)
 	await process_frame

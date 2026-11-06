@@ -161,8 +161,9 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		attacks[attack.actor_id] = attack
 	for id in _robots:
 		var view: Dictionary = _robots[id]
-		if view.removed: continue
 		var actor: Dictionary = snapshot.actors.get(id, {})
+		if view.dead and actor.get("alive", false): _relive(view, actor)
+		if view.removed: continue
 		var direction := _direction(commands.get(id, Vector2.ZERO))
 		var human: bool = id == &"human"
 		if not actor.get("alive", true) and not view.dead:
@@ -274,6 +275,26 @@ func _kill(view: Dictionary) -> void:
 	view.offset = false
 	_clear_weapon(view)
 	_set_robot_mc(view, "_Dead")
+
+
+## `AbstractPlayer.robotRelive` (a mode that brings robots back: Battle Royale, Green Zone,
+## Pac-Man): the robot stands on its start cell again; `AbstractRobot.relive` clears its
+## weapon, `RobotModel.initModel` faces it down on foot, `RobotController.initStage` makes its
+## clip again (`resetRobotMc`) and `resetMainContainer` puts its container back on its row.
+## The new InvincibilityCommand comes with the round's `blink_until`.
+func _relive(view: Dictionary, actor: Dictionary) -> void:
+	if view.removed:
+		view.layer = ""
+	view.dead = false
+	view.removed = false
+	view.offset = false
+	_clear_weapon(view)
+	view.vehicle = &""
+	view.vehicle_hit = -1
+	view.direction = Vector2i.ZERO
+	view.position = actor.get("position", view.position)
+	_place(view, floori((view.position as Vector2).y + 0.5), view.robot_row)
+	_set_robot_mc(view, "_Down")
 
 
 ## `RobotDeadCommand.countDead`, once per tick.
