@@ -160,6 +160,22 @@ func build(screen: StringName) -> void:
 		var relative := _relative(path)
 		if not relative.is_empty(): _by_name[relative] = rec
 	add_child(_hits)
+	# `UIManager.init`: `_mainMC.scrollRect = new Rectangle(0, 0, 700, 510)`: nothing shows
+	# outside the stage (the menus' balloons and sweets drift off its sides). The letterbox
+	# covers the window around the stage, over every piece, without masking the pieces (a
+	# mask would cut the blend modes' screen copies).
+	var letterbox := Node2D.new()
+	letterbox.name = "Letterbox"
+	letterbox.set_meta("swf_art", true)
+	letterbox.z_as_relative = false
+	letterbox.z_index = RenderingServer.CANVAS_ITEM_Z_MAX
+	letterbox.draw.connect(func():
+		var far := 100000.0
+		letterbox.draw_rect(Rect2(-far, -far, 2.0 * far + STAGE.x, far), Color.BLACK)
+		letterbox.draw_rect(Rect2(-far, STAGE.y, 2.0 * far + STAGE.x, far), Color.BLACK)
+		letterbox.draw_rect(Rect2(-far, 0, far, STAGE.y), Color.BLACK)
+		letterbox.draw_rect(Rect2(STAGE.x, 0, far, STAGE.y), Color.BLACK))
+	add_child(letterbox)
 	_apply(0)
 	visible = open_delay <= 0
 	is_open = open_delay <= 0
