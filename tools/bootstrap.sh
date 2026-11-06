@@ -79,6 +79,12 @@ if [ "$build_player" = 1 ]; then
 	tools/reference_player/build.sh
 fi
 
+# The sound pack (original/audio) is built from the SWF; without it the game is silent.
+if [ -f "$swf" ] && [ ! -f original/audio/index.json ]; then
+	echo "building the sound pack from the SWF..."
+	python3 tools/art_pipeline/original_audio.py || echo "sound pack build failed: the game will be silent" >&2
+fi
+
 have() { [ -e "$1" ] && echo yes || echo no; }
 captures=$(find .scratch/compare -mindepth 2 -maxdepth 2 -type d -name reference 2>/dev/null | wc -l | tr -d ' ')
 echo
@@ -86,6 +92,7 @@ echo "GODOT=$GODOT ($("$GODOT" --version 2>/dev/null | head -1))"
 echo "SWF:                $(have "$swf")"
 echo "decompiled AS3:     $(have .scratch/as3)"
 echo "art pack:           $(have original/screens)"
+echo "sound pack:         $(have original/audio/index.json)"
 echo "reference captures: $captures cases"
 echo "reference player:   $(have "$player")"
 echo
