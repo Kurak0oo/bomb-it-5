@@ -145,6 +145,8 @@ def resampling_ceiling(case, capture, reference_png):
     big = None
     for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
         layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if 'screen' not in layout:
+            continue  # localization.json
         if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
             big = ROOT / 'original' / 'screens' / layout['screen'] / 'reference-3x.png'
     if big is None or not big.is_file():
@@ -154,6 +156,9 @@ def resampling_ceiling(case, capture, reference_png):
     small = WORK / case / f'{capture}-reference-3x-to-1x.png'
     Image.open(big).convert('RGB').resize((700, 510), Image.LANCZOS).save(small)
     _, masks = owner_edits(case, capture)
+    # The 3× frame shows the localised fields (record_screen.py `localize`), the 1× one not.
+    golden = json.loads((GOLDENS / case / f'{capture}.json').read_text(encoding='utf-8'))
+    masks = masks + localize_golden(golden)[1]
     result = pixels.compare(reference_png, small, WORK / case / f'{capture}-ceiling-heatmap.png', masks=masks)
     return {k: result[k] for k in ('ssim', 'max_region_delta_e')}
 
@@ -163,6 +168,8 @@ def owner_edits(case, capture):
     the stage rectangles they change: original and new places, excluded from pixels."""
     for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
         layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if 'screen' not in layout:
+            continue  # localization.json
         golden = layout.get('source', {}).get('golden', '')
         # The screen's main capture, another capture of the same screen (a dropdown open), or
         # a capture of a case that names the screen it shows (`screen`: the gameplay screen
@@ -184,10 +191,31 @@ def owner_edits(case, capture):
     return {}, []
 
 
+def localize_golden(golden):
+    """The golden as the original shows it with its branding system: each NewTransText field
+    still showing its authoring placeholder gets its en-US text (layout.py `_localized_text`,
+    which the layouts and the art use too). The local 1× reference capture still shows the
+    placeholder, so each such field's place is left out of the pixel score (returned)."""
+    sys.path.insert(0, str(HERE.parent / 'convert'))
+    from layout import _localized_text
+    by_path = {n['path']: n for n in golden['nodes']}
+    nodes, masks = [], []
+    for n in golden['nodes']:
+        text = _localized_text(n, by_path.get(n['path'].rsplit('/', 1)[0]))
+        if text is not None:
+            n = dict(n, text=text)
+            if n.get('effective_visible') and n.get('render_bounds'):
+                masks.append(n['render_bounds'])
+        nodes.append(n)
+    return dict(golden, nodes=nodes), masks
+
+
 def effects_of(case, capture):
     """The run-time effects (`effects`, layout.py) of the screen this capture records."""
     for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
         layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if 'screen' not in layout:
+            continue  # localization.json
         if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
             return layout.get('effects', {})
     return {}
@@ -211,6 +239,8 @@ def check(name, godot):
         actual = json.loads((out / f'{capture}.nodes.json').read_text(encoding='utf-8'))
         edits, masks = owner_edits(name, capture)
         golden = nodes.apply_owner_edits(golden, edits)
+        golden, placeholder_masks = localize_golden(golden)
+        masks = masks + placeholder_masks
         # A screen's random effects (FallSnow's confetti) are checked by their rules, and
         # where either side draws one is left out of the pixel score.
         golden, actual, effects = nodes.split_effects(golden, actual, effects_of(name, capture))

@@ -402,3 +402,18 @@ Play-test fixes, 2026-11-06:
   (`GameView._protection`). Still placeholders: `ShieldProp`'s `nombril_<direction>`,
   `InvincibilityProp`'s `invincibityPlay` and colour filter, other weapons' action clips and
   shots (need the reference player's art pass).
+- Localised text showed its authoring placeholders (`U_TOTAL SCORE:`, `L_TOTAL SCORE`,
+  `P_PAUSE`, `R_ARCADE` ...): the original's branding system runs `NewTransText.updateText` on
+  every `translation_*` field (en-US string from `LocalizationPack`, font shrunk to fit,
+  recentred), but the reference player has none, so the goldens and the art kept them. The
+  player's `localize` command (patch `reference-localize`) replays updateText through the
+  TextField API; the art passes use it (`record_screen.py`, not timeline) on the fields still
+  showing a placeholder (a letter or digit and `_`: 15 fields on how-to-play, game over/win,
+  score, settings, loading and pause, including `1_ENEMIES KILLED` -> `ENEMIES DESTROYED`).
+  `tools/convert/localization.py` writes the strings (`scenes/swf/localization.json`); layout.py
+  writes the en-US `text` (golden's as `golden_text`); the comparison expects it and leaves those
+  fields out of the pixel score (the 1x reference still shows the placeholder). Goldens kept;
+  the results timelines were re-recorded (the unlock tip's robot had no eyes). Open for the
+  owner: other en-US strings differ from the authored English too (`START` -> `START GAME`,
+  `CINEMA` -> `MOVIE THEATER`, `LIGHTNING GUN` -> `LASER GUN`, `SPORT CAR` -> `SPORTS CAR`,
+  setting and loading hints); `localize FILE` without `placeholders` would apply them all.

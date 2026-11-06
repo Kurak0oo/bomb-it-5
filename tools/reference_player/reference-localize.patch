@@ -1,0 +1,263 @@
+--- a/core/src/avm2.rs
++++ b/core/src/avm2.rs
+@@ -75,6 +75,7 @@
+ pub(crate) mod reference_events;
+ pub(crate) mod reference_fixtures;
+ pub(crate) mod reference_symbol;
++pub(crate) mod reference_localize;
+ mod scope;
+ pub mod script;
+ #[cfg(feature = "known_stubs")]
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2349,6 +2349,21 @@
+         self.mutate_with_update_context(|context| crate::avm2::reference_symbol::add(context, parent, class, name, x, y, frame, cloth, hat, children))
+     }
+ 
++    /// Research-only art pass: load the en-US string table NewTransText fields take.
++    /// `placeholders_only`: only fields that still show an authoring placeholder.
++    pub fn reference_localize_load(&mut self, json: &str, placeholders_only: bool) -> Result<usize, String> {
++        crate::avm2::reference_localize::load(json, placeholders_only)
++    }
++
++    /// Research-only art pass: replay `NewTransText.updateText` on every localised field on
++    /// stage not done yet (nothing until a table is loaded). Returns `[path, from, to]` rows.
++    pub fn reference_localize(&mut self) -> Result<Vec<serde_json::Value>, String> {
++        if !crate::avm2::reference_localize::enabled() {
++            return Ok(Vec::new());
++        }
++        self.mutate_with_update_context(|context| crate::avm2::reference_localize::apply(context, None))
++    }
++
+     /// Research-only: take an instance `reference_symbol_add` added off again.
+     pub fn reference_symbol_remove(&mut self, path: &str) -> Result<(), String> {
+         self.mutate_with_update_context(|context| crate::avm2::reference_symbol::remove(context, path))
+--- a/core/src/reference_display.rs
++++ b/core/src/reference_display.rs
+@@ -255,6 +255,18 @@
+     display.as_container().map(|c| c.iter_render_list().collect()).unwrap_or_default()
+ }
+ 
++/// The dump path of a display object (`@state` for a button's state child).
++pub(crate) fn path_of(display: DisplayObject<'_>) -> String {
++    let mut parts = Vec::new();
++    let mut current = display;
++    while let Some(parent) = current.parent() {
++        parts.push(if parent.as_avm2_button().is_some() { "@state".to_string() } else { segment(current) });
++        current = parent;
++    }
++    parts.reverse();
++    format!("/{}", parts.join("/"))
++}
++
+ /// The chain of display objects from a stage child to `path`, using the dump's segments.
+ pub(crate) fn resolve<'gc>(stage: DisplayObject<'gc>, path: &str) -> Option<Vec<DisplayObject<'gc>>> {
+     let mut chain = Vec::new();
+@@ -318,6 +330,10 @@
+         goto = Some((path.to_string(), clip.current_frame(), clip.playing()));
+         clip.goto_frame(context, crate::display_object::GotoInfo {
+             frame, stop_or_play: crate::display_object::StopOrPlay::Stop });
++        // A widget frame's own NewTransText fields, as the original localises them on stage.
++        if let Err(e) = crate::avm2::reference_localize::apply(context, Some(target)) {
++            tracing::warn!("localize {path}: {e}");
++        }
+     }
+     let b = target.render_bounds_with_transform(&target.local_to_global_matrix(), true, &Matrix::IDENTITY);
+     let view = stage.view_matrix();
+--- a/core/src/display_object/edit_text.rs
++++ b/core/src/display_object/edit_text.rs
+@@ -196,6 +196,11 @@
+     /// See <https://docs.ruffle.rs/en_US/FlashPlatform/reference/actionscript/3/flash/text/engine/package-detail.html>
+     /// See <https://docs.ruffle.rs/en_US/as3/dev/WS9dd7ed846a005b294b857bfa122bd808ea6-8000.html>
+     is_fte: Cell<bool>,
++
++    /// Research-only (reference_localize): the text the field was created with, and whether
++    /// `NewTransText.updateText` was replayed on it.
++    reference_initial_text: RefCell<WString>,
++    reference_localized: Cell<bool>,
+ }
+ 
+ impl EditTextData<'_> {
+@@ -316,6 +321,8 @@
+             context.gc(),
+             EditTextData {
+                 base: Default::default(),
++                reference_initial_text: RefCell::new(text_spans.text().into()),
++                reference_localized: Cell::new(false),
+                 text_spans: RefCell::new(text_spans),
+                 shared: Gc::new(
+                     context.gc(),
+@@ -439,6 +446,20 @@
+         self.0.text_spans.borrow().text().into()
+     }
+ 
++    /// Research-only: the text this field was created with.
++    pub fn reference_initial_text(self) -> WString {
++        self.0.reference_initial_text.borrow().clone()
++    }
++
++    /// Research-only: whether reference_localize replayed `updateText` on this field.
++    pub fn reference_localized(self) -> bool {
++        self.0.reference_localized.get()
++    }
++
++    pub fn set_reference_localized(self) {
++        self.0.reference_localized.set(true);
++    }
++
+     pub fn set_text(self, text: &WStr, context: &mut UpdateContext<'gc>) {
+         if self.text() == text {
+             // Note: this check not only prevents text relayout,
+--- /dev/null
++++ b/core/src/avm2/reference_localize.rs
+@@ -0,0 +1,150 @@
++//! Research-only art pass: what the original's branding system does to its localised text
++//! fields. The reference player has no branding system (`BrandingManager` never gets ready),
++//! so `zlong.localization.NewTransText.updateText` never runs and every `translation_*` clip
++//! keeps its TextField's authoring placeholder (`U_TOTAL SCORE:`, `R_ARCADE` ...). With a
++//! string table loaded (`localize FILE`, scenes/swf/localization.json: the en-US values of
++//! `LocalizationPack`'s `localizedText`), each NewTransText on the display list gets its
++//! `init` + `updateText` once, through the Flash TextField API only. Use it in an art
++//! session, never in a recording whose state is evidence.
++use super::{Activation, FunctionArgs, Value};
++use crate::context::UpdateContext;
++use crate::display_object::{DisplayObject, TDisplayObject, TDisplayObjectContainer};
++use crate::string::{AvmString, WString};
++use std::collections::HashMap;
++use std::sync::Mutex;
++
++static STRINGS: Mutex<Option<HashMap<String, String>>> = Mutex::new(None);
++/// Only fields that still show an authoring placeholder (`placeholders` mode, see `apply`).
++static PLACEHOLDERS_ONLY: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
++
++/// An authoring placeholder: the designers' one-character prefix and an underscore before the
++/// text (`U_TOTAL SCORE:`, `R_ARCADE`, `1_ENEMIES KILLED`), which the branding system replaces.
++fn is_placeholder(text: &str) -> bool {
++    let b = text.as_bytes();
++    b.len() > 2 && (b[0].is_ascii_uppercase() || b[0].is_ascii_digit()) && b[1] == b'_'
++}
++
++/// Load `{"strings": {id: text}}`; from now on `apply` localises. Returns the string count.
++/// `placeholders_only`: localise only fields whose authored text is an authoring placeholder;
++/// the others keep the text they were authored with (their en-US string can differ:
++/// `START` / `START GAME`), as the recordings show them.
++pub fn load(json: &str, placeholders_only: bool) -> Result<usize, String> {
++    PLACEHOLDERS_ONLY.store(placeholders_only, std::sync::atomic::Ordering::Relaxed);
++    let value: serde_json::Value = serde_json::from_str(json).map_err(|e| e.to_string())?;
++    let table = value.get("strings").and_then(|s| s.as_object()).ok_or("no `strings` object")?;
++    let strings: HashMap<String, String> = table.iter()
++        .filter_map(|(k, v)| v.as_str().map(|s| (k.clone(), s.to_string()))).collect();
++    let count = strings.len();
++    *STRINGS.lock().unwrap() = Some(strings);
++    Ok(count)
++}
++
++pub fn enabled() -> bool {
++    STRINGS.lock().unwrap().is_some()
++}
++
++fn call<'gc>(value: Value<'gc>, name: &str, args: &[Value<'gc>], activation: &mut Activation<'_, 'gc>) -> Result<Value<'gc>, String> {
++    let key = AvmString::new_utf8(activation.gc(), name);
++    value.call_public_property(key, FunctionArgs::from_slice(args), activation).map_err(|e| e.to_string(activation))
++}
++
++fn get<'gc>(value: Value<'gc>, name: &str, activation: &mut Activation<'_, 'gc>) -> Result<Value<'gc>, String> {
++    let key = AvmString::new_utf8(activation.gc(), name);
++    value.get_public_property(key, activation).map_err(|e| e.to_string(activation))
++}
++
++fn number<'gc>(value: Value<'gc>, name: &str, activation: &mut Activation<'_, 'gc>) -> Result<f64, String> {
++    let v = get(value, name, activation)?;
++    v.coerce_to_number(activation).map_err(|e| e.to_string(activation))
++}
++
++fn set<'gc>(value: Value<'gc>, name: &str, data: Value<'gc>, activation: &mut Activation<'_, 'gc>) -> Result<(), String> {
++    let key = AvmString::new_utf8(activation.gc(), name);
++    value.set_public_property(key, data, activation).map_err(|e| e.to_string(activation))
++}
++
++/// Every display object under `root` (inclusive), button states included.
++fn walk<'gc>(root: DisplayObject<'gc>, out: &mut Vec<DisplayObject<'gc>>) {
++    out.push(root);
++    if let Some(button) = root.as_avm2_button() {
++        for state in [swf::ButtonState::UP, swf::ButtonState::OVER, swf::ButtonState::DOWN, swf::ButtonState::HIT_TEST] {
++            if let Some(child) = button.get_state_child(state) {
++                walk(child, out);
++            }
++        }
++    } else if let Some(container) = root.as_container() {
++        for child in container.iter_render_list() {
++            walk(child, out);
++        }
++    }
++}
++
++/// `NewTransText.init` + `updateText` (en-US: the field keeps its own format) for every
++/// NewTransText under `root` (the stage when None) whose TextField still shows its authored
++/// text and was not localised before. A field a script already changed (`setdata`'s
++/// `[X]/[X]`) is left as it is: in the original, updateText ran before that script, on the
++/// same authored text. Returns `[path, from, to]` of each field changed.
++pub(crate) fn apply<'gc>(context: &mut UpdateContext<'gc>, root: Option<DisplayObject<'gc>>) -> Result<Vec<serde_json::Value>, String> {
++    let strings = match STRINGS.lock().unwrap().clone() {
++        Some(s) => s,
++        None => return Ok(Vec::new()),
++    };
++    let mut nodes = Vec::new();
++    walk(root.unwrap_or_else(|| context.stage.into()), &mut nodes);
++    let domain = context.avm2.stage_domain();
++    let mut activation = Activation::from_domain(context, domain);
++    let qname = AvmString::new_utf8(activation.gc(), "zlong.localization.NewTransText");
++    // Before the game's code has loaded there is no NewTransText yet, so nothing to do.
++    let Some(class) = domain.get_defined_value_handling_vector(&mut activation, qname).ok()
++        .and_then(|d| d.as_object()).and_then(|o| o.as_class_object()).map(|c| c.inner_class_definition()) else {
++        return Ok(Vec::new());
++    };
++    let mut changed = Vec::new();
++    for node in nodes {
++        let Some(object) = node.object2() else { continue };
++        let this: Value<'_> = object.into();
++        if !this.is_of_type(class) {
++            continue;
++        }
++        // init: `this.tf = TextField(this.getChildAt(0))`.
++        let Some(field) = node.as_container().and_then(|c| c.child_by_index(0)) else { continue };
++        let Some(edit) = field.as_edit_text() else { continue };
++        if edit.reference_localized() || edit.text() != edit.reference_initial_text() {
++            continue;
++        }
++        if PLACEHOLDERS_ONLY.load(std::sync::atomic::Ordering::Relaxed) && !is_placeholder(&edit.text().to_string()) {
++            continue;
++        }
++        let name = field.name().map(|n| n.to_string()).unwrap_or_default();
++        // `getLocalizedObject(this.tf.name).value`
++        let Some(value) = strings.get(&name) else { continue };
++        let Some(tf_object) = field.object2() else { continue };
++        let tf: Value<'_> = tf_object.into();
++        edit.set_reference_localized();
++        let from = edit.text().to_string();
++        // init
++        let prev_width = number(tf, "width", &mut activation)?;
++        let prev_height = number(tf, "height", &mut activation)?;
++        let pre_y = number(tf, "y", &mut activation)?;
++        let pre_format = get(tf, "defaultTextFormat", &mut activation)?;
++        let scale = number(tf, "scaleX", &mut activation)?.min(number(tf, "scaleY", &mut activation)?);
++        // updateText, the non-ru/zh branch: the field keeps its own format.
++        set(tf, "embedFonts", Value::Bool(true), &mut activation)?;
++        set(tf, "defaultTextFormat", pre_format, &mut activation)?;
++        let format = get(tf, "defaultTextFormat", &mut activation)?;
++        let text = AvmString::new(activation.gc(), WString::from_utf8(value));
++        set(tf, "text", text.into(), &mut activation)?;
++        let mut width = number(tf, "textWidth", &mut activation)? * scale;
++        while width > prev_width {
++            let size = number(format, "size", &mut activation)? as i32;
++            set(format, "size", Value::Integer(size - 1), &mut activation)?;
++            call(tf, "setTextFormat", &[format], &mut activation)?;
++            width = number(tf, "textWidth", &mut activation)? * scale;
++            if size <= 1 { break; }
++        }
++        let text_height = number(tf, "textHeight", &mut activation)?;
++        set(tf, "y", Value::Number(pre_y + (prev_height - text_height * scale) / 2.0), &mut activation)?;
++        changed.push(serde_json::json!([crate::reference_display::path_of(field), from, value]));
++    }
++    Ok(changed)
++}

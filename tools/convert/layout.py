@@ -21,6 +21,7 @@ handlers; the table below cites its sources. Everything else comes from the gold
 import argparse
 import hashlib
 import json
+import string
 from pathlib import Path
 import sys
 
@@ -216,6 +217,30 @@ CARRIED = ('golden_path', 'kind', 'name', 'class', 'depth', 'character_id', 'eff
            'stage_matrix', 'stage_bounds', 'render_bounds', 'frame', 'total_frames', 'label',
            'button_state', 'text', 'text_format', 'clip_depth', 'clip_mask', 'mask', 'blend_mode', 'filters',
            'filter_list')
+
+
+LOCALIZATION = OUT / 'localization.json'
+_STRINGS = None
+
+
+def _localized_text(node, parent):
+    """The en-US text of a NewTransText field that the goldens show with its authoring
+    placeholder (`U_TOTAL SCORE:`), else None. `NewTransText.updateText` sets the field
+    (`getChildAt(0)` of a `translation_*` clip) to `getLocalizedObject(tf.name).value`; the
+    reference player has no branding system, so the goldens keep the placeholder (a one-character
+    prefix and `_`: `U_`, `1_ENEMIES KILLED`). Only placeholders are replaced, as the art pass does
+    (record_screen.py `localize ... placeholders`): other fields keep their authored text."""
+    global _STRINGS
+    if node.get('kind') != 'text' or not parent or not str(parent.get('class') or '').startswith('translation_'):
+        return None
+    text = node.get('text') or ''
+    if not (len(text) > 2 and text[0] in string.ascii_uppercase + string.digits and text[1] == '_'):
+        return None
+    if _STRINGS is None:
+        _STRINGS = json.loads(LOCALIZATION.read_text(encoding='utf-8'))['strings']
+    value = _STRINGS.get(node.get('name'))
+    # Flash TextField text stores a newline as a carriage return.
+    return None if value is None else value.replace('\r\n', '\r').replace('\n', '\r')
 
 
 def parent_of(path):
@@ -539,6 +564,9 @@ def build(name, spec):
             continue  # drawn by its group's frame art
         entry = {'path': path, 'parent': parent}
         entry.update({k: node[k] for k in CARRIED if k in node})
+        localized = _localized_text(node, by_path.get(parent))
+        if localized is not None:
+            entry['golden_text'], entry['text'] = node['text'], localized
         own = tl(path)
         if own is not None and own.changes(key(path)):
             entry['track'] = own.tracks[key(path)]

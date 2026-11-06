@@ -69,6 +69,18 @@ fn main() -> Result<()> {
     let mut trace_mode = "full";
     #[cfg(feature = "reference-events")]
     let mut event_dir: Option<String> = None;
+    // Fields `localize` changed so far: [frame, path, from, to].
+    #[cfg(feature = "reference-display")]
+    let mut localized: Vec<serde_json::Value> = Vec::new();
+    #[cfg(feature = "reference-display")]
+    let localize = |p: &Arc<Mutex<Player>>, frame: u64, log: &mut Vec<serde_json::Value>| -> Result<()> {
+        for row in p.lock().unwrap().reference_localize().map_err(|e| anyhow!(e))? {
+            let mut row = row.as_array().cloned().unwrap_or_default();
+            row.insert(0, frame.into());
+            log.push(row.into());
+        }
+        Ok(())
+    };
     let t0 = Instant::now();
     let stdin = std::io::stdin();
     let mut out = std::io::stdout();
@@ -118,6 +130,9 @@ fn main() -> Result<()> {
                         dt
                     };
                     frame += 1;
+                    // NewTransText fields that came on stage this frame (art pass, `localize`).
+                    #[cfg(feature = "reference-display")]
+                    localize(&player, frame, &mut localized)?;
                     #[cfg(feature = "reference-events")]
                     if let Some(d) = &event_dir {
                         let events = player.lock().unwrap().reference_events_drain();
@@ -213,6 +228,24 @@ fn main() -> Result<()> {
                 std::fs::write(t[1], serde_json::to_vec(&list)?)?;
             }
             #[cfg(feature = "reference-display")]
+            "localize" => {
+                // Art pass only: `localize FILE [placeholders]` loads the en-US strings
+                // (scenes/swf/localization.json) and, from now on, replays
+                // `NewTransText.updateText` on each localised field once it is on stage (after
+                // every step, `symbol` and a `piece` widget frame), as the original's branding
+                // system does. `placeholders`: only fields still showing an authoring
+                // placeholder (`U_TOTAL SCORE:`).
+                let only = t.get(2) == Some(&"placeholders");
+                let count = player.lock().unwrap().reference_localize_load(&std::fs::read_to_string(t[1])?, only).map_err(|e| anyhow!(e))?;
+                eprintln!("localize: {count} strings");
+                localize(&player, frame, &mut localized)?;
+            }
+            #[cfg(feature = "reference-display")]
+            "localized" => {
+                // `localized FILE`: every field `localize` changed so far, [frame, path, from, to].
+                std::fs::write(t[1], serde_json::to_vec(&localized)?)?;
+            }
+            #[cfg(feature = "reference-display")]
             "piece" => {
                 // One display-list path rendered alone (its masks, filters and blends
                 // included) on a transparent stage, cropped to its render bounds.
@@ -265,13 +298,14 @@ fn main() -> Result<()> {
                 // constructs a library class and adds it under PARENT as NAME, so `piece
                 // PARENT/NAME` renders it; `unsymbol PARENT/NAME` takes it off again.
                 // FRAME: a frame to stop at, `-` to stop where it is, `p` to leave it playing.
-                let frame: Option<i32> = t.get(6).filter(|f| **f != "-").map(|f| if *f == "p" { Ok(0) } else { f.parse() }).transpose()?;
+                let stop_at: Option<i32> = t.get(6).filter(|f| **f != "-").map(|f| if *f == "p" { Ok(0) } else { f.parse() }).transpose()?;
                 let cloth: i32 = t.get(7).map(|f| f.parse()).transpose()?.unwrap_or(-1);
                 let hat: i32 = t.get(8).map(|f| f.parse()).transpose()?.unwrap_or(-1);
                 let children: Vec<(String, i32)> = t.get(9).map(|s| s.split(',').filter_map(|kv| {
                     let (k, v) = kv.split_once('=')?; Some((k.to_string(), v.parse().ok()?)) }).collect()).unwrap_or_default();
-                player.lock().unwrap().reference_symbol_add(t[1], t[2], t[3], t[4].parse()?, t[5].parse()?, frame, cloth, hat, &children)
+                player.lock().unwrap().reference_symbol_add(t[1], t[2], t[3], t[4].parse()?, t[5].parse()?, stop_at, cloth, hat, &children)
                     .map_err(|e| anyhow!(e))?;
+                localize(&player, frame, &mut localized)?;
             }
             #[cfg(feature = "reference-display")]
             "unsymbol" => {

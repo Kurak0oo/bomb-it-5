@@ -54,6 +54,8 @@ import pixels  # noqa: E402
 
 GOLDENS = ROOT / 'tests' / 'goldens'
 PACK = ROOT / 'original' / 'screens'
+# The en-US strings of the localised text fields (tools/convert/localization.py).
+LOCALIZATION = ROOT / 'scenes' / 'swf' / 'localization.json'
 SCALE = 3
 MAX_PERIOD = 600
 
@@ -68,15 +70,25 @@ def default_player():
 
 
 class Player:
-    """The reference player at SCALE×, one acknowledged command at a time."""
+    """The reference player at SCALE×, one acknowledged command at a time.
 
-    def __init__(self, player, swf):
+    `localize` (every pass but timeline): the player replays `NewTransText.updateText` on the
+    localised text fields, as the original's branding system does (`localize` command, patch
+    reference-localize), so the art shows the en-US text (scenes/swf/localization.json)
+    instead of the authoring placeholders (`U_TOTAL SCORE:`). Only placeholder fields: the
+    others keep their authored text, as the recordings and the accepted screens show them,
+    although some en-US strings differ (`START` / `START GAME`). The timeline pass records
+    what the goldens hold (no branding system), so it leaves them as they are."""
+
+    def __init__(self, player, swf, localize=True):
         from replay_reference import ReferenceSession
         self.tmp = Path(tempfile.mkdtemp(prefix='bombit5-record-'))
         staged = self.tmp / 'original.swf'  # Ruffle rejects dot-prefixed SWF paths
         staged.write_bytes(Path(swf).read_bytes())
         self.session = ReferenceSession(player, staged, self.tmp / 'session', extra_args=('--scale', str(SCALE)))
         self.dumps = 0
+        if localize:
+            self.command(f'localize {LOCALIZATION} placeholders')
 
     @property
     def frame(self):
@@ -193,7 +205,7 @@ def record_timeline(case_name, player_path, swf):
             print(f'{screen}: no timeline (the round drives it)')
             continue
         golden = json.loads((GOLDENS / case_name / f'{capture}.json').read_text(encoding='utf-8'))
-        p = Player(player_path, swf)
+        p = Player(player_path, swf, localize=False)
         try:
             opened, last_input, tracks, t = None, 0, {}, 0
             root = None
@@ -291,7 +303,7 @@ def _record_extra_timeline(case_name, case, screen, spec, root, capture, selecto
     lengths = {int(n['total_frames']) for n in inside if (n.get('total_frames') or 1) > 1}
     period = min(reduce(lambda a, b: a * b // math.gcd(a, b), lengths, 1), MAX_PERIOD)
     top_class = {n['path']: n.get('class') for n in golden['nodes'] if n['path'] in tops}
-    p = Player(player_path, swf)
+    p = Player(player_path, swf, localize=False)
     tracks, first_present = {}, None
 
     def sample(nodes, index):
@@ -491,6 +503,7 @@ def record_art(case_name, player_path, swf):
         manifest = {'schema': 'bombit5-original-screen-v2', 'screen': screen,
                     'golden_sha256': layout['source']['golden_sha256'], 'swf_sha256': sha256(swf),
                     'player_sha256': sha256(player_path), 'scale': SCALE,
+                    'localization_sha256': sha256(LOCALIZATION),
                     'pieces': {k: v for k, v in pieces.items() if not isinstance(v, dict) or 'frames' not in v},
                     'sequences': {k: v['frames'] for k, v in pieces.items() if isinstance(v, dict) and 'frames' in v},
                     'states': json.loads(states.read_text(encoding='utf-8')) if states.is_file() else {},
