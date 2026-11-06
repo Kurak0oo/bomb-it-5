@@ -72,6 +72,14 @@ func _run() -> void:
 		await _lose_level(game)
 		if attempt < 2:
 			_expect(app.current == &"score", "a lost level shows its score screen")
+			if attempt == 0:
+				# DRESS UP with nothing newly unlocked: no unlock burst (`Art_unlockAnimas` is
+				# only added by UnlockAnimaPanel).
+				var score_swf = app.screen.get_child(0)
+				score_swf.get_meta("controller").dressUpHandle("")
+				_expect(score_swf.is_shown("UI_UNLOCK_TIP") and not score_swf.is_shown("UI_UNLOCK_TIP/containerMc/Art_unlockAnimas"),
+					"DRESS UP opens the tip without an unlock burst")
+				for tip in score_swf.get_meta("controller")._tips: if tip.__mc != "": tip.onClickOkBt("")
 			_expect(_find_text("LEVEL 1 / 10 FAILED…") != null, "the score screen names the failed level")
 			_expect(app.session.lives == 2 - attempt, "each lost level spends one heart")
 			var key := InputEventKey.new()

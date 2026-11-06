@@ -93,6 +93,10 @@ func initDis() -> void:
 	_robotMc = __containerMc + "/robotStage/robotMc"
 	_unlockTip = __containerMc + "/unlock_tip"
 	_screen.set_shown(_unlockTip, false)  # visible = false
+	# `Art_unlockAnimas` is not in the tip's clip: only UnlockAnimaPanel adds it (`initDis`),
+	# when looks were unlocked. The tip was recorded with a burst playing, so its generated
+	# instance starts hidden here (DRESS UP showed a burst over the first outfit).
+	_screen.set_shown(__containerMc + "/Art_unlockAnimas", false)
 	# robotStage: mouseEnabled = mouseChildren = false, gotoAndStop(1)
 	_screen.set_enabled(__containerMc + "/robotStage", false)
 	_screen.set_frame(__containerMc + "/robotStage", 1)
