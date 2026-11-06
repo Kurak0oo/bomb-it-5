@@ -331,7 +331,8 @@ func toggle_pause() -> void:
 
 
 ## The step's sounds, and the win or lose jingle when the ending begins (`win`/`lose`:
-## `stopPause` stops the round music, then `playWinMusic`/`playLoseMusic`).
+## `stopPause` stops the round music, then `playWinMusic`/`playLoseMusic`; every mode's
+## `timeOut` plays the lose jingle, whoever `judgeHandler` then finds the winner).
 func _play_audio(was_ending: bool) -> void:
 	var audio := Audio.current
 	if audio == null: return
@@ -339,8 +340,7 @@ func _play_audio(was_ending: bool) -> void:
 	if was_ending or state.get("round_stage") != &"ending": return
 	audio.pause_game_music()
 	audio.null_game_music()
-	var outcome: StringName = state.get("pending_outcome", &"")
-	var won: bool = outcome == &"won" or (outcome == &"timeout" and state.get("mode") == &"arcade" and Fidelity.timeout_wins())
+	var won: bool = state.get("pending_outcome", &"") == &"won" and not state.get("ending_timed_out", false)
 	if won: audio.create_level_complete_music()
 	else: audio.create_level_failed_music()
 

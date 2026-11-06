@@ -395,6 +395,18 @@ func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
 	_queue_apply()
 
 
+## Resample a run-time node's art (`art` as for `add_node`) in the background, ahead of the
+## frame that shows it, so a clip that changes image every frame (the end cartoon) need not wait.
+func prefetch(art: Dictionary) -> void:
+	var size: Array = art.get("pixel_size", [])
+	var px := _px if _px > 0.0 else pixels_per_unit()
+	if frame_locked or size.size() != 2 or px <= 0.0: return
+	var file := ProjectSettings.globalize_path((PACK % screen_name).get_base_dir().path_join(art.file))
+	if not FileAccess.file_exists(file): return
+	var origin := Vector2(art.pixel_origin[0], art.pixel_origin[1])
+	_request(file, _fit(file, origin, Vector2(size[0], size[1]), float(art.scale), px), true)
+
+
 ## Flash colour offsets on a run-time node's art (`InvincibilityCommand`'s +50 blink),
 ## added to every pixel it draws.
 func set_node_offset(path: String, offset: Color) -> void:

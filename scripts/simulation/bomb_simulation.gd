@@ -38,6 +38,9 @@ var _late_blast := false
 var _round_stage: StringName = &"playing"
 var _pending_outcome: StringName = &""
 var _ending_started := 0
+## The ending began on the round clock (each mode's `timeOut`: TIME'S UP and the lose jingle,
+## then `judgeHandler`), not on `win`/`lose`.
+var _ending_timed_out := false
 var _gameplay_end_tick := 0
 var _judgment_ready := false
 ## Original round clock (#80, `Game.countTime`): `seconds` polls the wall-clock second once per
@@ -297,6 +300,7 @@ func snapshot() -> Dictionary:
 		"blasts": [], "broken_soft_blocks": [], "flames": _flames.duplicate(true),
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
+		"ending_timed_out": _ending_timed_out,
 		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else clock_tick())), "result_score": _result_score,
 		"mode": _mode.name, "difficulty": _mode.difficulty, "mode_state": _mode.public_state(), "points_goal": _mode.points_goal(), "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
 		"features": _features.map(func(feature): return feature.public_state()),
@@ -523,6 +527,7 @@ func _finish_round() -> void:
 	if _pending_outcome != &"":
 		_round_stage = &"ending"
 		_ending_started = _tick
+		_ending_timed_out = _pending_outcome == &"timeout" or clock_tick() >= _mode.round_ticks()
 		_gameplay_end_tick = clock_tick()
 		for id in _actor_ids:
 			_weapons.cancel(_actors[id], id)

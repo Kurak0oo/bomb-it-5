@@ -42,6 +42,7 @@ func _initialize() -> void:
 	_step(game, {&"human": [&"down"]})
 	state = _run(game, 100)
 	_expect(state.round_stage == &"ending" and state.pending_outcome == &"won", "the human's 10th kill wins after the death animation")
+	_expect(not state.ending_timed_out, "a kill ending is `win`, not `timeOut` (winCartoon, the win jingle)")
 	state = _run(game, 110)
 	_expect(state.outcome == &"won" and state.result_breakdown.kills == 1000, "a Kill level scores 100 per kill plus bonuses")
 

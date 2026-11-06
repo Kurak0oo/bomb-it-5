@@ -32,6 +32,7 @@ const GameBoard = preload("res://scripts/ui/game_board.gd")
 const GameActors = preload("res://scripts/ui/game_actors.gd")
 const LoadingMapUI = preload("res://scripts/ui/loading_map_ui.gd")
 const PauseUI = preload("res://scripts/ui/pause_ui.gd")
+const GameEndCartoon = preload("res://scripts/ui/game_end_cartoon.gd")
 ## Power-up guide (`PowerUpsUI`): original names; only pickups this build implements.
 ## The glove slots (BOXING GLOVE, PUSH THE BOMB) appear only where rounds drop them (#85).
 const GUIDE := [
@@ -442,7 +443,8 @@ func _start_level() -> void:
 ## The gameplay screen (scenes/swf/game.json): `GameInterFace` on its HUD, the round's map
 ## laid out on its board (scripts/ui/game_board.gd), the round's actors as placeholders in
 ## its board container (robots, bombs and blasts from their original clips, GameActors;
-## pickups and weapon effects still placeholders), and the round held for as many frames as the original takes to
+## pickups and weapon effects still placeholders), the end cartoon over them while the round
+## ends (GameEndCartoon), and the round held for as many frames as the original takes to
 ## load the map (`round_start_after_input`).
 func _game_screen(recorded: bool) -> void:
 	var swf := _swf_page(&"game")
@@ -460,6 +462,8 @@ func _game_screen(recorded: bool) -> void:
 	swf.set_meta("controller", hud)
 	swf.set_meta("board", board)
 	swf.set_meta("actors", actors)
+	var cartoon := GameEndCartoon.new(swf, _hud_path(swf))
+	swf.set_meta("end_cartoon", cartoon)
 	# Under the map-loading screen the robots and their counters wait for `firstMapLoadOver`.
 	var robots_made := {"done": loading == null}
 	if loading == null: actors.update(game.get_snapshot())
@@ -468,11 +472,12 @@ func _game_screen(recorded: bool) -> void:
 			if not robots_made.done: return
 			board.update(snapshot)
 			actors.update(snapshot)
-			hud.present(snapshot), not own_art, swf.node_for(board_layout.rows[0]))
+			hud.present(snapshot)
+			cartoon.update(snapshot), not own_art, swf.node_for(board_layout.rows[0]))
 	game.start_delay = int(board_layout.round_start_after_input)
+	_game_swf = swf
 	if FileAccess.file_exists("res://scenes/swf/pause.json"):
 		game.swf_pause = true
-		_game_swf = swf
 		if not game.pause_changed.is_connected(_pause_screen): game.pause_changed.connect(_pause_screen)
 	if loading != null:
 		var plan: Dictionary = loading.get_meta("controller").schedule()
@@ -553,6 +558,9 @@ static func _hud_path(game_swf: Node2D) -> String:
 
 
 func _on_level_settled(snapshot: Dictionary, delay := 0) -> void:
+	# `GameEndCartoon.animationComplete` takes the cartoon off before the result handler runs.
+	if is_instance_valid(_game_swf) and _game_swf.has_meta("end_cartoon"):
+		_game_swf.get_meta("end_cartoon").animationComplete()
 	var outcome: StringName = snapshot.outcome
 	var won: bool = outcome == &"won" or (outcome == &"timeout" and session.mode == &"arcade" and Fidelity.timeout_wins())
 	var result: int = session.settle(&"won" if won else &"lost", snapshot.result_score,

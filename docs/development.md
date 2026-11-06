@@ -417,3 +417,17 @@ Play-test fixes, 2026-11-06:
   owner: other en-US strings differ from the authored English too (`START` -> `START GAME`,
   `CINEMA` -> `MOVIE THEATER`, `LIGHTNING GUN` -> `LASER GUN`, `SPORT CAR` -> `SPORTS CAR`,
   setting and loading hints); `localize FILE` without `placeholders` would apply them all.
+- No end cartoon when a round ended: `GameEndCartoon` is ported (`scripts/ui/game_end_cartoon.gd`).
+  When the simulation enters `ending`, the cartoon is added as the UI container's last child
+  (`GameMc/@0#1/@0#1`, over the HUD, which becomes `@0#0`): `winCartoon` for `win`,
+  `loseCartoon` for `lose`, `timeUpCartoon` whenever the ending began on the round clock (every
+  edition-5 mode's `timeOut`; new snapshot field `ending_timed_out`). Its frame is the tween's
+  (`TweenMax.to(mc, 3, {frame: 100})`: default ease `TweenLite.easeOut`, FramePlugin rounds)
+  after the elapsed share of the simulation's 105-tick ending; it is taken off when the round
+  settles (`animationComplete`), before the score screen. A pause during the ending leaves it
+  under PauseUI (added after it), frozen with the ending. Fixed with it: `timeOut` plays the
+  lose jingle whoever wins (`playLoseMusic`), so an Arcade time-out no longer plays the win
+  jingle. Art: `record_screen.py cartoons gameplay-cinema-start` (after `art`) makes each class
+  with `symbol` in the UI container and renders its 100 frames (whole stage: the clips dim it
+  with black at alpha 0.2), text localised in full, so the lose banner reads `YOU LOSE.` (en-US;
+  authored `YOU LOSE!`). Checked in `tests/flow_scene_check.gd`, `fidelity_check`, `kill_check`.

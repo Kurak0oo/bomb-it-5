@@ -530,6 +530,7 @@ func _date_round_clock() -> void:
 	var ending: Dictionary = simulation.snapshot()
 	_expect(ending.round_stage == &"ending" and ending.pending_outcome == &"timeout" and ending.remaining == 0,
 		"original clock: TIME'S UP when 180 seconds are counted, after only %d steps" % ending.tick)
+	_expect(ending.ending_timed_out, "the ending began on the clock (`timeOut`: timeUpCartoon and the lose jingle)")
 	_start(actors, {"round": true, "mode": ArcadeMode.new(&"normal", &"cinema")})
 	_expect(_step(35).remaining == 6300 - 35, "adapted: the round keeps its 6,300-step simulation clock")
 

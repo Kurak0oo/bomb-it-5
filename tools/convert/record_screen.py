@@ -18,6 +18,10 @@ through its frames. The clip frame shown in each state is recorded, and its art 
 panels (after art): the HUD panels of robots the gameplay capture lacks, from the art-only
 case tools/convert/cases/hud-robots.json.
 
+cartoons (after art): the round's end cartoons (`GameEndCartoon`: winCartoon, loseCartoon,
+timeUpCartoon), each made by its own class (`symbol`) in the UI container and rendered at
+every frame, its text localised in full.
+
 items (after actors): the pickups' PixelClip bitmaps, each pickup made by its own class
 (`pickup` fixture), and 3× frames of the cases that show them.
 
@@ -1269,6 +1273,68 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
     print(f'actors: {len(out["robots"])} robot clips, {len(seen)} distinct images in {target}')
 
 
+# ------------------------------------------------------------------ end cartoons
+
+# `GameEndCartoon.setCartoon`'s library classes: `AbstractGameMode.win`, `lose`, and every
+# edition-5 mode's `timeOut` (ArcadeMode, KillMode, GreenZoneMode, PacManMode).
+CARTOONS = ('winCartoon', 'loseCartoon', 'timeUpCartoon')
+
+
+def record_cartoons(case_name, player_path, swf):
+    """The round's end cartoons, into original/screens/game/cartoons/: on the case's capture
+    (a running round, the AI stopped), each class is made by its own constructor with the
+    reference player's `symbol` in the UI container (`game.uiManager.uiContainer`, where
+    `GameEndCartoon.setCartoon` adds it, after the HUD) at its origin, and rendered alone at
+    every frame (`gotoAndStop`, as the tween's FramePlugin sets it; the clips have no nested
+    timeline of their own). Each image is the whole stage: the clips dim it (black, alpha
+    0.2). The text fields are localised in full (`localize FILE`), as the branding system's
+    `NewTransText.updateText` does: the authored `YOU LOSE!` becomes the en-US `YOU LOSE.`.
+    Each image keeps the stage matrix it was rendered at (`at`)."""
+    case = load_case(case_name)
+    layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
+    capture = Path(layout['source']['golden']).stem
+    hud = next(n for n in layout['nodes'] if n.get('class') == 'UI_interface')
+    host = hud['parent']
+    target = PACK / 'game' / 'cartoons'
+    shutil.rmtree(target, ignore_errors=True)
+    target.mkdir(parents=True)
+    p = Player(player_path, swf, localize=False)
+    seen = {}
+    tmp = Path(tempfile.mkdtemp(prefix='bombit5-cartoons-'))
+    name = f'{host}/refsym'
+    out = {'schema': 'bombit5-original-cartoons-v1', 'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path),
+           'scale': SCALE, 'host': host, 'cartoons': {}}
+    try:
+        for line in single_steps(case, capture):
+            p.command(line)
+        for actor in (1, 2, 3):
+            p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
+        p.command(f'localize {LOCALIZATION}')
+        for cls in CARTOONS:
+            p.command(f'symbol {host} {cls} refsym 0 0 1')
+            root = next(n for n in p.display()['nodes'] if n['path'] == name)
+            p.command(f'unsymbol {name}')
+            frames, texts = {}, set()
+            for frame in range(1, root['total_frames'] + 1):
+                p.command(f'symbol {host} {cls} refsym 0 0 {frame}')
+                dump = p.display()['nodes']
+                texts |= {n['text'] for n in dump if n['path'].startswith(name + '/') and n.get('text')}
+                at = next(n for n in dump if n['path'] == name)['stage_matrix']
+                stored = _store(p, name, target, tmp, seen, None, None, cls)
+                p.command(f'unsymbol {name}')
+                if stored:
+                    stored['file'] = 'cartoons/' + stored['file']
+                    stored['at'] = at
+                    frames[str(frame)] = stored
+            out['cartoons'][cls] = {'total_frames': root['total_frames'], 'texts': sorted(texts), 'frames': frames}
+            print(f'{cls}: {len(frames)} of {root["total_frames"]} frames, text {sorted(texts)}')
+    finally:
+        p.close()
+        shutil.rmtree(tmp, ignore_errors=True)
+    (target / 'cartoons.json').write_text(json.dumps(out, indent=1) + '\n', encoding='utf-8')
+    print(f'cartoons: {len(seen)} distinct images in {target}')
+
+
 # ------------------------------------------------------------------ items
 
 # The pickups the reference player's `pickup` fixture can make (each an original class made by
@@ -1489,7 +1555,7 @@ def record_fonts(_case_name, _player_path, swf):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels'])
+    parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels', 'cartoons'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
@@ -1503,6 +1569,9 @@ def main():
         return 0
     if args.what == 'items':
         record_items(args.case, args.player.resolve(), args.swf)
+        return 0
+    if args.what == 'cartoons':
+        record_cartoons(args.case, args.player.resolve(), args.swf)
         return 0
     if args.what == 'panels':
         record_panels(args.case, args.player.resolve(), args.swf)

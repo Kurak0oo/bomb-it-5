@@ -69,7 +69,8 @@ func _run() -> void:
 	_expect(not is_instance_valid(game.swf_board_view), "Cinema's board is its own art: no placeholder board")
 
 	for attempt in 3:
-		await _lose_level(game)
+		if attempt == 0: await _lose_level_with_cartoon(game)
+		else: await _lose_level(game)
 		if attempt < 2:
 			_expect(app.current == &"score", "a lost level shows its score screen")
 			if attempt == 0:
@@ -218,6 +219,46 @@ func _lose_level(game: Node2D) -> void:
 	bomb.pressed = false
 	root.push_input(bomb, true)
 	await process_frame
+
+
+## As `_lose_level`, checking the end cartoon (`GameEndCartoon`): `loseCartoon` is the UI
+## container's last child, over the HUD, while the round ends, at the tween's frame, and is
+## taken off when the result handler runs.
+func _lose_level_with_cartoon(game: Node2D) -> void:
+	var game_swf = app.screen.get_child(0)
+	var cartoon = game_swf.get_meta("end_cartoon")
+	# The map-loading screen closes first (`firstMapLoadOver`): the actors and HUD are drawn.
+	for wait in 300:
+		if app.screen.get_child_count() == 1: break
+		await process_frame
+	var hud_parent: String = game_swf.layout.screen_root + "/@0#1"
+	var seen := {}
+	var removed := {}
+	var bomb := InputEventKey.new()
+	bomb.keycode = KEY_SPACE
+	bomb.pressed = true
+	root.push_input(bomb, true)
+	for tick in 240:
+		if app.current != &"playing": break
+		game.advance_time(1.0 / 35.0)
+		var snapshot: Dictionary = game.get_snapshot()
+		if app.current != &"playing" and removed.is_empty():
+			removed = {"cartoon": game_swf.by_path.has(hud_parent + "/@0#1"), "hud": game_swf.by_path.has(hud_parent + "/@0")}
+		if snapshot.get("round_stage") != &"ending" or app.current != &"playing": continue
+		var node: Node = game_swf.node_for(cartoon.path()) if cartoon.path() != "" else null
+		var host: Node = game_swf.node_for(hud_parent)
+		if seen.is_empty():
+			_expect(node != null and cartoon.cartoon_name() == "loseCartoon" and node.get_parent() == host
+				and node.get_index() == host.get_child_count() - 1 and game_swf.node_for(hud_parent + "/@0#0") != null,
+				"a lost round shows loseCartoon, the UI container's last child over the HUD")
+		var elapsed := roundi(float(snapshot.ending_progress) * 105.0)
+		seen[elapsed] = node != null and int(node.get_meta("swf_frame")) == cartoon.frame_at(elapsed, 100)
+	bomb.pressed = false
+	root.push_input(bomb, true)
+	await process_frame
+	_expect(seen.size() > 90 and not seen.values().has(false), "the cartoon plays its tween's frames through the ending")
+	_expect(cartoon.path() == "" and not removed.is_empty() and not removed.cartoon and removed.hud,
+		"the cartoon is taken off when the round settles")
 
 
 ## The unlock tip flies in on its own timeline; OK is where it lands once the clip is on
