@@ -468,7 +468,7 @@ func _game_screen(recorded: bool) -> void:
 			if not robots_made.done: return
 			board.update(snapshot)
 			actors.update(snapshot)
-			hud.present(snapshot), not own_art)
+			hud.present(snapshot), not own_art, swf.node_for(board_layout.rows[0]))
 	game.start_delay = int(board_layout.round_start_after_input)
 	if FileAccess.file_exists("res://scenes/swf/pause.json"):
 		game.swf_pause = true

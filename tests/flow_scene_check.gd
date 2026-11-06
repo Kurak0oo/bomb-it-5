@@ -66,6 +66,7 @@ func _run() -> void:
 	_expect(snapshot.actors[&"human"].robot == 5, "the player plays the chosen robot")
 	_expect(snapshot.board_meta.skin == chosen_set, "the level uses the chosen arena")
 	_expect(app.screen != null and app.screen.get_child(0).screen_name == &"game", "the level shows on the generated gameplay screen")
+	_expect(not is_instance_valid(game.swf_board_view), "Cinema's board is its own art: no placeholder board")
 
 	for attempt in 3:
 		await _lose_level(game)
@@ -155,6 +156,22 @@ func _run() -> void:
 	await process_frame
 	await _click(_find("mainMenu"))
 	_expect(app.current == &"menu", "MAIN MENU on the pause screen leaves a Battle Royale level too")
+
+	# A stage set whose board art is not in the pack: the placeholder board goes over the
+	# floor art and under the row layers; the effects layer stays over every row.
+	app.session.mode = &"arcade"
+	app.session.stage = &"zoo"
+	app.start_session()
+	await process_frame
+	app.game.set_process(false)
+	var game_swf = app.screen.get_child(0)
+	var first_row: Node = game_swf.node_for(game_swf.layout.board.rows[0])
+	var board_view: Node = app.game.swf_board_view
+	_expect(is_instance_valid(board_view) and board_view.get_parent() == first_row.get_parent()
+		and board_view.get_index() == first_row.get_index() - 1 and board_view.get_index() > 0,
+		"a Zoo board is drawn just under the first row, over the floor art")
+	_expect(app.game.swf_view.get_index() == app.game.swf_view.get_parent().get_child_count() - 1,
+		"weapon and protection effects are drawn over every row")
 	app.queue_free()
 	await process_frame
 	print("%s: %d flow scene checks" % ["PASS" if failures == 0 else "FAIL", checks])

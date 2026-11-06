@@ -64,6 +64,8 @@ var _paused_at_msec := 0
 ## the screen's board container, and what the screen reads from each snapshot (the
 ## board's boxes, GameInterFace's fields).
 var swf_view: Node2D
+## The placeholder board (a stage set whose board art is not in the pack), under the row layers.
+var swf_board_view: Node2D
 var _swf_present: Callable
 ## Frames before the round's first step: the original builds the map one row per
 ## Timer(100) tick under its loading screen and starts the round 100 ms after
@@ -395,6 +397,8 @@ func _process(delta: float) -> void:
 func detach_swf() -> void:
 	if is_instance_valid(swf_view): swf_view.queue_free()
 	swf_view = null
+	if is_instance_valid(swf_board_view): swf_board_view.queue_free()
+	swf_board_view = null
 	_swf_present = Callable()
 	start_delay = 0
 	swf_pause = false
@@ -403,16 +407,26 @@ func detach_swf() -> void:
 ## Draw the round on the generated gameplay screen: `present` is called with every snapshot,
 ## and the placeholder layer (scripts/game_view.gd: what has no original art yet; the board
 ## itself for a stage set whose art is not in the pack) sits in `parent`, the screen's board
-## container, through `transform`.
-func attach_swf(parent: Node2D, transform_in_parent: Transform2D, present: Callable, draw_board := false) -> void:
+## container, through `transform`. `first_row`: the board's first row layer; a board drawn
+## here goes just under it, over the stage's floor art (the container's earlier children).
+func attach_swf(parent: Node2D, transform_in_parent: Transform2D, present: Callable, draw_board := false, first_row: Node = null) -> void:
 	swf_view = GameView.new()
 	swf_view.name = "PlaceholderLayer"
 	swf_view.skin = visual_skin
-	swf_view.draw_board = draw_board
 	swf_view.transform = transform_in_parent
 	parent.add_child(swf_view)
-	# A board drawn here goes under the row layers (its boxes, robots and bombs).
-	if draw_board: parent.move_child(swf_view, 0)
+	# A board drawn here goes on a layer of its own under the row layers (its boxes, robots
+	# and bombs) but over the floor art (the container's children before the first row);
+	# the effects stay on the layer over every row.
+	if draw_board:
+		swf_board_view = GameView.new()
+		swf_board_view.name = "PlaceholderBoard"
+		swf_board_view.skin = visual_skin
+		swf_board_view.draw_board = true
+		swf_board_view.board_only = true
+		swf_board_view.transform = transform_in_parent
+		parent.add_child(swf_board_view)
+		parent.move_child(swf_board_view, first_row.get_index() if is_instance_valid(first_row) and first_row.get_parent() == parent else 0)
 	_swf_present = present
 	_refresh()
 
@@ -439,6 +453,7 @@ func _refresh() -> void:
 		var snapshot := get_snapshot()
 		var between: float = scheduler.interpolation() if replica and not paused and is_instance_valid(scheduler) else 1.0
 		swf_view.present(snapshot, practice, paused, previous_state, between)
+		if is_instance_valid(swf_board_view): swf_board_view.present(snapshot, practice, paused, previous_state, between)
 		_swf_present.call(snapshot)
 
 

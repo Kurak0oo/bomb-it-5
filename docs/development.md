@@ -390,3 +390,15 @@ Slice (c) and (d), 2026-11-05 (owner to review):
   so its boxes and features are drawn by the placeholder layer over Cinema's floor (known gap).
 - `tools/smoke_playthrough.gd` (in run_checks) plays a normal launch with keyboard events:
   menus by clicks, Cinema levels, pause/resume, score screens, game over, a Zoo level.
+
+Play-test fixes, 2026-11-06:
+- Stage sets other than Cinema showed an empty board: the placeholder layer that draws their
+  boxes and features was moved to the board container's first child, under Cinema's floor art
+  (`@0#0`, `@0#1`). It is now a board-only layer just under the first row layer, and the effects
+  layer (weapon actions and shots, mode objects) stays over every row
+  (`Game.attach_swf`, `swf_board_view`; checked in `tests/flow_scene_check.gd`).
+- The shield, invincibility and portal-transit effects had no drawing since the robots moved to
+  their SWF clips (slice c); the effects layer draws placeholders for them again
+  (`GameView._protection`). Still placeholders: `ShieldProp`'s `nombril_<direction>`,
+  `InvincibilityProp`'s `invincibityPlay` and colour filter, other weapons' action clips and
+  shots (need the reference player's art pass).
