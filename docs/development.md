@@ -429,5 +429,13 @@ Play-test fixes, 2026-11-06:
   lose jingle whoever wins (`playLoseMusic`), so an Arcade time-out no longer plays the win
   jingle. Art: `record_screen.py cartoons gameplay-cinema-start` (after `art`) makes each class
   with `symbol` in the UI container and renders its 100 frames (whole stage: the clips dim it
-  with black at alpha 0.2), text localised in full, so the lose banner reads `YOU LOSE.` (en-US;
-  authored `YOU LOSE!`). Checked in `tests/flow_scene_check.gd`, `fidelity_check`, `kill_check`.
+  with black at alpha 0.2), only placeholder text localised as in every art pass: the owner
+  keeps the authored texts (`YOU LOSE!`, not the en-US `YOU LOSE.`; likewise START, CINEMA,
+  LIGHTNING GUN, SPORT CAR stay as authored). Checked in `tests/flow_scene_check.gd`,
+  `fidelity_check`, `kill_check`.
+- The HUD kept the path `@0#0` after the first pause: `App._hud_path` read the layout entry,
+  which `rename_node` rewrites, so unpausing renamed `@0#0` to itself. The HUD's own path is
+  remembered, and the map-loading screen, the pause screen and the end cartoon count as one set
+  of children beside it (`SwfScreen.add_ui_child` / `remove_ui_child`): `@0#0` while any is up,
+  `@0` when it is alone again (also with a pause during the end cartoon). Checked in
+  `tests/flow_scene_check.gd`.

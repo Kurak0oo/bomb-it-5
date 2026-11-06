@@ -80,9 +80,8 @@ func setCartoon(cartoon_name: String) -> void:
 	_cartoon_name = cartoon_name
 	var clip: Dictionary = _art.get(cartoon_name, {})
 	_total_frames = int(clip.get("total_frames", 100))
-	# A second unnamed child of the container: the HUD's segment gains its index.
-	_screen.rename_node(_hud_path, _host.path_join("@0#0"))
-	_mc_path = _host.path_join("@0#1")
+	# Another unnamed child of the container: the HUD's segment gains its index.
+	_mc_path = _host.path_join("@0#%d" % _screen.add_ui_child(_hud_path))
 	# The tween skips frames: only those it shows are resampled, ahead of time.
 	var frames: Dictionary = clip.get("frames", {})
 	var shown := {}
@@ -100,7 +99,7 @@ func setCartoon(cartoon_name: String) -> void:
 func animationComplete() -> void:
 	if _mc_path == "" or not is_instance_valid(_screen): return
 	_screen.remove_node(_mc_path)
-	_screen.rename_node(_host.path_join("@0#0"), _hud_path)
+	_screen.remove_ui_child(_hud_path)
 	_mc_path = ""
 	_cartoon_name = ""
 

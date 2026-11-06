@@ -483,7 +483,7 @@ func _game_screen(recorded: bool) -> void:
 		var plan: Dictionary = loading.get_meta("controller").schedule()
 		# UI_reading is the UI container's second child while it shows: the HUD is `@0#0`.
 		var hud_path := _hud_path(swf)
-		swf.rename_node(hud_path, hud_path.get_base_dir().path_join("@0#0"))
+		swf.add_ui_child(hud_path)
 		var cover: RefCounted = loading.get_meta("controller")
 		loading.advanced.connect(func(t: int):
 			cover.tick()
@@ -501,7 +501,7 @@ func _game_screen(recorded: bool) -> void:
 				loading.visible = false
 				loading.get_meta("controller").destroy()
 				loading.queue_free()
-				swf.rename_node(hud_path.get_base_dir().path_join("@0#0"), hud_path))
+				swf.remove_ui_child(hud_path))
 
 
 ## `UIManager.loadingMap`: LoadingMapUI over the gameplay screen, from START until the round
@@ -540,20 +540,25 @@ func _pause_screen(is_paused: bool) -> void:
 		pause.set_meta("controller", PauseUI.new(pause, self, game, game.round_random()))
 		game_swf.set_meta("pause", pause)
 		game_swf.set_path_shown(board, false)
-		game_swf.rename_node(hud_path, hud_path.get_base_dir().path_join("@0#0"))
+		game_swf.add_ui_child(hud_path)
 	elif not is_paused and is_instance_valid(shown):
 		var controller = shown.get_meta("controller")
 		if controller.game != null: controller.destroy()
 		shown.queue_free()
 		game_swf.remove_meta("pause")
 		game_swf.set_path_shown(board, true)
-		game_swf.rename_node(hud_path.get_base_dir().path_join("@0#0"), hud_path)
+		game_swf.remove_ui_child(hud_path)
 
 
 ## The path of UI_interface, GameInterFace's clip, on the gameplay screen.
+## Its own path (`@0`, the container's only child), remembered when first asked: renaming
+## it (`add_ui_child`) rewrites the layout entry, so the entry's path is not it then.
 static func _hud_path(game_swf: Node2D) -> String:
+	if game_swf.has_meta("hud_path"): return game_swf.get_meta("hud_path")
 	for entry: Dictionary in game_swf.layout.nodes:
-		if entry.get("class", "") == "UI_interface": return entry.path
+		if entry.get("class", "") == "UI_interface":
+			game_swf.set_meta("hud_path", entry.path)
+			return entry.path
 	return ""
 
 

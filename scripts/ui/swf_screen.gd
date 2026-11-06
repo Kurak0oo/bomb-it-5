@@ -338,6 +338,25 @@ func remove_node(path: String) -> void:
 
 ## A run-time node's display-list path changes (`@0#k` of the boxes after a removed one);
 ## the run-time nodes inside it follow.
+## `addChild` on the UI container next to the HUD (the map-loading screen, the pause screen,
+## the end cartoon): while the HUD is not the container's only child, its unnamed segment is
+## `@0#0`, not `@0` (the reference player's path rule). One count for every such child, so
+## they can overlap (a pause during the end cartoon). Returns the new child's index.
+func add_ui_child(hud_path: String) -> int:
+	var count: int = get_meta("ui_children", 0)
+	if count == 0: rename_node(hud_path, hud_path.get_base_dir().path_join("@0#0"))
+	set_meta("ui_children", count + 1)
+	return count + 1
+
+
+## `removeChild` of such a child: the HUD is `@0` again once it is alone.
+func remove_ui_child(hud_path: String) -> void:
+	var count: int = get_meta("ui_children", 0)
+	if count <= 0: return
+	set_meta("ui_children", count - 1)
+	if count == 1: rename_node(hud_path.get_base_dir().path_join("@0#0"), hud_path)
+
+
 func rename_node(path: String, new_path: String) -> void:
 	var rec: Dictionary = _by_path_rec.get(path, {})
 	if rec.is_empty() or path == new_path: return

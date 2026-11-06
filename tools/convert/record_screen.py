@@ -1287,8 +1287,8 @@ def record_cartoons(case_name, player_path, swf):
     `GameEndCartoon.setCartoon` adds it, after the HUD) at its origin, and rendered alone at
     every frame (`gotoAndStop`, as the tween's FramePlugin sets it; the clips have no nested
     timeline of their own). Each image is the whole stage: the clips dim it (black, alpha
-    0.2). The text fields are localised in full (`localize FILE`), as the branding system's
-    `NewTransText.updateText` does: the authored `YOU LOSE!` becomes the en-US `YOU LOSE.`.
+    0.2). As in every art pass, only placeholder text fields are localised (`localize FILE
+    placeholders`): the owner keeps the authored texts (`YOU LOSE!`, not the en-US `YOU LOSE.`).
     Each image keeps the stage matrix it was rendered at (`at`)."""
     case = load_case(case_name)
     layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
@@ -1309,7 +1309,7 @@ def record_cartoons(case_name, player_path, swf):
             p.command(line)
         for actor in (1, 2, 3):
             p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
-        p.command(f'localize {LOCALIZATION}')
+        p.command(f'localize {LOCALIZATION} placeholders')
         for cls in CARTOONS:
             p.command(f'symbol {host} {cls} refsym 0 0 1')
             root = next(n for n in p.display()['nodes'] if n['path'] == name)

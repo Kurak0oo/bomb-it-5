@@ -232,6 +232,16 @@ func _lose_level_with_cartoon(game: Node2D) -> void:
 		if app.screen.get_child_count() == 1: break
 		await process_frame
 	var hud_parent: String = game_swf.layout.screen_root + "/@0#1"
+	# P, then P again: the HUD is the container's only child again, `@0`.
+	game.toggle_pause()
+	for step in game.PAUSE_DELAY_STEPS: game.advance_time(1.0 / 35.0)
+	await process_frame
+	game.toggle_pause()
+	for wait in 60:
+		if not game_swf.has_meta("pause"): break
+		await process_frame
+	_expect(game_swf.node_for(hud_parent + "/@0") != null and game_swf.node_for(hud_parent + "/@0#0") == null,
+		"after a pause the HUD is the UI container's only child again (@0)")
 	var seen := {}
 	var removed := {}
 	var bomb := InputEventKey.new()
@@ -252,6 +262,21 @@ func _lose_level_with_cartoon(game: Node2D) -> void:
 				and node.get_index() == host.get_child_count() - 1 and game_swf.node_for(hud_parent + "/@0#0") != null,
 				"a lost round shows loseCartoon, the UI container's last child over the HUD")
 		var elapsed := roundi(float(snapshot.ending_progress) * 105.0)
+		if elapsed == 30 and not seen.has(30):
+			# P during the ending: the pause screen and the cartoon are both beside the HUD;
+			# after the pause the HUD stays `@0#0` under the cartoon (it went back to `@0`).
+			game.toggle_pause()
+			for step in game.PAUSE_DELAY_STEPS: game.advance_time(1.0 / 35.0)
+			await process_frame
+			var paused_ok: bool = game.paused and game_swf.node_for(hud_parent + "/@0#0") != null
+			game.toggle_pause()
+			for wait in 60:
+				if not game_swf.has_meta("pause"): break
+				await process_frame
+			_expect(paused_ok and not game_swf.has_meta("pause") and not game.paused and game_swf.node_for(hud_parent + "/@0#0") != null
+				and game_swf.node_for(hud_parent + "/@0") == null and game_swf.node_for(cartoon.path()) != null,
+				"a pause during the end cartoon leaves the HUD beside the cartoon")
+			continue  # (the snapshot above is from before the pause's steps)
 		seen[elapsed] = node != null and int(node.get_meta("swf_frame")) == cartoon.frame_at(elapsed, 100)
 	bomb.pressed = false
 	root.push_input(bomb, true)
