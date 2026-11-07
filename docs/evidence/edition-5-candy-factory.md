@@ -47,3 +47,22 @@ registers at map build, before robots). `tests/stage_features_check.gd` covers e
 The desktop profile's float positions drift up to a tick against the original's twip
 positions; the replica profile rides in twips and matches the
 [recorded ride](edition-5-interactions.md).
+
+## Display (checkpoint 5, 2026-11-07)
+
+Recovered from `ConveyorBelt.initDis` / `initBeltView` and the recorded round's display
+list (case `gameplay-candy-start`, golden `tests/goldens/gameplay-candy-start/candy-start.json`):
+
+- `Art_CandyMachine` at 30/32 inside the ConveyorBelt's own container, which stays at
+  xPos 0 (the board's origin); the clip sits at `_xN * GRID_WIDTH` on the centre row's
+  platform layer. Its sweets are nested clips that loop over 70 frames from map load
+  (frame 61 at the round's first frame).
+- `Art_ConveyorBelt_1` at 30/32 on row 0's platform layer at the track's first cell
+  (`"Art_ConveyorBelt_" + 1`: the layout number passed to `setBeltTrack` is never used, so
+  `_2` and `_3` are never shown). One clip of 33 segment clips, each looping over 9 frames
+  (frame 7 at the round's first frame); the loop does not depend on the belt's movement.
+  Pac-Man layouts have no track, so no belt clip; the machine still shows.
+- The centre is a hidden box: `setMidBox(x, y)` without `true` (`CandyFactoryMapData.as:109`).
+- Not drawn yet: `Art_Prop_Disappear` (`addDisappearAni`, rotated to the last segment's
+  direction) when a carried item leaves the belt; carried pickups step from cell to cell
+  in the replica's display instead of sliding.

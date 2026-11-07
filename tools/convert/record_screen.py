@@ -20,7 +20,8 @@ case tools/convert/cases/hud-robots.json.
 
 sets (after art): each other stage set's floor, tiles and features on the gameplay screen
 (layout `board.sets`), from that set's own round (e.g. gameplay-zoo-start), into
-original/screens/game/sets/<set>/; the CASE argument is ignored (use game's: gameplay-cinema-start).
+original/screens/game/sets/<set>/; the CASE argument is ignored (use game's: gameplay-cinema-start);
+`--sets candy_factory` renders only those sets.
 
 cartoons (after art): the round's end cartoons (`GameEndCartoon`: winCartoon, loseCartoon,
 timeUpCartoon), each made by its own class (`symbol`) in the UI container and rendered at
@@ -702,9 +703,12 @@ def _record_tiles(case, capture, layout, player_path, swf, seen, target, p=None)
         for feature in board['features']:
             if feature['class'] in features:
                 continue
-            stored = _store(p, feature['path'], target, tmp, seen)
+            # The feature's clip, or its container when that stands on the clip's cell (layout.py
+            # `node`: the candy machine sits inside a container left at the board's origin).
+            path = feature['path'] + feature.get('node', '')
+            stored = _store(p, path, target, tmp, seen)
             if stored:
-                features[feature['class']] = dict(stored, at=dump[feature['path']]['stage_matrix'], source=feature['path'])
+                features[feature['class']] = dict(stored, at=dump[path]['stage_matrix'], source=path)
     finally:
         if own:
             p.close()
@@ -1686,6 +1690,8 @@ def main():
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
     parser.add_argument('--parts', default='robots,plays,weapons,clips',
                         help='actors: which parts to record again (robots, plays, weapons, clips); the others are kept')
+    parser.add_argument('--sets', default='',
+                        help='sets: the stage sets to render, comma separated (default: every set in board.sets)')
     parser.add_argument('--looks', choices=['round', 'all'], default='round',
                         help='actors: the default and recorded looks (round), or every look of every robot (all)')
     args = parser.parse_args()
@@ -1699,7 +1705,7 @@ def main():
         record_cartoons(args.case, args.player.resolve(), args.swf)
         return 0
     if args.what == 'sets':
-        record_sets(args.case, args.player.resolve(), args.swf)
+        record_sets(args.case, args.player.resolve(), args.swf, [x for x in args.sets.split(',') if x] or None)
         return 0
     if args.what == 'panels':
         record_panels(args.case, args.player.resolve(), args.swf)

@@ -5,7 +5,7 @@ extends SceneTree
 ## boxes, frames, kinds, display order and features as the original's display list, and
 ## place each cell where the original placed its Sprite. (A hold cell's Sprite has no clip,
 ## so no frame to compare.) Likewise for every other stage set recorded on the screen
-## (`board.sets`: Zoo, its crocodiles as features).
+## (`board.sets`: Zoo, its crocodiles as features; Candy Factory, its machine and belt).
 
 const GameBoard = preload("res://scripts/ui/game_board.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
@@ -36,17 +36,22 @@ func _check_set(layout: Dictionary, set_id: StringName) -> void:
 	for cell in board.cells:
 		if board.cells[cell] == &"soft": soft += 1
 	_expect(soft == recorded.boxes.filter(func(b): return b.exist).size(), "every recorded breakable box is a soft block (%d)" % soft)
+	# The belt's track as the round's feature state gives it (`belt_<n>` cells sorted by n,
+	# CandyFactoryMapData.setData; scripts/simulation/features/belt.gd `track`).
+	var belts: Array = board.features.keys().filter(func(c): return board.features[c].kind == &"belt")
+	belts.sort_custom(func(a, b): return int(board.features[a].detail) < int(board.features[b].detail))
 	var snapshot := {"board": board.cells, "board_meta": {"skin": board.skin, "variants": board.variants,
-		"center": board.center, "portal_ids": board.portal_ids}}
+		"center": board.center, "portal_ids": board.portal_ids},
+		"features": [{"kind": &"belt", "track": belts}] if not belts.is_empty() else []}
 	var items: Dictionary = view._items_of(snapshot)
 	var want: Array = recorded.boxes.map(func(b): return [_cell(b.cell), int(b.frame) if b.shown else 0, b.shown, b.exist])
 	var got: Array = items.boxes.map(func(b): return [_cell(b.cell), int(b.frame) if b.shown else 0, b.shown, b.exist])
 	_expect(got == want, "createRow lays out the original's %d %s boxes in its order, frames, visibility and kinds" % [want.size(), set_id])
-	var features: Array = recorded.features.map(func(f): return [_cell(f.cell), f["class"]])
-	var got_features: Array = items.features.map(func(f): return [_cell(f.cell), f["class"]])
+	var features: Array = recorded.features.map(func(f): return [_cell(f.cell), f["class"], int(f.get("row", f.cell[1]))])
+	var got_features: Array = items.features.map(func(f): return [_cell(f.cell), f["class"], int(f.get("row", f.cell[1]))])
 	features.sort()
 	got_features.sort()
-	_expect(got_features == features, "%s features (portals Art_Portal_<pair>, crocodiles Art_Crocodile) are on their cells" % set_id)
+	_expect(got_features == features, "%s features (portals Art_Portal_<pair>, crocodiles Art_Crocodile, the candy machine and belt) are on their cells and layers" % set_id)
 	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://" + golden_path))
 	var matrices := {}
 	for node: Dictionary in golden.nodes: matrices[node.path] = node.stage_matrix

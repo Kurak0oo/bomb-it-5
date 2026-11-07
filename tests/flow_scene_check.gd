@@ -204,19 +204,24 @@ func _run() -> void:
 		"a Magic Library board is drawn just under the first row, over the floor art")
 	_expect(app.game.swf_view.get_index() == app.game.swf_view.get_parent().get_child_count() - 1,
 		"weapon and protection effects are drawn over every row")
-	# A stage set whose board art is in the pack (Zoo, record_screen.py sets) draws its own
-	# floor, boxes and crocodiles: no placeholder board.
-	if FileAccess.file_exists(GameBoard.SET_PACK % "zoo"):
+	# A stage set whose board art is in the pack (record_screen.py sets) draws its own floor,
+	# boxes and features (Zoo's crocodiles, Candy Factory's machine and belt): no placeholder board.
+	for set_id: StringName in [&"zoo", &"candy_factory"]:
+		if not FileAccess.file_exists(GameBoard.SET_PACK % set_id): continue
 		app.show_main_menu()
 		await process_frame
 		app.session.mode = &"arcade"
-		app.session.stage = &"zoo"
+		app.session.stage = set_id
 		app.start_session()
 		await process_frame
 		app.game.set_process(false)
-		var zoo_board: RefCounted = app.screen.get_child(0).get_meta("board")
-		_expect(zoo_board.has_art() and zoo_board.set_id == &"zoo" and not is_instance_valid(app.game.swf_board_view),
-			"a Zoo board with its art in the pack is drawn from it, without the placeholder board")
+		var set_board: RefCounted = app.screen.get_child(0).get_meta("board")
+		_expect(set_board.has_art() and set_board.set_id == set_id and not is_instance_valid(app.game.swf_board_view),
+			"a %s board with its art in the pack is drawn from it, without the placeholder board" % set_id)
+		if set_id == &"candy_factory":
+			var classes: Array = set_board._features.map(func(f): return f["class"])
+			_expect(classes.has("Art_CandyMachine") and classes.has("Art_ConveyorBelt_1"),
+				"a rolled Candy Factory board has the candy machine and the belt (%s)" % [classes])
 	app.queue_free()
 	await process_frame
 	print("%s: %d flow scene checks" % ["PASS" if failures == 0 else "FAIL", checks])

@@ -196,9 +196,10 @@ SCREENS = {
                  'first_row': 2,
                  'layers': ('platform', 'box', 'bomb', 'robot', 'effect'),
                  # Classes on the platform layer that are part of the board (Portal.setMc
-                 # `Art_Portal_<colorId>`, Crocodile.setMc `Art_Crocodile`); anything else
+                 # `Art_Portal_<colorId>`, Crocodile.setMc `Art_Crocodile`, ConveyorBelt.initDis
+                 # `Art_CandyMachine` and initBeltView `Art_ConveyorBelt_1`); anything else
                  # there (a blast's flames) moves.
-                 'features': ('Art_Portal_', 'Art_Crocodile'),
+                 'features': ('Art_Portal_', 'Art_Crocodile', 'Art_CandyMachine', 'Art_ConveyorBelt_'),
                  # The stage set of the screen's own capture (StageSets id). CinemaMapData:
                  # `beginNum` 49; MapMaster.createRow draws every Cinema box from `_brick5`
                  # frames beginNum .. beginNum + 23 (the wall and centre at +23).
@@ -208,8 +209,9 @@ SCREENS = {
                  # board geometry, its own floor (`AbstractMapSet.init`'s BackGround_<Set>
                  # bitmap, the container's children before the rows), boxes and features
                  # (`_set_board`; art by record_screen.py `sets`).
-                 # ZooMapData: `beginNum` 73.
-                 'sets': {'zoo': {'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73}}},
+                 # ZooMapData: `beginNum` 73; CandyFactoryMapData: 25.
+                 'sets': {'zoo': {'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
+                          'candy_factory': {'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25}}},
              'interactive': {'pause': 'pause'},
              'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),
              'live_text': ('currentLevel', 'totalLevel', 'time', 'lifeTf', 'bombTf', 'powerTf', 'speedTf',
@@ -783,9 +785,21 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
             elif role == 'platform' and any(c.startswith(tuple(how['features'])) for c in classes):
                 # Its own loop (the portal's glow, a nested clip that plays from map load).
                 loop = next((n for n in tree[1:] if n.get('total_frames', 1) > 1), None)
-                features.append({'path': child, 'row': y, 'local': [round(local[0], 3), round(local[1], 3)],
-                                 'class': next(c for c in classes if c.startswith(tuple(how['features']))),
-                                 'loop_frame': loop['frame'] if loop else None})
+                # The feature's clip: where it stands on the board (its cell) and its scale in
+                # the container (ConveyorBelt: `scaleX = scaleY = 30 / 32`). The layer child is
+                # its AbstractObject `_container` (portals, crocodiles: at the clip's cell) or the
+                # clip itself (the belt, on row 0's layer: `game.getDisArr(0)`, at its first
+                # track cell). The candy machine's container stays at xPos 0 and the clip sits at
+                # `_xN * GRID_WIDTH` inside it (`ConveyorBelt.initDis`): its `origin` is the
+                # container's cell and `node` the clip under it.
+                clip = next(n for n in tree if (n.get('class') or '').startswith(tuple(how['features'])))
+                clip_local = _local_point(cm, clip['stage_matrix'][4], clip['stage_matrix'][5])
+                linear = [round(clip['stage_matrix'][k] / cm[0], 4) for k in range(4)]
+                features.append({'path': child, 'row': y, 'local': [round(clip_local[0], 3), round(clip_local[1], 3)],
+                                 'class': clip['class'], 'loop_frame': loop['frame'] if loop else None,
+                                 'node': clip['path'][len(child):], 'container_local': [round(local[0], 3), round(local[1], 3)],
+                                 'linear': linear, 'clip_frame': clip.get('frame') or 0,
+                                 'child_frame': node.get('frame') or 0})
             else:
                 dynamic[child] = {'role': role, 'render_bounds': _union([n.get('render_bounds') for n in tree]),
                                   'class': next((c for c in classes if c and not c.startswith('flash.')), None)}
@@ -801,13 +815,35 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     if max(origin_x) - min(origin_x) > 0.05 or max(origin_y) - min(origin_y) > 0.05:
         raise SystemExit(f'{name}: boxes do not sit on one grid')
     excursion = [round(sum(origin_x) / len(origin_x), 1), round(sum(origin_y) / len(origin_y), 1)]
-    for item in boxes + features:
-        cx = (item['local'][0] - excursion[0]) / grid
-        cy = (item['local'][1] - excursion[1]) / grid
-        if abs(cx - round(cx)) > 0.01 or abs(cy - round(cy)) > 0.01 or round(cy) != item['row']:
+    def cell_of(item, local, row=None):
+        cx = (local[0] - excursion[0]) / grid
+        cy = (local[1] - excursion[1]) / grid
+        if abs(cx - round(cx)) > 0.01 or abs(cy - round(cy)) > 0.01 or (row is not None and round(cy) != row):
             raise SystemExit(f'{name}: {item["path"]} is off the cell grid ({cx}, {cy})')
-        item['cell'] = [int(round(cx)), int(round(cy))]
+        return [int(round(cx)), int(round(cy))]
+
+    for item in boxes:
+        item['cell'] = cell_of(item, item['local'], item['row'])
         del item['local'], item['row']
+    for item in features:
+        item['cell'] = cell_of(item, item['local'])
+        origin = cell_of(item, item.pop('container_local'))
+        node = item.pop('node')
+        # Fields a portal or crocodile (its container at its cell, its clip unscaled, on its
+        # own row's layer) leaves out.
+        # The frame of the node the board view draws: the clip under a container left
+        # elsewhere, else the layer child (a container's 0; the belt clip's own frame).
+        clip_frame, child_frame = item.pop('clip_frame'), item.pop('child_frame')
+        if origin != item['cell']:
+            item['origin'], item['node'] = origin, node
+        frame = clip_frame if 'node' in item else child_frame
+        if frame:
+            item['frame'] = frame
+        if item['row'] == item['cell'][1]:
+            del item['row']
+        if item['linear'] == [1.0, 0.0, 0.0, 1.0]:
+            del item['linear']
+        del item['local']
     # HUD: the panels that show, in seat order (GameConfig.ROBOT_UI_Y_k grows with k).
     panels = sorted((n for n in nodes if n['path'].startswith(screen_root + '/')
                      and (n.get('name') or '').startswith('robotUI') and n.get('effective_visible')),
@@ -828,7 +864,9 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
         'begin_num': begin, 'template': template,
         'boxes': [dict({k: b[k] for k in ('cell', 'path', 'frame', 'shown', 'exist', 'brick')},
                        **({'loop_frames': b['loop_frames']} if b['loop_frames'] else {})) for b in boxes],
-        'features': [{k: f[k] for k in ('cell', 'path', 'class', 'loop_frame')} for f in features],
+        'features': [{k: f[k] for k in ('cell', 'path', 'class', 'loop_frame', 'row', 'origin', 'node', 'linear', 'frame')
+                      if k in f}
+                     for f in features],
         'dynamic': dynamic, 'robots': seats, 'looks': [looks[r] for r in seats],
         'robot_ui_slots': [n['stage_matrix'][4:6] for n in panels],
         'round_start_after_input': _frames_after_input(case, capture),
@@ -911,19 +949,30 @@ def _match_template(name, boxes, features, begin):
     layouts = json.loads((ROOT / 'assets' / 'maps' / 'layouts.json').read_text(encoding='utf-8'))['layouts']
     fixed = {tuple(b['cell']) for b in boxes if not b['exist']}
     soft = {tuple(b['cell']) for b in boxes if b['exist']}
-    portals = {tuple(f['cell']) for f in features}
+    portals = {tuple(f['cell']) for f in features if f['class'].startswith(('Art_Portal_', 'Art_Crocodile'))}
+    # CandyFactoryMapData.setData: the candy machine on `centerProp`, the belt's clip on the
+    # first cell of the track (`belt_<n>` sorted by n).
+    machine = {tuple(f['cell']) for f in features if f['class'] == 'Art_CandyMachine'}
+    belt = {tuple(f['cell']) for f in features if f['class'].startswith('Art_ConveyorBelt_')}
     found = []
     for layout_name, layout in sorted(layouts.items()):
-        want_fixed, want_soft, want_portals = set(), set(), set()
+        want_fixed, want_soft, want_portals, belts, centre = set(), set(), set(), {}, set()
         for y, row in enumerate(layout['rows']):
             for x, cell in enumerate(row):
                 if cell.startswith('fixedProp') or cell in ('centerProp', 'holdProp'):
                     want_fixed.add((x, y))
+                    if cell == 'centerProp':
+                        centre.add((x, y))
                 elif cell == 'unfixedProp_r':
                     want_soft.add((x, y))
                 elif cell.startswith('portal_') or cell == 'crocodile':
                     # The platforms: Portal (`portal_<n>`), Crocodile (ZooMapData: `crocodile`).
                     want_portals.add((x, y))
+                elif cell.startswith('belt_'):
+                    belts[int(cell.split('_')[1])] = (x, y)
+        want_belt = {belts[min(belts)]} if belts else set()
+        if machine and machine != centre or belt != want_belt and (belt or machine):
+            continue
         if fixed == want_fixed and soft <= want_soft and portals == want_portals:
             found.append(layout_name)
     if len(found) != 1:

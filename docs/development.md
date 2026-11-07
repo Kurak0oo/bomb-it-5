@@ -475,3 +475,30 @@ dragon rides draw their clips but their jump and crash are not checked against r
 other sets still use the placeholder layer. The next set needs its own case and `board.sets`
 entry, plus its features' classes (toy hands, belt, spellbook) and any behaviour they drive
 on screen (Candy's belt moves the robots' clips; Birthday's hands throw).
+
+Candy Factory slice, 2026-11-07 (owner to review):
+- Case `gameplay-candy-start`: as the Zoo case with `basketballStages` (Candy Factory) picked,
+  the centre of its bounds in the dropdown golden; 393 draws before the round.
+- `board.sets.candy_factory` (begin_num 25, template CandyFactoryStage3). Features now record
+  where the AS3 puts them (layout.py): the cell of the feature's clip, its layer's `row` when
+  another (the belt: `game.getDisArr(0)`), its scale (`linear`, 30/32), its frame, and for a clip
+  inside a container left elsewhere the container's `origin` and the clip's `node`
+  (`ConveyorBelt.initDis`: Art_CandyMachine in a container at xPos 0). Template matching places
+  the machine on `centerProp` and the belt on the track's first cell.
+- Art: `record_screen.py sets --sets candy_factory`: floor, 48 tiles, Art_CandyMachine (70-frame
+  sweets loop) and Art_ConveyorBelt_1 (33 segments, 9-frame loop; `_2`/`_3` are never shown,
+  `initBeltView` always makes `_1`). The actors pass was re-run for the round's looks.
+- Godot: `GameBoard` lays features on their own layer at their scale and frame; a rolled Candy
+  round gets the machine on the centre and, with a track, the belt at `track[0]` (snapshot
+  feature state); both loops play from the recorded phase as the portals' glow. The centre is a
+  hidden box for Candy Factory and Magic Library (`setMidBox` without `true`).
+- Results: gameplay-candy-start nodes 366/366, SSIM 0.899 (ceiling 0.901), ΔE 5.0; all 16 cases and tools/run_checks.sh (27 suites) pass.
+  Rolled Candy rounds (frames 250-550) show the belt, machine, both fixed and soft choices, a
+  carried bomb and pickup, as in `docs/evidence/reference-2026-10-21/features/candy-belt.png`.
+Known gaps: no compare case of a robot riding the belt (the ride is matched frame by frame by
+the `belt-ride` fixture replay, edition-5-interactions.md; the screen only draws the
+snapshot's position); carried pickups step cell to cell and restart their bitmap loop on each
+cell; `Art_Prop_Disappear` at the belt's end is not drawn; the loops' phase in rolled rounds is
+the recorded one. Birthday Party needs its toy hands' clips and throw/push display; Luxury
+Stores only the case, set entry and art pass; Magic Library its spellbook clip and a hidden
+centre (already ported).

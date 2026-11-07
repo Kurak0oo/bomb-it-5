@@ -13,6 +13,10 @@ extends RefCounted
 ##   breaks (`isExist`); `MapMaster.setBoxVisible(false)` leaves a hold cell's Sprite empty;
 ## - `Portal.setMc` / `AbstractPlatForm`: `Art_Portal_<colorId>` on the platform layer (0),
 ##   its glow a nested loop that plays from map load;
+## - `ConveyorBelt.initDis` / `initBeltView` (Candy Factory): `Art_CandyMachine` at 30/32 in a
+##   container left at the board's origin, on the centre row's platform layer, and
+##   `Art_ConveyorBelt_1` at 30/32 on row 0's platform layer at the track's first cell; each
+##   plays its own nested loops from map load (the machine's sweets, the belt's segments);
 ## - `Box.brickExp` / `Box.countBrickExp`: a box that breaks swaps its clip for `brickExp`
 ##   (`Tool.CreateBoxExpMovie`), which plays; once it reaches `totalFrames - 1` the box's
 ##   Sprite leaves its row (`_mainContainer.removeChild(_container)`).
@@ -35,6 +39,12 @@ extends RefCounted
 
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const SET_PACK := "res://original/screens/game/sets/%s/manifest.json"
+## Sets whose `<Set>MapData.setData` calls `mapMaster.setMidBox(x, y)` on `centerProp` without
+## `true`, so the centre is a hidden box (`getMidBox == 2`, `MapMaster.createRow`):
+## CandyFactoryMapData.as:109 (the candy machine stands there), MagicLibraryMapData.as:106.
+const HIDDEN_CENTRE: Array[StringName] = [&"candy_factory", &"magic_library"]
+## Features a set's pack plays by their nested loops' frame (record_screen.py sets `played`).
+const PLAYED_FEATURES := ["Art_Portal", "Art_Crocodile", "Art_ConveyorBelt_", "Art_CandyMachine"]
 
 var _screen: Node2D
 var _board: Dictionary
@@ -76,7 +86,7 @@ func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"") -> vo
 	# another set's features (its pack's `played`: the crocodile's water).
 	for played: Dictionary in [actor_art.get("played", {}), _art.get("played", {})]:
 		for cls in played:
-			if not String(cls).begins_with("Art_Portal") and not String(cls).begins_with("Art_Crocodile"): continue
+			if not PLAYED_FEATURES.any(func(prefix): return String(cls).begins_with(prefix)): continue
 			var by_frame := {}
 			for age in played[cls]:
 				var art: Dictionary = played[cls][age]
@@ -125,11 +135,26 @@ func build(snapshot: Dictionary, recorded: bool, all_rows := true) -> void:
 	if String(set_id) != String(_board.get("set", "cinema")):
 		var floor: Dictionary = _art.get("pieces", {})
 		for path in floor: _screen.set_node_art(path, floor[path])
-	# The platforms (portals, crocodiles) are made with the map (`AbstractMapSet.create`), before any row.
+	# The platforms (portals, crocodiles, the candy machine and belt) are made with the map
+	# (`AbstractMapSet.create`, `CandyFactoryMapData.setData`), before any row.
 	var looks: Dictionary = _art.get("features", {})
 	for feature: Dictionary in _features:
 		var art: Dictionary = looks.get(String(feature["class"]), {})
-		attach(_board.layers.platform[int(feature.cell[1])], feature, cell_matrix(Vector2(feature.cell[0], feature.cell[1])), art, "piece", art.is_empty())
+		# Its layer: its own row's, or another's (the belt: `game.getDisArr(0)`).
+		var layer: String = _board.layers.platform[int(feature.get("row", feature.cell[1]))]
+		var at := feature_matrix(feature)
+		if feature.has("node"):
+			# The clip inside a container that stays at `origin` (`ConveyorBelt.initDis`: the
+			# container at xPos 0, the machine at `_xN * GRID_WIDTH`).
+			var origin: Array = feature.origin
+			attach(layer, feature, cell_matrix(Vector2(origin[0], origin[1])))
+			feature.art_path = feature.path + String(feature.node)
+			var entry := _entry(feature.art_path, feature.path, at, "piece")
+			entry.frame = int(feature.get("frame", 0))
+			_screen.add_node(entry, art)
+		else:
+			attach(layer, feature, at, art, "piece", art.is_empty(), int(feature.get("frame", 0)))
+			feature.art_path = feature.path
 	if all_rows:
 		for y in _rows.size(): show_row(y)
 	_portals()
@@ -219,7 +244,7 @@ func _portals() -> void:
 		if feature.get("own_clock", false): continue  # a crocodile past its first opening (_crocodiles)
 		var frame := posmod(int(feature.loop_frame) - 1 + _tick, loop.size()) + 1
 		var art: Dictionary = loop.get(frame, {})
-		if not art.is_empty(): _screen.set_node_art(feature.path, art)
+		if not art.is_empty(): _screen.set_node_art(feature.get("art_path", feature.path), art)
 
 
 ## `Crocodile.runEngine`, display side. Closed, the clip stays on frame 1 (`_mc.gotoAndStop(1)`),
@@ -268,12 +293,13 @@ func _crocodiles(snapshot: Dictionary) -> void:
 
 ## Add `item` as the last child of `layer` (`addChild`): its path is `@0#k` among the layer's
 ## children (renaming an only child `@0` to `@0#0`). `item.path` is set.
-func attach(layer: String, item: Dictionary, stage_matrix: Array, art: Dictionary = {}, role := "group", outline := false) -> void:
+func attach(layer: String, item: Dictionary, stage_matrix: Array, art: Dictionary = {}, role := "group", outline := false, frame := 0) -> void:
 	var list: Array = _children.get_or_add(layer, [])
 	list.append(item)
 	item.path = _child_path(layer, list.size() - 1, list.size())
 	if list.size() == 2: _repath(layer)
 	var entry := _entry(item.path, layer, stage_matrix, role)
+	entry.frame = frame
 	if outline:
 		var size := float(_board.grid) * float(stage_matrix[0])
 		entry.render_bounds = [stage_matrix[4], stage_matrix[5], stage_matrix[4] + size, stage_matrix[5] + size]
@@ -297,6 +323,14 @@ func _repath(layer: String) -> void:
 		if list[k].path != path:
 			_screen.rename_node(list[k].path, path)
 			list[k].path = path
+
+
+## Where a feature's clip lies on the stage: its cell's matrix, scaled as the AS3 scales the
+## clip (`linear`, in the container's units: the belt and machine at 30/32).
+func feature_matrix(feature: Dictionary) -> Array:
+	var m := cell_matrix(Vector2(feature.cell[0], feature.cell[1]))
+	var l: Array = feature.get("linear", [1.0, 0.0, 0.0, 1.0])
+	return [m[0] * l[0] + m[2] * l[1], m[1] * l[0] + m[3] * l[1], m[0] * l[2] + m[2] * l[3], m[1] * l[2] + m[3] * l[3], m[4], m[5]]
 
 
 ## Where a point given in cells lies on the stage: the board container's matrix after
@@ -357,7 +391,10 @@ func _recorded_items() -> Dictionary:
 			"loop_frames": box.get("loop_frames", [])})
 	var features := []
 	for feature: Dictionary in set_data.features:
-		features.append({"cell": feature.cell, "class": feature["class"], "loop_frame": feature.get("loop_frame")})
+		var item := {"cell": feature.cell, "class": feature["class"], "loop_frame": feature.get("loop_frame")}
+		for key in ["row", "origin", "node", "linear", "frame"]:
+			if feature.has(key): item[key] = feature[key]
+		features.append(item)
 	return {"boxes": boxes, "features": features}
 
 
@@ -380,6 +417,12 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 	var centre_loops: Array = []
 	for box: Dictionary in set_data.boxes:
 		if box.has("loop_frames"): centre_loops = box.loop_frames
+	var skin := StringName(meta.get("skin", &"cinema"))
+	# The recorded features' placement fields by class (the machine's container origin and
+	# node, the belt's and machine's scale).
+	var placed := {}
+	for feature: Dictionary in set_data.features:
+		placed[String(feature["class"])] = feature
 	for y in int(size[1]):
 		for x in int(size[0]):
 			var cell := Vector2i(x, y)
@@ -387,7 +430,7 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 			var hold: bool = center is Vector2i and x >= center.x and x < center.x + 3 and y >= center.y and y < center.y + 3
 			if hold:
 				# `getMidBox == 3` (the centre) shows `beginNum + 23`; `== 2` is a hidden box.
-				boxes.append({"cell": [x, y], "frame": begin + 23, "shown": cell == center, "exist": false,
+				boxes.append({"cell": [x, y], "frame": begin + 23, "shown": cell == center and skin not in HIDDEN_CENTRE, "exist": false,
 					"loop_frames": centre_loops if cell == center else []})
 			elif kind == &"solid" and variants.has(cell):
 				boxes.append({"cell": [x, y], "frame": begin - 1 + int(variants[cell]), "shown": true, "exist": false})
@@ -400,4 +443,25 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 			elif kind == &"crocodile":
 				# `ZooMapData`: a `crocodile` cell makes a Crocodile (`Crocodile.setMc`: Art_Crocodile).
 				features.append({"cell": [x, y], "class": "Art_Crocodile", "loop_frame": loop_frames.get("Art_Crocodile")})
+	# `CandyFactoryMapData.setData`: `centerProp` makes a ConveyorBelt (`initDis`: the machine
+	# on the centre row) and, after every cell, `setBeltTrack` the belt (`initBeltView`, only
+	# with a track: Pac-Man layouts have none) on row 0 at the track's first cell (`belt_<n>`
+	# sorted by n: scripts/simulation/features/belt.gd `track`).
+	if skin == &"candy_factory" and center is Vector2i:
+		var machine: Dictionary = placed.get("Art_CandyMachine", {})
+		var item := {"cell": [center.x, center.y], "class": "Art_CandyMachine", "loop_frame": loop_frames.get("Art_CandyMachine")}
+		for key in ["origin", "node", "linear", "frame"]:
+			if machine.has(key): item[key] = machine[key]
+		features.append(item)
+		var track: Array = []
+		for state: Dictionary in snapshot.get("features", []):
+			if state.get("kind") == &"belt": track = state.get("track", [])
+		if not track.is_empty():
+			var belt: Dictionary = placed.get("Art_ConveyorBelt_1", {})
+			var first: Vector2i = track[0]
+			var item_belt := {"cell": [first.x, first.y], "class": "Art_ConveyorBelt_1", "loop_frame": loop_frames.get("Art_ConveyorBelt_")}
+			if first.y != 0: item_belt.row = 0
+			for key in ["linear", "frame"]:
+				if belt.has(key): item_belt[key] = belt[key]
+			features.append(item_belt)
 	return {"boxes": boxes, "features": features}
