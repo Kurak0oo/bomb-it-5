@@ -198,9 +198,10 @@ SCREENS = {
                  # Classes on the platform layer that are part of the board (Portal.setMc
                  # `Art_Portal_<colorId>`, Crocodile.setMc `Art_Crocodile`, ConveyorBelt.initDis
                  # `Art_CandyMachine` and initBeltView `Art_ConveyorBelt_1`, Spellbook.initDis
-                 # `Art_Spellbook`); anything else
+                 # `Art_Spellbook`, ToyHand.setMc `Art_ToyHand_<Direction>`); anything else
                  # there (a blast's flames) moves.
-                 'features': ('Art_Portal_', 'Art_Crocodile', 'Art_CandyMachine', 'Art_ConveyorBelt_', 'Art_Spellbook'),
+                 'features': ('Art_Portal_', 'Art_Crocodile', 'Art_CandyMachine', 'Art_ConveyorBelt_', 'Art_Spellbook',
+                              'Art_ToyHand_'),
                  # The stage set of the screen's own capture (StageSets id). CinemaMapData:
                  # `beginNum` 49; MapMaster.createRow draws every Cinema box from `_brick5`
                  # frames beginNum .. beginNum + 23 (the wall and centre at +23).
@@ -211,11 +212,12 @@ SCREENS = {
                  # bitmap, the container's children before the rows), boxes and features
                  # (`_set_board`; art by record_screen.py `sets`).
                  # ZooMapData: `beginNum` 73; CandyFactoryMapData: 25; LuxuryStoresMapData: 97;
-                 # MagicLibraryMapData: 121.
+                 # MagicLibraryMapData: 121; BirthdayPartyMapData: 1.
                  'sets': {'zoo': {'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
                           'candy_factory': {'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
                           'luxury_stores': {'golden': ('gameplay-luxury-start', 'luxury-start'), 'begin_num': 97},
-                          'magic_library': {'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121}}},
+                          'magic_library': {'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121},
+                          'birthday_party': {'golden': ('gameplay-birthday-start', 'birthday-start'), 'begin_num': 1}}},
              'interactive': {'pause': 'pause'},
              'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),
              'live_text': ('currentLevel', 'totalLevel', 'time', 'lifeTf', 'bombTf', 'powerTf', 'speedTf',
@@ -840,7 +842,10 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
         # The frame of the node the board view draws: the clip under a container left
         # elsewhere, else the layer child (a container's 0; the belt clip's own frame).
         clip_frame, child_frame = item.pop('clip_frame'), item.pop('child_frame')
-        if origin != item['cell']:
+        # Likewise a clip scaled inside a container that stands on its cell (ToyHand.setMc:
+        # `_mc.scaleX = _mc.scaleY = 30 / 32` in `_container`): the clip is drawn as its own
+        # node, so its frames (`gotoAndStop("g" + pushStep)`) show at the clip's scale.
+        if origin != item['cell'] or node and item['linear'] != [1.0, 0.0, 0.0, 1.0]:
             item['origin'], item['node'] = origin, node
         frame = clip_frame if 'node' in item else child_frame
         if frame:
@@ -951,7 +956,7 @@ def _frames_after_input(case, capture):
 
 def _match_template(name, boxes, features, begin):
     """The layout (assets/maps/layouts.json) whose fixed cells, centre, hold cells and platforms
-    (portals, crocodiles) are exactly where the recorded round has its fixed boxes and features."""
+    (portals, crocodiles, toy hands) are exactly where the recorded round has its fixed boxes and features."""
     layouts = json.loads((ROOT / 'assets' / 'maps' / 'layouts.json').read_text(encoding='utf-8'))['layouts']
     fixed = {tuple(b['cell']) for b in boxes if not b['exist']}
     soft = {tuple(b['cell']) for b in boxes if b['exist']}
@@ -961,12 +966,19 @@ def _match_template(name, boxes, features, begin):
     # spellbook on `centerProp` (`new Spellbook(game, x, y)`).
     machine = {tuple(f['cell']) for f in features if f['class'] in ('Art_CandyMachine', 'Art_Spellbook')}
     belt = {tuple(f['cell']) for f in features if f['class'].startswith('Art_ConveyorBelt_')}
+    # BirthdayPartyMapData.setData: `toyHand_<direction>` makes a hidden box (`setMidBox`) and
+    # a ToyHand (`Art_ToyHand_<Direction>`) on that cell.
+    hands = {(tuple(f['cell']), f['class'][len('Art_ToyHand_'):].lower()) for f in features
+             if f['class'].startswith('Art_ToyHand_')}
     found = []
     for layout_name, layout in sorted(layouts.items()):
-        want_fixed, want_soft, want_portals, belts, centre = set(), set(), set(), {}, set()
+        want_fixed, want_soft, want_portals, belts, centre, want_hands = set(), set(), set(), {}, set(), set()
         for y, row in enumerate(layout['rows']):
             for x, cell in enumerate(row):
-                if cell.startswith('fixedProp') or cell in ('centerProp', 'holdProp'):
+                if cell.startswith('toyHand_'):
+                    want_fixed.add((x, y))
+                    want_hands.add(((x, y), cell[len('toyHand_'):]))
+                elif cell.startswith('fixedProp') or cell in ('centerProp', 'holdProp'):
                     want_fixed.add((x, y))
                     if cell == 'centerProp':
                         centre.add((x, y))
@@ -980,7 +992,7 @@ def _match_template(name, boxes, features, begin):
         want_belt = {belts[min(belts)]} if belts else set()
         if machine and machine != centre or belt != want_belt and (belt or machine):
             continue
-        if fixed == want_fixed and soft <= want_soft and portals == want_portals:
+        if fixed == want_fixed and soft <= want_soft and portals == want_portals and hands == want_hands:
             found.append(layout_name)
     if len(found) != 1:
         raise SystemExit(f'{name}: the recorded board matches {len(found)} layouts ({found})')

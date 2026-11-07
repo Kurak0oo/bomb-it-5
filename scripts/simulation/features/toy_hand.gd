@@ -96,6 +96,10 @@ func blocked_cells() -> Array[Vector2i]:
 	return touched
 
 
+## Display fields: `frame` is the hand clip's frame (`_handMc`), 0 before the first opening,
+## left on its last frame once closed (`_handMc.stop()`); `push_step` is the label the toy's
+## clip stays on after an opening (`_mc.gotoAndStop("g" + this._pushStep)`, never sent back to 1).
 func public_state() -> Dictionary:
 	return {"kind": &"toy_hand", "cell": cell, "direction": direction, "open": is_open,
-		"frame": hand_frame, "reach": push_step if is_open else 0, "touched": touched.duplicate()}
+		"frame": hand_frame, "reach": push_step if is_open else 0, "push_step": push_step,
+		"touched": touched.duplicate()}

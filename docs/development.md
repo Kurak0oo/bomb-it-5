@@ -548,3 +548,29 @@ Luxury Stores slice, 2026-11-07 (owner to review):
   robots, as in the reference capture.
 Known gaps: the round's car drops and rides are not checked against a Luxury recording; a
 robots-only actors pass drops the clips' `next` (`--parts plays`), which only rides use.
+
+Birthday Party slice, 2026-11-07 (owner to review):
+- Case `gameplay-birthday-start`: as the Candy case with `restaurantStages` (Birthday Party,
+  `GameSettingsUI`: `_birthdayPartyStages`) picked, but seed 11: seed 42 rolls the handless
+  BirthdayPartyStage3, seed 11 BirthdayPartyStage2 with its four toy hands; 402 draws before
+  the round.
+- `board.sets.birthday_party` (begin_num 1, template BirthdayPartyStage2, the cake centre shown:
+  `setMidBox(x, y, true)`). layout.py takes `Art_ToyHand_` as a feature, matches `toyHand_<dir>`
+  cells (hidden box + hand) and gives a clip scaled inside a container on its own cell its own
+  `node` (`ToyHand.setMc`: 30/32), so its frames draw at the clip's scale.
+- Art: `record_screen.py sets --sets birthday_party`: floor, 48 tiles, the four hand clips
+  at frame 1 and each label `g0`-`g3` (frames 2-5) with its 14-frame `hand` clip. The actors pass
+  (robots) was re-run with every working copy's recorded looks (Birthday, Luxury, Magic).
+- Godot: `GameBoard._toy_hands` follows `ToyHand.runEngine`: frame 1 until the first opening,
+  then `g<pushStep>` with the hand one frame per tick, left on frame 14 (never back to 1); the
+  simulation's toy hand reports `push_step` for it (display field only). Rolled rounds lay the
+  hands and their hidden boxes out from the feature state. Every set now has art, so
+  `flow_scene_check` tests the placeholder board only on a set whose pack is missing.
+- Results: gameplay-birthday-start nodes 388/388, SSIM 0.937 (ceiling 0.937), ΔE 5.0; all 19 cases
+  and tools/run_checks.sh (27 suites) pass.
+  Rolled rounds (six runs: Stage1, Stage2, Stage3) show the hands opening, reaching 0-3 cells and
+  retracting at tick 105-118 as in the reference (`birthday-toy-hands-open.png` and a reference
+  run stepped past the opening).
+Known gaps: no compare case past tick 105 (opening and push are checked against the reference
+by eye only); pushed robots and thrown bombs move as the snapshot gives them (no own display);
+the toy's `toyHandOpen` sound is the simulation's.

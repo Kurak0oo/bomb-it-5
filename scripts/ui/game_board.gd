@@ -20,6 +20,9 @@ extends RefCounted
 ## - `Spellbook.initDis` / `runEngine` / `signItemPosition` (Magic Library): `Art_Spellbook` at
 ##   30/32 in a container left at the board's origin, on the centre row's platform layer, and
 ##   its flip and warning signs from the round's spellbook state (`_spellbooks`);
+## - `ToyHand.setMc` / `runEngine` (Birthday Party): `Art_ToyHand_<Direction>` at 30/32 in its
+##   container on its cell's platform layer, stopped at 1; from its first opening on at the
+##   label `g<pushStep>` (frames 2-5) with its `hand` clip one frame per tick (`_toy_hands`);
 ## - `Box.brickExp` / `Box.countBrickExp`: a box that breaks swaps its clip for `brickExp`
 ##   (`Tool.CreateBoxExpMovie`), which plays; once it reaches `totalFrames - 1` the box's
 ##   Sprite leaves its row (`_mainContainer.removeChild(_container)`).
@@ -80,6 +83,8 @@ var outline_missing := true
 var _built: Array = []
 ## The spellbook's warning signs on the board: each {cell, class, linear, path}.
 var _signs: Array = []
+## The toy hands' open frames were sent to be resampled (`_toy_hands`).
+var _hands_prefetched := false
 
 
 func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"") -> void:
@@ -139,6 +144,7 @@ func build(snapshot: Dictionary, recorded: bool, all_rows := true) -> void:
 	for box: Dictionary in items.boxes:
 		_rows[int(box.cell[1])].append(box)
 	_features = items.features
+	_hands_prefetched = false
 	_tick = int(snapshot.get("tick", 0))
 	_built.clear()
 	# `AbstractMapSet.init`: the set's BackGround_<Set> bitmap beneath the grid (the screen's
@@ -216,6 +222,7 @@ func update(snapshot: Dictionary) -> void:
 	_portals()
 	_crocodiles(snapshot)
 	_spellbooks(snapshot)
+	_toy_hands(snapshot)
 
 
 ## `brickExp` at age `age` (frames since `Box.brickExp`): made with `new`, it shows its first
@@ -376,6 +383,48 @@ func _spellbook_signs(wanted: Array, flip: int) -> void:
 		_screen.set_node_art(sign.path, art, int(art.get("frame", 1)))
 
 
+## `ToyHand.runEngine`, display side. Closed until its first opening, the clip stays on frame 1
+## (`setMc`: `_mc.gotoAndStop(1)`). On opening, `_mc.gotoAndStop("g" + this._pushStep)` (labels
+## g0-g3 on frames 2-5) and `_handMc.gotoAndStop(1)`, then one hand frame per tick to its last
+## (14), where `_handMc.stop()` leaves it: the clip is never sent back to frame 1. The
+## simulation's toy hand (scripts/simulation/features/toy_hand.gd) gives the hand clip's frame
+## (`frame`, 0 before the first opening) and the label's step (`push_step`). The label's body
+## and its `hand` clip are drawn apart (record_screen.py sets `frames`), the hand as the clip's
+## child node over the body.
+func _toy_hands(snapshot: Dictionary) -> void:
+	# Each label's body and hand frames are resampled ahead (one image a tick once open).
+	if not _hands_prefetched:
+		_hands_prefetched = true
+		for feature: Dictionary in _features:
+			if not String(feature["class"]).begins_with("Art_ToyHand_"): continue
+			var labels: Dictionary = _art.get("frames", {}).get(String(feature["class"]), {})
+			for label in labels:
+				_screen.prefetch(labels[label].body)
+				for art in labels[label].get("parts", {}).get("/hand", {}).values(): _screen.prefetch(art)
+	var by_cell := {}
+	for state: Dictionary in snapshot.get("features", []):
+		if state.get("kind") == &"toy_hand": by_cell[Vector2i(state.cell)] = state
+	for feature: Dictionary in _features:
+		if not String(feature["class"]).begins_with("Art_ToyHand_") or not feature.has("path"): continue
+		var state: Dictionary = by_cell.get(Vector2i(int(feature.cell[0]), int(feature.cell[1])), {})
+		var hand := int(state.get("frame", 0))
+		if hand <= 0: continue
+		var label := int(state.get("push_step", 0)) + 2
+		var frames: Dictionary = _art.get("frames", {}).get(String(feature["class"]), {}).get(str(label), {})
+		if frames.is_empty(): continue
+		var shown := [label, hand]
+		if feature.get("shown", []) == shown: continue
+		feature.shown = shown
+		var clip := art_path(feature)
+		_screen.set_node_art(clip, frames.body, label)
+		var path := clip + "/hand"
+		if not feature.get("hand_added", false):
+			feature.hand_added = true
+			_screen.add_node(_entry(path, clip, feature_matrix(feature), "piece"))
+		var parts: Dictionary = frames.get("parts", {}).get("/hand", {})
+		_screen.set_node_art(path, parts.get(str(mini(hand, parts.size())), {}), hand)
+
+
 ## Add `item` as the last child of `layer` (`addChild`): its path is `@0#k` among the layer's
 ## children (renaming an only child `@0` to `@0#0`). `item.path` is set.
 func attach(layer: String, item: Dictionary, stage_matrix: Array, art: Dictionary = {}, role := "group", outline := false, frame := 0) -> void:
@@ -515,6 +564,16 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 	var placed := {}
 	for feature: Dictionary in set_data.features:
 		placed[String(feature["class"])] = feature
+	# The toy hands of the round's feature state, by cell: their class by direction
+	# (`ToyHand.setMc`); a direction the recorded round lacks takes another hand's placement.
+	var hands := {}
+	var hand_placed := {}
+	for feature: Dictionary in set_data.features:
+		if String(feature["class"]).begins_with("Art_ToyHand_"): hand_placed = feature
+	for state: Dictionary in snapshot.get("features", []):
+		if state.get("kind") != &"toy_hand": continue
+		var d := Vector2i(state.direction)
+		hands[Vector2i(state.cell)] = "Art_ToyHand_" + ("Up" if d == Vector2i.UP else "Down" if d == Vector2i.DOWN else "Left" if d == Vector2i.LEFT else "Right")
 	for y in int(size[1]):
 		for x in int(size[0]):
 			var cell := Vector2i(x, y)
@@ -524,6 +583,15 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 				# `getMidBox == 3` (the centre) shows `beginNum + 23`; `== 2` is a hidden box.
 				boxes.append({"cell": [x, y], "frame": begin + 23, "shown": cell == center and skin not in HIDDEN_CENTRE, "exist": false,
 					"loop_frames": centre_loops if cell == center else []})
+			elif hands.has(cell):
+				# `BirthdayPartyMapData.setData`: `toyHand_<direction>` sets a hidden box
+				# (`setMidBox` without `true`) and makes a ToyHand (`Art_ToyHand_<Direction>`).
+				boxes.append({"cell": [x, y], "frame": begin + 23, "shown": false, "exist": false})
+				var hand: Dictionary = placed.get(hands[cell], hand_placed)
+				var item_hand := {"cell": [x, y], "class": hands[cell], "loop_frame": null, "origin": [x, y]}
+				for key in ["node", "linear", "frame"]:
+					if hand.has(key): item_hand[key] = hand[key]
+				features.append(item_hand)
 			elif kind == &"solid" and variants.has(cell):
 				boxes.append({"cell": [x, y], "frame": begin - 1 + int(variants[cell]), "shown": true, "exist": false})
 			elif kind == &"soft":

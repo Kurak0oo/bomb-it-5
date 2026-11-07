@@ -192,27 +192,31 @@ func _run() -> void:
 
 	# A stage set whose board art is not in the pack: the placeholder board goes over the
 	# floor art and under the row layers; the effects layer stays over every row. (The first
-	# set without a `board.sets` entry, so no art: none of the screen's recorded sets.)
+	# set without a `board.sets` entry or without its pack, so no art. Once every set is
+	# recorded and its pack is here, there is none: the effects layer is checked on Zoo.)
 	var bare: StringName = &""
 	for id: StringName in StageSets.ORDER:
-		if id != &"cinema" and not SwfScreen.layout_of(&"game").board.get("sets", {}).has(String(id)) and bare == &"": bare = id
+		if id == &"cinema" or bare != &"": continue
+		if not SwfScreen.layout_of(&"game").board.get("sets", {}).has(String(id)) or not FileAccess.file_exists(GameBoard.SET_PACK % id):
+			bare = id
 	app.session.mode = &"arcade"
-	app.session.stage = bare
+	app.session.stage = bare if bare != &"" else &"zoo"
 	app.start_session()
 	await process_frame
 	app.game.set_process(false)
-	var game_swf = app.screen.get_child(0)
-	var first_row: Node = game_swf.node_for(game_swf.layout.board.rows[0])
-	var board_view: Node = app.game.swf_board_view
-	_expect(is_instance_valid(board_view) and board_view.get_parent() == first_row.get_parent()
-		and board_view.get_index() == first_row.get_index() - 1 and board_view.get_index() > 0,
-		"a %s board without art is drawn just under the first row, over the floor art" % bare)
+	if bare != &"":
+		var game_swf = app.screen.get_child(0)
+		var first_row: Node = game_swf.node_for(game_swf.layout.board.rows[0])
+		var board_view: Node = app.game.swf_board_view
+		_expect(is_instance_valid(board_view) and board_view.get_parent() == first_row.get_parent()
+			and board_view.get_index() == first_row.get_index() - 1 and board_view.get_index() > 0,
+			"a %s board without art is drawn just under the first row, over the floor art" % bare)
 	_expect(app.game.swf_view.get_index() == app.game.swf_view.get_parent().get_child_count() - 1,
 		"weapon and protection effects are drawn over every row")
 	# A stage set whose board art is in the pack (record_screen.py sets) draws its own floor,
 	# boxes and features (Zoo's crocodiles, Candy Factory's machine and belt, Luxury Stores'
-	# shown centre, Magic Library's spellbook): no placeholder board.
-	for set_id: StringName in [&"zoo", &"candy_factory", &"luxury_stores", &"magic_library"]:
+	# shown centre, Magic Library's spellbook, Birthday Party's toy hands): no placeholder board.
+	for set_id: StringName in [&"zoo", &"candy_factory", &"luxury_stores", &"magic_library", &"birthday_party"]:
 		if not FileAccess.file_exists(GameBoard.SET_PACK % set_id): continue
 		app.show_main_menu()
 		await process_frame
@@ -237,6 +241,12 @@ func _run() -> void:
 				centre.append_array(row.filter(func(b): return b.shown and int(b.frame) == 97 + 23))
 			_expect(centre.size() == 1 and set_board._art.get("tiles", {}).has("120|0"),
 				"a rolled Luxury Stores board shows its centre (frame 120) from the pack (%d)" % centre.size())
+		if set_id == &"birthday_party":
+			# Each toy hand of the rolled round (none on BirthdayPartyStage3) is its clip.
+			var hands: Array = app.game.get_snapshot().get("features", []).filter(func(f): return f.kind == &"toy_hand")
+			var clips: Array = set_board._features.filter(func(f): return String(f["class"]).begins_with("Art_ToyHand_"))
+			_expect(clips.size() == hands.size() and clips.all(func(f): return f.has("node")),
+				"a rolled Birthday Party board draws each toy hand from its clip (%d hands)" % hands.size())
 	app.queue_free()
 	await process_frame
 	print("%s: %d flow scene checks" % ["PASS" if failures == 0 else "FAIL", checks])
