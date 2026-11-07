@@ -4,6 +4,8 @@ extends SceneTree
 
 const Session = preload("res://scripts/session.gd")
 const GameBoard = preload("res://scripts/ui/game_board.gd")
+const StageSets = preload("res://scripts/simulation/stage_sets.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 var failures := 0
 var checks := 0
 var app: Control
@@ -189,10 +191,13 @@ func _run() -> void:
 	_expect(app.current == &"menu", "MAIN MENU on the pause screen leaves a Battle Royale level too")
 
 	# A stage set whose board art is not in the pack: the placeholder board goes over the
-	# floor art and under the row layers; the effects layer stays over every row.
-	# (Magic Library: no set's art under original/screens/game/sets/ but Zoo's.)
+	# floor art and under the row layers; the effects layer stays over every row. (The first
+	# set without a `board.sets` entry, so no art: none of the screen's recorded sets.)
+	var bare: StringName = &""
+	for id: StringName in StageSets.ORDER:
+		if id != &"cinema" and not SwfScreen.layout_of(&"game").board.get("sets", {}).has(String(id)) and bare == &"": bare = id
 	app.session.mode = &"arcade"
-	app.session.stage = &"magic_library"
+	app.session.stage = bare
 	app.start_session()
 	await process_frame
 	app.game.set_process(false)
@@ -201,12 +206,12 @@ func _run() -> void:
 	var board_view: Node = app.game.swf_board_view
 	_expect(is_instance_valid(board_view) and board_view.get_parent() == first_row.get_parent()
 		and board_view.get_index() == first_row.get_index() - 1 and board_view.get_index() > 0,
-		"a Magic Library board is drawn just under the first row, over the floor art")
+		"a %s board without art is drawn just under the first row, over the floor art" % bare)
 	_expect(app.game.swf_view.get_index() == app.game.swf_view.get_parent().get_child_count() - 1,
 		"weapon and protection effects are drawn over every row")
 	# A stage set whose board art is in the pack (record_screen.py sets) draws its own floor,
 	# boxes and features (Zoo's crocodiles, Candy Factory's machine and belt): no placeholder board.
-	for set_id: StringName in [&"zoo", &"candy_factory"]:
+	for set_id: StringName in [&"zoo", &"candy_factory", &"magic_library"]:
 		if not FileAccess.file_exists(GameBoard.SET_PACK % set_id): continue
 		app.show_main_menu()
 		await process_frame
@@ -222,10 +227,52 @@ func _run() -> void:
 			var classes: Array = set_board._features.map(func(f): return f["class"])
 			_expect(classes.has("Art_CandyMachine") and classes.has("Art_ConveyorBelt_1"),
 				"a rolled Candy Factory board has the candy machine and the belt (%s)" % [classes])
+		if set_id == &"magic_library":
+			_check_spellbook(app, set_board)
 	app.queue_free()
 	await process_frame
 	print("%s: %d flow scene checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
+
+
+## A rolled Magic Library board shows the spellbook (`Spellbook.initDis`) and follows its flip
+## (`Spellbook.runEngine`) from the round's spellbook state, with the signs on the targets'
+## rows as the reference player showed them (a second child of a row's platform layer renames
+## the spellbook's container `@0` to `@0#0`; the signs leave on frame 69).
+func _check_spellbook(app: Node, board: RefCounted) -> void:
+	var book: Array = board._features.filter(func(f): return f["class"] == "Art_Spellbook")
+	_expect(book.size() == 1, "a rolled Magic Library board has the spellbook")
+	if book.size() != 1: return
+	var screen: Node2D = app.screen.get_child(0)
+	var snapshot: Dictionary = app.game.get_snapshot()
+	var state: Dictionary = {}
+	for f: Dictionary in snapshot.get("features", []):
+		if f.kind == &"spellbook": state = f
+	_expect(not state.is_empty() and Vector2i(state.cell) == Vector2i(book[0].cell[0], book[0].cell[1]),
+		"the spellbook stands on the round's spellbook cell")
+	if state.is_empty(): return
+	var at: Vector2i = state.cell
+	var clock := {"tick": int(snapshot.tick)}  # (a lambda captures locals by value)
+	var layer: String = board._board.layers.platform[at.y]
+	var up := Vector2i(1, at.y - 2)
+	var step := func(flipping: bool, frame: int, closed: int, signs: Array) -> void:
+		clock.tick += 1
+		var s := snapshot.duplicate()
+		s.tick = clock.tick
+		s.features = [{"kind": &"spellbook", "cell": at, "flipping": flipping, "frame": frame, "closed": closed, "signs": signs}]
+		board.update(s)
+	var signs := [{"cell": up, "kind": &"bomb"}, {"cell": Vector2i(at.x + 4, at.y), "kind": &"pickup"}]
+	step.call(true, 2, 0, signs)
+	_expect(board.art_path(book[0]) == layer + "/@0#0/@0" and screen.by_path.has(layer + "/@0#1"),
+		"on frame 2 a sign joins the spellbook's row (%s)" % board.art_path(book[0]))
+	_expect(screen.by_path.has(String(board._board.layers.platform[up.y]) + "/@0"), "the bomb's sign is on its own row")
+	_expect(screen.by_path.has(board.art_path(book[0]) + "/@42") and int(screen.by_path[board.art_path(book[0])].get_meta("swf_frame", 0)) == 2,
+		"frame 2 shows its body and the loop carried on over it")
+	step.call(true, 69 - 1, 0, signs)
+	_expect(not screen.by_path.has(board.art_path(book[0]) + "/@42"), "the loop is gone by frame 68")
+	step.call(false, 69, 0, [])
+	_expect(board.art_path(book[0]) == layer + "/@0/@0" and not screen.by_path.has(layer + "/@0#1"),
+		"deleSign takes the signs off on frame 69")
 
 
 func _lose_level(game: Node2D) -> void:

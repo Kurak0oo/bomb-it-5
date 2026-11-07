@@ -1290,6 +1290,12 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
 
 # ------------------------------------------------------------------ stage sets
 
+# Clips a set's features make while the round runs, made playing and rendered at each age
+# (`played`): Spellbook.signItemPosition's warning signs
+# (`Art_Sign_Red` for a bomb, `Art_Sign_Blue` otherwise).
+RUNTIME_CLASSES = {'magic_library': ('Art_Sign_Blue', 'Art_Sign_Red')}
+
+
 def record_sets(_case_name, player_path, swf, only=None):
     """Each other stage set's board art on the gameplay screen (layout `board.sets`, after
     art), into original/screens/game/sets/<set>/manifest.json, from that set's own round's
@@ -1301,9 +1307,12 @@ def record_sets(_case_name, player_path, swf, only=None):
     - `played`: each feature class made by its own class (`symbol`) at frame 1 and rendered at
       every frame its nested loops play through (Crocodile.setMc: `Art_Crocodile` stopped at
       1, its water loop playing), by the nested loop's frame;
-    - `frames`: each other frame of a feature class (Crocodile: frame 2, mouth open), its
-      body without its nested clips, and each nested clip alone at each of its frames
-      (`mouthOpen_mc`, sent one frame per tick by `Crocodile.runEngine`; the water loop).
+    - `frames`: each other frame of a feature class (Crocodile: frame 2, mouth open;
+      Art_Spellbook: its flip, frames 2-69), its body without its nested clips, and each
+      nested clip alone at each of its frames (`mouthOpen_mc`, sent one frame per tick by
+      `Crocodile.runEngine`; the water loop). The clips a feature makes at run time
+      (`RUNTIME_CLASSES`: the spellbook's warning signs) are made playing and kept in
+      `played` by age, each with the root's frame.
     Also the player's own 3× frame of the capture (the comparison's resampling ceiling)."""
     layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
     board = layout['board']
@@ -1354,6 +1363,25 @@ def record_sets(_case_name, player_path, swf, only=None):
                 stored = _store(p, path, target, tmp, seen, frame, hide)
                 return dict(stored, at=at) if stored else None
 
+            # A run-time clip plays from its making (`Attach.getMovieClip`, never stopped): made
+            # playing (`p`), it is rendered at each age until its timeline holds (`played`, by
+            # age; each image with the root's frame).
+            for cls in RUNTIME_CLASSES.get(set_id, ()):
+                p.command(f'symbol {host} {cls} refsym {x} {y} p')
+                total = tree()['']['total_frames']
+                ages = {}
+                for age in range(total + 1):
+                    nodes = tree()
+                    if '' not in nodes:
+                        break
+                    stored = store()
+                    if stored:
+                        stored['frame'] = nodes[''].get('frame')
+                        ages[str(age)] = stored
+                    p.command('step 1')
+                if '' in tree():
+                    p.command(f'unsymbol {name}')
+                out['played'][cls] = ages
             for cls in sorted({f['class'] for f in entry['features']}):
                 p.command(f'symbol {host} {cls} refsym {x} {y} 1')
                 nodes = tree()

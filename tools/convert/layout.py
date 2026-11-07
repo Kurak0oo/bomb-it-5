@@ -197,9 +197,10 @@ SCREENS = {
                  'layers': ('platform', 'box', 'bomb', 'robot', 'effect'),
                  # Classes on the platform layer that are part of the board (Portal.setMc
                  # `Art_Portal_<colorId>`, Crocodile.setMc `Art_Crocodile`, ConveyorBelt.initDis
-                 # `Art_CandyMachine` and initBeltView `Art_ConveyorBelt_1`); anything else
+                 # `Art_CandyMachine` and initBeltView `Art_ConveyorBelt_1`, Spellbook.initDis
+                 # `Art_Spellbook`); anything else
                  # there (a blast's flames) moves.
-                 'features': ('Art_Portal_', 'Art_Crocodile', 'Art_CandyMachine', 'Art_ConveyorBelt_'),
+                 'features': ('Art_Portal_', 'Art_Crocodile', 'Art_CandyMachine', 'Art_ConveyorBelt_', 'Art_Spellbook'),
                  # The stage set of the screen's own capture (StageSets id). CinemaMapData:
                  # `beginNum` 49; MapMaster.createRow draws every Cinema box from `_brick5`
                  # frames beginNum .. beginNum + 23 (the wall and centre at +23).
@@ -209,9 +210,10 @@ SCREENS = {
                  # board geometry, its own floor (`AbstractMapSet.init`'s BackGround_<Set>
                  # bitmap, the container's children before the rows), boxes and features
                  # (`_set_board`; art by record_screen.py `sets`).
-                 # ZooMapData: `beginNum` 73; CandyFactoryMapData: 25.
+                 # ZooMapData: `beginNum` 73; CandyFactoryMapData: 25; MagicLibraryMapData: 121.
                  'sets': {'zoo': {'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
-                          'candy_factory': {'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25}}},
+                          'candy_factory': {'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
+                          'magic_library': {'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121}}},
              'interactive': {'pause': 'pause'},
              'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),
              'live_text': ('currentLevel', 'totalLevel', 'time', 'lifeTf', 'bombTf', 'powerTf', 'speedTf',
@@ -783,8 +785,6 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
                               'frame': brick['frame'] if brick else None, 'shown': brick is not None,
                               'exist': exist, 'brick': brick['path'] if brick else None, 'loop_frames': loops})
             elif role == 'platform' and any(c.startswith(tuple(how['features'])) for c in classes):
-                # Its own loop (the portal's glow, a nested clip that plays from map load).
-                loop = next((n for n in tree[1:] if n.get('total_frames', 1) > 1), None)
                 # The feature's clip: where it stands on the board (its cell) and its scale in
                 # the container (ConveyorBelt: `scaleX = scaleY = 30 / 32`). The layer child is
                 # its AbstractObject `_container` (portals, crocodiles: at the clip's cell) or the
@@ -793,6 +793,10 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
                 # `_xN * GRID_WIDTH` inside it (`ConveyorBelt.initDis`): its `origin` is the
                 # container's cell and `node` the clip under it.
                 clip = next(n for n in tree if (n.get('class') or '').startswith(tuple(how['features'])))
+                # Its own loop (the portal's glow, a nested clip that plays from map load), under
+                # the clip: the clip's own frames are the AS3's to set (Spellbook.runEngine).
+                loop = next((n for n in tree if n['path'].startswith(clip['path'] + '/')
+                             and n.get('total_frames', 1) > 1), None)
                 clip_local = _local_point(cm, clip['stage_matrix'][4], clip['stage_matrix'][5])
                 linear = [round(clip['stage_matrix'][k] / cm[0], 4) for k in range(4)]
                 features.append({'path': child, 'row': y, 'local': [round(clip_local[0], 3), round(clip_local[1], 3)],
@@ -951,8 +955,9 @@ def _match_template(name, boxes, features, begin):
     soft = {tuple(b['cell']) for b in boxes if b['exist']}
     portals = {tuple(f['cell']) for f in features if f['class'].startswith(('Art_Portal_', 'Art_Crocodile'))}
     # CandyFactoryMapData.setData: the candy machine on `centerProp`, the belt's clip on the
-    # first cell of the track (`belt_<n>` sorted by n).
-    machine = {tuple(f['cell']) for f in features if f['class'] == 'Art_CandyMachine'}
+    # first cell of the track (`belt_<n>` sorted by n). MagicLibraryMapData.setData: the
+    # spellbook on `centerProp` (`new Spellbook(game, x, y)`).
+    machine = {tuple(f['cell']) for f in features if f['class'] in ('Art_CandyMachine', 'Art_Spellbook')}
     belt = {tuple(f['cell']) for f in features if f['class'].startswith('Art_ConveyorBelt_')}
     found = []
     for layout_name, layout in sorted(layouts.items()):

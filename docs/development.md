@@ -502,3 +502,31 @@ cell; `Art_Prop_Disappear` at the belt's end is not drawn; the loops' phase in r
 the recorded one. Birthday Party needs its toy hands' clips and throw/push display; Luxury
 Stores only the case, set entry and art pass; Magic Library its spellbook clip and a hidden
 centre (already ported).
+
+Magic Library slice, 2026-11-07 (owner to review):
+- Case `gameplay-library-start`: as the Zoo case with `caveStages` (Magic Library) picked, the
+  centre of its bounds in the dropdown golden; 413 draws before the round.
+- `board.sets.magic_library` (begin_num 121, template MagicLibraryStage3): `Art_Spellbook` is a
+  feature like the candy machine (`Spellbook.initDis`: at 30/32 in a container left at the
+  board's origin, on the centre row's platform layer); a feature's `loop_frame` is now its
+  nested loop's under the clip (the book's own frame is the AS3's to set; unchanged for the
+  other sets).
+- Art: `record_screen.py sets --sets magic_library`: floor, 48 tiles, Art_Spellbook frame 1 by its
+  50-frame loop (`@42`), frames 2-69 (the loop apart on 2-9), and the signs (`RUNTIME_CLASSES`:
+  `Art_Sign_Red`/`_Blue` made playing, 65 ages). Robots 5 and 6's round looks were rendered and
+  added to actors.json.
+- Recorded in the reference player (edition-5-magic-library.md): the flip runs ticks 451-518,
+  the loop carries on through frames 2-9 and restarts when the book is back on 1; signs show
+  frames 1, 1, 2 … 64 and leave on frame 69, after the drop.
+- Godot: `GameBoard._spellbooks` shows the book's frame from the simulation's spellbook state
+  (new display fields: `closed`, and `signs` kept until frame 69 as `deleSign` does) and the
+  signs on their rows' platform layers (`tests/flow_scene_check.gd` checks the paths).
+- Results: gameplay-library-start nodes 385/385, SSIM 0.905 (ceiling 0.906), ΔE 5.0; all 17 cases and
+  tools/run_checks.sh (27 suites) pass.
+  Rolled rounds (nine runs, and three stopped at flip frames 6, 21, 40) show the book, its
+  glow, the pages turning and red/blue signs as in the reference capture and
+  `docs/evidence/reference-2026-10-21/features/magic-spellbook-signs.png`.
+Known gaps: no compare case runs to a flip (checked against the reference player's display
+dump, not frame-matched pixels); the dropped items' fade-in (`itemsDrop`: `TweenLite.from(mc,
+1, {alpha: 0})`) is not checked; the shared actors pack is rewritten by each set's actors pass,
+so a pass must keep every set's looks (`board.sets` of all branches).

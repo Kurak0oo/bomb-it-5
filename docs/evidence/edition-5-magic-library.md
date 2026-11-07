@@ -31,7 +31,26 @@ through the bombs it makes ([spellbook bombs](reference-2026-10-21/features/magi
   one; corrected.
 - Vehicles: horse or moto. `lavaOrgan` is never placed by any recorded layout.
 
+## Display (2026-11-07, checkpoint 5)
+
+Observed in the reference player on the `gameplay-library-start` round (seed 42, Normal, AI
+stopped), one `display` dump per tick after the capture:
+
+- `Art_Spellbook` (69 frames, at 30/32 in its container on the centre row's platform layer,
+  `Spellbook.initDis`) stays on frame 1 to tick 450; its nested loop `@42` (50 frames) plays
+  from map load (frame 11 at the capture, 1 at tick 440). Ticks 451–518 show frames 2–69,
+  one per tick; `@42` carries on over frames 2–9 (12 … 19) and is gone from frame 10. On tick
+  519 the book is back on frame 1 and `@42` starts over at frame 1.
+- Signs (`signItemPosition`): `Art_Sign_Red` (bomb) and `Art_Sign_Blue` (pickup), 64 frames,
+  appear on tick 451 as the last child of their row's platform layer (the spellbook's
+  container becomes `@0#0` when one joins its row), show frame 1 on 451 and 452, then one
+  frame per tick, hold 64 from tick 515, and are gone on tick 518 (`deleSign` on frame 69),
+  so they stay after the drop on frame 32. The simulation's `signs` used to end at frame 32;
+  it now follows `deleSign`.
+
 ## Port
 
-`scripts/simulation/features/spellbook.gd`; the warning signs are drawn by the game view.
-`tests/stage_features_check.gd` covers each rule.
+`scripts/simulation/features/spellbook.gd`; `tests/stage_features_check.gd` covers each rule.
+On the gameplay screen `GameBoard._spellbooks` draws the book and its signs from their clips
+(record_screen.py `sets`), `tests/flow_scene_check.gd` checks the paths above; without the
+set's art the placeholder layer draws them.

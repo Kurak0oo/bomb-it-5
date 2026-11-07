@@ -80,6 +80,9 @@ func blocked_cells() -> Array[Vector2i]:
 	return []
 
 
+## For the view: `frame` is the clip's frame while it flips (`_mc.gotoAndStop(_mc.currentFrame + 1)`)
+## and `closed` the ticks since it last closed (`_currFrame`); the signs stay until the flip's
+## last frame (`deleSign`, observed: on the board from the book's frame 2 to 68).
 func public_state() -> Dictionary:
-	return {"kind": &"spellbook", "cell": cell, "flipping": flipping, "frame": flip_frame,
-		"signs": targets.duplicate(true) if flipping and flip_frame < DROP_FRAME else []}
+	return {"kind": &"spellbook", "cell": cell, "flipping": flipping, "frame": flip_frame, "closed": current_frame,
+		"signs": targets.duplicate(true) if flipping else []}

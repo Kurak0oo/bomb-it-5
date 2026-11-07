@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-library-start",
+ "case_sha256": "12f3026578d983d130f2130155c34e3f06c61e9bd69a4a5f330adae83172e32a",
+ "fps": 35.0,
+ "frames": {
+  "library-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

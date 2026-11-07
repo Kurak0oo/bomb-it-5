@@ -5,7 +5,8 @@ extends SceneTree
 ## boxes, frames, kinds, display order and features as the original's display list, and
 ## place each cell where the original placed its Sprite. (A hold cell's Sprite has no clip,
 ## so no frame to compare.) Likewise for every other stage set recorded on the screen
-## (`board.sets`: Zoo, its crocodiles as features; Candy Factory, its machine and belt).
+## (`board.sets`: Zoo, its crocodiles as features; Candy Factory, its machine and belt; Magic
+## Library, its spellbook).
 
 const GameBoard = preload("res://scripts/ui/game_board.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")

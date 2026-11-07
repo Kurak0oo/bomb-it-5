@@ -17,6 +17,9 @@ extends RefCounted
 ##   container left at the board's origin, on the centre row's platform layer, and
 ##   `Art_ConveyorBelt_1` at 30/32 on row 0's platform layer at the track's first cell; each
 ##   plays its own nested loops from map load (the machine's sweets, the belt's segments);
+## - `Spellbook.initDis` / `runEngine` / `signItemPosition` (Magic Library): `Art_Spellbook` at
+##   30/32 in a container left at the board's origin, on the centre row's platform layer, and
+##   its flip and warning signs from the round's spellbook state (`_spellbooks`);
 ## - `Box.brickExp` / `Box.countBrickExp`: a box that breaks swaps its clip for `brickExp`
 ##   (`Tool.CreateBoxExpMovie`), which plays; once it reaches `totalFrames - 1` the box's
 ##   Sprite leaves its row (`_mainContainer.removeChild(_container)`).
@@ -44,7 +47,13 @@ const SET_PACK := "res://original/screens/game/sets/%s/manifest.json"
 ## CandyFactoryMapData.as:109 (the candy machine stands there), MagicLibraryMapData.as:106.
 const HIDDEN_CENTRE: Array[StringName] = [&"candy_factory", &"magic_library"]
 ## Features a set's pack plays by their nested loops' frame (record_screen.py sets `played`).
-const PLAYED_FEATURES := ["Art_Portal", "Art_Crocodile", "Art_ConveyorBelt_", "Art_CandyMachine"]
+const PLAYED_FEATURES := ["Art_Portal", "Art_Crocodile", "Art_ConveyorBelt_", "Art_CandyMachine", "Art_Spellbook"]
+## `Spellbook`: FLIP_DELAY (closed ticks before a flip); `signItemPosition`'s sign classes and
+## their scale (`_loc6_.scaleX = _loc6_.scaleY = 30 / 32`).
+const FLIP_DELAY := 450
+const SIGN_BOMB := "Art_Sign_Red"
+const SIGN_OTHER := "Art_Sign_Blue"
+const SIGN_SCALE := 30.0 / 32.0
 
 var _screen: Node2D
 var _board: Dictionary
@@ -69,6 +78,8 @@ var _portal_loop: Dictionary = {}
 var outline_missing := true
 ## Rows made so far (`show_row`).
 var _built: Array = []
+## The spellbook's warning signs on the board: each {cell, class, linear, path}.
+var _signs: Array = []
 
 
 func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"") -> void:
@@ -148,13 +159,11 @@ func build(snapshot: Dictionary, recorded: bool, all_rows := true) -> void:
 			# container at xPos 0, the machine at `_xN * GRID_WIDTH`).
 			var origin: Array = feature.origin
 			attach(layer, feature, cell_matrix(Vector2(origin[0], origin[1])))
-			feature.art_path = feature.path + String(feature.node)
-			var entry := _entry(feature.art_path, feature.path, at, "piece")
+			var entry := _entry(art_path(feature), feature.path, at, "piece")
 			entry.frame = int(feature.get("frame", 0))
 			_screen.add_node(entry, art)
 		else:
 			attach(layer, feature, at, art, "piece", art.is_empty(), int(feature.get("frame", 0)))
-			feature.art_path = feature.path
 	if all_rows:
 		for y in _rows.size(): show_row(y)
 	_portals()
@@ -206,6 +215,7 @@ func update(snapshot: Dictionary) -> void:
 				_breaking.append(breaking)
 	_portals()
 	_crocodiles(snapshot)
+	_spellbooks(snapshot)
 
 
 ## `brickExp` at age `age` (frames since `Box.brickExp`): made with `new`, it shows its first
@@ -244,7 +254,7 @@ func _portals() -> void:
 		if feature.get("own_clock", false): continue  # a crocodile past its first opening (_crocodiles)
 		var frame := posmod(int(feature.loop_frame) - 1 + _tick, loop.size()) + 1
 		var art: Dictionary = loop.get(frame, {})
-		if not art.is_empty(): _screen.set_node_art(feature.get("art_path", feature.path), art)
+		if not art.is_empty(): _screen.set_node_art(art_path(feature), art)
 
 
 ## `Crocodile.runEngine`, display side. Closed, the clip stays on frame 1 (`_mc.gotoAndStop(1)`),
@@ -291,6 +301,81 @@ func _crocodiles(snapshot: Dictionary) -> void:
 			if not art.is_empty(): _screen.set_node_art(feature.path, art, 1)
 
 
+## `Spellbook.runEngine`, display side. Closed, the clip stays on frame 1 (`_mc.gotoAndStop(1)`),
+## whose nested loop (`/@42`, 50 frames) plays on its own from map load (`_portals`); after
+## FLIP_DELAY closed ticks it steps one frame per tick (`gotoAndStop(_mc.currentFrame + 1)`)
+## to its last (69), then back to 1. Observed in the reference player: the loop carries on
+## through frames 2-9 (rendered apart, record_screen.py sets `frames`) and is gone from 10;
+## frame 1 made again starts it over (`own_clock`). The simulation's spellbook gives the
+## clip's frame while flipping and the ticks since it closed (scripts/simulation/features/spellbook.gd).
+## `signItemPosition` (frame 2) puts a sign per target on the target row's platform layer
+## (`game.getDisArr(y).getChildAt(0).addChild`), at 30/32 on the cell: `Art_Sign_Red` for a bomb,
+## `Art_Sign_Blue` otherwise. Each plays from its frame 1 (shown twice, as made during the
+## frame) and stops on its last; `deleSign` takes them off on frame 69.
+func _spellbooks(snapshot: Dictionary) -> void:
+	var frames: Dictionary = _art.get("frames", {}).get("Art_Spellbook", {})
+	var closed_loop: Dictionary = _portal_loop.get("Art_Spellbook", {})
+	for state: Dictionary in snapshot.get("features", []):
+		if state.get("kind") != &"spellbook": continue
+		var flipping: bool = state.get("flipping", false)
+		var flip: int = int(state.get("frame", 0))
+		var closed: int = int(state.get("closed", 0))
+		var last := frames.size() + 1
+		# On the flip's last tick the clip is still on its last frame (`deleSign`, then CLOSE).
+		var frame := flip if flipping else (last if closed == 0 and flip == last else 1)
+		if has_art(): _spellbook_signs(state.get("signs", []) if flipping else [], flip)
+		for feature: Dictionary in _features:
+			if feature["class"] != "Art_Spellbook" or not feature.has("path") or frames.is_empty(): continue
+			if Vector2i(int(feature.cell[0]), int(feature.cell[1])) != Vector2i(state.cell): continue
+			var path := art_path(feature)
+			# The nested loop's frame: from map load (`_portals`) until the first flip ends, then
+			# from the clip's return to frame 1, carried on through the flip.
+			var count := closed if not flipping else FLIP_DELAY + flip - 1
+			var size := maxi(1, closed_loop.size())
+			var phase := posmod(count - 1, size) + 1 if feature.get("own_clock", false) \
+				else posmod(int(feature.get("loop_frame", 1)) - 1 + _tick, size) + 1
+			var shown: Dictionary = frames.get(str(frame), {})
+			for part: String in feature.get("parts", []):
+				if not shown.get("parts", {}).has(part): _screen.remove_node(path + part)
+			feature.parts = (shown.get("order", []) as Array).duplicate()
+			if frame == 1:
+				if feature.get("own_clock", false) and closed_loop.has(phase):
+					_screen.set_node_art(path, closed_loop[phase], 1)
+				continue
+			if frame == last and not flipping: feature.own_clock = true
+			_screen.set_node_art(path, shown.get("body", {}), frame)
+			for part: String in feature.parts:
+				if not _screen.by_path.has(path + part):
+					_screen.add_node(_entry(path + part, path, feature_matrix(feature), "piece"))
+				_screen.set_node_art(path + part, shown.parts[part].get(str(phase), {}), phase)
+
+
+## The spellbook's signs (`signItemPosition` / `deleSign`) at flip frame `flip`.
+func _spellbook_signs(wanted: Array, flip: int) -> void:
+	for k in range(_signs.size() - 1, -1, -1):
+		var sign: Dictionary = _signs[k]
+		if wanted.any(func(w): return Vector2i(w.cell) == Vector2i(int(sign.cell[0]), int(sign.cell[1]))): continue
+		detach(_board.layers.platform[int(sign.cell[1])], sign)
+		_signs.remove_at(k)
+	for target: Dictionary in wanted:
+		var cell := Vector2i(target.cell)
+		var sign: Dictionary = {}
+		for s: Dictionary in _signs:
+			if Vector2i(int(s.cell[0]), int(s.cell[1])) == cell: sign = s
+		if sign.is_empty():
+			sign = {"cell": [cell.x, cell.y], "class": SIGN_BOMB if target.get("kind") == &"bomb" else SIGN_OTHER,
+				"linear": [SIGN_SCALE, 0.0, 0.0, SIGN_SCALE]}
+			attach(_board.layers.platform[cell.y], sign, feature_matrix(sign), {}, "piece")
+			_signs.append(sign)
+		# Made on the book's frame 2, it plays from there: the pack's images by age since
+		# its making (record_screen.py sets, RUNTIME_CLASSES), held on the last.
+		var ages: Dictionary = _art.get("played", {}).get(sign["class"], {})
+		if ages.is_empty(): continue
+		var age := clampi(flip - 2, 0, ages.size() - 1)
+		var art: Dictionary = ages.get(str(age), {})
+		_screen.set_node_art(sign.path, art, int(art.get("frame", 1)))
+
+
 ## Add `item` as the last child of `layer` (`addChild`): its path is `@0#k` among the layer's
 ## children (renaming an only child `@0` to `@0#0`). `item.path` is set.
 func attach(layer: String, item: Dictionary, stage_matrix: Array, art: Dictionary = {}, role := "group", outline := false, frame := 0) -> void:
@@ -323,6 +408,13 @@ func _repath(layer: String) -> void:
 		if list[k].path != path:
 			_screen.rename_node(list[k].path, path)
 			list[k].path = path
+
+
+## The node that draws a feature's clip: its layer child, or the clip under it (`node`) when
+## the child is a container left elsewhere. (Read from `path` each time: a sibling added to
+## the layer renames the child, `_repath`.)
+static func art_path(feature: Dictionary) -> String:
+	return String(feature.path) + String(feature.get("node", ""))
 
 
 ## Where a feature's clip lies on the stage: its cell's matrix, scaled as the AS3 scales the
@@ -464,4 +556,13 @@ func _items_of(snapshot: Dictionary) -> Dictionary:
 			for key in ["linear", "frame"]:
 				if belt.has(key): item_belt[key] = belt[key]
 			features.append(item_belt)
+	# `MagicLibraryMapData.setData` / `setDataByPacMan`: `centerProp` makes a Spellbook
+	# (`initDis`: `Art_Spellbook` at 30/32 at `_xN * GRID_WIDTH` in its container, on the centre
+	# row's platform layer), stopped on frame 1.
+	if skin == &"magic_library" and center is Vector2i:
+		var book: Dictionary = placed.get("Art_Spellbook", {})
+		var item_book := {"cell": [center.x, center.y], "class": "Art_Spellbook", "loop_frame": loop_frames.get("Art_Spellbook")}
+		for key in ["origin", "node", "linear", "frame"]:
+			if book.has(key): item_book[key] = book[key]
+		features.append(item_book)
 	return {"boxes": boxes, "features": features}
