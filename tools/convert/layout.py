@@ -210,9 +210,11 @@ SCREENS = {
                  # board geometry, its own floor (`AbstractMapSet.init`'s BackGround_<Set>
                  # bitmap, the container's children before the rows), boxes and features
                  # (`_set_board`; art by record_screen.py `sets`).
-                 # ZooMapData: `beginNum` 73; CandyFactoryMapData: 25; MagicLibraryMapData: 121.
+                 # ZooMapData: `beginNum` 73; CandyFactoryMapData: 25; LuxuryStoresMapData: 97;
+                 # MagicLibraryMapData: 121.
                  'sets': {'zoo': {'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
                           'candy_factory': {'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
+                          'luxury_stores': {'golden': ('gameplay-luxury-start', 'luxury-start'), 'begin_num': 97},
                           'magic_library': {'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121}}},
              'interactive': {'pause': 'pause'},
              'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),

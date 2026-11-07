@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-luxury-start",
+ "case_sha256": "21a85319c8a26e8132e1eca82f11924fa2d5e1a62000957f39ee53e968908db5",
+ "fps": 35.0,
+ "frames": {
+  "luxury-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

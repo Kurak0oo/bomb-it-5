@@ -210,8 +210,9 @@ func _run() -> void:
 	_expect(app.game.swf_view.get_index() == app.game.swf_view.get_parent().get_child_count() - 1,
 		"weapon and protection effects are drawn over every row")
 	# A stage set whose board art is in the pack (record_screen.py sets) draws its own floor,
-	# boxes and features (Zoo's crocodiles, Candy Factory's machine and belt): no placeholder board.
-	for set_id: StringName in [&"zoo", &"candy_factory", &"magic_library"]:
+	# boxes and features (Zoo's crocodiles, Candy Factory's machine and belt, Luxury Stores'
+	# shown centre, Magic Library's spellbook): no placeholder board.
+	for set_id: StringName in [&"zoo", &"candy_factory", &"luxury_stores", &"magic_library"]:
 		if not FileAccess.file_exists(GameBoard.SET_PACK % set_id): continue
 		app.show_main_menu()
 		await process_frame
@@ -229,6 +230,13 @@ func _run() -> void:
 				"a rolled Candy Factory board has the candy machine and the belt (%s)" % [classes])
 		if set_id == &"magic_library":
 			_check_spellbook(app, set_board)
+		if set_id == &"luxury_stores":
+			# LuxuryStoresMapData.setData: `setMidBox(x, y, true)`, the centre shows `beginNum + 23`.
+			var centre: Array = []
+			for row: Array in set_board._rows:
+				centre.append_array(row.filter(func(b): return b.shown and int(b.frame) == 97 + 23))
+			_expect(centre.size() == 1 and set_board._art.get("tiles", {}).has("120|0"),
+				"a rolled Luxury Stores board shows its centre (frame 120) from the pack (%d)" % centre.size())
 	app.queue_free()
 	await process_frame
 	print("%s: %d flow scene checks" % ["PASS" if failures == 0 else "FAIL", checks])

@@ -530,3 +530,21 @@ Known gaps: no compare case runs to a flip (checked against the reference player
 dump, not frame-matched pixels); the dropped items' fade-in (`itemsDrop`: `TweenLite.from(mc,
 1, {alpha: 0})`) is not checked; the shared actors pack is rewritten by each set's actors pass,
 so a pass must keep every set's looks (`board.sets` of all branches).
+
+Luxury Stores slice, 2026-11-07 (owner to review):
+- Case `gameplay-luxury-start`: as the Zoo case with `mysteriousStages` (Luxury Shop) picked,
+  the centre of its stage bounds in the dropdown golden; 416 draws before the round
+  (template LuxuryStoresStage3).
+- `board.sets.luxury_stores` (begin_num 97). No features (`LuxuryStoresMapData.setData`'s
+  `lavaOrgan` branch is never reached: no Luxury layout has that cell) and the centre shows
+  (`setMidBox(x, y, true)`): frame 120, a shop window with no loops of its own.
+- Art: `record_screen.py sets --sets luxury_stores`: floor and 44 tiles (frame contents in
+  edition-5-stage-tiles.md). The robots' actors pass was re-run with the round's looks
+  (robots 2, 6, 5 at [5, 3], [3, 2], [1, 1]); the shared pack's pass now takes every working
+  copy's set looks. No Godot code change: `GameBoard` draws any set with a pack.
+- Results: gameplay-luxury-start nodes 386/386, SSIM 0.897 (ceiling 0.895), ΔE 5.0; all 18
+  cases and tools/run_checks.sh (27 suites) pass. Rolled Luxury rounds (frames 200-600) show
+  both ring choices (ring box, necklace bust), the shown centre, the soft variants and
+  robots, as in the reference capture.
+Known gaps: the round's car drops and rides are not checked against a Luxury recording; a
+robots-only actors pass drops the clips' `next` (`--parts plays`), which only rides use.
