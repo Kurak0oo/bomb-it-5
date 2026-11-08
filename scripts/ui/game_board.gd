@@ -134,6 +134,13 @@ func has_art() -> bool:
 	return not _art.is_empty()
 
 
+## A clip a feature makes stopped at run time and steps itself (record_screen.py sets
+## `stopped`: `Art_Prop_Disappear`): `total` frames and the art of each (`frames`); empty when
+## the set's pack has none.
+func stopped_art(cls: String) -> Dictionary:
+	return _art.get("stopped", {}).get(cls, {})
+
+
 ## Lay out the round's map. `recorded`: the boxes and features as the layout recorded
 ## them (the comparison loop's round, `App.round_as_recorded`); otherwise from the round's
 ## own board (`snapshot.board`, `board_meta`).
@@ -291,7 +298,8 @@ func _crocodiles(snapshot: Dictionary) -> void:
 		elif f > 324: mouth = f - 299
 		if mouth > 0 and not frames.is_empty():
 			feature.own_clock = true
-			_screen.set_node_art(feature.path, frames.body, 2)
+			# (The clip's frame is reported on the clip, which the container's art bakes in.)
+			_screen.set_node_art(feature.path, frames.body)
 			var water := posmod(f - 240, int(frames.parts["/@3"].size())) + 1
 			var shown := {"/@3": water, "/mouthOpen_mc": mini(mouth, int(frames.parts["/mouthOpen_mc"].size()))}
 			for part: String in frames.order:
@@ -305,7 +313,7 @@ func _crocodiles(snapshot: Dictionary) -> void:
 				_screen.remove_node(feature.parts[part])
 			feature.erase("parts")
 			var art: Dictionary = closed.get(posmod(f - 1, closed.size()) + 1, {}) if not closed.is_empty() else {}
-			if not art.is_empty(): _screen.set_node_art(feature.path, art, 1)
+			if not art.is_empty(): _screen.set_node_art(feature.path, art)
 
 
 ## `Spellbook.runEngine`, display side. Closed, the clip stays on frame 1 (`_mc.gotoAndStop(1)`),

@@ -38,6 +38,8 @@ var _late_blast := false
 var _round_stage: StringName = &"playing"
 var _pending_outcome: StringName = &""
 var _ending_started := 0
+## Display only: the last serial given to a bomb (`serial_of`).
+var _bomb_serial := 0
 ## The ending began on the round clock (each mode's `timeOut`: TIME'S UP and the lose jingle,
 ## then `judgeHandler`), not on `win`/`lose`.
 var _ending_timed_out := false
@@ -296,7 +298,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 func snapshot() -> Dictionary:
 	for id in _actor_ids: _actors[id].points = _mode.points(_actors[id])
 	return {"tick": _tick, "board": _board.duplicate(true), "actors": _actors.duplicate(true),
-		"bombs": _public_bombs(), "bomb_occupancy": _bombs.duplicate(true),
+		"bombs": _public_bombs(), "bomb_display": _bomb_display(), "bomb_occupancy": _bombs.duplicate(true),
 		"blasts": [], "broken_soft_blocks": [], "flames": _flames.duplicate(true),
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
@@ -321,6 +323,17 @@ func _pickup_sounds(kind: StringName, eaten := true) -> void:
 	if eaten: play_sound(&"eatProp")
 
 
+## Display fields, one per entry of `bombs` (`_public_bombs`, same order): the bomb's serial, so
+## one bomb's views follow it from cell to cell, and whether it flies (`Bomb.kickedFly` runs
+## `shootFunc`, `resetDisplay` then the step, each bomb tick).
+func _bomb_display() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for bomb in _bombs:
+		if bomb.get("detonated", false): continue
+		result.append({"serial": serial_of(bomb), "flying": bomb.get("flying", false)})
+	return result
+
+
 func _public_bombs() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for bomb in _bombs:
@@ -333,6 +346,14 @@ func _public_bombs() -> Array[Dictionary]:
 			item.kind = &"mine"
 		result.append(item)
 	return result
+
+
+## Display only: a bomb's serial, given the first time it is asked for.
+func serial_of(bomb: Dictionary) -> int:
+	if not bomb.has("serial"):
+		_bomb_serial += 1
+		bomb.serial = _bomb_serial
+	return int(bomb.serial)
 
 
 func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2i], mine_contact: bool = false) -> void:

@@ -14,7 +14,11 @@ const WALKABLE: Array[StringName] = [&"belt", &"crocodile"]
 static func create(features: Dictionary, mode: RefCounted, center: Variant, skin: StringName) -> Array:
 	var result: Array = []
 	var belts := {}
-	for cell in features:
+	# `<Set>MapData.setData` makes them column by column (x outer, y inner), and so registers
+	# their engine handlers, whose random draws (ToyHand's next interval) follow that order.
+	var cells := features.keys()
+	cells.sort_custom(func(a: Vector2i, b: Vector2i): return a.x < b.x or (a.x == b.x and a.y < b.y))
+	for cell in cells:
 		var entry: Dictionary = features[cell]
 		match StringName(entry.kind):
 			&"belt": belts[cell] = int(entry.detail)

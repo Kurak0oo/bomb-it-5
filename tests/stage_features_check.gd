@@ -155,12 +155,31 @@ func _belt() -> void:
 	game.add_bomb({"actor_id": &"", "cell": Vector2i(5, 11), "power": 1, "fuse": 900, "belt_position": Vector2(5, 11)})
 	for tick in 60: _step(game)
 	_expect(game.bombs().is_empty(), "a bomb reaching the track's end disappears without exploding")
+	# Display fields (scripts/ui/game_actors.gd): what the belt moved, in order, and where an
+	# Art_Prop_Disappear goes (ConveyorBelt.addDisappearAni: the last cell, the last segment's angle).
+	game = _round("CandyFactoryStage1", {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(15, 13)}})
+	game.add_bomb({"actor_id": &"", "cell": Vector2i(5, 11), "power": 1, "fuse": 900, "belt_position": Vector2(5, 11)})
+	var belt_state := func(state: Dictionary): return state.features.filter(func(f): return f.kind == &"belt")[0]
+	var first: Dictionary = belt_state.call(_step(game))
+	var serial: int = game.snapshot().bomb_display[0].serial
+	_expect(first.moved.size() == 1 and first.moved[0] == ["bomb", serial, 11], "the belt reports the bomb it moved and the row it now stands on")
+	var gone := []
+	for tick in 60:
+		var state: Dictionary = _step(game)
+		gone.append_array(belt_state.call(state).disappeared)
+	_expect(gone.size() == 1 and gone[0][0] == Vector2i(6, 11) and is_equal_approx(float(gone[0][1]), 0.0),
+		"a bomb leaving the belt reports an Art_Prop_Disappear on the last cell, turned to the last segment (0 degrees)")
+	game = _round("CandyFactoryStage1", {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(15, 13)}}, &"kill")
+	var ids := {}
+	for tick in 300:
+		for cell in belt_state.call(_step(game)).carried: ids[belt_state.call(game.snapshot()).carried[cell][0]] = true
+	_expect(ids.size() == 1, "a carried pickup keeps one id from cell to cell")
 	var fuses := []
 	for seed_value in 12:
 		game = _round("CandyFactoryStage1", {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(15, 13)}}, &"arcade", seed_value)
 		for tick in 211: _step(game)
-		for bomb in game.bombs(): fuses.append([bomb.actor_id, bomb.fuse])
-	_expect(not fuses.is_empty() and fuses.all(func(f): return f[0] == &"" and f[1] >= 0 and f[1] < 990), "belt bombs are ownerless with a 0-989 tick fuse")
+		for bomb in game.bombs(): fuses.append([bomb.actor_id, bomb.blast_time, bomb.fuse])
+	_expect(not fuses.is_empty() and fuses.all(func(f): return f[0] == &"" and f[1] >= 0 and f[1] < 990 and f[2] == f[1] + 2), "belt bombs are ownerless with a 0-989 tick blastTime, going off 2 ticks after it (Bomb.takeCount)")
 	var kill_items := true
 	for seed_value in 8:
 		game = _round("CandyFactoryStage1", {&"human": {"cell": Vector2i(1, 1)}, &"ai": {"cell": Vector2i(15, 13)}}, &"kill", seed_value)

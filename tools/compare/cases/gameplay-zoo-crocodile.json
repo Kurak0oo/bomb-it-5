@@ -1,0 +1,138 @@
+{
+ "name": "gameplay-zoo-crocodile",
+ "screen": "game",
+ "origin": "The Zoo crocodiles' first opening (checkpoint 5, feature motion), on the round of gameplay-zoo-start (seed 42, Arcade, Normal, robot 0; the AI robots stopped at the round's first frame, the player idle): Crocodile.runEngine counts 240 closed ticks, then gotoAndStop(2) with mouthOpen_mc at 1 (mouth-1), one mouth frame per tick to openComplete (25, open), held for 60 ticks while it eats (eating), one frame per tick to 46 (closing) and closed on frame 1 again (closed).",
+ "godot_note": "Godot starts on the recorded round with the original's Math.random place (tests/goldens/gameplay-zoo-start/math_random.json); the crocodiles follow the simulation's crocodile frame (scripts/ui/game_board.gd).",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 337.35 269.48"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round zoo-start",
+   "godot_note": "The round this START opens takes its board and enemy robots from the golden of the zoo-start capture (App.round_as_recorded), as gameplay-cinema-start does."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "capture": "mouth-1"
+  },
+  {
+   "command": "step 24"
+  },
+  {
+   "capture": "open"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "capture": "eating"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "closing"
+  },
+  {
+   "command": "step 20"
+  },
+  {
+   "capture": "closed"
+  }
+ ],
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME differs between the recording and Godot"
+ }
+}

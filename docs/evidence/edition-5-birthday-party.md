@@ -58,3 +58,23 @@ reference player (an art-pass session, not a recording):
   frame 1, so after the first opening the closed toy shows `g<pushStep>` with hand frame 14
   (**observed**: opening 105 frames after the capture, hand 14 thirteen frames later and
   held).
+
+## Pushes on screen (checkpoint 5, feature motion, 2026-11-08)
+
+Case `gameplay-birthday-push` (round of `gameplay-birthday-start`, AI stopped, the
+`reposition` fixture puts the player on (12,7) in front of the right hand on (11,7), box on
+(13,7)):
+
+- `BirthdayPartyMapData.setData` makes the hands column by column (x outer, y inner), so their
+  engine handlers, and the draws of their next intervals, run (5,7), (8,4), (8,10), (11,7).
+  **Observed:** the right hand opens again at tick 538, (8,4) at 363.
+- At tick 105 the scan finds the player on cell 1 and the box on cell 2, so `pushStep` is 1
+  (label `g1`) and `pushComplete` is hand frame 11; the push enters the box cell and snaps
+  back (no visible move). The second push keeps the stale checked cell: the player moves
+  15 px a tick, on the same tick as `pushComplete` (`PushRobotCommand.execute` then
+  `moveFuc` in that tick's robot engine), to 390 and stays in the box cell.
+- While pushed the robot only moves (`moveFunc` is `moveFuc`); `resetRobot` makes its clip
+  again where it stops (`robotMoveStart`, `resetRobotMc`). A thrown bomb's `kickedFly` runs
+  `shootFunc` each bomb tick: `resetDisplay` on the row it stood on, then the step; its clip
+  plays on.
+

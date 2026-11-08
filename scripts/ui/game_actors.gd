@@ -117,6 +117,8 @@ var _bomb_art: Dictionary = {}
 var _exp_art: Dictionary = {}
 var _items: Dictionary = {}
 var _spent_arms: Array = []
+## `ConveyorBelt.addDisappearAni`'s clips still on the board.
+var _disappearing: Array = []
 var _item_art: Dictionary = {}
 ## `AbstractItem.getMc`'s PixelClip arguments (tx, ty, xOffset, yOffset).
 const PIXEL_CLIP := [10, 20, 2, 0]
@@ -218,6 +220,12 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		view.loop_age += 1
 		# The engine tick: resetMainContainer (from where it stood), the AI's turns, moveStop.
 		_reset_main_container(view)
+		# PushRobotCommand.moveFuc: while a toy hand pushes it, the robot only moves (its position
+		# below); `resetRobot`, where it stops, makes its clip again (`robotMoveStart`, then
+		# `resetRobotMc`: `setRobotMc` facing `robotDirect`, the weapon's clip with it).
+		var pushed: bool = not actor.get("pushed", {}).is_empty()
+		if view.get("pushed", false) and not pushed and actor.get("alive", false): _set_robot_mc(view, view.suffix)
+		view.pushed = pushed
 		if not human and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
 		_vehicle(view, actor)
 		_weapon(view, actor, attacks.get(id, {}))
@@ -779,12 +787,16 @@ func _update_bombs(snapshot: Dictionary) -> void:
 		_screen.set_node_art(arm.item.path, _exp(arm.frame, arm.age + 1), arm.frame)
 		if arm.age + 1 >= _exp_art.get(str(arm.frame), {}).size(): _spent_arms.erase(arm)
 	var live := {}
-	for bomb in snapshot.get("bombs", []):
-		live[_key(bomb.actor_id, bomb.cell)] = bomb
+	var shown: Array = snapshot.get("bomb_display", [])
+	var bombs: Array = snapshot.get("bombs", [])
+	for k in bombs.size():
+		# The simulation's display fields for this bomb (serial, flying), when it gives them.
+		var bomb: Dictionary = bombs[k].merged(shown[k]) if k < shown.size() else bombs[k]
+		live[_bomb_key(bomb)] = bomb
 	var flames := {}
 	for flame in snapshot.get("flames", []):
 		var bomb: Dictionary = flame.get("bomb", {})
-		if not bomb.is_empty(): flames[_key(bomb.actor_id, bomb.cell)] = flame
+		if not bomb.is_empty(): flames[_bomb_key(bomb)] = flame
 	for view in _bombs.duplicate():
 		view.age += 1
 		if view.blasted:
@@ -807,7 +819,10 @@ func _update_bombs(snapshot: Dictionary) -> void:
 			continue
 		else:
 			var bomb: Dictionary = live[view.key]
-			if bomb.has("position"): view.position = bomb.position
+			# `Bomb.kickedFly` -> `shootFunc`: `resetDisplay` (on the row it stood on), then the step.
+			if bomb.get("flying", false): _reset_bomb_display(view, floori((view.position as Vector2).y + 0.5))
+			view.cell = bomb.cell
+			view.position = bomb.get("position", Vector2(bomb.cell))
 		_show_bomb(view)
 	for key in live:
 		if _bombs.any(func(v): return v.key == key): continue
@@ -817,21 +832,52 @@ func _update_bombs(snapshot: Dictionary) -> void:
 		var view := {"key": key, "cell": bomb.cell, "power": int(bomb.power), "age": 0 if bomb.actor_id == &"human" else -1, "blasted": false,
 			"position": bomb.get("position", Vector2(bomb.cell)), "arms": []}
 		# Bomb.init: a Sprite on its row's bomb layer (2).
-		view.layer = _board.layer_of(int(bomb.cell.y), 2)
+		view.layer = _board.layer_of(floori((view.position as Vector2).y + 0.5), 2)
 		view.item = {}
 		_board.attach(view.layer, view.item, _board.cell_matrix(view.position))
 		_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(view.position),
 			"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": 1})
 		_bombs.append(view)
 		_show_bomb(view)
+	# `ConveyorBelt.bombMove`: `resetDisplay` on the row the bomb now stands on, in the belt's order.
+	for moved in _belt_moved(snapshot):
+		if moved[0] != "bomb": continue
+		for view in _bombs:
+			if view.key == "s%d" % int(moved[1]) and not view.blasted: _reset_bomb_display(view, int(moved[2]))
 
 
 static func _key(actor_id, cell) -> String:
 	return "%s|%s" % [actor_id, cell]
 
 
+## One bomb's views follow it by its serial (display field), so a carried or thrown bomb keeps
+## its clip (and its frame) from cell to cell.
+static func _bomb_key(bomb: Dictionary) -> String:
+	return "s%d" % int(bomb.serial) if bomb.has("serial") else _key(bomb.actor_id, bomb.cell)
+
+
+## `Bomb.resetDisplay`: the bomb's Sprite leaves its layer and is added again, last, to the
+## bomb layer (2) of row `row` (`game.getDisArr(yN).getChildAt(2)`).
+func _reset_bomb_display(view: Dictionary, row: int) -> void:
+	_board.detach(view.layer, view.item)
+	view.layer = _board.layer_of(row, 2)
+	view.item = {}
+	_board.attach(view.layer, view.item, _board.cell_matrix(view.position))
+	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(view.position),
+		"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": 1})
+	_show_bomb(view)
+
+
+## This tick's `resetDisplay` calls of the Candy Factory belt (`ConveyorBelt.runEngine`, display
+## field `moved`: `[kind, id, row]` in its order).
+static func _belt_moved(snapshot: Dictionary) -> Array:
+	for state: Dictionary in snapshot.get("features", []):
+		if state.get("kind") == &"belt": return state.get("moved", [])
+	return []
+
+
 ## `Bomb.blast`: exp0 replaces the bomb clip, and an exp0 per flame cell goes on that row's
-## platform layer at `xPos + EXCURSION_X ± k * GRID_WIDTH`.
+## platform layer at `xPos + EXCURSION_X ± k * GRID_WIDTH` (the bomb's position, not its cell's).
 func _blast(view: Dictionary, flame: Dictionary) -> void:
 	view.blasted = true
 	view.age = 0
@@ -843,7 +889,9 @@ func _blast(view: Dictionary, flame: Dictionary) -> void:
 		var ray := offset / distance
 		var frame: int = ARM_FRAMES[ray][1 if distance == view.power else 0]
 		var arm := {"frame": frame, "item": {}, "layer": _board.layer_of(cell.y, 0), "cell": cell}
-		_board.attach(arm.layer, arm.item, _board.cell_matrix(Vector2(cell)), {}, "piece")
+		# At the bomb's own position (`xPos + EXCURSION_X + _mc.x`, ± k * GRID_WIDTH): off the grid
+		# when a belt carried it.
+		_board.attach(arm.layer, arm.item, _board.cell_matrix(view.position + Vector2(offset)), {}, "piece")
 		view.arms.append(arm)
 
 
@@ -870,39 +918,117 @@ func _exp(root: int, nested: int) -> Dictionary:
 
 # ------------------------------------------------------------------ pickups
 
-## `AbstractItem` per pickup of the snapshot (`pickups`: cell -> kind), once per tick.
+## `AbstractItem` per pickup of the snapshot (`pickups`: cell -> kind), once per tick. A pickup
+## the Candy Factory belt carries (its `carried` display field: cell -> [id, position]) is one
+## view from cell to cell, at its position between cells (`ConveyorBelt.propMove`), and keeps
+## its PixelClip's loop.
 func _update_items(snapshot: Dictionary) -> void:
 	var pickups: Dictionary = snapshot.get("pickups", {})
 	var burning := {}
 	for flame in snapshot.get("flames", []):
 		for cell in flame.get("cells", []): burning[cell] = true
-	for cell in _items.keys():
-		var view: Dictionary = _items[cell]
+	var carried := {}
+	for state: Dictionary in snapshot.get("features", []):
+		match state.get("kind"):
+			&"belt": carried = state.get("carried", {})
+			# `Crocodile.eat` on each open tick: the pickup on its cell goes by `deleProp`.
+			&"crocodile":
+				if int(state.frame) > 264 and int(state.frame) <= 324: burning[Vector2i(state.cell)] = true
+	var present := {}
+	for cell in pickups:
+		if pickups[cell] == &"coin": continue
+		present["p%d" % int(carried[cell][0]) if carried.has(cell) else cell] = cell
+	for key in _items.keys():
+		var view: Dictionary = _items[key]
 		view.age += 1
 		if view.has("brick"):
 			_count_brick_exp(view)
-		elif pickups.get(cell, &"") != view.kind:
-			if burning.has(cell): _dele_prop(view)
+		elif not present.has(key) or pickups.get(present[key], &"") != view.kind:
+			if burning.has(view.cell): _dele_prop(view)
 			else: _eat_prop(view)
 		else:
+			view.cell = present[key]
+			if carried.has(view.cell): view.position = carried[view.cell][1]
 			_play_arr(view)
-	for cell in pickups:
-		if _items.has(cell) or pickups[cell] == &"coin": continue
-		_init_item(cell, pickups[cell])
+	for key in present:
+		if _items.has(key): continue
+		var cell: Vector2i = present[key]
+		_init_item(key, cell, pickups[cell], carried[cell][1] if carried.has(cell) else Vector2(cell))
+	# `ConveyorBelt.propMove`: `resetDisplay` puts the item's Sprite last on the row it now stands on.
+	for moved in _belt_moved(snapshot):
+		if moved[0] == "prop" and _items.has("p%d" % int(moved[1])):
+			_reset_item_display(_items["p%d" % int(moved[1])], int(moved[2]))
+	_update_disappear(snapshot)
+
+
+## `ConveyorBelt.addDisappearAni`: where a carried item leaves the belt (its last cell), a
+## stopped `Art_Prop_Disappear` at `(xN + 0.5) * GRID_WIDTH + EXCURSION_X - 5`,
+## `(yN + 0.5) * GRID_WIDTH + EXCURSION_Y`, turned to the last segment's direction
+## (`mVector.angle`, degrees), last on that row's platform layer (`getDisArr(yN).getChildAt(0)`).
+## `countDisappearAni` runs on the brick explosion handlers, after the engine handlers that
+## made it, so the clip is first drawn on frame 2, one frame further per tick, and taken off
+## on the tick it reaches its last frame (`currentFrame == totalFrames`).
+func _update_disappear(snapshot: Dictionary) -> void:
+	var clip: Dictionary = _board.stopped_art("Art_Prop_Disappear")
+	var frames: Dictionary = clip.get("frames", {})
+	var total := int(clip.get("total", 0))
+	for view in _disappearing.duplicate():
+		view.frame += 1
+		if view.frame >= total:
+			_board.detach(view.layer, view.item)
+			_disappearing.erase(view)
+		else:
+			_screen.set_node_art(view.item.path, frames.get(str(view.frame), {}), view.frame)
+	if total == 0: return
+	for state: Dictionary in snapshot.get("features", []):
+		if state.get("kind") != &"belt": continue
+		for gone: Array in state.get("disappeared", []):
+			var cell: Vector2i = gone[0]
+			var view := {"frame": 2, "item": {}, "layer": _board.layer_of(cell.y, 0)}
+			var at := _rotate(_board.cell_matrix(Vector2(cell) + Vector2(0.5 - 5.0 / 30.0, 0.5)), float(gone[1]))
+			_board.attach(view.layer, view.item, at, {}, "piece", false, view.frame)
+			if view.frame >= total:
+				_board.detach(view.layer, view.item)
+				continue
+			_screen.set_node_art(view.item.path, frames.get(str(view.frame), {}), view.frame)
+			_disappearing.append(view)
+
+
+## A Flash `rotation` (degrees) set on a child at stage matrix `m`.
+static func _rotate(m: Array, degrees: float) -> Array:
+	var c := cos(deg_to_rad(degrees))
+	var s := sin(deg_to_rad(degrees))
+	return [m[0] * c + m[2] * s, m[1] * c + m[3] * s, m[2] * c - m[0] * s, m[3] * c - m[1] * s, m[4], m[5]]
 
 
 ## `AbstractItem.init` / `setProp` / `getMc`: the Sprite on its row at the cell, the
 ## PixelClip's Sprite and empty Bitmap inside it.
-func _init_item(cell: Vector2i, kind: StringName) -> void:
-	var view := {"cell": cell, "kind": kind, "age": 0, "item": {}, "row": _board.row_of(cell.y), "shown": -1}
-	var at: Array = _board.cell_matrix(Vector2(cell))
+func _init_item(key, cell: Vector2i, kind: StringName, position: Vector2) -> void:
+	var view := {"key": key, "cell": cell, "kind": kind, "age": 0, "item": {}, "row": _board.row_of(cell.y), "shown": -1,
+		"position": position}
+	_add_item_display(view)
+	_items[key] = view
+
+
+func _add_item_display(view: Dictionary) -> void:
+	var at: Array = _board.cell_matrix(view.position)
 	_board.attach(view.row, view.item, at)
 	var holder := _translate(at, Vector2(int(15 - PIXEL_CLIP[0] / 2.0) + PIXEL_CLIP[2], int(15 - PIXEL_CLIP[1] / 2.0) + PIXEL_CLIP[3]))
 	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": holder,
 		"role": "group", "kind": "movie_clip", "effective_visible": true, "frame": 0})
 	_screen.add_node({"path": view.item.path + "/@0/@0", "parent": view.item.path + "/@0", "stage_matrix": _translate(holder, Vector2(-15, -15)),
 		"role": "piece", "kind": "bitmap", "effective_visible": true})
-	_items[cell] = view
+
+
+## `AbstractItem.resetDisplay`: `_mainContainer.removeChild(_container)`, then
+## `game.getDisArr(yN).addChild(_container)`, at the item's position (`xPos`, `yPos`).
+func _reset_item_display(view: Dictionary, row: int) -> void:
+	_board.detach(view.row, view.item)
+	view.row = _board.row_of(row)
+	view.item = {}
+	_add_item_display(view)
+	view.shown = -1
+	_play_arr(view)
 
 
 ## `PixelClip.playArr`: the bitmap shown at this age (see the header for the recorded start).
@@ -919,14 +1045,14 @@ func _play_arr(view: Dictionary) -> void:
 ## `eatProp`: the Sprite leaves its row.
 func _eat_prop(view: Dictionary) -> void:
 	_board.detach(view.row, view.item)
-	_items.erase(view.cell)
+	_items.erase(view.key)
 
 
 ## `deleProp` -> `brickExp`: the PixelClip goes, `brickExp` plays in the Sprite.
 func _dele_prop(view: Dictionary) -> void:
 	_screen.remove_node(view.item.path + "/@0")
 	view.brick = 0
-	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(Vector2(view.cell)),
+	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(view.position),
 		"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": 1})
 	_count_brick_exp(view)
 

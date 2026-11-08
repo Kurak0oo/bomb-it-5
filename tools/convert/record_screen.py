@@ -1345,6 +1345,10 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
 # (`played`): Spellbook.signItemPosition's warning signs
 # (`Art_Sign_Red` for a bomb, `Art_Sign_Blue` otherwise).
 RUNTIME_CLASSES = {'magic_library': ('Art_Sign_Blue', 'Art_Sign_Red')}
+# Clips a set's features make stopped at run time and step themselves (`stopped`, by frame):
+# ConveyorBelt.addDisappearAni's `Art_Prop_Disappear` (`stop()`, then `gotoAndStop(currentFrame
+# + 1)` once per tick), rendered unrotated (the replica turns it as the AS3 does).
+STOPPED_CLASSES = {'candy_factory': ('Art_Prop_Disappear',)}
 
 
 def record_sets(_case_name, player_path, swf, only=None):
@@ -1381,7 +1385,7 @@ def record_sets(_case_name, player_path, swf, only=None):
         prefix = f'sets/{set_id}/'
         out = {'schema': 'bombit5-original-set-v1', 'set': set_id, 'golden_sha256': entry['golden_sha256'],
                'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path), 'scale': SCALE,
-               'pieces': {}, 'played': {}, 'frames': {}}
+               'pieces': {}, 'played': {}, 'frames': {}, 'stopped': {}}
         seen = {}
         p = Player(player_path, swf)
         tmp = Path(tempfile.mkdtemp(prefix='bombit5-sets-'))
@@ -1433,13 +1437,30 @@ def record_sets(_case_name, player_path, swf, only=None):
                 if '' in tree():
                     p.command(f'unsymbol {name}')
                 out['played'][cls] = ages
+            for cls in STOPPED_CLASSES.get(set_id, ()):
+                p.command(f'symbol {host} {cls} refsym {x} {y} 1')
+                nodes = tree()
+                total = nodes['']['total_frames']
+                nested = [k for k, n in nodes.items() if k and n.get('total_frames', 1) > 1]
+                p.command(f'unsymbol {name}')
+                frames = {}
+                for frame in range(1, total + 1):
+                    p.command(f'symbol {host} {cls} refsym {x} {y} {frame}')
+                    stored = store()
+                    if stored:
+                        frames[str(frame)] = stored
+                    p.command(f'unsymbol {name}')
+                # Every frame stands alone (`nested` lists clips that would play on their own).
+                out['stopped'][cls] = {'total': total, 'frames': frames, 'nested': nested}
             for cls in sorted({f['class'] for f in entry['features']}):
                 p.command(f'symbol {host} {cls} refsym {x} {y} 1')
                 nodes = tree()
                 total = nodes['']['total_frames']
                 loops = [n['total_frames'] for k, n in nodes.items() if k and n.get('total_frames', 1) > 1]
                 ages = {}
-                for age in range(math.lcm(*loops) if loops else 1):
+                # One age past the period: made by `new`, a loop shows its first frame twice, so
+                # its last frame comes at age lcm (without it the replica's loop is a frame short).
+                for age in range(math.lcm(*loops) + 1 if loops else 1):
                     nodes = tree()
                     stored = store()
                     if stored:
@@ -1764,7 +1785,7 @@ def record_fonts(_case_name, _player_path, swf):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels', 'cartoons',
-                                         'sets'])
+                                         'sets', 'shots'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
@@ -1783,6 +1804,11 @@ def main():
         return 0
     if args.what == 'cartoons':
         record_cartoons(args.case, args.player.resolve(), args.swf)
+        return 0
+    if args.what == 'shots':
+        # Only the original's own 3× frame of each capture (the comparison's resampling
+        # ceiling), for a gameplay case whose art the other passes already hold.
+        _shots(load_case(args.case), args.case, args.player.resolve(), args.swf, PACK / 'game')
         return 0
     if args.what == 'sets':
         record_sets(args.case, args.player.resolve(), args.swf, [x for x in args.sets.split(',') if x] or None)

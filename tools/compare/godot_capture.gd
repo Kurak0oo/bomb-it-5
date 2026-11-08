@@ -22,7 +22,8 @@ extends SceneTree
 ## the gameplay capture CAPTURE recorded (`App.round_as_recorded`), for the same reason;
 ## `ai-stop N` stops the round's AI robot of seat N (`Game.stop_ai`), where the case stops the
 ## original's with the `ai-control` fixture; `pickup KIND` puts a pickup on the player's cell, where
-## the case gives the original's player one with the `pickup` fixture.
+## the case gives the original's player one with the `pickup` fixture; `reposition X Y` puts the
+## player on that cell, where the case uses the `reposition` fixture.
 
 const STAGE := Vector2i(700, 510)
 
@@ -50,6 +51,12 @@ func _initialize() -> void:
 	root.add_child(_viewport)
 	# Generated screens follow the stepped frames, not the clock (see swf_screen.gd).
 	load("res://scripts/ui/swf_screen.gd").frame_locked = true
+	# `--frame-clock` (a case's `godot_args`): the round's Date seconds follow the stepped
+	# frames (35 a second), not the host clock, so a long case's timed events (ArcadeMode.timePassed)
+	# do not depend on how fast this machine renders. The reference player's Date follows its
+	# own host clock, which runs far behind its stepped frames; such a case ends before 45 s.
+	if args.has("--frame-clock"):
+		load("res://scripts/game.gd").seconds_source = func() -> int: return int(_frame / 35) % 60
 	var app: Node = load(ProjectSettings.get_setting("application/run/main_scene")).instantiate()
 	if "save_path" in app:
 		app.save_path = _out.path_join("save.json")
@@ -131,6 +138,8 @@ func _run(case: Dictionary) -> void:
 			_dump(_viewport, dump)
 			FileAccess.open(_out.path_join(name + ".nodes.json"), FileAccess.WRITE).store_string(JSON.stringify(dump, " "))
 	FileAccess.open(_out.path_join("godot-log.json"), FileAccess.WRITE).store_string(JSON.stringify({"frame": _frame, "notes": log}, " "))
+	# (A static Callable bound to this tree must not outlive it.)
+	load("res://scripts/game.gd").seconds_source = Callable()
 	quit(0)
 
 

@@ -614,3 +614,30 @@ Known gaps:
 - Invincibility's end is not captured: after 10 s the Arcade timed drops (host clock in
   the reference) differ.
 - Re-picking invincibility mid-introduction is mapped from source and not recorded.
+
+Feature motion, 2026-11-08 (checkpoint 5, owner to review):
+- Candy Factory belt (`ConveyorBelt.runEngine`, `bombMove`/`propMove`, `Bomb`/`AbstractItem.resetDisplay`):
+  a carried bomb or pickup is one view from cell to cell at its twip position, its clip and
+  PixelClip loop running on; each tick it is re-added last to its row's bomb layer / row in the
+  belt's order (display fields: bombs' `bomb_display` serials, the belt's `carried`, `moved`).
+  `addDisappearAni`: `Art_Prop_Disappear` (30 frames, art pass `sets` `stopped`) on the last
+  cell's platform layer, turned to the last segment, frames 2-29. Blast arms sit at the bomb's
+  own position. Source fixes found by the case: belt bombs go off `blastTime + 2` ticks after
+  they are made (`Bomb.takeCount`), and set features are made column by column (`setData`),
+  which orders the toy hands' interval draws. The sets pass now records one age past each
+  played loop (the candy machine's 70-frame sweets and the belt's 9-frame segments were a frame
+  short and drifted).
+- Birthday Party toy hands: a pushed robot moves as `PushRobotCommand.moveFuc` moves it and
+  `resetRobot` makes its clip again where it stops; a thrown bomb keeps its clip and is re-added
+  to the row it stood on each tick (`kickedFly` -> `shootFunc`).
+- Zoo crocodile: no clip of its own for what it eats (bombs blast, a pickup goes by `deleProp`'s
+  `brickExp`, now drawn so, robots die); nothing is spat out.
+- Cases: `gameplay-candy-belt` (1,725 frames: bomb out of the exit, pickup sliding, a bomb and a
+  pickup leaving with the disappear clip; `--frame-clock` keeps the round's Date on the frames),
+  `gameplay-birthday-push` (`reposition` fixture, Godot `reposition X Y`: the snapped first push
+  and the stale-check second push at tick 548), `gameplay-zoo-crocodile` (first opening, ticks
+  240-354). All 25 cases pass (belt SSIM 0.898 at a 0.900 ceiling, push 0.935-0.939, crocodile
+  0.941; ΔE ≤ 6.4); tools/run_checks.sh (27 suites) passes.
+Known gaps: no case throws a bomb with a toy hand (its display is ported, not checked against
+a recording; Stage2's hands all face boxes); a robot pushed while a key is held keeps its playing clip as
+the snapshot's commands give it; the push end re-adds the weapon clip through `setRobotMc` only.

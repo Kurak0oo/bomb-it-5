@@ -60,6 +60,9 @@ A nested clip that an actor's library clip plays on its own while the clip itsel
 **Set art**:
 A stage set's board art on the one gameplay screen: its floor bitmap, board tiles and features, from that set's own recorded round; Cinema's is in the screen's pack, every other set's in its own pack folder.
 
+**Display field**:
+A snapshot field the simulation keeps only so the replica can draw the round as the original does (a bomb's serial, what the belt carried and moved this tick, a toy hand's label); the round's rules never read it.
+
 **Placeholder layer**:
 What the gameplay screen draws without original art yet (most weapon actions and shots, mode objects, and the board of a stage set whose art is not in the pack), in the screen's board container.
 

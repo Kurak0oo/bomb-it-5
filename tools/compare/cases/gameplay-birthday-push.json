@@ -1,0 +1,147 @@
+{
+ "name": "gameplay-birthday-push",
+ "screen": "game",
+ "origin": "A toy hand pushing the player (checkpoint 5, feature motion), on the round of gameplay-birthday-start (seed 11, Arcade, Normal, robot 0, BirthdayPartyStage2; the AI robots stopped at the round's first frame): the reposition fixture puts the player on (12,7), in front of the right-facing hand on (11,7), with a box on (13,7). ToyHand.runEngine opens every hand at tick 105 (hand-open) and on the hand clip's pushComplete frame sets the robot's hitHand; PushRobotCommand.moveFuc snaps it back from the box cell (first-push, as in docs/evidence/edition-5-interactions.md). The hand opens again at tick 538; this push keeps the stale checked cell, so the player moves 15 px per tick (push-mid) into the box cell (push-end) and stays there once the hand is closed (closed).",
+ "godot_note": "Godot's player is put on the same cell (Game.reposition_human); the robot's display follows the simulation's push (scripts/ui/game_actors.gd).",
+ "actions": [
+  {
+   "command": "seed 11"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 337.35 211.18"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round birthday-start",
+   "godot_note": "The round this START opens takes its board and enemy robots from the golden of the birthday-start capture (App.round_as_recorded), as gameplay-cinema-start does."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "reposition",
+    "x": 12,
+    "y": 7
+   },
+   "godot_command": "reposition 12 7",
+   "godot_note": "The original's player put on the cell through its own position setters (fixture); Godot's player stands on the same cell (Game.reposition_human)."
+  },
+  {
+   "command": "step 105"
+  },
+  {
+   "capture": "hand-open"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "capture": "first-push"
+  },
+  {
+   "command": "step 433"
+  },
+  {
+   "capture": "push-mid"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "capture": "push-end"
+  },
+  {
+   "command": "step 3"
+  },
+  {
+   "capture": "closed"
+  }
+ ],
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME differs between the recording and Godot"
+ }
+}
