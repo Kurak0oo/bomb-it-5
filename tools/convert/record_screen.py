@@ -1085,6 +1085,13 @@ def _record_weapons(p, add, nodes, name, target, tmp, seen, at, out, xy):
             got = frames_of(f'{weapon}{d}', 'held')
             if got:
                 out['weapons']['held'][f'{weapon}{d}'] = got
+                # LaserGunProp.bombDown / FlamerProp.countFirePos: the action starts at the held
+                # clip's `gunpoint` (its frame 1: robotMoveStop has sent the clip there).
+                add(f'{weapon}{d}', 1)
+                tree = nodes()
+                p.command(f'unsymbol {name}')
+                if '/gunpoint' in tree:
+                    got['gunpoint'] = _local_point(tree[''], tree['/gunpoint'])
         p.command(f'symbol {name.rsplit("/", 1)[0]} showTimes refsym {xy} 1 -1 -1 showWeaponMc={show}')
         stored = _store(p, name, target, tmp, seen, None, [name + '/timesNum'], 'weapon')
         p.command(f'unsymbol {name}')
@@ -1093,6 +1100,7 @@ def _record_weapons(p, add, nodes, name, target, tmp, seen, at, out, xy):
             stored['at'] = at
             out['weapons']['times'][kind] = stored
         print(f'  weapon {kind}: {len(seen)} images so far')
+    _record_shots(p, add, nodes, name, target, tmp, seen, at, out)
     # The count's digits, from the round itself.
     p.command('fixture ' + json.dumps({'op': 'pickup', 'kind': 'hammer'}))
     p.command('step 2')
@@ -1155,6 +1163,77 @@ def _record_effects(p, add, nodes, name, target, tmp, seen, at, out):
                 # (getChildByName: a direct child; its x and y, in the clip's own space)
                 out['effects']['hand2'][cls] = tree['/hand2']['matrix'][4:6]
     print(f'  effects: {sorted(out["effects"]["clips"])}, hand2 in {len(out["effects"]["hand2"])} robot clips')
+
+
+def _local_point(clip, child):
+    """Where `child`'s registration point lies in `clip`'s own coordinates (stage matrices)."""
+    a, b, c, d, tx, ty = clip['stage_matrix']
+    x, y = child['stage_matrix'][4] - tx, child['stage_matrix'][5] - ty
+    det = a * d - b * c
+    return [round((d * x - c * y) / det, 4), round((a * y - b * x) / det, 4)]
+
+
+def _local_bounds(clip):
+    """A clip's own bounds (`width`/`height` in AS3 come from these, filters left out) in its
+    coordinates, from its stage bounds and stage matrix (no rotation in the weapon clips)."""
+    a, _, _, d, tx, ty = clip['stage_matrix']
+    x0, y0, x1, y1 = clip['stage_bounds']
+    xs, ys = sorted([(x0 - tx) / a, (x1 - tx) / a]), sorted([(y0 - ty) / d, (y1 - ty) / d])
+    return [round(xs[0], 4), round(ys[0], 4), round(xs[1], 4), round(ys[1], 4)]
+
+
+# Weapon clips whose image depends on how long they have been on the display list, not only on
+# the frame AS3 sends them to (`_record_shots`):
+# - made playing (`new`, never stopped), by age: FlamerProp.bombDown's thrower<Direction>_Play
+#   (one frame holding the 24-frame `fire_Play` that FlamerPlayCommand watches) and
+#   LandmineBomb's `mine_bomb` (Bomb.createMC; it loops);
+# - stopped at a frame while nested clips play on, by root frame and age: ShootLaserCommand's
+#   `laserCartoon` (gotoAndStop(_chosMcArr[k])), `lasergun_Play` (LaserGunPlayCommand stops it at
+#   frame 11; its nested 2-frame clip flickers on), FireballBomb's `ninjialBomb_fire` and
+#   TripleShootGunBomb's `bullet_fire` (createMC: gotoAndStop by direction).
+SHOTS_PLAYED = {**{f'thrower{d}_Play': 26 for d in DIRECTIONS}, 'mine_bomb': 30}
+SHOTS_AGED = {'laserCartoon': (range(1, 13), 14), 'lasergun_Play': (range(1, 13), 2),
+              'ninjialBomb_fire': (range(1, 5), 36), 'bullet_fire': (range(1, 5), 1)}
+
+
+def _record_shots(p, add, nodes, name, target, tmp, seen, at, out):
+    """The weapons' clips that play on their own (SHOTS_PLAYED, SHOTS_AGED): each image with the
+    frames of the clip and its nested clips (`frames`, '/' the clip's own), and the laser's
+    `laserCartoon` bounds per frame (ShootLaserCommand places each piece by the `width` and
+    `height` of the one before)."""
+    weapons = out['weapons']
+    weapons['played'], weapons['aged'], weapons['bounds'] = {}, {}, {}
+
+    def store(tree):
+        stored = _store(p, name, target, tmp, seen, None, None, 'weapon')
+        if stored:
+            stored['file'] = 'actors/' + stored['file']
+            stored['at'] = at
+            stored['frames'] = {k or '/': v.get('frame') for k, v in tree.items() if v.get('total_frames', 1) > 1}
+        return stored or {}
+
+    for cls, ages in SHOTS_PLAYED.items():
+        add(cls, 'p')
+        by_age = {}
+        for age in range(ages):
+            by_age[str(age)] = store(nodes())
+            p.command('step 1')
+        p.command(f'unsymbol {name}')
+        weapons['played'][cls] = by_age
+    for cls, (roots, ages) in SHOTS_AGED.items():
+        weapons['aged'][cls] = {}
+        for root in roots:
+            add(cls, root)
+            by_age = {}
+            for age in range(ages):
+                tree = nodes()
+                if age == 0 and cls == 'laserCartoon':
+                    weapons['bounds'].setdefault(cls, {})[str(root)] = _local_bounds(tree[''])
+                by_age[str(age)] = store(tree)
+                p.command('step 1')
+            p.command(f'unsymbol {name}')
+            weapons['aged'][cls][str(root)] = by_age
+        print(f'  weapon shots {cls}: {len(seen)} images so far')
 
 
 def _write_actors(target, out, done, previous):
@@ -1739,7 +1818,8 @@ def record_panels(_case_name, player_path, swf):
 # Cases whose captures show the gameplay screen past its first frame (their 3× frames give
 # the pixel score's ceiling, compare.py resampling_ceiling).
 CASES_WITH_ACTORS = ('gameplay-cinema-bomb',)
-CASES_WITH_RIDES = ('gameplay-cinema-ride', 'gameplay-cinema-hammer')
+CASES_WITH_RIDES = ('gameplay-cinema-ride', 'gameplay-cinema-hammer', 'gameplay-cinema-flamer', 'gameplay-cinema-laser',
+                    'gameplay-cinema-fireball', 'gameplay-cinema-boxing', 'gameplay-cinema-landmine')
 CASES_WITH_EFFECTS = ('gameplay-cinema-shield', 'gameplay-cinema-invincible', 'gameplay-cinema-portal')
 
 

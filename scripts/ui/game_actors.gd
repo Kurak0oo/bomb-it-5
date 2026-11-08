@@ -28,7 +28,16 @@ extends RefCounted
 ##   clip `<name><direction>` at the robot's hand, in front of or behind the robot clip in its
 ##   container; HammerProp's `bombDown` swaps the held clip for `sinker<direction>_Play`, which
 ##   `HammerPlayCommand` takes off at the blow, when `robotMoveStart` makes the robot's clip
-##   again. The other weapons' action clips and shots are still the placeholder view's.
+##   again.
+## - Every weapon's action (checkpoint 5): each `bombDown` and its command, ported from
+##   items/weapons/*Prop.as and commands/weapon/*Command.as (`_start_action`, `_advance_action`):
+##   BoxingProp's `boxing<direction>_Play[_2|_3]`, LaserGunProp's `lasergun_Play` and the Laser
+##   (ShootLaserCommand's laserCartoon pieces, LaserEndCommand), FlamerProp's
+##   `thrower<direction>_Play` scaled by FlamerFire, ShotGunProp's `fireball<direction>_Play`,
+##   LandminePlayCommand's LandmineBomb (`mine_bomb`); the projectiles `TripleShootGunBomb`
+##   (`bullet_fire`) and `FireballBomb` (`ninjialBomb_fire`) follow the snapshot's `projectiles`.
+##   The clips count their frames from the action's start as the commands do (the simulation's
+##   own callbacks run a tick later: see docs/development.md, checkpoint 5 weapons).
 ##
 ## Frame timing recorded in the reference player (gameplay-cinema-bomb): a clip made between
 ## frames (a key press turning the robot, a bomb dropped by key) shows its first frame on the
@@ -81,8 +90,33 @@ const WEAPON_NAMES := {&"hammer": "sinker", &"flamer": "thrower", &"laser": "las
 const BEHIND_LEFT_ONLY := ["shotgun", "lasergun", "thrower", "boxing"]
 ## `HammerProp.initPlayPos`: where `bombDown` puts the `_Play` clip in the robot's container.
 const HAMMER_PLAY_POS := {"_Left": Vector2(10, -15), "_Right": Vector2(-10, -15), "_Up": Vector2(15, -15), "_Down": Vector2(0, 0)}
+## `ShotGunProp.initPlayPos` (the fireball) and `BoxingProp.initPlayPos`.
+const FIREBALL_PLAY_POS := {"_Left": Vector2(-10, -2), "_Right": Vector2(-5, 0), "_Up": Vector2(20, 3), "_Down": Vector2(3, 8)}
+const BOXING_PLAY_POS := {"_Left": Vector2(15.4, 16.7), "_Right": Vector2(15, 17), "_Up": Vector2(24.4, 14.8), "_Down": Vector2(7, 15)}
+## `BoxingProp.createWeaponPlay` by `checkAttactDistance` (0, 1, 2).
+const BOXING_VARIANTS := ["_3", "_2", ""]
 ## `bombDown` adds the `_Play` clip at the container's bottom facing up or left.
 const PLAY_BEHIND := ["_Up", "_Left"]
+const DIRECTION_OF := {"_Down": Vector2i(0, 1), "_Left": Vector2i(-1, 0), "_Right": Vector2i(1, 0), "_Up": Vector2i(0, -1)}
+## `GameConfig.GRID_WIDTH`.
+const GRID_WIDTH := 30.0
+## `lasergun_Play` (12 frames: LaserGunPlayCommand shoots at 11), LaserEndCommand's runs
+## (`_continueTime > 9`), `Laser._startWid`, and ShootLaserCommand's `_chosMcArr` per direction.
+const LASER_CHARGE_FRAMES := 12
+const LASER_END_RUNS := 11
+const LASER_START_WID := 6.0
+## A Sprite scaled to nothing (`width = height = 0`): kept invertible on screen, drawn empty.
+const LASER_NO_SCALE := 0.0001
+const LASER_PIECES := {Vector2i(1, 0): [1, 2, 3], Vector2i(-1, 0): [10, 11, 12], Vector2i(0, 1): [6, 5, 4], Vector2i(0, -1): [9, 8, 7]}
+## `fire_Play` in `thrower<Direction>_Play` (FlamerPlayCommand stops at `totalFrames - 1`).
+const FLAMER_FIRE_FRAMES := 24
+## The projectiles' clips (`TripleShootGunBomb` / `FireballBomb.createMC`): frame and offset of
+## `_mc` per direction; both fade in (`TweenMax.from(_mc, 0.2, {alpha: 0})`).
+const SHOT_CLIPS := {&"triple": "bullet_fire", &"shotgun": "ninjialBomb_fire"}
+const SHOT_FRAMES := {
+	&"triple": {Vector2i(-1, 0): [3, Vector2(-15, 5)], Vector2i(1, 0): [1, Vector2(25, 5)], Vector2i(0, -1): [2, Vector2(15, 0)], Vector2i(0, 1): [4, Vector2(5, 5)]},
+	&"shotgun": {Vector2i(-1, 0): [3, Vector2(0, -5)], Vector2i(1, 0): [1, Vector2(20, -5)], Vector2i(0, -1): [4, Vector2(10, -10)], Vector2i(0, 1): [2, Vector2(0, 0)]}}
+const SHOT_FADE_TICKS := 7.0
 ## `setWeaponTimesMc`: showTimes at (mc.x, mc.y - 40) in the robot's container.
 const TIMES_AT := Vector2(0, -40)
 ## `TryToKillCommandChain`: a ride's clip goes to `dead` and tweens to its last frame in 1 s.
@@ -120,6 +154,13 @@ var _spent_arms: Array = []
 ## `ConveyorBelt.addDisappearAni`'s clips still on the board.
 var _disappearing: Array = []
 var _item_art: Dictionary = {}
+## The snapshot being stepped (for the commands that read the board: ShootLaserCommand,
+## BoxingPlayCommand.checkAttactDistance, LandminePlayCommand).
+var _snapshot: Dictionary = {}
+## LandmineBombs made by LandminePlayCommand, until the snapshot's mine shows up.
+var _pending_mines: Array = []
+## The projectiles (`TripleShootGunBomb`, `FireballBomb`) by owner and birth tick.
+var _shots: Dictionary = {}
 ## `AbstractItem.getMc`'s PixelClip arguments (tx, ty, xOffset, yOffset).
 const PIXEL_CLIP := [10, 20, 2, 0]
 
@@ -167,7 +208,7 @@ func _create_robots(snapshot: Dictionary) -> void:
 			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO), "blink_until": int(actor.get("blink_until", 0)),
 			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "loop_age": 0, "loop_count": 0,
 			"weapon": &"", "ammo": 0, "weapon_class": "", "weapon_frame": 1, "weapon_playing": false, "weapon_fresh": 0,
-			"play_class": "", "play_started": -1,
+			"action": {}, "last_started": -1,
 			"shield": false, "shield_class": "", "shield_frame": 1, "shield_playing": false, "shield_fresh": 0, "alpha": 1.0, "transit": false,
 			"inv_from": 0, "inv_play": -1, "filter": {}, "filter_count": 0}
 		_robots[id] = view
@@ -184,6 +225,7 @@ func _create_robots(snapshot: Dictionary) -> void:
 
 
 func _step(snapshot: Dictionary, last: bool) -> void:
+	_snapshot = snapshot
 	var commands := {}
 	for command in snapshot.get("commands", []):
 		commands[command.actor_id] = command.direction
@@ -202,9 +244,11 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		if view.dead:
 			_count_dead(view)
 			continue
+		# A weapon's action stops the robot's move listener until `robotMoveStart`.
+		var busy: bool = not view.action.is_empty() and not view.action.ended
 		# A key press reaches the robot between frames (robot_turnHandler).
 		# (in a portal the robot's key listener is off: `stopMoveListener`)
-		if human and not view.transit and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
+		if human and not view.transit and not busy and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
 		# The frame's timeline advance.
 		if view.playing and view.fresh == 0:
 			view.frame = _next_frame(view.class, view.frame)
@@ -226,7 +270,7 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		var pushed: bool = not actor.get("pushed", {}).is_empty()
 		if view.get("pushed", false) and not pushed and actor.get("alive", false): _set_robot_mc(view, view.suffix)
 		view.pushed = pushed
-		if not human and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
+		if not human and not busy and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
 		_vehicle(view, actor)
 		_weapon(view, actor, attacks.get(id, {}))
 		_shield(view, actor)
@@ -249,6 +293,7 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		for view in _robots.values():
 			if view.dead and not view.removed: _show(view)
 	_update_bombs(snapshot)
+	_update_shots(snapshot)
 	_update_items(snapshot)
 
 
@@ -331,6 +376,7 @@ func _kill(view: Dictionary) -> void:
 	view.dead = true
 	view.offset = false
 	_clear_weapon(view)
+	view.action = {}
 	_set_robot_mc(view, "_Dead")
 	# `clearDisplay`: the container keeps only the clip (the item Sprite goes too).
 	_remove_child(view, "item")
@@ -350,6 +396,7 @@ func _relive(view: Dictionary, actor: Dictionary) -> void:
 	view.removed = false
 	view.offset = false
 	_clear_weapon(view)
+	view.action = {}
 	view.vehicle = &""
 	view.vehicle_hit = -1
 	view.direction = Vector2i.ZERO
@@ -406,21 +453,21 @@ func _vehicle(view: Dictionary, actor: Dictionary) -> void:
 # ------------------------------------------------------------------ weapons
 
 ## The robot's weapon (`AbstractWeapon`): a pickup's `changeStage` (showTimes, then the held
-## clip), `bombDown` (the held clip goes, the `_Play` clip comes; the count goes down), the end
-## of the action (`HammerPlayCommand`: the `_Play` clip goes, `robotMoveStart` makes the robot's
-## clip again; the last use's `initWeapon` takes the weapon off).
+## clip); the snapshot's attack starts the weapon's `bombDown` (`_start_action`), whose command
+## then runs once per engine tick (`_advance_action`) until its own end; the snapshot's attack
+## ending (the simulation's recovery) ends it too. The last use's `initWeapon` takes the weapon off.
 func _weapon(view: Dictionary, actor: Dictionary, attack: Dictionary) -> void:
 	var kind := StringName(actor.get("weapon", &""))
 	if not WEAPON_NAMES.has(kind): kind = &""
 	var ammo := int(actor.get("ammo", 0))
 	var acting: bool = not attack.is_empty()
-	if view.play_class != "" and (not acting or int(attack.started) != view.play_started):
-		# The action is over: the `_Play` clip goes and the robot's clip is made again.
-		_remove_child(view, "play")
-		view.play_class = ""
-		view.play_started = -1
+	var action: Dictionary = view.action
+	if not action.is_empty() and (not acting or int(attack.started) != int(action.started)):
+		if not action.ended: _end_action(view, ammo)
+		view.action = {}
 		if kind != view.weapon or ammo <= 0: _clear_weapon(view)
-		_set_robot_mc(view, view.suffix)
+	elif not action.is_empty() and not action.ended:
+		_advance_action(view, attack, ammo)
 	if kind != view.weapon and not acting:
 		_clear_weapon(view)
 		if kind != &"":
@@ -429,20 +476,243 @@ func _weapon(view: Dictionary, actor: Dictionary, attack: Dictionary) -> void:
 			view.ammo = ammo
 			_add_child(view, {"kind": "times"}, -1)
 			_update_weapon_display(view)
-	if acting and view.play_class == "" and view.weapon != &"" and attack.get("kind", &"") == view.weapon:
+	if acting and view.action.is_empty() and view.weapon != &"" and attack.get("kind", &"") == view.weapon \
+			and int(attack.started) != view.last_started:
 		view.ammo = ammo
-		if view.weapon == &"hammer":
-			# `bombDown`: `robotMoveStop(true)` (the robot's clip stops, the held clip goes), the
-			# `_Play` clip at `_playPos` (under the robot facing up or left).
-			view.playing = false
-			view.weapon_playing = false
-			_remove_child(view, "weapon")
-			view.weapon_class = ""
-			view.play_class = "%s%s_Play" % [WEAPON_NAMES[view.weapon], view.suffix]
-			view.play_started = int(attack.started)
-			_add_child(view, {"kind": "play"}, 0 if view.suffix in PLAY_BEHIND else -1)
+		_start_action(view, attack)
 	if view.weapon != &"" and ammo != view.ammo and not acting:
 		view.ammo = ammo
+
+
+## `bombDown` of the robot's weapon, on the tick the action starts (the key was pressed between
+## frames; the command it adds first runs on this engine tick).
+func _start_action(view: Dictionary, attack: Dictionary) -> void:
+	var weapon: StringName = view.weapon
+	var suffix: String = view.suffix
+	var name: String = WEAPON_NAMES[weapon]
+	view.action = {"kind": weapon, "started": int(attack.started), "ended": false, "suffix": suffix}
+	view.last_started = int(attack.started)
+	# `robotMoveStop`: the robot's clip stops; HammerProp, BoxingProp and LandmineProp pass
+	# `true` (`RobotView.robotMoveStop`: the held clip goes), the others leave the held clip
+	# at its frame 1.
+	view.playing = false
+	view.weapon_playing = false
+	if weapon in [&"hammer", &"boxing", &"landmine"]:
+		_remove_child(view, "weapon")
+		view.weapon_class = ""
+	else:
+		view.weapon_frame = 1
+	match weapon:
+		&"hammer", &"shotgun":
+			# AbstractWeapon.bombDown: `<name><Direction>_Play` at `_playPos`, under the robot
+			# facing up or left (HammerProp, ShotGunProp).
+			var pos: Dictionary = HAMMER_PLAY_POS if weapon == &"hammer" else FIREBALL_PLAY_POS
+			_add_child(view, {"kind": "play", "cls": "%s%s_Play" % [name, suffix], "pos": pos.get(suffix, Vector2.ZERO)},
+				0 if suffix in PLAY_BEHIND else -1)
+		&"boxing":
+			# BoxingProp.bombDown: `createWeaponPlay` picks `_Play`, `_Play_2` or `_Play_3` by
+			# `checkAttactDistance`; under the robot facing left only.
+			var variant: String = BOXING_VARIANTS[_check_attact_distance(view, _snapshot)]
+			_add_child(view, {"kind": "play", "cls": "boxing%s_Play%s" % [suffix, variant], "pos": BOXING_PLAY_POS.get(suffix, Vector2.ZERO)},
+				0 if suffix == "_Left" else -1)
+		&"laser", &"flamer":
+			# LaserGunProp.bombDown (`lasergun_Play`) / FlamerProp.bombDown (`thrower<Direction>_Play`)
+			# at the held clip's `gunpoint`; under the robot facing up only.
+			var cls := "lasergun_Play" if weapon == &"laser" else "%s%s_Play" % [name, suffix]
+			_add_child(view, {"kind": "play", "cls": cls, "pos": _gun_point(view)}, 0 if suffix == "_Up" else -1)
+		&"triple", &"landmine":
+			# TripleShootGunProp / LandmineProp: `createWeaponPlay` is an empty MovieClip, which
+			# NinjialPlayCommand / LandminePlayCommand take off on their first run, this tick.
+			pass
+	_advance_action(view, attack, int(view.ammo))
+
+
+## The weapon's command on this engine tick (`age` ticks after `bombDown`): HammerPlayCommand,
+## BoxingPlayCommand, LaserGunPlayCommand with the Laser's ShootLaserCommand and LaserEndCommand,
+## FlamerPlayCommand, ShotGunPlayCommand, LandminePlayCommand (NinjialPlayCommand only shoots:
+## its projectiles are the snapshot's, its end the simulation's recovery). Each clip shows frame
+## age + 1 (made between frames, it advances from the next frame on).
+func _advance_action(view: Dictionary, attack: Dictionary, ammo: int) -> void:
+	var action: Dictionary = view.action
+	var age: int = _tick_now() - int(action.started)
+	match action.kind:
+		&"hammer":
+			# `currentFrame >= totalFrames - 1` (24 of 25).
+			if age + 1 >= _weapon_total("play", _child(view, "play").get("cls", "")) - 1: _end_action(view, ammo)
+		&"boxing":
+			var play: Dictionary = _child(view, "play")
+			var total := _weapon_total("play", play.get("cls", ""))
+			# `currentFrame == floor(totalFrames / 2)`: facing up, the clip goes under the robot.
+			if age + 1 == total / 2 and action.suffix == "_Up":
+				view.children.erase(play)
+				view.children.insert(0, play)
+				_arrange(view)
+			if age + 1 >= total - 1: _end_action(view, ammo)
+		&"flamer":
+			# FlamerFire.shootFire scales the clip to a fixed box (the simulation's `scale`);
+			# FlamerPlayCommand ends when `fire_Play` reaches `totalFrames - 1` (23 of 24).
+			var play: Dictionary = _child(view, "play")
+			if attack.has("scale"):
+				var s := float(attack.scale)
+				play.scale = Vector2(s, 1.0) if action.suffix in ["_Left", "_Right"] else Vector2(1.0, s)
+			if age + 1 >= FLAMER_FIRE_FRAMES - 1: _end_action(view, ammo)
+		&"laser":
+			# LaserGunPlayCommand: at frame `totalFrames - 1` (11) the clip stops and the Laser
+			# is made; ShootLaserCommand draws it this tick; LaserEndCommand's eleventh run
+			# (`_continueTime > 9`) takes it off and gives the robot back.
+			# (frame totalFrames - 1 shows `totalFrames - 2` ticks after bombDown)
+			var shot: int = LASER_CHARGE_FRAMES - 2
+			if age == shot: _shoot_laser(view)
+			elif age >= shot + LASER_END_RUNS: _end_action(view, ammo)
+		&"shotgun":
+			# ShotGunPlayCommand: at `currentFrame == totalFrames` (14) the clip goes and the
+			# FireballBomb is made (the snapshot's projectile); the robot waits for the recovery.
+			var play: Dictionary = _child(view, "play")
+			if not play.is_empty() and age + 1 >= _weapon_total("play", play.cls):
+				_remove_child(view, "play")
+		&"landmine":
+			# LandminePlayCommand: the LandmineBomb on the robot's cell (`mine_bomb`, made here;
+			# the snapshot's mine takes it over), `robotMoveStart`, the last use's `initWeapon`.
+			var cell: Vector2i = _snapshot.get("actors", {}).get(view.id, {}).get("cell", Vector2i.ZERO)
+			_pending_mines.append({"actor_id": view.id, "cell": cell, "made": _tick_now()})
+			_end_action(view, ammo)
+
+
+## The action's end: its clips go and `robotMoveStart` makes the robot's clip again
+## (`setRobotMc`, the held clip with it); the last use's `initWeapon` takes the weapon off.
+func _end_action(view: Dictionary, ammo: int) -> void:
+	view.action.ended = true
+	_remove_child(view, "play")
+	_remove_child(view, "laser")
+	if ammo <= 0: _clear_weapon(view)
+	_set_robot_mc(view, view.suffix)
+
+
+## `AbstractWeapon.updateWeaponDisplay`'s place for the held clip (the new robot clip's `hand`
+## at its first frame) plus its `gunpoint` (LaserGunProp `_laserPos`, FlamerProp `countFirePos`).
+func _gun_point(view: Dictionary) -> Vector2:
+	var gun: Array = _art.get("weapons", {}).get("held", {}).get(view.weapon_class, {}).get("gunpoint", [0, 0])
+	return _hand(view) + Vector2(float(gun[0]), float(gun[1]))
+
+
+## The robot clip's `hand` in the robot's container, where the art pass found it at frame 1.
+func _hand(view: Dictionary) -> Vector2:
+	var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
+	var first: Dictionary = clip.get("looks", {}).values()[0].get("1", {}) if not clip.get("looks", {}).is_empty() else {}
+	var clip_at := _m(first.get("at", _art.get("at", [1, 0, 0, 1, 0, 0])))
+	return (clip_at.affine_inverse() * _m(clip.get("hand", _a(clip_at)))).origin
+
+
+## BoxingPlayCommand.checkAttactDistance: the first of the two cells ahead holding a fixed box,
+## a box that is there or a bomb; past the two it reads cell (0, 0) (`_loc2_[4]` is undefined),
+## the board's corner wall, so it returns 2 when neither holds one.
+func _check_attact_distance(view: Dictionary, snapshot: Dictionary) -> int:
+	var actor: Dictionary = snapshot.get("actors", {}).get(view.id, {})
+	var cell: Vector2i = actor.get("cell", Vector2i.ZERO)
+	var ahead: Vector2i = DIRECTION_OF[view.suffix]
+	for k in 2:
+		var at: Vector2i = cell + ahead * (k + 1)
+		if _is_box(snapshot, at) or _has_bomb(snapshot, at): return k
+	return 2
+
+
+## `Grid.box`: a fixed or breakable box on the cell.
+static func _is_box(snapshot: Dictionary, cell: Vector2i) -> bool:
+	return snapshot.get("board", {}).get(cell, &"solid") in [&"solid", &"soft"]
+
+
+static func _has_bomb(snapshot: Dictionary, cell: Vector2i) -> bool:
+	return snapshot.get("bombs", []).any(func(b): return b.cell == cell and not b.has("position"))
+
+
+## ShootLaserCommand.execute: from the robot's cell along the direction, every cell that does
+## not block (no box or bomb) or holds robots gets a middle piece (`_chosMcArr[1]`) in one
+## Sprite, the first other one the end piece (`_chosMcArr[2]`); the start piece
+## (`_chosMcArr[0]`) is at the gun. The middle pieces follow the start piece's width, 29 apart;
+## the end piece and the Sprite's scale come from the last middle cell's far edge. The walk
+## reads the board of this tick, before the simulation's own laser pass (a tick later).
+func _shoot_laser(view: Dictionary) -> void:
+	var direct: Vector2i = DIRECTION_OF[view.action.suffix]
+	var chos: Array = LASER_PIECES[direct]
+	var actor: Dictionary = _snapshot.get("actors", {}).get(view.id, {})
+	var grid: Vector2i = actor.get("cell", Vector2i.ZERO)
+	var laser_pos := _gun_point(view)
+	var robot_pos: Vector2 = Vector2(actor.get("position", view.position)) * GRID_WIDTH
+	var x_pos := laser_pos.x + robot_pos.x
+	var y_pos := laser_pos.y + robot_pos.y
+	var size: Vector2i = _snapshot.get("board_meta", {}).get("size", Vector2i(17, 15))
+	var start := _laser_size(chos[0])
+	var mids: Array = []
+	var end_at = null
+	var loc5 := 0.0
+	var loc6 := 0.0
+	for k in size.x:
+		var cell: Vector2i = grid + direct * k
+		if not (cell.y > -1 and cell.y < size.y and cell.x > -1 and cell.x < size.x): break
+		var blocked: bool = _is_box(_snapshot, cell) or _has_bomb(_snapshot, cell)
+		var robots: bool = _snapshot.get("actors", {}).values().any(func(a): return a.get("alive", false) and a.get("cell") == cell)
+		if not blocked or robots:
+			if mids.is_empty(): mids.append(Vector2(direct.x * start.x, direct.y * start.y))
+			else: mids.append(mids.back() + Vector2(direct) * 29)
+			if direct.y > 0: loc5 = (grid.y + direct.y * k) * GRID_WIDTH + GRID_WIDTH - y_pos - direct.y * LASER_START_WID
+			elif direct.y < 0: loc5 = absf((grid.y + direct.y * k) * GRID_WIDTH - y_pos) + direct.y * LASER_START_WID
+			elif direct.x > 0: loc6 = (grid.x + direct.x * k) * GRID_WIDTH + GRID_WIDTH - x_pos - direct.x * LASER_START_WID
+			else: loc6 = absf((grid.x + direct.x * k) * GRID_WIDTH - x_pos) + direct.x * LASER_START_WID
+		else:
+			# (a blocking cell is never empty)
+			end_at = Vector2(direct) * LASER_START_WID
+			break
+	var scale := Vector2.ONE
+	if end_at != null and mids.size() >= 2:
+		end_at = Vector2(direct.x * loc6 + direct.x * LASER_START_WID, direct.y * loc5 + direct.y * LASER_START_WID)
+		var box := _laser_union(chos[1], mids)
+		if loc6 != 0: scale.x = absf(end_at.x - direct.x * LASER_START_WID) / box.size.x
+		if loc5 != 0: scale.y = absf(end_at.y - direct.y * LASER_START_WID) / box.size.y
+	elif end_at != null:
+		# `_loc7_.width = _loc7_.height = 0`
+		scale = Vector2.ONE * LASER_NO_SCALE
+	var pieces: Array = [{"root": chos[0], "at": Transform2D()}]
+	if not mids.is_empty():
+		pieces.append({"group": true, "at": Transform2D(0.0, scale, 0.0, Vector2.ZERO), "mids": mids, "root": chos[1]})
+	if end_at != null: pieces.append({"root": chos[2], "at": Transform2D(0.0, end_at)})
+	# Laser.init: the Laser's container at `_laserPos`, under the robot facing up only.
+	_add_child(view, {"kind": "laser", "pos": laser_pos, "pieces": pieces, "shot": _tick_now(), "built": false},
+		0 if view.action.suffix == "_Up" else -1)
+
+
+## A laserCartoon frame's `width` and `height` (the art pass's bounds of that frame).
+func _laser_size(root: int) -> Vector2:
+	var b: Array = _art.get("weapons", {}).get("bounds", {}).get("laserCartoon", {}).get(str(root), [0, 0, 0, 0])
+	return Vector2(float(b[2]) - float(b[0]), float(b[3]) - float(b[1]))
+
+
+## The bounds of the middle pieces in their Sprite (its `width` and `height` at scale 1).
+func _laser_union(root: int, mids: Array) -> Rect2:
+	var b: Array = _art.get("weapons", {}).get("bounds", {}).get("laserCartoon", {}).get(str(root), [0, 0, 0, 0])
+	var offset := Vector2(float(b[0]), float(b[1]))
+	var size := Vector2(float(b[2]) - float(b[0]), float(b[3]) - float(b[1]))
+	var box := Rect2(mids[0] + offset, size)
+	for at: Vector2 in mids:
+		box = box.merge(Rect2(at + offset, size))
+	return box
+
+
+## The Laser's pieces as nodes under its container (made once, after the container's node).
+func _build_laser(view: Dictionary, child: Dictionary) -> void:
+	var base := _path(view, child)
+	var n: int = child.pieces.size()
+	for k in n:
+		var piece: Dictionary = child.pieces[k]
+		piece.rel = "@0" if n == 1 else "@0#%d" % k
+		var path := "%s/%s" % [base, piece.rel]
+		_screen.add_node({"path": path, "parent": base, "stage_matrix": _art.get("at"), "role": "group" if piece.get("group", false) else "piece",
+			"kind": "movie_clip", "effective_visible": true, "frame": 0 if piece.get("group", false) else piece.root})
+		if piece.get("group", false):
+			var m: int = piece.mids.size()
+			for j in m:
+				_screen.add_node({"path": "%s/%s" % [path, "@0" if m == 1 else "@0#%d" % j], "parent": path, "stage_matrix": _art.get("at"),
+					"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": piece.root})
+	child.built = true
 
 
 ## `updateWeaponDisplay`: a new held clip `<name><direction>` at the robot's hand (where the
@@ -463,11 +733,9 @@ func _update_weapon_display(view: Dictionary) -> void:
 
 ## `clearWeapon` / `initWeapon`: the weapon's clips and counter leave the robot.
 func _clear_weapon(view: Dictionary) -> void:
-	for kind in ["weapon", "play", "times"]: _remove_child(view, kind)
+	for kind in ["weapon", "play", "laser", "times"]: _remove_child(view, kind)
 	view.weapon = &""
 	view.weapon_class = ""
-	view.play_class = ""
-	view.play_started = -1
 
 
 func _weapon_total(bucket: String, cls: String) -> int:
@@ -573,6 +841,39 @@ func _show_shield(view: Dictionary, mc_path: String, at: Transform2D, offset: Co
 	_screen.set_node_under(path, view.suffix == "_Right")
 
 
+## The length of the loop `key` plays in such a table (the most frames the art pass saw it at).
+static func _nested_total(table: Dictionary, key: String) -> int:
+	var total := 1
+	for art: Dictionary in table.values(): total = maxi(total, int(art.get("frames", {}).get(key, 1)))
+	return total
+
+
+## An image of a clip that plays on its own (`weapons.played`: by age since it was made, or
+## `weapons.aged`: stopped at `root`, by age), the first whose clip `key` shows `frame`.
+func _aged_art(table: Dictionary, key: String, frame: int) -> Dictionary:
+	for age in table:
+		var art: Dictionary = table[age]
+		if int(art.get("frames", {}).get(key, 1)) == frame: return art
+	return table.get("0", {})
+
+
+## The action clip's image this tick (`age` ticks after bombDown: frame age + 1).
+func _play_art(view: Dictionary, child: Dictionary, age: int) -> Array:
+	var cls: String = child.cls
+	var weapons: Dictionary = _art.get("weapons", {})
+	match view.action.get("kind", &""):
+		&"laser":
+			# Stopped at 11; its nested 2-frame clip flickers on from bombDown (recorded,
+			# gameplay-cinema-laser: frame 2 eleven ticks in, 1 sixteen ticks in).
+			var frame := mini(age + 1, LASER_CHARGE_FRAMES - 1)
+			return [_aged_art(weapons.get("aged", {}).get(cls, {}).get(str(frame), {}), "/@3", age % 2 + 1), frame]
+		&"flamer":
+			# Its one frame holds `fire_Play`, which plays: frame age + 1.
+			return [_aged_art(weapons.get("played", {}).get(cls, {}), "/fire_Play", mini(age + 1, FLAMER_FIRE_FRAMES)), 1]
+	var frame: int = clampi(age + 1, 1, maxi(1, _weapon_total("play", cls)))
+	return [weapons.get("play", {}).get(cls, {}).get("images", {}).get(str(frame), {}), frame]
+
+
 # ------------------------------------------------------------------ the robot's container
 
 ## `resetMainContainer`: on its row's `robotRow` layer, judged from where it stood.
@@ -646,11 +947,14 @@ func _arrange(view: Dictionary) -> void:
 		else:
 			child.rel = rel
 			var matrix: Array = _board.cell_matrix(view.position)
-			# (the item Sprite holds a clip of its own; a Sprite reports frame 0)
-			var item: bool = child.kind == "item"
-			_screen.add_node({"path": path, "parent": base, "stage_matrix": matrix, "role": "group" if item else "piece",
-				"kind": "movie_clip", "effective_visible": true, "frame": 0 if item else 1})
-			if child.kind == "mc":
+			# (the item Sprite holds a clip of its own, the Laser's container its pieces; a
+			# Sprite reports frame 0)
+			var group: bool = child.kind in ["item", "laser"]
+			_screen.add_node({"path": path, "parent": base, "stage_matrix": matrix, "role": "group" if group else "piece",
+				"kind": "movie_clip", "effective_visible": true, "frame": 0 if group else 1})
+			if child.kind == "laser":
+				_build_laser(view, child)
+			elif child.kind == "mc":
 				view.loop_count = 0
 			elif child.kind == "times":
 				# showTimes draws its showWeaponMc in its art; its count is a node of its own.
@@ -707,20 +1011,19 @@ func _show(view: Dictionary) -> void:
 					_screen.set_node_art(play, _effects().get("clips", {}).get("invincibityPlay", {}).get("images", {}).get(str(frame), {}), frame)
 			"weapon":
 				# The hand where the robot clip's first frame was rendered (its own `at`).
-				var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
-				var first: Dictionary = clip.get("looks", {}).values()[0].get("1", {}) if not clip.get("looks", {}).is_empty() else {}
-				var clip_at := _m(first.get("at", _a(art_at)))
-				var hand: Vector2 = (clip_at.affine_inverse() * _m(clip.get("hand", _a(clip_at)))).origin
-				_screen.move_node(path, _a(at * Transform2D(0.0, hand)))
+				_screen.move_node(path, _a(at * Transform2D(0.0, _hand(view))))
 				var images: Dictionary = _art.get("weapons", {}).get("held", {}).get(view.weapon_class, {}).get("images", {})
 				_screen.set_node_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
 				# CountInvincibilityCommand: `weaponMc.filters` as the clip's.
 				_screen.set_node_filter(path, view.filter)
 			"play":
-				var frame: int = clampi(_tick_now() - view.play_started + 1, 1, maxi(1, _weapon_total("play", view.play_class)))
-				_screen.move_node(path, _a(at * Transform2D(0.0, HAMMER_PLAY_POS.get(view.suffix, Vector2.ZERO))))
-				var images: Dictionary = _art.get("weapons", {}).get("play", {}).get(view.play_class, {}).get("images", {})
-				_screen.set_node_art(path, images.get(str(frame), {}), frame)
+				var age: int = _tick_now() - int(view.action.get("started", _tick_now()))
+				var scale: Vector2 = child.get("scale", Vector2.ONE)
+				_screen.move_node(path, _a(at * Transform2D(0.0, scale, 0.0, child.pos)))
+				var shown: Array = _play_art(view, child, age)
+				_screen.set_node_art(path, shown[0], shown[1])
+			"laser":
+				_show_laser(view, child, path, at, offset)
 			"times":
 				var times := at * Transform2D(0.0, TIMES_AT)
 				_screen.move_node(path, _a(times))
@@ -730,6 +1033,33 @@ func _show(view: Dictionary) -> void:
 					_screen.move_node(path + "/~count", _a(times * _m(digit.times_at).affine_inverse() * _m(digit.at)))
 				_screen.set_node_art(path + "/~count", digit)
 				_screen.set_node_offset(path + "/~count", offset)
+
+
+## The Laser's container at `_laserPos` in the robot's container and its pieces (see
+## `_shoot_laser`). Each laserCartoon stands at its frame while its nested 10-frame clip plays:
+## made during the engine tick, it shows its first nested frame on the next frame too
+## (recorded, gameplay-cinema-laser: 1 one tick after the shot, 6 six ticks after).
+func _show_laser(view: Dictionary, child: Dictionary, path: String, at: Transform2D, offset: Color) -> void:
+	var container := at * Transform2D(0.0, child.pos)
+	_screen.move_node(path, _a(container))
+	var aged: Dictionary = _art.get("weapons", {}).get("aged", {}).get("laserCartoon", {})
+	var nested: int = (maxi(1, _tick_now() - int(child.shot)) - 1) % _nested_total(aged.get("2", {}), "/@1") + 1
+	for piece: Dictionary in child.pieces:
+		var piece_path := "%s/%s" % [path, piece.rel]
+		var piece_at: Transform2D = container * piece.at
+		_screen.move_node(piece_path, _a(piece_at))
+		var art := _aged_art(aged.get(str(piece.root), {}), "/@1", nested)
+		if not piece.get("group", false):
+			_screen.set_node_art(piece_path, art, piece.root)
+			_screen.set_node_offset(piece_path, offset)
+			continue
+		var m: int = piece.mids.size()
+		for j in m:
+			var mid_path := "%s/%s" % [piece_path, "@0" if m == 1 else "@0#%d" % j]
+			_screen.move_node(mid_path, _a(piece_at * Transform2D(0.0, piece.mids[j])))
+			# (a Sprite scaled to nothing draws nothing)
+			_screen.set_node_art(mid_path, art if piece.at.get_scale().x > LASER_NO_SCALE else {}, piece.root)
+			_screen.set_node_offset(mid_path, offset)
 
 
 ## The robot clip's own loops (eyes blinking, a feather): each its own node over the clip,
@@ -789,10 +1119,24 @@ func _update_bombs(snapshot: Dictionary) -> void:
 	var live := {}
 	var shown: Array = snapshot.get("bomb_display", [])
 	var bombs: Array = snapshot.get("bombs", [])
+	var mines := {}
 	for k in bombs.size():
 		# The simulation's display fields for this bomb (serial, flying), when it gives them.
 		var bomb: Dictionary = bombs[k].merged(shown[k]) if k < shown.size() else bombs[k]
 		live[_bomb_key(bomb)] = bomb
+		if bomb.get("kind", &"bomb") == &"mine": mines[_key(bomb.actor_id, bomb.cell)] = _bomb_key(bomb)
+	# A LandmineBomb LandminePlayCommand made this tick or the last, before the simulation's
+	# mine registers (it places it a tick later); the simulation's mine then takes its view over.
+	for mine in _pending_mines.duplicate():
+		var key := _key(mine.actor_id, mine.cell)
+		if mines.has(key):
+			for view in _bombs:
+				if view.key == key: view.key = mines[key]
+			_pending_mines.erase(mine)
+		elif _tick_now() - int(mine.made) > 1:
+			_pending_mines.erase(mine)
+		else:
+			live[key] = {"actor_id": mine.actor_id, "cell": mine.cell, "power": 2, "kind": &"mine", "made": mine.made}
 	var flames := {}
 	for flame in snapshot.get("flames", []):
 		var bomb: Dictionary = flame.get("bomb", {})
@@ -830,7 +1174,8 @@ func _update_bombs(snapshot: Dictionary) -> void:
 		# A bomb the AI drops during the frame's scripts shows its first frame once more than
 		# one dropped by key between frames (recorded, gameplay-cinema-ai).
 		var view := {"key": key, "cell": bomb.cell, "power": int(bomb.power), "age": 0 if bomb.actor_id == &"human" else -1, "blasted": false,
-			"position": bomb.get("position", Vector2(bomb.cell)), "arms": []}
+			"position": bomb.get("position", Vector2(bomb.cell)), "arms": [], "mine": bomb.get("kind", &"bomb") == &"mine"}
+		if view.mine: view.age = _tick_now() - int(bomb.get("made", _tick_now()))
 		# Bomb.init: a Sprite on its row's bomb layer (2).
 		view.layer = _board.layer_of(floori((view.position as Vector2).y + 0.5), 2)
 		view.item = {}
@@ -899,6 +1244,13 @@ func _show_bomb(view: Dictionary) -> void:
 	var matrix: Array = _board.cell_matrix(view.position)
 	_screen.move_node(view.item.path, matrix)
 	_screen.move_node(view.item.path + "/@0", matrix)
+	if not view.blasted and view.get("mine", false):
+		# LandmineBomb's `mine_bomb` (Bomb.createMC), playing and looping; made during the engine
+		# tick, it shows its first frame twice (recorded, gameplay-cinema-landmine: frame 3 at age 30).
+		var played: Dictionary = _art.get("weapons", {}).get("played", {}).get("mine_bomb", {})
+		var frame: int = (maxi(1, int(view.age)) - 1) % _nested_total(played, "/") + 1
+		_screen.set_node_art(view.item.path + "/@0", _aged_art(played, "/", frame), frame)
+		return
 	if not view.blasted:
 		var age := maxi(0, int(view.age))
 		var key := "%d|%d" % [age % 27 + 1, age % 14 + 1]
@@ -914,6 +1266,75 @@ func _exp(root: int, nested: int) -> Dictionary:
 	var by_nested: Dictionary = _exp_art.get(str(root), {})
 	if by_nested.is_empty(): return {}
 	return by_nested.get(str(mini(nested, by_nested.size())), {})
+
+
+# ------------------------------------------------------------------ projectiles
+
+## The triple gun's and the fireball gun's projectiles (`TripleShootGunBomb`, `FireballBomb`,
+## both `Bomb`s): the snapshot's `projectiles`, by owner and birth tick. `Bomb.init` puts a
+## Sprite on its row's bomb layer (2) at its cell, `createMC` the clip at the direction's frame
+## and offset, fading in; each move (`shootFunc`) first runs `resetDisplay` (off its row and
+## on again, on the row it stands on); `blast` takes the clip off, `ended` the Sprite after
+## its eleventh run (the snapshot drops the projectile then).
+func _update_shots(snapshot: Dictionary) -> void:
+	var seen := {}
+	for projectile: Dictionary in snapshot.get("projectiles", []):
+		var key := "%s|%s" % [projectile.actor_id, projectile.born]
+		seen[key] = true
+		var view: Dictionary = _shots.get(key, {})
+		var position: Vector2 = projectile.position
+		if view.is_empty():
+			var kind: StringName = projectile.kind
+			var dir: Vector2i = projectile.direction
+			view = {"kind": kind, "dir": dir, "item": {}, "row": floori(position.y + 0.5), "born": _tick_now(), "clip": true,
+				"position": position}
+			view.layer = _board.layer_of(view.row, 2)
+			_board.attach(view.layer, view.item, _board.cell_matrix(position))
+			var frame: int = SHOT_FRAMES[kind][dir][0]
+			_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(position),
+				"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": frame})
+			_shots[key] = view
+		elif projectile.phase != &"cleanup" and (position != view.position or view.clip):
+			if position != view.position:
+				# `shootFunc` -> `resetDisplay`, on the row it stood on before this move.
+				_board.detach(view.layer, view.item)
+				view.layer = _board.layer_of(floori(view.position.y + 0.5), 2)
+				_board.attach(view.layer, view.item, _board.cell_matrix(view.position))
+				_add_shot_clip(view)
+		if projectile.phase == &"cleanup" and view.clip:
+			# `blast`: the clip goes; the Sprite stays until `ended`.
+			_screen.remove_node(view.item.path + "/@0")
+			view.clip = false
+		view.position = position
+		_show_shot(view)
+	for key in _shots.keys():
+		if seen.has(key): continue
+		_board.detach(_shots[key].layer, _shots[key].item)
+		_shots.erase(key)
+
+
+## The projectile's clip again under its Sprite (the Sprite was taken off its row and put back).
+func _add_shot_clip(view: Dictionary) -> void:
+	if not view.clip or _screen.by_path.has(view.item.path + "/@0"): return
+	_screen.add_node({"path": view.item.path + "/@0", "parent": view.item.path, "stage_matrix": _board.cell_matrix(view.position),
+		"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": SHOT_FRAMES[view.kind][view.dir][0]})
+
+
+func _show_shot(view: Dictionary) -> void:
+	var matrix: Array = _board.cell_matrix(view.position)
+	_screen.move_node(view.item.path, matrix)
+	if not view.clip: return
+	var how: Array = SHOT_FRAMES[view.kind][view.dir]
+	var clip_path: String = view.item.path + "/@0"
+	_screen.move_node(clip_path, _a(_m(matrix) * Transform2D(0.0, how[1])))
+	var age: int = _tick_now() - int(view.born)
+	var aged: Dictionary = _art.get("weapons", {}).get("aged", {}).get(SHOT_CLIPS[view.kind], {}).get(str(how[0]), {})
+	# The fireball's nested 35-frame clip plays from the frame after (made during the tick).
+	var nested := (maxi(1, age) - 1) % _nested_total(aged, "/@1") + 1
+	_screen.set_node_art(clip_path, _aged_art(aged, "/@1", nested) if view.kind == &"shotgun" else aged.get("0", {}), how[0])
+	# `TweenMax.from(_mc, 0.2, {alpha: 0})`: TweenLite's default ease (Quad.easeOut) over 0.2 s.
+	var t := clampf(age / SHOT_FADE_TICKS, 0.0, 1.0)
+	_screen.set_node_alpha(clip_path, 1.0 - (1.0 - t) * (1.0 - t))
 
 
 # ------------------------------------------------------------------ pickups

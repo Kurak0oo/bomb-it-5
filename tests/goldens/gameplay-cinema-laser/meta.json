@@ -1,0 +1,16 @@
+{
+ "case": "gameplay-cinema-laser",
+ "case_sha256": "24ec06e8bca1135d869b1f9018ace30cab01e8a95cb6512ce5bd85b862ad0ab8",
+ "fps": 35.0,
+ "frames": {
+  "after": 730,
+  "beam": 717,
+  "beam-late": 722,
+  "charge": 706,
+  "held": 702,
+  "turned": 705
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

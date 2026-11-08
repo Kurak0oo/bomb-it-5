@@ -1,10 +1,9 @@
 extends Node2D
 ## The gameplay screen's placeholder layer (App._game_screen, in the board container): what the
-## round shows that has no original art in the pack yet. Weapon actions other than the hammer's
-## and their shots, mode objects (Green Zone's flag) and, for a stage set other than Cinema, the
-## board itself (its `_brick5` tiles, background and features are not rendered yet). Robots,
-## bombs, blasts and pickups are the original's (scripts/ui/game_actors.gd). Receives
-## snapshots; never owns or advances gameplay.
+## round shows that has no original art in the pack yet: mode objects (Green Zone's flag) and, for a
+## stage set whose board art is not in the pack, the board itself. Robots, bombs, blasts, pickups,
+## the protection effects and the weapons' actions and shots are the original's
+## (scripts/ui/game_actors.gd). Receives snapshots; never owns or advances gameplay.
 
 const PITCH := 36.0
 const ORIGIN := Vector2(334, 86)
@@ -37,8 +36,6 @@ var skin: RefCounted = VisualSkin.new()
 var draw_board := false
 ## Only the board (the layer under the row layers); the effects go on a layer over them.
 var board_only := false
-## Weapon actions GameActors draws from their own clips (HammerProp's `sinker*_Play`).
-const ORIGINAL_ATTACKS: Array[StringName] = [&"hammer"]
 
 
 ## Drawing between steps (#79): `previous` is the step before `snapshot` and `between` how far
@@ -68,16 +65,6 @@ func _draw() -> void:
 		_features()
 	if board_only: return
 	_mode_objects()
-	for attack in state.attacks:
-		if attack.get("layer") == &"behind" and attack.kind not in ORIGINAL_ATTACKS: _attack(attack)
-	for projectile in state.projectiles:
-		if projectile.get("phase") == &"cleanup": continue
-		var at: Vector2 = ORIGIN + (_blend(_was_projectile(projectile), projectile.position) + Vector2.ONE * 0.5) * PITCH
-		if skin.draw(self, "projectile." + projectile.kind, ArtCatalog.rect("projectile." + projectile.kind, at), state.tick, projectile.direction): continue
-		draw_line(at - Vector2(projectile.direction) * 15, at, Color("ee9958"), 6, Quality.edges)
-		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
-	for attack in state.attacks:
-		if attack.get("layer") != &"behind" and attack.kind not in ORIGINAL_ATTACKS: _attack(attack)
 	_mode_overlays()
 
 
@@ -86,12 +73,6 @@ func _draw() -> void:
 func _blend(was: Variant, now: Vector2) -> Vector2:
 	if between >= 1.0 or was == null or (was as Vector2).distance_to(now) > 1.5: return now
 	return (was as Vector2).lerp(now, between)
-
-
-func _was_projectile(projectile: Dictionary) -> Variant:
-	for old in previous.get("projectiles", []):
-		if old.actor_id == projectile.actor_id and old.get("born") == projectile.get("born"): return old.position
-	return null
 
 
 ## Pair 1 draws green and pair 2 purple; the recorded instance falls back to its columns.
@@ -305,55 +286,6 @@ func _marquee() -> void:
 	_label(at + Vector2(15, 77), "★  ★  ★", 18, Color("ffe8b2"))
 	for n in 8:
 		draw_circle(at + Vector2(12 + n * 12, 18), 3, Color("ffe4a3"))
-
-
-func _attack_animation_end(kind: StringName) -> float:
-	# Laser stops on animation frame 11 while its separate recovery lock continues.
-	# See docs/evidence/edition-5-weapon-action-recovery.md and Weapons.advance.
-	return {&"hammer": 24.0, &"laser": 11.0, &"flamer": 23.0, &"triple": 32.0, &"shotgun": 14.0, &"boxing": 13.0}.get(kind, 24.0)
-
-
-func _attack_progress(attack: Dictionary) -> float:
-	return clampf(attack.get("frame", 0) / _attack_animation_end(attack.kind), 0, 1)
-
-
-func _attack(attack: Dictionary) -> void:
-	var at := _center(attack.cell)
-	var direction: Vector2 = Vector2(attack.direction)
-	var age: int = attack.get("frame", 0)
-	var progress := _attack_progress(attack)
-	if attack.kind == &"laser" and attack.get("fired", false) or attack.kind == &"flamer" and not attack.get("cells", []).is_empty():
-		if skin.texture("attack." + attack.kind) != null:
-			for cell in attack.get("cells", []):
-				skin.draw(self, "attack." + attack.kind, ArtCatalog.rect("attack." + attack.kind, _center(cell), state.tick, true), state.tick, direction, progress)
-			return
-	elif skin.draw(self, "attack." + attack.kind, ArtCatalog.rect("attack." + attack.kind, at), state.tick, direction, progress): return
-	if attack.kind == &"hammer":
-		var attachment: Vector2 = attack.get("attachment", Vector2.ZERO) * PITCH / 30.0
-		var swing := direction.rotated(lerpf(-1.5, 0.2, minf(1.0, age / 24.0)))
-		var hand := at + attachment * 0.4
-		var head := hand + swing * 29
-		draw_line(hand, head, Color("e5be80"), 5, Quality.edges)
-		_box(Rect2(head - Vector2(10, 7), Vector2(20, 14)), Color("d5edf0"), Color("7cacba"), 3)
-	elif attack.kind == &"boxing":
-		var reach: float = sin(progress * PI) * PITCH * 1.2
-		draw_line(at, at + direction * reach, Color("e5be80"), 5, Quality.edges)
-		draw_circle(at + direction * reach, 9, Color("e8584f"))
-	elif attack.kind == &"laser" and attack.fired:
-		for cell in attack.get("cells", []):
-			draw_line(_center(cell) - Vector2(attack.direction) * 18, _center(cell) + Vector2(attack.direction) * 18, Color("fff1b6"), 7, Quality.edges)
-	elif attack.kind == &"flamer":
-		for cell in attack.get("cells", []):
-			draw_line(at, _center(cell), Color("ffae62"), 11 + sin(age) * 2, Quality.edges)
-			draw_line(at, _center(cell), Color("ffe69e"), 5, Quality.edges)
-			draw_circle(_center(cell), 8, Color("fff0b0"))
-	elif attack.kind == &"shotgun" and not attack.fired:
-		draw_circle(at + direction * 18, 3 + minf(age, 14) * 0.7, Color("ffba6e"))
-	elif attack.kind == &"triple":
-		var kick := 5.0 if age % 15 < 3 else 0.0
-		draw_line(at, at + direction * (23 - kick), Color("b7d7d4"), 8, Quality.edges)
-	elif not attack.fired:
-		draw_arc(at, 22, -PI / 2, -PI / 2 + TAU * minf(1.0, float(state.tick - attack.started + 1) / maxf(1, attack.ready - attack.started)), 24, Color("ffd989"), 3, Quality.edges)
 
 
 func _center(cell: Vector2i) -> Vector2:

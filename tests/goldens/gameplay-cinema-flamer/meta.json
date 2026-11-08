@@ -1,0 +1,15 @@
+{
+ "case": "gameplay-cinema-flamer",
+ "case_sha256": "6de3120d6e9a84805ba5c5f5058fc8e64549978effa1c13eedb770e01f817aa4",
+ "fps": 35.0,
+ "frames": {
+  "after": 731,
+  "flame": 706,
+  "flame-mid": 716,
+  "held": 702,
+  "turned": 705
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

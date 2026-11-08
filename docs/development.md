@@ -641,3 +641,36 @@ Feature motion, 2026-11-08 (checkpoint 5, owner to review):
 Known gaps: no case throws a bomb with a toy hand (its display is ported, not checked against
 a recording; Stage2's hands all face boxes); a robot pushed while a key is held keeps its playing clip as
 the snapshot's commands give it; the push end re-adds the weapon clip through `setRobotMc` only.
+
+Weapons slice, 2026-11-08 (owner to review): every weapon's action and shots from their SWF clips.
+- Ported in `scripts/ui/game_actors.gd` (`_start_action` = each `*Prop.bombDown`, `_advance_action`
+  = its command, cited per weapon): BoxingProp (`boxing<D>_Play`, `_Play_2`, `_Play_3` by
+  `checkAttactDistance`, under the robot at frame 7 facing up), LaserGunProp (`lasergun_Play` at the
+  held clip's `gunpoint`, stopped at 11; ShootLaserCommand's laserCartoon start, middle pieces in a
+  Sprite scaled to the last cell's edge and end piece, walked over the board of that tick;
+  LaserEndCommand's eleventh run), FlamerProp (`thrower<D>_Play` at the gunpoint, its `fire_Play`
+  by age, scaled by FlamerFire from the snapshot's `scale`), ShotGunProp (`fireball<D>_Play`, off at
+  frame 14), TripleShootGunProp and LandmineProp (their empty play clips live within one tick),
+  LandminePlayCommand's `mine_bomb` (looping, then the ordinary blast); the projectiles
+  `TripleShootGunBomb` (`bullet_fire`) and `FireballBomb` (`ninjialBomb_fire`, nested 35-frame loop)
+  from the snapshot's `projectiles`: frame and offset by direction, `resetDisplay` on each move,
+  clip off at `blast`, Sprite off at `ended`, the 0.2 s fade-in on the game clock (7 ticks). Every
+  weapon's placeholder in `scripts/game_view.gd` is removed.
+- Art: `record_screen.py actors gameplay-cinema-start --parts weapons` adds each held clip's
+  `gunpoint`, `weapons.played` (made playing, by age: `thrower<D>_Play`, `mine_bomb`),
+  `weapons.aged` (stopped at a frame while nested clips play, by age: laserCartoon, lasergun_Play,
+  ninjialBomb_fire, bullet_fire) and `weapons.bounds` (laserCartoon `width`/`height` per frame). Only
+  the `weapons` key of actors.json and `weapon-*.png` change.
+- New cases (pickup fixture, then the action): `gameplay-cinema-flamer`, `-laser`, `-boxing`,
+  `-landmine` (right, at the boxes ahead) and `-fireball` (its charge, down). All pass at the 3×→1×
+  ceiling; nodes match exactly (the laser's scaled Sprite and end piece included).
+Known gaps: the simulation runs each weapon's callbacks one tick after the original in play (its
+weapon timings count from the input counter, but the game consumes a key on the next frame:
+`weapons.gd` emits the first triple shot, fires the laser, ends the hammer/flamer a tick late), so a
+moving projectile stands one move behind the original's and boxes broken by a weapon break a tick
+late; the clips count their own frames from the action's start as the commands do, so they match.
+No case captures a shot for that reason (a scratch run, right and down, matched every shot node but
+its position, one move behind, and its fade): the triple gun has no case. The
+triple/fireball recovery and the shots' fade-in run on the host clock in the reference player
+(TweenMax), so they are not captured. The burnt pickup's `brickExp` (pickups slice) does not show
+its sparkles as the original's at frame 9 (found by the flamer case; captures moved off the burn, whose score also lands a tick late).

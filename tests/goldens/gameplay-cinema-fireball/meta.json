@@ -1,0 +1,13 @@
+{
+ "case": "gameplay-cinema-fireball",
+ "case_sha256": "bafd856a1143870df50b9348547e7350f3f877ddfaafaf72cc11ac4de80419c0",
+ "fps": 35.0,
+ "frames": {
+  "charge": 703,
+  "charge-late": 715,
+  "held": 702
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}
