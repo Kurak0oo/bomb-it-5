@@ -1,0 +1,13 @@
+{
+ "case": "gameplay-cinema-portal",
+ "case_sha256": "61e5c32a652cfb620b9314d50129b28658b14b2e29a1cb02949b4c91217488ad",
+ "fps": 35.0,
+ "frames": {
+  "arrive": 761,
+  "fade": 727,
+  "fade-late": 738
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

@@ -273,6 +273,16 @@ func give_pickup(kind: StringName) -> void:
 	simulation.pickups()[human.cell] = kind
 
 
+## The comparison loop only (`reposition X Y`, where the case uses the reference player's
+## `reposition` fixture: the player's view set to `grid * 30` on empty floor through the
+## original's setters): the player stands on that cell, at rest.
+func reposition_human(cell: Vector2i) -> void:
+	var human: Dictionary = simulation.actors()[&"human"]
+	human.cell = cell
+	human.position = Vector2(cell)
+	human.velocity = Vector2.ZERO
+
+
 func _ai_command(id: StringName) -> Dictionary:
 	return ai.command(simulation.snapshot(), id)
 

@@ -167,3 +167,12 @@ The screen START shows while the board is built row by row (`LoadingMapUI`), gon
 
 **Round draws**:
 The original's `Math.random` calls made before a round starts; a recorded round's own draws continue after them.
+
+**Shield (nombril)**:
+The one-hit protection from `ShieldProp`, shown as the `nombril_<direction>` clip at the robot clip's `hand2`.
+
+**Invincibility**:
+`InvincibilityProp`'s state: a 29-tick introduction (`invincibityPlay`), then a colour-cycling GradientGlowFilter on the robot until it ends.
+
+**Portal transit**:
+The 30 ticks of `SendRobotCommand`, in which a robot fades out at one portal and reappears at the paired one.

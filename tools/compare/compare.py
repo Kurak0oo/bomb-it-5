@@ -31,6 +31,8 @@ GOLDENS = ROOT / 'tests' / 'goldens'
 WORK = ROOT / '.scratch' / 'compare'
 DEFAULT_SWF = ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf'
 FLOOR_SLACK = {'ssim': 0.001, 'delta_e': 0.25}
+# Filters the reference player does not draw (Ruffle's wgpu backend: render/wgpu/src/filters.rs).
+UNRENDERED_FILTERS = ('GradientGlowFilter', 'GradientBevelFilter')
 
 
 def load_case(name):
@@ -265,7 +267,27 @@ def check(name, godot):
                     n.pop('frame', None)
                     if side is golden and n.get('render_bounds'):
                         masks = masks + [n['render_bounds']]
+        # A filter the reference player cannot draw (Ruffle's wgpu backend skips GradientGlowFilter
+        # and GradientBevelFilter: the invincible robot's colour cycle) is drawn by Godot only;
+        # its node's place is left out of the pixel score.
+        unrendered = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
+                      and any(f.get('type') in UNRENDERED_FILTERS for f in n.get('filter_list') or [])]
+        masks = masks + [n['render_bounds'] for n in unrendered]
+        # Flash applies a clip's alpha to each shape inside it, so overlapping shapes add up;
+        # a baked image fades as one. Where the case says so (`composite_alpha`), a faded
+        # baked node's place is left out of the pixel score (its alpha is still compared).
+        if case.get('composite_alpha'):
+            baked = {n['path'] for n in actual['nodes'] if n.get('baked')}
+            faded = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
+                     and n.get('alpha', 1.0) < 1.0 and n['path'] in baked]
+            masks = masks + [n['render_bounds'] for n in faded]
+        else:
+            faded = []
         entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
+        if unrendered:
+            entry['unrendered_filters'] = sorted(n['path'] for n in unrendered)
+        if faded:
+            entry['composite_alpha'] = sorted(n['path'] for n in faded)
         if wall_clock:
             entry['wall_clock_text'] = sorted(wall_clock)
         if wall_frames:

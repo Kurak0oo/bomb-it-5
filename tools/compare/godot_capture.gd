@@ -105,6 +105,10 @@ func _run(case: Dictionary) -> void:
 					# The case's `pickup` fixture (the original's pickup class made on the
 					# player's cell): the same pickup on the player's cell (Game.give_pickup).
 					_viewport.get_child(0).game.give_pickup(StringName(words[1]))
+				"reposition":
+					# The case's `reposition` fixture (the original's setters put the player on
+					# an empty floor cell): the player on that cell (Game.reposition_human).
+					_viewport.get_child(0).game.reposition_human(Vector2i(int(words[1]), int(words[2])))
 				"seed":
 					# The app's Flash `Math.random` (scripts/simulation/avm_random.gd) takes
 					# the case's seed, as the reference player's does. The screens' draws

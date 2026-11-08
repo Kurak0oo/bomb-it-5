@@ -1,0 +1,14 @@
+{
+ "case": "gameplay-cinema-shield",
+ "case_sha256": "690b915750160a42190d79811d0a12ef0590c20b84cd2cf5969236ad893681f9",
+ "fps": 35.0,
+ "frames": {
+  "held": 702,
+  "turned": 705,
+  "used": 814,
+  "walk": 711
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

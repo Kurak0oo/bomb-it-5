@@ -414,6 +414,8 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 		actor.shield -= 1
 		play_sound(&"useNombril")
 		actor.protected_until = _tick + 81
+		# (display) TryToKillCommandChain: `addUseNum`, then a new InvincibilityCommand blinks.
+		actor.blink_until = _tick + 81
 	else:
 		if owner == actor_id: _mode.on_self_kill(actor)
 		actor.alive = false
@@ -458,6 +460,8 @@ func _advance_actor_states() -> void:
 			actor.vehicle = &""
 			actor.kick = false
 			actor.protected_until = _tick + 81
+			# (display) `vehicleComplete`: a new InvincibilityCommand blinks.
+			actor.blink_until = _tick + 81
 			actor.movement_rearm = true
 		actor.protection_stage = &"none"
 		if actor.alive:

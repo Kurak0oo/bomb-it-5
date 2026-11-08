@@ -52,6 +52,22 @@ extends RefCounted
 ## swaps the PixelClip for `brickExp`, removed when it reaches its last frame
 ## (`countBrickExp`: `currentFrame == totalFrames`). The bitmaps are the reference player's
 ## (original/screens/game/items/, record_screen.py items).
+##
+## Effects (checkpoint 5, robot effects; art: record_screen.py actors --parts effects):
+## - `ShieldProp.changeStage` / `initMc` (`resetRobotMc`: a new robot clip) and
+##   `RobotView.setRobotMc`: with a shield, every new clip that has a `hand2` gets a new
+##   `nombril<direction>` at hand2's x and y, at the bottom of the clip facing right
+##   (`addChildAt(_, 0)`) and on top otherwise, sent to the clip's frame and playing and
+##   stopping with it (`robotTurn`, `normalStop`); `addUseNum` takes it off. A ride's clip has
+##   no `hand2` on most rides (`removeShieldDisplay`), and a `_Dead` clip none;
+## - `InvincibilityProp.changeStage`: `invincibityPlay` in the robot's `itemMc` Sprite, which
+##   `setItemMc` puts on top of the robot's container; `CountMcPlayCommand` takes the clip off
+##   on its frame totalFrames - 1 (recorded: frames 1, 1, 2 … 28 over the 29 ticks of the
+##   introduction; the empty Sprite stays), then `CountInvincibilityCommand` sets a
+##   GradientGlowFilter on the robot's clip and weapon every tick (`_filerColor` turned every
+##   2nd tick, `_filerStr` + `_colortime`) until `_time > _totalTime`;
+## - `SendRobotCommand.execute`: the robot's clip at alpha 1 - count / 35 (count 1 on the
+##   tick the portal sends it), until callback 30's `robotMoveStart` makes a new clip.
 
 const DIRECTIONS := {Vector2i(0, 1): "_Down", Vector2i(-1, 0): "_Left", Vector2i(1, 0): "_Right", Vector2i(0, -1): "_Up"}
 ## `RobotModel.vehicle` per ride (CarProp `_Car`, MotoCycleProp `_Skateboard`, HorseProp
@@ -74,6 +90,17 @@ const VEHICLE_HIT_TICKS := 35
 ## `Bomb.blast`'s exp0 frames per ray (middle, end).
 const ARM_FRAMES := {Vector2i(0, -1): [2, 3], Vector2i(0, 1): [8, 9], Vector2i(-1, 0): [6, 7], Vector2i(1, 0): [4, 5]}
 const INVINCIBILITY_FRAMES := 80
+## `CountInvincibilityCommand()`: the filter's colours, ratios and alpha; `execute` builds
+## `new GradientGlowFilter(-20, 60, _filerColor, alphas, ratios, 18, 18, 1, HIGH, INNER, false)`.
+const FILER_COLOR := [16711680, 16744192, 16776960, 8388352, 65280, 65407, 65535, 32767, 255, 8323327,
+	16711935, 16711807, 16711680]
+const FILER_STR := [0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240]
+const FILER_ALPHA := 0.8
+const FILER_STEP := -20
+## `SendRobotCommand`: `Root.GAME_FRAMERATE`, the fade's divisor.
+const GAME_FRAMERATE := 35.0
+## `SendRobotCommand`'s `_totalFrame` (default 30): its last callback makes the robot's clip again.
+const SEND_TOTAL_FRAME := 30
 const ROUND_START_LOOP_AGE := 4
 const BLAST_TICKS := 16
 
@@ -138,7 +165,9 @@ func _create_robots(snapshot: Dictionary) -> void:
 			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO), "blink_until": int(actor.get("blink_until", 0)),
 			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "loop_age": 0, "loop_count": 0,
 			"weapon": &"", "ammo": 0, "weapon_class": "", "weapon_frame": 1, "weapon_playing": false, "weapon_fresh": 0,
-			"play_class": "", "play_started": -1}
+			"play_class": "", "play_started": -1,
+			"shield": false, "shield_class": "", "shield_frame": 1, "shield_playing": false, "shield_fresh": 0, "alpha": 1.0, "transit": false,
+			"inv_from": 0, "inv_play": -1, "filter": {}, "filter_count": 0}
 		_robots[id] = view
 		# RobotView(): `_mainContainer = getDisArr(yN).getChildAt(3)` while yPos is still 0.
 		_place(view, 0, 3)
@@ -172,11 +201,17 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 			_count_dead(view)
 			continue
 		# A key press reaches the robot between frames (robot_turnHandler).
-		if human and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
+		# (in a portal the robot's key listener is off: `stopMoveListener`)
+		if human and not view.transit and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
 		# The frame's timeline advance.
 		if view.playing and view.fresh == 0:
 			view.frame = _next_frame(view.class, view.frame)
 		view.fresh = maxi(0, view.fresh - 1)
+		# The shield's clip plays on its own: made playing, `robotTurn` plays it, `normalStop`
+		# stops it (a key for the way it already faces plays only the robot's clip; recorded).
+		if view.shield_playing and view.shield_fresh == 0 and view.shield_class != "":
+			view.shield_frame = view.shield_frame % _effect_total(view.shield_class) + 1
+		view.shield_fresh = maxi(0, view.shield_fresh - 1)
 		if view.weapon_playing and view.weapon_fresh == 0 and view.weapon_class != "":
 			view.weapon_frame = view.weapon_frame % _weapon_total("held", view.weapon_class) + 1
 		view.weapon_fresh = maxi(0, view.weapon_fresh - 1)
@@ -186,9 +221,13 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		if not human and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
 		_vehicle(view, actor)
 		_weapon(view, actor, attacks.get(id, {}))
+		_shield(view, actor)
+		_invincibility_prop(view, actor)
+		_send_robot(view, actor)
 		if direction == Vector2i.ZERO:
 			view.playing = false
 			view.weapon_playing = false
+			view.shield_playing = false
 		view.direction = direction
 		if int(actor.get("blink_until", 0)) > view.blink_until:
 			# robotRelive: a new InvincibilityCommand.
@@ -221,6 +260,7 @@ func _turn(view: Dictionary, direction: Vector2i, hold := 1) -> void:
 		view.fresh = hold
 		view.weapon_playing = true
 		view.weapon_fresh = hold
+		view.shield_fresh = hold
 	view.playing = true
 
 
@@ -247,6 +287,15 @@ func _set_robot_mc(view: Dictionary, suffix: String) -> void:
 	# (a ride's clip after the pickup, the robot after a swing; recorded).
 	view.fresh = 1
 	view.loop_age = 0
+	# A new MovieClip: alpha 1 (SendRobotCommand faded the old one); the shield's new
+	# `nombril<direction>` where the clip has a `hand2` (`gotoAndPlay(_mc.currentFrame)`).
+	view.alpha = 1.0
+	view.shield_class = ""
+	if view.shield and not suffix.begins_with("_Dead") and _effects().get("hand2", {}).has(view.class):
+		view.shield_class = "nombril" + suffix
+		view.shield_frame = clampi(view.frame, 1, _effect_total(view.shield_class))
+		view.shield_playing = true
+		view.shield_fresh = 1
 	var mc: Dictionary = _child(view, "mc")
 	if not mc.is_empty():
 		view.children.erase(mc)
@@ -275,6 +324,10 @@ func _kill(view: Dictionary) -> void:
 	view.offset = false
 	_clear_weapon(view)
 	_set_robot_mc(view, "_Dead")
+	# `clearDisplay`: the container keeps only the clip (the item Sprite goes too).
+	_remove_child(view, "item")
+	view.inv_play = -1
+	view.filter = {}
 
 
 ## `AbstractPlayer.robotRelive` (a mode that brings robots back: Battle Royale, Green Zone,
@@ -413,6 +466,105 @@ func _weapon_total(bucket: String, cls: String) -> int:
 	return int(_art.get("weapons", {}).get(bucket, {}).get(cls, {}).get("frames", 1))
 
 
+# ------------------------------------------------------------------ effects
+
+func _effects() -> Dictionary:
+	return _art.get("effects", {})
+
+
+func _effect_total(cls: String) -> int:
+	return maxi(1, int(_effects().get("clips", {}).get(cls, {}).get("frames", 1)))
+
+
+## `ShieldProp.changeStage` (`initMc`: `resetRobotMc`, so a new robot clip with its nombril)
+## and `addUseNum` (the shield used: its nombril leaves the clip).
+func _shield(view: Dictionary, actor: Dictionary) -> void:
+	var on: bool = int(actor.get("shield", 0)) > 0 and not view.dead
+	if on == view.shield: return
+	view.shield = on
+	if on:
+		_set_robot_mc(view, view.suffix)
+	else:
+		view.shield_class = ""
+
+
+## `InvincibilityProp.changeStage`, `CountMcPlayCommand` and `CountInvincibilityCommand`, once
+## per tick, timed by the snapshot: the introduction runs from the pickup to
+## `invincible_active_from` (29 ticks), the filter from there to `invincible_until`.
+func _invincibility_prop(view: Dictionary, actor: Dictionary) -> void:
+	var from := int(actor.get("invincible_active_from", 0))
+	var until := int(actor.get("invincible_until", 0))
+	if from != view.inv_from and from > _now and until > _now:
+		# A pickup: `gotoAndPlay(1)` on a running introduction; else a new `invincibityPlay` in
+		# `itemMc`, which `setItemMc` puts on top of the container (the chain before it goes;
+		# its filter stays on the clip until the new chain sets one).
+		view.inv_from = from
+		if view.inv_play < 0:
+			_remove_child(view, "item")
+			_add_child(view, {"kind": "item"}, -1)
+		view.inv_play = _now
+	if view.inv_play >= 0 and _now >= view.inv_from:
+		# CountMcPlayCommand: the clip off on its frame totalFrames - 1; the filter's chain.
+		view.inv_play = -1
+		view.filter_count = 0
+	if view.inv_play < 0 and view.inv_from > 0 and _now >= view.inv_from:
+		if _now < until:
+			# CountInvincibilityCommand.execute: `_colortime += _step`; below -20 it is 0 again and
+			# the colours turn by one.
+			view.filter_count += 1
+			var colortime: int = FILER_STEP if view.filter_count % 2 == 1 else 0
+			var turns: int = view.filter_count / 2
+			var colors := []
+			for k in FILER_COLOR.size(): colors.append(FILER_COLOR[(k + turns) % FILER_COLOR.size()])
+			var ratios := []
+			var alphas := []
+			for value in FILER_STR:
+				ratios.append(value + colortime)
+				alphas.append(FILER_ALPHA)
+			view.filter = {"type": "GradientGlowFilter", "distance": -20, "angle": 60, "colors": colors, "alphas": alphas,
+				"ratios": ratios, "blur_x": 18, "blur_y": 18, "strength": 1, "quality": 3, "inner": true, "knockout": false}
+		elif not view.filter.is_empty():
+			# `_time > _totalTime`: `mc.filters = []`, the weapon's too.
+			view.filter = {}
+			view.inv_from = 0
+
+
+## `SendRobotCommand.execute`: the clip fades for 29 callbacks; the 30th (`robotMoveStart`,
+## `sendEnd`) makes the robot's clip again where the other portal is.
+func _send_robot(view: Dictionary, actor: Dictionary) -> void:
+	var until := int(actor.get("transit_until", 0))
+	if until > _now:
+		if not view.transit:
+			# Portal.runEngine: `robotMoveStop` (RobotView.robotMoveStop(false): the clip stops,
+			# the weapon's goes to frame 1).
+			view.transit = true
+			view.playing = false
+			view.weapon_playing = false
+			view.weapon_frame = 1
+		var frame_count := SEND_TOTAL_FRAME - (until - _now)
+		view.alpha = 1.0 - frame_count / GAME_FRAMERATE
+	elif view.transit:
+		view.transit = false
+		_set_robot_mc(view, view.suffix)
+
+
+## The shield's nombril in the robot's clip: drawn with the clip (a baked node), at hand2.
+func _show_shield(view: Dictionary, mc_path: String, at: Transform2D, offset: Color) -> void:
+	var path := mc_path + "/~shield"
+	var shown: bool = _screen.by_path.has(path)
+	if view.shield_class == "" or view.dead:
+		if shown: _screen.remove_node(path)
+		return
+	if not shown: _add_art_node(path, mc_path, _a(at))
+	var hand: Array = _effects().get("hand2", {}).get(view.class, [0, 0])
+	_screen.move_node(path, _a(at * Transform2D(0.0, Vector2(hand[0], hand[1]))))
+	var images: Dictionary = _effects().get("clips", {}).get(view.shield_class, {}).get("images", {})
+	_screen.set_node_art(path, images.get(str(view.shield_frame), {}))
+	_screen.set_node_offset(path, offset)
+	# `setRobotMc`: `addChildAt(_shieldContainer, 0)` facing right, else `addChild`.
+	_screen.set_node_under(path, view.suffix == "_Right")
+
+
 # ------------------------------------------------------------------ the robot's container
 
 ## `resetMainContainer`: on its row's `robotRow` layer, judged from where it stood.
@@ -486,8 +638,10 @@ func _arrange(view: Dictionary) -> void:
 		else:
 			child.rel = rel
 			var matrix: Array = _board.cell_matrix(view.position)
-			_screen.add_node({"path": path, "parent": base, "stage_matrix": matrix, "role": "piece", "kind": "movie_clip",
-				"effective_visible": true, "frame": 1})
+			# (the item Sprite holds a clip of its own; a Sprite reports frame 0)
+			var item: bool = child.kind == "item"
+			_screen.add_node({"path": path, "parent": base, "stage_matrix": matrix, "role": "group" if item else "piece",
+				"kind": "movie_clip", "effective_visible": true, "frame": 0 if item else 1})
 			if child.kind == "mc":
 				view.loop_count = 0
 			elif child.kind == "times":
@@ -525,6 +679,24 @@ func _show(view: Dictionary) -> void:
 				var art := _robot_art(view)
 				_screen.set_node_art(path, art, view.frame)
 				_show_loops(view, path, at, art, offset)
+				_show_shield(view, path, at, offset)
+				_screen.set_node_alpha(path, view.alpha)
+				_screen.set_node_filter(path, view.filter)
+			"item":
+				# The `itemMc` Sprite (at the container's origin) and its `invincibityPlay`.
+				_screen.move_node(path, matrix)
+				var play := path + "/@0"
+				var playing: bool = view.inv_play >= 0
+				if playing and not _screen.by_path.has(play):
+					_screen.add_node({"path": play, "parent": path, "stage_matrix": matrix, "role": "piece", "kind": "movie_clip",
+						"effective_visible": true, "frame": 1})
+				elif not playing and _screen.by_path.has(play):
+					_screen.remove_node(play)
+				if playing:
+					var frame: int = clampi(_tick_now() - view.inv_play, 1, _effect_total("invincibityPlay"))
+					_screen.move_node(play, matrix)
+					_screen.set_node_offset(play, offset)
+					_screen.set_node_art(play, _effects().get("clips", {}).get("invincibityPlay", {}).get("images", {}).get(str(frame), {}), frame)
 			"weapon":
 				# The hand where the robot clip's first frame was rendered (its own `at`).
 				var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
@@ -534,6 +706,8 @@ func _show(view: Dictionary) -> void:
 				_screen.move_node(path, _a(at * Transform2D(0.0, hand)))
 				var images: Dictionary = _art.get("weapons", {}).get("held", {}).get(view.weapon_class, {}).get("images", {})
 				_screen.set_node_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
+				# CountInvincibilityCommand: `weaponMc.filters` as the clip's.
+				_screen.set_node_filter(path, view.filter)
 			"play":
 				var frame: int = clampi(_tick_now() - view.play_started + 1, 1, maxi(1, _weapon_total("play", view.play_class)))
 				_screen.move_node(path, _a(at * Transform2D(0.0, HAMMER_PLAY_POS.get(view.suffix, Vector2.ZERO))))

@@ -1,0 +1,141 @@
+{
+ "name": "gameplay-cinema-invincible",
+ "screen": "game",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ },
+ "origin": "The robots' effects (checkpoint 5): the round of gameplay-cinema-bomb (AI robots stopped); the pickup fixture gives the player an InvincibilityProp (intro: invincibityPlay in the robot's itemMc on top of its container, InvincibilityProp.changeStage; intro-late: its frame 27), CountMcPlayCommand takes the clip off and CountInvincibilityCommand sets the GradientGlowFilter on the robot's clip every tick (glow, glow-turned). Its end (350 ticks later) is not captured: by then the Arcade timed drops, on the host clock in the reference player, differ.",
+ "unrendered_filters": "The reference player draws no GradientGlowFilter (Ruffle's wgpu backend skips it): where a reference node carries one, its place is left out of the pixel score.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "pickup",
+    "kind": "invincibility"
+   },
+   "godot_command": "pickup invincible",
+   "godot_note": "The pickup fixture makes the original's own pickup class on the player's cell (AbstractItem.init), collected by GetItemCommand on the next engine frame; Godot puts the same pickup on the player's cell (Game.give_pickup)."
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "capture": "intro"
+  },
+  {
+   "command": "step 27"
+  },
+  {
+   "capture": "intro-late"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "capture": "glow"
+  },
+  {
+   "command": "step 7"
+  },
+  {
+   "capture": "glow-turned"
+  }
+ ]
+}

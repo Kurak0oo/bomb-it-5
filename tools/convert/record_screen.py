@@ -1114,9 +1114,53 @@ def _record_weapons(p, add, nodes, name, target, tmp, seen, at, out, xy):
     print(f'  weapon digits: {sorted(out["weapons"]["digits"])}')
 
 
+def _record_effects(p, add, nodes, name, target, tmp, seen, at, out):
+    """The robots' effect clips (`effects`): the shield `nombril_<Direction>` (ShieldProp.initMc,
+    RobotView.setRobotMc: made per direction and put in the robot's clip at its `hand2`), the
+    invincibility introduction `invincibityPlay` (InvincibilityProp.changeStage, in the robot's
+    `itemMc`), each at every frame, rendered where the robots are; and per robot clip the place
+    of its `hand2` child (`_shieldContainer.x/y = hand2.x/y`; a clip without one shows no shield,
+    the rides). The portal transit (SendRobotCommand) only fades the robot's clip, and the
+    invincibility's GradientGlowFilter (CountInvincibilityCommand) is drawn by Godot: the
+    reference player renders no GradientGlowFilter (Ruffle's wgpu backend skips it)."""
+    out['effects'] = {'clips': {}, 'hand2': {}}
+
+    def frames_of(cls):
+        add(cls, 1)
+        tree = nodes()
+        p.command(f'unsymbol {name}')
+        if '' not in tree:
+            return None
+        frames = {}
+        for frame in range(1, tree['']['total_frames'] + 1):
+            add(cls, frame)
+            stored = _store(p, name, target, tmp, seen, None, None, 'effect')
+            p.command(f'unsymbol {name}')
+            if stored:
+                stored['file'] = 'actors/' + stored['file']
+                stored['at'] = at
+                frames[str(frame)] = stored
+        return {'frames': tree['']['total_frames'], 'images': frames}
+
+    for cls in [f'nombril{d}' for d in DIRECTIONS] + ['invincibityPlay']:
+        got = frames_of(cls)
+        if got:
+            out['effects']['clips'][cls] = got
+    for robot in ROBOTS:
+        for cls in _robot_classes(robot):
+            add(cls, 1)
+            tree = nodes()
+            p.command(f'unsymbol {name}')
+            if '/hand2' in tree:
+                # (getChildByName: a direct child; its x and y, in the clip's own space)
+                out['effects']['hand2'][cls] = tree['/hand2']['matrix'][4:6]
+    print(f'  effects: {sorted(out["effects"]["clips"])}, hand2 in {len(out["effects"]["hand2"])} robot clips')
+
+
 def _write_actors(target, out, done, previous):
     """actors.json with the parts recorded so far (`done`); the others as they were."""
-    keys = {'robots': ('robots', 'loop_art'), 'weapons': ('weapons',), 'clips': ('played', 'nested', 'still', 'loops')}
+    keys = {'robots': ('robots', 'loop_art'), 'weapons': ('weapons',), 'clips': ('played', 'nested', 'still', 'loops'),
+            'effects': ('effects',)}
     merged = dict(out)
     for part, names in keys.items():
         if part not in done:
@@ -1126,7 +1170,7 @@ def _write_actors(target, out, done, previous):
     (target / 'actors.json').write_text(json.dumps(merged, indent=1) + '\n', encoding='utf-8')
 
 
-def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots', 'plays', 'weapons', 'clips')):
+def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots', 'plays', 'weapons', 'clips', 'effects')):
     """The moving actors' art (checkpoint 4 slice b), into original/screens/<screen>/actors/:
     each library clip the round makes at run time is constructed by its own class with the
     reference player's `symbol` (art pass only), put on the board's first row layer, and
@@ -1140,6 +1184,8 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
       a hat's feather) is left out of the clip's images and rendered alone at each of its
       frames, with its place at each root frame (`_record_robots`);
     - each weapon's held clip, its `_Play` clip and the `showTimes` counter (`_record_weapons`);
+    - the robots' effect clips: the shield, the invincibility introduction, each robot clip's
+      `hand2` (`_record_effects`, key `effects`);
     - bomb0 and the portals by age (their timelines play, as made with `new`), exp0 at each
       root frame by age of its nested clip (the root is stopped), brickExp at each frame;
     - a box running loops of its own (the centre's marquee), on stage at every combination.
@@ -1159,7 +1205,7 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
     elif (target / 'actors.json').is_file():
         previous = json.loads((target / 'actors.json').read_text(encoding='utf-8'))
         for part in parts:
-            for old in target.glob(f'{ {"robots": "robot", "weapons": "weapon", "clips": "piece", "plays": "-"}[part]}-*.png'):
+            for old in target.glob(f'{ {"robots": "robot", "weapons": "weapon", "clips": "piece", "plays": "-", "effects": "effect"}[part]}-*.png'):
                 old.unlink()
     target.mkdir(parents=True, exist_ok=True)
     host = board['layers']['robot'][0]
@@ -1203,6 +1249,11 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
             _write_actors(target, out, parts & {'weapons'}, previous)
             # 3× frames of the cases that show rides and weapons (the pixel score's ceiling).
             for other in CASES_WITH_RIDES:
+                _shots(load_case(other), other, player_path, swf, PACK / screen)
+        if 'effects' in parts:
+            _record_effects(p, add, nodes, name, target, tmp, seen, at, out)
+            _write_actors(target, out, parts & {'weapons', 'effects'}, previous)
+            for other in CASES_WITH_EFFECTS:
                 _shots(load_case(other), other, player_path, swf, PACK / screen)
         if 'robots' in parts:
             _record_robots(p, target, seen, looks, all_looks, out)
@@ -1668,6 +1719,7 @@ def record_panels(_case_name, player_path, swf):
 # the pixel score's ceiling, compare.py resampling_ceiling).
 CASES_WITH_ACTORS = ('gameplay-cinema-bomb',)
 CASES_WITH_RIDES = ('gameplay-cinema-ride', 'gameplay-cinema-hammer')
+CASES_WITH_EFFECTS = ('gameplay-cinema-shield', 'gameplay-cinema-invincible', 'gameplay-cinema-portal')
 
 
 def _shots(case, case_name, player_path, swf, target):
@@ -1716,8 +1768,8 @@ def main():
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
-    parser.add_argument('--parts', default='robots,plays,weapons,clips',
-                        help='actors: which parts to record again (robots, plays, weapons, clips); the others are kept')
+    parser.add_argument('--parts', default='robots,plays,weapons,clips,effects',
+                        help='actors: which parts to record again (robots, plays, weapons, clips, effects); the others are kept')
     parser.add_argument('--sets', default='',
                         help='sets: the stage sets to render, comma separated (default: every set in board.sets)')
     parser.add_argument('--looks', choices=['round', 'all'], default='round',

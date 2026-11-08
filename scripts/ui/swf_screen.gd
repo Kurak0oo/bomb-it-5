@@ -38,6 +38,7 @@ const FPS := 35.0
 const BLEND_SHADER := preload("res://scripts/ui/swf_blend.gdshader")
 const GLOW_SHADER := preload("res://scripts/ui/swf_glow.gdshader")
 const OFFSET_SHADER := preload("res://scripts/ui/swf_color_add.gdshader")
+const GRADIENT_GLOW_SHADER := preload("res://scripts/ui/swf_gradient_glow.gdshader")
 const FlashKeys = preload("res://scripts/ui/flash_keys.gd")
 const FONTS := "res://original/fonts/fonts.json"
 ## Flash's TextField draws its text 2 units inside its bounds.
@@ -300,7 +301,7 @@ func add_node(entry: Dictionary, art: Dictionary = {}) -> Dictionary:
 	var parent: Node2D = by_path.get(entry.parent, self)
 	var node := Node2D.new()
 	node.name = _node_name(path)
-	parent.add_child(node)
+	_content(_by_path_rec.get(entry.parent, {}), parent).add_child(node)
 	by_path[path] = node
 	var rec := {"entry": entry, "node": node, "parent": entry.parent, "path": path,
 		"static": _matrix(entry.stage_matrix), "visible": bool(entry.get("effective_visible", true)),
@@ -449,6 +450,125 @@ func _offset_material(rec: Dictionary) -> void:
 		shader.shader = OFFSET_SHADER
 		sprite.material = shader
 	(sprite.material as ShaderMaterial).set_shader_parameter("offset", Vector3(offset.r, offset.g, offset.b))
+
+
+## A run-time node's own alpha (`DisplayObject.alpha`: SendRobotCommand's fade), on the node
+## and what it holds; reported as the node's alpha. The art is premultiplied.
+func set_node_alpha(path: String, alpha: float) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	rec.node.set_meta("swf_alpha", alpha)
+	rec.node.modulate = Color(alpha, alpha, alpha, alpha)
+
+
+## A child drawn under its parent's own art (`addChildAt(child, 0)` inside a baked clip: the
+## shield facing right) stays before the parent's art sprite; otherwise it goes on top.
+func set_node_under(path: String, under: bool) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	var node: Node2D = rec.node
+	node.set_meta("swf_under", under)
+	node.get_parent().move_child(node, 0 if under else -1)
+
+
+## Children drawn under the node's art come first among its content.
+static func _under_count(content: Node) -> int:
+	var k := 0
+	for child in content.get_children():
+		if not child.get_meta("swf_under", false): break
+		k += 1
+	return k
+
+
+## Where a node's art and run-time children go: its filter group while it has one.
+static func _content(rec: Dictionary, fallback: Node) -> Node:
+	var group = rec.get("filter_group")
+	return group if group != null else fallback
+
+
+## A run-time node's filter (`DisplayObject.filters`), drawn over the node and everything it
+## holds: a GradientGlowFilter as `{"type": "GradientGlowFilter", "distance", "angle", "colors",
+## "alphas", "ratios", "blur_x", "blur_y", "strength", "quality", "inner", "knockout"}` (Flash
+## units: degrees, 0-255 ratios), or `{}` for none (`filters = []`).
+func set_node_filter(path: String, filter: Dictionary) -> void:
+	var rec: Dictionary = _by_path_rec.get(path, {})
+	if rec.is_empty(): return
+	var node: Node2D = rec.node
+	var group: CanvasGroup = rec.get("filter_group")
+	if filter.is_empty():
+		if group == null: return
+		for child in group.get_children(): child.reparent(node, false)
+		rec.erase("filter_group")
+		rec.erase("filter_key")
+		group.queue_free()
+		return
+	if group == null:
+		group = CanvasGroup.new()
+		# (not `swf_art`: run-time nodes with display-list paths can live inside it)
+		group.name = "Filters"
+		var material := ShaderMaterial.new()
+		material.shader = GRADIENT_GLOW_SHADER
+		group.material = material
+		for child in node.get_children(): child.reparent(group, false)
+		node.add_child(group)
+		rec.filter_group = group
+	var px := maxf(0.01, _px if _px > 0.0 else pixels_per_unit())
+	var key := "%s|%f" % [filter, px]
+	if rec.get("filter_key", "") == key: return
+	rec.filter_key = key
+	_fit_gradient_glow(group, filter, px)
+
+
+## The GradientGlowFilter's uniforms at this screen scale. The blur is sampled once per stage
+## unit (Ruffle's blur size in screen pixels, (blur - 1) * scale + 1, over `stride`), so a
+## kernel of `quality` passes fits the shader's 64 taps.
+func _fit_gradient_glow(group: CanvasGroup, filter: Dictionary, px: float) -> void:
+	var material: ShaderMaterial = group.material
+	var passes := int(filter.get("quality", 1))
+	var stride := maxf(1.0, px)
+	var kx := _glow_kernel(((float(filter.get("blur_x", 0)) - 1.0) * px + 1.0) / stride, passes)
+	var ky := _glow_kernel(((float(filter.get("blur_y", 0)) - 1.0) * px + 1.0) / stride, passes)
+	var angle := deg_to_rad(float(filter.get("angle", 45)))
+	var offset := Vector2(cos(angle), sin(angle)) * float(filter.get("distance", 4)) * px
+	material.set_shader_parameter("nx", mini(kx.size(), 64))
+	material.set_shader_parameter("ny", mini(ky.size(), 64))
+	material.set_shader_parameter("wx", kx)
+	material.set_shader_parameter("wy", ky)
+	material.set_shader_parameter("stride", stride)
+	material.set_shader_parameter("offset_px", offset)
+	material.set_shader_parameter("strength", float(filter.get("strength", 1)))
+	material.set_shader_parameter("inner", bool(filter.get("inner", false)))
+	material.set_shader_parameter("knockout", bool(filter.get("knockout", false)))
+	material.set_shader_parameter("gradient", _gradient_table(filter.get("colors", []), filter.get("alphas", []), filter.get("ratios", [])))
+	var reach := float(maxi(kx.size(), ky.size()) / 2 + 2) * stride + offset.length()
+	group.fit_margin = reach
+	group.clear_margin = reach * 2.0
+
+
+## A Flash gradient's 256 entries (straight colour and alpha): each ratio (clamped to 0-255,
+## as the filter's setter keeps them) places its colour; between two the colour is linear,
+## before the first and after the last it is held.
+static func _gradient_table(colors: Array, alphas: Array, ratios: Array) -> ImageTexture:
+	var image := Image.create(256, 1, false, Image.FORMAT_RGBA8)
+	var n := mini(colors.size(), mini(alphas.size(), ratios.size()))
+	for i in 256:
+		var c := Color(0, 0, 0, 0)
+		if n > 0:
+			var k := 0
+			while k < n and clampi(int(ratios[k]), 0, 255) < i: k += 1
+			if k == 0 or k >= n:
+				c = _stop(colors, alphas, mini(k, n - 1))
+			else:
+				var r0 := clampi(int(ratios[k - 1]), 0, 255)
+				var r1 := clampi(int(ratios[k]), 0, 255)
+				c = _stop(colors, alphas, k - 1).lerp(_stop(colors, alphas, k), float(i - r0) / maxf(1.0, float(r1 - r0)))
+		image.set_pixel(i, 0, c)
+	return ImageTexture.create_from_image(image)
+
+
+static func _stop(colors: Array, alphas: Array, k: int) -> Color:
+	var rgb := int(colors[k])
+	return Color8((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255, roundi(clampf(float(alphas[k]), 0.0, 1.0) * 255.0))
 
 
 ## The local pack's manifest of this screen (art the controllers lay out themselves).
@@ -915,8 +1035,9 @@ func _sprite(rec: Dictionary) -> Sprite2D:
 		var material := CanvasItemMaterial.new()
 		material.blend_mode = CanvasItemMaterial.BLEND_MODE_PREMULT_ALPHA
 		sprite.material = material
-	rec.node.add_child(sprite)
-	rec.node.move_child(sprite, 1 if blend > 0 else 0)
+	var content := _content(rec, rec.node)
+	content.add_child(sprite)
+	content.move_child(sprite, (1 if blend > 0 else 0) + _under_count(content))
 	rec.sprite = sprite
 	if rec.has("color_offset"): _offset_material(rec)
 	return sprite

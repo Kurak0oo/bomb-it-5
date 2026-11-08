@@ -1,0 +1,145 @@
+{
+ "name": "gameplay-cinema-portal",
+ "screen": "game",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ },
+ "origin": "The robots' effects (checkpoint 5): the round of gameplay-cinema-bomb (AI robots stopped); the reposition fixture puts the player on (3, 3) under the portal at (3, 2); it walks up into it (Portal.runEngine: SendRobotCommand fades the robot's clip, alpha 1 - count / 35: fade, fade-late) and arrives at the other portal (arrive: robotMoveStart makes the clip again, InvincibilityCommand(45) blinks).",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "reposition",
+    "x": 3,
+    "y": 3
+   },
+   "godot_command": "reposition 3 3",
+   "godot_note": "The reposition fixture puts the player's view on an empty floor cell through the original's setters; Godot puts the player on that cell (Game.reposition_human)."
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "kd up"
+  },
+  {
+   "command": "step 24"
+  },
+  {
+   "capture": "fade"
+  },
+  {
+   "command": "step 11"
+  },
+  {
+   "capture": "fade-late"
+  },
+  {
+   "command": "ku up"
+  },
+  {
+   "command": "step 23"
+  },
+  {
+   "capture": "arrive"
+  }
+ ],
+ "composite_alpha": "SendRobotCommand fades the robot clip (alpha compared); Flash applies that alpha to each shape inside the clip, so its overlapping shapes add up (the head stays bluer), while the baked image fades as one: the faded clip is left out of the pixel score."
+}

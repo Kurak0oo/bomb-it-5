@@ -7,8 +7,6 @@ extends Node2D
 ## snapshots; never owns or advances gameplay.
 
 const PITCH := 36.0
-## Portal transit length in steps (`BombSimulation`, `SendRobotCommand` totalFrame).
-const TRANSIT_TICKS := 29
 const ORIGIN := Vector2(334, 86)
 ## Art slots and native colours per robot r0-r7 (Session.ROBOTS order).
 const ROBOT_SLOTS := [&"human", &"ruby", &"lime", &"gold", &"violet", &"slate", &"mint", &"snow"]
@@ -80,36 +78,7 @@ func _draw() -> void:
 		draw_circle(at, 6 if projectile.kind == &"triple" else 9, Color("ffdf8d"))
 	for attack in state.attacks:
 		if attack.get("layer") != &"behind" and attack.kind not in ORIGINAL_ATTACKS: _attack(attack)
-	for id in state.actors: _protection(state.actors[id], id)
 	_mode_overlays()
-
-
-func _was_actor(id: StringName) -> Variant:
-	var old: Dictionary = previous.get("actors", {}).get(id, {})
-	return old.get("position") if old.get("alive", false) else null
-
-
-## Placeholders for what the robots' original clips do not show yet: the shield
-## (`ShieldProp`: `nombril_<direction>` in the robot's clip), the invincibility effect
-## (`InvincibilityProp`: `invincibityPlay` and the colour filter) and the portal transit
-## (`SendRobotCommand`). Drawn over the robot until those clips are rendered.
-func _protection(actor: Dictionary, id: StringName) -> void:
-	if not actor.get("alive", false): return
-	var at: Vector2 = ORIGIN + (_blend(_was_actor(id), actor.position) + Vector2.ONE * 0.5) * PITCH
-	if int(actor.get("transit_until", 0)) > state.tick:
-		if not skin.draw(self, "effect.transit", ArtCatalog.rect("effect.transit", at), state.tick):
-			draw_arc(at, 16, state.tick * 0.3, state.tick * 0.3 + PI * 1.5, 24, Color("bab2f4"), 3, Quality.edges)
-	if int(actor.get("shield", 0)) > 0:
-		if not skin.draw(self, "effect.shield", ArtCatalog.rect("effect.shield", at), state.tick):
-			draw_circle(at, 21, Color(0.82, 0.93, 0.69, 0.18))
-			draw_arc(at, 21, 0, TAU, 32, Color("d2eeb1"), 2.5, Quality.edges)
-	if int(actor.get("invincible_until", 0)) > state.tick:
-		var introducing: bool = actor.get("protection_stage") == &"introduction"
-		var aura := "effect.invincible_intro" if introducing and skin.texture("effect.invincible_intro") != null else "effect.invincible"
-		if not skin.draw(self, aura, ArtCatalog.rect(aura, at), state.tick):
-			# `InvincibilityProp._filerColor`: the filter cycles through the rainbow.
-			var hue := fposmod(state.tick / 26.0, 1.0)
-			draw_arc(at, 23 + sin(state.tick * 0.3) * (6 if introducing else 2), 0, TAU, 32, Color.from_hsv(hue, 0.8, 1.0), 3, Quality.edges)
 
 
 ## Where a moving thing is drawn: its previous-step position blended towards `now`, unless it

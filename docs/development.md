@@ -574,3 +574,43 @@ Birthday Party slice, 2026-11-07 (owner to review):
 Known gaps: no compare case past tick 105 (opening and push are checked against the reference
 by eye only); pushed robots and thrown bombs move as the snapshot gives them (no own display);
 the toy's `toyHandOpen` sound is the simulation's.
+
+Robot effects slice, 2026-11-08 (owner to review):
+- Shield, invincibility and portal transit are drawn from the original's clips
+  (`scripts/ui/game_actors.gd`); the placeholders in `GameView._protection` are removed.
+  - Shield (`ShieldProp.initMc`, `RobotView.setRobotMc`): a pickup remakes the robot's clip;
+    each new clip with a `hand2` child gets `nombril_<direction>` at hand2's x and y, under
+    the robot facing right and on top otherwise. It plays when the robot turns and stops at
+    `normalStop`. A key for the way the robot already faces plays only the robot's clip
+    (recorded). `addUseNum` takes it off.
+  - Invincibility (`InvincibilityProp.changeStage`, `CountMcPlayCommand`): `invincibityPlay`
+    in the `itemMc` Sprite on top of the container shows frames 1, 1, 2 … 28 and is taken off
+    on tick 30. The empty Sprite stays until death (`clearDisplay`).
+    `CountInvincibilityCommand`'s GradientGlowFilter (colours turned every 2nd tick, ratios
+    + `_colortime`) goes on the clip and weapon until `invincible_until`. Godot draws it
+    with `swf_gradient_glow.gdshader` on a CanvasGroup (`SwfScreen.set_node_filter`).
+  - Transit (`SendRobotCommand`): the clip's alpha is 1 - count / 35 (count 1 on the send
+    tick), the clip stops (`robotMoveStop`), and callback 30 makes a new clip at alpha 1.
+  - The simulation now sets `blink_until` (display only) after a shield is used and after
+    a ride's recovery (`TryToKillCommandChain`'s InvincibilityCommand).
+- Art: `record_screen.py actors gameplay-cinema-start --parts effects` (key `effects`:
+  nombril clips, `invincibityPlay`, each robot clip's `hand2`; 3× shots of the new cases).
+- New cases: `gameplay-cinema-shield` (held, turned, walk, used),
+  `gameplay-cinema-invincible` (intro, intro-late, glow, glow-turned) and
+  `gameplay-cinema-portal` (fade, fade-late, arrive; Godot `reposition X Y`). All nodes
+  match, including the transit alpha. All 22 cases and tools/run_checks.sh pass.
+- Comparison: the reference player draws no GradientGlowFilter (Ruffle's wgpu backend skips
+  it), so a golden node carrying one is left out of the pixel score (`UNRENDERED_FILTERS`).
+  `composite_alpha` (portal case) does the same for a faded baked clip: Flash applies the
+  alpha per shape, so overlapping shapes add up, while the baked image fades as one.
+- HUD portraits: `GameInterFace.setMC` runs `stopMC` over the whole HUD, so the panels'
+  85-frame eye loops stay on frame 1. Stepped 150 frames in the reference player, no HUD
+  clip changed frame. Nothing to animate.
+Known gaps:
+- The glow is checked by eye only; there is no reference render of it.
+- A faded robot's overlapping shapes are lighter than in Flash.
+- Godot blasts a bomb dropped this way one tick after the original. The shield's `used`
+  capture is therefore after the blast.
+- Invincibility's end is not captured: after 10 s the Arcade timed drops (host clock in
+  the reference) differ.
+- Re-picking invincibility mid-introduction is mapped from source and not recorded.
