@@ -1,9 +1,9 @@
 extends Node2D
 ## The gameplay screen's placeholder layer (App._game_screen, in the board container): what the
-## round shows that has no original art in the pack yet: mode objects (Green Zone's flag) and, for a
-## stage set whose board art is not in the pack, the board itself. Robots, bombs, blasts, pickups,
-## the protection effects and the weapons' actions and shots are the original's
-## (scripts/ui/game_actors.gd). Receives snapshots; never owns or advances gameplay.
+## round shows that has no original art in the pack yet: for a stage set whose board art is not
+## in the pack, the board itself. Robots, bombs, blasts, pickups, the protection effects and the
+## weapons' actions and shots are the original's (scripts/ui/game_actors.gd), Green Zone's flag
+## too (scripts/ui/game_board.gd). Receives snapshots; never owns or advances gameplay.
 
 const PITCH := 36.0
 const ORIGIN := Vector2(334, 86)
@@ -64,8 +64,6 @@ func _draw() -> void:
 		_marquee()
 		_features()
 	if board_only: return
-	_mode_objects()
-	_mode_overlays()
 
 
 ## Where a moving thing is drawn: its previous-step position blended towards `now`, unless it
@@ -83,35 +81,6 @@ func _portal_pair(cell: Vector2i) -> int:
 
 func _board_skin() -> StringName:
 	return state.get("board_meta", {}).get("skin", &"cinema") if not state.is_empty() else &"cinema"
-
-
-## Green Zone flag with each holder's progress (`Flag`, `r<robot>_progress`).
-func _mode_objects() -> void:
-	var mode_state: Dictionary = state.get("mode_state", {})
-	var flag: Variant = mode_state.get("flag")
-	if flag != null:
-		var at := _center(flag)
-		if not skin.draw(self, "mode.flag", Rect2(at - Vector2(18, 26), Vector2(36, 44)), state.tick):
-			draw_circle(at + Vector2(0, 10), 14, Color(0.35, 0.85, 0.45, 0.35))
-			draw_line(at + Vector2(-6, 14), at + Vector2(-6, -20), Color("e8e2cf"), 3)
-			draw_colored_polygon(PackedVector2Array([at + Vector2(-5, -20), at + Vector2(14, -13), at + Vector2(-5, -6)]), Color("58c46a"))
-
-
-## Holders' progress bars over the flag, drawn above the robots.
-func _mode_overlays() -> void:
-	var mode_state: Dictionary = state.get("mode_state", {})
-	var flag: Variant = mode_state.get("flag")
-	if flag != null:
-		var at := _center(flag)
-		var row := 0
-		for id in mode_state.get("progress", {}):
-			if not state.actors.has(id): continue
-			var robot: int = state.actors[id].get("robot", SEAT_ROBOTS.get(id, 0))
-			var bar := Rect2(at + Vector2(-18, -34 - row * 7), Vector2(36, 5))
-			var filled := Rect2(bar.position, Vector2(36.0 * mode_state.progress[id] / mode_state.get("capture_ticks", 105), 5))
-			draw_rect(bar, Color(0, 0, 0, 0.5))
-			if not skin.draw(self, "mode.progress", filled, state.tick): draw_rect(filled, ROBOT_COLORS[robot])
-			row += 1
 
 
 func _tile(cell: Vector2i, kind: StringName, floor := true) -> void:

@@ -714,3 +714,58 @@ player (`trace-focus` per frame: shield, hammer, boxing, fireball, triple, ride)
   host-clock fade (`TweenMax.from` on the shots) out of the alpha compare and the pixel score.
 Host-clock only (not frame-matched): the shots' 0.2 s fade-in, the triple/fireball 0.3 s
 recovery (`delayedCall`), the AI's delayed callbacks, TIME and the loading bar.
+
+Modes slice, 2026-11-08 (checkpoint 5, owner to review): Kill (Battle Royale), Green Zone and
+Pac-Man against their own recordings, on Cinema.
+- Cases `gameplay-kill-start`, `gameplay-greenzone-start`, `gameplay-pacman-start`: as
+  gameplay-cinema-start (seed 42, Normal, Cinema, robot 0, through the real menus) with Game
+  Settings' mode card clicked (`killMode`, `paintingMode` = Green Zone, `collectMode` = Pac-Man,
+  `GameSettingsUI`), each with its `math_random.json`. Follow-ups (AI stopped):
+  `gameplay-greenzone-flag` (reposition above the flag, walk on: the r0 bar at 30, then the point
+  and "got it") and `gameplay-pacman-coin` (walk right, coins eaten, HUD `2/119`).
+- `board.modes.<mode>` (layout.py): each mode's round on the screen's own set, as `board.sets`
+  (its boxes, template, robots, looks), plus `items` (the map-load pickups: `AbstractItem.init`
+  adds them to the row itself, after its five layers) and `mode_objects` (the Flag: a `_brick5`
+  at 160 on the platform layer). `App.round_as_recorded` and `GameBoard` take it for a mode's
+  recorded round.
+- The modes' `mapLoadOver` draws come from the original's `Math.random`: the recorded round's
+  generator now stops after `createAIPlayer`, and the mode makes its own opening from there
+  (`containerMove` for the flag, `createRamdonProp`, `itemPosSetting`): every flag, item, coin and
+  kind lands where the recording has it. Found by it: at map load the robots are not on the map
+  yet, so `getRandomPropPosition` offers their cells (`spawn_random_pickups(count, before_robots)`).
+- Base weapons (`AbstractRobot.set baseWeapon` → `changeStage`, `GameActors._base_weapon`):
+  KillModeWeapon's hammer (Kill, Green Zone) and PacModeWeapon's flamer (ghosts) held from the
+  first frame with showTimes emptied, the held clip playing from creation (frame 4 on the round's
+  first frame); NullWeapon's hidden showTimes, empty clip and hidden item on the player's spawn.
+  An unlimited weapon (ammo -1) is no longer taken off after an action.
+- Green Zone's flag (`Flag.setMc`, `runEngine`, `complete`, `move`; `GameBoard._flags`): the
+  `_brick5` at 30/32, its nested clip on the recorded idle loop (4…68, back to 37), each holder's
+  `r<id>_progress` at (10, 20 − slot × 20) × 2 by `int(totalTime / maxTime × 100)`, under the
+  nested clip (recorded `@0` / `@1`), "got it" from `complete` (frame 70 on), the next flag after
+  the move. The nested clip and the bars hold sub-clips (stars, sparkles) that play on their own,
+  so the art is the whole clip as the round played it: the idle flag per frame, the flag after
+  `complete` per tick, the player's bar per tick while held; other cases fall back to frames
+  rendered alone. The placeholder flag and bars in `scripts/game_view.gd` are removed.
+- Pac-Man: coins are drawn as pickups (`CoinProp`, PixelClip); the HUD ports PacManMode's
+  `mapLoadOver` (`setScore(i, -1)`, `scoreStr = "/" + coins`, `textColNum`): the player's score
+  reads `0/119` beside face frame 4, the ghosts' fields stay empty. Kill and Green Zone show
+  `0/10` beside the skull / flag face (`setFaceMc`, already ported).
+- Art: `record_screen.py modes` (after art): the flag's body, nested frames, recorded loop and
+  played images (its got-it and held-bar images from gameplay-greenzone-flag's flow), the eight
+  progress bars (`symbol`), the coin's 22 bitmaps from the Pac-Man round
+  (`first_change` places the map-load items' age), and the 3× frames of the mode captures, into
+  `original/screens/game/modes/`. The robots' actors pass takes `board.modes` looks too.
+- Results: kill-start nodes 386/386, SSIM 0.938; greenzone-start 328/328, 0.948; greenzone-flag
+  328/328 (holding 0.947, got-it 0.945); pacman-start 692/692, 0.940; pacman-coin 689/686 nodes,
+  0.942/0.946; every one at or over its 3×→1× ceiling, ΔE 4.9. The mode rounds' maps also roll
+  exactly from the recorded draws (timing slice's `Layouts.roll_set`). All 36 cases and
+  tools/run_checks.sh (27 suites) pass. Rolled Kill, Green Zone and Pac-Man rounds play on the
+  screen with their base weapons, flag and coins.
+Known gaps: no case counts a kill (the AI's callbacks run on the host clock; Kill's HUD is checked
+at 0/10 only); the flag's move (`TweenMax.delayedCall(3)`) runs on the host clock, so the next
+flag is not captured; a bar drained or held by another robot than robot 0 draws its frames made
+stopped (its sparkles at their first frame); a flag made mid-round shows its parts alone until the
+recorded age; the NullWeapon item stays hidden on the player's spawn for the whole round (the
+original may remove it when the player leaves); the loading screen's mode frames (ported, art
+present) are not captured per mode; the ghosts catching the player and Pac-Man's win are not
+recorded.

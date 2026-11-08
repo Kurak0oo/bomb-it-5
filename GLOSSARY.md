@@ -67,7 +67,7 @@ A stage set's board art on the one gameplay screen: its floor bitmap, board tile
 A snapshot field the simulation keeps only so the replica can draw the round as the original does (a bomb's serial, what the belt carried and moved this tick, a toy hand's label); the round's rules never read it.
 
 **Placeholder layer**:
-What the gameplay screen draws without original art yet (most weapon actions and shots, mode objects, and the board of a stage set whose art is not in the pack), in the screen's board container.
+What the gameplay screen draws without original art yet (most weapon actions and shots, and the board of a stage set whose art is not in the pack), in the screen's board container.
 
 **Recorded round**:
 The robots and the `Math.random` position a gameplay capture recorded, which the comparison loop starts its Godot round from because the menus' random draws are not reproduced; its board is rolled again from the original's draws and must equal the recorded one.
@@ -149,6 +149,12 @@ A ride carried by an actor, with its own movement and damage state.
 
 **Weapon**:
 An equipped item that gives the actor an action in place of ordinary bomb placement.
+
+**Base weapon**:
+The weapon a mode gives every robot for the whole round, held from its first frame and back after a picked-up weapon is spent: the hammer in Kill and Green Zone, the flamer for Pac-Man's ghosts, none (NullWeapon) for Pac-Man's player.
+
+**Mode object**:
+A board object that only one mode makes, such as Green Zone's flag with its robots' progress bars or Pac-Man's coins.
 
 **Fuse**:
 A bomb's delay before timed detonation. A chain reaction can detonate it earlier.

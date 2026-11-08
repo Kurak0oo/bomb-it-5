@@ -621,8 +621,11 @@ func _advance_pickups() -> void:
 
 
 ## Map.createRamdonProp: choose every cell first, then draw each pickup's class.
-func spawn_random_pickups(count: int) -> void:
-	var free := _free_cells()
+## `getRandomPropPosition` skips cells with a robot on the map; at map load (a mode's
+## `mapLoadOver`) the robots are not on the map yet (`before_robots`; recorded: Green Zone's
+## opening pickups land on the cells these draws give with the spawns counted).
+func spawn_random_pickups(count: int, before_robots := false) -> void:
+	var free := _free_cells(before_robots)
 	var selected_cells: Array[Vector2i] = []
 	for index in mini(count, free.size()):
 		var selected := int(_draw_random() * free.size())
@@ -924,12 +927,12 @@ func current_tick() -> int:
 
 
 ## Empty cells for placed pickups, x first then y as the source enumerates them.
-func _free_cells() -> Array[Vector2i]:
+func _free_cells(ignore_actors := false) -> Array[Vector2i]:
 	var free: Array[Vector2i] = []
 	for x in range(1, _board_max.x + 1):
 		for y in range(1, _board_max.y + 1):
 			var cell := Vector2i(x, y)
-			if _board.get(cell) in [&"floor", &"portal", &"crocodile"] and not _feature_blocked(cell) and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
+			if _board.get(cell) in [&"floor", &"portal", &"crocodile"] and not _feature_blocked(cell) and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and (ignore_actors or not _actors.values().any(func(a): return a.alive and a.cell == cell)):
 				free.append(cell)
 	return free
 

@@ -217,7 +217,14 @@ SCREENS = {
                           'candy_factory': {'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
                           'luxury_stores': {'golden': ('gameplay-luxury-start', 'luxury-start'), 'begin_num': 97},
                           'magic_library': {'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121},
-                          'birthday_party': {'golden': ('gameplay-birthday-start', 'birthday-start'), 'begin_num': 1}}},
+                          'birthday_party': {'golden': ('gameplay-birthday-start', 'birthday-start'), 'begin_num': 1}},
+                 # The other game modes' rounds on the screen's own set (Cinema), each from its
+                 # own round's first frame (`board.modes.<mode>`, the session's mode ids): its
+                 # boxes, robots and what the mode's `mapLoadOver` made (KillMode: nothing;
+                 # GreenZoneMode: a Flag and two pickups; PacManMode: four items and the coins).
+                 'modes': {'kill': {'golden': ('gameplay-kill-start', 'kill-start'), 'begin_num': 49},
+                           'green_zone': {'golden': ('gameplay-greenzone-start', 'greenzone-start'), 'begin_num': 49},
+                           'pac_man': {'golden': ('gameplay-pacman-start', 'pacman-start'), 'begin_num': 49}}},
              'interactive': {'pause': 'pause'},
              'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),
              'live_text': ('currentLevel', 'totalLevel', 'time', 'lifeTf', 'bombTf', 'powerTf', 'speedTf',
@@ -229,6 +236,10 @@ SCREENS = {
 EDITS = Path(__file__).resolve().parent / 'owner_edits.json'
 # Flash blend modes the screen reproduces (scripts/ui/swf_blend.gdshader).
 BLENDS = ('Multiply', 'Screen', 'Lighten', 'Darken', 'Difference', 'Add', 'Subtract', 'Overlay', 'HardLight')
+
+# Green Zone's flag (`Flag extends AbstractPlatForm`): a `_brick5` stopped at `Flag._mcNum`.
+FLAG_CLASS = '_brick5'
+FLAG_FRAME = 160
 
 CARRIED = ('golden_path', 'kind', 'name', 'class', 'depth', 'character_id', 'effective_visible', 'alpha',
            'stage_matrix', 'stage_bounds', 'render_bounds', 'frame', 'total_frames', 'label',
@@ -404,6 +415,10 @@ def build(name, spec):
         board['set'] = spec['board']['set']
         board['sets'] = {set_id: _set_board(name, spec, set_id, how, screen_root, board, nodes)
                          for set_id, how in spec['board'].get('sets', {}).items()}
+        board['modes'] = {mode: _set_board(name, spec, mode, how, screen_root, board, nodes)
+                          for mode, how in spec['board'].get('modes', {}).items()}
+        for mode, entry in board['modes'].items():
+            del entry['floor']  # the screen's own set: its own floor
     by_path = {n['path']: n for n in nodes}
 
     # Parts that are off the display list at the capture (a dropdown added on demand, the
@@ -760,18 +775,23 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     kids = sorted((p for p in by_path if parent_of(p) == container), key=_segment_index)
     rows = [p for p in kids if _segment_index(p) >= how['first_row']]
     layers = {}
+    # A row's children after its layers are pickups made at map load (a mode's
+    # `mapLoadOver`: GreenZoneMode's `createRamdonProp(2)`, PacManMode's items and coins):
+    # `AbstractItem.init` adds its Sprite to the row itself (`game.getDisArr(yN)`).
+    row_items = []
     for y, row in enumerate(rows):
         own = sorted((p for p in by_path if parent_of(p) == row), key=_segment_index)
-        if len(own) != len(how['layers']):
+        if len(own) < len(how['layers']):
             raise SystemExit(f'{name}: row {row} has {len(own)} layers, expected {len(how["layers"])}')
-        for k, layer in enumerate(own):
+        for k, layer in enumerate(own[:len(how['layers'])]):
             layers[layer] = (y, how['layers'][k])
+        row_items += [(y, p) for p in own[len(how['layers']):]]
     cm = by_path[container]['stage_matrix']
 
     def subtree(path):
         return [n for n in nodes if n['path'] == path or n['path'].startswith(path + '/')]
 
-    boxes, features, dynamic, robots, looks = [], [], {}, [], {}
+    boxes, features, dynamic, robots, looks, mode_objects = [], [], {}, [], {}, []
     for layer, (y, role) in layers.items():
         for child in sorted((p for p in by_path if parent_of(p) == layer), key=_segment_index):
             tree = subtree(child)
@@ -808,13 +828,28 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
                                  'node': clip['path'][len(child):], 'container_local': [round(local[0], 3), round(local[1], 3)],
                                  'linear': linear, 'clip_frame': clip.get('frame') or 0,
                                  'child_frame': node.get('frame') or 0})
+            elif role == 'platform' and any(n.get('class') == FLAG_CLASS and n.get('frame') == FLAG_FRAME for n in tree):
+                # A mode's platform (GreenZoneMode.mapLoadOver: `new Flag(game, x, y)`):
+                # `AbstractPlatForm.setMc` puts a `_brick5` in its `_container` on the row's
+                # platform layer and `Flag.setMc` stops it at `_mcNum` 160, whose nested clip
+                # plays (`loop_frame`).
+                clip = next(n for n in tree if n.get('class') == FLAG_CLASS)
+                loop = next((n for n in tree if parent_of(n['path']) == clip['path']
+                             and n.get('total_frames', 1) > 1), None)
+                mode_objects.append({'path': child, 'row': y, 'local': [round(local[0], 3), round(local[1], 3)],
+                                     'class': 'Flag', 'frame': clip['frame'], 'node': clip['path'][len(child):],
+                                     'loop': loop['path'][len(child):] if loop else None,
+                                     'loop_frame': loop['frame'] if loop else None})
             else:
                 dynamic[child] = {'role': role, 'render_bounds': _union([n.get('render_bounds') for n in tree]),
                                   'class': next((c for c in classes if c and not c.startswith('flash.')), None)}
                 robot = next((c for c in classes if c.startswith('_r') and c[2:].split('_')[0].isdigit()), None)
                 if role == 'robot' and robot:
                     robots.append(int(robot[2:].split('_')[0]))
-                    looks[robots[-1]] = _robot_look(by_path, f'{child}/@0')
+                    # The robot's clip: the container's first child (`@0`, or `@0#0` beside a
+                    # weapon's `showTimes` and held clip: a mode's base weapon).
+                    clip = next(n['path'] for n in tree if n.get('class') == robot)
+                    looks[robots[-1]] = _robot_look(by_path, clip)
     # The cell grid: rows from the row Sprites, columns from the outer ring's left column.
     grid = 30
     # (Golden matrices carry 4 decimals, so local positions agree to about 0.01.)
@@ -833,6 +868,16 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     for item in boxes:
         item['cell'] = cell_of(item, item['local'], item['row'])
         del item['local'], item['row']
+    for item in mode_objects:
+        item['cell'] = cell_of(item, item.pop('local'), item.pop('row'))
+    # The map-load pickups: each Sprite at `xPos = xN * GRID_WIDTH`, `yPos = yN * GRID_WIDTH`
+    # on its own row (AbstractItem.init), in display order.
+    items = []
+    for y, path in row_items:
+        m = by_path[path]['stage_matrix']
+        item = {'path': path}
+        item['cell'] = cell_of(item, _local_point(cm, m[4], m[5]), y)
+        items.append(item)
     for item in features:
         item['cell'] = cell_of(item, item['local'])
         origin = cell_of(item, item.pop('container_local'))
@@ -866,7 +911,10 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     template = _match_template(name, boxes, features, begin)
     groups = [container] + [p for p in kids if _segment_index(p) < how['first_row'] and not subtree(p)[1:]]
     groups += rows + list(layers)
-    keep = [n for n in nodes if not any(n['path'].startswith(layer + '/') for layer in layers)]
+    unlaid = tuple(layer + '/' for layer in layers)
+    item_paths = {p for _, p in row_items}
+    keep = [n for n in nodes if not n['path'].startswith(unlaid) and n['path'] not in item_paths
+            and not any(n['path'].startswith(p + '/') for p in item_paths)]
     board = {
         'container': container, 'container_matrix': cm, 'grid': grid, 'excursion': excursion,
         'size': [17, len(rows)], 'rows': rows,
@@ -878,7 +926,8 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
         'features': [{k: f[k] for k in ('cell', 'path', 'class', 'loop_frame', 'row', 'origin', 'node', 'linear', 'frame')
                       if k in f}
                      for f in features],
-        'dynamic': dynamic, 'robots': seats, 'looks': [looks[r] for r in seats],
+        'dynamic': dynamic, 'items': items, 'mode_objects': mode_objects,
+        'robots': seats, 'looks': [looks[r] for r in seats],
         'robot_ui_slots': [n['stage_matrix'][4:6] for n in panels],
         'round_start_after_input': _frames_after_input(case, capture),
         'groups': groups,
@@ -888,7 +937,7 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
 
 # What a stage set's round has of its own on the gameplay screen (`board.sets.<set>`); the
 # rest of `board` (container, rows, layers, grid, excursion) is the screen's and every set's.
-SET_FIELDS = ('begin_num', 'template', 'boxes', 'features', 'dynamic', 'robots', 'looks', 'robot_ui_slots',
+SET_FIELDS = ('begin_num', 'template', 'boxes', 'features', 'dynamic', 'items', 'mode_objects', 'robots', 'looks', 'robot_ui_slots',
               'round_start_after_input')
 SHARED_FIELDS = ('container', 'container_matrix', 'grid', 'excursion', 'size', 'rows', 'layers')
 

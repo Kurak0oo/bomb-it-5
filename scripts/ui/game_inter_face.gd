@@ -49,6 +49,10 @@ var _time_flashing := false
 var _tween_tick := -1
 ## The score fields that flash (`colorChangeArray`): uiId -> on.
 var colorChangeArray := {}
+## `Game.textColNum` (set by PacManMode's `mapLoadOver`).
+var textColNum := 0
+## The mode's `mapLoadOver` has run on the HUD (first snapshot of the round).
+var _map_loaded := false
 const RED := Color8(255, 0, 0)  # 16711680
 const WHITE := Color8(255, 255, 255)  # 16777215
 
@@ -221,6 +225,9 @@ func setScore(uiId: int, value: int) -> void:
 ## steps of 35 per second; `currentLevel` from `firstMapLoadOver`).
 func present(snapshot: Dictionary) -> void:
 	if snapshot.is_empty(): return
+	if not _map_loaded:
+		_map_loaded = true
+		mapLoadOver(snapshot)
 	set_current_level(int(_root.session.level))
 	var time := int(snapshot.get("remaining", 0)) / 35
 	set_time(str(time))
@@ -240,6 +247,24 @@ func present(snapshot: Dictionary) -> void:
 		# `score`); the other modes show the level's points.
 		setScore(uiId, int(actor.get("score", 0)) if _root.session.mode == ARCADE_MODE else int(actor.get("points", 0)))
 		uiId += 1
+
+
+## What the mode's `mapLoadOver` does to the HUD. PacManMode: `setScore(i, -1)` for the
+## players (field emptied, face on frame 4), `scoreStr = "/" + _coinTotal`, `textColNum =
+## _coinTotal - 15`, then `eatNum = 0` writes the player's score through `coinsNum`
+## (`scoreData`, here by `present`), and `setScore(i, -1)` for every AI seat.
+func mapLoadOver(snapshot: Dictionary) -> void:
+	if _root.session.mode != PAC_MAN_MODE: return
+	var coins := int(snapshot.get("mode_state", {}).get("coins_total", 0))
+	for uiId in _scoreTextArr.size(): setScore(uiId, -1)
+	scoreStr = "/" + str(coins)
+	textColNum = coins - 15
+
+
+## `set scoreStr`
+var scoreStr: String:
+	set(value): _scoreStr = value
+	get: return _scoreStr
 
 
 ## `timeCountDownHandle`: `changeTimeCol` joins the engine's tween handlers.

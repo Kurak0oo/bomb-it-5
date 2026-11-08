@@ -136,6 +136,8 @@ const GAME_FRAMERATE := 35.0
 ## `SendRobotCommand`'s `_totalFrame` (default 30): its last callback makes the robot's clip again.
 const SEND_TOTAL_FRAME := 30
 const ROUND_START_LOOP_AGE := 4
+## The simulation's name for Pac-Man's player's base weapon (NullWeapon).
+const NULL_WEAPON := &"none"
 const BLAST_TICKS := 16
 
 var _screen: Node2D
@@ -180,6 +182,10 @@ func _init(screen: Node2D, board: RefCounted, looks: Array = []) -> void:
 	var items := ProjectSettings.globalize_path("res://original/screens/game/items/items.json")
 	if FileAccess.file_exists(items):
 		_item_art = JSON.parse_string(FileAccess.get_file_as_string(items)).get("items", {})
+	# The modes' own pickups (record_screen.py modes: Pac-Man's CoinProp, from its round).
+	var modes := ProjectSettings.globalize_path("res://original/screens/game/modes/manifest.json")
+	if FileAccess.file_exists(modes):
+		_item_art.merge(JSON.parse_string(FileAccess.get_file_as_string(modes)).get("items", {}), true)
 
 
 ## Every snapshot; the clips advance once per tick.
@@ -188,6 +194,16 @@ func update(snapshot: Dictionary) -> void:
 	if _tick < 0:
 		_tick = tick
 		_create_robots(snapshot)
+		# The pickups the mode's `mapLoadOver` made (Green Zone's two, Pac-Man's items and
+		# coins), made with the robots before the round's first frame: their PixelClips stand
+		# where the recorded coin's stood (`first_change`: frames to its next bitmap, which
+		# `playArr` shows from age 4k + 1), else as far on as the robots' loops.
+		_update_items(snapshot)
+		var first_change := int(_item_art.get("coin", {}).get("first_change", 0))
+		for view: Dictionary in _items.values():
+			if view.get("hidden", false): continue
+			view.age = 5 - first_change if first_change > 0 else ROUND_START_LOOP_AGE
+			_play_arr(view)
 		return
 	if tick <= _tick:
 		return
@@ -215,6 +231,7 @@ func _create_robots(snapshot: Dictionary) -> void:
 		# RobotView(): `_mainContainer = getDisArr(yN).getChildAt(3)` while yPos is still 0.
 		_place(view, 0, 3)
 		_set_robot_mc(view, "_Down")
+		_base_weapon(view, actor)
 		# Made before the round starts (`initStage`), the clip's loops stand at their fourth
 		# frame on the round's first frame (recorded, gameplay-cinema-start); a frame further
 		# per frame from there.
@@ -472,6 +489,8 @@ func _vehicle(view: Dictionary, actor: Dictionary) -> void:
 ## then runs once per engine tick (`_advance_action`) until its own end; the snapshot's attack
 ## ending (the simulation's recovery) ends it too. The last use's `initWeapon` takes the weapon off.
 func _weapon(view: Dictionary, actor: Dictionary, attack: Dictionary) -> void:
+	# NullWeapon stays until another weapon replaces it (`_base_weapon`).
+	if view.weapon == NULL_WEAPON and StringName(actor.get("weapon", &"")) == NULL_WEAPON: return
 	var kind := StringName(actor.get("weapon", &""))
 	if not WEAPON_NAMES.has(kind): kind = &""
 	var ammo := int(actor.get("ammo", 0))
@@ -484,7 +503,7 @@ func _weapon(view: Dictionary, actor: Dictionary, attack: Dictionary) -> void:
 	if not action.is_empty() and (not acting or int(attack.started) != int(action.started)):
 		if not action.ended: _end_action(view, ammo)
 		view.action = {}
-		if kind != view.weapon or ammo <= 0: _clear_weapon(view)
+		if kind != view.weapon or ammo == 0: _clear_weapon(view)
 	elif not action.is_empty() and not action.ended:
 		_advance_action(view, attack, ammo)
 	if kind != view.weapon and not acting:
@@ -603,7 +622,8 @@ func _end_action(view: Dictionary, ammo: int) -> void:
 	view.action.ended = true
 	_remove_child(view, "play")
 	_remove_child(view, "laser")
-	if ammo <= 0: _clear_weapon(view)
+	# (A base weapon reports -1: unlimited, `totalUseNum` 2000000, never taken off.)
+	if ammo == 0: _clear_weapon(view)
 	_set_robot_mc(view, view.suffix)
 
 
@@ -742,6 +762,38 @@ func _build_laser(view: Dictionary, child: Dictionary) -> void:
 	child.built = true
 
 
+## `AbstractRobot.set baseWeapon`: the mode's base weapon (`PersonPlayer` / `AIPlayer`
+## `.updateGameModeData`, made with the robot) takes its robot by `changeStage`:
+## - KillModeWeapon (Kill and Green Zone; a HammerProp): showTimes, its `timesNum` emptied
+##   (`KillModeWeapon.changeStage`), and the held `sinker<direction>`;
+## - PacModeWeapon (Pac-Man's ghosts; a FlamerProp): likewise with `thrower<direction>`;
+## - NullWeapon (Pac-Man's player): showTimes made and then hidden (`NullWeapon.changeStage`:
+##   `_weaponTimesMc.visible = false`), and since no `speedgun<direction>` class exists,
+##   `updateWeaponDisplay` adds an empty MovieClip (its `catch`).
+## `updateWeaponDisplay`'s `gotoAndPlay(mc.currentFrame)`: the held clip plays from the robot's
+## frame while the robot's own clip stands, so on the round's first frame it is as far on as the
+## robot's loops (recorded: `sinker_Down` and `thrower_Down` on frame 4).
+func _base_weapon(view: Dictionary, actor: Dictionary) -> void:
+	var kind := StringName(actor.get("base_weapon", &""))
+	if kind == NULL_WEAPON:
+		# `new NullWeapon(game, x, y)` is an item on the robot's cell too, its Sprite hidden
+		# (`_container.visible = false`); nothing eats it before the round.
+		var cell := Vector2i(actor.get("cell", Vector2i.ZERO))
+		var item := {"key": "null_weapon", "cell": cell, "kind": NULL_WEAPON, "age": 0, "item": {}, "row": _board.row_of(cell.y),
+			"shown": -1, "position": Vector2(cell), "hidden": true}
+		_add_item_display(item)
+		_screen.set_path_shown(item.item.path, false)
+		_items[item.key] = item
+		view.weapon = NULL_WEAPON
+		_add_child(view, {"kind": "times", "hidden": true}, -1)
+		_add_child(view, {"kind": "weapon", "empty": true}, -1)
+		return
+	if not WEAPON_NAMES.has(kind): return
+	_weapon(view, actor, {})
+	view.weapon_frame = clampi(ROUND_START_LOOP_AGE, 1, maxi(1, _weapon_total("held", view.weapon_class)))
+	view.weapon_playing = true
+
+
 ## `updateWeaponDisplay`: a new held clip `<name><direction>` at the robot's hand (where the
 ## new robot clip's `hand` is at its first frame), playing from the robot's frame; on a ride it
 ## is made but not added. Its place in the container depends on the weapon and direction.
@@ -750,6 +802,11 @@ func _update_weapon_display(view: Dictionary) -> void:
 	view.weapon_class = ""
 	var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
 	if not clip.has("hand") or view.vehicle != &"": return
+	if view.weapon == NULL_WEAPON:
+		# No `speedgun<direction>` class: the `catch` makes an empty MovieClip, placed as the
+		# other weapons not named in `updateWeaponDisplay`'s first branch.
+		_add_child(view, {"kind": "weapon", "empty": true}, 0 if view.suffix in ["_Up", "_Left"] else -1)
+		return
 	var name: String = WEAPON_NAMES[view.weapon]
 	view.weapon_class = name + view.suffix
 	view.weapon_frame = clampi(view.frame, 1, maxi(1, _weapon_total("held", view.weapon_class)))
@@ -1036,9 +1093,13 @@ func _show(view: Dictionary) -> void:
 					_screen.move_node(play, matrix)
 					_screen.set_node_offset(play, offset)
 					_screen.set_node_art(play, _effects().get("clips", {}).get("invincibityPlay", {}).get("images", {}).get(str(frame), {}), frame)
+			"times" when child.get("hidden", false):
+				_screen.move_node(path, _a(at * Transform2D(0.0, TIMES_AT)))
+				_screen.set_path_shown(path, false)
 			"weapon":
 				# The hand where the robot clip's first frame was rendered (its own `at`).
 				_screen.move_node(path, _a(at * Transform2D(0.0, _hand(view))))
+				if child.get("empty", false): continue
 				var images: Dictionary = _art.get("weapons", {}).get("held", {}).get(view.weapon_class, {}).get("images", {})
 				_screen.set_node_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
 				# CountInvincibilityCommand: `weaponMc.filters` as the clip's.
@@ -1384,10 +1445,10 @@ func _update_items(snapshot: Dictionary) -> void:
 				if int(state.frame) > 264 and int(state.frame) <= 324: burning[Vector2i(state.cell)] = true
 	var present := {}
 	for cell in pickups:
-		if pickups[cell] == &"coin": continue
 		present["p%d" % int(carried[cell][0]) if carried.has(cell) else cell] = cell
 	for key in _items.keys():
 		var view: Dictionary = _items[key]
+		if view.get("hidden", false): continue
 		view.age += 1
 		if view.has("brick"):
 			_count_brick_exp(view)

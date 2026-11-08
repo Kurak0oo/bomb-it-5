@@ -90,6 +90,8 @@ var _art := false
 var _page_fill := Color("214c60")
 ## The comparison loop's recorded round (`round_as_recorded`): the next level starts on it.
 var recorded_round: Dictionary = {}
+## The game mode whose recorded round (`board.modes.<mode>`) the current level started on.
+var _recorded_mode: StringName = &""
 ## The generated gameplay screen of the current round (its pause screen goes over it).
 var _game_swf: Node2D
 
@@ -409,6 +411,7 @@ func round_as_recorded(capture: String) -> void:
 	var golden := String(screen_layout.source.golden)
 	recorded_round = screen_layout.board.duplicate()
 	recorded_round.erase("sets")
+	recorded_round.erase("modes")
 	if not golden.ends_with("/%s.json" % capture):
 		var found := false
 		for set_id in screen_layout.board.get("sets", {}):
@@ -416,6 +419,14 @@ func round_as_recorded(capture: String) -> void:
 			if String(entry.golden).ends_with("/%s.json" % capture):
 				recorded_round.merge(entry, true)
 				recorded_round.set = set_id
+				golden = entry.golden
+				found = true
+		# Another game mode's round on the screen's own set (`board.modes.<mode>`).
+		for mode in screen_layout.board.get("modes", {}):
+			var entry: Dictionary = screen_layout.board.modes[mode]
+			if String(entry.golden).ends_with("/%s.json" % capture):
+				recorded_round.merge(entry, true)
+				recorded_round.mode = mode
 				golden = entry.golden
 				found = true
 		if not found:
@@ -444,6 +455,7 @@ func _start_level() -> void:
 	game.visible = true
 	game.detach_swf()
 	var recorded := not recorded_round.is_empty()
+	_recorded_mode = StringName(recorded_round.get("mode", ""))
 	game.math_random = math_random
 	game.recorded_board = recorded_round
 	recorded_round = {}
@@ -462,7 +474,7 @@ func _start_level() -> void:
 func _game_screen(recorded: bool) -> void:
 	var swf := _swf_page(&"game")
 	var board_layout: Dictionary = swf.layout.board
-	var board := GameBoard.new(swf, board_layout, game.stage_set)
+	var board := GameBoard.new(swf, board_layout, game.stage_set, _recorded_mode if recorded else &"")
 	# A stage set whose board art is in the pack (its floor, boxes and features: Cinema's in
 	# the screen's own, others' under sets/) draws it; the others' boxes and features are
 	# drawn by the placeholder layer over the screen's floor, without outlines.
@@ -480,7 +492,9 @@ func _game_screen(recorded: bool) -> void:
 	swf.set_meta("end_cartoon", cartoon)
 	# Under the map-loading screen the robots and their counters wait for `firstMapLoadOver`.
 	var robots_made := {"done": loading == null}
-	if loading == null: actors.update(game.get_snapshot())
+	if loading == null:
+		board.map_load_over(game.get_snapshot())
+		actors.update(game.get_snapshot())
 	game.attach_swf(swf.node_for(board_layout.container), board.view_transform(GameView.ORIGIN, GameView.PITCH),
 		func(snapshot: Dictionary):
 			if not robots_made.done: return
@@ -508,6 +522,8 @@ func _game_screen(recorded: bool) -> void:
 					board.show_row(int(row))
 			if t >= plan.robots and not robots_made.done:
 				robots_made.done = true
+				# `firstMapLoadOver`: the mode's `mapLoadOver` (the flag), then the robots.
+				board.map_load_over(game.get_snapshot())
 				actors.update(game.get_snapshot())
 				hud.present(game.get_snapshot())
 			if t >= plan.closed:

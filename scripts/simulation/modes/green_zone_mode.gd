@@ -55,7 +55,7 @@ func keeps_weapon_pickups() -> bool:
 func begin(round_state: RefCounted) -> void:
 	for id in round_state.actors(): round_state.actors()[id].flags = round_state.actors()[id].get("flags", 0)
 	_place(round_state)
-	round_state.spawn_random_pickups(2)
+	round_state.spawn_random_pickups(2, true)
 
 
 ## Flag.runEngine: robots on the flag gain 1 per tick, the rest lose 1; a full bar scores

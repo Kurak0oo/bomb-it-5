@@ -246,8 +246,15 @@ static func _recorded_draws(record: Dictionary, set_id: StringName, pac_man: boo
 	var map_from := -1
 	for group: Dictionary in record.get("callers", []):
 		if map_from < 0 and String(group.method).ends_with("MapMaster/init()"): map_from = int(group.first)
+	# The mode's own `mapLoadOver` draws come after the AI players' (`createAIPlayer`):
+	# GreenZoneMode's flag (`AbstractMoveObject.containerMove`) and pickups
+	# (`Map.createRamdonProp`), PacManMode's `itemPosSetting` and items. The round's mode
+	# makes them itself (`begin`), so the generator stops before them.
+	var stop := int(record.draws_before_round)
+	for caller: Dictionary in record.get("callers", []):
+		if String(caller.get("method", "")).contains("AbstractGameMode/createAIPlayer"): stop = int(caller["last"])
 	var ordinal := 0
-	while ordinal < int(record.draws_before_round):
+	while ordinal < stop:
 		if board.is_empty() and ordinal + 1 == map_from:
 			var counted := CountedRandom.new(random)
 			board = Layouts.roll_set(set_id, pac_man, soft_chance, counted)

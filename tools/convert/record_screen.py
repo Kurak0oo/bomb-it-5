@@ -1292,8 +1292,9 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
     x, y = board['excursion'][0] + 7 * board['grid'], board['excursion'][1] + 6 * board['grid']
     at = [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
     looks = {r: {(0, 0)} for r in range(8)}
-    # The recorded rounds' looks: the screen's own and each other stage set's (`board.sets`).
-    for own in [board] + list(board.get('sets', {}).values()):
+    # The recorded rounds' looks: the screen's own, each other stage set's (`board.sets`) and
+    # each other game mode's (`board.modes`).
+    for own in [board] + list(board.get('sets', {}).values()) + list(board.get('modes', {}).values()):
         for robot, look in zip(own['robots'], own.get('looks', [])):
             looks[robot].add(tuple(max(0, v) for v in look))  # -1: the clip has none; its default
     p = Player(player_path, swf)
@@ -1585,6 +1586,223 @@ def record_sets(_case_name, player_path, swf, only=None):
               f'{len(out["features"])} features, {len(seen)} distinct images in {target}')
 
 
+# ------------------------------------------------------------------ game modes
+
+# Frames the modes pass follows the flag's nested clip after the capture (its idle loop).
+FLAG_LOOP_FRAMES = 150
+# Items the modes pass compares to find a coin on the Pac-Man board (the most common image).
+COIN_CANDIDATES = 12
+MAX_COIN_STEPS = 240  # 4 frames per bitmap, as many bitmaps as `items` allows (MAX_ITEM_IMAGES)
+
+
+def _record_flag_got_it(player_path, swf, clip, loop, store):
+    """The flag after `Flag.complete` as the round plays it: the case gameplay-greenzone-flag up to
+    its `holding` capture (the player on the flag), then a frame at a time: from the first frame the
+    nested clip leaves its idle loop (`gotoAndPlay("got it")`), the whole clip each frame
+    (`FLAG_GOT_IT_FRAMES`), with the nested clip's frame."""
+    case = load_case('gameplay-greenzone-flag')
+    p = Player(player_path, swf)
+    shots = []
+    # The player's bar as it plays while held, one image a frame from the frame it is made: the
+    # bar's own sub-clips (sparkles) play on their own, so its frames made stopped do not show them.
+    bar = []
+
+    def held_bar(nodes):
+        held = [k for k, n in nodes.items() if k.rsplit('/', 1)[0] == clip and (n.get('class') or '') == 'r0_progress']
+        if held:
+            stored = store(p, held[0], at=nodes[held[0]]['stage_matrix'])
+            stored['frame'] = nodes[held[0]].get('frame')
+            bar.append(stored)
+    try:
+        on_board = False
+        for line in single_steps(case, 'holding'):
+            p.command(line)
+            on_board = on_board or '"reposition"' in line
+            if on_board and line == 'step 1':
+                held_bar({n['path']: n for n in p.display()['nodes']})
+        last = None
+        for _ in range(200):
+            p.command('step 1')
+            nodes = {n['path']: n for n in p.display()['nodes']}
+            if clip not in nodes:
+                break
+            if not shots:
+                held_bar(nodes)
+            frame = nodes[loop]['frame']
+            # Still idle: the loop's next frame (68 goes back to 37).
+            idle = last is None or frame == (FLAG_IDLE_FIRST if last == FLAG_IDLE_LAST else last + 1)
+            last = frame
+            if not shots and idle:
+                continue
+            # Bars left by now (`complete` takes them off); hide any that remain.
+            bars = [k for k, n in nodes.items() if k.startswith(clip + '/') and (n.get('class') or '').endswith('_progress')]
+            stored = store(p, clip, hide=bars or None, at=nodes[clip]['stage_matrix'])
+            if stored:
+                stored['frame'] = frame
+            shots.append(stored)
+            if len(shots) >= FLAG_GOT_IT_FRAMES:
+                break
+    finally:
+        p.close()
+    return shots, bar
+
+
+# The flag's nested clip loops 37..68 (recorded `loop`); `got it` frames come after.
+FLAG_IDLE_FIRST, FLAG_IDLE_LAST = 37, 68
+FLAG_GOT_IT_FRAMES = 40
+
+
+def record_modes(_case_name, player_path, swf):
+    """The game modes' own board objects on the gameplay screen (layout `board.modes`, after
+    art), into original/screens/game/modes/manifest.json:
+
+    - `flag` (GreenZoneMode.mapLoadOver: `new Flag(game, x, y)`; `Flag.setMc`: a `_brick5`
+      stopped at `_mcNum` 160): its `body` without the nested clip, the nested clip alone at
+      each of its frames (`parts`, with the label each frame shows), `loop`: the nested clip's
+      frame on each frame from the capture on, as the round plays it (the AI stopped), `played`:
+      the whole clip on those frames, and `got_it`: the whole clip on each
+      frame after `complete`, and `bar_played`: the player's bar on each frame it is held
+      (`_record_flag_got_it`);
+    - `progress` (`Flag.runEngine`: `Attach.getMovieClip("r" + robotID + "_progress")`, stopped
+      at `int(totalTime / maxTime * 100)`): each robot's bar at each frame, made by its class
+      (`symbol`), unscaled (the board view applies `scaleX = scaleY = 2`);
+    - `items.coin` (PacManMode.mapLoadOver: `new CoinProp`, `_propNum` 36): the PixelClip bitmaps
+      of a coin on the round's board, from the capture on until they wrap (`PixelClip.playArr`:
+      a bitmap per 4 frames), and `first_change`: frames from the capture to its first change,
+      which places the map-load items' age on the round's first frame.
+    Also the player's own 3× frame of each mode's capture (the comparison's resampling ceiling)."""
+    layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
+    board = layout['board']
+    target = PACK / 'game' / 'modes'
+    shutil.rmtree(target, ignore_errors=True)
+    target.mkdir(parents=True)
+    out = {'schema': 'bombit5-original-modes-v1', 'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path),
+           'scale': SCALE, 'goldens': {mode: e['golden_sha256'] for mode, e in board.get('modes', {}).items()},
+           'flag': {}, 'progress': {}, 'items': {}}
+    seen = {}
+    tmp = Path(tempfile.mkdtemp(prefix='bombit5-modes-'))
+    m, grid, ex = board['container_matrix'], board['grid'], board['excursion']
+
+    def cell_at(cell):
+        x, y = ex[0] + cell[0] * grid, ex[1] + cell[1] * grid
+        return [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
+
+    def run_to(mode):
+        entry = board['modes'][mode]
+        golden = Path(entry['golden'])
+        case_name, capture = golden.parent.name, golden.stem
+        case = load_case(case_name)
+        p = Player(player_path, swf)
+        for line in single_steps(case, capture):
+            p.command(line)
+        p.shot(PACK / 'game' / f'reference-3x-{case_name}-{capture}.png')
+        for actor in (1, 2, 3):
+            p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
+        return p, entry
+
+    def store(p, path, frame=None, hide=None, at=None):
+        stored = _store(p, path, target, tmp, seen, frame, hide)
+        if stored:
+            stored['file'] = 'modes/' + stored['file']
+            if at is not None:
+                stored['at'] = at
+        return stored
+
+    try:
+        if 'green_zone' in board.get('modes', {}):
+            p, entry = run_to('green_zone')
+            try:
+                flag = entry['mode_objects'][0]
+                clip, loop = flag['path'] + flag['node'], flag['path'] + flag['loop']
+
+                def node(path):
+                    return next((n for n in p.display()['nodes'] if n['path'] == path), None)
+                # The nested clip's frame on each frame the round plays (its idle loop).
+                # Each frame's whole clip as the round plays it (`played`, beside `loop`): the
+                # nested clip's own sub-clips (stars) play on their own, so a frame
+                # rendered alone (`parts`) does not show them where the round has them.
+                at = node(clip)['stage_matrix']
+                frames = [node(loop)['frame']]
+                played = [store(p, clip, at=at)]
+                for _ in range(FLAG_LOOP_FRAMES):
+                    p.command('step 1')
+                    frames.append(node(loop)['frame'])
+                    played.append(store(p, clip, at=at))
+                total = node(loop)['total_frames']
+                # Both drawn on the `_brick5`'s node (at 30/32 in its container): its matrix.
+                body = store(p, clip, hide=[loop], at=at)
+                parts = {}
+                for f in range(1, total + 1):
+                    stored = store(p, loop, f, at=at)
+                    shown = node(loop)
+                    if stored:
+                        stored['label'] = shown.get('label') if shown.get('frame') == f else None
+                        parts[str(f)] = stored
+                out['flag'] = {'body': body, 'parts': parts, 'total': total, 'loop': frames,
+                               'clip_frame': flag['frame'], 'played': played}
+                out['flag']['got_it'], out['flag']['bar_played'] = _record_flag_got_it(player_path, swf, clip, loop, store)
+                # Each robot's progress bar, made by its class on the first row's robot layer.
+                host = board['layers']['robot'][0]
+                x, y = ex[0] + 7 * grid, ex[1] + 6 * grid
+                bar_at = cell_at((7, 6))
+                name = f'{host}/refsym'
+                for robot in range(8):
+                    cls = f'r{robot}_progress'
+                    p.command(f'symbol {host} {cls} refsym {x} {y} 1')
+                    total = node(name)['total_frames']
+                    p.command(f'unsymbol {name}')
+                    bars = {}
+                    for f in range(1, total + 1):
+                        p.command(f'symbol {host} {cls} refsym {x} {y} {f}')
+                        stored = store(p, name, at=bar_at)
+                        if stored:
+                            bars[str(f)] = stored
+                        p.command(f'unsymbol {name}')
+                    out['progress'][cls] = {'total': total, 'frames': bars}
+                    print(f'  {cls}: {total} frames')
+            finally:
+                p.close()
+        if 'pac_man' in board.get('modes', {}):
+            p, entry = run_to('pac_man')
+            try:
+                # A coin: the most common image among some map-load items (the others are the
+                # four drawn items and the hidden NullWeapon).
+                p.shot(tmp / 'frame.png')
+                candidates = entry['items'][len(entry['items']) // 2:][:COIN_CANDIDATES]
+                images = {}
+                for item in candidates:
+                    stored = store(p, item['path'])
+                    images.setdefault(stored['file'] if stored else None, []).append(item)
+                coin = max((v for k, v in images.items() if k), key=len)[0]
+                at = cell_at(coin['cell'])
+                shown = [store(p, coin['path'], at=at)]
+                first_change = None
+                for step in range(1, MAX_COIN_STEPS + 1):
+                    p.command('step 1')
+                    p.shot(tmp / 'frame.png')
+                    stored = store(p, coin['path'], at=at)
+                    if stored['file'] == shown[-1]['file']:
+                        continue
+                    first_change = first_change or step
+                    if stored['file'] == shown[0]['file'] and len(shown) > 1:
+                        break
+                    shown.append(stored)
+                out['items']['coin'] = {'cycle': len(shown), 'bitmaps': shown, 'first_change': first_change,
+                                        'cell': coin['cell']}
+                print(f'  coin: {len(shown)} bitmaps, first change {first_change} frames after the capture')
+            finally:
+                p.close()
+        for mode in board.get('modes', {}):
+            if mode not in ('green_zone', 'pac_man'):
+                golden = Path(board['modes'][mode]['golden'])
+                _shots(load_case(golden.parent.name), golden.parent.name, player_path, swf, PACK / 'game')
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    (target / 'manifest.json').write_text(json.dumps(out, indent=1) + '\n', encoding='utf-8')
+    print(f'modes: flag {len(out["flag"].get("parts", {}))} frames, {len(out["progress"])} progress bars, '
+          f'{len(out["items"])} item kinds, {len(seen)} distinct images in {target.relative_to(ROOT)}')
+
+
 # ------------------------------------------------------------------ end cartoons
 
 # `GameEndCartoon.setCartoon`'s library classes: `AbstractGameMode.win`, `lose`, and every
@@ -1871,7 +2089,7 @@ def record_fonts(_case_name, _player_path, swf):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels', 'cartoons',
-                                         'sets', 'shots'])
+                                         'sets', 'modes', 'shots'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
@@ -1898,6 +2116,9 @@ def main():
         return 0
     if args.what == 'sets':
         record_sets(args.case, args.player.resolve(), args.swf, [x for x in args.sets.split(',') if x] or None)
+        return 0
+    if args.what == 'modes':
+        record_modes(args.case, args.player.resolve(), args.swf)
         return 0
     if args.what == 'panels':
         record_panels(args.case, args.player.resolve(), args.swf)

@@ -57,6 +57,12 @@ const FLIP_DELAY := 450
 const SIGN_BOMB := "Art_Sign_Red"
 const SIGN_OTHER := "Art_Sign_Blue"
 const SIGN_SCALE := 30.0 / 32.0
+## The game modes' board objects (record_screen.py modes).
+const MODES_PACK := "res://original/screens/game/modes/manifest.json"
+## Made with the map (GreenZoneMode.mapLoadOver), the flag's nested clip stands at the
+## recording's first loop frame on the round's first frame, as the robots' loops do
+## (scripts/ui/game_actors.gd ROUND_START_LOOP_AGE).
+const ROUND_START_FLAG_AGE := 4
 
 var _screen: Node2D
 var _board: Dictionary
@@ -87,13 +93,17 @@ var _signs: Array = []
 var _hands_prefetched := false
 
 
-func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"") -> void:
+func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"", recorded_mode: StringName = &"") -> void:
 	_screen = screen
 	_board = board
 	set_id = stage_set if stage_set != &"" else StringName(board.get("set", "cinema"))
 	set_data = board.duplicate()
 	set_data.erase("sets")
+	set_data.erase("modes")
 	set_data.merge(board.get("sets", {}).get(String(set_id), {}), true)
+	# A recorded round of another game mode on the screen's own set (`board.modes.<mode>`).
+	if recorded_mode != &"":
+		set_data.merge(board.get("modes", {}).get(String(recorded_mode), {}), true)
 	_art = art_of(screen, board, set_id)
 	var file := ProjectSettings.globalize_path("res://original/screens/game/actors/actors.json")
 	if FileAccess.file_exists(file):
@@ -230,6 +240,7 @@ func update(snapshot: Dictionary) -> void:
 	_crocodiles(snapshot)
 	_spellbooks(snapshot)
 	_toy_hands(snapshot)
+	for step in steps: _flags(snapshot, true)
 
 
 ## `brickExp` at age `age` (frames since `Box.brickExp`): made with `new`, it shows its first
@@ -431,6 +442,187 @@ func _toy_hands(snapshot: Dictionary) -> void:
 			_screen.add_node(_entry(path, clip, feature_matrix(feature), "piece"))
 		var parts: Dictionary = frames.get("parts", {}).get("/hand", {})
 		_screen.set_node_art(path, parts.get(str(mini(hand, parts.size())), {}), hand)
+
+
+## The game modes' board objects, once the mode's `mapLoadOver` has run (`Game.firstMapLoadOver`,
+## with the robots): Green Zone's flag.
+func map_load_over(snapshot: Dictionary) -> void:
+	_mode_tick = int(snapshot.get("tick", 0))
+	_flags(snapshot, false)
+
+
+## Green Zone's flag (`maps/platform/Flag`), display side; the round's flag and each robot's
+## hold progress come from the mode's state (scripts/simulation/modes/green_zone_mode.gd):
+## - `Flag.init` / `AbstractPlatForm.setMc` / `Flag.setMc`: a Sprite on its row's platform layer
+##   (`game.getDisArr(y).getChildAt(0)`) at the cell, holding a `_brick5` stopped at `_mcNum`
+##   160, whose nested clip plays (record_screen.py modes `flag`: its frames from the capture
+##   on, `loop`; made with the map, it stands where the recording has it on the round's first
+##   frame; a flag made later starts on frame 1, shown twice);
+## - `runEngine`: a robot that stands on it gets the first free slot (`slots.shift()`) and its
+##   `r<robotID>_progress` clip in `_mc` at (`_baseX`, `_baseY - slot * 20`) at scale 2, on frame
+##   `int(totalTime / maxTime * 100)`; a bar that drains to 0 leaves and frees its slot
+##   (`slots.unshift`);
+## - `complete`: the nested clip `gotoAndPlay("got it")`, every bar leaves; after
+##   `TweenMax.delayedCall(3, move)` the Flag is disposed and a new one made at the next cell.
+const FLAG_BASE := Vector2(10, 20)
+const FLAG_SCALE := 30.0 / 32.0
+var _flag: Dictionary = {}
+var _mode_art: Dictionary = {}
+var _mode_tick := 0
+
+
+func _flags(snapshot: Dictionary, step := true) -> void:
+	if StringName(snapshot.get("mode", &"")) != &"green_zone": return
+	if _mode_art.is_empty():
+		var file := ProjectSettings.globalize_path(MODES_PACK)
+		if FileAccess.file_exists(file): _mode_art = JSON.parse_string(FileAccess.get_file_as_string(file))
+	var state: Dictionary = snapshot.get("mode_state", {})
+	var cell = state.get("flag")
+	if step and not _flag.is_empty(): _flag.age += 1
+	if not _flag.is_empty() and cell != null and Vector2i(cell) != _flag.cell:
+		# `move`: `map.removePlatForm`, `new Flag(...)`, `dispose`.
+		detach(_flag.layer, _flag)
+		_flag = {}
+	if _flag.is_empty():
+		if cell == null: return
+		_make_flag(Vector2i(cell), not step)
+	if cell == null and not _flag.done:
+		_flag_complete()
+	if not _flag.done: _flag_progress(snapshot)
+	_show_flag()
+
+
+func _make_flag(cell: Vector2i, at_map_load: bool) -> void:
+	var art: Dictionary = _mode_art.get("flag", {})
+	_flag = {"cell": cell, "layer": layer_of(cell.y, 0), "done": false, "bars": {}, "slots": [0, 1, 2, 3],
+		"age": ROUND_START_FLAG_AGE if at_map_load else 0, "frame": 1, "got_it": -1}
+	attach(_flag.layer, _flag, cell_matrix(Vector2(cell)))
+	var clip := String(_flag.path) + "/@0"
+	var at := _flag_clip_matrix()
+	_screen.add_node(_entry(clip, _flag.path, at, "piece"), art.get("body", {}))
+	_screen.set_node_art(clip, art.get("body", {}), int(art.get("clip_frame", 160)))
+	_add_art_node(clip + "/~loop", clip, at)
+
+
+## The flag's `_brick5` in its container: `scaleX = scaleY = 30 / 32` (`AbstractPlatForm.setMc`).
+func _flag_clip_matrix() -> Array:
+	var m := _m(cell_matrix(Vector2(_flag.cell))) * Transform2D(0.0, Vector2(FLAG_SCALE, FLAG_SCALE), 0.0, Vector2.ZERO)
+	return [m.x.x, m.x.y, m.y.x, m.y.y, m.origin.x, m.origin.y]
+
+
+## The nested clip's frame `age` ticks after the Flag was made: the recorded loop (frames from
+## the capture on, the capture at ROUND_START_FLAG_AGE), and before it frame 1 twice, then on.
+func _flag_loop_frame(age: int) -> int:
+	var loop: Array = _mode_art.get("flag", {}).get("loop", [])
+	if loop.is_empty(): return 1
+	if age < ROUND_START_FLAG_AGE: return maxi(1, age)
+	var k := age - ROUND_START_FLAG_AGE
+	if k < loop.size(): return int(loop[k])
+	# Past the recording: the loop's period (the first frame seen again).
+	var start: int = loop.find(loop[loop.size() - 1])
+	var period := loop.size() - 1 - start
+	return int(loop[start + (k - start) % maxi(1, period)]) if period > 0 else int(loop[-1])
+
+
+func _flag_complete() -> void:
+	_flag.done = true
+	_flag.got_it = _flag.age
+	for robot in _flag.bars.keys(): _remove_bar(robot)
+
+
+func _flag_progress(snapshot: Dictionary) -> void:
+	var progress: Dictionary = snapshot.get("mode_state", {}).get("progress", {})
+	var capture := float(snapshot.get("mode_state", {}).get("capture_ticks", 105))
+	var robots := {}
+	for id in progress:
+		var actor: Dictionary = snapshot.get("actors", {}).get(id, {})
+		robots[int(actor.get("robot", 0))] = int(progress[id])
+	for robot in _flag.bars.keys():
+		if not robots.has(robot): _remove_bar(robot)
+	for robot in robots:
+		if not _flag.bars.has(robot):
+			var slot: int = _flag.slots.pop_front() if not _flag.slots.is_empty() else 0
+			_flag.bars[robot] = {"slot": slot, "path": "%s/@0/~bar%d" % [_flag.path, robot]}
+			_add_art_node(_flag.bars[robot].path, String(_flag.path) + "/@0", _flag_clip_matrix())
+			var top: Node2D = _screen.by_path.get(String(_flag.path) + "/@0/~loop")
+			if top != null: top.get_parent().move_child(top, -1)
+		var bar: Dictionary = _flag.bars[robot]
+		# Held since it was made (its progress one more each tick), it plays as recorded.
+		bar.held = bar.get("held", true) and int(robots[robot]) == int(bar.get("progress", int(robots[robot]) - 1)) + 1
+		bar.progress = int(robots[robot])
+		bar.age = int(bar.get("age", -1)) + 1
+		bar.frame = int(robots[robot] / capture * 100)
+
+
+func _remove_bar(robot: int) -> void:
+	var bar: Dictionary = _flag.bars[robot]
+	_flag.slots.push_front(bar.slot)
+	_screen.remove_node(bar.path)
+	_flag.bars.erase(robot)
+
+
+func _show_flag() -> void:
+	var art: Dictionary = _mode_art.get("flag", {})
+	var at := _flag_clip_matrix()
+	var clip := String(_flag.path) + "/@0"
+	# The whole clip as the round played it (record_screen.py modes): the nested clip's own
+	# sub-clips (stars) run on their own, so its frames alone do not show them in place.
+	# Idle: by the nested clip's frame (`played`). After `complete`: `gotoAndPlay("got it")`,
+	# one recorded image per tick from the tick it scored (`got_it`).
+	var image: Dictionary = {}
+	if _flag.done:
+		var got_it: Array = art.get("got_it", [])
+		if not got_it.is_empty(): image = got_it[clampi(_flag.age - _flag.got_it, 0, got_it.size() - 1)]
+	else:
+		image = _flag_played(art)
+	# The bars show under the nested clip (recorded: `r<id>_progress` at the `_brick5`'s `@0`,
+	# its nested clip at `@1`), so the clip's image goes on its last child node.
+	_screen.set_node_art(clip, {} if not image.is_empty() else art.get("body", {}), int(art.get("clip_frame", 160)))
+	_screen.set_node_art(clip + "/~loop", image if not image.is_empty() else art.get("parts", {}).get(str(_flag_loop_frame(_flag.age)), {}))
+	var bars: Dictionary = _mode_art.get("progress", {})
+	for robot in _flag.bars:
+		var bar: Dictionary = _flag.bars[robot]
+		var local := Transform2D(0.0, Vector2(2, 2), 0.0, FLAG_BASE - Vector2(0, bar.slot * 20))
+		var m := _m(at) * local
+		_screen.move_node(bar.path, [m.x.x, m.x.y, m.y.x, m.y.y, m.origin.x, m.origin.y])
+		var frames: Dictionary = bars.get("r%d_progress" % robot, {}).get("frames", {})
+		var bar_image: Dictionary = frames.get(str(maxi(1, int(bar.frame))), {})
+		# The bar's sparkles play on their own: while held from the start, the recorded bar
+		# (record_screen.py modes `bar_played`, the player's robot 0) at its age, where it has one.
+		var played: Array = art.get("bar_played", [])
+		if robot == 0 and bar.get("held", false) and int(bar.age) < played.size() \
+				and int(played[int(bar.age)].get("frame", -1)) == maxi(1, int(bar.frame)):
+			bar_image = played[int(bar.age)]
+		_screen.set_node_art(bar.path, bar_image)
+
+
+## The idle flag's recorded image `age` ticks after it was made (`played`, one per frame from the
+## capture, ROUND_START_FLAG_AGE): past the recording, the image recorded at the same place of the
+## nested loop's period, so its sub-clips keep their phase.
+func _flag_played(art: Dictionary) -> Dictionary:
+	var played: Array = art.get("played", [])
+	var loop: Array = art.get("loop", [])
+	if played.is_empty() or loop.is_empty(): return {}
+	var k: int = int(_flag.age) - ROUND_START_FLAG_AGE
+	if k < 0: return {}
+	if k < played.size(): return played[k]
+	var start: int = loop.find(loop[loop.size() - 1])
+	var period := loop.size() - 1 - start
+	return played[start + (k - start) % period] if period > 0 else played[-1]
+
+
+## A node that only draws (no display-list path of its own: inside a clip drawn as one piece).
+func _add_art_node(path: String, parent: String, matrix: Array) -> void:
+	_screen.add_node({"path": path, "parent": parent, "stage_matrix": matrix, "role": "piece", "kind": "movie_clip",
+		"effective_visible": true})
+	var node: Node2D = _screen.by_path.get(path)
+	if node != null:
+		node.remove_meta("swf_path")
+		node.set_meta("swf_art", true)
+
+
+static func _m(m: Array) -> Transform2D:
+	return Transform2D(Vector2(m[0], m[1]), Vector2(m[2], m[3]), Vector2(m[4], m[5]))
 
 
 ## Add `item` as the last child of `layer` (`addChild`): its path is `@0#k` among the layer's

@@ -7,7 +7,8 @@ extends SceneTree
 ## so no frame to compare.) Likewise for every other stage set recorded on the screen
 ## (`board.sets`: Zoo, its crocodiles as features; Candy Factory, its machine and belt;
 ## Luxury Stores, no features and a shown centre; Magic Library, its spellbook; Birthday
-## Party, its toy hands).
+## Party, its toy hands), and every other game mode recorded on the screen's own set
+## (`board.modes`: Kill, Green Zone, Pac-Man, on Cinema).
 
 const GameBoard = preload("res://scripts/ui/game_board.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
@@ -22,14 +23,16 @@ func _initialize() -> void:
 	_check_set(layout, StringName(layout.board.set))
 	for set_id in layout.board.get("sets", {}):
 		_check_set(layout, StringName(set_id))
+	for mode in layout.board.get("modes", {}):
+		_check_set(layout, StringName(layout.board.set), StringName(mode))
 	_expect(GameBoard._child_path("/a", 0, 1) == "/a/@0" and GameBoard._child_path("/a", 2, 5) == "/a/@0#2",
 		"an only child is `@0`, siblings `@0#k`")
 	print("%s: %d game board checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(1 if failures else 0)
 
 
-func _check_set(layout: Dictionary, set_id: StringName) -> void:
-	var view := GameBoard.new(null, layout.board, set_id)
+func _check_set(layout: Dictionary, set_id: StringName, mode := &"") -> void:
+	var view := GameBoard.new(null, layout.board, set_id, mode)
 	var recorded: Dictionary = view.set_data
 	var golden_path: String = recorded.get("golden", layout.source.golden)
 	var board := Layouts.recorded(recorded.template, recorded.boxes)
