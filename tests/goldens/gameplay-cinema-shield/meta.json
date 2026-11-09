@@ -1,8 +1,9 @@
 {
  "case": "gameplay-cinema-shield",
- "case_sha256": "690b915750160a42190d79811d0a12ef0590c20b84cd2cf5969236ad893681f9",
+ "case_sha256": "c47d605e2cce615bba96ad89ff389bb959a9b4a1481c1ae2337e615e277ab6b3",
  "fps": 35.0,
  "frames": {
+  "blast": 793,
   "held": 702,
   "turned": 705,
   "used": 814,

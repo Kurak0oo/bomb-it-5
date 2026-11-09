@@ -54,6 +54,9 @@ The art of one box kind on the gameplay screen: a `_brick5` frame, shrunk and ce
 **Actor art**:
 The images of a library clip the round makes at run time (a robot in a direction and look, a bomb, a blast), rendered alone by the reference player at every frame the round can show, and placed by the clip's registration point.
 
+**Frame script**:
+Code on a clip's timeline frame (`addFrameScript`), such as a ride clip's `gotoAndPlay(1)` on its loop's last frame. It runs after the frame's engine callbacks, so it can restart a clip the engine stopped.
+
 **Clip loop**:
 A nested clip that an actor's library clip plays on its own while the clip itself stands still (a robot's blinking eyes), rendered apart from the clip and drawn as its own node over it, so a clip costs its root frames plus its loop frames.
 
@@ -67,7 +70,7 @@ A snapshot field the simulation keeps only so the replica can draw the round as 
 What the gameplay screen draws without original art yet (most weapon actions and shots, mode objects, and the board of a stage set whose art is not in the pack), in the screen's board container.
 
 **Recorded round**:
-The board and robots a gameplay capture recorded, which the comparison loop starts its Godot round on because the original's random draws before the map are not reproduced yet.
+The robots and the `Math.random` position a gameplay capture recorded, which the comparison loop starts its Godot round from because the menus' random draws are not reproduced; its board is rolled again from the original's draws and must equal the recorded one.
 
 **Original pack**:
 The art and audio taken from the user's own SWF, kept on their machine and never committed.
@@ -102,6 +105,9 @@ The central area of the virtual stick that represents no movement request.
 
 **Command**:
 One actor's direction and ordered bomb input events for a tick.
+
+**Key's tick**:
+The first engine tick after a key reaches the original between frames. A bomb made by that key counts down from it and a weapon's command first runs on it, with its clip still on frame 1.
 
 **Bomb input event**:
 A delivered down or up input for an actor's bomb/action control. Repeated down events are distinct events even when the control remains held.

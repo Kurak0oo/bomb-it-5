@@ -1,7 +1,7 @@
 {
  "name": "gameplay-cinema-ride",
  "screen": "game",
- "origin": "A ride on the gameplay screen (checkpoint 4, slice c): the round of gameplay-cinema-bomb (AI robots stopped at its first frame); the pickup fixture gives the player a CarProp on its cell, collected on the next engine frame (mount: CarProp.changeStage, resetRobotMc: _r0_Car_Down at frame 1), the player drives down (drive: the clip playing). Recorded further (released after 10 frames, parked at frame 715), the original's ride clip advances once more after the release than Godot's (frame 2, Godot 1): not explained yet, so the case ends at drive; its goldens are that recording's.",
+ "origin": "A ride on the gameplay screen (checkpoint 4, slice c; extended in checkpoint 5): the round of gameplay-cinema-bomb (AI robots stopped at its first frame); the pickup fixture gives the player a CarProp on its cell, collected on the next engine frame (mount: CarProp.changeStage, resetRobotMc: _r0_Car_Down at frame 1), the player drives down (drive: the clip playing) and releases the key after 10 frames (release: one frame on, the clip has advanced once more, as the player advances a playing clip's timeline before the frame's scripts run moveStop; parked: two frames later, at frame 715, standing on that frame).",
  "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
  "wall_clock_text": {
   "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
@@ -69,7 +69,7 @@
   },
   {
    "godot_command": "round cinema-start",
-   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
   },
   {
    "command": "click 528 475"
@@ -126,6 +126,24 @@
   },
   {
    "capture": "drive"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "ku down"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "capture": "release"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "capture": "parked"
   }
  ]
 }

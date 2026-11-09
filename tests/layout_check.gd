@@ -6,6 +6,7 @@ const Layouts = preload("res://scripts/simulation/layouts.gd")
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const ArcadeMode = preload("res://scripts/simulation/modes/arcade_mode.gd")
+const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
 var failures := 0
 var checks := 0
 
@@ -60,6 +61,7 @@ func _initialize() -> void:
 	_expect(zoo.features.values().any(func(f): return f.kind == &"crocodile"), "set tiles are kept as board features")
 
 	_tile_art_follows_the_round_choices()
+	_rolls_follow_the_original_draws()
 
 	_expect(StageSets.available_sets() == StageSets.ORDER, "every stage set is offered once its features are ported (#63-#66)")
 
@@ -103,6 +105,35 @@ func _tile_art_follows_the_round_choices() -> void:
 	_expect(random_ok, "random fixed props draw one of the round's two fixed choices")
 	_expect(soft_ok, "soft blocks draw one of the round's two soft choices")
 	_expect(ring_varies.size() > 1, "the outer ring's art changes with the round's first fixed choice")
+
+
+## Each recorded round's board (scenes/swf/game.json `board` and `board.sets`), rolled again
+## from its seed's `Math.random` at the draw `AbstractGameMode.initMap` starts on
+## (tests/goldens/<case>/math_random.json): the pool's Vehicle draws, then `Layouts.roll_set`
+## must take the original's template, every box and its frame, and stop on the draw before
+## `AbstractPlayer.set scoreData`.
+func _rolls_follow_the_original_draws() -> void:
+	var board: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scenes/swf/game.json")).board
+	var rounds := {StringName(board.set): board}
+	for set_id in board.sets: rounds[StringName(set_id)] = board.sets[set_id]
+	for set_id in rounds:
+		var entry: Dictionary = rounds[set_id]
+		var golden := String(entry.get("golden", "tests/goldens/gameplay-cinema-start/cinema-start.json"))
+		var record: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://" + golden.get_base_dir().path_join("math_random.json")))
+		var first_pool := -1
+		var score_from := -1
+		for group: Dictionary in record.callers:
+			if first_pool < 0 and String(group.method).ends_with("AbstractGameMode/initMap()"): first_pool = int(group.first)
+			if score_from < 0 and String(group.method).ends_with("AbstractPlayer/set scoreData()"): score_from = int(group.first)
+		var random := AvmRandom.new(int(record.seed))
+		for ordinal in range(1, first_pool): random.next_raw()
+		for ordinal in record.pool_draws: random.next_raw()
+		var rolled: Dictionary = Layouts.roll_set(set_id, false, 0.6, random)
+		var expected: Dictionary = Layouts.recorded(String(entry.template), entry.boxes)
+		_expect(rolled.layout == expected.layout and rolled.cells == expected.cells and rolled.variants == expected.variants,
+			"%s: seed %d rolls the recorded round's template, boxes and frames" % [set_id, int(record.seed)])
+		_expect(random.next_raw() == int(record.raw[score_from - 1]),
+			"%s: the roll takes the original's draws %d-%d" % [set_id, first_pool + record.pool_draws.size(), score_from - 1])
 
 
 func _soft_ratio(name: String, chance: float) -> float:

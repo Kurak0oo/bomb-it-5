@@ -1,0 +1,152 @@
+{
+ "name": "gameplay-cinema-triple",
+ "screen": "game",
+ "origin": "A weapon on the gameplay screen (checkpoint 5, timing): the round of gameplay-cinema-bomb (AI robots stopped); the pickup fixture gives the player a TripleShootGunProp (held) and it fires down into the seat below. NinjialPlayCommand makes a TripleShootGunBomb on its first run (the key's frame) and every 15th after (bullet_fire, 5 units a frame from the next frame): first (frame 12 after the key: the first shot at the seat, in its cleanup), second (28: the second moving), third (44: the third at the seat, the robot back after the 0.3 s delayedCall). Captures leave each shot at least 10 frames past its 0.2 s fade-in, which runs on the host clock in the reference player.",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ },
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "pickup",
+    "kind": "triple"
+   },
+   "godot_command": "pickup triple",
+   "godot_note": "The pickup fixture makes the original's own pickup class on the player's cell (AbstractItem.init), collected by GetItemCommand on the next engine frame; Godot puts the same pickup on the player's cell (Game.give_pickup)."
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "capture": "held"
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "step 11"
+  },
+  {
+   "capture": "first"
+  },
+  {
+   "command": "step 16"
+  },
+  {
+   "capture": "second"
+  },
+  {
+   "command": "step 16"
+  },
+  {
+   "capture": "third"
+  }
+ ],
+ "wall_clock_alpha": {
+  "bullet_fire": "TripleShootGunBomb.createMC: TweenMax.from(_mc, 0.2, {alpha: 0}) runs on the host clock in the reference player (stepped faster than real time, the shot is still fading tens of frames on), so its alpha is not compared"
+ }
+}

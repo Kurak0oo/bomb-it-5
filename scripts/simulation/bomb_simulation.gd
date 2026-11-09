@@ -202,8 +202,14 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 						continue
 					if _bombs.any(func(bomb: Dictionary): return bomb.cell == actor.cell):
 						continue
+					# `RobotController.addBomb` -> `Bomb.init` (`addBombHandler`): a key between frames
+					# makes the bomb before this tick's bomb phase, so its first `takeCount` runs this
+					# tick and it blasts on the 72nd (recorded: key at 721, `_time` 1 at 722, blast at
+					# 793; chain probe: fixture bomb at 822, blast at 894). An AI's controller acts
+					# during the frame's scripts, after the bomb phase: its bomb counts from the next.
 					var placed := {"actor_id": command.actor_id, "cell": actor.cell,
-						"power": actor.get("power", 1), "born": _tick, "age": 0, "blasted": false, "previous_cell": Vector2i.ZERO}
+						"power": actor.get("power", 1), "born": _tick if command.get("in_frame", false) else _tick - 1,
+						"age": 0, "blasted": false, "previous_cell": Vector2i.ZERO}
 					_bombs.append(placed)
 					_countdowns.append(placed)
 					play_sound(&"addBomb")

@@ -85,7 +85,10 @@ func advance_time(elapsed_seconds: float) -> Dictionary:
 				_directions[actor_id] = _pending_controllers[actor_id].direction
 			var capture: Dictionary = _bomb_queues[actor_id].capture()
 			captures[actor_id] = capture
-			batch.append({"actor_id": actor_id, "direction": _directions[actor_id], "bomb_events": capture.events})
+			var command := {"actor_id": actor_id, "direction": _directions[actor_id], "bomb_events": capture.events}
+			# A controller (the AI) acts during the frame's scripts, a key between frames.
+			if _controllers.has(actor_id): command.in_frame = true
+			batch.append(command)
 		var result: Dictionary = _commands.call(&"advance", batch)
 		var observations := {}
 		for actor_id in _pending_controllers:

@@ -1336,6 +1336,11 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
                 _shots(load_case(other), other, player_path, swf, PACK / screen)
         if 'robots' in parts:
             _record_robots(p, target, seen, looks, all_looks, out)
+            if 'plays' not in parts:
+                # Keep how each clip plays (`next`, the rides' frame scripts) from the last plays pass.
+                for cls, entry in out['robots'].items():
+                    if 'next' in previous.get('robots', {}).get(cls, {}):
+                        entry['next'] = previous['robots'][cls]['next']
             _write_actors(target, out, parts & {'weapons', 'robots'}, previous)
         if 'plays' in parts:
             if 'robots' not in parts:
@@ -1819,7 +1824,8 @@ def record_panels(_case_name, player_path, swf):
 # the pixel score's ceiling, compare.py resampling_ceiling).
 CASES_WITH_ACTORS = ('gameplay-cinema-bomb',)
 CASES_WITH_RIDES = ('gameplay-cinema-ride', 'gameplay-cinema-hammer', 'gameplay-cinema-flamer', 'gameplay-cinema-laser',
-                    'gameplay-cinema-fireball', 'gameplay-cinema-boxing', 'gameplay-cinema-landmine')
+                    'gameplay-cinema-fireball', 'gameplay-cinema-boxing', 'gameplay-cinema-landmine',
+                    'gameplay-cinema-triple')
 CASES_WITH_EFFECTS = ('gameplay-cinema-shield', 'gameplay-cinema-invincible', 'gameplay-cinema-portal')
 
 

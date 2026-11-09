@@ -1,0 +1,14 @@
+{
+ "case": "gameplay-cinema-triple",
+ "case_sha256": "1d165b37b3346854ef5f8ef1d0a782015703bdd4eadf9939b2899995c6c4a2bc",
+ "fps": 35.0,
+ "frames": {
+  "first": 714,
+  "held": 702,
+  "second": 730,
+  "third": 746
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

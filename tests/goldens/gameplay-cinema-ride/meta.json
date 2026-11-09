@@ -1,12 +1,14 @@
 {
  "case": "gameplay-cinema-ride",
- "case_sha256": "d6f4de86feaff5b933e2b1ea557ccd848f51f3b9a3303ad5120e5a5629d3a66d",
+ "case_sha256": "1eb7fb8cc259cf8171bba89713137d4a07d2cbeac9380cbfb801d6b0673af3f1",
  "fps": 35.0,
  "frames": {
   "drive": 707,
-  "mount": 702
+  "mount": 702,
+  "parked": 715,
+  "release": 713
  },
- "note": "Recorded by tools/compare/compare.py record (to parked); the case was then cut after drive, its goldens kept.",
- "player_sha256": "fddd18bc24219371386c1e8028ff16cffac5c7e6854bae5b77a7624e2d53c6e4",
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
  "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
 }

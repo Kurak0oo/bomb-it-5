@@ -674,3 +674,43 @@ its position, one move behind, and its fade): the triple gun has no case. The
 triple/fireball recovery and the shots' fade-in run on the host clock in the reference player
 (TweenMax), so they are not captured. The burnt pickup's `brickExp` (pickups slice) does not show
 its sparkles as the original's at frame 9 (found by the flamer case; captures moved off the burn, whose score also lands a tick late).
+
+Timing and random draws, 2026-11-08 (checkpoint 5, owner to review). Traced first in the reference
+player (`trace-focus` per frame: shield, hammer, boxing, fireball, triple, ride).
+- Weapons a tick late: a key reaches the original between frames, so `*Prop.bombDown` adds its
+  command before the next frame and the command first runs on that frame (the *key's tick*) with
+  the play clip on frame 1. `weapons.gd` counted its waits from the input counter (hammer 24,
+  laser 11 ...) but from the key's tick: every weapon acted a tick late. Now a command waiting
+  for clip frame f acts at age f - 1 (hammer blow 23, laser 10, boxing 12, fireball 13); flamer
+  fire, the landmine and the first triple shot act on the key's tick, the triple's at 0/15/30
+  (recorded: key 705 -> hammer back 729, boxing 718; key 702 -> triple shots 703/718/733,
+  fireball 716). Also from the traces: a hit projectile's `ended` counts on the hit's own tick
+  (gone 11 ticks on), and its handler's removal skips the next projectile's move that tick
+  (`GameEngine` bomb loop; the third triple shot stands still when the second hits). The
+  display's laser walk treats the cells its own tick's laser pass broke as still blocking; a
+  landmine's one-tick action shows through the actor's `action_started_tick`.
+- Bomb blast a tick late: `Bomb.init` registers `takeCount` before the key's tick, so a keyed
+  bomb counts on that tick and blasts on its 72nd (recorded: key 721, `_time` 1 at 722, blast
+  793; chain probe: fixture bomb 822, blast 894). The simulation skipped every bomb's first tick;
+  now only a controller's (AI) bomb, made during the frame's scripts, counts from the next tick
+  (`in_frame` on scheduler commands). Checks moved to the source timing (bomb_simulation,
+  round_play, round_regression, fidelity, hitmove).
+- Map draws: `Layouts.roll_set` ports `MapMaster.init`, `<Set>MapData.init`, `AbstractMapData.data`
+  / `pacManData`, `setData` (column by column) and `MapMaster.createRow` (row by row, one draw per
+  cell without a mid box, one more per soft block) onto the round's `Math.random`; a rolled round
+  draws the pool's vehicles (`initMap`) first. All six recorded rounds roll again exactly from
+  their seeds, on the original's draw ordinals (`tests/layout_check.gd`). The recorded cases now
+  roll their board from the replayed draws too (`Game._recorded_draws`); they still start there
+  because the app does not reproduce the menus' draws (UILoading, SoundManger, MainMenuUI,
+  GASender: draws 1-11).
+- Ride clip after release: `_r<n>_Car_<dir>` has a frame script on frame 11, `gotoAndPlay(1)`,
+  which runs after the engine's `moveStop` and restarts the clip, so it shows one frame more
+  (recorded: 10, then 1 and 2, stopped). Not a port error of the clip itself: the art pack had
+  lost the clips' `next` (a robots-only actors pass dropped it; now kept, `--parts plays`
+  re-run), and the display now restarts a clip whose step was a frame-script jump.
+- Cases: new `gameplay-cinema-triple` (first, second, third), `gameplay-cinema-fireball` adds
+  shot and blast, `gameplay-cinema-shield` captures the blast (72 frames after the key) before
+  used, `gameplay-cinema-ride` adds release and parked. `wall_clock_alpha` (compare.py) leaves a
+  host-clock fade (`TweenMax.from` on the shots) out of the alpha compare and the pixel score.
+Host-clock only (not frame-matched): the shots' 0.2 s fade-in, the triple/fireball 0.3 s
+recovery (`delayedCall`), the AI's delayed callbacks, TIME and the loading bar.

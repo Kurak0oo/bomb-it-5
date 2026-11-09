@@ -73,7 +73,7 @@ func _start(actors: Dictionary, rules: Dictionary = {}, board: Dictionary = {}) 
 	fixtures.append({"id": current_fixture, "initial_actors": actors.duplicate(true),
 		"initial_board": board.duplicate(true), "rules": rules.duplicate(true),
 		"clock": "accepted 35Hz simulation; callback/host-clock conversions are documented separately",
-		"input_mapping": "enqueue before tick cutoff; one admitted interval per step; uniform bomb birth exclusion"})
+		"input_mapping": "enqueue before tick cutoff; one admitted interval per step; a keyed bomb counts from its own tick, a controller's from the next"})
 
 
 func _step(count: int = 1, directions: Dictionary = {}, events: Dictionary = {}) -> Dictionary:
@@ -128,8 +128,9 @@ func _overlap_callbacks() -> void:
 		_step(1, {}, {&"human": [&"down"]})
 		_step(9)
 		_step(1, {}, {&"ai": [&"down"]})
-		var state := _step(78)
-		_expect(state.tick == 89 and not state.fire.has(Vector2i(2, 3)) and state.flames.size() == 1,
+		# Keys at 822 and 832 (ticks 1 and 11): blasts on 894 and 905, older cleanup on 910 (tick 88).
+		var state := _step(77)
+		_expect(state.tick == 88 and not state.fire.has(Vector2i(2, 3)) and state.flames.size() == 1,
 			"older cleanup clears shared Boolean fire while the younger visual remains in either owner order")
 		_expect(state.flames[0].count == 5, "live cleanup removal skips the younger callback")
 
@@ -213,8 +214,9 @@ func _laser_single_pass() -> void:
 	_start({&"human": {"cell": Vector2i(3, 3), "facing": Vector2.RIGHT}},
 		{"drops": true, "pickups": {Vector2i(3, 3): &"laser"}}, board)
 	_step()
+	# The key's tick runs LaserGunPlayCommand with the clip on frame 1: frame 11 is 10 ticks on.
 	_step(1, {}, {&"human": [&"down"]})
-	var state := _step(10)
+	var state := _step(9)
 	_expect(state.board[Vector2i(6, 3)] == &"soft", "laser waits for charge frame eleven")
 	state = _step()
 	_expect(state.board[Vector2i(6, 3)] == &"floor" and state.board[Vector2i(7, 3)] == &"soft",
@@ -231,7 +233,7 @@ func _mine_contact_and_external_blast() -> void:
 		{"drops": true, "damage": true, "pickups": {Vector2i(3, 3): &"landmine"}})
 	_step()
 	var state := _step(1, {}, {&"human": [&"down"]})
-	_expect(state.bombs.is_empty(), "mine down queues placement for the next action callback")
+	_expect(state.bombs.size() == 1, "LandminePlayCommand makes the mine on its first run, the key's tick")
 	state = _step(1, {}, {&"ai": [&"down"]})
 	_expect(state.bombs.size() == 2, "mine and adjacent ordinary bomb use separate capacity paths")
 	state = _step(72)
@@ -256,9 +258,10 @@ func _flamer_native_endpoints() -> void:
 		_start({&"human": {"cell": Vector2i(1, 1), "facing": directions[direction]}},
 			{"drops": true, "pickups": {Vector2i(1, 1): &"flamer"}})
 		_step()
-		_step(1, {}, {&"human": [&"down"]})
+		# Recorded rows from the frame after the key (724 for a key at 723): the key's tick.
+		var state := _step(1, {}, {&"human": [&"down"]})
 		for row in oracle.rows:
-			var state := _step()
+			if row != oracle.rows[0]: state = _step()
 			var expected := Vector2i(int(row.actual.xN), int(row.actual.yN))
 			_expect(not state.attacks.is_empty() and state.attacks[0].get("endpoint") == expected,
 				"flamer %s frame %d agrees with original endpoint getter" % [direction, int(row.fire_frame)])
@@ -268,9 +271,10 @@ func _projectile_emission_and_recovery() -> void:
 	_start({&"human": {"cell": Vector2i(1, 3), "facing": Vector2.RIGHT}},
 		{"drops": true, "pickups": {Vector2i(1, 3): &"triple"}})
 	_step()
+	# Recorded: key at 702, projectiles made on 703, 718 and 733 (NinjialPlayCommand `_count % 15`).
 	var state := _step(1, {}, {&"human": [&"down"]})
-	_expect(state.projectiles.is_empty(), "triple-shot down does not run its first action callback immediately")
-	state = _step(31)
+	_expect(state.projectiles.size() == 1, "triple-shot emits on its command's first run, the key's tick")
+	state = _step(30)
 	_expect(state.projectiles.size() == 3 and state.actors[&"human"].busy_until > state.tick,
 		"three inline emissions are fifteen callbacks apart and precede independent recovery")
 	scheduler.pause()
@@ -284,8 +288,9 @@ func _projectile_emission_and_recovery() -> void:
 	_start({&"human": {"cell": Vector2i(1, 3), "facing": Vector2.RIGHT}},
 		{"drops": true, "pickups": {Vector2i(1, 3): &"shotgun"}})
 	_step()
+	# Recorded: key at 702, FireballBomb made on 716.
 	_step(1, {}, {&"human": [&"down"]})
-	state = _step(13)
+	state = _step(12)
 	_expect(state.projectiles.is_empty(), "fireball waits for its final frame fourteen")
 	state = _step()
 	_expect(state.projectiles.size() == 1, "fireball releases on its own frame-fourteen boundary")
@@ -298,12 +303,13 @@ func _projectile_cleanup() -> void:
 		{"drops": true, "pickups": {Vector2i(1, 3): &"shotgun"}}, board)
 	_step()
 	_step(1, {}, {&"human": [&"down"]})
-	_step(14)
+	_step(13)
 	# Three ten-unit moves reach the free cell anchor; the fourth attempts blocked entry.
 	var state := _step(4)
 	_expect(state.board[Vector2i(3, 3)] == &"floor" and state.projectiles.size() == 1 and state.projectiles[0].get("phase") == &"cleanup",
 		"projectile collision affects the additional cell and retains an invisible cleanup callback")
-	state = _step(11)
+	# `ended` first counts on the hit's own tick (recorded: `_continueTime` 1), removal on the 12th.
+	state = _step(10)
 	_expect(state.projectiles.size() == 1, "projectile remains through eleven cleanup callbacks")
 	state = _step()
 	_expect(state.projectiles.is_empty(), "twelfth projectile cleanup callback removes it")
@@ -313,7 +319,7 @@ func _death_settlement() -> void:
 	_start({&"human": {"cell": Vector2i(3, 3)}, &"ai": {"cell": Vector2i(4, 3)}},
 		{"damage": true, "round": true})
 	_step(1, {}, {&"human": [&"down"]})
-	var state := _step(72)
+	var state := _step(71)
 	_expect(not state.actors[&"human"].alive and state.actors[&"human"].lives == 3 and state.outcome == &"running",
 		"simultaneous death detaches actors without spending hearts or settling the result")
 	state = _step(59)

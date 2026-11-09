@@ -69,7 +69,7 @@
   },
   {
    "godot_command": "round cinema-start",
-   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
   },
   {
    "command": "click 528 475"

@@ -5,7 +5,7 @@
  "wall_clock_text": {
   "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
  },
- "origin": "The robots' effects (checkpoint 5): the round of gameplay-cinema-bomb (AI robots stopped); the pickup fixture gives the player a ShieldProp (held: ShieldProp.initMc and RobotView.setRobotMc put nombril_Down at the new clip's hand2, on top), the player turns right (turned: nombril_Right at the bottom of _r0_Right, playing with it) and walks (walk), stops, drops a bomb and stands in its blast (used: TryToKillCommandChain, ShieldProp.addUseNum takes the nombril off; InvincibilityCommand blinks; captured at its 22nd tick, after the blast: Godot blasts this bomb one tick after the original, a known gap of the simulation).",
+ "origin": "The robots' effects (checkpoint 5): the round of gameplay-cinema-bomb (AI robots stopped); the pickup fixture gives the player a ShieldProp (held: ShieldProp.initMc and RobotView.setRobotMc put nombril_Down at the new clip's hand2, on top), the player turns right (turned: nombril_Right at the bottom of _r0_Right, playing with it) and walks (walk), stops, drops a bomb and stands in its blast (blast: the bomb's 72nd takeCount, 72 frames after the key, TryToKillCommandChain, ShieldProp.addUseNum takes the nombril off; used: 21 frames on, InvincibilityCommand blinks).",
  "actions": [
   {
    "command": "seed 42"
@@ -69,7 +69,7 @@
   },
   {
    "godot_command": "round cinema-start",
-   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
   },
   {
    "command": "click 528 475"
@@ -158,7 +158,13 @@
    "command": "ku space"
   },
   {
-   "command": "step 92"
+   "command": "step 71"
+  },
+  {
+   "capture": "blast"
+  },
+  {
+   "command": "step 21"
   },
   {
    "capture": "used"

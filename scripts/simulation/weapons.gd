@@ -30,27 +30,38 @@ func start(id: StringName, actor: Dictionary, tick: int) -> void:
 	if actor.ammo > 0: actor.ammo -= 1
 	actor.action_started_tick = tick
 	sounds.append(USE_SOUNDS[kind])
-	var windup := 24 if kind == &"hammer" else 11 if kind == &"laser" else 0
-	var duration := 24 if kind == &"hammer" else 22 if kind == &"laser" else 23
+	# `AbstractWeapon.bombDown` runs in the key handler, between frames; `tick` is the first
+	# engine frame after it, where the command it added first runs (`GameEngine.enterFrameHandle`,
+	# engine phase) with the play clip still on frame 1: the clip shows frame `age + 1` at
+	# `tick + age`. A command that waits for clip frame f acts at age f - 1.
+	# HammerPlayCommand.execute: `currentFrame >= totalFrames - 1` (24 of 25), then robotMoveStart.
+	var windup := 23 if kind == &"hammer" else 10 if kind == &"laser" else 0
+	# LaserGunPlayCommand.execute: frame 11 of 12 makes the Laser; LaserEndCommand's eleventh run
+	# (`_continueTime > 9`) gives the robot back, 21 ticks after the first.
+	var duration := 23 if kind == &"hammer" else 21 if kind == &"laser" else 22
 	if kind == &"triple":
-		duration = 43
+		# NinjialPlayCommand: emissions at ages 0, 15, 30, then a 0.3 s delayedCall (recover_at).
+		duration = 42
 	elif kind == &"shotgun":
-		windup = 14
-		duration = 26
+		# ShotGunPlayCommand.execute: `currentFrame == totalFrames` (14), then a 0.3 s delayedCall.
+		windup = 13
+		duration = 25
 	elif kind == &"flamer":
-		duration = 24
+		# FlamerPlayCommand: fire from the first run through `fire_Play` frame 23 of 24 (age 22);
+		# `expires` only bounds it.
+		duration = 23
 	actor.busy_until = tick + duration
 	attacks.append({"kind": kind, "actor_id": id, "direction": cardinal(actor.facing),
 		"ready": tick + windup, "expires": tick + duration, "cell": actor.cell,
 		"started": tick, "fired": false, "frame": 0, "phase": &"windup", "layer": &"front", "recover_at": -1})
 	if kind == &"hammer":
-		attacks[-1].expires = tick + 25
-		actor.busy_until = tick + 24
+		# The blow itself completes the action (`ready`); `expires` only bounds it.
+		attacks[-1].expires = tick + 24
 	elif kind == &"boxing":
-		# `BoxingPlayCommand` resolves at `totalFrames-1` of the 14-frame `boxing*_Play` clips.
-		attacks[-1].ready = tick + 13
-		attacks[-1].expires = tick + 14
-		actor.busy_until = tick + 13
+		# `BoxingPlayCommand` resolves at `totalFrames-1` (13) of the 14-frame `boxing*_Play` clips.
+		attacks[-1].ready = tick + 12
+		attacks[-1].expires = tick + 13
+		actor.busy_until = tick + 12
 
 
 func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> Array[Dictionary]:
@@ -67,31 +78,33 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			continue
 		attack.frame = tick - attack.started
 		if attack.kind == &"flamer":
-			if attack.frame <= 0: continue
+			# FlamerPlayCommand.execute shoots from its first run (age 0).
 			attack.direction = cardinal(actors[attack.actor_id].facing)
 			attack.endpoint = Geometry.flamer_endpoint(attack, actors[attack.actor_id], board)
 			attack.phase = &"active"
 			attack.fired = true
 			effects.append(attack.duplicate())
-			if attack.frame >= 23: complete(attack, actors[attack.actor_id], tick)
+			if attack.frame >= 22: complete(attack, actors[attack.actor_id], tick)
 			continue
 		if attack.kind == &"landmine":
-			if attack.frame > 0:
-				effects.append(attack.duplicate())
-				complete(attack, actors[attack.actor_id], tick)
+			# LandminePlayCommand.execute: the LandmineBomb and robotMoveStart on its first run.
+			effects.append(attack.duplicate())
+			complete(attack, actors[attack.actor_id], tick)
 			continue
-		if attack.kind == &"laser" and attack.frame >= 11:
-			attack.frame = 11
+		if attack.kind == &"laser" and attack.frame >= 10:
+			# The charge clip stops on frame 11 (age 10).
+			attack.frame = 10
 			attack.phase = &"beam"
 		if attack.kind in [&"hammer", &"boxing"]:
 			attack.direction = cardinal(actors[attack.actor_id].facing)
 			if attack.kind == &"hammer": attack.attachment = Geometry.HAMMER_OFFSET[attack.direction]
 			# Both re-insert the Up clip behind the robot on `floor(totalFrames / 2)`.
-			if attack.frame >= (12 if attack.kind == &"hammer" else 7) and attack.direction == Vector2i.UP:
+			if attack.frame + 1 >= (12 if attack.kind == &"hammer" else 7) and attack.direction == Vector2i.UP:
 				attack.layer = &"behind"
 		if attack.kind in [&"triple", &"shotgun"]:
 			var age: int = tick - attack.started
-			if (attack.kind == &"triple" and age in [1, 16, 31]) or (attack.kind == &"shotgun" and tick == attack.ready):
+			# NinjialPlayCommand.execute: `_count % 15 == 0` from its first run (ages 0, 15, 30).
+			if (attack.kind == &"triple" and age in [0, 15, 30]) or (attack.kind == &"shotgun" and tick == attack.ready):
 				attack.direction = cardinal(actors[attack.actor_id].facing)
 				# Each projectile is a `Bomb` subclass, so its constructor plays `addBomb`.
 				sounds.append(&"addBomb")
@@ -101,7 +114,7 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 					"speed": (5.0 if attack.kind == &"triple" else 10.0) / 30.0, "born": tick})
 				attack.fired = true
 				attack.phase = &"emission"
-				if age == 31 or attack.kind == &"shotgun":
+				if age == 30 or attack.kind == &"shotgun":
 					# Deliberate simulation-clock conversion; not an observed SWF frame count.
 					attack.recover_at = tick + ceili(0.3 * 35.0)
 					attack.phase = &"recovery"
@@ -115,12 +128,20 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			attack.phase = &"beam" if attack.kind == &"laser" else &"impact"
 			if attack.kind == &"laser": sounds.append(&"useLaserShoot")
 			if attack.kind in [&"hammer", &"boxing"]: complete(attack, actors[attack.actor_id], tick)
+	# The projectiles' `shootFunc` run in the engine's bomb array (`GameEngine.enterFrameHandle`);
+	# one that hits takes its handler off during that loop (`removeBombHandler`), so the loop
+	# skips the next handler this tick (recorded, gameplay-cinema-triple: the third shot stands
+	# still on the tick the second hits).
+	var skip_next := false
 	for projectile in projectiles.duplicate():
 		if projectile.born == tick:
 			continue
 		if projectile.phase == &"cleanup":
 			if projectile.cleanup_count > 10: projectiles.erase(projectile)
 			projectile.cleanup_count += 1
+			continue
+		if skip_next:
+			skip_next = false
 			continue
 		var next: Vector2 = projectile.position + Vector2(projectile.direction) * projectile.speed
 		var edge: Vector2 = next + Vector2(projectile.direction) * 0.49999
@@ -135,6 +156,10 @@ func advance(tick: int, actors: Dictionary, board: Dictionary, bombs: Array) -> 
 			effects.append({"kind": &"projectile", "actor_id": projectile.actor_id,
 				"cell": target + projectile.direction, "direction": Vector2i.ZERO, "damage": false})
 			projectile.phase = &"cleanup"
+			# `blast` adds `ended` to the blast array, which runs later this same tick: its first
+			# count (recorded: `_continueTime` 1 on the hit, gone on the eleventh tick after).
+			projectile.cleanup_count = 1
+			skip_next = true
 			sounds.append(&"bomb")
 	return effects
 

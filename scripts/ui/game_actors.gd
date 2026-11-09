@@ -36,8 +36,8 @@ extends RefCounted
 ##   `thrower<direction>_Play` scaled by FlamerFire, ShotGunProp's `fireball<direction>_Play`,
 ##   LandminePlayCommand's LandmineBomb (`mine_bomb`); the projectiles `TripleShootGunBomb`
 ##   (`bullet_fire`) and `FireballBomb` (`ninjialBomb_fire`) follow the snapshot's `projectiles`.
-##   The clips count their frames from the action's start as the commands do (the simulation's
-##   own callbacks run a tick later: see docs/development.md, checkpoint 5 weapons).
+##   The clips count their frames from the action's start as the commands do, on the same ticks
+##   as the simulation's weapon callbacks (`weapons.gd`).
 ##
 ## Frame timing recorded in the reference player (gameplay-cinema-bomb): a clip made between
 ## frames (a key press turning the robot, a bomb dropped by key) shows its first frame on the
@@ -249,8 +249,15 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		# A key press reaches the robot between frames (robot_turnHandler).
 		# (in a portal the robot's key listener is off: `stopMoveListener`)
 		if human and not view.transit and not busy and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
-		# The frame's timeline advance.
+		# The frame's timeline advance. A ride clip's loop frame script (`_r0_Car_Down.frame11`:
+		# `gotoAndPlay(1)`) runs after the frame's engine, so it plays the clip again even when
+		# moveStop stopped it this frame: after a release on the loop's last frame the clip
+		# shows one frame more (recorded, gameplay-cinema-ride: 10, then 1 and 2, stopped).
+		var replay := false
+		# (only while the same clip stays: a new clip from setRobotMc is not that one)
+		var replay_class: String = view.class
 		if view.playing and view.fresh == 0:
+			replay = _jumps(view.class, view.frame)
 			view.frame = _next_frame(view.class, view.frame)
 		view.fresh = maxi(0, view.fresh - 1)
 		# The shield's clip plays on its own: made playing, `robotTurn` plays it, `normalStop`
@@ -280,6 +287,7 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 			view.playing = false
 			view.weapon_playing = false
 			view.shield_playing = false
+		if replay and view.class == replay_class and view.fresh == 0: view.playing = true
 		view.direction = direction
 		if int(actor.get("blink_until", 0)) > view.blink_until:
 			# robotRelive: a new InvincibilityCommand.
@@ -364,6 +372,13 @@ func _next_frame(cls: String, frame: int) -> int:
 	var nxt: Dictionary = _art.get("robots", {}).get(cls, {}).get("next", {})
 	if nxt.has(str(frame)): return int(nxt[str(frame)])
 	return frame % _total(cls) + 1
+
+
+## Whether the clip's frame after `frame` comes from a frame script (`gotoAndPlay`), not the
+## playhead's own step (the art pass's `next`: how the clip plays).
+func _jumps(cls: String, frame: int) -> bool:
+	var nxt: Dictionary = _art.get("robots", {}).get(cls, {}).get("next", {})
+	return nxt.has(str(frame)) and int(nxt[str(frame)]) != frame % _total(cls) + 1
 
 
 func _total(cls: String) -> int:
@@ -460,6 +475,10 @@ func _weapon(view: Dictionary, actor: Dictionary, attack: Dictionary) -> void:
 	var kind := StringName(actor.get("weapon", &""))
 	if not WEAPON_NAMES.has(kind): kind = &""
 	var ammo := int(actor.get("ammo", 0))
+	# An action whose command ends on its first run (LandminePlayCommand) is gone from the
+	# snapshot's attacks on the tick it starts; the actor's `action_started_tick` still shows it.
+	if attack.is_empty() and int(actor.get("action_started_tick", -1)) == _tick_now() and view.weapon != &"":
+		attack = {"kind": view.weapon, "started": _tick_now()}
 	var acting: bool = not attack.is_empty()
 	var action: Dictionary = view.action
 	if not action.is_empty() and (not acting or int(attack.started) != int(action.started)):
@@ -562,7 +581,7 @@ func _advance_action(view: Dictionary, attack: Dictionary, ammo: int) -> void:
 			# (`_continueTime > 9`) takes it off and gives the robot back.
 			# (frame totalFrames - 1 shows `totalFrames - 2` ticks after bombDown)
 			var shot: int = LASER_CHARGE_FRAMES - 2
-			if age == shot: _shoot_laser(view)
+			if age == shot: _shoot_laser(view, attack)
 			elif age >= shot + LASER_END_RUNS: _end_action(view, ammo)
 		&"shotgun":
 			# ShotGunPlayCommand: at `currentFrame == totalFrames` (14) the clip goes and the
@@ -603,6 +622,13 @@ func _hand(view: Dictionary) -> Vector2:
 	return (clip_at.affine_inverse() * _m(clip.get("hand", _a(clip_at)))).origin
 
 
+## Whether this tick's laser pass broke a soft block or set off a bomb on `cell`.
+func _struck(attack: Dictionary, cell: Vector2i) -> bool:
+	if cell not in attack.get("cells", []): return false
+	if cell in _snapshot.get("broken_soft_blocks", []): return true
+	return _snapshot.get("blasts", []).any(func(b): return b.get("cell") == cell)
+
+
 ## BoxingPlayCommand.checkAttactDistance: the first of the two cells ahead holding a fixed box,
 ## a box that is there or a bomb; past the two it reads cell (0, 0) (`_loc2_[4]` is undefined),
 ## the board's corner wall, so it returns 2 when neither holds one.
@@ -630,8 +656,9 @@ static func _has_bomb(snapshot: Dictionary, cell: Vector2i) -> bool:
 ## Sprite, the first other one the end piece (`_chosMcArr[2]`); the start piece
 ## (`_chosMcArr[0]`) is at the gun. The middle pieces follow the start piece's width, 29 apart;
 ## the end piece and the Sprite's scale come from the last middle cell's far edge. The walk
-## reads the board of this tick, before the simulation's own laser pass (a tick later).
-func _shoot_laser(view: Dictionary) -> void:
+## draws and hits cell by cell, so a cell the simulation's laser pass of this same tick struck
+## (the attack's `cells`: a soft block it broke, a bomb it set off) still blocks the walk.
+func _shoot_laser(view: Dictionary, attack: Dictionary) -> void:
 	var direct: Vector2i = DIRECTION_OF[view.action.suffix]
 	var chos: Array = LASER_PIECES[direct]
 	var actor: Dictionary = _snapshot.get("actors", {}).get(view.id, {})
@@ -649,7 +676,7 @@ func _shoot_laser(view: Dictionary) -> void:
 	for k in size.x:
 		var cell: Vector2i = grid + direct * k
 		if not (cell.y > -1 and cell.y < size.y and cell.x > -1 and cell.x < size.x): break
-		var blocked: bool = _is_box(_snapshot, cell) or _has_bomb(_snapshot, cell)
+		var blocked: bool = _is_box(_snapshot, cell) or _has_bomb(_snapshot, cell) or _struck(attack, cell)
 		var robots: bool = _snapshot.get("actors", {}).values().any(func(a): return a.get("alive", false) and a.get("cell") == cell)
 		if not blocked or robots:
 			if mids.is_empty(): mids.append(Vector2(direct.x * start.x, direct.y * start.y))
@@ -1126,7 +1153,7 @@ func _update_bombs(snapshot: Dictionary) -> void:
 		live[_bomb_key(bomb)] = bomb
 		if bomb.get("kind", &"bomb") == &"mine": mines[_key(bomb.actor_id, bomb.cell)] = _bomb_key(bomb)
 	# A LandmineBomb LandminePlayCommand made this tick or the last, before the simulation's
-	# mine registers (it places it a tick later); the simulation's mine then takes its view over.
+	# mine registers (both on the command's first run); the simulation's mine takes its view over.
 	for mine in _pending_mines.duplicate():
 		var key := _key(mine.actor_id, mine.cell)
 		if mines.has(key):

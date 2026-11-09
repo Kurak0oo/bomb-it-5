@@ -114,7 +114,7 @@ func _initialize() -> void:
 	portal_block[Vector2i(2, 2)] = &"portal"
 	game = Simulation.new([&"human"], {&"human": {"cell": Vector2i(2, 3), "power": 3}}, portal_block)
 	game.advance([_command(Vector2.ZERO, [&"down"])])
-	for index in 72:
+	for index in 71:
 		state = game.advance([_command()])
 	_expect(Vector2i(2, 1) not in state.blasts[0].cells and Vector2i(2, 2) not in state.blasts[0].cells,
 		"ordinary blast rays stop before a non-existing portal platform")

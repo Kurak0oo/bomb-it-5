@@ -147,9 +147,17 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	elif not recorded_board.is_empty():
 		board = Layouts.recorded(recorded_board.template, recorded_board.boxes)
 		if recorded_board.has("math_random"):
-			var place := _recorded_draws(recorded_board.math_random)
+			var place := _recorded_draws(recorded_board.math_random, board.skin, mode_name == &"pac_man", mode.soft_chance())
 			draws = place.pool
 			round_random = place.random
+			# The map rolled from the original's draws (Layouts.roll_set); it must be the
+			# recorded one.
+			if place.board.is_empty():
+				pass
+			elif place.board.layout == board.layout and place.board.cells == board.cells and place.board.variants == board.variants:
+				board = place.board
+			else:
+				push_error("the map rolled from the recorded draws is not the recorded round's")
 		stage_set = board.skin
 		mode.stage_set = stage_set
 		recorded_board = {}
@@ -160,7 +168,14 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 		var choices := StageSets.available_sets()
 		if stage_set == &"": stage_set = choices[rng.randi_range(0, choices.size() - 1)]
 		mode.stage_set = stage_set
-		board = Layouts.roll_set(stage_set, mode_name == &"pac_man", mode.soft_chance(), rng)
+		var map_random: Object = rng
+		if round_random != null and session != null and session.math_random != null:
+			# The original's order from START: `AbstractGameMode.initMap` draws each Vehicle
+			# entry of the drop pool, then the map (`MapMaster`, `<Set>MapData`) is rolled.
+			for index in mode.drop_weights().get(&"vehicle", 0):
+				draws.append(round_random.random())
+			map_random = round_random
+		board = Layouts.roll_set(stage_set, mode_name == &"pac_man", mode.soft_chance(), map_random)
 	for index in roster.size():
 		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1, "robot": robots[index]}
 		if session != null:
@@ -199,8 +214,8 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 ## (`AbstractPlayer.set scoreData`, two draws, traced: tools/compare/round_draws.py), then
 ## `AbstractGameMode.createAIPlayer` per AI: clothID `int(random * 7)`, hatID `int(random * 7)`,
 ## and its AI from the difficulty's list (`_xml.ai[difficulty].split("|")`; one profile in
-## every mode, so the draw picks nothing). The map's own draws (`MapMaster`, `<Set>MapData`)
-## are still Godot's (Layouts.roll_set), so these do not land on the original's ordinals.
+## every mode, so the draw picks nothing). They follow the pool's and the map's draws
+## (`_start_round`, Layouts.roll_set), as in the original.
 func _create_ai_players(random: RefCounted, roster: Array[StringName]) -> void:
 	random.random()
 	random.random()
@@ -217,21 +232,46 @@ func _create_ai_players(random: RefCounted, roster: Array[StringName]) -> void:
 
 ## Where the original's `Math.random` stands at a recorded round (tests/goldens/<case>/
 ## math_random.json, tools/compare/round_draws.py): the drop pool's Vehicle entries were drawn
-## at `pool_draws` (`AbstractGameMode.initMap`), and the round's own draws continue after
-## `draws_before_round` (the menus', the map's and the AI players' draws, which Godot takes
-## from the recording instead). The same seed's generator replays them (checked against the
-## recorded raw draws).
-static func _recorded_draws(record: Dictionary) -> Dictionary:
+## at `pool_draws` (`AbstractGameMode.initMap`), the map right after them (`MapMaster`,
+## `<Set>MapData`: rolled here with Layouts.roll_set), and the round's own draws continue after
+## `draws_before_round` (the menus' and the AI players' draws, which Godot takes from the
+## recording instead). The same seed's generator replays them (checked against the recorded
+## raw draws).
+static func _recorded_draws(record: Dictionary, set_id: StringName, pac_man: bool, soft_chance: float) -> Dictionary:
 	var random: RefCounted = AvmRandom.new(int(record.seed))
 	var pool := []
 	var pool_draws: Array = record.pool_draws.map(func(n): return int(n))
 	var raw: Array = record.get("raw", [])
-	for ordinal in range(1, int(record.draws_before_round) + 1):
+	var board := {}
+	var map_from := -1
+	for group: Dictionary in record.get("callers", []):
+		if map_from < 0 and String(group.method).ends_with("MapMaster/init()"): map_from = int(group.first)
+	var ordinal := 0
+	while ordinal < int(record.draws_before_round):
+		if board.is_empty() and ordinal + 1 == map_from:
+			var counted := CountedRandom.new(random)
+			board = Layouts.roll_set(set_id, pac_man, soft_chance, counted)
+			ordinal += counted.count
+			continue
 		var value: int = random.next_raw()
+		ordinal += 1
 		if ordinal <= raw.size() and int(raw[ordinal - 1]) != value:
 			push_error("the original's draw %d does not match the Math.random port" % ordinal)
 		if ordinal in pool_draws: pool.append(float(value) / 2147483648.0)
-	return {"pool": pool, "random": random}
+	return {"pool": pool, "random": random, "board": board}
+
+
+## A `Math.random` that counts its draws (how many the map took).
+class CountedRandom extends RefCounted:
+	var source: RefCounted
+	var count := 0
+
+	func _init(from: RefCounted) -> void:
+		source = from
+
+	func random() -> float:
+		count += 1
+		return source.random()
 
 
 ## The `Math.random` the round draws from (the original's, for a recorded round from where

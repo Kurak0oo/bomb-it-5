@@ -267,6 +267,17 @@ def check(name, godot):
                     n.pop('frame', None)
                     if side is golden and n.get('render_bounds'):
                         masks = masks + [n['render_bounds']]
+        # And a clip whose alpha the original tweens on the host's clock (TweenMax.from: the
+        # projectiles' 0.2 s fade-in), named by class: present, placed and framed, its alpha not
+        # compared and its place left out of the pixel score.
+        wall_alpha = case.get('wall_clock_alpha', {})
+        faded_paths = {n['path'] for n in golden['nodes'] if n.get('class') in wall_alpha}
+        for side in (golden, actual):
+            for n in side['nodes']:
+                if n['path'] in faded_paths:
+                    n.pop('alpha', None)
+                    if side is golden and n.get('render_bounds'):
+                        masks = masks + [n['render_bounds']]
         # A filter the reference player cannot draw (Ruffle's wgpu backend skips GradientGlowFilter
         # and GradientBevelFilter: the invincible robot's colour cycle) is drawn by Godot only;
         # its node's place is left out of the pixel score.
@@ -292,6 +303,8 @@ def check(name, godot):
             entry['wall_clock_text'] = sorted(wall_clock)
         if wall_frames:
             entry['wall_clock_frame'] = sorted(wall_frames)
+        if faded_paths:
+            entry['wall_clock_alpha'] = sorted(faded_paths)
         if effects:
             entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
             entry['node']['passed'] &= all(e['passed'] for e in effects.values())
@@ -342,6 +355,8 @@ def print_report(report):
             print(f'  {capture}: text on the wall clock not compared: {", ".join(entry["wall_clock_text"])}')
         if entry.get('wall_clock_frame'):
             print(f'  {capture}: clip frame on the wall clock not compared: {", ".join(entry["wall_clock_frame"])}')
+        if entry.get('wall_clock_alpha'):
+            print(f'  {capture}: alpha on the wall clock not compared: {", ".join(entry["wall_clock_alpha"])}')
         for effect, e in entry.get('effects', {}).items():
             print(f'  {capture}: {effect}: {e["godot"]} in Godot, {e["original"]} in the original, '
                   f'{"by its rules" if e["passed"] else "off: " + "; ".join(e["problems"][:5])} (excluded from the pixel score)')

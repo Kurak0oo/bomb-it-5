@@ -1,7 +1,7 @@
 {
  "name": "gameplay-cinema-fireball",
  "screen": "game",
- "origin": "A weapon on the gameplay screen (checkpoint 5, weapons): the round of gameplay-cinema-bomb (AI robots stopped); the pickup fixture gives the player a ShotGunProp (held) and it fires down into the seat below (charge, charge-late: fireball_Down_Play at frames 1 and 13). The FireballBomb is not captured: the simulation makes it a tick late (docs/development.md).",
+ "origin": "A weapon on the gameplay screen (checkpoint 5, weapons): the round of gameplay-cinema-bomb (AI robots stopped); the pickup fixture gives the player a ShotGunProp (held) and it fires down into the seat below (charge, charge-late: fireball_Down_Play at frames 1 and 13). The FireballBomb is made on the clip's frame 14 (ShotGunPlayCommand), 14 frames after the key, and moves 10 units a frame from the next (shot: its fourth move; blast: it reached the seat on its sixth move, clip off at blast).",
  "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
  "wall_clock_text": {
   "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
@@ -69,7 +69,7 @@
   },
   {
    "godot_command": "round cinema-start",
-   "godot_note": "Godot cannot roll the original's board yet (its Math.random draws before the map are not reproduced): the round this START opens takes its board (every box's _brick5 frame, the layout's hold cells and portals) and the enemy robots from the golden of the cinema-start capture (App.round_as_recorded)."
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
   },
   {
    "command": "click 528 475"
@@ -135,6 +135,21 @@
   },
   {
    "capture": "charge-late"
+  },
+  {
+   "command": "step 4"
+  },
+  {
+   "capture": "shot"
+  },
+  {
+   "command": "step 3"
+  },
+  {
+   "capture": "blast"
   }
- ]
+ ],
+ "wall_clock_alpha": {
+  "ninjialBomb_fire": "FireballBomb.createMC: TweenMax.from(_mc, 0.2, {alpha: 0}) runs on the host clock in the reference player (stepped faster than real time, the shot is still fading tens of frames on), so its alpha is not compared"
+ }
 }
