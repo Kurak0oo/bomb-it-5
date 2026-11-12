@@ -36,6 +36,41 @@ static func depths(blasts: Array, is_root: Array) -> Array[int]:
 	return result
 
 
+## Seconds after the gameplay hit at which each blast shows. A bomb goes off one
+## `chain_step` after the blast whose ray stopped on it, as with `depths`. The
+## simulation also lets a later ray run through a cell whose bomb an earlier branch of
+## the chain already set off; on screen that bomb must go off no later than the moment
+## that flame reaches it (`ring_step` per cell), or the flame would cross a bomb that
+## still looks unexploded.
+static func starts(blasts: Array, is_root: Array, chain_step: float, ring_step: float) -> Array[float]:
+	var result: Array[float] = []
+	result.resize(blasts.size())
+	result.fill(INF)
+	for index in blasts.size():
+		if is_root[index]:
+			result[index] = 0.0
+	var changed := true
+	while changed:
+		changed = false
+		for parent in blasts.size():
+			if result[parent] == INF:
+				continue
+			for child in blasts.size():
+				var step := INF
+				if touches(blasts[parent], blasts[child]):
+					step = chain_step
+				elif child != parent and blasts[parent].cells.has(blasts[child].cell):
+					var offset: Vector2i = blasts[child].cell - blasts[parent].cell
+					step = (absi(offset.x) + absi(offset.y)) * ring_step
+				if result[parent] + step < result[child] - 0.00001:
+					result[child] = result[parent] + step
+					changed = true
+	for index in result.size():
+		if result[index] == INF:
+			result[index] = 0.0
+	return result
+
+
 ## True when blast `a`'s ray stopped on the cell where blast `b`'s bomb sat: the cell
 ## just past `a`'s last flame cell in that direction (`_detonate` leaves the bomb cell
 ## out of the parent's cells). A ray that ended on power alone can look the same; the

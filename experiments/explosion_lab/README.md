@@ -76,6 +76,10 @@ lab never delays a hit. It only decides when each cell appears on screen:
 visual delay = chain depth x chain_step (70 ms) + ring distance x ring_step (22 ms)
 ```
 
+The simulation also lets a later ray run through a cell whose bomb an earlier branch of
+the chain already set off. On screen that bomb goes off when the flame reaches it
+(`ChainOrder.starts`), so a flame never crosses a bomb that still looks unexploded.
+
 `chain_order.gd` recovers chain depth from the blast geometry: the cell just past a
 ray's last flame is where the chained bomb sat. A bomb's own sprite stays until its
 flame shows, so chained bombs don't vanish early. The `B` overlay draws the true hit

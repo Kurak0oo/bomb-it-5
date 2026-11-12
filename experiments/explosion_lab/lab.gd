@@ -299,7 +299,7 @@ func _on_blasts(blasts: Array, broken: Array) -> void:
 	for blast in blasts:
 		var bomb := _bomb_at(blast.cell)
 		roots.append(bomb.is_empty() or bomb.age >= bomb.get("fuse", Simulation.FUSE_TICKS))
-	var depths := ChainOrder.depths(blasts, roots)
+	var starts := ChainOrder.starts(blasts, roots, chain_step, ring_step)
 	var broken_cells := {}
 	for cell in broken:
 		broken_cells[cell] = true
@@ -307,7 +307,7 @@ func _on_blasts(blasts: Array, broken: Array) -> void:
 		# Freeze just after the first flash peaks, longer for bigger batches.
 		_later(0.04, _start_hitstop.bind(blasts.size()))
 	for index in blasts.size():
-		_spawn_blast(blasts[index], depths[index] if toggles.stagger else 0, broken_cells)
+		_spawn_blast(blasts[index], starts[index] if toggles.stagger else 0.0, broken_cells)
 	_link_tips()
 	if toggles.hitbox:
 		var cells: Array[Vector2i] = []
@@ -325,8 +325,7 @@ func _later(delay: float, callable: Callable) -> void:
 
 # --- Effects ---------------------------------------------------------------------------
 
-func _spawn_blast(blast: Dictionary, depth: int, broken_cells: Dictionary) -> void:
-	var base_delay := ChainOrder.delay(depth, 0, chain_step, ring_step)
+func _spawn_blast(blast: Dictionary, base_delay: float, broken_cells: Dictionary) -> void:
 	var bomb := _bomb_at(blast.cell)
 	if not bomb.is_empty():
 		_bombs.erase(bomb)
@@ -334,7 +333,7 @@ func _spawn_blast(blast: Dictionary, depth: int, broken_cells: Dictionary) -> vo
 		_later(base_delay, _remove_bomb_view.bind(bomb.lab_id))
 	for segment in ChainOrder.segments(blast):
 		var distance: int = segment.distance if toggles.stagger else 0
-		var delay := ChainOrder.delay(depth, distance, chain_step, ring_step)
+		var delay := base_delay + distance * ring_step
 		_add_flame(segment, delay)
 		if broken_cells.has(segment.cell):
 			broken_cells.erase(segment.cell)
