@@ -91,7 +91,8 @@ judge.
 | Blocks and bombs | Drawn by hand (rounded boxes, circles, outlines) on one y-sorted layer; no textures, lights or normal maps | `block_view.gd`, `bomb_view.gd` |
 | Debris | Custom outlined chunks with ground position plus height, and a shadow that shrinks with height (2.5D) | `debris.gd` |
 | Flash and glow | Alpha-blended radial sprites: 0.12 s white flash, 0.4 s yellow swell | `_flash` |
-| Flame | One shared shader on per-cell quads: signed-distance shapes (block, band, rounded tip, then ball with streaks) coloured by distance from the edge; toggle `core` drops the white middle | `flame.gdshader` |
+| Flame | One shared shader on per-cell quads: signed-distance shapes (block, band, rounded tip, then ball with streaks). Each cell is drawn as three colour layers (rim, band, core) on rising z, so overlapping cells and crossing blasts merge into one shape; toggle `core` drops the white layer | `flame.gdshader`, `_add_flame` |
+| Joined chains | A ray's tip facing another burning cell opens into a plain arm once that cell shows | `_link_tips` |
 | Puffs and sparkles | Hand-drawn outlined circles and stars; stars launch up against gravity so they arc and fall (fake z) | `toon_fx.gd` |
 | Bounce | Blocks and bombs within reach squash and spring back, nearest first | `_bounce_around` |
 | Shockwave | Additive light ring (default) or screen-texture refraction (`F`) | `shockwave_*.gdshader` |
@@ -113,8 +114,8 @@ clock.
   reported load and first-use stutter on web exports; the lab now uses no particle
   nodes at all (puffs, stars and chunks are drawn by hand).
 - **No 2D MSAA:** Godot 4.5 reports "2D MSAA is not yet supported for GLES3", so
-  circles and rounded boxes use their own antialiasing and polygons (stars, chunks)
-  have hard edges.
+  shapes bring their own smoothing: circles and rounded boxes use the built-in
+  antialiasing, polygons (stars) get a one-pixel feathered edge line (`toon_draw.gd`).
 - **Screen-texture refraction:** under Compatibility on llvmpipe, the copied screen
   came back brighter than the screen, showing as a pale disc, and a `pow(2.2)` fix
   overshot. Refraction stays opt-in (`F`) until it is checked on a phone GPU.
@@ -126,8 +127,7 @@ clock.
   next entry. The comment there ("live registry removal") suggests this is
   deliberate; no change was made.
 - **Flame quads need headroom:** arms are 1.02 x 1.45 cells and the centre quad is 1.45
-  cells, so the soft rim never reaches the quad border. Arms draw over centres, so a
-  centre's rim never cuts across an arm's white middle.
+  cells, so the soft rim never reaches the quad border.
 
 ## Sources
 
@@ -141,8 +141,6 @@ clock.
 
 ## Next ideas
 
-- Join the facing ends of two chained blasts into one beam (they now meet as two
-  rounded tips).
 - Audio sync: fire `bomb` once per chain step rather than once per tick, to match the
   visual stagger.
 - Decide with the owner whether chain stagger belongs in the new-art profile at all.

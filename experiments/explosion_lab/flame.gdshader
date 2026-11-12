@@ -3,11 +3,13 @@
 // its life each cell shrinks to a glowing ball with pointed streaks along the ray, as
 // in the reference captures (docs/evidence/reference-2026-10-19/chains/).
 // Per-sprite parameters arrive packed in the modulate colour so every flame cell shares
-// one material and batches: r = age 0..1, g = kind (0 centre, 0.5 arm, 1 tip), b = seed.
+// one material: r = age 0..1, g = kind (0 centre, 0.5 arm, 1 tip), b = seed, a = colour
+// layer. Each cell is drawn three times, rim under band under core (lab.gd puts them on
+// rising z), so overlapping cells and crossing blasts merge into one shape: one cell's
+// rim can never cut across another cell's white middle.
 shader_type canvas_item;
 render_mode unshaded, blend_mix;
 
-uniform float core = 1.0; // 0 drops the white-hot middle (toggle "core")
 uniform vec3 hot_colour : source_color = vec3(1.0, 1.0, 0.96);
 uniform vec3 mid_colour : source_color = vec3(1.0, 0.92, 0.22);
 uniform vec3 rim_colour : source_color = vec3(1.0, 0.52, 0.04);
@@ -56,8 +58,17 @@ void fragment() {
 	float morph = smoothstep(0.42, 0.68, age);
 	float d = mix(block, ball, morph);
 	float band = mix(1.0, 0.55, morph); // the colour bands narrow with the shape
-	vec3 colour = mix(rim_colour, mid_colour, smoothstep(-0.02 * band, 0.05 * band, -d));
-	colour = mix(colour, hot_colour, core * smoothstep(0.05 * band, 0.14 * band, -d));
-	float alpha = (1.0 - smoothstep(0.0, 0.11 * band, d)) * (1.0 - smoothstep(0.92, 1.0, age));
-	COLOR = vec4(colour, alpha);
+	vec3 colour;
+	float alpha;
+	if (COLOR.a > 0.8) {
+		colour = rim_colour;
+		alpha = 1.0 - smoothstep(0.0, 0.11 * band, d);
+	} else if (COLOR.a > 0.5) {
+		colour = mid_colour;
+		alpha = smoothstep(-0.02 * band, 0.05 * band, -d);
+	} else {
+		colour = hot_colour;
+		alpha = smoothstep(0.05 * band, 0.14 * band, -d);
+	}
+	COLOR = vec4(colour, alpha * (1.0 - smoothstep(0.92, 1.0, age)));
 }

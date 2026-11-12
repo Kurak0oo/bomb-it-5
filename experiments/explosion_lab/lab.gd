@@ -308,6 +308,7 @@ func _on_blasts(blasts: Array, broken: Array) -> void:
 		_later(0.04, _start_hitstop.bind(blasts.size()))
 	for index in blasts.size():
 		_spawn_blast(blasts[index], depths[index] if toggles.stagger else 0, broken_cells)
+	_link_tips()
 	if toggles.hitbox:
 		var cells: Array[Vector2i] = []
 		for blast in blasts:
@@ -347,23 +348,43 @@ func _remove_bomb_view(lab_id: int) -> void:
 		_bomb_views.erase(lab_id)
 
 
+## One sprite per colour layer (rim, band, core) on rising z; see flame.gdshader.
+const FLAME_LAYERS := [1.0, 0.65, 0.3]
+
+
 func _add_flame(segment: Dictionary, delay: float) -> void:
-	var sprite := Sprite2D.new()
-	sprite.texture = FxTextures.white()
-	sprite.material = _flame_material
-	sprite.position = _cell_center(segment.cell)
-	sprite.rotation = Vector2(segment.direction).angle()
+	var record := {"start": _fx_time + delay, "kind": segment.kind, "seed": randf(), "nodes": [],
+		"cell": segment.cell, "direction": segment.direction, "join_at": INF}
 	# Arms span exactly one cell along the ray (plus 2 % overlap) and leave headroom
 	# across it for the rim; the centre quad is larger so its rounded block can overshoot.
 	# Keep both sizes in step with `quad` in flame.gdshader.
-	var centre: bool = segment.kind == ChainOrder.KIND_CENTER
-	var size := Vector2(1.45, 1.45) if centre else Vector2(1.02, 1.45)
-	sprite.scale = size * CELL / FxTextures.WHITE_SIZE
-	# Arms draw over centres, so a centre's rim never cuts across an arm's white middle.
-	sprite.z_index = 0 if centre else 1
-	sprite.visible = false
-	_flame_layer.add_child(sprite)
-	_flames.append({"start": _fx_time + delay, "kind": segment.kind, "seed": randf(), "nodes": [sprite]})
+	var size := Vector2(1.45, 1.45) if segment.kind == ChainOrder.KIND_CENTER else Vector2(1.02, 1.45)
+	for layer in (3 if toggles.core else 2):
+		var sprite := Sprite2D.new()
+		sprite.texture = FxTextures.white()
+		sprite.material = _flame_material
+		sprite.position = _cell_center(segment.cell)
+		sprite.rotation = Vector2(segment.direction).angle()
+		sprite.scale = size * CELL / FxTextures.WHITE_SIZE
+		sprite.z_index = layer
+		sprite.visible = false
+		_flame_layer.add_child(sprite)
+		record.nodes.append(sprite)
+	_flames.append(record)
+
+
+## A ray's tip that faces another burning cell (the chained bomb's centre, or a blast
+## already there) opens into a plain arm once that cell shows, so chained blasts read
+## as one beam instead of two rounded ends with a notch between them.
+func _link_tips() -> void:
+	var starts := {}
+	for record in _flames:
+		starts[record.cell] = minf(starts.get(record.cell, INF), record.start)
+	for record in _flames:
+		if record.kind == ChainOrder.KIND_TIP and record.join_at == INF:
+			var next: Vector2i = record.cell + record.direction
+			if starts.has(next):
+				record.join_at = maxf(starts[next], record.start)
 
 
 func _update_flames() -> void:
@@ -376,10 +397,12 @@ func _update_flames() -> void:
 				sprite.queue_free()
 			_flames.remove_at(index)
 			continue
-		for sprite: Sprite2D in record.nodes:
+		var kind: float = ChainOrder.KIND_ARM if _fx_time >= record.join_at else record.kind
+		for layer in record.nodes.size():
+			var sprite: Sprite2D = record.nodes[layer]
 			sprite.visible = age >= 0.0
-			# Shader parameters packed into modulate: age, kind, seed (see fire_shape).
-			sprite.modulate = Color(clampf(age, 0.0, 1.0), record.kind, record.seed, 1.0)
+			# Shader parameters packed into modulate: age, kind, seed, colour layer.
+			sprite.modulate = Color(clampf(age, 0.0, 1.0), kind, record.seed, FLAME_LAYERS[layer])
 		index += 1
 
 
@@ -479,7 +502,6 @@ func _update_shake(delta: float) -> void:
 
 
 func _apply_toggles() -> void:
-	_flame_material.set_shader_parameter("core", 1.0 if toggles.core else 0.0)
 	for view in _bomb_views.values():
 		view.anticipation = toggles.anticipation
 

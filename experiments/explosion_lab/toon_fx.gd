@@ -3,6 +3,7 @@ extends Node2D
 ## and outlines (particle sprites read as realistic smoke and embers, which is not the
 ## original's look).
 
+const ToonDraw = preload("res://experiments/explosion_lab/toon_draw.gd")
 const PUFF_FILL := Color("fff7df")
 const PUFF_LINE := Color("e2b27a")
 const STAR_FILL := Color("fff066")
@@ -82,8 +83,8 @@ func _draw() -> void:
 		if size <= 0.5:
 			continue
 		draw_set_transform(star.pos, star.rot, Vector2.ONE)
-		draw_colored_polygon(_star(size + 2.0), STAR_LINE)
-		draw_colored_polygon(_star(size), STAR_FILL)
+		ToonDraw.polygon(self, ToonDraw.star(Vector2.ZERO, size + 2.5, 4, 0.42, 0.0), STAR_LINE)
+		ToonDraw.polygon(self, ToonDraw.star(Vector2.ZERO, size, 4, 0.38, 0.0), STAR_FILL)
 		draw_circle(Vector2.ZERO, size * 0.28, Color.WHITE, true, -1.0, true)
 	draw_set_transform(Vector2.ZERO)
 
@@ -97,9 +98,3 @@ func _puff_radius(puff: Dictionary) -> float:
 	var overshoot := 1.0 + 0.25 * sin(grow * PI)
 	return puff.radius * grow * overshoot * (1.0 - smoothstep(0.55, 1.0, life))
 
-
-func _star(size: float) -> PackedVector2Array:
-	var points := PackedVector2Array()
-	for index in 8:
-		points.append(Vector2.from_angle(index * PI / 4.0) * (size if index % 2 == 0 else size * 0.38))
-	return points

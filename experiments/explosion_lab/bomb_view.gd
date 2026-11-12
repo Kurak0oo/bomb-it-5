@@ -5,6 +5,7 @@ extends Node2D
 ## burns; the last ticks squash it and blink it red just before it pops.
 
 const FxTextures = preload("res://experiments/explosion_lab/fx_textures.gd")
+const ToonDraw = preload("res://experiments/explosion_lab/toon_draw.gd")
 ## BombSimulation.FUSE_TICKS
 const DEFAULT_FUSE := 72.0
 const WARN_TICKS := 8.0
@@ -58,8 +59,7 @@ func _draw() -> void:
 	var top := middle + Vector2.from_angle(-1.0) * radius
 	# Cap and fuse sit behind the ball's upper right.
 	draw_set_transform_matrix(Transform2D(0.0, ground) * Transform2D(0.0, squash, 0.0, Vector2.ZERO) * Transform2D(0.57, top))
-	draw_rect(Rect2(-0.17 * c, -0.13 * c, 0.34 * c, 0.2 * c), LINE)
-	draw_rect(Rect2(-0.17 * c + 2.0, -0.13 * c + 2.0, 0.34 * c - 4.0, 0.2 * c - 4.0), Color("7b7b8c"))
+	ToonDraw.box(self, Rect2(-0.17 * c, -0.13 * c, 0.34 * c, 0.2 * c), Color("7b7b8c"), 3, LINE, 2)
 	draw_set_transform(ground, 0.0, squash)
 	var fuse_line := PackedVector2Array([top + Vector2(0.03, -0.08) * c, top + Vector2(0.07, -0.17) * c, top + Vector2(0.15, -0.22) * c])
 	draw_polyline(fuse_line, LINE, 6.0, true)
@@ -80,14 +80,8 @@ func _draw() -> void:
 		# Cartoon spark: a spinning star that flickers between two sizes.
 		var spark := fuse_line[2]
 		var size := 0.13 * c * (1.0 + 0.3 * signf(sin(_time * 30.0)))
-		draw_colored_polygon(_star(spark, size + 2.0, _time * 6.0), Color("e6321e"))
-		draw_colored_polygon(_star(spark, size, _time * 6.0), Color("ff9a1a"))
+		ToonDraw.polygon(self, ToonDraw.star(spark, size + 2.0, 5, 0.5, _time * 6.0), Color("e6321e"))
+		ToonDraw.polygon(self, ToonDraw.star(spark, size, 5, 0.5, _time * 6.0), Color("ff9a1a"))
 		draw_circle(spark, size * 0.45, Color("fff27a"), true, -1.0, true)
 	draw_set_transform(Vector2.ZERO)
 
-
-func _star(center: Vector2, size: float, angle: float) -> PackedVector2Array:
-	var points := PackedVector2Array()
-	for index in 10:
-		points.append(center + Vector2.from_angle(angle + index * PI / 5.0) * (size if index % 2 == 0 else size * 0.5))
-	return points

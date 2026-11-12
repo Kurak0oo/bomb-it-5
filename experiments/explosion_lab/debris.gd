@@ -4,6 +4,7 @@ extends Node2D
 ## split between ground and height is what makes flat chunks read as flying. Chunks are
 ## chunky, outlined and in the broken block's own colours, to match the cartoon board.
 
+const ToonDraw = preload("res://experiments/explosion_lab/toon_draw.gd")
 const GRAVITY := 1150.0
 const BOUNCE := 0.45
 const LINE_DARKEN := 0.55
@@ -63,7 +64,6 @@ func _draw() -> void:
 		draw_set_transform(chunk.pos - Vector2(0.0, chunk.z), chunk.rot, Vector2.ONE * shrink)
 		var half: float = chunk.size * 0.5
 		var colour: Color = chunk.color
-		draw_rect(Rect2(-half - 2.0, -half * 0.8 - 2.0, half * 2.0 + 4.0, half * 1.6 + 4.0), colour.darkened(LINE_DARKEN))
-		draw_rect(Rect2(-half, -half * 0.8, half * 2.0, half * 1.6), colour)
-		draw_rect(Rect2(-half + 1.0, -half * 0.8 + 1.0, half * 2.0 - 2.0, half * 0.5), colour.lightened(0.45))
+		ToonDraw.box(self, Rect2(-half - 2.0, -half * 0.8 - 2.0, half * 2.0 + 4.0, half * 1.6 + 4.0), colour, 4, colour.darkened(LINE_DARKEN), 2)
+		ToonDraw.box(self, Rect2(-half + 1.0, -half * 0.8 + 1.0, half * 2.0 - 2.0, half * 0.5), colour.lightened(0.45), 2)
 	draw_set_transform(Vector2.ZERO)
