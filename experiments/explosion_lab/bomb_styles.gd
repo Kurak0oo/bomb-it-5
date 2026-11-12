@@ -16,7 +16,7 @@ const STYLES := [
 	{"robot": "VIOLET", "theme": "magic", "shape": &"twinkle", "hot": Color("fdf5ff"), "mid": Color("e7b0ff"), "rim": Color("b44cff"), "puff": Color("f4e6ff"), "puff_line": Color("b98ae6")},
 	{"robot": "SLATE", "theme": "steel", "shape": &"nut", "hot": Color("e8edf5"), "mid": Color("a9b6c9"), "rim": Color("3d4a66"), "puff": Color("eef1f5"), "puff_line": Color("9aa6b4")},
 	{"robot": "MINT", "theme": "leaf", "shape": &"leaf", "hot": Color("e6fff0"), "mid": Color("6fe8ac"), "rim": Color("0f9a70"), "puff": Color("e4fff2"), "puff_line": Color("7fd0aa")},
-	{"robot": "SNOW", "theme": "frost", "shape": &"flake", "hot": Color("ffffff"), "mid": Color("d2efff"), "rim": Color("86ccff"), "puff": Color("ffffff"), "puff_line": Color("b4d8f0")},
+	{"robot": "SNOW", "theme": "peppermint", "shape": &"candy", "hot": Color("ffffff"), "mid": Color("fff1f1"), "rim": Color("e8283c"), "puff": Color("ffffff"), "puff_line": Color("f2a0a8")},
 ]
 ## Gold is the original's own yellow and orange blast.
 const DEFAULT := 3
@@ -58,8 +58,9 @@ static func shape(kind: StringName) -> PackedVector2Array:
 				points.append(Vector2(-1.0 + index * 0.25, -0.5 * sin(index * PI / 8.0)))
 			for index in range(7, 0, -1):
 				points.append(Vector2(-1.0 + index * 0.25, 0.5 * sin(index * PI / 8.0)))
-		&"flake":
-			points = ToonDraw.star(Vector2.ZERO, 1.0, 6, 0.4)
+		&"candy":
+			for index in 20:
+				points.append(Vector2.from_angle(index * TAU / 20.0) * 0.9)
 	_shapes[kind] = points
 	return points
 
@@ -73,5 +74,12 @@ static func draw_shape(canvas: CanvasItem, kind: StringName, center: Vector2, si
 		for point in unit:
 			points.append(center + point * radius)
 		ToonDraw.polygon(canvas, points, line if pass_index == 0 else fill)
+	if kind == &"candy":
+		# Peppermint swirl: three wedges in the outline colour on the white disc.
+		for wedge in 3:
+			var points := PackedVector2Array([center])
+			for step in 5:
+				points.append(center + Vector2.from_angle(wedge * TAU / 3.0 + step * TAU / 24.0) * size * 0.9)
+			ToonDraw.polygon(canvas, points, line)
 	if kind == &"nut":
 		canvas.draw_circle(center, size * 0.36, line, true, -1.0, true)

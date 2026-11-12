@@ -53,7 +53,7 @@ changes only the colours, the shape that bursts out, and the emblem on the bomb.
 | Violet | Magic | white, lilac, purple | four-point twinkle |
 | Slate | Steel | pale steel, grey, dark slate | hex nut |
 | Mint | Leaf | pale mint, mint, teal | leaf |
-| Snow | Frost | white, ice, sky blue | snowflake |
+| Snow | Peppermint | white, white, candy red | peppermint swirl |
 
 `T` picks the robot whose bombs a click places; `O` sets one bomb per robot side by
 side. The chain and random presets mix robots.
