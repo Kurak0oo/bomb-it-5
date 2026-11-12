@@ -14,6 +14,27 @@ generate, don't invent). None of these effects belong in the replica profile. Th
 candidates for the new-art (Douyin) build profile, and the owner decides whether any of
 them ship. All art here is procedural placeholder; no original art is used.
 
+## Art style
+
+The first version looked realistic and grim (noise fire, dimmed board, cast shadows,
+grey smoke, scorch marks), which is not how Bomb It looks. The style now follows
+captures of the original in `docs/evidence/reference-2026-10-19/`
+(`cinema-base-01/explosion.png`, `cinema-base-01/bomb.png`,
+`chains/overlap-left-first/both-visible.png`, `chains/*/after-chain.png`):
+
+- **Board:** saturated floor with a soft light spot per cell, inside a glossy cyan
+  frame. Nothing is dimmed, lit or shadowed.
+- **Blocks:** chunky, glossy, candy-coloured, outlined in a darker shade of their own
+  hue, and taller than a cell so they overlap the row above (one y-sorted layer).
+- **Bomb:** a big glossy dark ball with a cap, a short fuse and a cartoon spark.
+- **Blast:** a flat gradient, white-hot block to yellow to a soft orange rim, with no
+  noise. It pops in with an overshoot, then each cell shrinks to a glowing ball with
+  pointed streaks along the ray, as the original's blast does when it ends.
+- **Around it:** cream puffs instead of smoke, stars instead of embers, outlined chunks
+  in the block's own colours, and blocks and bombs that bounce like rubber toys.
+
+The shapes and motifs are the lab's own; only the style is taken from the captures.
+
 ## Run
 
 ```bash
@@ -26,7 +47,7 @@ godot --path . res://experiments/explosion_lab/lab.tscn
 | Wheel, `[` `]` | Bomb power |
 | `C` `V` `G` `R` | Presets: chain snake, dense cluster, random play, reset |
 | Space | Detonate every bomb next tick |
-| `1`–`0`, `S`, `H`, `B` | Toggle layers (see the HUD): anticipation, stagger, core, glow, lights, shockwave, smoke, embers, debris, scorch, shake, hit-stop, hitbox overlay |
+| `1`–`9`, `S`, `H`, `B` | Toggle layers (see the HUD): anticipation, stagger, core, glow, bounce, shockwave, smoke (puffs), sparkles, debris, shake, hit-stop, hitbox overlay |
 | `-` `=` / `,` `.` | Chain step / ring step (ms) |
 | `P` / `F` | Quarter-speed slow motion / shockwave style (light ring or refraction) |
 
@@ -66,22 +87,20 @@ judge.
 
 | Layer | Technique | Where |
 | --- | --- | --- |
-| Floor, scorch, blocks, bombs, debris | Board canvas, dimmed by `CanvasModulate` so lights pop | `lab.gd` |
-| Block and bomb depth | Procedural bevel/sphere **normal maps** (`CanvasTexture`) lit by an unshadowed `PointLight2D` | `fx_textures.gd` |
-| Cast shadows | A second, shadowed `PointLight2D` lights the floor only; every block has a `LightOccluder2D` | `_make_light_pair` |
-| Smoke | `CPUParticles2D`, normal blend, emitted along the whole cross, rises and swells | `_smoke` |
-| Flame body | One shared shader on per-cell quads: world-space scrolling noise, heat ramp, cylinder "volume" shading and a hot rim | `fire_body.gdshader` |
-| Flame core | Same field, half width, **additive**: fake HDR without HDR 2D | `fire_core.gdshader` |
-| Flash and glow | Additive radial sprites: 0.1 s white flash, 0.45 s orange swell | `_flash` |
-| Embers | Additive `CPUParticles2D` launched up against strong gravity: sparks arc and fall (fake z) | `_embers` |
-| Debris | Custom chunks with ground position plus height, and a shadow that shrinks with height (2.5D) | `debris.gd` |
+| Floor and frame | Flat colours plus a soft radial spot per cell | `lab.gd` `_draw_floor` |
+| Blocks and bombs | Drawn by hand (rounded boxes, circles, outlines) on one y-sorted layer; no textures, lights or normal maps | `block_view.gd`, `bomb_view.gd` |
+| Debris | Custom outlined chunks with ground position plus height, and a shadow that shrinks with height (2.5D) | `debris.gd` |
+| Flash and glow | Alpha-blended radial sprites: 0.12 s white flash, 0.4 s yellow swell | `_flash` |
+| Flame | One shared shader on per-cell quads: signed-distance shapes (block, band, rounded tip, then ball with streaks) coloured by distance from the edge; toggle `core` drops the white middle | `flame.gdshader` |
+| Puffs and sparkles | Hand-drawn outlined circles and stars; stars launch up against gravity so they arc and fall (fake z) | `toon_fx.gd` |
+| Bounce | Blocks and bombs within reach squash and spring back, nearest first | `_bounce_around` |
 | Shockwave | Additive light ring (default) or screen-texture refraction (`F`) | `shockwave_*.gdshader` |
-| Camera | Trauma-squared noise shake; hit-stop of 35–120 ms scaled by batch size | `_update_shake`, `_start_hitstop` |
+| Camera | Trauma-squared noise shake (kept small); hit-stop of 35–120 ms scaled by batch size | `_update_shake`, `_start_hitstop` |
 
 Per-cell flame parameters (age, kind, seed) are packed into `modulate`, so every flame
-quad shares two materials and the batch stays cheap. Bomb anticipation reads the
+quad shares one material and the batch stays cheap. Bomb anticipation reads the
 simulation's own `age` and `fuse`. The pulse speeds up as the fuse burns, and the last
-8 ticks squash and whiten the bomb.
+8 ticks squash the bomb and blink it red.
 
 **Gameplay never pauses.** The simulation steps on real time, while hit-stop and slow
 motion scale only `Engine.time_scale`, which drives tweens, particles and the effects
@@ -90,19 +109,25 @@ clock.
 ## Findings
 
 - **Compatibility renderer:** 2D HDR is documented for Forward+ and Mobile only, so
-  bloom is faked with additive layers. GPUParticles2D has reported load and first-use
-  stutter on web exports, so the lab uses CPUParticles2D throughout.
+  there is no bloom; the flat cartoon look does not need it. GPUParticles2D has
+  reported load and first-use stutter on web exports; the lab now uses no particle
+  nodes at all (puffs, stars and chunks are drawn by hand).
+- **No 2D MSAA:** Godot 4.5 reports "2D MSAA is not yet supported for GLES3", so
+  circles and rounded boxes use their own antialiasing and polygons (stars, chunks)
+  have hard edges.
 - **Screen-texture refraction:** under Compatibility on llvmpipe, the copied screen
   came back brighter than the screen, showing as a pale disc, and a `pow(2.2)` fix
   overshot. Refraction stays opt-in (`F`) until it is checked on a phone GPU.
-- **Light strength:** an unshadowed light at energy 1.6 washed the stone blocks out
-  to lavender, so the face light is now 0.75 and more saturated.
+- **Realistic lighting fights the style:** the first version dimmed the board and lit
+  it with shadowed 2D lights and normal maps. It read as a different, grimmer game, so
+  all of it is gone.
 - **Simulation quirk worth knowing:** two bombs due on the same tick go off on
   consecutive ticks. `_detonate` erases from `_countdowns` mid-pass, which skips the
   next entry. The comment there ("live registry removal") suggests this is
   deliberate; no change was made.
-- **Flame quads need headroom:** the noisy flame edge is clipped flat if it reaches the
-  quad border. Arms are 1.02 x 1.45 cells and the fireball quad is 1.45 cells.
+- **Flame quads need headroom:** arms are 1.02 x 1.45 cells and the centre quad is 1.45
+  cells, so the soft rim never reaches the quad border. Arms draw over centres, so a
+  centre's rim never cuts across an arm's white middle.
 
 ## Sources
 
@@ -116,10 +141,8 @@ clock.
 
 ## Next ideas
 
-- An ember and smoke pool instead of one particle node per blast, if a phone profile
-  shows allocation spikes.
-- Per-direction light colour, or a `DirectionalLight2D` key light, so fire lights
-  block faces from the correct side.
+- Join the facing ends of two chained blasts into one beam (they now meet as two
+  rounded tips).
 - Audio sync: fire `bomb` once per chain step rather than once per tick, to match the
   visual stagger.
 - Decide with the owner whether chain stagger belongs in the new-art profile at all.

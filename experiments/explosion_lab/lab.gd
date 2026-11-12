@@ -13,8 +13,9 @@ const ChainOrder = preload("res://experiments/explosion_lab/chain_order.gd")
 const FxTextures = preload("res://experiments/explosion_lab/fx_textures.gd")
 const Debris = preload("res://experiments/explosion_lab/debris.gd")
 const BombView = preload("res://experiments/explosion_lab/bomb_view.gd")
-const FireBody = preload("res://experiments/explosion_lab/fire_body.gdshader")
-const FireCore = preload("res://experiments/explosion_lab/fire_core.gdshader")
+const BlockView = preload("res://experiments/explosion_lab/block_view.gd")
+const ToonFx = preload("res://experiments/explosion_lab/toon_fx.gd")
+const Flame = preload("res://experiments/explosion_lab/flame.gdshader")
 const ShockwaveRing = preload("res://experiments/explosion_lab/shockwave_ring.gdshader")
 const ShockwaveRefract = preload("res://experiments/explosion_lab/shockwave_refract.gdshader")
 
@@ -27,17 +28,22 @@ const FLAME_TICKS := 16
 const FLAME_SECONDS := FLAME_TICKS / TICKS_PER_SECOND
 const LAB_ACTOR := &"lab"
 const NEVER := 1_000_000
-const LIGHT_POOL := 6
-const CRATE_PALETTE := [Color(0.66, 0.44, 0.24), Color(0.52, 0.33, 0.17), Color(0.78, 0.56, 0.32)]
+## Look, taken from captures of the original (docs/evidence/reference-2026-10-19/
+## cinema-base-01, chains/): a saturated floor with a soft spot per cell inside a glossy
+## cyan frame. Nothing on the board is dimmed, lit or shadowed.
+const FLOOR_COLOURS := [Color("8a1f86"), Color("7a1878")]
+const FRAME_COLOUR := Color("19b6e6")
+const FRAME_LINE := Color("0b6fa8")
+const BACKDROP := Color("0d86c4")
 const TOGGLE_KEYS := {
-	KEY_1: &"anticipation", KEY_2: &"stagger", KEY_3: &"core", KEY_4: &"glow", KEY_5: &"lights",
-	KEY_6: &"shockwave", KEY_7: &"smoke", KEY_8: &"embers", KEY_9: &"debris", KEY_0: &"scorch",
+	KEY_1: &"anticipation", KEY_2: &"stagger", KEY_3: &"core", KEY_4: &"glow", KEY_5: &"bounce",
+	KEY_6: &"shockwave", KEY_7: &"smoke", KEY_8: &"sparkles", KEY_9: &"debris",
 	KEY_S: &"shake", KEY_H: &"hitstop", KEY_B: &"hitbox",
 }
 
 var toggles := {
-	&"anticipation": true, &"stagger": true, &"core": true, &"glow": true, &"lights": true,
-	&"shockwave": true, &"smoke": true, &"embers": true, &"debris": true, &"scorch": true,
+	&"anticipation": true, &"stagger": true, &"core": true, &"glow": true, &"bounce": true,
+	&"shockwave": true, &"smoke": true, &"sparkles": true, &"debris": true,
 	&"shake": true, &"hitstop": true, &"hitbox": false,
 }
 var ring_step := 0.022
@@ -62,8 +68,6 @@ var _bomb_views: Dictionary = {}
 var _block_views: Dictionary = {}
 var _flames: Array[Dictionary] = []
 var _hitboxes: Array[Dictionary] = []
-var _lights: Array[Dictionary] = []
-var _light_index := 0
 var _shake_noise := FastNoiseLite.new()
 var _capture_dir := ""
 var _capture_frames: Array[float] = []
@@ -71,30 +75,21 @@ var _capture_frames: Array[float] = []
 var _camera: Camera2D
 var _world: Node2D
 var _floor: Node2D
-var _scorch_layer: Node2D
-var _block_layer: Node2D
-var _bomb_layer: Node2D
+## Blocks and bombs share one y-sorted layer: tall blocks overlap the row above.
+var _entity_layer: Node2D
 var _debris: Node2D
-var _canvas_modulate: CanvasModulate
+var _toon: Node2D
 var _fx_root: Node2D
-var _smoke_layer: Node2D
 var _flame_layer: Node2D
 var _glow_layer: Node2D
-var _spark_layer: Node2D
 var _shock_layer: Node2D
 var _hitbox_layer: Node2D
 var _hud: Label
-var _body_material := ShaderMaterial.new()
-var _core_material := ShaderMaterial.new()
-var _add_material := CanvasItemMaterial.new()
-var _occluder := OccluderPolygon2D.new()
-var _smoke_ramp := Gradient.new()
-var _smoke_curve := Curve.new()
-var _ember_ramp := Gradient.new()
+var _flame_material := ShaderMaterial.new()
 
 
 func _ready() -> void:
-	RenderingServer.set_default_clear_color(Color(0.07, 0.07, 0.09))
+	RenderingServer.set_default_clear_color(BACKDROP)
 	_build_resources()
 	_build_nodes()
 	_reset_board(true)
@@ -107,45 +102,24 @@ func _ready() -> void:
 # --- Scene -----------------------------------------------------------------------------
 
 func _build_resources() -> void:
-	for material in [_body_material, _core_material]:
-		material.set_shader_parameter("noise_tex", FxTextures.noise())
-		material.set_shader_parameter("ramp_tex", FxTextures.fire_ramp())
-	_body_material.shader = FireBody
-	_core_material.shader = FireCore
-	_add_material.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
-	_add_material.light_mode = CanvasItemMaterial.LIGHT_MODE_UNSHADED
-	var half := CELL * 0.5 - 1.0
-	_occluder.polygon = PackedVector2Array([Vector2(-half, -half), Vector2(half, -half), Vector2(half, half), Vector2(-half, half)])
-	_smoke_ramp.offsets = PackedFloat32Array([0.0, 0.12, 0.6, 1.0])
-	_smoke_ramp.colors = PackedColorArray([Color(0.35, 0.32, 0.3, 0.0), Color(0.3, 0.28, 0.27, 0.55),
-		Color(0.22, 0.21, 0.21, 0.3), Color(0.2, 0.2, 0.2, 0.0)])
-	_smoke_curve.add_point(Vector2(0.0, 0.45))
-	_smoke_curve.add_point(Vector2(1.0, 1.4))
-	_ember_ramp.offsets = PackedFloat32Array([0.0, 0.25, 0.6, 1.0])
-	_ember_ramp.colors = PackedColorArray([Color(1, 1, 0.85, 1), Color(1, 0.8, 0.3, 1), Color(1, 0.35, 0.05, 0.8), Color(0.6, 0.1, 0, 0)])
+	_flame_material.shader = Flame
 	_shake_noise.frequency = 0.9
 
 
 func _build_nodes() -> void:
 	_camera = Camera2D.new()
-	_camera.position = Vector2(BOARD_SIZE) * CELL * 0.5 + Vector2(0, -CELL * 0.4)
+	_camera.position = Vector2(BOARD_SIZE) * CELL * 0.5 + Vector2(0, -CELL * 0.75)
 	add_child(_camera)
-	_canvas_modulate = CanvasModulate.new()
-	add_child(_canvas_modulate)
 	_world = Node2D.new()
 	_world.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	add_child(_world)
 	_floor = Node2D.new()
 	_floor.draw.connect(_draw_floor)
-	_scorch_layer = Node2D.new()
-	_block_layer = Node2D.new()
-	_bomb_layer = Node2D.new()
+	_entity_layer = Node2D.new()
+	_entity_layer.y_sort_enabled = true
 	_debris = Debris.new()
-	for child in [_floor, _scorch_layer, _block_layer, _bomb_layer, _debris]:
+	for child in [_floor, _entity_layer, _debris]:
 		_world.add_child(child)
-	for index in LIGHT_POOL:
-		_lights.append(_make_light_pair())
-	# FX sit on their own layer: CanvasModulate dims the board only, never the fire.
 	var fx_layer := CanvasLayer.new()
 	fx_layer.layer = 1
 	fx_layer.follow_viewport_enabled = true
@@ -153,14 +127,13 @@ func _build_nodes() -> void:
 	_fx_root = Node2D.new()
 	_fx_root.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	fx_layer.add_child(_fx_root)
-	_smoke_layer = Node2D.new()
-	_flame_layer = Node2D.new()
 	_glow_layer = Node2D.new()
-	_spark_layer = Node2D.new()
+	_flame_layer = Node2D.new()
+	_toon = ToonFx.new()
 	_shock_layer = Node2D.new()
 	_hitbox_layer = Node2D.new()
 	_hitbox_layer.draw.connect(_draw_hitboxes)
-	for child in [_smoke_layer, _flame_layer, _glow_layer, _spark_layer, _shock_layer, _hitbox_layer]:
+	for child in [_glow_layer, _flame_layer, _toon, _shock_layer, _hitbox_layer]:
 		_fx_root.add_child(child)
 	var hud_layer := CanvasLayer.new()
 	hud_layer.layer = 2
@@ -168,46 +141,33 @@ func _build_nodes() -> void:
 	_hud = Label.new()
 	_hud.position = Vector2(10, 6)
 	_hud.add_theme_font_size_override("font_size", 13)
-	_hud.add_theme_color_override("font_outline_color", Color.BLACK)
-	_hud.add_theme_constant_override("outline_size", 4)
+	_hud.add_theme_color_override("font_outline_color", Color("0a3d66"))
+	_hud.add_theme_constant_override("outline_size", 5)
 	hud_layer.add_child(_hud)
 	_apply_toggles()
 
 
-## Two lights per explosion: one shadowed light for the floor (blocks cast shadows) and
-## one unshadowed light for block and bomb faces (lights their normal maps).
-func _make_light_pair() -> Dictionary:
-	var ground := PointLight2D.new()
-	ground.texture = FxTextures.light_falloff()
-	ground.color = Color(1.0, 0.62, 0.28)
-	ground.shadow_enabled = true
-	ground.shadow_filter = Light2D.SHADOW_FILTER_PCF5
-	ground.shadow_filter_smooth = 2.0
-	ground.range_item_cull_mask = 1
-	ground.enabled = false
-	var face := PointLight2D.new()
-	face.texture = FxTextures.light_falloff()
-	face.color = Color(1.0, 0.5, 0.2)
-	face.range_item_cull_mask = 2
-	face.height = 36.0
-	face.enabled = false
-	_world.add_child(ground)
-	_world.add_child(face)
-	return {"ground": ground, "face": face, "tween": null}
-
-
 func _fit_camera() -> void:
 	var view := get_viewport_rect().size
-	var board := Vector2(BOARD_SIZE) * CELL + Vector2(0, CELL * 1.6)
+	var board := Vector2(BOARD_SIZE) * CELL + Vector2(0, CELL * 2.3)
 	var zoom := minf(view.x / board.x, view.y / board.y)
 	_camera.zoom = Vector2.ONE * zoom
 
 
 func _draw_floor() -> void:
+	var board := Rect2(Vector2.ZERO, Vector2(BOARD_SIZE) * CELL)
+	var frame := StyleBoxFlat.new()
+	frame.bg_color = FRAME_COLOUR
+	frame.border_color = FRAME_LINE
+	frame.set_border_width_all(3)
+	frame.set_corner_radius_all(14)
+	_floor.draw_style_box(frame, board.grow(12.0))
+	_floor.draw_rect(Rect2(board.position - Vector2(6, 9), Vector2(board.size.x + 12.0, 3.0)), Color(1, 1, 1, 0.55))
 	for y in BOARD_SIZE.y:
 		for x in BOARD_SIZE.x:
-			var shade := 0.3 if (x + y) % 2 == 0 else 0.27
-			_floor.draw_rect(Rect2(Vector2(x, y) * CELL, Vector2.ONE * CELL), Color(shade * 0.8, shade, shade * 0.75))
+			var cell := Rect2(Vector2(x, y) * CELL, Vector2.ONE * CELL)
+			_floor.draw_rect(cell, FLOOR_COLOURS[(x + y) % 2])
+			_floor.draw_texture_rect(FxTextures.floor_spot(), cell, false)
 
 
 func _draw_hitboxes() -> void:
@@ -219,9 +179,11 @@ func _draw_hitboxes() -> void:
 # --- Board and bombs -------------------------------------------------------------------
 
 func _reset_board(fill_soft: bool) -> void:
-	for layer in [_scorch_layer, _block_layer, _bomb_layer, _smoke_layer, _flame_layer, _glow_layer, _spark_layer, _shock_layer]:
+	for layer in [_entity_layer, _flame_layer, _glow_layer, _shock_layer]:
 		for child in layer.get_children():
 			child.queue_free()
+	_debris.clear()
+	_toon.clear()
 	_block_views.clear()
 	_bomb_views.clear()
 	_bombs.clear()
@@ -251,15 +213,13 @@ func _reset_board(fill_soft: bool) -> void:
 
 
 func _add_block_view(cell: Vector2i, kind: StringName) -> void:
-	var sprite := Sprite2D.new()
-	sprite.texture = FxTextures.block(kind, int(CELL))
-	sprite.position = _cell_center(cell)
-	sprite.light_mask = 2
-	var occluder := LightOccluder2D.new()
-	occluder.occluder = _occluder
-	sprite.add_child(occluder)
-	_block_layer.add_child(sprite)
-	_block_views[cell] = sprite
+	var view := BlockView.new()
+	view.kind = kind
+	view.variant = posmod(cell.x * 7 + cell.y * 13 + _board_seed, 3)
+	view.cell_size = CELL
+	view.position = _cell_center(cell)
+	_entity_layer.add_child(view)
+	_block_views[cell] = view
 
 
 ## Lab-only board edit: `BombSimulation.board()` hands out its live board.
@@ -287,7 +247,7 @@ func _place_bomb(cell: Vector2i, bomb_power: int, fuse := 0) -> void:
 	view.cell_size = CELL
 	view.anticipation = toggles.anticipation
 	view.position = _cell_center(cell)
-	_bomb_layer.add_child(view)
+	_entity_layer.add_child(view)
 	_bomb_views[bomb.lab_id] = view
 
 
@@ -375,8 +335,6 @@ func _spawn_blast(blast: Dictionary, depth: int, broken_cells: Dictionary) -> vo
 		var distance: int = segment.distance if toggles.stagger else 0
 		var delay := ChainOrder.delay(depth, distance, chain_step, ring_step)
 		_add_flame(segment, delay)
-		if toggles.scorch:
-			_later(delay, _add_scorch.bind(segment.cell))
 		if broken_cells.has(segment.cell):
 			broken_cells.erase(segment.cell)
 			_later(delay, _break_block.bind(segment.cell, blast.cell))
@@ -390,22 +348,22 @@ func _remove_bomb_view(lab_id: int) -> void:
 
 
 func _add_flame(segment: Dictionary, delay: float) -> void:
-	var record := {"start": _fx_time + delay, "kind": segment.kind, "seed": randf(), "nodes": []}
-	var materials: Array = [_body_material, _core_material] if toggles.core else [_body_material]
-	for material in materials:
-		var sprite := Sprite2D.new()
-		sprite.texture = FxTextures.white()
-		sprite.material = material
-		sprite.position = _cell_center(segment.cell)
-		sprite.rotation = Vector2(segment.direction).angle()
-		# Arms span exactly one cell along the ray (plus 2 % overlap) and leave headroom
-		# across it; the centre quad is larger still so the fireball stays round.
-		var size := Vector2(1.45, 1.45) if segment.kind == ChainOrder.KIND_CENTER else Vector2(1.02, 1.45)
-		sprite.scale = size * CELL / FxTextures.WHITE_SIZE
-		sprite.visible = false
-		_flame_layer.add_child(sprite)
-		record.nodes.append(sprite)
-	_flames.append(record)
+	var sprite := Sprite2D.new()
+	sprite.texture = FxTextures.white()
+	sprite.material = _flame_material
+	sprite.position = _cell_center(segment.cell)
+	sprite.rotation = Vector2(segment.direction).angle()
+	# Arms span exactly one cell along the ray (plus 2 % overlap) and leave headroom
+	# across it for the rim; the centre quad is larger so its rounded block can overshoot.
+	# Keep both sizes in step with `quad` in flame.gdshader.
+	var centre: bool = segment.kind == ChainOrder.KIND_CENTER
+	var size := Vector2(1.45, 1.45) if centre else Vector2(1.02, 1.45)
+	sprite.scale = size * CELL / FxTextures.WHITE_SIZE
+	# Arms draw over centres, so a centre's rim never cuts across an arm's white middle.
+	sprite.z_index = 0 if centre else 1
+	sprite.visible = false
+	_flame_layer.add_child(sprite)
+	_flames.append({"start": _fx_time + delay, "kind": segment.kind, "seed": randf(), "nodes": [sprite]})
 
 
 func _update_flames() -> void:
@@ -427,63 +385,54 @@ func _update_flames() -> void:
 
 func _burst(blast: Dictionary, reach: int) -> void:
 	var center := _cell_center(blast.cell)
-	var points := PackedVector2Array()
-	for cell: Vector2i in blast.cells:
-		points.append(_cell_center(cell) - center)
 	if toggles.glow:
 		_flash(center, reach)
-	if toggles.lights:
-		_light(center, reach)
+	if toggles.bounce:
+		_bounce_around(center, reach)
 	if toggles.shockwave:
 		_shockwave(center, reach)
 	if toggles.smoke:
-		_smoke(center, points, reach)
-	if toggles.embers:
-		_embers(center, points, reach)
+		_toon.puffs(center, 4 + reach, CELL)
+	if toggles.sparkles:
+		_toon.sparkles(center, 4 + reach, CELL)
 	if toggles.shake:
-		_trauma = minf(_trauma + 0.2 + 0.04 * reach, 1.0)
+		_trauma = minf(_trauma + 0.16 + 0.03 * reach, 1.0)
 
 
 func _flash(center: Vector2, reach: int) -> void:
 	var flash := Sprite2D.new()
 	flash.texture = FxTextures.soft_circle()
-	flash.material = _add_material
 	flash.position = center
-	flash.scale = Vector2.ONE * CELL * 2.2 / 128.0
+	flash.scale = Vector2.ONE * CELL * 2.4 / 128.0
 	_glow_layer.add_child(flash)
 	var fade := flash.create_tween()
-	fade.tween_property(flash, "modulate:a", 0.0, 0.1).from(1.0)
+	fade.tween_property(flash, "modulate:a", 0.0, 0.12).from(0.9)
 	fade.tween_callback(flash.queue_free)
 	var glow := Sprite2D.new()
 	glow.texture = FxTextures.fire_glow()
-	glow.material = _add_material
 	glow.position = center
 	var size := CELL * (2.0 + reach) / 128.0
 	_glow_layer.add_child(glow)
 	var swell := glow.create_tween().set_parallel()
-	swell.tween_property(glow, "scale", Vector2.ONE * size * 1.1, 0.35).from(Vector2.ONE * size * 0.5) \
-		.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-	swell.tween_property(glow, "modulate:a", 0.0, 0.45).from(0.9)
+	swell.tween_property(glow, "scale", Vector2.ONE * size * 1.1, 0.3).from(Vector2.ONE * size * 0.5) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	swell.tween_property(glow, "modulate:a", 0.0, 0.4).from(1.0)
 	swell.chain().tween_callback(glow.queue_free)
 
 
-func _light(center: Vector2, reach: int) -> void:
-	var pair: Dictionary = _lights[_light_index]
-	_light_index = (_light_index + 1) % _lights.size()
-	if pair.tween is Tween and pair.tween.is_valid():
-		pair.tween.kill()
-	var tween := create_tween().set_parallel()
-	for key in [&"ground", &"face"]:
-		var light: PointLight2D = pair[key]
-		light.position = center
-		light.texture_scale = CELL * (2.0 * reach + 3.0) / 256.0
-		light.enabled = true
-		tween.tween_property(light, "energy", 0.0, 0.55).from(2.2 if key == &"ground" else 0.75) \
-			.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.chain().tween_callback(func() -> void:
-		pair.ground.enabled = false
-		pair.face.enabled = false)
-	pair.tween = tween
+## Blocks and bombs near a blast squash and spring back, nearest first: the board
+## reacts like rubber toys instead of being lit and shadowed.
+func _bounce_around(center: Vector2, reach: int) -> void:
+	var limit := (reach + 1.5) * CELL
+	for view: Node2D in _block_views.values() + _bomb_views.values():
+		var distance := view.position.distance_to(center)
+		if distance > limit or distance < 1.0:
+			continue
+		var strength := 1.0 - distance / limit
+		var tween := view.create_tween()
+		tween.tween_interval(distance / CELL * 0.03)
+		tween.tween_property(view, "scale", Vector2(1.0 + 0.16 * strength, 1.0 - 0.14 * strength), 0.06)
+		tween.tween_property(view, "scale", Vector2.ONE, 0.4).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 
 func _shockwave(center: Vector2, reach: int) -> void:
@@ -502,79 +451,20 @@ func _shockwave(center: Vector2, reach: int) -> void:
 	tween.tween_callback(ring.queue_free)
 
 
-func _particles(center: Vector2, points: PackedVector2Array, lifetime: float) -> CPUParticles2D:
-	var particles := CPUParticles2D.new()
-	particles.position = center
-	particles.one_shot = true
-	particles.explosiveness = 0.9
-	particles.lifetime = lifetime
-	particles.texture = FxTextures.soft_circle()
-	particles.emission_shape = CPUParticles2D.EMISSION_SHAPE_POINTS
-	particles.emission_points = points
-	particles.spread = 180.0
-	get_tree().create_timer(lifetime + 0.3).timeout.connect(particles.queue_free)
-	return particles
-
-
-func _smoke(center: Vector2, points: PackedVector2Array, reach: int) -> void:
-	var smoke := _particles(center, points, 1.3)
-	smoke.amount = 6 + reach * 3
-	smoke.direction = Vector2.UP
-	smoke.initial_velocity_min = 10.0
-	smoke.initial_velocity_max = 30.0 + 10.0 * reach
-	smoke.gravity = Vector2(0, -28)
-	smoke.damping_min = 10.0
-	smoke.damping_max = 25.0
-	smoke.angle_min = 0.0
-	smoke.angle_max = 360.0
-	smoke.scale_amount_min = 0.35
-	smoke.scale_amount_max = 0.6
-	smoke.scale_amount_curve = _smoke_curve
-	smoke.color_ramp = _smoke_ramp
-	_smoke_layer.add_child(smoke)
-	smoke.emitting = true
-
-
-func _embers(center: Vector2, points: PackedVector2Array, reach: int) -> void:
-	var embers := _particles(center, points, 0.7)
-	embers.amount = 14 + reach * 4
-	embers.material = _add_material
-	embers.direction = Vector2.UP
-	embers.initial_velocity_min = 140.0
-	embers.initial_velocity_max = 360.0
-	# Strong downward gravity on an upward launch: sparks arc up and fall back (fake z).
-	embers.gravity = Vector2(0, 520)
-	embers.damping_min = 40.0
-	embers.damping_max = 80.0
-	embers.scale_amount_min = 0.04
-	embers.scale_amount_max = 0.09
-	embers.color_ramp = _ember_ramp
-	_spark_layer.add_child(embers)
-	embers.emitting = true
-
-
-func _add_scorch(cell: Vector2i) -> void:
-	if _scorch_layer.get_child_count() > 300:
-		return
-	var mark := Sprite2D.new()
-	mark.texture = FxTextures.scorch()
-	mark.position = _cell_center(cell) + Vector2(randf_range(-4, 4), randf_range(-4, 4))
-	mark.rotation = randf() * TAU
-	mark.scale = Vector2.ONE * CELL * randf_range(1.0, 1.3) / 128.0
-	_scorch_layer.add_child(mark)
-	var tween := mark.create_tween()
-	tween.tween_property(mark, "modulate:a", 0.55, 0.15).from(0.0)
-	tween.tween_interval(3.0)
-	tween.tween_property(mark, "modulate:a", 0.0, 2.0)
-	tween.tween_callback(mark.queue_free)
-
-
 func _break_block(cell: Vector2i, origin: Vector2i) -> void:
-	if _block_views.has(cell):
-		_block_views[cell].queue_free()
-		_block_views.erase(cell)
+	if not _block_views.has(cell):
+		return
+	var view: Node2D = _block_views[cell]
+	_block_views.erase(cell)
+	# Cartoon pop: the block swells and whitens for two frames, then bursts into chunks.
+	var tween := view.create_tween().set_parallel()
+	tween.tween_property(view, "scale", Vector2(1.25, 1.25), 0.06)
+	tween.tween_property(view, "modulate", Color(3, 3, 3), 0.06)
+	tween.chain().tween_callback(view.queue_free)
 	if toggles.debris:
-		_debris.burst(_cell_center(cell), Vector2(cell - origin), CRATE_PALETTE, CELL)
+		_debris.burst(_cell_center(cell), Vector2(cell - origin), view.debris_colours(), CELL)
+	if toggles.smoke:
+		_toon.puffs(_cell_center(cell), 3, CELL)
 
 
 func _start_hitstop(count: int) -> void:
@@ -585,11 +475,11 @@ func _update_shake(delta: float) -> void:
 	_trauma = maxf(_trauma - delta * 1.5, 0.0)
 	_shake_time += delta * 40.0
 	var amount := _trauma * _trauma
-	_camera.offset = Vector2(_shake_noise.get_noise_2d(_shake_time, 0.0), _shake_noise.get_noise_2d(0.0, _shake_time)) * 16.0 * amount
+	_camera.offset = Vector2(_shake_noise.get_noise_2d(_shake_time, 0.0), _shake_noise.get_noise_2d(0.0, _shake_time)) * 9.0 * amount
 
 
 func _apply_toggles() -> void:
-	_canvas_modulate.color = Color(0.58, 0.58, 0.68) if toggles.lights else Color.WHITE
+	_flame_material.set_shader_parameter("core", 1.0 if toggles.core else 0.0)
 	for view in _bomb_views.values():
 		view.anticipation = toggles.anticipation
 
@@ -691,7 +581,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _update_hud() -> void:
 	var names := {KEY_1: "1", KEY_2: "2", KEY_3: "3", KEY_4: "4", KEY_5: "5", KEY_6: "6", KEY_7: "7",
-		KEY_8: "8", KEY_9: "9", KEY_0: "0", KEY_S: "S", KEY_H: "H", KEY_B: "B"}
+		KEY_8: "8", KEY_9: "9", KEY_S: "S", KEY_H: "H", KEY_B: "B"}
 	var parts: PackedStringArray = []
 	for keycode in TOGGLE_KEYS:
 		var key: StringName = TOGGLE_KEYS[keycode]
@@ -719,8 +609,8 @@ func _parse_args() -> void:
 		if argument.begins_with("--off="):
 			for key in argument.trim_prefix("--off=").split(","):
 				toggles[StringName(key)] = false
-	_apply_toggles()
 	toggles.hitstop = false
+	_apply_toggles()
 	match preset:
 		"cluster": _preset_cluster()
 		"random": _preset_random()

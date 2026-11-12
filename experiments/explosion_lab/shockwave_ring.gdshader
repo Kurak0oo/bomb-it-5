@@ -5,8 +5,8 @@ render_mode unshaded, blend_add;
 
 uniform float progress = 0.0;  // 0 = birth, 1 = gone
 uniform float strength = 0.018; // shared with the refraction style; scales brightness here
-uniform float thickness = 0.1;  // ring width in quad radii
-uniform vec3 ring_colour : source_color = vec3(1.0, 0.8, 0.55);
+uniform float thickness = 0.06; // ring width in quad radii
+uniform vec3 ring_colour : source_color = vec3(1.0, 1.0, 0.82);
 
 void fragment() {
 	float r = length(UV - 0.5) * 2.0;
