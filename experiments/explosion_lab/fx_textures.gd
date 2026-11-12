@@ -35,10 +35,10 @@ static func soft_circle() -> Texture2D:
 		PackedFloat32Array([0.0, 0.45, 1.0]))
 
 
-## Warm swell behind a blast: yellow to orange, alpha-blended so it stays candy-bright
-## on a saturated floor instead of burning to white.
+## Soft swell behind a blast, tinted by the blast's own colour through `modulate` and
+## alpha-blended, so it stays candy-bright on a saturated floor instead of burning out.
 static func fire_glow() -> Texture2D:
-	return radial(&"glow", PackedColorArray([Color(1, 0.95, 0.5, 0.75), Color(1, 0.7, 0.15, 0.35), Color(1, 0.5, 0.05, 0)]),
+	return radial(&"glow", PackedColorArray([Color(1, 1, 1, 0.7), Color(1, 1, 1, 0.3), Color(1, 1, 1, 0)]),
 		PackedFloat32Array([0.0, 0.45, 1.0]))
 
 

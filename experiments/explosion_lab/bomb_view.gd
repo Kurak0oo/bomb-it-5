@@ -5,6 +5,7 @@ extends Node2D
 ## burns; the last ticks squash it and blink it red just before it pops.
 
 const FxTextures = preload("res://experiments/explosion_lab/fx_textures.gd")
+const BombStyles = preload("res://experiments/explosion_lab/bomb_styles.gd")
 const ToonDraw = preload("res://experiments/explosion_lab/toon_draw.gd")
 ## BombSimulation.FUSE_TICKS
 const DEFAULT_FUSE := 72.0
@@ -13,6 +14,8 @@ const LINE := Color("15151c")
 
 var bomb: Dictionary
 var cell_size := 48.0
+## The owner robot's entry in BombStyles.STYLES: emblem, cap and spark colours.
+var style: Dictionary = BombStyles.style(BombStyles.DEFAULT)
 var anticipation := true
 var pop := 0.0
 var _phase := 0.0
@@ -59,7 +62,7 @@ func _draw() -> void:
 	var top := middle + Vector2.from_angle(-1.0) * radius
 	# Cap and fuse sit behind the ball's upper right.
 	draw_set_transform_matrix(Transform2D(0.0, ground) * Transform2D(0.0, squash, 0.0, Vector2.ZERO) * Transform2D(0.57, top))
-	ToonDraw.box(self, Rect2(-0.17 * c, -0.13 * c, 0.34 * c, 0.2 * c), Color("7b7b8c"), 3, LINE, 2)
+	ToonDraw.box(self, Rect2(-0.17 * c, -0.13 * c, 0.34 * c, 0.2 * c), style.rim.lerp(Color("7b7b8c"), 0.35), 3, LINE, 2)
 	draw_set_transform(ground, 0.0, squash)
 	var fuse_line := PackedVector2Array([top + Vector2(0.03, -0.08) * c, top + Vector2(0.07, -0.17) * c, top + Vector2(0.15, -0.22) * c])
 	draw_polyline(fuse_line, LINE, 6.0, true)
@@ -69,6 +72,8 @@ func _draw() -> void:
 	for direction in _circle:
 		points.append(middle + direction * radius)
 	draw_colored_polygon(points, Color.WHITE, _circle_uvs, FxTextures.bomb_shade())
+	# The robot's mark on the ball, in its blast colours.
+	BombStyles.draw_shape(self, style.shape, middle + Vector2(0.16, 0.2) * radius, radius * 0.4, style.mid, style.rim, 2.0)
 	if blink:
 		draw_circle(middle, radius, Color(1.0, 0.25, 0.2, 0.6), true, -1.0, true)
 	draw_set_transform_matrix(Transform2D(0.0, ground) * Transform2D(0.0, squash, 0.0, Vector2.ZERO)
@@ -80,8 +85,8 @@ func _draw() -> void:
 		# Cartoon spark: a spinning star that flickers between two sizes.
 		var spark := fuse_line[2]
 		var size := 0.13 * c * (1.0 + 0.3 * signf(sin(_time * 30.0)))
-		ToonDraw.polygon(self, ToonDraw.star(spark, size + 2.0, 5, 0.5, _time * 6.0), Color("e6321e"))
-		ToonDraw.polygon(self, ToonDraw.star(spark, size, 5, 0.5, _time * 6.0), Color("ff9a1a"))
-		draw_circle(spark, size * 0.45, Color("fff27a"), true, -1.0, true)
+		ToonDraw.polygon(self, ToonDraw.star(spark, size + 2.0, 5, 0.5, _time * 6.0), style.rim)
+		ToonDraw.polygon(self, ToonDraw.star(spark, size, 5, 0.5, _time * 6.0), style.mid)
+		draw_circle(spark, size * 0.45, style.hot, true, -1.0, true)
 	draw_set_transform(Vector2.ZERO)
 

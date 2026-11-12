@@ -35,6 +35,29 @@ captures of the original in `docs/evidence/reference-2026-10-19/`
 
 The shapes and motifs are the lab's own; only the style is taken from the captures.
 
+## One bomb effect per robot
+
+The original gives every robot the same bomb and blast. As a new-art idea, each of the
+eight robots gets its own (`bomb_styles.gd`, in `Session.ROBOTS` order). Every style
+keeps the original's form, the glossy dark ball and the flat three-band cross, and
+changes only the colours, the shape that bursts out, and the emblem on the bomb.
+
+![Bombs, blasts and bursts for the eight robots](media/robots.png)
+
+| Robot | Theme | Blast colours | Burst shape and emblem |
+| --- | --- | --- | --- |
+| Blue | Spark | pale yellow, cyan, blue | lightning bolt |
+| Ruby | Sweetheart | white, pink, hot pink | heart |
+| Lime | Slime | pale lime, lime, green | drop |
+| Gold | Sunburst (the original's own colours) | white, yellow, orange | five-point star |
+| Violet | Magic | white, lilac, purple | four-point twinkle |
+| Slate | Steel | pale steel, grey, dark slate | hex nut |
+| Mint | Leaf | pale mint, mint, teal | leaf |
+| Snow | Frost | white, ice, sky blue | snowflake |
+
+`T` picks the robot whose bombs a click places; `O` sets one bomb per robot side by
+side. The chain and random presets mix robots.
+
 ## Run
 
 ```bash
@@ -45,7 +68,8 @@ godot --path . res://experiments/explosion_lab/lab.tscn
 | --- | --- |
 | Left click / right click | Place a bomb / toggle a crate |
 | Wheel, `[` `]` | Bomb power |
-| `C` `V` `G` `R` | Presets: chain snake, dense cluster, random play, reset |
+| `C` `V` `G` `O` `R` | Presets: chain snake, dense cluster, random play, one bomb per robot, reset |
+| `T` | Next robot for placed bombs |
 | Space | Detonate every bomb next tick |
 | `1`–`9`, `S`, `H`, `B` | Toggle layers (see the HUD): anticipation, stagger, core, glow, bounce, shockwave, smoke (puffs), sparkles, debris, shake, hit-stop, hitbox overlay |
 | `-` `=` / `,` `.` | Chain step / ring step (ms) |
@@ -97,7 +121,7 @@ judge.
 | Flash and glow | Alpha-blended radial sprites: 0.12 s white flash, 0.4 s yellow swell | `_flash` |
 | Flame | One shared shader on per-cell quads: signed-distance shapes (block, band, rounded tip, then ball with streaks). Each cell is drawn as three colour layers (rim, band, core) on rising z, so overlapping cells and crossing blasts merge into one shape; toggle `core` drops the white layer | `flame.gdshader`, `_add_flame` |
 | Joined chains | A ray's tip facing another burning cell opens into a plain arm once that cell shows | `_link_tips` |
-| Puffs and sparkles | Hand-drawn outlined circles and stars; stars launch up against gravity so they arc and fall (fake z) | `toon_fx.gd` |
+| Puffs and sparkles | Hand-drawn and outlined, under the flames. Each blast throws one ring of four of its robot's shape, which fly out, slow and shrink; totals are capped (20 shapes, 30 puffs) so a chain stays tidy | `toon_fx.gd` |
 | Bounce | Blocks and bombs within reach squash and spring back, nearest first | `_bounce_around` |
 | Shockwave | Additive light ring (default) or screen-texture refraction (`F`) | `shockwave_*.gdshader` |
 | Camera | Trauma-squared noise shake (kept small); hit-stop of 35–120 ms scaled by batch size | `_update_shake`, `_start_hitstop` |

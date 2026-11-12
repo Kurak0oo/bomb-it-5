@@ -14,6 +14,7 @@ const FxTextures = preload("res://experiments/explosion_lab/fx_textures.gd")
 const Debris = preload("res://experiments/explosion_lab/debris.gd")
 const BombView = preload("res://experiments/explosion_lab/bomb_view.gd")
 const BlockView = preload("res://experiments/explosion_lab/block_view.gd")
+const BombStyles = preload("res://experiments/explosion_lab/bomb_styles.gd")
 const ToonFx = preload("res://experiments/explosion_lab/toon_fx.gd")
 const Flame = preload("res://experiments/explosion_lab/flame.gdshader")
 const ShockwaveRing = preload("res://experiments/explosion_lab/shockwave_ring.gdshader")
@@ -52,6 +53,8 @@ var power := 2
 var lab_speed := 1.0
 ## Key F: screen-texture refraction instead of the light ring (see shockwave_refract).
 var refract_shockwave := false
+## Key T: the robot whose bombs a click places (index into BombStyles.STYLES).
+var robot: int = BombStyles.DEFAULT
 
 var _sim: Simulation
 var _sim_tick := 0
@@ -85,7 +88,8 @@ var _glow_layer: Node2D
 var _shock_layer: Node2D
 var _hitbox_layer: Node2D
 var _hud: Label
-var _flame_material := ShaderMaterial.new()
+## One flame material per robot style: same shader, that robot's three colour bands.
+var _flame_materials: Array[ShaderMaterial] = []
 
 
 func _ready() -> void:
@@ -102,7 +106,13 @@ func _ready() -> void:
 # --- Scene -----------------------------------------------------------------------------
 
 func _build_resources() -> void:
-	_flame_material.shader = Flame
+	for style: Dictionary in BombStyles.STYLES:
+		var material := ShaderMaterial.new()
+		material.shader = Flame
+		material.set_shader_parameter("hot_colour", style.hot)
+		material.set_shader_parameter("mid_colour", style.mid)
+		material.set_shader_parameter("rim_colour", style.rim)
+		_flame_materials.append(material)
 	_shake_noise.frequency = 0.9
 
 
@@ -133,7 +143,9 @@ func _build_nodes() -> void:
 	_shock_layer = Node2D.new()
 	_hitbox_layer = Node2D.new()
 	_hitbox_layer.draw.connect(_draw_hitboxes)
-	for child in [_glow_layer, _flame_layer, _toon, _shock_layer, _hitbox_layer]:
+	# Puffs and sparkles sit under the flames: they come out from behind the blast
+	# instead of scribbling over its white middle.
+	for child in [_glow_layer, _toon, _flame_layer, _shock_layer, _hitbox_layer]:
 		_fx_root.add_child(child)
 	var hud_layer := CanvasLayer.new()
 	hud_layer.layer = 2
@@ -232,10 +244,11 @@ func _set_cell(cell: Vector2i, kind: StringName) -> void:
 		_add_block_view(cell, kind)
 
 
-func _place_bomb(cell: Vector2i, bomb_power: int, fuse := 0) -> void:
+func _place_bomb(cell: Vector2i, bomb_power: int, fuse := 0, bomb_robot := -1) -> void:
 	if _sim.board().get(cell) != &"floor" or not _bomb_at(cell).is_empty():
 		return
-	var bomb := {"actor_id": LAB_ACTOR, "cell": cell, "power": bomb_power, "lab_id": _next_id}
+	var bomb := {"actor_id": LAB_ACTOR, "cell": cell, "power": bomb_power, "lab_id": _next_id,
+		"lab_robot": robot if bomb_robot < 0 else bomb_robot % BombStyles.STYLES.size()}
 	if fuse > 0:
 		bomb.fuse = fuse
 	_next_id += 1
@@ -244,6 +257,7 @@ func _place_bomb(cell: Vector2i, bomb_power: int, fuse := 0) -> void:
 	_bombs.append(bomb)
 	var view := BombView.new()
 	view.bomb = bomb
+	view.style = BombStyles.style(bomb.lab_robot)
 	view.cell_size = CELL
 	view.anticipation = toggles.anticipation
 	view.position = _cell_center(cell)
@@ -327,6 +341,7 @@ func _later(delay: float, callable: Callable) -> void:
 
 func _spawn_blast(blast: Dictionary, base_delay: float, broken_cells: Dictionary) -> void:
 	var bomb := _bomb_at(blast.cell)
+	var blast_robot: int = bomb.get("lab_robot", BombStyles.DEFAULT)
 	if not bomb.is_empty():
 		_bombs.erase(bomb)
 		# The bomb stays drawn until its own flame shows, so chained bombs never vanish early.
@@ -334,11 +349,11 @@ func _spawn_blast(blast: Dictionary, base_delay: float, broken_cells: Dictionary
 	for segment in ChainOrder.segments(blast):
 		var distance: int = segment.distance if toggles.stagger else 0
 		var delay := base_delay + distance * ring_step
-		_add_flame(segment, delay)
+		_add_flame(segment, delay, blast_robot)
 		if broken_cells.has(segment.cell):
 			broken_cells.erase(segment.cell)
 			_later(delay, _break_block.bind(segment.cell, blast.cell))
-	_later(base_delay, _burst.bind(blast, ChainOrder.reach(blast)))
+	_later(base_delay, _burst.bind(blast, ChainOrder.reach(blast), BombStyles.style(blast_robot)))
 
 
 func _remove_bomb_view(lab_id: int) -> void:
@@ -351,7 +366,7 @@ func _remove_bomb_view(lab_id: int) -> void:
 const FLAME_LAYERS := [1.0, 0.65, 0.3]
 
 
-func _add_flame(segment: Dictionary, delay: float) -> void:
+func _add_flame(segment: Dictionary, delay: float, flame_robot: int) -> void:
 	var record := {"start": _fx_time + delay, "kind": segment.kind, "seed": randf(), "nodes": [],
 		"cell": segment.cell, "direction": segment.direction, "join_at": INF}
 	# Arms span exactly one cell along the ray (plus 2 % overlap) and leave headroom
@@ -361,7 +376,7 @@ func _add_flame(segment: Dictionary, delay: float) -> void:
 	for layer in (3 if toggles.core else 2):
 		var sprite := Sprite2D.new()
 		sprite.texture = FxTextures.white()
-		sprite.material = _flame_material
+		sprite.material = _flame_materials[flame_robot]
 		sprite.position = _cell_center(segment.cell)
 		sprite.rotation = Vector2(segment.direction).angle()
 		sprite.scale = size * CELL / FxTextures.WHITE_SIZE
@@ -405,23 +420,23 @@ func _update_flames() -> void:
 		index += 1
 
 
-func _burst(blast: Dictionary, reach: int) -> void:
+func _burst(blast: Dictionary, reach: int, style: Dictionary) -> void:
 	var center := _cell_center(blast.cell)
 	if toggles.glow:
-		_flash(center, reach)
+		_flash(center, reach, style)
 	if toggles.bounce:
 		_bounce_around(center, reach)
 	if toggles.shockwave:
-		_shockwave(center, reach)
+		_shockwave(center, reach, style)
 	if toggles.smoke:
-		_toon.puffs(center, 4 + reach, CELL)
+		_toon.puffs(center, 3 + mini(reach, 3), CELL, style.puff, style.puff_line)
 	if toggles.sparkles:
-		_toon.sparkles(center, 4 + reach, CELL)
+		_toon.sparkles(center, 4, CELL, style.shape, style.mid.lerp(style.hot, 0.35), style.rim)
 	if toggles.shake:
 		_trauma = minf(_trauma + 0.16 + 0.03 * reach, 1.0)
 
 
-func _flash(center: Vector2, reach: int) -> void:
+func _flash(center: Vector2, reach: int, style: Dictionary) -> void:
 	var flash := Sprite2D.new()
 	flash.texture = FxTextures.soft_circle()
 	flash.position = center
@@ -432,6 +447,7 @@ func _flash(center: Vector2, reach: int) -> void:
 	fade.tween_callback(flash.queue_free)
 	var glow := Sprite2D.new()
 	glow.texture = FxTextures.fire_glow()
+	glow.self_modulate = style.mid.lerp(style.rim, 0.35)
 	glow.position = center
 	var size := CELL * (2.0 + reach) / 128.0
 	_glow_layer.add_child(glow)
@@ -457,12 +473,13 @@ func _bounce_around(center: Vector2, reach: int) -> void:
 		tween.tween_property(view, "scale", Vector2.ONE, 0.4).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 
 
-func _shockwave(center: Vector2, reach: int) -> void:
+func _shockwave(center: Vector2, reach: int, style: Dictionary) -> void:
 	var ring := Sprite2D.new()
 	ring.texture = FxTextures.white()
 	var material := ShaderMaterial.new()
 	material.shader = ShockwaveRefract if refract_shockwave else ShockwaveRing
 	material.set_shader_parameter("strength", 0.008 + 0.003 * reach)
+	material.set_shader_parameter("ring_colour", style.mid.lerp(style.hot, 0.5))
 	ring.material = material
 	ring.position = center
 	ring.scale = Vector2.ONE * CELL * (2.0 * reach + 1.5) / FxTextures.WHITE_SIZE
@@ -486,7 +503,8 @@ func _break_block(cell: Vector2i, origin: Vector2i) -> void:
 	if toggles.debris:
 		_debris.burst(_cell_center(cell), Vector2(cell - origin), view.debris_colours(), CELL)
 	if toggles.smoke:
-		_toon.puffs(_cell_center(cell), 3, CELL)
+		var neutral := BombStyles.style(BombStyles.DEFAULT)
+		_toon.puffs(_cell_center(cell), 3, CELL, neutral.puff, neutral.puff_line)
 
 
 func _start_hitstop(count: int) -> void:
@@ -522,7 +540,7 @@ func _preset_chain() -> void:
 	for x in range(BOARD_SIZE.x - 4, 0, -2):
 		path.append(Vector2i(x, BOARD_SIZE.y - 2))
 	for index in path.size():
-		_place_bomb(path[index], 2, 40 if index == 0 else NEVER)
+		_place_bomb(path[index], 2, 40 if index == 0 else NEVER, index)
 
 
 ## A dense cluster that goes off almost at once: stresses hit-stop, the light pool and
@@ -553,7 +571,21 @@ func _preset_random() -> void:
 	floors.sort()
 	for index in 18:
 		var cell := floors[rng.randi_range(0, floors.size() - 1)]
-		_place_bomb(cell, rng.randi_range(1, 4), rng.randi_range(30, 140))
+		_place_bomb(cell, rng.randi_range(1, 4), rng.randi_range(30, 140), rng.randi_range(0, 7))
+
+
+## One bomb per robot on an open floor, all on the same fuse: the eight effects side by
+## side, each with a crate to break.
+func _preset_robots() -> void:
+	_reset_board(false)
+	for y in range(1, BOARD_SIZE.y - 1):
+		for x in range(1, BOARD_SIZE.x - 1):
+			_set_cell(Vector2i(x, y), &"floor")
+	for index in BombStyles.STYLES.size():
+		var row := index / 3
+		var cell := Vector2i((5 if row == 2 else 3) + (index % 3) * 4, 2 + row * 4)
+		_set_cell(cell + Vector2i(0, 1), &"soft")
+		_place_bomb(cell, 1, 40, index)
 
 
 func _detonate_all() -> void:
@@ -589,6 +621,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			KEY_C: _preset_chain()
 			KEY_V: _preset_cluster()
 			KEY_G: _preset_random()
+			KEY_O: _preset_robots()
+			KEY_T: robot = (robot + 1) % BombStyles.STYLES.size()
 			KEY_SPACE: _detonate_all()
 			KEY_BRACKETLEFT: power = maxi(power - 1, 1)
 			KEY_BRACKETRIGHT: power = mini(power + 1, 10)
@@ -609,7 +643,8 @@ func _update_hud() -> void:
 		parts.append("%s %s%s" % [names[keycode], "+" if toggles[key] else "-", key])
 	_hud.text = "Explosion lab  |  click bomb  right-click crate  wheel/[ ] power %d  space detonate all  F shockwave: %s\n" % [
 		power, "refract" if refract_shockwave else "ring"] \
-		+ "C chain  V cluster  G random  R reset  P slow-mo %s  -/= chain step %.0f ms  ,/. ring step %.0f ms\n" % [
+		+ "T robot: %s (%s)  O all robots  C chain  V cluster  G random  R reset  P slow-mo %s  -/= chain step %.0f ms  ,/. ring step %.0f ms\n" % [
+			BombStyles.style(robot).robot, BombStyles.style(robot).theme,
 			"on" if lab_speed < 1.0 else "off", chain_step * 1000.0, ring_step * 1000.0] \
 		+ "  ".join(parts)
 
@@ -635,6 +670,7 @@ func _parse_args() -> void:
 	match preset:
 		"cluster": _preset_cluster()
 		"random": _preset_random()
+		"robots": _preset_robots()
 		_: _preset_chain()
 	_capture_frames.assign([1.0, 1.17, 1.2, 1.25, 1.32, 1.45, 1.6, 1.8, 2.1, 2.6, 3.4])
 
