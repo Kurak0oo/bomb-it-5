@@ -35,9 +35,9 @@ class RoundsTest(unittest.TestCase):
         own, old_sets, old_modes = today()
         self.assertEqual(set_rounds(own), old_sets)
         self.assertEqual(mode_rounds(own), old_modes)
-        # The manifests are written in these orders: keep today's sets/modes order.
-        self.assertEqual(list(set_rounds(own)), list(old_sets))
-        self.assertEqual(list(mode_rounds(own)), list(old_modes))
+        # The manifests are written in these orders: the group ids, sorted.
+        self.assertEqual(list(set_rounds(own)), sorted(SET_IDS))
+        self.assertEqual(list(mode_rounds(own)), sorted(MODE_IDS))
 
     def test_all_rounds_is_the_boards_own_plus_every_entry(self):
         own, _, _ = today()
@@ -58,6 +58,17 @@ class RoundsTest(unittest.TestCase):
         self.assertEqual(len(all_rounds(grown)), 1 + 9)
         self.assertEqual(set_rounds(grown), old_sets)
         self.assertEqual(mode_rounds(grown), old_modes)
+
+    def test_inserting_birthday_party_kill_keeps_the_mode_rounds_order(self):
+        # `birthday_party/kill` sorts first; a manifest written without `sort_keys` may list
+        # it before the screen's own modes, but the mode order and picks must not follow it.
+        own, _, old_modes = today()
+        rounds = {'birthday_party/kill': entry('birthday_party', 'kill')}
+        rounds.update(own['rounds'])
+        grown = board(rounds)
+        self.assertEqual(list(mode_rounds(grown)), sorted(MODE_IDS))
+        self.assertEqual(mode_rounds(grown), old_modes)
+        self.assertIs(mode_rounds(grown)['kill'], old_modes['kill'])
 
     def test_a_set_without_an_arcade_round_still_gets_its_first_sorted_round(self):
         pac_man = entry('zoo', 'pac_man')
