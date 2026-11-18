@@ -771,3 +771,34 @@ recorded age; the NullWeapon item stays hidden on the player's spawn for the who
 original may remove it when the player leaves); the loading screen's mode frames (ported, art
 present) are not captured per mode; the ghosts catching the player and Pac-Man's win are not
 recorded.
+
+Modes on Zoo, 2026-11-18 (checkpoint 5, owner to review): Kill, Green Zone and Pac-Man on the Zoo
+stage set, and one table of recorded rounds so the other four sets need no further code.
+- Reference player rebuilt (`tools/reference_player/build.sh`; probe b87d797f): the old binary
+  failed with a duplicate display-list path. Re-recording `gameplay-kill-start` with it matches
+  the committed golden in every compared field; only Ruffle's per-run `instanceNNNN` names differ.
+- `board.rounds` (scenes/swf/game.json, layout.py `rounds`) replaces `board.sets` and
+  `board.modes`: every recorded round but the screen's own (Cinema, Arcade: `board` itself),
+  keyed `<set>/<mode>`, each with `set` and `mode`, `floor` exactly when the set is not the
+  screen's. `App.round_as_recorded`, `GameBoard` (a missing `<set>/<mode>` falls back to
+  `<set>/arcade`, then `board`) and record_screen.py (`all_rounds` for the robots' looks,
+  `set_rounds` for set art from the set's Arcade round, `mode_rounds` for mode art from the
+  mode's Cinema round; ids in sorted order) read it. Checked in `tests/game_board_check.gd`,
+  `layout_check`, `flow_scene_check`, `tools/convert/test_rounds.py`.
+- Cases `gameplay-zoo-kill-start`, `gameplay-zoo-greenzone-start`, `gameplay-zoo-pacman-start`:
+  each mode's Cinema case with gameplay-zoo-start's stage click (Zoo, `337.35 269.48`), seed 42,
+  each with its `math_random.json`. Art: `record_screen.py shots <case>` and `actors
+  gameplay-cinema-start --parts robots` (the new rounds' looks); no new set or mode art.
+- Results: zoo-kill-start nodes 377/377, SSIM 0.940 (ceiling 0.938); zoo-greenzone-start
+  326/326, 0.947 (0.946); zoo-pacman-start 704/704, 0.936 (ceiling 0.938, need 0.918); ΔE ≤ 5.6.
+  All 39 cases (`tools/compare.sh all`) and tools/run_checks.sh (27 suites) pass.
+Known gaps: zoo-pacman-start is 0.002 under its 3×→1× ceiling (passes its floor); layout_check
+rolls only the Arcade rounds from their draws, not the mode rounds; gameplay-greenzone-start and
+gameplay-pacman-start have no local reference capture on this machine, so their pixels were not
+re-scored here (nodes pass).
+Next sets (Candy Factory, Magic Library, Luxury Stores, Birthday Party), per set: three cases
+(the set's stage click from its `gameplay-<set>-start`), `compare.py record` and `round_draws.py`
+for each, three layout.py `rounds` entries (the set's `begin_num`), then `record_screen.py shots`
+per case and one `actors gameplay-cinema-start --parts robots`. Cases and recordings can run in
+parallel worktrees (copy each case's `.scratch/compare/<case>/reference` back); layout.py and the
+art passes rewrite game.json and the shared pack, so they run once, in sequence, on one checkout.
