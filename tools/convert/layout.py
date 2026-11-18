@@ -218,8 +218,12 @@ SCREENS = {
                  # The other game modes' rounds on Cinema (the session's mode ids): its boxes,
                  # robots and what the mode's `mapLoadOver` made (KillMode: nothing;
                  # GreenZoneMode: a Flag and two pickups; PacManMode: four items and the coins).
+                 # Zoo's recorded mode rounds are the same modes on the zoo set (`beginNum` 73).
                  'rounds': [
                      {'set': 'zoo', 'mode': 'arcade', 'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
+                     {'set': 'zoo', 'mode': 'kill', 'golden': ('gameplay-zoo-kill-start', 'zoo-kill-start'), 'begin_num': 73},
+                     {'set': 'zoo', 'mode': 'green_zone', 'golden': ('gameplay-zoo-greenzone-start', 'zoo-greenzone-start'), 'begin_num': 73},
+                     {'set': 'zoo', 'mode': 'pac_man', 'golden': ('gameplay-zoo-pacman-start', 'zoo-pacman-start'), 'begin_num': 73},
                      {'set': 'candy_factory', 'mode': 'arcade', 'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
                      {'set': 'luxury_stores', 'mode': 'arcade', 'golden': ('gameplay-luxury-start', 'luxury-start'), 'begin_num': 97},
                      {'set': 'magic_library', 'mode': 'arcade', 'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121},
