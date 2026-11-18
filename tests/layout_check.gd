@@ -107,17 +107,26 @@ func _tile_art_follows_the_round_choices() -> void:
 	_expect(ring_varies.size() > 1, "the outer ring's art changes with the round's first fixed choice")
 
 
-## Each recorded round's board (scenes/swf/game.json `board` and `board.sets`), rolled again
+## Each recorded round's board (scenes/swf/game.json `board` and `board.rounds`), rolled again
 ## from its seed's `Math.random` at the draw `AbstractGameMode.initMap` starts on
 ## (tests/goldens/<case>/math_random.json): the pool's Vehicle draws, then `Layouts.roll_set`
 ## must take the original's template, every box and its frame, and stop on the draw before
 ## `AbstractPlayer.set scoreData`.
 func _rolls_follow_the_original_draws() -> void:
 	var board: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://scenes/swf/game.json")).board
-	var rounds := {StringName(board.set): board}
-	for set_id in board.sets: rounds[StringName(set_id)] = board.sets[set_id]
-	for set_id in rounds:
-		var entry: Dictionary = rounds[set_id]
+	_expect(board.has("rounds"), "the recorded board has a board.rounds table")
+	var rounds := {"%s/arcade" % String(board.set): board}
+	for key in board.get("rounds", {}):
+		rounds[String(key)] = board.rounds[key]
+	for key in rounds:
+		var entry: Dictionary = rounds[key]
+		var set_id := StringName(String(key).get_slice("/", 0))
+		var mode := String(key).get_slice("/", 1)
+		# Mode rounds' `math_random.json` has no `AbstractPlayer/set scoreData()` caller (their
+		# `mapLoadOver` draws follow `createAIPlayer`), and Pac-Man picks its layout from
+		# `MapMaster/init()`: replaying those needs mode-specific draw bookkeeping the loop
+		# below does not have, so it rolls the screen's own round and the arcade rounds.
+		if mode != "arcade": continue
 		var golden := String(entry.get("golden", "tests/goldens/gameplay-cinema-start/cinema-start.json"))
 		var record: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://" + golden.get_base_dir().path_join("math_random.json")))
 		var first_pool := -1
@@ -131,9 +140,9 @@ func _rolls_follow_the_original_draws() -> void:
 		var rolled: Dictionary = Layouts.roll_set(set_id, false, 0.6, random)
 		var expected: Dictionary = Layouts.recorded(String(entry.template), entry.boxes)
 		_expect(rolled.layout == expected.layout and rolled.cells == expected.cells and rolled.variants == expected.variants,
-			"%s: seed %d rolls the recorded round's template, boxes and frames" % [set_id, int(record.seed)])
+			"%s: seed %d rolls the recorded round's template, boxes and frames" % [key, int(record.seed)])
 		_expect(random.next_raw() == int(record.raw[score_from - 1]),
-			"%s: the roll takes the original's draws %d-%d" % [set_id, first_pool + record.pool_draws.size(), score_from - 1])
+			"%s: the roll takes the original's draws %d-%d" % [key, first_pool + record.pool_draws.size(), score_from - 1])
 
 
 func _soft_ratio(name: String, chance: float) -> float:

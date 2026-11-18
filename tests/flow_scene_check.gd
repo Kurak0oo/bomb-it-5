@@ -192,12 +192,14 @@ func _run() -> void:
 
 	# A stage set whose board art is not in the pack: the placeholder board goes over the
 	# floor art and under the row layers; the effects layer stays over every row. (The first
-	# set without a `board.sets` entry or without its pack, so no art. Once every set is
+	# set without a `board.rounds` entry or without its pack, so no art. Once every set is
 	# recorded and its pack is here, there is none: the effects layer is checked on Zoo.)
+	var rounds: Dictionary = SwfScreen.layout_of(&"game").board.get("rounds", {})
+	_expect(not rounds.is_empty(), "the recorded board has a non-empty board.rounds table")
 	var bare: StringName = &""
 	for id: StringName in StageSets.ORDER:
 		if id == &"cinema" or bare != &"": continue
-		if not SwfScreen.layout_of(&"game").board.get("sets", {}).has(String(id)) or not FileAccess.file_exists(GameBoard.SET_PACK % id):
+		if not rounds.values().any(func(entry): return StringName(entry.get("set", "")) == id) or not FileAccess.file_exists(GameBoard.SET_PACK % id):
 			bare = id
 	app.session.mode = &"arcade"
 	app.session.stage = bare if bare != &"" else &"zoo"
