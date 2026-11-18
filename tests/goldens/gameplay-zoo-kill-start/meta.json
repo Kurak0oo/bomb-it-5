@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-zoo-kill-start",
+ "case_sha256": "d8515903ae9e6f368c73425053f50dbfe86e5aafd4ad120e63fd70fcf289c44c",
+ "fps": 35.0,
+ "frames": {
+  "zoo-kill-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "b87d797f8cac147eeda3cc342fbbb29c41af680d7b282d193f46579dc4a61a4f",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}
