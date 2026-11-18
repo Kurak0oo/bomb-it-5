@@ -31,8 +31,9 @@ extends RefCounted
 ## rendered on a recorded box and placed on this cell.
 ##
 ## Stage sets: the layout's `board` is the screen's own set (`board.set`, Cinema) and
-## `board.sets.<set>` another set's round on the same board geometry (its boxes, features,
-## robots, floor). A set's art is the screen's pack for its own set, and
+## `board.rounds["<set>/<mode>"]` another round on the same board geometry (its boxes,
+## features, robots, floor; the screen's own set has no floor there). A set's art is the
+## screen's pack for its own set, and
 ## `original/screens/game/sets/<set>/manifest.json` (record_screen.py sets) for another: the
 ## floor (`AbstractMapSet.init`'s BackGround_<Set> bitmap, on the container's first child),
 ## its tiles and features, and its features' own frames (`Crocodile`). A set whose art is
@@ -66,8 +67,9 @@ const ROUND_START_FLAG_AGE := 4
 
 var _screen: Node2D
 var _board: Dictionary
-## The stage set shown (StageSets id), its board fields (`board` with `board.sets.<set>` over
-## it) and its art (tiles, features, floor `pieces`, features' `played` and `frames`).
+## The stage set shown (StageSets id), its board fields (`board` with its recorded
+## `board.rounds["<set>/<mode>"]` over it) and its art (tiles, features, floor `pieces`,
+## features' `played` and `frames`).
 var set_id: StringName
 var set_data: Dictionary
 var _art: Dictionary
@@ -98,12 +100,17 @@ func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"", recor
 	_board = board
 	set_id = stage_set if stage_set != &"" else StringName(board.get("set", "cinema"))
 	set_data = board.duplicate()
-	set_data.erase("sets")
-	set_data.erase("modes")
-	set_data.merge(board.get("sets", {}).get(String(set_id), {}), true)
-	# A recorded round of another game mode on the screen's own set (`board.modes.<mode>`).
-	if recorded_mode != &"":
-		set_data.merge(board.get("modes", {}).get(String(recorded_mode), {}), true)
+	set_data.erase("rounds")
+	# The recorded round: `<set>/<mode>` (`&""` is Arcade). The screen's own round is `board`
+	# itself, without a `rounds` entry; a missing mode entry falls back to the set's Arcade
+	# round, then to `board` (merging the set then the mode, as before).
+	var mode: StringName = recorded_mode if recorded_mode != &"" else &"arcade"
+	var rounds: Dictionary = board.get("rounds", {})
+	var round_key := "%s/%s" % [set_id, mode]
+	if rounds.has(round_key):
+		set_data.merge(rounds[round_key], true)
+	elif String(mode) != "arcade" and rounds.has("%s/arcade" % set_id):
+		set_data.merge(rounds["%s/arcade" % set_id], true)
 	_art = art_of(screen, board, set_id)
 	var file := ProjectSettings.globalize_path("res://original/screens/game/actors/actors.json")
 	if FileAccess.file_exists(file):
@@ -130,11 +137,13 @@ static func art_of(screen: Node2D, board: Dictionary, stage_set: StringName) -> 
 	if String(stage_set) == String(board.get("set", "cinema")):
 		var own: Dictionary = screen.pack() if screen != null else {}
 		return own if own.has("tiles") else {}
-	if not board.get("sets", {}).has(String(stage_set)): return {}
+	var set_rounds: Array = board.get("rounds", {}).values().filter(
+		func(entry): return StringName(entry.get("set", "")) == stage_set)
+	if set_rounds.is_empty(): return {}
 	var file := SET_PACK % stage_set
 	if not FileAccess.file_exists(file): return {}
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(file))
-	if manifest.get("golden_sha256", "") != board.sets[String(stage_set)].golden_sha256:
+	if not set_rounds.any(func(entry): return String(entry.get("golden_sha256", "")) == String(manifest.get("golden_sha256", ""))):
 		push_warning("original pack for the %s board was rendered from another golden; run record_screen.py sets" % stage_set)
 	return manifest
 
