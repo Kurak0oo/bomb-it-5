@@ -90,7 +90,8 @@ var _art := false
 var _page_fill := Color("214c60")
 ## The comparison loop's recorded round (`round_as_recorded`): the next level starts on it.
 var recorded_round: Dictionary = {}
-## The game mode whose recorded round (`board.modes.<mode>`) the current level started on.
+## The game mode whose recorded round (`board.rounds["<set>/<mode>"]`) the current level
+## started on.
 var _recorded_mode: StringName = &""
 ## The generated gameplay screen of the current round (its pause screen goes over it).
 var _game_swf: Node2D
@@ -405,34 +406,28 @@ func start_session() -> void:
 ## not reproduce the original's `Math.random` draws before the map, so the next level starts
 ## on the round the gameplay screen's capture CAPTURE recorded (its board, its robots),
 ## from that screen's layout (scenes/swf/game.json `board`, tools/convert/layout.py): the
-## screen's own capture, or another stage set's (`board.sets.<set>`, its fields over `board`).
+## screen's own capture, or another recorded round (`board.rounds["<set>/<mode>"]`, its
+## fields over `board`).
 func round_as_recorded(capture: String) -> void:
 	var screen_layout := SwfScreen.layout_of(&"game")
 	var golden := String(screen_layout.source.golden)
 	recorded_round = screen_layout.board.duplicate()
-	recorded_round.erase("sets")
-	recorded_round.erase("modes")
+	recorded_round.erase("rounds")
 	if not golden.ends_with("/%s.json" % capture):
-		var found := false
-		for set_id in screen_layout.board.get("sets", {}):
-			var entry: Dictionary = screen_layout.board.sets[set_id]
-			if String(entry.golden).ends_with("/%s.json" % capture):
-				recorded_round.merge(entry, true)
-				recorded_round.set = set_id
-				golden = entry.golden
-				found = true
-		# Another game mode's round on the screen's own set (`board.modes.<mode>`).
-		for mode in screen_layout.board.get("modes", {}):
-			var entry: Dictionary = screen_layout.board.modes[mode]
-			if String(entry.golden).ends_with("/%s.json" % capture):
-				recorded_round.merge(entry, true)
-				recorded_round.mode = mode
-				golden = entry.golden
-				found = true
-		if not found:
+		var entry := {}
+		for key in screen_layout.board.get("rounds", {}):
+			var candidate: Dictionary = screen_layout.board.rounds[key]
+			if String(candidate.golden).ends_with("/%s.json" % capture):
+				entry = candidate
+				break
+		if entry.is_empty():
 			push_error("the gameplay screen has no board from capture %s" % capture)
 			recorded_round = {}
 			return
+		recorded_round.merge(entry, true)
+		recorded_round.set = entry.set
+		recorded_round.mode = entry.mode
+		golden = entry.golden
 	# Where the original's Math.random stood then (tools/compare/round_draws.py).
 	var draws := golden.get_base_dir().path_join("math_random.json")
 	if FileAccess.file_exists("res://" + draws):

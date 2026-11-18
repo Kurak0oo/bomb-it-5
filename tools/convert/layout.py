@@ -207,24 +207,26 @@ SCREENS = {
                  # frames beginNum .. beginNum + 23 (the wall and centre at +23).
                  'set': 'cinema',
                  'begin_num': 49,
-                 # Other stage sets, each from its own round's first frame: the same screen and
-                 # board geometry, its own floor (`AbstractMapSet.init`'s BackGround_<Set>
-                 # bitmap, the container's children before the rows), boxes and features
-                 # (`_set_board`; art by record_screen.py `sets`).
+                 # The other rounds, each from its own round's first frame, keyed `<set>/<mode>`
+                 # in the layout (`board.rounds`): the same screen and board geometry, its own
+                 # floor (`AbstractMapSet.init`'s BackGround_<Set> bitmap, the container's
+                 # children before the rows), boxes and features (`_set_board`; art by
+                 # record_screen.py `sets`). A round on the screen's own set keeps no floor:
+                 # its own pieces show the art (`floor` only when the set differs).
                  # ZooMapData: `beginNum` 73; CandyFactoryMapData: 25; LuxuryStoresMapData: 97;
                  # MagicLibraryMapData: 121; BirthdayPartyMapData: 1.
-                 'sets': {'zoo': {'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
-                          'candy_factory': {'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
-                          'luxury_stores': {'golden': ('gameplay-luxury-start', 'luxury-start'), 'begin_num': 97},
-                          'magic_library': {'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121},
-                          'birthday_party': {'golden': ('gameplay-birthday-start', 'birthday-start'), 'begin_num': 1}},
-                 # The other game modes' rounds on the screen's own set (Cinema), each from its
-                 # own round's first frame (`board.modes.<mode>`, the session's mode ids): its
-                 # boxes, robots and what the mode's `mapLoadOver` made (KillMode: nothing;
+                 # The other game modes' rounds on Cinema (the session's mode ids): its boxes,
+                 # robots and what the mode's `mapLoadOver` made (KillMode: nothing;
                  # GreenZoneMode: a Flag and two pickups; PacManMode: four items and the coins).
-                 'modes': {'kill': {'golden': ('gameplay-kill-start', 'kill-start'), 'begin_num': 49},
-                           'green_zone': {'golden': ('gameplay-greenzone-start', 'greenzone-start'), 'begin_num': 49},
-                           'pac_man': {'golden': ('gameplay-pacman-start', 'pacman-start'), 'begin_num': 49}}},
+                 'rounds': [
+                     {'set': 'zoo', 'mode': 'arcade', 'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
+                     {'set': 'candy_factory', 'mode': 'arcade', 'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
+                     {'set': 'luxury_stores', 'mode': 'arcade', 'golden': ('gameplay-luxury-start', 'luxury-start'), 'begin_num': 97},
+                     {'set': 'magic_library', 'mode': 'arcade', 'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121},
+                     {'set': 'birthday_party', 'mode': 'arcade', 'golden': ('gameplay-birthday-start', 'birthday-start'), 'begin_num': 1},
+                     {'set': 'cinema', 'mode': 'kill', 'golden': ('gameplay-kill-start', 'kill-start'), 'begin_num': 49},
+                     {'set': 'cinema', 'mode': 'green_zone', 'golden': ('gameplay-greenzone-start', 'greenzone-start'), 'begin_num': 49},
+                     {'set': 'cinema', 'mode': 'pac_man', 'golden': ('gameplay-pacman-start', 'pacman-start'), 'begin_num': 49}]},
              'interactive': {'pause': 'pause'},
              'widgets': tuple(f'robotUI{i}' for i in range(8)) + ('faceMc', 'pause'),
              'live_text': ('currentLevel', 'totalLevel', 'time', 'lifeTf', 'bombTf', 'powerTf', 'speedTf',
@@ -413,12 +415,18 @@ def build(name, spec):
     if spec.get('board'):
         nodes, board = _split_board(name, spec, case, capture, nodes, screen_root)
         board['set'] = spec['board']['set']
-        board['sets'] = {set_id: _set_board(name, spec, set_id, how, screen_root, board, nodes)
-                         for set_id, how in spec['board'].get('sets', {}).items()}
-        board['modes'] = {mode: _set_board(name, spec, mode, how, screen_root, board, nodes)
-                          for mode, how in spec['board'].get('modes', {}).items()}
-        for mode, entry in board['modes'].items():
-            del entry['floor']  # the screen's own set: its own floor
+        # Each round is keyed `<set>/<mode>`; a round on the screen's own set keeps no floor
+        # (its own pieces show the art). Adding a round later is one entry in the list.
+        rounds = {}
+        for how in spec['board'].get('rounds', []):
+            set_id, mode = how['set'], how['mode']
+            entry = _set_board(name, spec, f'{set_id}/{mode}', how, screen_root, board, nodes)
+            entry['set'] = set_id
+            entry['mode'] = mode
+            if set_id == board['set']:
+                del entry['floor']
+            rounds[f'{set_id}/{mode}'] = entry
+        board['rounds'] = rounds
     by_path = {n['path']: n for n in nodes}
 
     # Parts that are off the display list at the capture (a dropdown added on demand, the
@@ -935,7 +943,7 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     return keep, board
 
 
-# What a stage set's round has of its own on the gameplay screen (`board.sets.<set>`); the
+# What a set's round has of its own on the gameplay screen (`board.rounds`); the
 # rest of `board` (container, rows, layers, grid, excursion) is the screen's and every set's.
 SET_FIELDS = ('begin_num', 'template', 'boxes', 'features', 'dynamic', 'items', 'mode_objects', 'robots', 'looks', 'robot_ui_slots',
               'round_start_after_input')
