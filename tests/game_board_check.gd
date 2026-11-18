@@ -4,11 +4,10 @@ extends SceneTree
 ## (scenes/swf/game.json `board`, read back by `Layouts.recorded`), must lay out the same
 ## boxes, frames, kinds, display order and features as the original's display list, and
 ## place each cell where the original placed its Sprite. (A hold cell's Sprite has no clip,
-## so no frame to compare.) Likewise for every other stage set recorded on the screen
-## (`board.sets`: Zoo, its crocodiles as features; Candy Factory, its machine and belt;
-## Luxury Stores, no features and a shown centre; Magic Library, its spellbook; Birthday
-## Party, its toy hands), and every other game mode recorded on the screen's own set
-## (`board.modes`: Kill, Green Zone, Pac-Man, on Cinema).
+## so no frame to compare.) Likewise for every other recorded round in `board.rounds`
+## (`<set>/<mode>`: another stage set's round, e.g. Zoo and its crocodiles, Candy Factory's
+## machine and belt, Luxury Stores' shown centre, Magic Library's spellbook, Birthday
+## Party's toy hands; another game mode's round on Cinema, e.g. Kill, Green Zone, Pac-Man).
 
 const GameBoard = preload("res://scripts/ui/game_board.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
@@ -19,12 +18,24 @@ var checks := 0
 
 func _initialize() -> void:
 	var layout := SwfScreen.layout_of(&"game")
-	# The screen's own stage set and every other set recorded on it (`board.sets`).
-	_check_set(layout, StringName(layout.board.set))
-	for set_id in layout.board.get("sets", {}):
-		_check_set(layout, StringName(set_id))
-	for mode in layout.board.get("modes", {}):
-		_check_set(layout, StringName(layout.board.set), StringName(mode))
+	var board: Dictionary = layout.board
+	var rounds: Dictionary = board.get("rounds", {})
+	# The screen's own round (`board` itself, Cinema/Arcade) and every other recorded round,
+	# keyed "<set>/<mode>" in `board.rounds`.
+	_check_set(layout, StringName(board.set))
+	_expect(not board.has("sets") and not board.has("modes"), "the recorded board has no `sets` or `modes` table")
+	_expect(not rounds.is_empty(), "the recorded board has a non-empty `rounds` table")
+	for key in rounds:
+		var entry: Dictionary = rounds[key]
+		_expect(String(key) == "%s/%s" % [String(entry.set), String(entry.mode)],
+			"rounds entry %s is keyed by its set and mode" % key)
+		_expect(entry.has("floor") == (String(entry.set) != String(board.set)),
+			"rounds entry %s has a floor exactly when its set is not the screen's own" % key)
+	for key in rounds:
+		var entry: Dictionary = rounds[key]
+		# GameBoard.new: mode `&""` is Arcade; another mode's id picks its recorded round.
+		var mode := &"" if String(entry.mode) == "arcade" else StringName(entry.mode)
+		_check_set(layout, StringName(entry.set), mode)
 	_expect(GameBoard._child_path("/a", 0, 1) == "/a/@0" and GameBoard._child_path("/a", 2, 5) == "/a/@0#2",
 		"an only child is `@0`, siblings `@0#k`")
 	print("%s: %d game board checks" % ["PASS" if failures == 0 else "FAIL", checks])
