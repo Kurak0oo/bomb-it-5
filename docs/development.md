@@ -440,6 +440,8 @@ Play-test fixes, 2026-11-06:
   `@0` when it is alone again (also with a pause during the end cartoon). Checked in
   `tests/flow_scene_check.gd`.
 
+Checkpoint 4 is done: accepted by the owner on 2026-11-18.
+
 Checkpoint 5 (each mode × stage set) started 2026-11-06 with the stage sets' board art.
 
 Zoo slice, 2026-11-06 (owner to review):
