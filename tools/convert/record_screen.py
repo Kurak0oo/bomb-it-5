@@ -19,7 +19,7 @@ panels (after art): the HUD panels of robots the gameplay capture lacks, from th
 case tools/convert/cases/hud-robots.json.
 
 sets (after art): each other stage set's floor, tiles and features on the gameplay screen
-(layout `board.sets`), from that set's own round (e.g. gameplay-zoo-start), into
+(layout `board.rounds`), from that set's own round (e.g. gameplay-zoo-start), into
 original/screens/game/sets/<set>/; the CASE argument is ignored (use game's: gameplay-cinema-start);
 `--sets candy_factory` renders only those sets.
 
@@ -76,6 +76,58 @@ def sha256(path):
 def default_player():
     base = ROOT / '.scratch' / 'edition-5-research' / 'ruffle-runtime' / 'target' / 'ci' / 'probe'
     return base.with_suffix('.exe') if platform.system() == 'Windows' else base
+
+
+def all_rounds(board):
+    """Every round of a screen's board: its own round, then each `board.rounds` entry.
+
+    `board.rounds` is keyed `<set>/<mode>` and holds the other sets' Arcade rounds and the
+    other modes' rounds; `board` itself is the screen's own round (Cinema, Arcade)."""
+    return [board] + list(board['rounds'].values())
+
+
+def _rounds_by(board, field):
+    """`board.rounds` grouped by `field` (`set` or `mode`), each group in sorted key order,
+    plus the groups' first-appearance order in `board.rounds` (the authoring order, which
+    keeps the passes' manifest order as it was with `board.sets` and `board.modes`)."""
+    groups = {}
+    for key in sorted(board['rounds']):
+        entry = board['rounds'][key]
+        groups.setdefault(entry[field], []).append(entry)
+    order, seen = [], set()
+    for entry in board['rounds'].values():
+        if entry[field] not in seen:
+            seen.add(entry[field])
+            order.append(entry[field])
+    return groups, order
+
+
+def set_rounds(board):
+    """The one round each other stage set's floor, tiles and features are rendered from:
+    the set's Arcade round if present, else its first round in sorted key order. Returns
+    `{set id: entry}`, excluding the screen's own set."""
+    groups, order = _rounds_by(board, 'set')
+    rounds = {}
+    for set_id in order:
+        if set_id == board['set']:
+            continue
+        entries = groups[set_id]
+        rounds[set_id] = next((e for e in entries if e['mode'] == 'arcade'), entries[0])
+    return rounds
+
+
+def mode_rounds(board):
+    """The one round each non-Arcade mode's objects are rendered from: the mode's round on
+    the screen's own set if present, else its first round in sorted key order. Returns
+    `{mode id: entry}`."""
+    groups, order = _rounds_by(board, 'mode')
+    rounds = {}
+    for mode in order:
+        if mode == 'arcade':
+            continue
+        entries = groups[mode]
+        rounds[mode] = next((e for e in entries if e['set'] == board['set']), entries[0])
+    return rounds
 
 
 class Player:
@@ -1292,9 +1344,9 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
     x, y = board['excursion'][0] + 7 * board['grid'], board['excursion'][1] + 6 * board['grid']
     at = [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
     looks = {r: {(0, 0)} for r in range(8)}
-    # The recorded rounds' looks: the screen's own, each other stage set's (`board.sets`) and
-    # each other game mode's (`board.modes`).
-    for own in [board] + list(board.get('sets', {}).values()) + list(board.get('modes', {}).values()):
+    # Every recorded round's looks: the screen's own, each other stage set's and each other
+    # game mode's (`board.rounds`).
+    for own in all_rounds(board):
         for robot, look in zip(own['robots'], own.get('looks', [])):
             looks[robot].add(tuple(max(0, v) for v in look))  # -1: the clip has none; its default
     p = Player(player_path, swf)
@@ -1437,7 +1489,7 @@ STOPPED_CLASSES = {'candy_factory': ('Art_Prop_Disappear',)}
 
 
 def record_sets(_case_name, player_path, swf, only=None):
-    """Each other stage set's board art on the gameplay screen (layout `board.sets`, after
+    """Each other stage set's board art on the gameplay screen (layout `board.rounds`, after
     art), into original/screens/game/sets/<set>/manifest.json, from that set's own round's
     first frame (its case and capture, e.g. gameplay-zoo-start):
 
@@ -1457,17 +1509,17 @@ def record_sets(_case_name, player_path, swf, only=None):
     layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
     board = layout['board']
     pieces_of_screen = {n['path'] for n in layout['nodes'] if n['role'] == 'piece'}
-    for set_id, entry in board.get('sets', {}).items():
+    for set_id, entry in set_rounds(board).items():
         if only and set_id not in only:
             continue
         golden = Path(entry['golden'])
         case_name, capture = golden.parent.name, golden.stem
         case = load_case(case_name)
         merged = dict(board, **{k: entry[k] for k in layouts.SET_FIELDS})
-        target = PACK / 'game' / 'sets' / set_id
+        prefix = f'sets/{set_id}/'
+        target = PACK / 'game' / prefix
         shutil.rmtree(target, ignore_errors=True)
         target.mkdir(parents=True)
-        prefix = f'sets/{set_id}/'
         out = {'schema': 'bombit5-original-set-v1', 'set': set_id, 'golden_sha256': entry['golden_sha256'],
                'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path), 'scale': SCALE,
                'pieces': {}, 'played': {}, 'frames': {}, 'stopped': {}}
@@ -1653,7 +1705,7 @@ FLAG_GOT_IT_FRAMES = 40
 
 
 def record_modes(_case_name, player_path, swf):
-    """The game modes' own board objects on the gameplay screen (layout `board.modes`, after
+    """The game modes' own board objects on the gameplay screen (layout `board.rounds`, after
     art), into original/screens/game/modes/manifest.json:
 
     - `flag` (GreenZoneMode.mapLoadOver: `new Flag(game, x, y)`; `Flag.setMc`: a `_brick5`
@@ -1673,11 +1725,13 @@ def record_modes(_case_name, player_path, swf):
     Also the player's own 3× frame of each mode's capture (the comparison's resampling ceiling)."""
     layout = json.loads((ROOT / 'scenes' / 'swf' / 'game.json').read_text(encoding='utf-8'))
     board = layout['board']
-    target = PACK / 'game' / 'modes'
+    modes = mode_rounds(board)
+    prefix = 'modes/'
+    target = PACK / 'game' / prefix
     shutil.rmtree(target, ignore_errors=True)
     target.mkdir(parents=True)
     out = {'schema': 'bombit5-original-modes-v1', 'swf_sha256': sha256(swf), 'player_sha256': sha256(player_path),
-           'scale': SCALE, 'goldens': {mode: e['golden_sha256'] for mode, e in board.get('modes', {}).items()},
+           'scale': SCALE, 'goldens': {mode: e['golden_sha256'] for mode, e in modes.items()},
            'flag': {}, 'progress': {}, 'items': {}}
     seen = {}
     tmp = Path(tempfile.mkdtemp(prefix='bombit5-modes-'))
@@ -1688,7 +1742,7 @@ def record_modes(_case_name, player_path, swf):
         return [m[0], m[1], m[2], m[3], m[4] + m[0] * x + m[2] * y, m[5] + m[1] * x + m[3] * y]
 
     def run_to(mode):
-        entry = board['modes'][mode]
+        entry = modes[mode]
         golden = Path(entry['golden'])
         case_name, capture = golden.parent.name, golden.stem
         case = load_case(case_name)
@@ -1703,13 +1757,13 @@ def record_modes(_case_name, player_path, swf):
     def store(p, path, frame=None, hide=None, at=None):
         stored = _store(p, path, target, tmp, seen, frame, hide)
         if stored:
-            stored['file'] = 'modes/' + stored['file']
+            stored['file'] = prefix + stored['file']
             if at is not None:
                 stored['at'] = at
         return stored
 
     try:
-        if 'green_zone' in board.get('modes', {}):
+        if 'green_zone' in modes:
             p, entry = run_to('green_zone')
             try:
                 flag = entry['mode_objects'][0]
@@ -1762,7 +1816,7 @@ def record_modes(_case_name, player_path, swf):
                     print(f'  {cls}: {total} frames')
             finally:
                 p.close()
-        if 'pac_man' in board.get('modes', {}):
+        if 'pac_man' in modes:
             p, entry = run_to('pac_man')
             try:
                 # A coin: the most common image among some map-load items (the others are the
@@ -1792,9 +1846,9 @@ def record_modes(_case_name, player_path, swf):
                 print(f'  coin: {len(shown)} bitmaps, first change {first_change} frames after the capture')
             finally:
                 p.close()
-        for mode in board.get('modes', {}):
+        for mode in modes:
             if mode not in ('green_zone', 'pac_man'):
-                golden = Path(board['modes'][mode]['golden'])
+                golden = Path(modes[mode]['golden'])
                 _shots(load_case(golden.parent.name), golden.parent.name, player_path, swf, PACK / 'game')
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
@@ -2096,7 +2150,7 @@ def main():
     parser.add_argument('--parts', default='robots,plays,weapons,clips,effects',
                         help='actors: which parts to record again (robots, plays, weapons, clips, effects); the others are kept')
     parser.add_argument('--sets', default='',
-                        help='sets: the stage sets to render, comma separated (default: every set in board.sets)')
+                        help='sets: the stage sets to render, comma separated (default: every set in board.rounds)')
     parser.add_argument('--looks', choices=['round', 'all'], default='round',
                         help='actors: the default and recorded looks (round), or every look of every robot (all)')
     args = parser.parse_args()
