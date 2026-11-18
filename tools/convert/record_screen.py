@@ -88,18 +88,14 @@ def all_rounds(board):
 
 def _rounds_by(board, field):
     """`board.rounds` grouped by `field` (`set` or `mode`), each group in sorted key order,
-    plus the groups' first-appearance order in `board.rounds` (the authoring order, which
-    keeps the passes' manifest order as it was with `board.sets` and `board.modes`)."""
+    plus the groups' ids in sorted order. The order is stable however `board.rounds` is
+    ordered: the sets/modes passes write manifest.json without `sort_keys`, so an added
+    round that sorts first (e.g. `birthday_party/kill`) must not reorder their manifests."""
     groups = {}
     for key in sorted(board['rounds']):
         entry = board['rounds'][key]
         groups.setdefault(entry[field], []).append(entry)
-    order, seen = [], set()
-    for entry in board['rounds'].values():
-        if entry[field] not in seen:
-            seen.add(entry[field])
-            order.append(entry[field])
-    return groups, order
+    return groups, sorted(groups)
 
 
 def set_rounds(board):

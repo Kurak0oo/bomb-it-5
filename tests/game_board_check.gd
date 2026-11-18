@@ -36,6 +36,21 @@ func _initialize() -> void:
 		# GameBoard.new: mode `&""` is Arcade; another mode's id picks its recorded round.
 		var mode := &"" if String(entry.mode) == "arcade" else StringName(entry.mode)
 		_check_set(layout, StringName(entry.set), mode)
+	# A missing `<set>/<mode>` falls back to the set's Arcade round, not to the screen's own
+	# round (GameBoard._init): Zoo/Kill is recorded, but without it Zoo still renders its
+	# Arcade round on a Zoo/Kill board.
+	var stripped: Dictionary = board.duplicate(true)
+	var zoo_arcade: Dictionary = rounds.get("zoo/arcade", {})
+	var kept := {}
+	for key in rounds:
+		if String(key).begins_with("zoo/") and String(key) != "zoo/arcade":
+			continue
+		kept[key] = stripped.rounds[key]
+	stripped.rounds = kept
+	var fallback := GameBoard.new(null, stripped, &"zoo", &"kill")
+	_expect(not zoo_arcade.is_empty() and fallback.set_data.boxes == zoo_arcade.boxes
+		and fallback.set_data.template == zoo_arcade.template,
+		"a missing zoo/kill falls back to the recorded zoo/arcade round")
 	_expect(GameBoard._child_path("/a", 0, 1) == "/a/@0" and GameBoard._child_path("/a", 2, 5) == "/a/@0#2",
 		"an only child is `@0`, siblings `@0#k`")
 	print("%s: %d game board checks" % ["PASS" if failures == 0 else "FAIL", checks])
