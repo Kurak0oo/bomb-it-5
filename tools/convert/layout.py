@@ -429,7 +429,7 @@ def build(name, spec):
     nodes = _class_segments(nodes, prefixes)
     board = None
     if spec.get('board'):
-        nodes, board = _split_board(name, spec, case, capture, nodes, screen_root)
+        nodes, board = _split_board(name, spec, case, capture, nodes, screen_root, spec['board']['set'], 'arcade')
         board['set'] = spec['board']['set']
         # Each round is keyed `<set>/<mode>`; a round on the screen's own set keeps no floor
         # (its own pieces show the art). Adding a round later is one entry in the list.
@@ -761,7 +761,7 @@ def _union(bounds):
     return [min(b[0] for b in bounds), min(b[1] for b in bounds), max(b[2] for b in bounds), max(b[3] for b in bounds)]
 
 
-def _split_board(name, spec, case, capture, nodes, screen_root):
+def _split_board(name, spec, case, capture, nodes, screen_root, set_id, mode):
     """Take the map out of the gameplay screen's golden (`board` in the spec).
 
     The board container and its row and layer Sprites stay in the layout as groups. Their
@@ -932,7 +932,7 @@ def _split_board(name, spec, case, capture, nodes, screen_root):
     if sorted(seats) != sorted(robots):
         raise SystemExit(f'{name}: HUD panels {seats} do not match the robots on the board {robots}')
     begin = how['begin_num']
-    template = _match_template(name, boxes, features, begin)
+    template = _match_template(name, boxes, features, begin, set_id, mode)
     groups = [container] + [p for p in kids if _segment_index(p) < how['first_row'] and not subtree(p)[1:]]
     groups += rows + list(layers)
     unlaid = tuple(layer + '/' for layer in layers)
@@ -979,7 +979,7 @@ def _set_board(name, spec, set_id, how, screen_root, board, screen_nodes):
     nodes = _unique_paths([n for n in json.loads(golden_bytes)['nodes'] if n.get('kind') != 'stage'])
     nodes = _class_segments(nodes, tuple(spec.get('class_segments', ())))
     own = dict(spec, board=dict(spec['board'], begin_num=how['begin_num']))
-    nodes, other = _split_board(f'{name} ({set_id})', own, case, capture, nodes, screen_root)
+    nodes, other = _split_board(f'{name} ({set_id})', own, case, capture, nodes, screen_root, how['set'], how['mode'])
     for field in SHARED_FIELDS:
         if other[field] != board[field]:
             raise SystemExit(f'{name}: the {set_id} board differs from the screen\'s in {field}')
@@ -1027,9 +1027,12 @@ def _frames_after_input(case, capture):
     raise SystemExit(f'{case}: no capture {capture}')
 
 
-def _match_template(name, boxes, features, begin):
+def _match_template(name, boxes, features, begin, set_id, mode):
     """The layout (assets/maps/layouts.json) whose fixed cells, centre, hold cells and platforms
-    (portals, crocodiles, toy hands) are exactly where the recorded round has its fixed boxes and features."""
+    (portals, crocodiles, toy hands) are exactly where the recorded round has its fixed boxes and features.
+    Only the round's set and mode family are candidates: `MapMaster` draws `pacManData`'s
+    `<Set>Stage_PacMan_` maps for a Pac-Man round and the set's other maps otherwise
+    (`Layouts.names` in scripts/simulation/layouts.gd)."""
     layouts = json.loads((ROOT / 'assets' / 'maps' / 'layouts.json').read_text(encoding='utf-8'))['layouts']
     fixed = {tuple(b['cell']) for b in boxes if not b['exist']}
     soft = {tuple(b['cell']) for b in boxes if b['exist']}
@@ -1044,7 +1047,10 @@ def _match_template(name, boxes, features, begin):
     hands = {(tuple(f['cell']), f['class'][len('Art_ToyHand_'):].lower()) for f in features
              if f['class'].startswith('Art_ToyHand_')}
     found = []
+    pac_man = mode == 'pac_man'
     for layout_name, layout in sorted(layouts.items()):
+        if layout['set'] != set_id or layout['pac_man'] != pac_man:
+            continue
         want_fixed, want_soft, want_portals, belts, centre, want_hands = set(), set(), set(), {}, set(), set()
         for y, row in enumerate(layout['rows']):
             for x, cell in enumerate(row):
