@@ -4,6 +4,7 @@ extends SceneTree
 ## records a round's looks cannot make GameActors draw the default look (#74).
 
 const Looks = preload("res://scripts/looks.gd")
+const GameActors = preload("res://scripts/ui/game_actors.gd")
 const SAVE := "user://dress-up-check-save.json"
 ## robot, GameModel.P1ClothId (outfit), GameModel.P1HatId: non-default looks the two
 ## robots' Looks.count allows.
@@ -66,8 +67,10 @@ func _run() -> void:
 
 ## RobotView.setRobotMc sends the innermost bodyMc/hatMc to clothID + 1 / hatID + 1; a clip
 ## with no hatMc is set to the hat's frame itself (`_r0_Down`), and GameActors keys its art by
-## the clips it has. Every robot clip of the robot needs that look's full frame range; the
-## missing art is drawn as the default look (`_robot_art`'s fallback).
+## the clips it has. Past a clip's last frame Flash stays on its last frame (scripts/game.gd,
+## `_create_ai_players`), so a look wider than the clip resolves to the clip's largest cloth
+## and hat (`GameActors.resolve_look_key`), never to the default look. Every robot clip of the
+## robot needs that resolved look's full frame range.
 func _check_actor_art() -> void:
 	var pack_file := "res://original/screens/game/actors/actors.json"
 	if not FileAccess.file_exists(pack_file):
@@ -83,12 +86,25 @@ func _check_actor_art() -> void:
 		for cls: String in robots:
 			if not cls.begins_with("_r%d_" % robot): continue
 			var clip: Dictionary = robots[cls]
-			var key := "%d|%d" % [look[1] if clip.body else -1, look[2] if clip.hat else -1]
+			var cloth: int = look[1] if clip.body else -1
+			var hat: int = look[2] if clip.hat else -1
+			var key: String = GameActors.resolve_look_key(clip, cloth, hat)
 			var frames: Dictionary = clip.get("looks", {}).get(key, {})
 			var gaps := []
 			for frame in range(1, int(clip.get("frames", 0)) + 1):
 				if not frames.has(str(frame)): gaps.append(frame)
 			if gaps.size() > 0: missing.append("%s %s (frames %s)" % [cls, key, gaps])
+			# The look past the clip's last frame is its last frame, not the default fallback.
+			var max_cloth := -1
+			var max_hat := -1
+			for look_key: String in clip.get("looks", {}):
+				var parts := look_key.split("|")
+				max_cloth = maxi(max_cloth, int(parts[0]))
+				max_hat = maxi(max_hat, int(parts[1]))
+			var resolved := "%d|%d" % [mini(cloth, max_cloth), mini(hat, max_hat)]
+			_expect(key == resolved,
+				"robot %d look %d|%d: %s resolves to its last body/hat frame %s (got %s)"
+				% [robot, look[1], look[2], cls, resolved, key])
 		_expect(missing.is_empty(), "robot %d look %d|%d: the actors pack has every clip's frames (missing %s)"
 			% [robot, look[1], look[2], missing])
 

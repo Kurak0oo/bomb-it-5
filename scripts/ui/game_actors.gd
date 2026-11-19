@@ -1180,12 +1180,31 @@ func _tick_now() -> int:
 func _robot_art(view: Dictionary) -> Dictionary:
 	var clip: Dictionary = _art.get("robots", {}).get(view.class, {})
 	if clip.is_empty(): return {}
-	var key := "%d|%d" % [view.cloth if clip.body else -1, view.hat if clip.hat else -1]
-	var looks: Dictionary = clip.looks
-	# A look the pack has no art for (record_screen.py actors --looks all renders every one)
-	# shows the robot's default look.
-	var frames: Dictionary = looks.get(key, looks.get("%d|%d" % [0 if clip.body else -1, 0 if clip.hat else -1], {}))
+	var key := resolve_look_key(clip, view.cloth if clip.body else -1, view.hat if clip.hat else -1)
+	# A look the pack has no art for at all shows the robot's default look.
+	var frames: Dictionary = clip.looks.get(key, {})
 	return frames.get(str(view.frame), {})
+
+
+## The look key `_robot_art` draws for a clip: `RobotView.setRobotMc` sends the innermost
+## `bodyMc`/`hatMc` to `gotoAndStop(clothID + 1)` / `gotoAndStop(hatID + 1)`, and past a clip's
+## last frame Flash stays on its last frame (scripts/game.gd, `_create_ai_players`). So a look
+## past this clip's last body/hat frame (e.g. robot 2's `_r2_Up`, a one-frame hatMc) draws the
+## clip's largest cloth/hat instead of another look. Only when even that is missing does it
+## fall back to the default key (0|0, or -1 for a part the clip lacks).
+static func resolve_look_key(clip: Dictionary, cloth: int, hat: int) -> String:
+	var looks: Dictionary = clip.get("looks", {})
+	var key := "%d|%d" % [cloth, hat]
+	if looks.has(key): return key
+	var max_cloth := -1
+	var max_hat := -1
+	for look_key: String in looks:
+		var parts := look_key.split("|")
+		max_cloth = maxi(max_cloth, int(parts[0]))
+		max_hat = maxi(max_hat, int(parts[1]))
+	var clamped := "%d|%d" % [mini(cloth, max_cloth), mini(hat, max_hat)]
+	if looks.has(clamped): return clamped
+	return "%d|%d" % [0 if clip.get("body", false) else -1, 0 if clip.get("hat", false) else -1]
 
 
 static func _m(m: Array) -> Transform2D:
