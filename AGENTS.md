@@ -26,6 +26,8 @@ Do not copy files from `C:\Users\Eiji\Github\bomb-it-1`.
 
 **Orchestrator** (the session that plans and delegates): work here runs through the `orchestrator` skill; read it before changing code. Every source change goes through a subagent profile, and every task carries a gate.
 
+**Art is the orchestrator's own work.** Every pass that renders art into the ignored pack `original/` (`tools/convert/record_screen.py` and its art passes, e.g. `actors`, `sets`, `modes`, `shots`) is run by the orchestrator, never by a worker. Workers may change converter code; the orchestrator runs it, checks the pack and owns its flags (`actors` keeps `--looks all`).
+
 **Worker** (you were started with a brief that has Objective, Files and Gate): ignore the paragraph above. Do the brief yourself, directly; never run `devspace agents` or hand work to another agent. The sections below are reference for you too.
 
 There is no `package.json`. Checks are Godot 4.5 scripts, run from the repo root. Godot is `/Applications/Godot.app/Contents/MacOS/Godot` (4.5.stable). Timed 2026-11-18.
