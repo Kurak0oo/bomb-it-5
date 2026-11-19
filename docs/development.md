@@ -829,3 +829,27 @@ All 51 cases (`tools/compare.sh all`) and tools/run_checks.sh (27 suites) pass. 
 `compare.sh all` run failed gameplay-cinema-shield (Godot's `@0#0` subtree hidden, 302/803 nodes)
 and, while another Godot run overlapped it, four Zoo cases; none reproduced in seven reruns
 (yesterday's code, today's code, alone and concurrent), so it is recorded as an unexplained flake.
+
+Dress-up, 2026-11-19 (owner to review): a dressed robot now wears its look in the next level and
+in new games.
+- Cause: the actors pack held only the looks of recorded rounds (robot 0: one), because the
+  robots art pass ran with `--looks round` (yesterday's and today's mode passes), and
+  `GameActors._robot_art` drew the default look for any look without art. The session already
+  carried the choice (`CharacterSelectUI.startFunc`, `UnlockTipScreen.onChangeCloth/onChangeHat`
+  write `GameModel.P1ClothId/P1HatId`; nothing resets them where the AS3 does not).
+- `record_screen.py actors` now renders every look by default (`--looks round` opt-in); the pack
+  was re-rendered (56,914 images, every robot clip's full outfit x hat grid). Art passes are the
+  orchestrator's own work (AGENTS.md).
+- `GameActors.resolve_look_key`: past a clip's last outfit/hat frame the clip shows its last
+  frame (`RobotView.setRobotMc` → `gotoAndStop(id + 1)`), e.g. robot 2's back view has one hat
+  frame; before, such a look fell back to the default outfit. AI looks keep the raw
+  `int(Math.random() * 7)` draws of `AbstractGameMode.createAIPlayer` and clamp per clip (robot
+  0's front view has 7 outfit frames, `Looks.count` 5), so `tests/looks_check.gd` now replays
+  those draws instead of bounding them by `Looks.count`.
+- Checked in `tests/dress_up_check.gd` (in run_checks): the look through character select, the
+  next level and a new game; every robot x look x clip resolves to full art; `_robot_art`
+  returns the clamped look's frames. run_checks (28 suites) and compare all (51 cases) pass.
+Known gaps: the grid check derives each clip's extent from the pack itself, so a pack holding
+only default looks for robots 0/3/4/7 would pass; storing each clip's bodyMc/hatMc frame counts
+in the pack (needs an art pass) closes it. `docs/evidence/edition-5-modes-and-flow.md` still
+says the port keeps AI looks within the robot's set (source record, left as is).
