@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-candy-greenzone-start",
+ "case_sha256": "fe6b68f6cc7650150978d5ab1098b33567acfaa088723c979eff17a6fa7ee59b",
+ "fps": 35.0,
+ "frames": {
+  "candy-greenzone-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "b87d797f8cac147eeda3cc342fbbb29c41af680d7b282d193f46579dc4a61a4f",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}
