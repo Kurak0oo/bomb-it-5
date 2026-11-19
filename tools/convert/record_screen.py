@@ -1297,7 +1297,7 @@ def _write_actors(target, out, done, previous):
     (target / 'actors.json').write_text(json.dumps(merged, indent=1) + '\n', encoding='utf-8')
 
 
-def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots', 'plays', 'weapons', 'clips', 'effects')):
+def record_actors(case_name, player_path, swf, all_looks=True, parts=('robots', 'plays', 'weapons', 'clips', 'effects')):
     """The moving actors' art (checkpoint 4 slice b), into original/screens/<screen>/actors/:
     each library clip the round makes at run time is constructed by its own class with the
     reference player's `symbol` (art pass only), put on the board's first row layer, and
@@ -1305,9 +1305,9 @@ def record_actors(case_name, player_path, swf, all_looks=False, parts=('robots',
 
     - robots `_r<n><vehicle><Down|Left|Right|Up|Dead>` at every frame (`RobotView.setRobotMc`:
       vehicle '' on foot, `_Car` (CarProp) and `_Skateboard` (MotoCycleProp), Cinema's rides),
-      with each look a round uses (innermost `bodyMc` at clothID + 1, `hatMc` at hatID + 1):
-      the default look of every robot and the recorded round's looks (layout `board.looks`),
-      or every look with --looks all. A nested loop the clip plays on its own (eyes blinking,
+      with every look of every robot (innermost `bodyMc` at clothID + 1, `hatMc` at hatID + 1,
+      --looks all, the default), or just the default look and the recorded rounds' looks
+      (layout `board.looks`, --looks round). A nested loop the clip plays on its own (eyes blinking,
       a hat's feather) is left out of the clip's images and rendered alone at each of its
       frames, with its place at each root frame (`_record_robots`);
     - each weapon's held clip, its `_Play` clip and the `showTimes` counter (`_record_weapons`);
@@ -2147,8 +2147,8 @@ def main():
                         help='actors: which parts to record again (robots, plays, weapons, clips, effects); the others are kept')
     parser.add_argument('--sets', default='',
                         help='sets: the stage sets to render, comma separated (default: every set in board.rounds)')
-    parser.add_argument('--looks', choices=['round', 'all'], default='round',
-                        help='actors: the default and recorded looks (round), or every look of every robot (all)')
+    parser.add_argument('--looks', choices=['round', 'all'], default='all',
+                        help='actors: every look of every robot (all, the default), or just the default and recorded looks (round)')
     args = parser.parse_args()
     if args.what == 'actors':
         record_actors(args.case, args.player.resolve(), args.swf, args.looks == 'all', args.parts.split(','))
