@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-luxury-pacman-start",
+ "case_sha256": "3599c2ecddfa8df3d8c823ab86b09f7c1f1276586575bcb744166a426aab8b4f",
+ "fps": 35.0,
+ "frames": {
+  "luxury-pacman-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "b87d797f8cac147eeda3cc342fbbb29c41af680d7b282d193f46579dc4a61a4f",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}
