@@ -35,25 +35,65 @@ captures of the original in `docs/evidence/reference-2026-10-19/`
 
 The shapes and motifs are the lab's own; only the style is taken from the captures.
 
-## One bomb effect per robot
+## Bomb profiles
 
 The original gives every robot the same bomb and blast. As a new-art idea, each of the
-eight robots gets its own (`bomb_styles.gd`, in `Session.ROBOTS` order). Every style
-keeps the original's form, the glossy dark ball and the flat three-band cross, and
-changes only the colours, the shape that bursts out, and the emblem on the bomb.
+eight robots gets its own, built from that robot's character as the original draws it
+(HUD portraits in `docs/evidence/reference-2026-10-21/{green-zone,pac-man,kill}`, whose
+`summary.json` files give each seat's robot index).
 
-![Bombs, blasts and bursts for the eight robots](media/robots.png)
+**The danger contract.** The lab started from one rule: effects are presentation only,
+and a player must always read where and when a blast hurts. So every bomb keeps:
 
-| Robot | Theme | Blast colours | Burst shape and emblem |
-| --- | --- | --- | --- |
-| Blue | Spark | pale yellow, cyan, blue | lightning bolt |
-| Ruby | Sweetheart | white, pink, hot pink | heart |
-| Lime | Slime | pale lime, lime, green | drop |
-| Gold | Sunburst (the original's own colours) | white, yellow, orange | five-point star |
-| Violet | Magic | white, lilac, purple | four-point twinkle |
-| Slate | Steel | pale steel, grey, dark slate | hex nut |
-| Mint | Leaf | pale mint, mint, teal | leaf |
-| Snow | Peppermint | white, white, candy red | peppermint swirl |
+- the same footprint: exactly the simulation's blast cells, one cross per blast;
+- the same timing: 16 ticks per cell, chain stagger and passing-flame order from
+  `ChainOrder.starts`;
+- a full-width cell with a white-hot core while the cell is live, then a small "spent"
+  shape (morph at age 0.42–0.68 of the cell's life), gone at age 1;
+- the same last warning: the final 8 fuse ticks squash the bomb and blink it red;
+- a calm screen: one signature burst of four pieces per blast, capped at 20 on screen.
+
+Personality goes only into five beats: how the bomb waits, how the blast pops, how its
+edge moves, what it shrinks to, and its signature burst. Code: `bomb_styles.gd` (table),
+`bomb_view.gd` (wait), `flame.gdshader` (pop, edge, centre, spent shape), `toon_fx.gd`
+(signature burst), `lab.gd` `_burst` (shockwave and shake).
+
+| Robot | Character | Theme | Bomb waits | Pop and edge | Spent shape | Signature burst |
+| --- | --- | --- | --- | --- | --- | --- |
+| Blue | little blue bot, antenna, headphones; the hero | Circuit Zap | antenna LED blinks faster | crisp box; edge crackles in a zigzag, core buzzes | thin bolt that keeps crackling | four sparks zip out on the diagonals |
+| Ruby | pink pop idol, pigtails, headphones | Encore | hops to the beat | heart-shaped centre; arms throb like a speaker; shockwave comes twice | little upright hearts | four music notes float up |
+| Lime | green alien, horn, sunglasses | Alien Goo | wobbles like jelly | wobbly blob; goo wave runs out along the arms | blobs that sag toward the floor | four drops arc out and splat flat |
+| Gold | orange tough guy, helmet (viking horns in play) | Big Kaboom (the original's colours) | plain pulse, a little stronger | biggest overshoot, heaviest shake | the original's ball with streaks | four stars |
+| Violet | purple sailor girl (witch's hat in play) | Spellburst | floats, a twinkle orbits it | twinkle-shaped centre; glitter twinkles on the band | small twinkles | spell ring plus four twinkles spiralling out |
+| Slate | grey bot, black pompadour | Heavy Metal | rattles harder as it burns | hard square, little give; riveted plates, dead-straight edges | small hard squares | four nuts thrown up, clattering twice |
+| Mint | gentle girl, long green twin tails | Bloom | rocks gently | flower centre unfurls softly; arms sway; no shockwave, lightest shake | small flowers | four leaves drift down, rocking |
+| Snow | white racing helmet, red stripes | Turbo | revs with a fine shiver | instant pop, arrow-nosed tips, red dashes stream down the arms | speed lines sliding outward | four speed lines shoot on past the tips |
+
+Profile sheets: the bomb idle, its warning, then its blast at fixed times after it
+shows. They are captured from the lab, not drawn.
+
+| | |
+| --- | --- |
+| Blue | ![Blue](media/bombs/blue.png) |
+| Ruby | ![Ruby](media/bombs/ruby.png) |
+| Lime | ![Lime](media/bombs/lime.png) |
+| Gold | ![Gold](media/bombs/gold.png) |
+| Violet | ![Violet](media/bombs/violet.png) |
+| Slate | ![Slate](media/bombs/slate.png) |
+| Mint | ![Mint](media/bombs/mint.png) |
+| Snow | ![Snow](media/bombs/snow.png) |
+
+Regenerate them (the sheet capture sets one bomb per robot and records each bomb's
+screen position and blast time in `layout.json`):
+
+```bash
+xvfb-run -a godot --path . --rendering-driver opengl3 --resolution 1920x1080 --fixed-fps 60 \
+  res://experiments/explosion_lab/lab.tscn -- --capture=.scratch/sheet --sheet --off=shake
+```
+
+```bash
+python3 experiments/explosion_lab/make_sheets.py .scratch/sheet experiments/explosion_lab/media/bombs
+```
 
 `T` picks the robot whose bombs a click places; `O` sets one bomb per robot side by
 side. The chain and random presets mix robots.
@@ -119,9 +159,9 @@ judge.
 | Blocks and bombs | Drawn by hand (rounded boxes, circles, outlines) on one y-sorted layer; no textures, lights or normal maps | `block_view.gd`, `bomb_view.gd` |
 | Debris | Custom outlined chunks with ground position plus height, and a shadow that shrinks with height (2.5D) | `debris.gd` |
 | Flash and glow | Alpha-blended radial sprites: 0.12 s white flash, 0.4 s yellow swell | `_flash` |
-| Flame | One shared shader on per-cell quads: signed-distance shapes (block, band, rounded tip, then ball with streaks). Each cell is drawn as three colour layers (rim, band, core) on rising z, so overlapping cells and crossing blasts merge into one shape; toggle `core` drops the white layer | `flame.gdshader`, `_add_flame` |
+| Flame | One shader on per-cell quads, one material per robot: signed-distance shapes (block, band, tip, then the robot's spent shape). Each cell is drawn as three colour layers (rim, band, core) on rising z, so overlapping cells and crossing blasts merge into one shape; toggle `core` drops the white layer | `flame.gdshader`, `_add_flame` |
 | Joined chains | A ray's tip facing another burning cell opens into a plain arm once that cell shows | `_link_tips` |
-| Puffs and sparkles | Hand-drawn and outlined, under the flames. Each blast throws one ring of four of its robot's shape, which fly out, slow and shrink; totals are capped (20 shapes, 30 puffs) so a chain stays tidy | `toon_fx.gd` |
+| Puffs and signature bursts | Hand-drawn and outlined, under the flames. Each blast throws four pieces of its robot's signature, each moving its own way (see Bomb profiles); totals are capped (20 pieces, 30 puffs) so a chain stays tidy | `toon_fx.gd` |
 | Bounce | Blocks and bombs within reach squash and spring back, nearest first | `_bounce_around` |
 | Shockwave | Additive light ring (default) or screen-texture refraction (`F`) | `shockwave_*.gdshader` |
 | Camera | Trauma-squared noise shake (kept small); hit-stop of 35–120 ms scaled by batch size | `_update_shake`, `_start_hitstop` |

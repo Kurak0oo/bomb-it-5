@@ -74,6 +74,16 @@ var _hitboxes: Array[Dictionary] = []
 var _shake_noise := FastNoiseLite.new()
 var _capture_dir := ""
 var _capture_frames: Array[float] = []
+## --sheet: every other frame is saved from SHEET_START until each robot's blast has
+## played out, with each bomb's position and blast time (make_sheets.py cuts them up).
+## Same-tick bombs go off on consecutive ticks, so each bomb keeps its own blast time.
+const SHEET_START := 0.45
+const SHEET_TAIL := 0.8
+var _sheet := false
+var _sheet_frame := 0
+var _sheet_times: Array[float] = []
+var _sheet_bombs: Array = []
+var _sheet_blasts: Dictionary = {}
 
 var _camera: Camera2D
 var _world: Node2D
@@ -106,9 +116,12 @@ func _ready() -> void:
 # --- Scene -----------------------------------------------------------------------------
 
 func _build_resources() -> void:
-	for style: Dictionary in BombStyles.STYLES:
+	for index in BombStyles.STYLES.size():
+		var style := BombStyles.style(index)
 		var material := ShaderMaterial.new()
 		material.shader = Flame
+		material.set_shader_parameter("style", index)
+		material.set_shader_parameter("cell", CELL)
 		material.set_shader_parameter("hot_colour", style.hot)
 		material.set_shader_parameter("mid_colour", style.mid)
 		material.set_shader_parameter("rim_colour", style.rim)
@@ -257,7 +270,7 @@ func _place_bomb(cell: Vector2i, bomb_power: int, fuse := 0, bomb_robot := -1) -
 	_bombs.append(bomb)
 	var view := BombView.new()
 	view.bomb = bomb
-	view.style = BombStyles.style(bomb.lab_robot)
+	view.robot = bomb.lab_robot
 	view.cell_size = CELL
 	view.anticipation = toggles.anticipation
 	view.position = _cell_center(cell)
@@ -353,7 +366,7 @@ func _spawn_blast(blast: Dictionary, base_delay: float, broken_cells: Dictionary
 		if broken_cells.has(segment.cell):
 			broken_cells.erase(segment.cell)
 			_later(delay, _break_block.bind(segment.cell, blast.cell))
-	_later(base_delay, _burst.bind(blast, ChainOrder.reach(blast), BombStyles.style(blast_robot)))
+	_later(base_delay, _burst.bind(blast, ChainOrder.reach(blast), blast_robot))
 
 
 func _remove_bomb_view(lab_id: int) -> void:
@@ -420,20 +433,26 @@ func _update_flames() -> void:
 		index += 1
 
 
-func _burst(blast: Dictionary, reach: int, style: Dictionary) -> void:
+func _burst(blast: Dictionary, reach: int, blast_robot: int) -> void:
+	var style := BombStyles.style(blast_robot)
 	var center := _cell_center(blast.cell)
+	if _sheet and not _sheet_blasts.has(blast_robot):
+		_sheet_blasts[blast_robot] = _fx_time
 	if toggles.glow:
 		_flash(center, reach, style)
 	if toggles.bounce:
 		_bounce_around(center, reach)
-	if toggles.shockwave:
+	# Mint blooms without a shockwave; Ruby's comes twice, on the beat.
+	if toggles.shockwave and style.fx != &"leaf":
 		_shockwave(center, reach, style)
+		if style.fx == &"note":
+			_later(0.14, _shockwave.bind(center, reach, style))
 	if toggles.smoke:
-		_toon.puffs(center, 3 + mini(reach, 3), CELL, style.puff, style.puff_line)
+		_toon.puffs(center, 3 + mini(reach, 2), CELL, style.puff, style.puff_line)
 	if toggles.sparkles:
-		_toon.sparkles(center, 4, CELL, style.shape, style.mid.lerp(style.hot, 0.35), style.rim)
+		_toon.signature(center, blast_robot, reach, CELL)
 	if toggles.shake:
-		_trauma = minf(_trauma + 0.16 + 0.03 * reach, 1.0)
+		_trauma = minf(_trauma + (0.16 + 0.03 * reach) * style.shake, 1.0)
 
 
 func _flash(center: Vector2, reach: int, style: Dictionary) -> void:
@@ -665,6 +684,9 @@ func _parse_args() -> void:
 		if argument.begins_with("--off="):
 			for key in argument.trim_prefix("--off=").split(","):
 				toggles[StringName(key)] = false
+		if argument == "--sheet":
+			_sheet = true
+			preset = "robots"
 	toggles.hitstop = false
 	_apply_toggles()
 	match preset:
@@ -672,10 +694,14 @@ func _parse_args() -> void:
 		"random": _preset_random()
 		"robots": _preset_robots()
 		_: _preset_chain()
-	_capture_frames.assign([1.0, 1.17, 1.2, 1.25, 1.32, 1.45, 1.6, 1.8, 2.1, 2.6, 3.4])
+	if not _sheet:
+		_capture_frames.assign([1.0, 1.17, 1.2, 1.25, 1.32, 1.45, 1.6, 1.8, 2.1, 2.6, 3.4])
 
 
 func _update_capture() -> void:
+	if _sheet:
+		_update_sheet()
+		return
 	if _capture_dir == "" or _capture_frames.is_empty():
 		return
 	if _fx_time >= _capture_frames[0]:
@@ -684,3 +710,26 @@ func _update_capture() -> void:
 		_capture_frames.remove_at(0)
 		if _capture_frames.is_empty():
 			get_tree().quit()
+
+
+func _update_sheet() -> void:
+	if _fx_time < SHEET_START:
+		return
+	if _sheet_bombs.is_empty():
+		# The stretch from the logical canvas to the captured image, then the camera.
+		var canvas := get_viewport().get_final_transform() * get_viewport().get_canvas_transform()
+		for bomb in _bombs:
+			var pos: Vector2 = canvas * _cell_center(bomb.cell)
+			_sheet_bombs.append({"robot": bomb.lab_robot, "x": pos.x, "y": pos.y, "cell": CELL * canvas.get_scale().x})
+	_sheet_frame += 1
+	if _sheet_frame % 2 == 0:
+		get_viewport().get_texture().get_image().save_png("%s/sheet_%03d.png" % [_capture_dir, _sheet_times.size()])
+		_sheet_times.append(_fx_time)
+	if _sheet_blasts.size() < _sheet_bombs.size() or _fx_time < _sheet_blasts.values().max() + SHEET_TAIL:
+		return
+	for bomb in _sheet_bombs:
+		bomb.blast = _sheet_blasts[bomb.robot]
+	var file := FileAccess.open("%s/layout.json" % _capture_dir, FileAccess.WRITE)
+	file.store_string(JSON.stringify({"times": _sheet_times, "bombs": _sheet_bombs}))
+	file.close()
+	get_tree().quit()

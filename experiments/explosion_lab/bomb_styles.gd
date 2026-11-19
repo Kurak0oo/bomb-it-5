@@ -7,16 +7,36 @@ extends RefCounted
 
 const ToonDraw = preload("res://experiments/explosion_lab/toon_draw.gd")
 
+## Each robot's bomb follows its character as drawn in the original (HUD portraits in
+## docs/evidence/reference-2026-10-21/{green-zone,pac-man,kill}, whose summary.json files
+## give the robot index of each seat). `fx` is the signature burst in toon_fx.gd; the
+## flame shader and bomb_view.gd branch on the same index. `shake` scales screen shake.
 ## hot / mid / rim: the blast's three colour bands. puff / puff_line: the cloud.
 const STYLES := [
-	{"robot": "BLUE", "theme": "spark", "shape": &"bolt", "hot": Color("ffffdd"), "mid": Color("6fe0ff"), "rim": Color("1e6bff"), "puff": Color("eaf8ff"), "puff_line": Color("8cc8f0")},
-	{"robot": "RUBY", "theme": "sweetheart", "shape": &"heart", "hot": Color("fff6fa"), "mid": Color("ffa3cf"), "rim": Color("ff3d8b"), "puff": Color("ffeaf3"), "puff_line": Color("f29ac0")},
-	{"robot": "LIME", "theme": "slime", "shape": &"drop", "hot": Color("fbffe0"), "mid": Color("c8f24a"), "rim": Color("4fb81e"), "puff": Color("efffd0"), "puff_line": Color("9bd45a")},
-	{"robot": "GOLD", "theme": "sunburst", "shape": &"star", "hot": Color("fffff5"), "mid": Color("ffeb38"), "rim": Color("ff850a"), "puff": Color("fff7df"), "puff_line": Color("e2b27a")},
-	{"robot": "VIOLET", "theme": "magic", "shape": &"twinkle", "hot": Color("fdf5ff"), "mid": Color("e7b0ff"), "rim": Color("b44cff"), "puff": Color("f4e6ff"), "puff_line": Color("b98ae6")},
-	{"robot": "SLATE", "theme": "steel", "shape": &"nut", "hot": Color("e8edf5"), "mid": Color("a9b6c9"), "rim": Color("3d4a66"), "puff": Color("eef1f5"), "puff_line": Color("9aa6b4")},
-	{"robot": "MINT", "theme": "leaf", "shape": &"leaf", "hot": Color("e6fff0"), "mid": Color("6fe8ac"), "rim": Color("0f9a70"), "puff": Color("e4fff2"), "puff_line": Color("7fd0aa")},
-	{"robot": "SNOW", "theme": "peppermint", "shape": &"candy", "hot": Color("ffffff"), "mid": Color("fff1f1"), "rim": Color("e8283c"), "puff": Color("ffffff"), "puff_line": Color("f2a0a8")},
+	{"robot": "BLUE", "theme": "Circuit Zap", "look": "little blue bot with an antenna and headphones; the hero",
+		"shape": &"bolt", "fx": &"bolt", "shake": 1.0,
+		"hot": Color("ffffdd"), "mid": Color("6fe0ff"), "rim": Color("1e6bff"), "puff": Color("eaf8ff"), "puff_line": Color("8cc8f0")},
+	{"robot": "RUBY", "theme": "Encore", "look": "pink pop idol with yellow pigtails and headphones",
+		"shape": &"heart", "fx": &"note", "shake": 0.7,
+		"hot": Color("fff6fa"), "mid": Color("ffa3cf"), "rim": Color("ff3d8b"), "puff": Color("ffeaf3"), "puff_line": Color("f29ac0")},
+	{"robot": "LIME", "theme": "Alien Goo", "look": "green alien with a horn and dark sunglasses",
+		"shape": &"drop", "fx": &"drop", "shake": 1.0,
+		"hot": Color("fbffe0"), "mid": Color("c8f24a"), "rim": Color("4fb81e"), "puff": Color("efffd0"), "puff_line": Color("9bd45a")},
+	{"robot": "GOLD", "theme": "Big Kaboom", "look": "orange tough guy in a helmet (viking horns in play)",
+		"shape": &"star", "fx": &"star", "shake": 1.4,
+		"hot": Color("fffff5"), "mid": Color("ffeb38"), "rim": Color("ff850a"), "puff": Color("fff7df"), "puff_line": Color("e2b27a")},
+	{"robot": "VIOLET", "theme": "Spellburst", "look": "purple sailor girl in pigtails (a witch's hat in play)",
+		"shape": &"twinkle", "fx": &"twinkle", "shake": 0.7,
+		"hot": Color("fdf5ff"), "mid": Color("e7b0ff"), "rim": Color("b44cff"), "puff": Color("f4e6ff"), "puff_line": Color("b98ae6")},
+	{"robot": "SLATE", "theme": "Heavy Metal", "look": "grey bot with a black pompadour",
+		"shape": &"nut", "fx": &"nut", "shake": 1.3,
+		"hot": Color("e8edf5"), "mid": Color("a9b6c9"), "rim": Color("3d4a66"), "puff": Color("e4e8ef"), "puff_line": Color("8a96a8")},
+	{"robot": "MINT", "theme": "Bloom", "look": "gentle girl with long green twin tails",
+		"shape": &"leaf", "fx": &"leaf", "shake": 0.5,
+		"hot": Color("e6fff0"), "mid": Color("6fe8ac"), "rim": Color("0f9a70"), "puff": Color("e4fff2"), "puff_line": Color("7fd0aa")},
+	{"robot": "SNOW", "theme": "Turbo", "look": "white racing helmet with red stripes",
+		"shape": &"chevron", "fx": &"streak", "shake": 0.9,
+		"hot": Color("ffffff"), "mid": Color("fff0ee"), "rim": Color("e8283c"), "puff": Color("ffffff"), "puff_line": Color("c9ccd4")},
 ]
 ## Gold is the original's own yellow and orange blast.
 const DEFAULT := 3
@@ -58,9 +78,9 @@ static func shape(kind: StringName) -> PackedVector2Array:
 				points.append(Vector2(-1.0 + index * 0.25, -0.5 * sin(index * PI / 8.0)))
 			for index in range(7, 0, -1):
 				points.append(Vector2(-1.0 + index * 0.25, 0.5 * sin(index * PI / 8.0)))
-		&"candy":
-			for index in 20:
-				points.append(Vector2.from_angle(index * TAU / 20.0) * 0.9)
+		&"chevron":
+			points = PackedVector2Array([Vector2(-0.85, -0.85), Vector2(-0.25, -0.85), Vector2(0.75, 0.0),
+				Vector2(-0.25, 0.85), Vector2(-0.85, 0.85), Vector2(0.15, 0.0)])
 	_shapes[kind] = points
 	return points
 
@@ -74,12 +94,5 @@ static func draw_shape(canvas: CanvasItem, kind: StringName, center: Vector2, si
 		for point in unit:
 			points.append(center + point * radius)
 		ToonDraw.polygon(canvas, points, line if pass_index == 0 else fill)
-	if kind == &"candy":
-		# Peppermint swirl: three wedges in the outline colour on the white disc.
-		for wedge in 3:
-			var points := PackedVector2Array([center])
-			for step in 5:
-				points.append(center + Vector2.from_angle(wedge * TAU / 3.0 + step * TAU / 24.0) * size * 0.9)
-			ToonDraw.polygon(canvas, points, line)
 	if kind == &"nut":
 		canvas.draw_circle(center, size * 0.36, line, true, -1.0, true)
