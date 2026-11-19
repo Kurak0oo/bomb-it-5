@@ -3,7 +3,12 @@ extends SceneTree
 
 const Looks = preload("res://scripts/looks.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
+const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
+const Layouts = preload("res://scripts/simulation/layouts.gd")
+const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const SAVE := "user://looks-check-save.json"
+## The next level's `Math.random` seed, pinned so the AI looks below can be replayed from it.
+const AI_SEED := 27
 var failures := 0
 var checks := 0
 var app: Control
@@ -67,9 +72,13 @@ func _run() -> void:
 	await _click(_find("hat1"))
 	await _click(_find("okBt"))
 	_expect(app.current == &"score" and not score.is_shown("UI_UNLOCK_TIP"), "OK returns to the score screen")
+	# Pin the next level's generator (App.math_random is the round's AvmRandom) so its AI
+	# looks can be replayed exactly.
+	app.seed_math_random(AI_SEED)
 	await _click(_find("nextLevel"))
 	var actor: Dictionary = app.game.get_snapshot().actors[&"human"]
 	_expect(actor.hat == 1 and actor.body == 0, "the next level shows the chosen look")
+	var expected_looks := _expected_ai_looks()
 	var ai_ok := true
 	for id in app.game.get_snapshot().actors:
 		if id == &"human": continue
@@ -79,8 +88,10 @@ func _run() -> void:
 		# (`RobotView.setRobotMc`, GameActors.resolve_look_key: `_r0_Down` has 7 body frames
 		# while Looks.count(0, &"body") is 5). Session.begin's `randi_range(0, Looks.count)`
 		# looks only fill the seats until Game._create_ai_players draws over them.
-		ai_ok = ai_ok and ai.hat >= 0 and ai.hat <= 6 and ai.body >= 0 and ai.body <= 6
-	_expect(ai_ok, "AI robots wear the raw createAIPlayer 0..6 draws, clamped per clip")
+		var expected: Array = expected_looks.get(id, [])
+		ai_ok = ai_ok and not expected.is_empty() \
+			and ai.hat == expected[0] and ai.body == expected[1]
+	_expect(ai_ok, "AI robots wear the raw createAIPlayer draws replayed from the round's Math.random")
 	app.queue_free()
 	await process_frame
 
@@ -115,6 +126,27 @@ func _run() -> void:
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))
 	print("%s: %d looks checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
+
+
+## `Game._create_ai_players`'s draws for this level, replayed from `AI_SEED`: the mode's drop
+## pool draws its `vehicle` entries, then `Layouts.roll_set` rolls the map, then the player's
+## `updateUI` draws twice, then per AI clothID, hatID and its AI profile draw (`AbstractGameMode
+## .createAIPlayer`).
+func _expected_ai_looks() -> Dictionary:
+	var mode = Modes.create(app.session.mode, app.session.difficulty, &"cinema")
+	var random = AvmRandom.new(AI_SEED)
+	for _draw in int(mode.drop_weights().get(&"vehicle", 0)): random.random()
+	Layouts.roll_set(app.session.current_set, app.session.mode == &"pac_man", mode.soft_chance(), random)
+	random.random()
+	random.random()
+	var expected := {}
+	for id in app.game.get_snapshot().actors:
+		if id == &"human": continue
+		var cloth := int(random.random() * 7)
+		var hat := int(random.random() * 7)
+		random.random()
+		expected[id] = [hat, cloth]
+	return expected
 
 
 ## Character select draws every robot from its recorded parts (scenes/swf/character.json):

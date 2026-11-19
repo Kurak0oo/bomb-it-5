@@ -157,6 +157,31 @@ func _check_robot_art(pack: Dictionary) -> void:
 	var actors := GameActors.new(null, board)
 	var frames: Dictionary = actors._robot_art({"class": "_r2_Up", "cloth": 1, "hat": 0, "frame": 1})
 	_expect(not frames.is_empty(), "_robot_art draws a non-default look on _r2_Up")
+	# `_r2_Up` has a one-frame hatMc (its looks are "x|0"), so cloth 2, hat 1 must draw the
+	# clip's last hat frame, key "2|0" (resolve_look_key), not fall back to the default 0|0.
+	var robots: Dictionary = pack.get("robots", {})
+	_expect_look_frame(actors, robots, "_r2_Up", 2, 1, "2|0",
+		"a hat past _r2_Up's one-frame hatMc draws its clamped look")
+	# A clip without a hatMc takes the cloth only ("1|-1").
+	_expect_look_frame(actors, robots, "_r0_Down", 1, 0, "1|-1",
+		"a clip without a hatMc draws its cloth look")
+	# The dead clips have a single look of their own ("-1|-1").
+	var dead: Dictionary = robots.get("_r2_Dead", {}).get("looks", {})
+	if dead.is_empty():
+		print("NOTE: _r2_Dead has no looks; skipping its frame check")
+	else:
+		_expect_look_frame(actors, robots, "_r2_Dead", 0, 0, "-1|-1",
+			"a dead clip draws its own look")
+
+
+## The frame `_robot_art` returns for `cls` at look `cloth`|`hat` is the pack's own entry for
+## the key the game resolves, compared by image (the frame dictionaries' `file`).
+func _expect_look_frame(actors: RefCounted, robots: Dictionary, cls: String, cloth: int, hat: int,
+		key: String, label: String) -> void:
+	var expected: Dictionary = robots.get(cls, {}).get("looks", {}).get(key, {}).get("1", {})
+	var frame: Dictionary = actors._robot_art({"class": cls, "cloth": cloth, "hat": hat, "frame": 1})
+	_expect(not expected.is_empty() and frame.get("file", "") == expected.get("file", ""),
+		"%s (got %s, want %s %s)" % [label, frame.get("file", ""), key, expected.get("file", "")])
 
 
 func _grid_max(clip: Dictionary) -> Array:
