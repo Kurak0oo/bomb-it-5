@@ -802,3 +802,30 @@ for each, three layout.py `rounds` entries (the set's `begin_num`), then `record
 per case and one `actors gameplay-cinema-start --parts robots`. Cases and recordings can run in
 parallel worktrees (copy each case's `.scratch/compare/<case>/reference` back); layout.py and the
 art passes rewrite game.json and the shared pack, so they run once, in sequence, on one checkout.
+
+Modes on the other four sets, 2026-11-19 (checkpoint 5, owner to review): Kill, Green Zone and
+Pac-Man on Candy Factory, Magic Library, Luxury Stores and Birthday Party. Every mode now has a
+recorded round on every stage set (23 rounds in `board.rounds` plus the screen's own).
+- Cases `gameplay-<s>-<mode>-start` for s = candy, library, luxury, birthday: each Zoo mode case
+  with the set's stage click from its `gameplay-<s>-start`, seed 42 (Birthday Party's Arcade case
+  uses seed 11 only to roll a stage with toy hands; the mode rounds roll BirthdayPartyStage2 for
+  Kill and Green Zone, which has them, and BirthdayPartyStage_PacMan_3 for Pac-Man). Recorded in
+  parallel worktrees, then layout.py, `record_screen.py shots` and one robots actors pass here.
+- layout.py `_match_template` takes the round's set and mode: only the set's maps, and the
+  `<Set>Stage_PacMan_` maps exactly for a Pac-Man round (`MapMaster` `pacManData`, as
+  `Layouts.names`). Without it Magic Library's Kill and Green Zone boards matched both
+  MagicLibraryStage2 and MagicLibraryStage_PacMan_2, which share their geometry. Kill and Green
+  Zone rolled each set's Stage2, Pac-Man its Stage_PacMan_3.
+- Results (nodes, SSIM / 3×→1× ceiling): candy kill 373/373 0.903/0.907, greenzone 333/333
+  0.915/0.916, pacman 718/718 0.905/0.908; library kill 389/389 0.905/0.905, greenzone 330/330
+  0.922/0.923, pacman 710/710 0.918/0.919; luxury kill 385/385 0.900/0.898, greenzone 328/328
+  0.917/0.915, pacman 692/692 0.904/0.904; birthday kill 392/392 0.931/0.931, greenzone 334/334
+  0.944/0.943, pacman 700/700 0.920/0.921; ΔE ≤ 6.3. Every case passes its floor.
+Known gaps: six of the twelve sit up to 0.004 under their 3×→1× ceiling (over their floors), as
+zoo-pacman-start does; the toy hands, belt, machine and spellbook are only captured at the round's
+first frame in the mode rounds (their motion is checked on the Arcade cases); no mode round on
+these sets plays past its first frame (flag, coins and kills are covered on Cinema only).
+All 51 cases (`tools/compare.sh all`) and tools/run_checks.sh (27 suites) pass. One earlier
+`compare.sh all` run failed gameplay-cinema-shield (Godot's `@0#0` subtree hidden, 302/803 nodes)
+and, while another Godot run overlapped it, four Zoo cases; none reproduced in seven reruns
+(yesterday's code, today's code, alone and concurrent), so it is recorded as an unexplained flake.
