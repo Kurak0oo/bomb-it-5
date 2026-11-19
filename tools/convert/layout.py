@@ -218,16 +218,28 @@ SCREENS = {
                  # The other game modes' rounds on Cinema (the session's mode ids): its boxes,
                  # robots and what the mode's `mapLoadOver` made (KillMode: nothing;
                  # GreenZoneMode: a Flag and two pickups; PacManMode: four items and the coins).
-                 # Zoo's recorded mode rounds are the same modes on the zoo set (`beginNum` 73).
+                 # Zoo's recorded mode rounds are the same modes on the zoo set (`beginNum` 73); every set's mode rounds use the set's beginNum.
                  'rounds': [
                      {'set': 'zoo', 'mode': 'arcade', 'golden': ('gameplay-zoo-start', 'zoo-start'), 'begin_num': 73},
                      {'set': 'zoo', 'mode': 'kill', 'golden': ('gameplay-zoo-kill-start', 'zoo-kill-start'), 'begin_num': 73},
                      {'set': 'zoo', 'mode': 'green_zone', 'golden': ('gameplay-zoo-greenzone-start', 'zoo-greenzone-start'), 'begin_num': 73},
                      {'set': 'zoo', 'mode': 'pac_man', 'golden': ('gameplay-zoo-pacman-start', 'zoo-pacman-start'), 'begin_num': 73},
                      {'set': 'candy_factory', 'mode': 'arcade', 'golden': ('gameplay-candy-start', 'candy-start'), 'begin_num': 25},
+                     {'set': 'candy_factory', 'mode': 'kill', 'golden': ('gameplay-candy-kill-start', 'candy-kill-start'), 'begin_num': 25},
+                     {'set': 'candy_factory', 'mode': 'green_zone', 'golden': ('gameplay-candy-greenzone-start', 'candy-greenzone-start'), 'begin_num': 25},
+                     {'set': 'candy_factory', 'mode': 'pac_man', 'golden': ('gameplay-candy-pacman-start', 'candy-pacman-start'), 'begin_num': 25},
                      {'set': 'luxury_stores', 'mode': 'arcade', 'golden': ('gameplay-luxury-start', 'luxury-start'), 'begin_num': 97},
+                     {'set': 'luxury_stores', 'mode': 'kill', 'golden': ('gameplay-luxury-kill-start', 'luxury-kill-start'), 'begin_num': 97},
+                     {'set': 'luxury_stores', 'mode': 'green_zone', 'golden': ('gameplay-luxury-greenzone-start', 'luxury-greenzone-start'), 'begin_num': 97},
+                     {'set': 'luxury_stores', 'mode': 'pac_man', 'golden': ('gameplay-luxury-pacman-start', 'luxury-pacman-start'), 'begin_num': 97},
                      {'set': 'magic_library', 'mode': 'arcade', 'golden': ('gameplay-library-start', 'library-start'), 'begin_num': 121},
+                     {'set': 'magic_library', 'mode': 'kill', 'golden': ('gameplay-library-kill-start', 'library-kill-start'), 'begin_num': 121},
+                     {'set': 'magic_library', 'mode': 'green_zone', 'golden': ('gameplay-library-greenzone-start', 'library-greenzone-start'), 'begin_num': 121},
+                     {'set': 'magic_library', 'mode': 'pac_man', 'golden': ('gameplay-library-pacman-start', 'library-pacman-start'), 'begin_num': 121},
                      {'set': 'birthday_party', 'mode': 'arcade', 'golden': ('gameplay-birthday-start', 'birthday-start'), 'begin_num': 1},
+                     {'set': 'birthday_party', 'mode': 'kill', 'golden': ('gameplay-birthday-kill-start', 'birthday-kill-start'), 'begin_num': 1},
+                     {'set': 'birthday_party', 'mode': 'green_zone', 'golden': ('gameplay-birthday-greenzone-start', 'birthday-greenzone-start'), 'begin_num': 1},
+                     {'set': 'birthday_party', 'mode': 'pac_man', 'golden': ('gameplay-birthday-pacman-start', 'birthday-pacman-start'), 'begin_num': 1},
                      {'set': 'cinema', 'mode': 'kill', 'golden': ('gameplay-kill-start', 'kill-start'), 'begin_num': 49},
                      {'set': 'cinema', 'mode': 'green_zone', 'golden': ('gameplay-greenzone-start', 'greenzone-start'), 'begin_num': 49},
                      {'set': 'cinema', 'mode': 'pac_man', 'golden': ('gameplay-pacman-start', 'pacman-start'), 'begin_num': 49}]},
