@@ -16,7 +16,6 @@ const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
-const Looks = preload("res://scripts/looks.gd")
 const Audio = preload("res://scripts/original_audio.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
@@ -224,10 +223,11 @@ func _create_ai_players(random: RefCounted, roster: Array[StringName]) -> void:
 		var hat := int(random.random() * 7)
 		random.random()
 		var actor: Dictionary = simulation.actors()[id]
-		# `setRobotMc` sends the look clips to id + 1; past a clip's last frame Flash stays on
-		# its last frame, so a robot with fewer looks wears its last one.
-		actor.body = mini(cloth, Looks.count(int(actor.get("robot", 0)), &"body"))
-		actor.hat = mini(hat, Looks.count(int(actor.get("robot", 0)), &"hat"))
+		# `RobotView.setRobotMc` sends the innermost look clips to clothID + 1 / hatID + 1;
+		# past a clip's last frame Flash stays on that clip's last frame, so the draws stay
+		# raw and every clip clamps them to its own grid (GameActors.resolve_look_key).
+		actor.body = cloth
+		actor.hat = hat
 
 
 ## Where the original's `Math.random` stands at a recorded round (tests/goldens/<case>/

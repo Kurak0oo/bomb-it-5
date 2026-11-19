@@ -74,8 +74,13 @@ func _run() -> void:
 	for id in app.game.get_snapshot().actors:
 		if id == &"human": continue
 		var ai: Dictionary = app.game.get_snapshot().actors[id]
-		ai_ok = ai_ok and ai.hat <= Looks.count(ai.robot, &"hat") and ai.body <= Looks.count(ai.robot, &"body")
-	_expect(ai_ok, "AI robots wear random looks within their robot's set")
+		# `AbstractGameMode.createAIPlayer` stores clothID/hatID as `int(Math.random() * 7)`,
+		# so the snapshot keeps the raw 0..6 draw; Flash clamps each look per clip
+		# (`RobotView.setRobotMc`, GameActors.resolve_look_key: `_r0_Down` has 7 body frames
+		# while Looks.count(0, &"body") is 5). Session.begin's `randi_range(0, Looks.count)`
+		# looks only fill the seats until Game._create_ai_players draws over them.
+		ai_ok = ai_ok and ai.hat >= 0 and ai.hat <= 6 and ai.body >= 0 and ai.body <= 6
+	_expect(ai_ok, "AI robots wear the raw createAIPlayer 0..6 draws, clamped per clip")
 	app.queue_free()
 	await process_frame
 

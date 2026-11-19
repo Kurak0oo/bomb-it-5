@@ -21,6 +21,7 @@ suites=(
 	"res://tests/difficulty_check.gd|^PASS: [0-9]+ difficulty checks$"
 	"res://tests/controls_check.gd|^PASS: [0-9]+ controls checks$"
 	"res://tests/looks_check.gd|^PASS: [0-9]+ looks checks$"
+	"res://tests/dress_up_check.gd|^PASS: [0-9]+ dress-up checks$"
 	"res://tests/kill_check.gd|^PASS: [0-9]+ kill checks$"
 	"res://tests/green_zone_check.gd|^PASS: [0-9]+ green zone checks$"
 	"res://tests/pac_man_check.gd|^PASS: [0-9]+ pac-man checks$"

@@ -6,12 +6,20 @@ extends SceneTree
 const Looks = preload("res://scripts/looks.gd")
 const GameActors = preload("res://scripts/ui/game_actors.gd")
 const SAVE := "user://dress-up-check-save.json"
+## `AbstractGameMode.createAIPlayer` draws `int(random * 7)` for both looks, so an AI look
+## reaches 6 whatever its robot's unlock set holds.
+const MAX_AI_LOOK := 6
 ## robot, GameModel.P1ClothId (outfit), GameModel.P1HatId: non-default looks the two
 ## robots' Looks.count allows.
 const LOOKS := [[0, 1, 1], [2, 2, 1]]
 var failures := 0
 var checks := 0
 var app: Control
+
+
+## A board for GameActors without a scene: `_robot_art` only reads `actor_art`.
+class PackBoard extends RefCounted:
+	var actor_art: Dictionary
 
 
 func _initialize() -> void:
@@ -65,48 +73,117 @@ func _run() -> void:
 	quit(0 if failures == 0 else 1)
 
 
-## RobotView.setRobotMc sends the innermost bodyMc/hatMc to clothID + 1 / hatID + 1; a clip
-## with no hatMc is set to the hat's frame itself (`_r0_Down`), and GameActors keys its art by
-## the clips it has. Past a clip's last frame Flash stays on its last frame (scripts/game.gd,
-## `_create_ai_players`), so a look wider than the clip resolves to the clip's largest cloth
-## and hat (`GameActors.resolve_look_key`), never to the default look. Every robot clip of the
-## robot needs that resolved look's full frame range.
+## The actors pack is optional (tests/looks_check.gd); without the local pack only these
+## assertions are skipped, and the level flow below still runs.
 func _check_actor_art() -> void:
 	var pack_file := "res://original/screens/game/actors/actors.json"
 	if not FileAccess.file_exists(pack_file):
-		_expect(false, "the local actors pack %s is missing: run record_screen.py actors" % pack_file)
+		print("NOTE: the local actors pack %s is missing; skipping the pack checks" % pack_file)
 		return
 	var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(pack_file))
 	var robots: Dictionary = pack.get("robots", {})
-	for look: Array in LOOKS:
-		var robot: int = look[0]
-		_expect(look[1] <= Looks.count(robot, &"body") and look[2] <= Looks.count(robot, &"hat"),
-			"robot %d: look %d|%d is within Looks.count" % [robot, look[1], look[2]])
+	_check_look_grids(robots)
+	_check_every_look(robots)
+	_check_robot_art(pack)
+
+
+## `record_screen.py actors --looks all` renders a clip's looks as the full grid of its
+## innermost `bodyMc`/`hatMc` frames (tools/convert/record_screen.py ~1011-1021). A pack
+## recorded for one round's looks (`--looks round`) does not, and GameActors would fall back
+## to the default look for the rest. Independent of `resolve_look_key`: the grid is read from
+## the keys themselves.
+func _check_look_grids(robots: Dictionary) -> void:
+	for cls: String in robots:
+		if _robot_of(cls) < 0: continue
+		var clip: Dictionary = robots[cls]
+		var looks: Dictionary = clip.get("looks", {})
+		var grid := _grid_max(clip)
+		var expected := {}
+		var clothes: Array = range(grid[0] + 1) if clip.get("body", false) else [-1]
+		var hats: Array = range(grid[1] + 1) if clip.get("hat", false) else [-1]
+		for cloth: int in clothes:
+			for hat: int in hats: expected["%d|%d" % [cloth, hat]] = true
 		var missing := []
-		for cls: String in robots:
-			if not cls.begins_with("_r%d_" % robot): continue
-			var clip: Dictionary = robots[cls]
-			var cloth: int = look[1] if clip.body else -1
-			var hat: int = look[2] if clip.hat else -1
-			var key: String = GameActors.resolve_look_key(clip, cloth, hat)
-			var frames: Dictionary = clip.get("looks", {}).get(key, {})
-			var gaps := []
-			for frame in range(1, int(clip.get("frames", 0)) + 1):
-				if not frames.has(str(frame)): gaps.append(frame)
-			if gaps.size() > 0: missing.append("%s %s (frames %s)" % [cls, key, gaps])
-			# The look past the clip's last frame is its last frame, not the default fallback.
-			var max_cloth := -1
-			var max_hat := -1
-			for look_key: String in clip.get("looks", {}):
-				var parts := look_key.split("|")
-				max_cloth = maxi(max_cloth, int(parts[0]))
-				max_hat = maxi(max_hat, int(parts[1]))
-			var resolved := "%d|%d" % [mini(cloth, max_cloth), mini(hat, max_hat)]
-			_expect(key == resolved,
-				"robot %d look %d|%d: %s resolves to its last body/hat frame %s (got %s)"
-				% [robot, look[1], look[2], cls, resolved, key])
-		_expect(missing.is_empty(), "robot %d look %d|%d: the actors pack has every clip's frames (missing %s)"
-			% [robot, look[1], look[2], missing])
+		var extra := []
+		for key: String in expected:
+			if not looks.has(key): missing.append(key)
+		for key: String in looks:
+			if not expected.has(key): extra.append(key)
+		_expect(missing.is_empty() and extra.is_empty(),
+			"%s: its looks are the clip's full grid (missing %s, extra %s)" % [cls, missing, extra])
+
+
+## Every look the game can give a robot (its unlock set, and the AI's raw `int(random * 7)`
+## draw up to 6): every clip resolves to the look clamped to its own grid, and that key has
+## the clip's full frame range. Flash keeps a look past a clip's last frame on that last
+## frame (`_create_ai_players`), so the default fallback only shows when the clamped look is
+## the default.
+func _check_every_look(robots: Dictionary) -> void:
+	for robot in 8:
+		var clips := _clips_of(robots, robot)
+		_expect(not clips.is_empty(), "robot %d: the actors pack has its clips" % robot)
+		var max_cloth: int = maxi(Looks.count(robot, &"body"), MAX_AI_LOOK)
+		var max_hat: int = maxi(Looks.count(robot, &"hat"), MAX_AI_LOOK)
+		for cloth in range(max_cloth + 1):
+			for hat in range(max_hat + 1):
+				var bad := []
+				for cls: String in clips:
+					var clip: Dictionary = robots[cls]
+					var key: String = GameActors.resolve_look_key(clip,
+						cloth if clip.get("body", false) else -1, hat if clip.get("hat", false) else -1)
+					var grid := _grid_max(clip)
+					var expected := "%d|%d" % [
+						mini(cloth, grid[0]) if clip.get("body", false) else -1,
+						mini(hat, grid[1]) if clip.get("hat", false) else -1]
+					if key != expected:
+						bad.append("%s resolves %s, not its clamped look %s" % [cls, key, expected])
+						continue
+					var frames: Dictionary = clip.get("looks", {}).get(key, {})
+					var gaps := []
+					for frame in range(1, int(clip.get("frames", 0)) + 1):
+						if not frames.has(str(frame)): gaps.append(frame)
+					if not gaps.is_empty():
+						bad.append("%s %s misses frames %s" % [cls, key, gaps])
+				_expect(bad.is_empty(),
+					"robot %d look %d|%d: every clip draws its clamped look for its full range (bad %s)"
+					% [robot, cloth, hat, bad])
+
+
+## `_robot_art` is the draw path `resolve_look_key` serves; without a scene it still needs
+## only the pack's robots (`_init` reads `board.actor_art`).
+func _check_robot_art(pack: Dictionary) -> void:
+	var board := PackBoard.new()
+	board.actor_art = pack
+	var actors := GameActors.new(null, board)
+	var frames: Dictionary = actors._robot_art({"class": "_r2_Up", "cloth": 1, "hat": 0, "frame": 1})
+	_expect(not frames.is_empty(), "_robot_art draws a non-default look on _r2_Up")
+
+
+func _grid_max(clip: Dictionary) -> Array:
+	var max_cloth := -1
+	var max_hat := -1
+	for key: String in clip.get("looks", {}):
+		var parts := key.split("|")
+		max_cloth = maxi(max_cloth, int(parts[0]))
+		max_hat = maxi(max_hat, int(parts[1]))
+	return [max_cloth, max_hat]
+
+
+## The clips `_r<n>_...` of one robot; -1 for a class that is not a robot clip.
+func _robot_of(cls: String) -> int:
+	if not cls.begins_with("_r"): return -1
+	var rest := cls.substr(2)
+	var at := rest.find("_")
+	if at <= 0: return -1
+	var digits := rest.substr(0, at)
+	return int(digits) if digits.is_valid_int() else -1
+
+
+func _clips_of(robots: Dictionary, robot: int) -> Array:
+	var clips := []
+	for cls: String in robots:
+		if _robot_of(cls) == robot: clips.append(cls)
+	return clips
 
 
 func _start_level(robot: int, body: int, hat: int) -> void:
