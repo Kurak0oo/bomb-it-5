@@ -1190,7 +1190,9 @@ func _robot_art(view: Dictionary) -> Dictionary:
 ## `bodyMc`/`hatMc` to `gotoAndStop(clothID + 1)` / `gotoAndStop(hatID + 1)`, and past a clip's
 ## last frame Flash stays on its last frame (scripts/game.gd, `_create_ai_players`). So a look
 ## past this clip's last body/hat frame (e.g. robot 2's `_r2_Up`, a one-frame hatMc) draws the
-## clip's largest cloth/hat instead of another look. Only when even that is missing does it
+## clip's largest cloth/hat instead of another look. The pack's `body_frames`/`hat_frames` are
+## those parts' true frame counts (tools/convert/record_screen.py, `_record_robots`); a pack
+## older than them falls back to the largest look key. Only when even that is missing does it
 ## fall back to the default key (0|0, or -1 for a part the clip lacks).
 static func resolve_look_key(clip: Dictionary, cloth: int, hat: int) -> String:
 	var looks: Dictionary = clip.get("looks", {})
@@ -1198,10 +1200,14 @@ static func resolve_look_key(clip: Dictionary, cloth: int, hat: int) -> String:
 	if looks.has(key): return key
 	var max_cloth := -1
 	var max_hat := -1
-	for look_key: String in looks:
-		var parts := look_key.split("|")
-		max_cloth = maxi(max_cloth, int(parts[0]))
-		max_hat = maxi(max_hat, int(parts[1]))
+	if clip.has("body_frames") and clip.has("hat_frames"):
+		max_cloth = int(clip["body_frames"]) - 1
+		max_hat = int(clip["hat_frames"]) - 1
+	else:
+		for look_key: String in looks:
+			var parts := look_key.split("|")
+			max_cloth = maxi(max_cloth, int(parts[0]))
+			max_hat = maxi(max_hat, int(parts[1]))
 	var clamped := "%d|%d" % [mini(cloth, max_cloth), mini(hat, max_hat)]
 	if looks.has(clamped): return clamped
 	return "%d|%d" % [0 if clip.get("body", false) else -1, 0 if clip.get("hat", false) else -1]

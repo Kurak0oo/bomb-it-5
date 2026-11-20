@@ -1004,18 +1004,25 @@ def _record_robots(p, target, seen, looks, all_looks, out):
             body = '/bodyMc' in tree
             hat_from = '/bodyMc' if body and '/bodyMc/hatMc' in tree else ''
             hat = f'{hat_from}/hatMc' in tree
-            entry = {'frames': tree['']['total_frames'], 'body': body, 'hat': hat, 'looks': {}, 'labels': {}}
+
+            def innermost(start, child):
+                path = f'{start}/{child}'
+                while f'{path}/{child}' in tree:
+                    path += f'/{child}'
+                return tree[path]['total_frames']
+
+            # RobotView.setRobotMc sends the innermost bodyMc/hatMc to gotoAndStop(look + 1):
+            # these are the clip's true look counts, whatever looks this pass rendered.
+            entry = {'frames': tree['']['total_frames'], 'body': body, 'hat': hat,
+                     'body_frames': innermost('', 'bodyMc') if body else 0,
+                     'hat_frames': innermost(hat_from, 'hatMc') if hat else 0,
+                     'looks': {}, 'labels': {}}
             at = tree['']['stage_matrix']
             if '/hand' in tree:
                 entry['hand'] = tree['/hand']['stage_matrix']
             if all_looks:
-                def innermost(start, child):
-                    path = f'{start}/{child}'
-                    while f'{path}/{child}' in tree:
-                        path += f'/{child}'
-                    return tree[path]['total_frames']
-                bodies = range(innermost('', 'bodyMc')) if body else [0]
-                hats = range(innermost(hat_from, 'hatMc')) if hat else [0]
+                bodies = range(entry['body_frames']) if body else [0]
+                hats = range(entry['hat_frames']) if hat else [0]
                 wanted = {(c, h) for c in bodies for h in hats}
             else:
                 wanted = looks[robot]
