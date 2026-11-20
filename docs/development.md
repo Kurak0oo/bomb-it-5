@@ -853,3 +853,8 @@ Known gaps: the grid check derives each clip's extent from the pack itself, so a
 only default looks for robots 0/3/4/7 would pass; storing each clip's bodyMc/hatMc frame counts
 in the pack (needs an art pass) closes it. `docs/evidence/edition-5-modes-and-flow.md` still
 says the port keeps AI looks within the robot's set (source record, left as is).
+Frame counts, 2026-11-20: the actors pack stores each robot clip's `body_frames`/`hat_frames`
+(innermost bodyMc/hatMc); `resolve_look_key` clamps to them and `dress_up_check` requires each
+clip's looks to be exactly that grid (a pack without them fails). Pack re-rendered, 56,912 images;
+counts match `docs/evidence/edition-5-robot-looks.md` for the eight base views. Open: the
+key-derived fallback for older packs is untested; per-outfit hat counts are read at frame 1 only.
