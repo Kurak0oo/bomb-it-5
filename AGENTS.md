@@ -26,7 +26,7 @@ Do not copy files from `C:\Users\Eiji\Github\bomb-it-1`.
 
 **Orchestrator** (the session that plans and delegates): work here runs through the `orchestrator` skill; read it before changing code. Every source change goes through a subagent profile, and every task carries a gate.
 
-**Art is the orchestrator's own work.** Every pass that renders art into the ignored pack `original/` (`tools/convert/record_screen.py` and its art passes, e.g. `actors`, `sets`, `modes`, `shots`) is run by the orchestrator, never by a worker. Workers may change converter code; the orchestrator runs it, checks the pack and owns its flags (`actors` keeps `--looks all`).
+**Generated art is the orchestrator's own work.** Art the orchestrator makes from its own ability (for example, drawing a new character or map that no code can derive from the SWF) is done by the orchestrator, not a worker. Art that code or another model can produce goes to a worker like any other task: `tools/convert/record_screen.py` passes (`actors`, `sets`, `modes`, `shots`) and SWF conversions. The orchestrator owns those passes' flags in its briefs (`actors` keeps `--looks all`).
 
 **Worker** (you were started with a brief that has Objective, Files and Gate): ignore the paragraph above. Do the brief yourself, directly; never run `devspace agents` or hand work to another agent. The sections below are reference for you too.
 
