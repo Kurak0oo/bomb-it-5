@@ -142,24 +142,92 @@ def reference_meta(name, case_path, swf_sha256):
     return meta
 
 
-def _scene_problems(golden_path, capture, replayed):
-    """Differences between the replayed display list and one committed golden, briefly."""
+def scene_exclusions(case, name, capture, golden, other):
+    """What neither side can reproduce when a scene is diffed: a screen's random effects
+    (FallSnow's confetti) and the text, clip frames and alpha the original drives on the host
+    clock. Both `check` and reference verification run this; only `check` applies owner edits
+    and localization (the golden alone is the owner's screen, the replay is the original).
+
+    Returns the two scenes, the effects report, the pixel masks for what was taken out, and
+    the case fields that named it."""
+    golden, other, effects = nodes.split_effects(golden, other, effects_of(name, capture))
+    masks = [b for e in effects.values() for b in e['bounds']]
+    # Text the original takes from the host's wall clock (TIME: `Game.countTime` polls
+    # `new Date().getSeconds()`, which the reference player does not step with its frames)
+    # cannot match frame for frame; the case names it: only its presence is compared, and
+    # its place is left out of the pixel score.
+    wall_clock = case.get('wall_clock_text', {})
+    for side in (golden, other):
+        for n in side['nodes']:
+            if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_clock):
+                n.pop('text', None)
+                if side is golden and n.get('render_bounds'):
+                    masks += [n['render_bounds']]
+    # Likewise a clip frame the original drives on the host's clock (TweenMax: the
+    # map-loading screen's progress bar): present and placed, its frame not compared.
+    wall_frames = case.get('wall_clock_frame', {})
+    for side in (golden, other):
+        for n in side['nodes']:
+            if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_frames):
+                n.pop('frame', None)
+                if side is golden and n.get('render_bounds'):
+                    masks += [n['render_bounds']]
+    # And a clip whose alpha the original tweens on the host's clock (TweenMax.from: the
+    # projectiles' 0.2 s fade-in), named by class: present, placed and framed, its alpha not
+    # compared and its place left out of the pixel score.
+    wall_alpha = case.get('wall_clock_alpha', {})
+    faded_paths = {n['path'] for n in golden['nodes'] if n.get('class') in wall_alpha}
+    for side in (golden, other):
+        for n in side['nodes']:
+            if n['path'] in faded_paths:
+                n.pop('alpha', None)
+                if side is golden and n.get('render_bounds'):
+                    masks += [n['render_bounds']]
+    return {'golden': golden, 'other': other, 'effects': effects, 'masks': masks,
+            'wall_clock_text': wall_clock, 'wall_clock_frame': wall_frames,
+            'wall_clock_alpha': faded_paths}
+
+
+def _tag_original_effects(scene, effects):
+    """Mark the replayed original's effect nodes like Godot marks its own (the display-list
+    dump has no such field), so `nodes.split_effects` takes them out of both sides."""
+    by_path = {path: effect for effect, how in effects.items() for path in how.get('nodes', {})}
+    tagged = []
+    for n in scene['nodes']:
+        effect = by_path.get(n['path'])
+        tagged.append(dict(n, effect=effect) if effect else n)
+    return dict(scene, nodes=tagged)
+
+
+def _scene_problems(case, name, golden_path, capture, replayed):
+    """Differences between the replayed display list and one committed golden, briefly.
+
+    Both sides here are the original (the committed golden and this replay), so owner edits
+    and localization are not applied: they would invent differences. Only the exclusions
+    `check` also makes before its node diff are applied."""
     if not golden_path.is_file():
         return [f'capture {capture} has no committed golden']
+    frame = replayed['frames'].get(capture)
+    if frame is None:
+        return [f'capture {capture} has no replayed frame']
     try:
         dump = json.loads((Path(replayed.get('out') or WORK / name / 'reference') / f'{capture}.display.json')
                           .read_text(encoding='utf-8'))
         scene = nodes.normalize_reference(dump)
     except (OSError, ValueError) as error:
         return [f'capture {capture} replayed no readable display list ({error})']
-    scene['frame'] = replayed['frames'][capture]
+    scene['frame'] = frame
     golden = json.loads(golden_path.read_text(encoding='utf-8'))
-    report = nodes.diff(golden, scene, replayed.get('tolerances'))
-    if report['passed']:
-        return []
+    scene = _tag_original_effects(scene, effects_of(name, capture))
+    shared = scene_exclusions(case, name, capture, golden, scene)
+    report = nodes.diff(shared['golden'], shared['other'], replayed.get('tolerances'))
     differences = [f'missing {path}' for path in report['missing']]
     differences += [f'extra {path}' for path in report['extra']]
     differences += [f'{item["path"]}: {"; ".join(item["problems"])}' for item in report['mismatches']]
+    if not differences and report['matched'] < report['reference_nodes']:
+        differences.append(f'{report["matched"]}/{report["reference_nodes"]} nodes matched')
+    if not differences:
+        return []
     return [f'capture {capture} scene differs: ' + '; '.join(differences[:5])]
 
 
@@ -183,7 +251,7 @@ def verify_reference_goldens(name, replay, meta=None):
         if recorded != replayed:
             problems.append(f'capture {capture} is at frame {recorded}, replayed {replayed}')
             continue
-        problems += _scene_problems(GOLDENS / name / f'{capture}.json', capture, replay)
+        problems += _scene_problems(case, name, GOLDENS / name / f'{capture}.json', capture, replay)
     if problems:
         raise SystemExit(f'{name}: the reference would not correspond to the golden: ' + '; '.join(problems))
     return {'player_sha256': replay.get('player_sha256'),
@@ -365,13 +433,14 @@ def reference_provenance_problem(name, capture, case_path, meta, golden_path):
     except (OSError, ValueError):
         return 'reference.json is unreadable'
     if provenance.get('case_sha256') != reference_sha256(case_path):
-        return 'the case changed since the reference was recorded'
+        return 'the case changed since the reference was recorded (case_sha256)'
     frames, golden_frames = provenance.get('frames') or {}, meta.get('frames') or {}
     if frames.get(capture) != golden_frames.get(capture):
-        return f'the reference is at frame {frames.get(capture)}, the golden at {golden_frames.get(capture)}'
+        return (f'the reference is at frame {frames.get(capture)}, the golden at '
+                f'{golden_frames.get(capture)} (frames)')
     recorded = (provenance.get('golden_sha256') or {}).get(capture)
     if recorded != sha256(golden_path):
-        return 'the committed golden changed since the reference was recorded'
+        return 'the committed golden changed since the reference was recorded (golden_sha256)'
     return None
 
 
@@ -395,41 +464,13 @@ def check(name, godot):
         golden = nodes.apply_owner_edits(golden, edits)
         golden, placeholder_masks = localize_golden(golden)
         masks = masks + placeholder_masks
-        # A screen's random effects (FallSnow's confetti) are checked by their rules, and
-        # where either side draws one is left out of the pixel score.
-        golden, actual, effects = nodes.split_effects(golden, actual, effects_of(name, capture))
-        masks = masks + [b for e in effects.values() for b in e['bounds']]
-        # Text the original takes from the host's wall clock (TIME: `Game.countTime` polls
-        # `new Date().getSeconds()`, which the reference player does not step with its frames)
-        # cannot match frame for frame; the case names it: only its presence is compared, and
-        # its place is left out of the pixel score.
-        wall_clock = case.get('wall_clock_text', {})
-        for side in (golden, actual):
-            for n in side['nodes']:
-                if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_clock):
-                    n.pop('text', None)
-                    if side is golden and n.get('render_bounds'):
-                        masks = masks + [n['render_bounds']]
-        # Likewise a clip frame the original drives on the host's clock (TweenMax: the
-        # map-loading screen's progress bar): present and placed, its frame not compared.
-        wall_frames = case.get('wall_clock_frame', {})
-        for side in (golden, actual):
-            for n in side['nodes']:
-                if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_frames):
-                    n.pop('frame', None)
-                    if side is golden and n.get('render_bounds'):
-                        masks = masks + [n['render_bounds']]
-        # And a clip whose alpha the original tweens on the host's clock (TweenMax.from: the
-        # projectiles' 0.2 s fade-in), named by class: present, placed and framed, its alpha not
-        # compared and its place left out of the pixel score.
-        wall_alpha = case.get('wall_clock_alpha', {})
-        faded_paths = {n['path'] for n in golden['nodes'] if n.get('class') in wall_alpha}
-        for side in (golden, actual):
-            for n in side['nodes']:
-                if n['path'] in faded_paths:
-                    n.pop('alpha', None)
-                    if side is golden and n.get('render_bounds'):
-                        masks = masks + [n['render_bounds']]
+        # What neither side can reproduce (a screen's random effects, and the text, clip frames
+        # and alpha the original drives on the host clock) is taken out of both sides here and
+        # out of the pixel score. Reference verification makes the same exclusions.
+        shared = scene_exclusions(case, name, capture, golden, actual)
+        golden, actual = shared['golden'], shared['other']
+        effects = shared['effects']
+        masks = masks + shared['masks']
         # A filter the reference player cannot draw (Ruffle's wgpu backend skips GradientGlowFilter
         # and GradientBevelFilter: the invincible robot's colour cycle) is drawn by Godot only;
         # its node's place is left out of the pixel score.
@@ -451,12 +492,12 @@ def check(name, godot):
             entry['unrendered_filters'] = sorted(n['path'] for n in unrendered)
         if faded:
             entry['composite_alpha'] = sorted(n['path'] for n in faded)
-        if wall_clock:
-            entry['wall_clock_text'] = sorted(wall_clock)
-        if wall_frames:
-            entry['wall_clock_frame'] = sorted(wall_frames)
-        if faded_paths:
-            entry['wall_clock_alpha'] = sorted(faded_paths)
+        if shared['wall_clock_text']:
+            entry['wall_clock_text'] = sorted(shared['wall_clock_text'])
+        if shared['wall_clock_frame']:
+            entry['wall_clock_frame'] = sorted(shared['wall_clock_frame'])
+        if shared['wall_clock_alpha']:
+            entry['wall_clock_alpha'] = sorted(shared['wall_clock_alpha'])
         if effects:
             entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
             entry['node']['passed'] &= all(e['passed'] for e in effects.values())
@@ -467,7 +508,8 @@ def check(name, godot):
             stale = reference_provenance_problem(name, capture, case_path, meta, golden_dir / f'{capture}.json')
             if stale:
                 entry['pixel'] = {'passed': None,
-                                  'skipped': 'local reference is stale or unverified: re-run record --reference-only'}
+                                  'skipped': 'local reference is stale or unverified: re-run record --reference-only',
+                                  'reason': stale}
             else:
                 thresholds = dict(case.get('thresholds', {}))
                 ceiling = resampling_ceiling(name, capture, reference_png)
@@ -519,6 +561,8 @@ def print_report(report):
                   f'{"by its rules" if e["passed"] else "off: " + "; ".join(e["problems"][:5])} (excluded from the pixel score)')
         if p.get('skipped'):
             print(f'    pixels skipped: {p["skipped"]}')
+            if p.get('reason'):
+                print(f'    why: {p["reason"]}')
         elif 'error' in p:
             print(f'    pixels: {p["error"]}')
         else:

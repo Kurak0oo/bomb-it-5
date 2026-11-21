@@ -221,6 +221,7 @@ class ReferenceOnlyRecord(unittest.TestCase):
                                    'stage_matrix': [1.0, 0.0, 0.0, 1.0, 10.0, 20.0]}]}
         self.golden = nodes.normalize_reference(self.display)
         self.golden['frame'] = 541
+        self.replay_display = None
         self.replay = {'case_path': self.case_path, 'captures': ['menu'], 'frames': {'menu': 541},
                        'fps': 35.0, 'swf_sha256': compare.sha256(self.swf),
                        'player_sha256': compare.sha256(self.player)}
@@ -244,7 +245,8 @@ class ReferenceOnlyRecord(unittest.TestCase):
         out = Path(out) if out is not None else compare.WORK / name / 'reference'
         out.mkdir(parents=True, exist_ok=True)
         (out / 'menu.png').write_bytes(b'stub reference PNG')
-        (out / 'menu.display.json').write_text(json.dumps(self.display), encoding='utf-8')
+        display = self.display if self.replay_display is None else self.replay_display
+        (out / 'menu.display.json').write_text(json.dumps(display), encoding='utf-8')
         return dict(self.replay, out=out)
 
     def write_meta(self, **changes):
@@ -295,6 +297,93 @@ class ReferenceOnlyRecord(unittest.TestCase):
         self.display['nodes'][0]['stage_matrix'][4] = 50.0
         with self.assertRaisesRegex(SystemExit, 'capture menu scene differs'):
             compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def write_layout(self, **layout):
+        target = self.root / 'scenes' / 'swf' / 'screen.json'
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(json.dumps(dict({'screen': 'menu',
+                                           'source': {'golden': 'tests/goldens/main-menu/menu.json'}},
+                                          **layout)), encoding='utf-8')
+
+    def rewrite_case(self, **changes):
+        case = json.loads(self.case_path.read_text(encoding='utf-8'))
+        self.case_path.write_text(json.dumps(dict(case, **changes)), encoding='utf-8')
+        self.meta['case_sha256'] = compare.reference_sha256(self.case_path)
+
+    def test_wall_clock_text_difference_is_accepted(self):
+        self.rewrite_case(wall_clock_text={'/root1/time': 'Game.countTime polls the host clock'})
+        self.display['nodes'][0].update(path='/root1/time', text='178')
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
+        self.replay_display = json.loads(json.dumps(self.display))
+        self.replay_display['nodes'][0]['text'] = '179'
+        self.write_meta()
+        with contextlib.redirect_stdout(io.StringIO()):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertTrue((self.work / 'main-menu' / 'reference' / 'reference.json').is_file())
+
+    def test_random_effect_difference_is_accepted(self):
+        pink = {'add': [255, 0, 102, 0], 'mult': [0.0, 0.0, 0.0, 1.0]}
+        snow = ref_node('/@0#4', kind='bitmap', color_transform=pink, render_bounds=[165.3, 19.0, 186.85, 40.5])
+        snow['stage_matrix'] = [0.7676, 0.0931, -0.0931, 0.7676, 167.65, 19.0]
+        self.display['nodes'].append(snow)
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
+        self.replay_display = json.loads(json.dumps(self.display))
+        self.replay_display['nodes'][-1] = dict(
+            snow, color_transform={'add': [102, 204, 102, 0], 'mult': [0.0, 0.0, 0.0, 1.0]},
+            stage_matrix=[0.433, 0.25, -0.25, 0.433, 300.0, 40.0])
+        self.write_layout(effects={'FallSnow': {'nodes': {'/@0#4': {}}}})
+        self.write_meta()
+        with contextlib.redirect_stdout(io.StringIO()):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertTrue((self.work / 'main-menu' / 'reference' / 'reference.json').is_file())
+
+    def test_owner_edited_node_in_both_is_accepted(self):
+        self.display['nodes'].append(ref_node('/root1/removed', 5, 5))
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
+        self.replay_display = json.loads(json.dumps(self.display))
+        self.write_layout(owner_edits={'removed': {'/root1/menu': {}}})
+        self.write_meta()
+        with contextlib.redirect_stdout(io.StringIO()):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertTrue((self.work / 'main-menu' / 'reference' / 'reference.json').is_file())
+
+    def test_regular_node_frame_difference_is_refused(self):
+        self.display['nodes'][0]['frame'] = 3
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
+        self.replay_display = json.loads(json.dumps(self.display))
+        self.replay_display['nodes'][0]['frame'] = 4
+        self.write_meta()
+        with self.assertRaisesRegex(SystemExit, 'frame 4 != 3'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_unmatched_reference_node_is_refused(self):
+        # nodes.diff only calls a node missing when it shows; verification also refuses a
+        # golden node the replay does not have at all (matched < total).
+        self.display['nodes'].append(ref_node('/root1/hidden', visible=False))
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
+        self.replay_display = {'schema': self.display['schema'], 'truncated': False, 'stage': {},
+                               'nodes': [self.display['nodes'][0]]}
+        self.write_meta()
+        with self.assertRaisesRegex(SystemExit, '1/2 nodes matched'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_scene_problems_work_fallback_and_missing_frame(self):
+        # No `out` on the replay: the fallback is WORK/<name>/reference (this used to be a
+        # NameError), and a capture absent from the replayed frames is a clean error.
+        self.write_meta()
+        out = self.work / 'main-menu' / 'reference'
+        out.mkdir(parents=True)
+        (out / 'menu.display.json').write_text(json.dumps(self.display), encoding='utf-8')
+        case = json.loads(self.case_path.read_text(encoding='utf-8'))
+        golden = self.goldens / 'main-menu' / 'menu.json'
+        self.assertEqual(compare._scene_problems(case, 'main-menu', golden, 'menu', {'frames': {'menu': 541}}), [])
+        self.assertEqual(compare._scene_problems(case, 'main-menu', golden, 'menu', {'frames': {}}),
+                         ['capture menu has no replayed frame'])
 
     def test_failed_verify_keeps_existing_reference(self):
         self.write_meta(frames={'menu': 540})
@@ -414,6 +503,11 @@ class CheckReferenceProvenance(unittest.TestCase):
 
     def test_missing_provenance_skips_pixels(self):
         self.assert_pixels_skipped()
+
+    def test_missing_provenance_prints_the_reason(self):
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            compare.check('main-menu', 'godot')
+        self.assertIn('why: reference.json is missing', printed.getvalue())
 
     def test_stale_frames_skip_pixels(self):
         self.write_provenance(frames={'menu': 540})
