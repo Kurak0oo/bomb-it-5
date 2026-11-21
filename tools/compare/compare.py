@@ -75,11 +75,12 @@ def reference_sha256(case_path):
     return hashlib.sha256(json.dumps(case, sort_keys=True).encode()).hexdigest()
 
 
-def replay_case(name, player, swf):
-    """Replay the case in the reference player into WORK/<name>/reference.
+def replay_case(name, player, swf, out=None):
+    """Replay the case in the reference player into WORK/<name>/reference (or `out`).
 
     Shared by `record` (goldens + local PNGs) and `record --reference-only` (local PNGs only).
-    Returns the case path, its captures, their replay frames, the fps setting and the SWF hash.
+    Returns the case path, its captures, their replay frames, the fps setting, the SWF and
+    player hashes, and the directory the captures were written to.
     """
     from replay_reference import ReferenceSession, SWF_SHA256
     case_path, case, captures = load_case(name)
@@ -90,8 +91,10 @@ def replay_case(name, player, swf):
     if not player.is_file():
         raise SystemExit(f'Reference player not built: {player} (run tools/reference_player/build.sh)')
     import tempfile
-    out = WORK / name / 'reference'
-    shutil.rmtree(out, ignore_errors=True)
+    if out is None:
+        out = WORK / name / 'reference'
+        shutil.rmtree(out, ignore_errors=True)
+    out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     # Same reason as replay_reference: Ruffle rejects dot-prefixed SWF paths.
     with tempfile.TemporaryDirectory(prefix='bombit5-compare-') as staging:
@@ -115,12 +118,11 @@ def replay_case(name, player, swf):
         finally:
             session.close(check=ok)
     return {'case_path': case_path, 'captures': captures, 'frames': frames, 'fps': fps,
-            'swf_sha256': sha256(swf)}
+            'swf_sha256': sha256(swf), 'player_sha256': sha256(player), 'out': out}
 
 
-def verify_reference_goldens(name, replay):
-    """Fail unless the committed goldens describe the same case, SWF and capture frames as the
-    replay, so the local reference PNGs can stand in for the goldens' original capture."""
+def reference_meta(name, case_path, swf_sha256):
+    """The committed meta, after checking the replay inputs match it before anything replays."""
     meta_path = GOLDENS / name / 'meta.json'
     if not meta_path.is_file():
         try:
@@ -130,34 +132,112 @@ def verify_reference_goldens(name, replay):
         raise SystemExit(f'{name}: no committed goldens at {shown}; '
                          'the reference would not correspond to the golden')
     meta = json.loads(meta_path.read_text(encoding='utf-8'))
-    case_path = replay['case_path']
     problems = []
-    if meta.get('swf_sha256') != replay['swf_sha256']:
-        problems.append(f'swf_sha256 is {meta.get("swf_sha256")}, replayed {replay["swf_sha256"]}')
+    if meta.get('swf_sha256') != swf_sha256:
+        problems.append(f'swf_sha256 is {meta.get("swf_sha256")}, replayed {swf_sha256}')
     if meta.get('case_sha256') not in (reference_sha256(case_path), sha256(case_path)):
         problems.append(f'case_sha256 is {meta.get("case_sha256")}, replayed {reference_sha256(case_path)}')
-    frames = meta.get('frames') or {}
-    for capture in replay['captures']:
-        recorded, replayed = frames.get(capture), replay['frames'][capture]
-        if recorded != replayed:
-            problems.append(f'capture {capture} is at frame {recorded}, replayed {replayed}')
     if problems:
         raise SystemExit(f'{name}: the reference would not correspond to the golden: ' + '; '.join(problems))
+    return meta
+
+
+def _scene_problems(golden_path, capture, replayed):
+    """Differences between the replayed display list and one committed golden, briefly."""
+    if not golden_path.is_file():
+        return [f'capture {capture} has no committed golden']
+    try:
+        dump = json.loads((Path(replayed.get('out') or WORK / name / 'reference') / f'{capture}.display.json')
+                          .read_text(encoding='utf-8'))
+        scene = nodes.normalize_reference(dump)
+    except (OSError, ValueError) as error:
+        return [f'capture {capture} replayed no readable display list ({error})']
+    scene['frame'] = replayed['frames'][capture]
+    golden = json.loads(golden_path.read_text(encoding='utf-8'))
+    report = nodes.diff(golden, scene, replayed.get('tolerances'))
+    if report['passed']:
+        return []
+    differences = [f'missing {path}' for path in report['missing']]
+    differences += [f'extra {path}' for path in report['extra']]
+    differences += [f'{item["path"]}: {"; ".join(item["problems"])}' for item in report['mismatches']]
+    return [f'capture {capture} scene differs: ' + '; '.join(differences[:5])]
+
+
+def verify_reference_goldens(name, replay, meta=None):
+    """Fail unless the committed goldens describe the same case, SWF, capture frames and scene
+    as the replay, so the local reference PNGs can stand in for the goldens' original capture.
+
+    The scene is rebuilt from the replayed display lists exactly as `record` makes the goldens,
+    then diffed with the same node diff as `check` (it reads display-list paths and fields, not
+    the per-run Ruffle `name`). A different player build is accepted when its scene matches:
+    the meta's player recorded the golden, and scene equality is the evidence.
+    """
+    if meta is None:
+        meta = reference_meta(name, replay['case_path'], replay['swf_sha256'])
+    case = json.loads(Path(replay['case_path']).read_text(encoding='utf-8'))
+    replay = dict(replay, tolerances=case.get('tolerances'))
+    problems = []
+    frames = meta.get('frames') or {}
+    for capture in replay['captures']:
+        recorded, replayed = frames.get(capture), replay['frames'].get(capture)
+        if recorded != replayed:
+            problems.append(f'capture {capture} is at frame {recorded}, replayed {replayed}')
+            continue
+        problems += _scene_problems(GOLDENS / name / f'{capture}.json', capture, replay)
+    if problems:
+        raise SystemExit(f'{name}: the reference would not correspond to the golden: ' + '; '.join(problems))
+    return {'player_sha256': replay.get('player_sha256'),
+            'player_matches': replay.get('player_sha256') == meta.get('player_sha256')}
+
+
+def write_reference_provenance(out, case_path, replay, captures, golden_dir):
+    """The local reference's provenance, checked by `check` before it uses the PNGs."""
+    provenance = {'case_sha256': reference_sha256(case_path), 'swf_sha256': replay['swf_sha256'],
+                  'player_sha256': replay.get('player_sha256'),
+                  'frames': {capture: replay['frames'][capture] for capture in captures},
+                  'golden_sha256': {capture: sha256(golden_dir / f'{capture}.json') for capture in captures}}
+    (out / 'reference.json').write_text(json.dumps(provenance, indent=1, sort_keys=True) + '\n', encoding='utf-8')
 
 
 def record(name, player, swf, reference_only=False):
-    replay = replay_case(name, player, swf)
-    case_path, captures, frames = replay['case_path'], replay['captures'], replay['frames']
     if reference_only:
-        verify_reference_goldens(name, replay)
-        out = WORK / name / 'reference'
+        case_path, _case, captures = load_case(name)
+        if not swf.is_file():
+            raise SystemExit(f'record needs the SWF at {swf} (pass --swf)')
+        meta = reference_meta(name, case_path, sha256(swf))
+        out, tmp = WORK / name / 'reference', WORK / name / 'reference.tmp'
+        old = WORK / name / 'reference.old'
+        shutil.rmtree(tmp, ignore_errors=True)
+        try:
+            replay = replay_case(name, player, swf, out=tmp)
+            verified = verify_reference_goldens(name, replay, meta)
+            write_reference_provenance(tmp, case_path, replay, captures, GOLDENS / name)
+            # Swap the verified replay in only now; restore the old reference if the swap fails.
+            shutil.rmtree(old, ignore_errors=True)
+            if out.exists() or out.is_symlink():
+                out.rename(old)
+            try:
+                tmp.rename(out)
+            except BaseException:
+                if old.exists():
+                    old.rename(out)
+                raise
+            shutil.rmtree(old, ignore_errors=True)
+        except BaseException:
+            shutil.rmtree(tmp, ignore_errors=True)
+            raise
         try:
             shown = out.relative_to(ROOT)
         except ValueError:
             shown = out
         print(f'recorded reference for {name}: {len(captures)} capture(s) in {shown}')
+        if not verified['player_matches']:
+            print(f'  reference player {str(verified["player_sha256"])[:12]}… differs from the golden\'s '
+                  f'{str(meta.get("player_sha256"))[:12]}…; scene matches, accepting')
         return
-    out = WORK / name / 'reference'
+    replay = replay_case(name, player, swf)
+    case_path, captures, frames = replay['case_path'], replay['captures'], replay['frames']
+    out = replay['out']
     target = GOLDENS / name
     target.mkdir(parents=True, exist_ok=True)
     for capture in captures:
@@ -166,9 +246,10 @@ def record(name, player, swf, reference_only=False):
         golden['frame'] = frames[capture]
         (target / f'{capture}.json').write_text(json.dumps(golden, indent=1, sort_keys=True) + '\n', encoding='utf-8')
     meta = {'case': name, 'case_sha256': reference_sha256(case_path), 'swf_sha256': replay['swf_sha256'],
-            'player_sha256': sha256(player), 'fps': replay['fps'], 'frames': frames,
+            'player_sha256': replay['player_sha256'], 'fps': replay['fps'], 'frames': frames,
             'note': 'Recorded by tools/compare/compare.py record; regenerate rather than edit.'}
     (target / 'meta.json').write_text(json.dumps(meta, indent=1, sort_keys=True) + '\n', encoding='utf-8')
+    write_reference_provenance(out, case_path, replay, captures, target)
     print(f'recorded {name}: {len(captures)} capture(s), goldens in {target.relative_to(ROOT)}')
 
 
@@ -274,6 +355,26 @@ def effects_of(case, capture):
     return {}
 
 
+def reference_provenance_problem(name, capture, case_path, meta, golden_path):
+    """Why the local reference cannot stand in for this golden, or None when it can."""
+    path = WORK / name / 'reference' / 'reference.json'
+    if not path.is_file():
+        return 'reference.json is missing'
+    try:
+        provenance = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return 'reference.json is unreadable'
+    if provenance.get('case_sha256') != reference_sha256(case_path):
+        return 'the case changed since the reference was recorded'
+    frames, golden_frames = provenance.get('frames') or {}, meta.get('frames') or {}
+    if frames.get(capture) != golden_frames.get(capture):
+        return f'the reference is at frame {frames.get(capture)}, the golden at {golden_frames.get(capture)}'
+    recorded = (provenance.get('golden_sha256') or {}).get(capture)
+    if recorded != sha256(golden_path):
+        return 'the committed golden changed since the reference was recorded'
+    return None
+
+
 def check(name, godot):
     case_path, case, captures = load_case(name)
     golden_dir = GOLDENS / name
@@ -363,21 +464,26 @@ def check(name, godot):
             entry['owner_edits'] = {'removed': sorted(edits.get('removed', {})), 'moved': sorted(edits.get('moved', {}))}
         reference_png = WORK / name / 'reference' / f'{capture}.png'
         if reference_png.is_file():
-            thresholds = dict(case.get('thresholds', {}))
-            ceiling = resampling_ceiling(name, capture, reference_png)
-            if ceiling:
-                # No 3× pipeline can beat the original's own 3× render scaled to 1×.
-                base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
-                thresholds['ssim'] = min(base['ssim'], ceiling['ssim'] - CEILING_MARGIN['ssim'])
-                thresholds['delta_e'] = max(base['delta_e'], ceiling['max_region_delta_e'] + CEILING_MARGIN['delta_e'])
-            if capture in floor:
-                base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
-                thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
-                thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
-            entry['pixel'] = pixels.compare(reference_png, out / f'{capture}.png',
-                                            WORK / name / f'{capture}-heatmap.png', thresholds, masks)
-            if ceiling:
-                entry['pixel']['ceiling'] = ceiling
+            stale = reference_provenance_problem(name, capture, case_path, meta, golden_dir / f'{capture}.json')
+            if stale:
+                entry['pixel'] = {'passed': None,
+                                  'skipped': 'local reference is stale or unverified: re-run record --reference-only'}
+            else:
+                thresholds = dict(case.get('thresholds', {}))
+                ceiling = resampling_ceiling(name, capture, reference_png)
+                if ceiling:
+                    # No 3× pipeline can beat the original's own 3× render scaled to 1×.
+                    base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
+                    thresholds['ssim'] = min(base['ssim'], ceiling['ssim'] - CEILING_MARGIN['ssim'])
+                    thresholds['delta_e'] = max(base['delta_e'], ceiling['max_region_delta_e'] + CEILING_MARGIN['delta_e'])
+                if capture in floor:
+                    base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
+                    thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
+                    thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
+                entry['pixel'] = pixels.compare(reference_png, out / f'{capture}.png',
+                                                WORK / name / f'{capture}-heatmap.png', thresholds, masks)
+                if ceiling:
+                    entry['pixel']['ceiling'] = ceiling
         else:
             entry['pixel'] = {'passed': None, 'skipped': 'no local reference capture (record on the SWF machine)'}
         report['captures'][capture] = entry
