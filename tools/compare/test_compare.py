@@ -206,47 +206,123 @@ class ReferenceOnlyRecord(unittest.TestCase):
         self.root = Path(self.dir.name)
         self.goldens = self.root / 'goldens'
         self.work = self.root / 'work'
-        self.case_path = self.root / 'main-menu.json'
+        self.cases = self.root / 'cases'
+        self.cases.mkdir()
+        self.case_path = self.cases / 'main-menu.json'
         self.case_path.write_text(json.dumps({'name': 'main-menu', 'actions': [{'capture': 'menu'}]}),
                                   encoding='utf-8')
         self.swf = self.root / 'game.swf'
         self.swf.write_bytes(b'stub SWF; the replay is patched')
         self.player = self.root / 'probe'
         self.player.write_bytes(b'stub player')
+        self.display = {'schema': 'bombit5-display-list-v1', 'truncated': False, 'stage': {},
+                        'nodes': [{'path': '/root1/menu', 'kind': 'movie_clip', 'depth': 1,
+                                   'effective_visible': True, 'alpha': 1.0,
+                                   'stage_matrix': [1.0, 0.0, 0.0, 1.0, 10.0, 20.0]}]}
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
         self.replay = {'case_path': self.case_path, 'captures': ['menu'], 'frames': {'menu': 541},
-                       'fps': 35.0, 'swf_sha256': compare.sha256(self.swf)}
+                       'fps': 35.0, 'swf_sha256': compare.sha256(self.swf),
+                       'player_sha256': compare.sha256(self.player)}
         self.meta = {'case': 'main-menu', 'case_sha256': compare.reference_sha256(self.case_path),
-                     'swf_sha256': self.replay['swf_sha256'], 'fps': 35.0, 'frames': {'menu': 541}}
+                     'swf_sha256': self.replay['swf_sha256'],
+                     'player_sha256': self.replay['player_sha256'],
+                     'fps': 35.0, 'frames': {'menu': 541}}
         for patch in (mock.patch.object(compare, 'ROOT', self.root),
                       mock.patch.object(compare, 'GOLDENS', self.goldens),
                       mock.patch.object(compare, 'WORK', self.work),
-                      mock.patch.object(compare, 'replay_case', return_value=self.replay)):
+                      mock.patch.object(compare, 'CASES', self.cases),
+                      mock.patch.object(compare, 'replay_case', side_effect=self.fake_replay)):
             patch.start()
             self.addCleanup(patch.stop)
 
     def tearDown(self):
         self.dir.cleanup()
 
+    def fake_replay(self, name, player, swf, out=None):
+        """A replay that writes only what `record` reads: a PNG and a display list."""
+        out = Path(out) if out is not None else compare.WORK / name / 'reference'
+        out.mkdir(parents=True, exist_ok=True)
+        (out / 'menu.png').write_bytes(b'stub reference PNG')
+        (out / 'menu.display.json').write_text(json.dumps(self.display), encoding='utf-8')
+        return dict(self.replay, out=out)
+
     def write_meta(self, **changes):
         target = self.goldens / 'main-menu'
         target.mkdir(parents=True, exist_ok=True)
+        (target / 'menu.json').write_text(json.dumps(self.golden, indent=1, sort_keys=True) + '\n',
+                                          encoding='utf-8')
         (target / 'meta.json').write_text(json.dumps(dict(self.meta, **changes)), encoding='utf-8')
         return target
+
+    def seed_reference(self):
+        out = self.work / 'main-menu' / 'reference'
+        out.mkdir(parents=True, exist_ok=True)
+        (out / 'menu.png').write_bytes(b'good reference PNG')
+        (out / 'reference.json').write_text('{"kept": true}\n', encoding='utf-8')
+        return out
 
     def test_reference_only_writes_nothing_under_goldens(self):
         target = self.write_meta()
         meta = (target / 'meta.json').read_bytes()
+        golden = (target / 'menu.json').read_bytes()
         with contextlib.redirect_stdout(io.StringIO()) as printed:
             compare.record('main-menu', self.player, self.swf, reference_only=True)
         self.assertIn('recorded reference for main-menu: 1 capture(s) in', printed.getvalue())
-        self.assertEqual(sorted(p.name for p in target.iterdir()), ['meta.json'])
+        self.assertEqual(sorted(p.name for p in target.iterdir()), ['menu.json', 'meta.json'])
         self.assertEqual((target / 'meta.json').read_bytes(), meta)
-        self.assertFalse((self.work / 'main-menu').exists())
+        self.assertEqual((target / 'menu.json').read_bytes(), golden)
+        self.assertTrue((self.work / 'main-menu' / 'reference' / 'menu.png').is_file())
+
+    def test_reference_only_writes_provenance(self):
+        target = self.write_meta()
+        with contextlib.redirect_stdout(io.StringIO()):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        provenance = json.loads((self.work / 'main-menu' / 'reference' / 'reference.json').read_text(encoding='utf-8'))
+        self.assertEqual(provenance['case_sha256'], compare.reference_sha256(self.case_path))
+        self.assertEqual(provenance['swf_sha256'], compare.sha256(self.swf))
+        self.assertEqual(provenance['player_sha256'], compare.sha256(self.player))
+        self.assertEqual(provenance['frames'], {'menu': 541})
+        self.assertEqual(provenance['golden_sha256'], {'menu': compare.sha256(target / 'menu.json')})
 
     def test_frame_mismatch_raises(self):
         self.write_meta(frames={'menu': 540})
         with self.assertRaisesRegex(SystemExit, 'capture menu is at frame 540, replayed 541'):
             compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_scene_mismatch_raises(self):
+        self.write_meta()
+        self.display['nodes'][0]['stage_matrix'][4] = 50.0
+        with self.assertRaisesRegex(SystemExit, 'capture menu scene differs'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_failed_verify_keeps_existing_reference(self):
+        self.write_meta(frames={'menu': 540})
+        out = self.seed_reference()
+        before = (out / 'menu.png').read_bytes()
+        with self.assertRaises(SystemExit):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertEqual((out / 'menu.png').read_bytes(), before)
+        self.assertTrue((out / 'reference.json').is_file())
+        self.assertFalse((self.work / 'main-menu' / 'reference.tmp').exists())
+
+    def test_scene_mismatch_keeps_existing_reference(self):
+        self.write_meta()
+        out = self.seed_reference()
+        before = (out / 'menu.png').read_bytes()
+        self.display['nodes'][0]['stage_matrix'][5] = 60.0
+        with self.assertRaisesRegex(SystemExit, 'scene differs'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertEqual((out / 'menu.png').read_bytes(), before)
+        self.assertTrue((out / 'reference.json').is_file())
+        self.assertFalse((self.work / 'main-menu' / 'reference.tmp').exists())
+
+    def test_different_player_with_matching_scene_is_accepted(self):
+        self.write_meta(player_sha256='0' * 64)
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertIn('scene matches, accepting', printed.getvalue())
+        self.assertTrue((self.work / 'main-menu' / 'reference' / 'reference.json').is_file())
 
     def test_case_hash_mismatch_raises(self):
         self.write_meta(case_sha256='0' * 64)
@@ -275,6 +351,91 @@ class ReferenceOnlyRecord(unittest.TestCase):
         meta = json.loads((target / 'meta.json').read_text(encoding='utf-8'))
         self.assertEqual(meta['frames'], {'menu': 541})
         self.assertEqual(meta['case_sha256'], compare.reference_sha256(self.case_path))
+        provenance = json.loads((out / 'reference.json').read_text(encoding='utf-8'))
+        self.assertEqual(provenance['golden_sha256'], {'menu': compare.sha256(target / 'menu.json')})
+
+
+class CheckReferenceProvenance(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        self.goldens = self.root / 'goldens'
+        self.work = self.root / 'work'
+        self.cases = self.root / 'cases'
+        self.cases.mkdir()
+        self.case_path = self.cases / 'main-menu.json'
+        self.case_path.write_text(json.dumps({'name': 'main-menu', 'actions': [{'capture': 'menu'}]}),
+                                  encoding='utf-8')
+        target = self.goldens / 'main-menu'
+        target.mkdir(parents=True)
+        self.golden_path = target / 'menu.json'
+        self.golden_path.write_text(json.dumps({'schema': 'bombit5-golden-nodes-v1',
+                                                'nodes': [ref_node('/root1/menu', 10, 20, frame=541)]},
+                                               indent=1) + '\n', encoding='utf-8')
+        self.meta = {'case': 'main-menu', 'case_sha256': compare.reference_sha256(self.case_path),
+                     'swf_sha256': 'a' * 64, 'player_sha256': '0' * 64, 'fps': 35.0,
+                     'frames': {'menu': 541}}
+        (target / 'meta.json').write_text(json.dumps(self.meta), encoding='utf-8')
+        self.reference = self.work / 'main-menu' / 'reference'
+        self.reference.mkdir(parents=True)
+        (self.reference / 'menu.png').write_bytes(b'local reference PNG')
+        self.provenance = {'case_sha256': self.meta['case_sha256'], 'swf_sha256': self.meta['swf_sha256'],
+                           'player_sha256': self.meta['player_sha256'], 'frames': {'menu': 541},
+                           'golden_sha256': {'menu': compare.sha256(self.golden_path)}}
+        self.godot = self.work / 'main-menu' / 'godot'
+        self.godot.mkdir(parents=True)
+        (self.godot / 'menu.nodes.json').write_text(json.dumps(
+            {'schema': 'bombit5-godot-nodes-v1', 'nodes': [ref_node('/root1/menu', 10, 20, frame=541)]}),
+            encoding='utf-8')
+        (self.godot / 'menu.png').write_bytes(b'godot PNG')
+        for patch in (mock.patch.object(compare, 'ROOT', self.root),
+                      mock.patch.object(compare, 'GOLDENS', self.goldens),
+                      mock.patch.object(compare, 'WORK', self.work),
+                      mock.patch.object(compare, 'CASES', self.cases),
+                      mock.patch.object(compare, 'run_godot', return_value=self.godot)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def write_provenance(self, **changes):
+        (self.reference / 'reference.json').write_text(json.dumps(dict(self.provenance, **changes)),
+                                                       encoding='utf-8')
+
+    def assert_pixels_skipped(self):
+        with contextlib.redirect_stdout(io.StringIO()):
+            report = compare.check('main-menu', 'godot')
+        pixel = report['captures']['menu']['pixel']
+        self.assertEqual(pixel['skipped'], 'local reference is stale or unverified: re-run record --reference-only')
+        self.assertIsNone(pixel['passed'])
+        self.assertTrue(report['passed'])
+        return report
+
+    def test_missing_provenance_skips_pixels(self):
+        self.assert_pixels_skipped()
+
+    def test_stale_frames_skip_pixels(self):
+        self.write_provenance(frames={'menu': 540})
+        self.assert_pixels_skipped()
+
+    def test_changed_golden_skips_pixels(self):
+        self.write_provenance()
+        document = json.loads(self.golden_path.read_text(encoding='utf-8'))
+        self.golden_path.write_text(json.dumps(document, indent=2) + '\n', encoding='utf-8')
+        self.assert_pixels_skipped()
+
+    def test_valid_provenance_scores_pixels(self):
+        self.write_provenance()
+        with mock.patch.object(compare.pixels, 'compare',
+                               return_value={'passed': True, 'ssim': 1.0, 'max_region_delta_e': 0.0,
+                                             'thresholds': dict(pixels.DEFAULT_THRESHOLDS)}), \
+                contextlib.redirect_stdout(io.StringIO()):
+            report = compare.check('main-menu', 'godot')
+        pixel = report['captures']['menu']['pixel']
+        self.assertNotIn('skipped', pixel)
+        self.assertTrue(pixel['passed'])
+        self.assertTrue(report['passed'])
 
 
 if __name__ == '__main__':
