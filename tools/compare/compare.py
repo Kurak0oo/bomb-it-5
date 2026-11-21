@@ -188,14 +188,31 @@ def scene_exclusions(case, name, capture, golden, other):
             'wall_clock_alpha': faded_paths}
 
 
+def _is_effect_node(node, how):
+    """Whether a replayed node is the effect the layout declares, not a static node that
+    happens to sit at the effect's path: the layout names the class (`flash.display::Bitmap`
+    for FallSnow), or a kind when it has no class."""
+    declared = how.get('class')
+    if declared:
+        return node.get('class') == declared
+    declared = how.get('kind')
+    if declared:
+        return node.get('kind') == declared
+    return True
+
+
 def _tag_original_effects(scene, effects):
     """Mark the replayed original's effect nodes like Godot marks its own (the display-list
-    dump has no such field), so `nodes.split_effects` takes them out of both sides."""
-    by_path = {path: effect for effect, how in effects.items() for path in how.get('nodes', {})}
+    dump has no such field), so `nodes.split_effects` takes them out of both sides.
+
+    Only a node at the effect's path whose class/kind is the one the layout declares is
+    tagged: a static or wrong-class node stays in the scene, so it shows up as an extra
+    node instead of being silently dropped with the golden effect's bounds."""
+    by_path = {path: (effect, how) for effect, how in effects.items() for path in how.get('nodes', {})}
     tagged = []
     for n in scene['nodes']:
-        effect = by_path.get(n['path'])
-        tagged.append(dict(n, effect=effect) if effect else n)
+        effect, how = by_path.get(n['path'], (None, None))
+        tagged.append(dict(n, effect=effect) if effect and _is_effect_node(n, how) else n)
     return dict(scene, nodes=tagged)
 
 
@@ -220,12 +237,16 @@ def _scene_problems(case, name, golden_path, capture, replayed):
     golden = json.loads(golden_path.read_text(encoding='utf-8'))
     scene = _tag_original_effects(scene, effects_of(name, capture))
     shared = scene_exclusions(case, name, capture, golden, scene)
+    # `check` fails on an effect whose rules do not hold; refusing only when the scene has
+    # no differences would drop the effect and mask its bounds.
+    differences = [f'{effect}: {"; ".join(how["problems"])}'
+                   for effect, how in shared['effects'].items() if not how['passed']]
     report = nodes.diff(shared['golden'], shared['other'], replayed.get('tolerances'))
-    differences = [f'missing {path}' for path in report['missing']]
+    differences += [f'missing {path}' for path in report['missing']]
     differences += [f'extra {path}' for path in report['extra']]
     differences += [f'{item["path"]}: {"; ".join(item["problems"])}' for item in report['mismatches']]
-    if not differences and report['matched'] < report['reference_nodes']:
-        differences.append(f'{report["matched"]}/{report["reference_nodes"]} nodes matched')
+    # Like `check`, refuse only what `nodes.diff` calls a difference: a hidden golden node
+    # the replay does not build is not missing (`matched < reference_nodes`).
     if not differences:
         return []
     return [f'capture {capture} scene differs: ' + '; '.join(differences[:5])]

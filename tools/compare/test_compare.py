@@ -339,6 +339,42 @@ class ReferenceOnlyRecord(unittest.TestCase):
             compare.record('main-menu', self.player, self.swf, reference_only=True)
         self.assertTrue((self.work / 'main-menu' / 'reference' / 'reference.json').is_file())
 
+    def test_wrong_class_node_at_effect_path_is_refused(self):
+        # The layout's effect is a FallSnow Bitmap; a static movie clip at its path is not
+        # the effect, so it is left in the scene (an extra) rather than dropped.
+        pink = {'add': [255, 0, 102, 0], 'mult': [0.0, 0.0, 0.0, 1.0]}
+        snow = ref_node('/@0#4', kind='bitmap', color_transform=pink, render_bounds=[165.3, 19.0, 186.85, 40.5])
+        snow['class'] = 'flash.display::Bitmap'
+        snow['stage_matrix'] = [0.7676, 0.0931, -0.0931, 0.7676, 167.65, 19.0]
+        self.display['nodes'].append(snow)
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
+        self.replay_display = json.loads(json.dumps(self.display))
+        self.replay_display['nodes'][-1] = ref_node('/@0#4', kind='movie_clip', x=300, y=40)
+        self.write_layout(effects={'FallSnow': {'class': 'flash.display::Bitmap',
+                                                'nodes': {'/@0#4': {}}}})
+        self.write_meta()
+        with self.assertRaisesRegex(SystemExit, 'scene differs'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_effect_node_breaking_its_rules_is_refused(self):
+        # A Bitmap at the effect path with a scale the AS3 never makes is tagged and taken
+        # out of the node diff; the effect's own rules must still refuse it (check does).
+        pink = {'add': [255, 0, 102, 0], 'mult': [0.0, 0.0, 0.0, 1.0]}
+        snow = ref_node('/@0#4', kind='bitmap', color_transform=pink, render_bounds=[165.3, 19.0, 186.85, 40.5])
+        snow['class'] = 'flash.display::Bitmap'
+        snow['stage_matrix'] = [0.7676, 0.0931, -0.0931, 0.7676, 167.65, 19.0]
+        self.display['nodes'].append(snow)
+        self.golden = nodes.normalize_reference(self.display)
+        self.golden['frame'] = 541
+        self.replay_display = json.loads(json.dumps(self.display))
+        self.replay_display['nodes'][-1]['stage_matrix'] = [1.0, 0.0, 0.0, 1.0, 300.0, 40.0]
+        self.write_layout(effects={'FallSnow': {'class': 'flash.display::Bitmap',
+                                                'nodes': {'/@0#4': {}}}})
+        self.write_meta()
+        with self.assertRaisesRegex(SystemExit, 'scale'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
     def test_owner_edited_node_in_both_is_accepted(self):
         self.display['nodes'].append(ref_node('/root1/removed', 5, 5))
         self.golden = nodes.normalize_reference(self.display)
@@ -360,17 +396,18 @@ class ReferenceOnlyRecord(unittest.TestCase):
         with self.assertRaisesRegex(SystemExit, 'frame 4 != 3'):
             compare.record('main-menu', self.player, self.swf, reference_only=True)
 
-    def test_unmatched_reference_node_is_refused(self):
-        # nodes.diff only calls a node missing when it shows; verification also refuses a
-        # golden node the replay does not have at all (matched < total).
+    def test_hidden_reference_node_absent_is_accepted(self):
+        # Like check, verification refuses only nodes.diff's missing/extra/off: a hidden
+        # golden node the replay does not build is not missing.
         self.display['nodes'].append(ref_node('/root1/hidden', visible=False))
         self.golden = nodes.normalize_reference(self.display)
         self.golden['frame'] = 541
         self.replay_display = {'schema': self.display['schema'], 'truncated': False, 'stage': {},
                                'nodes': [self.display['nodes'][0]]}
         self.write_meta()
-        with self.assertRaisesRegex(SystemExit, '1/2 nodes matched'):
+        with contextlib.redirect_stdout(io.StringIO()):
             compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertTrue((self.work / 'main-menu' / 'reference' / 'reference.json').is_file())
 
     def test_scene_problems_work_fallback_and_missing_frame(self):
         # No `out` on the replay: the fallback is WORK/<name>/reference (this used to be a
