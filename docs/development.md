@@ -858,3 +858,22 @@ Frame counts, 2026-11-20: the actors pack stores each robot clip's `body_frames`
 clip's looks to be exactly that grid (a pack without them fails). Pack re-rendered, 56,912 images;
 counts match `docs/evidence/edition-5-robot-looks.md` for the eight base views. Open: the
 key-derived fallback for older packs is untested; per-outfit hat counts are read at frame 1 only.
+
+Pack and reference captures, 2026-11-21:
+- Modes pack re-rendered (`record_screen.py modes`): its goldens now match the Cinema mode rounds
+  (it was rendered before those rounds' last recording; ~800 entries changed).
+- `tools/compare.sh record <case> --reference-only` records the original's local reference
+  captures without touching goldens. It replays into a temp dir, checks the case/SWF hashes and
+  capture frames, and diffs the replayed scene against the golden after the same host-clock and
+  random-effect exclusions `check` applies (wall-clock text/frame/alpha; FallSnow effects, which
+  must still pass their rules; not owner edits or localization), refusing on any shared-diff
+  difference. Accepted references carry `reference/reference.json` (hashes, frames, golden
+  hashes); `check` scores pixels only against a valid one.
+- Result: compare all 51/51 pass; 46 cases now pixel-checked on this machine (was 22). Five cases
+  stay unverifiable with the current reference player (b87d797f): their replays differ from the
+  golden on host-clock or nondeterministic content: game-over / results (p1head child, background
+  frame), game-win (score 3770 vs 3780/3790 across replays), gameplay-cinema-ai (AI clip frame),
+  gameplay-cinema-item (loading bar child). Their pixels are skipped, not scored.
+Known gaps: the 3x resampling ceilings in original/ were rendered by older player builds, so a
+ceiling can be a cross-build comparison; the five cases above would need their goldens
+re-recorded together with references (owner decision: goldens are accepted floors).
