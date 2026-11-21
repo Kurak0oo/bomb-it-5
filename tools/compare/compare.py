@@ -1,6 +1,8 @@
 """Comparison loop: the same case in the reference player and in Godot, diffed.
 
     compare.py record CASE   reference player -> committed golden node dumps (+ local PNGs)
+    compare.py record CASE --reference-only
+                             reference player -> local PNGs only, committed goldens untouched
     compare.py check CASE    Godot -> node diff against goldens, pixel diff where PNGs exist
     compare.py run CASE      record (when the SWF and player are present), then check
     compare.py all           check every case
@@ -73,7 +75,12 @@ def reference_sha256(case_path):
     return hashlib.sha256(json.dumps(case, sort_keys=True).encode()).hexdigest()
 
 
-def record(name, player, swf):
+def replay_case(name, player, swf):
+    """Replay the case in the reference player into WORK/<name>/reference.
+
+    Shared by `record` (goldens + local PNGs) and `record --reference-only` (local PNGs only).
+    Returns the case path, its captures, their replay frames, the fps setting and the SWF hash.
+    """
     from replay_reference import ReferenceSession, SWF_SHA256
     case_path, case, captures = load_case(name)
     if not swf.is_file():
@@ -107,6 +114,50 @@ def record(name, player, swf):
             ok = True
         finally:
             session.close(check=ok)
+    return {'case_path': case_path, 'captures': captures, 'frames': frames, 'fps': fps,
+            'swf_sha256': sha256(swf)}
+
+
+def verify_reference_goldens(name, replay):
+    """Fail unless the committed goldens describe the same case, SWF and capture frames as the
+    replay, so the local reference PNGs can stand in for the goldens' original capture."""
+    meta_path = GOLDENS / name / 'meta.json'
+    if not meta_path.is_file():
+        try:
+            shown = meta_path.relative_to(ROOT)
+        except ValueError:
+            shown = meta_path
+        raise SystemExit(f'{name}: no committed goldens at {shown}; '
+                         'the reference would not correspond to the golden')
+    meta = json.loads(meta_path.read_text(encoding='utf-8'))
+    case_path = replay['case_path']
+    problems = []
+    if meta.get('swf_sha256') != replay['swf_sha256']:
+        problems.append(f'swf_sha256 is {meta.get("swf_sha256")}, replayed {replay["swf_sha256"]}')
+    if meta.get('case_sha256') not in (reference_sha256(case_path), sha256(case_path)):
+        problems.append(f'case_sha256 is {meta.get("case_sha256")}, replayed {reference_sha256(case_path)}')
+    frames = meta.get('frames') or {}
+    for capture in replay['captures']:
+        recorded, replayed = frames.get(capture), replay['frames'][capture]
+        if recorded != replayed:
+            problems.append(f'capture {capture} is at frame {recorded}, replayed {replayed}')
+    if problems:
+        raise SystemExit(f'{name}: the reference would not correspond to the golden: ' + '; '.join(problems))
+
+
+def record(name, player, swf, reference_only=False):
+    replay = replay_case(name, player, swf)
+    case_path, captures, frames = replay['case_path'], replay['captures'], replay['frames']
+    if reference_only:
+        verify_reference_goldens(name, replay)
+        out = WORK / name / 'reference'
+        try:
+            shown = out.relative_to(ROOT)
+        except ValueError:
+            shown = out
+        print(f'recorded reference for {name}: {len(captures)} capture(s) in {shown}')
+        return
+    out = WORK / name / 'reference'
     target = GOLDENS / name
     target.mkdir(parents=True, exist_ok=True)
     for capture in captures:
@@ -114,8 +165,8 @@ def record(name, player, swf):
         golden = nodes.normalize_reference(dump)
         golden['frame'] = frames[capture]
         (target / f'{capture}.json').write_text(json.dumps(golden, indent=1, sort_keys=True) + '\n', encoding='utf-8')
-    meta = {'case': name, 'case_sha256': reference_sha256(case_path), 'swf_sha256': sha256(swf),
-            'player_sha256': sha256(player), 'fps': fps, 'frames': frames,
+    meta = {'case': name, 'case_sha256': reference_sha256(case_path), 'swf_sha256': replay['swf_sha256'],
+            'player_sha256': sha256(player), 'fps': replay['fps'], 'frames': frames,
             'note': 'Recorded by tools/compare/compare.py record; regenerate rather than edit.'}
     (target / 'meta.json').write_text(json.dumps(meta, indent=1, sort_keys=True) + '\n', encoding='utf-8')
     print(f'recorded {name}: {len(captures)} capture(s), goldens in {target.relative_to(ROOT)}')
@@ -392,11 +443,15 @@ def main():
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=DEFAULT_SWF)
     parser.add_argument('--godot', default=default_godot())
+    parser.add_argument('--reference-only', action='store_true',
+                        help='record only the local reference capture; leave tests/goldens untouched')
     args = parser.parse_args()
     if args.action != 'all' and not args.case:
         parser.error('this action needs a case')
+    if args.reference_only and args.action != 'record':
+        parser.error('--reference-only is only valid with record')
     if args.action == 'record':
-        record(args.case, args.player, args.swf)
+        record(args.case, args.player, args.swf, reference_only=args.reference_only)
         return 0
     if args.action == 'accept':
         accept(args.case)

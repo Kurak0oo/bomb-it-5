@@ -2,14 +2,19 @@
 
     python3 -m unittest discover -s tools/compare
 """
+import contextlib
+import io
+import json
 import math
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 import numpy as np
 from PIL import Image
 
+import compare
 import nodes
 import pixels
 
@@ -193,6 +198,83 @@ class PixelDiff(unittest.TestCase):
         result = pixels.compare(self.save('a.png', self.base), self.save('b.png', small), Path(self.dir.name) / 'h.png')
         self.assertFalse(result['passed'])
         self.assertIn('size', result['error'])
+
+
+class ReferenceOnlyRecord(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        self.goldens = self.root / 'goldens'
+        self.work = self.root / 'work'
+        self.case_path = self.root / 'main-menu.json'
+        self.case_path.write_text(json.dumps({'name': 'main-menu', 'actions': [{'capture': 'menu'}]}),
+                                  encoding='utf-8')
+        self.swf = self.root / 'game.swf'
+        self.swf.write_bytes(b'stub SWF; the replay is patched')
+        self.player = self.root / 'probe'
+        self.player.write_bytes(b'stub player')
+        self.replay = {'case_path': self.case_path, 'captures': ['menu'], 'frames': {'menu': 541},
+                       'fps': 35.0, 'swf_sha256': compare.sha256(self.swf)}
+        self.meta = {'case': 'main-menu', 'case_sha256': compare.reference_sha256(self.case_path),
+                     'swf_sha256': self.replay['swf_sha256'], 'fps': 35.0, 'frames': {'menu': 541}}
+        for patch in (mock.patch.object(compare, 'ROOT', self.root),
+                      mock.patch.object(compare, 'GOLDENS', self.goldens),
+                      mock.patch.object(compare, 'WORK', self.work),
+                      mock.patch.object(compare, 'replay_case', return_value=self.replay)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def write_meta(self, **changes):
+        target = self.goldens / 'main-menu'
+        target.mkdir(parents=True, exist_ok=True)
+        (target / 'meta.json').write_text(json.dumps(dict(self.meta, **changes)), encoding='utf-8')
+        return target
+
+    def test_reference_only_writes_nothing_under_goldens(self):
+        target = self.write_meta()
+        meta = (target / 'meta.json').read_bytes()
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+        self.assertIn('recorded reference for main-menu: 1 capture(s) in', printed.getvalue())
+        self.assertEqual(sorted(p.name for p in target.iterdir()), ['meta.json'])
+        self.assertEqual((target / 'meta.json').read_bytes(), meta)
+        self.assertFalse((self.work / 'main-menu').exists())
+
+    def test_frame_mismatch_raises(self):
+        self.write_meta(frames={'menu': 540})
+        with self.assertRaisesRegex(SystemExit, 'capture menu is at frame 540, replayed 541'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_case_hash_mismatch_raises(self):
+        self.write_meta(case_sha256='0' * 64)
+        with self.assertRaisesRegex(SystemExit, 'case_sha256'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_swf_hash_mismatch_raises(self):
+        self.write_meta(swf_sha256='0' * 64)
+        with self.assertRaisesRegex(SystemExit, 'swf_sha256'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_missing_goldens_raises(self):
+        with self.assertRaisesRegex(SystemExit, 'no committed goldens'):
+            compare.record('main-menu', self.player, self.swf, reference_only=True)
+
+    def test_normal_record_still_writes_goldens_and_meta(self):
+        out = self.work / 'main-menu' / 'reference'
+        out.mkdir(parents=True)
+        (out / 'menu.display.json').write_text(json.dumps(
+            {'schema': 'bombit5-display-list-v1', 'truncated': False, 'stage': {}, 'nodes': []}),
+            encoding='utf-8')
+        with contextlib.redirect_stdout(io.StringIO()):
+            compare.record('main-menu', self.player, self.swf)
+        target = self.goldens / 'main-menu'
+        self.assertTrue((target / 'menu.json').is_file())
+        meta = json.loads((target / 'meta.json').read_text(encoding='utf-8'))
+        self.assertEqual(meta['frames'], {'menu': 541})
+        self.assertEqual(meta['case_sha256'], compare.reference_sha256(self.case_path))
 
 
 if __name__ == '__main__':
