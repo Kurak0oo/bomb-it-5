@@ -866,8 +866,12 @@ func _gate(widget: Control, name: StringName) -> void:
 
 func _clear_screen() -> void:
 	if is_instance_valid(screen):
+		# The screen is dropped from the pressed button's own input event: detaching it
+		# here would take that control out of the tree while the viewport still calls
+		# can_process() on it (the `!is_inside_tree()` engine error). Hiding stops it
+		# drawing and taking input; queue_free removes it after the event, at frame end.
+		screen.hide()
 		screen.queue_free()
-		remove_child(screen)
 	screen = null
 
 

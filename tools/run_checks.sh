@@ -18,6 +18,7 @@ suites=(
 	"res://tests/session_check.gd|^PASS: [0-9]+ session checks$"
 	"res://tests/game_board_check.gd|^PASS: [0-9]+ game board checks$"
 	"res://tests/flow_scene_check.gd|^PASS: [0-9]+ flow scene checks$"
+	"res://tests/start_error_check.gd|^PASS: [0-9]+ start error checks$"
 	"res://tests/difficulty_check.gd|^PASS: [0-9]+ difficulty checks$"
 	"res://tests/controls_check.gd|^PASS: [0-9]+ controls checks$"
 	"res://tests/looks_check.gd|^PASS: [0-9]+ looks checks$"
