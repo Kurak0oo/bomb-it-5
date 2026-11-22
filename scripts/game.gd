@@ -357,6 +357,11 @@ func advance_time(seconds: float) -> void:
 			# `moveStop`, and `movement_rearm` waits for that stop before a fresh press moves.
 			held.clear()
 			scheduler.set_direction(&"human", Vector2.ZERO)
+		elif _jump_started():
+			# `HorseProp.frog`: `robotMoveStop` / `robotBombStop` take the movement and bomb
+			# listeners away for the jump and `clearMoveStage` clears the held flags, so a key
+			# released while the jump runs must not walk the robot on after landing.
+			_clear_human_input()
 		if not practice and state.outcome != &"running" and not result_credited:
 			result_credited = true
 			session_lives = state.actors[&"human"].lives
@@ -366,6 +371,28 @@ func advance_time(seconds: float) -> void:
 				level_settled.emit(get_snapshot())
 				return
 	_refresh()
+
+
+## `HorseProp.frog` starts on the tick the horse reaches the box or bomb ahead: the tick
+## before it the human's `jump` was empty.
+func _jump_started() -> bool:
+	var before: Dictionary = previous_state.get("actors", {}).get(&"human", {})
+	return (before.get("jump", {}) as Dictionary).is_empty() \
+		and not (state.actors[&"human"].get("jump", {}) as Dictionary).is_empty()
+
+
+## `HorseProp.frog`'s `robotMoveStop` / `robotBombStop`: the scene's `held` and the
+## scheduler's held direction stand in for the move stage those listeners cleared, and the
+## bomb queue for the bomb listener. The queue's own capture/acknowledge pair drops its
+## pending events (the scheduler has finished its ticks by the time this runs).
+func _clear_human_input() -> void:
+	held.clear()
+	if scheduler == null: return
+	scheduler.set_direction(&"human", Vector2.ZERO)
+	var queues = scheduler.get("_bomb_queues")
+	if queues is Dictionary and queues.has(&"human"):
+		var queue = queues[&"human"]
+		queue.acknowledge(queue.capture().token, true)
 
 
 func toggle_pause() -> void:
