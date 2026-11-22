@@ -403,7 +403,9 @@ def resampling_ceiling(case, capture, reference_png):
             reference_by = None
     if not rendered_by:
         print(f'  note: {big.name}: 3x ceiling image has no recorded player; it may compare builds')
-    elif reference_by and rendered_by != reference_by:
+    elif not reference_by:
+        print(f'  note: {big.name}: reference player unknown; the 3x ceiling may compare builds')
+    elif rendered_by != reference_by:
         print(f'  note: {big.name} was rendered by reference player {rendered_by[:12]}…, the reference '
               f'capture by {reference_by[:12]}…; the 3×→1× ceiling compares different player builds')
     small = WORK / case / f'{capture}-reference-3x-to-1x.png'
