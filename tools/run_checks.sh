@@ -13,6 +13,7 @@ suites=(
 	"res://tests/round_regression_check.gd|^PASS: [0-9]+ round regression checks$"
 	"res://tests/fidelity_check.gd|^PASS: [0-9]+ fidelity checks$"
 	"res://tests/game_scene_check.gd|^PASS: [0-9]+ game scene checks$"
+	"res://tests/actor_display_check.gd|^PASS: [0-9]+ actor display checks$"
 	"res://tests/mode_seam_check.gd|^PASS: [0-9]+ mode seam checks$"
 	"res://tests/layout_check.gd|^PASS: [0-9]+ layout checks$"
 	"res://tests/session_check.gd|^PASS: [0-9]+ session checks$"
