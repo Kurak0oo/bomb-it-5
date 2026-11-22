@@ -23,6 +23,7 @@ func _run() -> void:
 	await _respawn_moves_after_a_key_released_while_dead(&"kill", "Kill")
 	await _respawn_moves_after_a_key_released_while_dead(&"green_zone", "Green Zone")
 	await _arcade_life_starts_with_a_fresh_movement_stage()
+	await _jump_starts_with_a_fresh_movement_stage()
 	if failures == 0:
 		print("PASS: %d respawn input checks" % checks)
 	else:
@@ -108,6 +109,61 @@ func _arcade_life_starts_with_a_fresh_movement_stage() -> void:
 		game.advance_time(1.0 / 35.0)
 	_expect(game.get_snapshot().actors[&"human"].position != Vector2(retry_spawn),
 		"Arcade: the retry round moves on its first press")
+	game.queue_free()
+	await process_frame
+
+
+## `HorseProp.frog`: when the frog jump starts, `robotMoveStop`/`robotBombStop` remove the
+## movement and bomb listeners and `clearMoveStage` clears the held flags, so a key released
+## during the jump must not stay latched: the landing must not walk on in the direction held
+## when the jump started, and a fresh press after it must move.
+func _jump_starts_with_a_fresh_movement_stage() -> void:
+	game = Game.new()
+	game.auto_start = false
+	root.add_child(game)
+	await process_frame
+	game.set_process(false)
+	game.start_session(true)
+	var actor: Dictionary = game.simulation._actors[&"human"]
+	actor.vehicle = &"horse"
+	actor.drive_speed = 1.6
+	actor.cell = Vector2i(2, 1)
+	actor.position = Vector2(actor.cell)
+	actor.velocity = Vector2.ZERO
+	actor.movement_rearm = false
+	# The practice map's row 1: a soft box ahead at (3, 1) and open floor to land on at (4, 1).
+	var board: Dictionary = game.simulation._board
+	board[Vector2i(3, 1)] = &"soft"
+	for x in range(4, 8): board[Vector2i(x, 1)] = &"floor"
+	game.state = game.simulation.snapshot()
+	game.previous_state = {}
+	var right := _key_for(Vector2.RIGHT)
+	_key(right, true)
+	var deadline: int = game.get_snapshot().tick + 60
+	while game.get_snapshot().actors[&"human"].get("jump", {}).is_empty() and game.get_snapshot().tick < deadline:
+		game.advance_time(1.0 / 35.0)
+	_expect(not (game.get_snapshot().actors[&"human"].get("jump", {}) as Dictionary).is_empty(),
+		"Jump: the horse's frog jump starts on the soft box")
+	_expect(game.held.is_empty(), "Jump: starting the jump clears the held key")
+	_expect(game.scheduler._directions[&"human"] == Vector2.ZERO,
+		"Jump: starting the jump clears the scheduler's held direction")
+
+	# The player lets go while the jump runs: `robotMoveStop` removed the listener then.
+	_key(right, false)
+	var landing_deadline: int = game.get_snapshot().tick + 60
+	while not (game.get_snapshot().actors[&"human"].get("jump", {}) as Dictionary).is_empty() \
+			and game.get_snapshot().tick < landing_deadline:
+		game.advance_time(1.0 / 35.0)
+	var landed: Vector2 = game.get_snapshot().actors[&"human"].position
+	for tick in 8:
+		game.advance_time(1.0 / 35.0)
+	_expect(game.get_snapshot().actors[&"human"].position == landed,
+		"Jump: no stale direction walks the robot on after landing")
+	_key(right, true)
+	for tick in 8:
+		game.advance_time(1.0 / 35.0)
+	_expect(game.get_snapshot().actors[&"human"].position != landed,
+		"Jump: a fresh press after landing moves")
 	game.queue_free()
 	await process_frame
 

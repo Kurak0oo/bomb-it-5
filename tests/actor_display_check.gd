@@ -132,20 +132,19 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if not FileAccess.file_exists(PACK):
-		print("NOTE: the local actors pack %s is missing; skipping the actor display checks" % PACK)
-		print("PASS: 0 actor display checks")
-		quit(0)
-		return
-	var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACK))
-	_check_spawn_blink(pack)
-	_check_golden_spawn_captures(pack)
-	_check_short_command_blink(pack)
-	_check_replacement_blink(pack)
-	_check_loops_follow_the_clip(pack)
-	_check_horse_jump(pack)
-	_check_horse_jump_turn(pack)
-	_check_horse_stop_frame(pack)
+	if FileAccess.file_exists(PACK):
+		var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACK))
+		_check_spawn_blink(pack)
+		_check_golden_spawn_captures(pack)
+		_check_short_command_blink(pack)
+		_check_replacement_blink(pack)
+		_check_loops_follow_the_clip(pack)
+		_check_horse_jump(pack)
+		_check_horse_jump_turn(pack)
+		_check_horse_stop_frame(pack)
+	else:
+		print("SKIP: actor display checks need the local actors pack")
+	# The input gate reads the snapshot only: it runs with or without the art pack.
 	_check_jump_input_gate()
 	print("%s: %d actor display checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
@@ -168,11 +167,12 @@ func _check_spawn_blink(pack: Dictionary) -> void:
 	scene.screen.queue_free()
 
 
-## The committed captures record the original's robot containers' colour transforms. The
-## round's first gameplay capture is 701 (`gameplay-cinema-start`), so a capture at frame f
-## is the display's tick f - 701; every included capture's +50 state must match the spawn
-## command's 4-tick phase there. Captures owned by a later command (`shield/used`) are left
-## out; the portal's `arrive` still shows the AIs' spawn blink.
+## The committed captures record the original's human robot container's colour transform.
+## The round's first gameplay capture is 701 (`gameplay-cinema-start`), so a capture at
+## frame f is the display's tick f - 701; every included capture's +50 state must match the
+## spawn command's 4-tick phase there. Captures owned by a later command (`shield/used`) are
+## left out. The portal's `arrive` is owned by `Portal.runEngine`'s own
+## `new InvincibilityCommand(45)`, which restarts the 4-tick phase on that tick.
 func _check_golden_spawn_captures(pack: Dictionary) -> void:
 	var cases := {
 		"gameplay-cinema-start": ["cinema-start"],
@@ -184,52 +184,62 @@ func _check_golden_spawn_captures(pack: Dictionary) -> void:
 		"gameplay-cinema-shield": ["held", "turned", "walk", "blast"],
 	}
 	var base := int(_golden_meta("gameplay-cinema-start").frames["cinema-start"])
-	var observations := []
-	var max_tick := 0
 	for case: String in cases:
 		var meta := _golden_meta(case)
+		var observations := []
+		var restarts := {}
+		var max_tick := 0
 		for capture: String in cases[case]:
 			var tick := int(meta.frames[capture]) - base
-			observations.append({"case": case, "capture": capture, "tick": tick,
-				"on": _golden_blink_on(case, capture)})
+			# `Portal.runEngine`'s `new InvincibilityCommand(robot, 45)` on the arrival tick:
+			# it ends 46 ticks later (`_check_short_command_blink`).
+			var restart := 46 if case == "gameplay-cinema-portal" and capture == "arrive" else 0
+			observations.append({"capture": capture, "tick": tick,
+				"on": _golden_blink_on(case, capture), "restart": restart})
+			if restart > 0: restarts[tick] = restart
 			max_tick = maxi(max_tick, tick + 4)
-	var scene := _make(pack)
-	var actors: RefCounted = scene.actors
-	actors.update(_snapshot(0))
-	var view: Dictionary = actors._robots[&"human"]
-	var lit := {0: false}
-	for tick in range(1, max_tick + 1):
-		actors.update(_snapshot(tick))
-		lit[tick] = bool(view.bright)
-	for obs: Dictionary in observations:
-		_expect(bool(lit[int(obs.tick)]) == bool(obs.on),
-			"%s/%s: the spawn blink is %s at its capture tick" % [obs.case, obs.capture,
-				"on" if obs.on else "off"])
-	scene.screen.queue_free()
+		var scene := _make(pack)
+		var actors: RefCounted = scene.actors
+		actors.update(_snapshot(0))
+		var view: Dictionary = actors._robots[&"human"]
+		var lit := {0: false}
+		for tick in range(1, max_tick + 1):
+			var overrides := {}
+			if restarts.has(tick): overrides["blink_until"] = tick + int(restarts[tick])
+			actors.update(_snapshot(tick, overrides))
+			lit[tick] = bool(view.bright)
+		for obs: Dictionary in observations:
+			_expect(bool(lit[int(obs.tick)]) == bool(obs.on),
+				"%s/%s: the human robot's blink is %s at its capture tick" % [case, obs.capture,
+					"on" if obs.on else "off"])
+		scene.screen.queue_free()
 
 
 func _golden_meta(case: String) -> Dictionary:
 	return JSON.parse_string(FileAccess.get_file_as_string("res://tests/goldens/%s/meta.json" % case))
 
 
-## The original's +50 on any robot container at a capture (`color_transform.add`).
+## The original's +50 on the human's own robot container at a capture
+## (`color_transform.add`): the container of the human's clip `_r0_<direction>`
+## (`RobotView.setRobotMc`; the player's robot is DEFAULT_ROBOTS[0]) on the player's layer 4
+## (`Game.getDisArr(y).getChildAt(4)`, `robotRow`). The AI robots on layer 3 are not the
+## human's.
 func _golden_blink_on(case: String, capture: String) -> bool:
 	var scene: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
 		"res://tests/goldens/%s/%s.json" % [case, capture]))
+	var by_path := {}
+	for node: Dictionary in scene.nodes: by_path[String(node.get("path", ""))] = node
 	for node: Dictionary in scene.nodes:
-		if not _is_robot_container(node): continue
-		var ct = node.get("color_transform")
+		if not String(node.get("class", "")).begins_with("_r0_"): continue
+		var container: Dictionary = by_path.get(String(node.get("path", "")).get_base_dir(), {})
+		if container.is_empty(): continue
+		# The clip sits in the layer's container; the layer is the clip's grandparent, and the
+		# player's is layer 4 (a nested container can also end `@0#4`).
+		if not String(container.get("path", "")).get_base_dir().ends_with("/@0#4"): continue
+		var ct = container.get("color_transform")
 		var add: Array = ct.get("add", [0, 0, 0, 0]) if ct is Dictionary else [0, 0, 0, 0]
-		if not add.is_empty() and int(add[0]) != 0: return true
+		return not add.is_empty() and int(add[0]) != 0
 	return false
-
-
-## A robot's container: a Sprite directly on a row's AI (3) or player (4) layer.
-func _is_robot_container(node: Dictionary) -> bool:
-	if String(node.get("kind", "")) != "movie_clip": return false
-	if not String(node.get("class", "")).contains("Sprite"): return false
-	var parent := String(node.get("path", "")).get_base_dir()
-	return parent.ends_with("/@0#3") or parent.ends_with("/@0#4")
 
 
 ## Portal's `new InvincibilityCommand(robot, 45)` sets `blink_until` 46 ticks later; the
