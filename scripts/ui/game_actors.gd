@@ -123,7 +123,14 @@ const TIMES_AT := Vector2(0, -40)
 const VEHICLE_HIT_TICKS := 35
 ## `Bomb.blast`'s exp0 frames per ray (middle, end).
 const ARM_FRAMES := {Vector2i(0, -1): [2, 3], Vector2i(0, 1): [8, 9], Vector2i(-1, 0): [6, 7], Vector2i(1, 0): [4, 5]}
-const INVINCIBILITY_FRAMES := 80
+## `AbstractRobot.init` / `relive`'s `new InvincibilityCommand(this)` (default 80): its first
+## execute can run in the creation frame, so it clears its transform on the 81st tick after.
+const SPAWN_BLINK_TICKS := 81
+## `HorseProp.frog`: `robot.view.mc.gotoAndPlay(19)` when the jump starts; `xJump`/`yJump`
+## land with `mc.gotoAndStop(1)`. `_r<n>_forg_<dir>.as` scripts frame 34 (0-based 33) with
+## `gotoAndPlay(1)`, so the jump plays 19-33 and starts over at 1.
+const HORSE_JUMP_FRAME := 19
+const HORSE_JUMP_END := 33
 ## `CountInvincibilityCommand()`: the filter's colours, ratios and alpha; `execute` builds
 ## `new GradientGlowFilter(-20, 60, _filerColor, alphas, ratios, 18, 18, 1, HIGH, INNER, false)`.
 const FILER_COLOR := [16711680, 16744192, 16776960, 8388352, 65280, 65407, 65535, 32767, 255, 8323327,
@@ -220,9 +227,10 @@ func _create_robots(snapshot: Dictionary) -> void:
 		var look: Array = _looks[seat] if seat < _looks.size() else [int(actor.get("body", 0)), int(actor.get("hat", 0))]
 		var view := {"id": id, "robot": int(actor.get("robot", seat)), "cloth": maxi(0, int(look[0])), "hat": maxi(0, int(look[1])),
 			"robot_row": 4 if id == &"human" else 3, "row": 0, "layer": "", "item": {}, "children": [], "class": "", "suffix": "_Down",
-			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": 0, "bright": false, "blinking": true,
-			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO), "blink_until": int(actor.get("blink_until", 0)),
-			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "loop_age": 0, "loop_count": 0,
+			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": 1, "bright": false, "blinking": true,
+			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO),
+			"blink_until": maxi(int(actor.get("blink_until", 0)), _tick + SPAWN_BLINK_TICKS),
+			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "jumping": false, "loop_age": 0, "loop_count": 0,
 			"weapon": &"", "ammo": 0, "weapon_class": "", "weapon_frame": 1, "weapon_playing": false, "weapon_fresh": 0,
 			"action": {}, "last_started": -1,
 			"shield": false, "shield_class": "", "shield_frame": 1, "shield_playing": false, "shield_fresh": 0, "alpha": 1.0, "transit": false,
@@ -300,16 +308,20 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		_shield(view, actor)
 		_invincibility_prop(view, actor)
 		_send_robot(view, actor)
+		# `HorseProp.frog` starts its clip again after `robotMoveStop`; the landing frame
+		# (`gotoAndStop(1)`) overrides a key release (`normalStop`) while the jump runs.
+		_jump(view, actor)
 		if direction == Vector2i.ZERO:
-			view.playing = false
 			view.weapon_playing = false
 			view.shield_playing = false
+			if not view.jumping: view.playing = false
 		if replay and view.class == replay_class and view.fresh == 0: view.playing = true
 		view.direction = direction
 		if int(actor.get("blink_until", 0)) > view.blink_until:
-			# robotRelive: a new InvincibilityCommand.
+			# robotRelive / TryToKillCommandChain / Portal: a new InvincibilityCommand.
 			view.blink_until = int(actor.blink_until)
 			view.blink = 0
+			view.bright = false
 			view.blinking = true
 		_invincibility(view)
 		view.position = actor.get("position", view.position)
@@ -368,6 +380,7 @@ func _set_robot_mc(view: Dictionary, suffix: String) -> void:
 	# A new MovieClip: alpha 1 (SendRobotCommand faded the old one); the shield's new
 	# `nombril<direction>` where the clip has a `hand2` (`gotoAndPlay(_mc.currentFrame)`).
 	view.alpha = 1.0
+	view.jumping = false
 	view.shield_class = ""
 	if view.shield and not suffix.begins_with("_Dead") and _effects().get("hand2", {}).has(view.class):
 		view.shield_class = "nombril" + suffix
@@ -386,6 +399,8 @@ func _set_robot_mc(view: Dictionary, suffix: String) -> void:
 ## The frame after `frame` of a playing robot clip, as the art pass saw it play (a ride's clip
 ## loops over its driving frames only); else the next frame, wrapping.
 func _next_frame(cls: String, frame: int) -> int:
+	# `_r<n>_forg_<dir>.as`: frame 34's script `gotoAndPlay(1)` ends the jump loop.
+	if cls.contains("_forg_") and frame == HORSE_JUMP_END: return 1
 	var nxt: Dictionary = _art.get("robots", {}).get(cls, {}).get("next", {})
 	if nxt.has(str(frame)): return int(nxt[str(frame)])
 	return frame % _total(cls) + 1
@@ -407,6 +422,11 @@ func _total(cls: String) -> int:
 func _kill(view: Dictionary) -> void:
 	view.dead = true
 	view.offset = false
+	# `clearDisplay` / the dead clip take the container's blink with them.
+	view.blinking = false
+	view.bright = false
+	view.blink = 0
+	view.jumping = false
 	_clear_weapon(view)
 	view.action = {}
 	_set_robot_mc(view, "_Dead")
@@ -427,6 +447,12 @@ func _relive(view: Dictionary, actor: Dictionary) -> void:
 	view.dead = false
 	view.removed = false
 	view.offset = false
+	# The new InvincibilityCommand replaces any old one; `_step` arms it from the snapshot.
+	view.blinking = false
+	view.bright = false
+	view.blink = 0
+	view.blink_until = 0
+	view.jumping = false
 	_clear_weapon(view)
 	view.action = {}
 	view.vehicle = &""
@@ -446,10 +472,12 @@ func _count_dead(view: Dictionary) -> void:
 		view.frame += 1
 
 
-## `InvincibilityCommand.execute`, once per tick.
+## `InvincibilityCommand.execute`, once per tick. The command removes itself (and clears the
+## +50 offsets) after its counter passes `_totalFrames`; the simulation's `blink_until` is the
+## tick it clears (`_tick + 46` for Portal's 45, `_tick + 81` for the default 80 and spawn).
 func _invincibility(view: Dictionary) -> void:
 	if not view.blinking: return
-	if view.blink > INVINCIBILITY_FRAMES:
+	if _now >= view.blink_until:
 		view.blinking = false
 		view.bright = false
 		view.blink = 0
@@ -480,6 +508,26 @@ func _vehicle(view: Dictionary, actor: Dictionary) -> void:
 		var total := int(clip.get("frames", dead))
 		view.frame = dead + roundi((total - dead) * minf(1.0, float(view.vehicle_hit) / VEHICLE_HIT_TICKS))
 		view.vehicle_hit += 1
+
+
+## `HorseProp.frog` / `xJump` / `yJump`, display side: the ride clip jumps from frame 19 and
+## keeps playing while the simulation moves the unmounted controls to `_moveJump`; the landing
+## puts it back on frame 1, stopped (`gotoAndStop(1)`). A hit mid-jump goes to the ride's `dead`
+## frame instead (`TryToKillCommandChain.vehicleComplete`), so the landing is only applied to a
+## finished jump.
+func _jump(view: Dictionary, actor: Dictionary) -> void:
+	var jump: Dictionary = actor.get("jump", {})
+	var jumping: bool = view.vehicle == &"horse" and not jump.is_empty()
+	if jumping and not view.jumping:
+		view.jumping = true
+		view.frame = HORSE_JUMP_FRAME
+		view.playing = true
+		view.fresh = 0
+	elif view.jumping and not jumping:
+		view.jumping = false
+		if view.vehicle_hit < 0 and not view.dead:
+			view.frame = 1
+			view.playing = false
 
 
 # ------------------------------------------------------------------ weapons
@@ -1155,15 +1203,18 @@ func _show_laser(view: Dictionary, child: Dictionary, path: String, at: Transfor
 ## shows its first frame twice, then one frame per frame).
 func _show_loops(view: Dictionary, mc_path: String, at: Transform2D, art: Dictionary, offset: Color) -> void:
 	var loops: Array = art.get("loops", [])
+	# A clip with fewer loops than the one before (`_r0_Right` has one, `_r0_Down` two) takes
+	# the extra loop nodes off: left behind, they keep the last clip's blink offset.
+	while view.loop_count > loops.size():
+		view.loop_count -= 1
+		var stale := "%s/~loop%d" % [mc_path, view.loop_count]
+		if _screen.by_path.has(stale): _screen.remove_node(stale)
 	while view.loop_count < loops.size():
 		_add_art_node("%s/~loop%d" % [mc_path, view.loop_count], mc_path, _a(at))
 		view.loop_count += 1
 	var robot_at := _m(art.get("at", _a(at)))
 	for k in view.loop_count:
 		var path := "%s/~loop%d" % [mc_path, k]
-		if k >= loops.size():
-			_screen.set_node_art(path, {})
-			continue
 		var loop: Dictionary = loops[k]
 		var frames: Dictionary = _art.get("loop_art", {}).get(loop.art, {})
 		var frame: int = maxi(0, view.loop_age - 1) % maxi(1, frames.size()) + 1
