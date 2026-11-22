@@ -139,66 +139,103 @@ func _expect(condition: bool, label: String) -> void:
 		printerr(label)
 
 
-## `AbstractPlayer.scoreData` / `GameInterFace.changeCol`: Kill's score highlights at
-## `KillMode/@textColNum` = 8; the other modes' HUD behaviour stays as ported.
+## `AbstractPlayer.scoreData` / `GameInterFace.changeCol`: every non-Arcade mode flashes
+## its score at `Game.textColNum`; Arcade never does. The HUD sees real snapshot ticks
+## through `present`, so a paused round presents the same tick without a flip.
 func _check_hud_highlight() -> void:
 	var app := FakeApp.new()
-	app.session.mode = &"kill"
 	var screen := FakeScreen.new()
+	app.session.mode = &"kill"
 	var hud = GameInterFace.new(screen, app, null)
-	hud.mapLoadOver({})
-	_expect(hud.textColNum == 8, "Kill's score threshold is KillMode/@textColNum = 8")
-	hud.setScore(0, 7)
-	_expect(not hud.colorChangeArray.has(0), "a score below 8 does not flash")
-	hud.setScore(0, 8)
-	_expect(hud.colorChangeArray.has(0), "the 8th kill puts the score field on the tween handlers")
-	hud._tween_handlers(0)
-	hud._tween_handlers(4)
 	var field: String = hud._scoreTextArr[0]
-	_expect(screen.colours.get(field) == GameInterFace.RED, "the highlighted score turns red first (16711680)")
-	hud._tween_handlers(8)
-	_expect(screen.colours.get(field) == GameInterFace.WHITE, "then white on the next tween tick (16777215)")
-	hud.setScore(0, 7)
+	_expect(hud.textColNum == 8, "Kill's score threshold is KillMode/@textColNum = 8")
+	_expect(hud._shown.get(field + "|colour") == Color8(1, 61, 103),
+		"the flasher starts from the layout's recorded text colour")
+	for tick in 5: _present(hud, tick, 7)
+	_expect(not hud.colorChangeArray.has(0) and not _flashing(screen, field),
+		"a Kill score below 8 never flashes")
+	_present(hud, 5, 8)
+	_expect(hud.colorChangeArray.has(0), "the 8th kill puts the score field on the tween handlers")
+	for i in 6: _present(hud, 5, 8)  # paused: the snapshot tick stays put
+	_expect(not _flashing(screen, field), "no flip while paused before the next 4th tick")
+	_present(hud, 6, 8)
+	_present(hud, 7, 8)
+	_expect(not _flashing(screen, field), "no flip on ticks 6 or 7")
+	_present(hud, 8, 8)
+	_expect(screen.colours.get(field) == GameInterFace.RED, "the next 4th tick after resume turns it red")
+	for i in 6: _present(hud, 8, 8)  # paused after the flip
+	_expect(screen.colours.get(field) == GameInterFace.RED, "no further flip while paused on tick 8")
+	_present(hud, 12, 8)
+	_expect(screen.colours.get(field) == GameInterFace.WHITE, "the next 4th tick turns it white")
+	_present(hud, 13, 7)
 	_expect(not hud.colorChangeArray.has(0) and screen.colours.get(field) == Color8(101, 58, 18),
 		"a score back below 8 returns to 6634002")
-	hud.setScore(0, 8)
-	hud._tween_handlers(12)
+	_present(hud, 14, 8)
+	_present(hud, 16, 8)
 	_expect(screen.colours.get(field) == GameInterFace.RED, "crossing 8 again flashes from red")
 	screen.free()
 
 	app.session.mode = &"green_zone"
 	var other := FakeScreen.new()
 	hud = GameInterFace.new(other, app, null)
-	hud.mapLoadOver({})
-	hud.setScore(0, 8)
-	_expect(not hud.colorChangeArray.has(0), "Green Zone's HUD does not flash (unchanged)")
+	field = hud._scoreTextArr[0]
+	_expect(hud.textColNum == 8, "Green Zone's threshold is GreenZoneMode/@textColNum = 8")
+	for tick in 5: _present(hud, tick, 7)
+	_expect(not _flashing(other, field), "a Green Zone score below 8 never flashes")
+	_present(hud, 5, 8)
+	_present(hud, 8, 8)
+	_expect(other.colours.get(field) == GameInterFace.RED, "Green Zone flashes from 8")
 	other.free()
+
 	app.session.mode = &"pac_man"
 	other = FakeScreen.new()
 	hud = GameInterFace.new(other, app, null)
-	hud.mapLoadOver({"mode_state": {"coins_total": 121}})
-	_expect(hud.textColNum == 106, "Pac-Man keeps textColNum = coins - 15")
-	hud.setScore(0, 108)
-	_expect(not hud.colorChangeArray.has(0), "Pac-Man's HUD does not flash (unchanged)")
+	field = hud._scoreTextArr[0]
+	_expect(hud.textColNum == 5, "PacManMode's rules XML threshold is 5")
+	for tick in 5: _present(hud, tick, 0)
+	_expect(hud.textColNum == 106, "PacManMode.mapLoadOver replaces it with coins - 15")
+	_expect(not _flashing(other, field), "Pac-Man below coins - 15 never flashes")
+	_present(hud, 5, 105)
+	_present(hud, 8, 105)
+	_expect(not _flashing(other, field), "Pac-Man at 105 of 121 coins does not flash")
+	_present(hud, 9, 106)
+	_present(hud, 12, 106)
+	_expect(other.colours.get(field) == GameInterFace.RED, "Pac-Man flashes at 106 of 121 coins (coins - 15)")
 	other.free()
+
 	app.session.mode = &"arcade"
 	other = FakeScreen.new()
 	hud = GameInterFace.new(other, app, null)
-	hud.mapLoadOver({})
-	hud.setScore(0, 8)
-	_expect(not hud.colorChangeArray.has(0), "Arcade's HUD does not flash (unchanged)")
+	field = hud._scoreTextArr[0]
+	_expect(hud.textColNum == 0, "Arcade's rules XML has no textColNum")
+	for tick in [0, 4, 8, 12]: _present(hud, tick, 8)
+	_expect(not hud.colorChangeArray.has(0) and not _flashing(other, field), "Arcade never flashes")
 	other.free()
 	app.free()
+
+
+func _present(hud: RefCounted, tick: int, points: int) -> void:
+	hud.present({"tick": tick, "remaining": 180 * 35,
+		"mode_state": {"coins_total": 121},
+		"actors": {&"human": {"lives": 3, "capacity": 1, "power": 1, "speed": 1.6,
+			"score": points, "points": points}}})
+
+
+func _flashing(screen, field: String) -> bool:
+	var colour: Color = screen.colours.get(field, Color(0, 0, 0, 0))
+	return colour == GameInterFace.RED or colour == GameInterFace.WHITE
 
 
 ## The HUD's screen side: layout, instances and live text/colour writes, recorded here.
 class FakeScreen extends Node2D:
 	signal mouse_event(instance: String, kind: StringName)
 
-	var layout := {"board": {"robot_ui_slots": [[0, 0], [10, 0], [20, 0]]}, "nodes": []}
+	var layout := {"board": {"robot_ui_slots": [[0, 0], [10, 0], [20, 0]]},
+		"nodes": [{"path": "robotUI0/interfaceMc0/scoreTf", "text_format": {"color": [1, 61, 103]}}]}
 	var colours := {}
 	var texts := {}
 
+	func _relative(path: String) -> String: return path
 	func set_shown(_instance: String, _shown: bool) -> void: pass
 	func set_frame(_instance: String, _frame: int) -> void: pass
 	func move_instance(_instance: String, _offset: Vector2) -> void: pass

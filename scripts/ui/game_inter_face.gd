@@ -11,8 +11,8 @@ extends "res://scripts/ui/abstract_ui.gd"
 ## `changeTimeCol`: once TIME reads under 10 (`Game.countTime` dispatches TIME_COUNT_DOWN,
 ## `timeCountDownHandle` adds it to the engine's tween handlers), TIME turns red, white, red …
 ## on every tween tick (`GameEngine.enterFrameHandle` runs them every 4th engine tick).
-## `changeCol` / `defaultCol`: Kill's score flashes once a robot reaches
-## `KillMode/@textColNum` = 8 (`AbstractPlayer.scoreData`); Arcade does not.
+## `changeCol` / `defaultCol`: a non-Arcade score flashes at `Game.textColNum`
+## (`AbstractPlayer.scoreData`); Arcade does not.
 ##
 ## Not ported yet: `stopMC` (generated screens show recorded frames only) and the `gameFrame`
 ## bitmap copy in `initData` (the layout already holds it as the screen's first piece).
@@ -24,6 +24,12 @@ const ARCADE_MODE := &"arcade"
 const KILL_MODE := &"kill"
 const PAC_MAN_MODE := &"pac_man"
 const GREEN_ZONE := &"green_zone"
+## `Game.textColNum`, which `AbstractGameMode.init` reads from each mode's rules XML
+## (`<mode>/@textColNum`): KillMode 8, GreenZoneMode 8, PacManMode 5. PacManMode's
+## `mapLoadOver` replaces the Pac-Man value with `_coinTotal - 15`.
+const TEXT_COL_NUM := {KILL_MODE: 8, GREEN_ZONE: 8, PAC_MAN_MODE: 5}
+## `GameInterFace.defaultCol`: 6634002.
+const DEFAULT_SCORE_COLOUR := Color8(101, 58, 18)
 
 var _currentLevel := ""
 var _totalLevel := ""
@@ -50,7 +56,8 @@ var _time_flashing := false
 var _tween_tick := -1
 ## The score fields that flash (`colorChangeArray`): uiId -> on.
 var colorChangeArray := {}
-## `Game.textColNum` (set by PacManMode's `mapLoadOver`).
+## `Game.textColNum` (`AbstractGameMode.init` reads `<mode>/@textColNum`; PacManMode's
+## `mapLoadOver` replaces it with `_coinTotal - 15`).
 var textColNum := 0
 ## The mode's `mapLoadOver` has run on the HUD (first snapshot of the round).
 var _map_loaded := false
@@ -117,6 +124,9 @@ func initView() -> void:
 			var slot := Vector2(float(_slots[i][0]), float(_slots[i][1]))
 			_mc.move_instance(panel, slot - _mc.instance_position(panel))
 	setFaceMc()
+	# `changeCol` reads the field's text colour (`TextField.textColor`): start from the
+	# layout's recorded colour so the first flip cannot be stale.
+	for field in _scoreTextArr: _shown[field + "|colour"] = _layout_colour(field)
 
 
 ## Where UI_interface (the AS3 `_mc`) lies under the screen root, as instance addresses go
@@ -142,6 +152,7 @@ func setFaceMc() -> void:
 		GREEN_ZONE:
 			frame = 2
 			_scoreStr = "/10"
+	textColNum = int(TEXT_COL_NUM.get(_root.session.mode, 0))
 	for face in _faceMcArr:
 		_mc.set_frame(face, frame)
 
@@ -212,15 +223,13 @@ func setSpeed(uiId: int, value: int) -> void:
 
 
 ## `setScore(uiId, points)`: -1 empties the field and shows the face's frame 4.
-## `AbstractPlayer.scoreData` then compares the points with `Game.textColNum`, which
-## `AbstractGameMode.init` reads from the mode's rules XML (`KillMode/@textColNum` = 8):
-## at or above it the field joins the tween handlers (`changeCol`), below it leaves them
-## (`defaultCol`). Only Kill enables the check here; Arcade, Green Zone and Pac-Man keep
-## the HUD behaviour they had.
+## `AbstractPlayer.scoreData` then compares the points with `Game.textColNum` for every
+## non-Arcade mode: at or above it the field joins the tween handlers (`changeCol`), below
+## it leaves them (`defaultCol`). `TEXT_COL_NUM` holds the rules XML thresholds.
 func setScore(uiId: int, value: int) -> void:
 	if value != -1:
 		_put(_scoreTextArr[uiId], str(value) + _scoreStr)
-		if _root.session.mode == KILL_MODE:
+		if _root.session.mode != ARCADE_MODE:
 			if value >= textColNum:
 				changeCol(uiId)
 			elif colorChangeArray.has(uiId):
@@ -262,18 +271,15 @@ func present(snapshot: Dictionary) -> void:
 
 ## What the mode's `mapLoadOver` does to the HUD. PacManMode: `setScore(i, -1)` for the
 ## players (field emptied, face on frame 4), `scoreStr = "/" + _coinTotal`, `textColNum =
-## _coinTotal - 15`, then `eatNum = 0` writes the player's score through `coinsNum`
-## (`scoreData`, here by `present`), and `setScore(i, -1)` for every AI seat.
-## Kill: `Game.textColNum` = `KillMode/@textColNum` = 8, read by `AbstractGameMode.init`.
+## _coinTotal - 15` (replacing the rules XML's 5 from `TEXT_COL_NUM`), then `eatNum = 0`
+## writes the player's score through `coinsNum` (`scoreData`, here by `present`), and
+## `setScore(i, -1)` for every AI seat.
 func mapLoadOver(snapshot: Dictionary) -> void:
-	match _root.session.mode:
-		PAC_MAN_MODE:
-			var coins := int(snapshot.get("mode_state", {}).get("coins_total", 0))
-			for uiId in _scoreTextArr.size(): setScore(uiId, -1)
-			scoreStr = "/" + str(coins)
-			textColNum = coins - 15
-		KILL_MODE:
-			textColNum = 8
+	if _root.session.mode != PAC_MAN_MODE: return
+	var coins := int(snapshot.get("mode_state", {}).get("coins_total", 0))
+	for uiId in _scoreTextArr.size(): setScore(uiId, -1)
+	scoreStr = "/" + str(coins)
+	textColNum = coins - 15
 
 
 ## `set scoreStr`
@@ -311,13 +317,27 @@ func changeCol(index: int) -> void:
 ## `defaultCol(index)`: the score field back to 6634002, no longer flashing.
 func defaultCol(index: int) -> void:
 	colorChangeArray.erase(index)
-	_shown[_scoreTextArr[index] + "|colour"] = Color8(101, 58, 18)
-	_mc.set_text_color(_scoreTextArr[index], Color8(101, 58, 18))
+	_shown[_scoreTextArr[index] + "|colour"] = DEFAULT_SCORE_COLOUR
+	_mc.set_text_color(_scoreTextArr[index], DEFAULT_SCORE_COLOUR)
 
 
+## The score field's recorded text colour, from the layout's `text_format.color`.
+func _layout_colour(field: String) -> Color:
+	for entry: Dictionary in _mc.layout.nodes:
+		if _mc._relative(entry.path) == field:
+			var colour: Array = entry.get("text_format", {}).get("color", [])
+			if colour.size() >= 3:
+				return Color8(int(colour[0]), int(colour[1]), int(colour[2]))
+	return DEFAULT_SCORE_COLOUR
+
+
+## `changeCol`'s closure: red to white and back, from the field's actual colour
+## (`TextField.textColor`).
 func _flip(field: String) -> void:
-	var red: bool = _shown.get(field + "|colour") == RED
-	_shown[field + "|colour"] = WHITE if red else RED
+	var key := field + "|colour"
+	if not _shown.has(key): _shown[key] = _layout_colour(field)
+	var red: bool = _shown[key] == RED
+	_shown[key] = WHITE if red else RED
 	_mc.set_text_color(field, WHITE if red else RED)
 
 
