@@ -666,13 +666,8 @@ Weapons slice, 2026-11-08 (owner to review): every weapon's action and shots fro
 - New cases (pickup fixture, then the action): `gameplay-cinema-flamer`, `-laser`, `-boxing`,
   `-landmine` (right, at the boxes ahead) and `-fireball` (its charge, down). All pass at the 3×→1×
   ceiling; nodes match exactly (the laser's scaled Sprite and end piece included).
-Known gaps: the simulation runs each weapon's callbacks one tick after the original in play (its
-weapon timings count from the input counter, but the game consumes a key on the next frame:
-`weapons.gd` emits the first triple shot, fires the laser, ends the hammer/flamer a tick late), so a
-moving projectile stands one move behind the original's and boxes broken by a weapon break a tick
-late; the clips count their own frames from the action's start as the commands do, so they match.
-No case captures a shot for that reason (a scratch run, right and down, matched every shot node but
-its position, one move behind, and its fade): the triple gun has no case. The
+Known gaps: (the weapons' one-tick lag noted here first was fixed by the timing slice below, which
+added the `gameplay-cinema-triple` case.) The
 triple/fireball recovery and the shots' fade-in run on the host clock in the reference player
 (TweenMax), so they are not captured. The burnt pickup's `brickExp` (pickups slice) does not show
 its sparkles as the original's at frame 9 (found by the flamer case; captures moved off the burn, whose score also lands a tick late).
