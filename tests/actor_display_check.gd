@@ -138,7 +138,9 @@ func _run() -> void:
 		return
 	var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACK))
 	_check_spawn_blink(pack)
+	_check_golden_spawn_captures(pack)
 	_check_short_command_blink(pack)
+	_check_replacement_blink(pack)
 	_check_loops_follow_the_clip(pack)
 	_check_horse_jump(pack)
 	print("%s: %d actor display checks" % ["PASS" if failures == 0 else "FAIL", checks])
@@ -153,13 +155,77 @@ func _check_spawn_blink(pack: Dictionary) -> void:
 	var screen: FakeScreen = scene.screen
 	actors.update(_snapshot(0))
 	var view: Dictionary = actors._robots[&"human"]
-	_expect(view.blinking and view.blink == 1, "spawn invincibility owns the robot's first tick")
+	_expect(view.blinking and view.blink == 0, "spawn invincibility owns the robot's first tick")
 	for tick in range(1, 82):
 		actors.update(_snapshot(tick))
 	_expect(not view.blinking and not view.bright and view.blink == 0,
 		"the spawn blink clears on the 81st tick after robot init")
 	_expect(_no_offsets(screen, view), "the spawn blink leaves no colour offset on the robot's nodes")
 	scene.screen.queue_free()
+
+
+## The committed captures record the original's robot containers' colour transforms. The
+## round's first gameplay capture is 701 (`gameplay-cinema-start`), so a capture at frame f
+## is the display's tick f - 701; every included capture's +50 state must match the spawn
+## command's 4-tick phase there. Captures owned by a later command (`shield/used`) are left
+## out; the portal's `arrive` still shows the AIs' spawn blink.
+func _check_golden_spawn_captures(pack: Dictionary) -> void:
+	var cases := {
+		"gameplay-cinema-start": ["cinema-start"],
+		"gameplay-cinema-bomb": ["walk", "bomb", "blast", "box-break"],
+		"gameplay-cinema-boxing": ["turned", "punch", "punch-late", "after"],
+		"gameplay-cinema-portal": ["fade", "fade-late", "arrive"],
+		"gameplay-cinema-invincible": ["intro", "intro-late", "glow", "glow-turned"],
+		# `used` is the shield's own new InvincibilityCommand after the bomb consumes it.
+		"gameplay-cinema-shield": ["held", "turned", "walk", "blast"],
+	}
+	var base := int(_golden_meta("gameplay-cinema-start").frames["cinema-start"])
+	var observations := []
+	var max_tick := 0
+	for case: String in cases:
+		var meta := _golden_meta(case)
+		for capture: String in cases[case]:
+			var tick := int(meta.frames[capture]) - base
+			observations.append({"case": case, "capture": capture, "tick": tick,
+				"on": _golden_blink_on(case, capture)})
+			max_tick = maxi(max_tick, tick + 4)
+	var scene := _make(pack)
+	var actors: RefCounted = scene.actors
+	actors.update(_snapshot(0))
+	var view: Dictionary = actors._robots[&"human"]
+	var lit := {0: false}
+	for tick in range(1, max_tick + 1):
+		actors.update(_snapshot(tick))
+		lit[tick] = bool(view.bright)
+	for obs: Dictionary in observations:
+		_expect(bool(lit[int(obs.tick)]) == bool(obs.on),
+			"%s/%s: the spawn blink is %s at its capture tick" % [obs.case, obs.capture,
+				"on" if obs.on else "off"])
+	scene.screen.queue_free()
+
+
+func _golden_meta(case: String) -> Dictionary:
+	return JSON.parse_string(FileAccess.get_file_as_string("res://tests/goldens/%s/meta.json" % case))
+
+
+## The original's +50 on any robot container at a capture (`color_transform.add`).
+func _golden_blink_on(case: String, capture: String) -> bool:
+	var scene: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
+		"res://tests/goldens/%s/%s.json" % [case, capture]))
+	for node: Dictionary in scene.nodes:
+		if not _is_robot_container(node): continue
+		var ct = node.get("color_transform")
+		var add: Array = ct.get("add", [0, 0, 0, 0]) if ct is Dictionary else [0, 0, 0, 0]
+		if not add.is_empty() and int(add[0]) != 0: return true
+	return false
+
+
+## A robot's container: a Sprite directly on a row's AI (3) or player (4) layer.
+func _is_robot_container(node: Dictionary) -> bool:
+	if String(node.get("kind", "")) != "movie_clip": return false
+	if not String(node.get("class", "")).contains("Sprite"): return false
+	var parent := String(node.get("path", "")).get_base_dir()
+	return parent.ends_with("/@0#3") or parent.ends_with("/@0#4")
 
 
 ## Portal's `new InvincibilityCommand(robot, 45)` sets `blink_until` 46 ticks later; the
@@ -178,6 +244,26 @@ func _check_short_command_blink(pack: Dictionary) -> void:
 	_expect(view.blink_until == end and not view.blinking and not view.bright,
 		"a 45-tick InvincibilityCommand ends on its blink_until tick")
 	_expect(_no_offsets(screen, view), "a finished InvincibilityCommand clears the robot's offset")
+	scene.screen.queue_free()
+
+
+## Portal's 45-tick command replaces a running spawn command (`CommandChain.addCommand`
+## removes the old one), so its shorter end wins even though it is earlier than the spawn end.
+func _check_replacement_blink(pack: Dictionary) -> void:
+	var scene := _make(pack)
+	var actors: RefCounted = scene.actors
+	var screen: FakeScreen = scene.screen
+	actors.update(_snapshot(0))
+	var view: Dictionary = actors._robots[&"human"]
+	for tick in range(1, 21):
+		actors.update(_snapshot(tick))
+	var end := 20 + 46
+	actors.update(_snapshot(20, {"blink_until": end}))
+	for tick in range(21, end + 1):
+		actors.update(_snapshot(tick, {"blink_until": end}))
+	_expect(view.blink_until == end and not view.blinking and not view.bright,
+		"a shorter Portal command replaces the running spawn blink")
+	_expect(_no_offsets(screen, view), "the replaced spawn blink leaves no colour offset")
 	scene.screen.queue_free()
 
 

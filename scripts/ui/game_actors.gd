@@ -227,7 +227,7 @@ func _create_robots(snapshot: Dictionary) -> void:
 		var look: Array = _looks[seat] if seat < _looks.size() else [int(actor.get("body", 0)), int(actor.get("hat", 0))]
 		var view := {"id": id, "robot": int(actor.get("robot", seat)), "cloth": maxi(0, int(look[0])), "hat": maxi(0, int(look[1])),
 			"robot_row": 4 if id == &"human" else 3, "row": 0, "layer": "", "item": {}, "children": [], "class": "", "suffix": "_Down",
-			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": 1, "bright": false, "blinking": true,
+			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": 0, "bright": false, "blinking": true,
 			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO),
 			"blink_until": maxi(int(actor.get("blink_until", 0)), _tick + SPAWN_BLINK_TICKS),
 			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "jumping": false, "loop_age": 0, "loop_count": 0,
@@ -317,9 +317,13 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 			if not view.jumping: view.playing = false
 		if replay and view.class == replay_class and view.fresh == 0: view.playing = true
 		view.direction = direction
-		if int(actor.get("blink_until", 0)) > view.blink_until:
-			# robotRelive / TryToKillCommandChain / Portal: a new InvincibilityCommand.
-			view.blink_until = int(actor.blink_until)
+		var blink_end := int(actor.get("blink_until", 0))
+		if blink_end != view.blink_until and blink_end > _now:
+			# robotRelive / TryToKillCommandChain / Portal: a new InvincibilityCommand
+			# replaces the running one (`CommandChain.addCommand` removes the old), so its
+			# shorter 45-tick Portal blink restarts the 4-tick phase instead of inheriting
+			# the spawn command's end.
+			view.blink_until = blink_end
 			view.blink = 0
 			view.bright = false
 			view.blinking = true
