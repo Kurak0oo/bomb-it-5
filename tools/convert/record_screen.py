@@ -44,6 +44,7 @@ from functools import reduce
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import platform
 import shutil
@@ -85,18 +86,37 @@ REFERENCE_3X = 'reference-3x.json'
 def record_reference_3x(target, case_name, capture, player_path, file_name=None):
     """Remember which player build rendered a 3× image: the comparison's resampling ceiling
     (`compare.py resampling_ceiling`) must not compare across builds. One manifest per screen
-    directory lists every 3× image there, so any pass that writes one updates only its entry."""
+    directory lists every 3× image there, so any pass that writes one updates only its entry.
+
+    A manifest that cannot be read is an error, not an empty manifest: replacing it would
+    forget every other image's player. The write goes through a temp file and `os.replace`,
+    so a failure leaves the previous manifest whole."""
     file_name = file_name or f'reference-3x-{case_name}-{capture}.png'
     manifest_path = Path(target) / REFERENCE_3X
     images = {}
     if manifest_path.is_file():
         try:
-            images = json.loads(manifest_path.read_text(encoding='utf-8')).get('images', {})
-        except (OSError, ValueError):
-            images = {}
+            data = json.loads(manifest_path.read_text(encoding='utf-8'))
+        except (OSError, ValueError) as error:
+            raise SystemExit(f'{manifest_path}: cannot read the 3× player manifest ({error}); '
+                             'delete it to start a new one') from error
+        if not isinstance(data, dict) or not isinstance(data.get('images', {}), dict):
+            raise SystemExit(f'{manifest_path}: "images" is not an object; delete the corrupt manifest')
+        images = data.get('images', {})
     images[file_name] = {'case': case_name, 'capture': capture, 'player_sha256': sha256(player_path)}
-    manifest_path.write_text(json.dumps({'schema': 'bombit5-reference-3x-v1', 'images': images},
-                                       indent=1, sort_keys=True) + '\n', encoding='utf-8')
+    text = json.dumps({'schema': 'bombit5-reference-3x-v1', 'images': images},
+                      indent=1, sort_keys=True) + '\n'
+    fd, temp_name = tempfile.mkstemp(prefix=f'.{REFERENCE_3X}.', dir=manifest_path.parent)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as handle:
+            handle.write(text)
+        os.replace(temp_name, manifest_path)
+    except BaseException:
+        try:
+            os.unlink(temp_name)
+        except FileNotFoundError:
+            pass
+        raise
 
 
 def all_rounds(board):
@@ -588,17 +608,7 @@ def record_art(case_name, player_path, swf):
                     'states': json.loads(states.read_text(encoding='utf-8')) if states.is_file() else {},
                     'frames': frames, 'frame_sequences': frame_sequences}
         if layout.get('effects'):
-            try:
-                manifest['effects'] = _record_screen_effects(layout, target, swf)
-            except (FileNotFoundError, KeyError, subprocess.CalledProcessError) as error:
-                # FFDec needs Java. The effect art already in the pack is unchanged by a
-                # re-render of the screen's pieces, so keep it instead of failing the screen.
-                previous = target / 'manifest.json'
-                old = json.loads(previous.read_text(encoding='utf-8')) if previous.is_file() else {}
-                if not old.get('effects'):
-                    raise
-                print(f'  effects not re-rendered ({error}); keeping the recorded effect art')
-                manifest['effects'] = old['effects']
+            manifest['effects'] = _record_effects_or_keep(layout, target, swf, manifest)
         if layout.get('board'):
             manifest['tiles'], manifest['features'] = _record_tiles(case, capture, layout, player_path, swf, seen, target)
         check = _self_check(layout, manifest, target)
@@ -916,19 +926,105 @@ def _self_check(layout, manifest, target):
     return {k: result.get(k) for k in ('ssim', 'max_region_delta_e', 'regions_over', 'worst_region')}
 
 
+class EffectsUnavailable(RuntimeError):
+    """The effect art cannot be rendered now; recorded art may stand in only if it matches."""
+
+
+def _ffdec_missing():
+    """Why FFDec cannot render now (None when it can). `bakeoff.ensure_ffdec` downloads the
+    jar when it is not cached (which needs the network) and raises SystemExit when Java is
+    missing, so check both first and take the recorded-art fallback without calling it."""
+    jar = ROOT / '.scratch' / 'tools' / 'ffdec' / 'ffdec.jar'
+    if not jar.is_file():
+        return f'FFDec is not cached at {jar.relative_to(ROOT)}'
+    if not shutil.which('java'):
+        return 'Java is not on PATH (FFDec needs Java)'
+    return None
+
+
+def _record_effects_or_keep(layout, target, swf, manifest):
+    """Render the effects, or keep the recorded art when FFDec cannot (see the finding in
+    `_keep_recorded_effects`). Only the effect lookup's KeyError is narrowed to LookupError;
+    every other failure propagates."""
+    try:
+        unavailable = _ffdec_missing()
+        if unavailable:
+            raise EffectsUnavailable(unavailable)
+        return _record_screen_effects(layout, target, swf)
+    except (EffectsUnavailable, FileNotFoundError, LookupError, subprocess.CalledProcessError) as error:
+        return _keep_recorded_effects(layout, target, manifest, error)
+
+
+def _keep_recorded_effects(layout, target, manifest, error):
+    """The effect art already in the pack, if it is the art the current SWF and layout need.
+
+    A re-render of the screen's pieces does not change the effect art, but stale art must not
+    stand in for a new SWF or layout: the manifest's SWF and golden hashes, each effect's
+    identity (its art class) and bitmap size, and every frame it names must still match."""
+    previous = target / 'manifest.json'
+    old = {}
+    if previous.is_file():
+        try:
+            old = json.loads(previous.read_text(encoding='utf-8'))
+        except (OSError, ValueError) as parse_error:
+            raise SystemExit(f'{target}: cannot keep the recorded effects: {previous} is unreadable '
+                             f'({parse_error})') from parse_error
+        if not isinstance(old, dict):
+            raise SystemExit(f'{target}: cannot keep the recorded effects: {previous} is unreadable '
+                             '(not a JSON object)')
+    problem = _effects_mismatch(layout, target, manifest, old)
+    if problem:
+        raise SystemExit(f'{layout["screen"]}: effects not re-rendered ({error}) and the recorded '
+                         f'effect art cannot be kept: {problem}')
+    print(f'  effects not re-rendered ({error}); keeping the recorded effect art')
+    return old['effects']
+
+
+def _effects_mismatch(layout, target, manifest, old):
+    """Why the recorded effects cannot stand in for this render (None when they can)."""
+    effects = old.get('effects')
+    if not isinstance(effects, dict):
+        return 'the manifest has no recorded effects'
+    if old.get('swf_sha256') != manifest['swf_sha256']:
+        return 'recorded for a different SWF'
+    if old.get('golden_sha256') != manifest['golden_sha256']:
+        return 'recorded for a different golden capture'
+    if set(effects) != set(layout['effects']):
+        return (f'recorded for {", ".join(sorted(effects))} but the layout has '
+                f'{", ".join(sorted(layout["effects"]))}')
+    for effect, how in layout['effects'].items():
+        entry = effects[effect]
+        if not isinstance(entry, dict):
+            return f'{effect}: the recorded entry is not an object'
+        if entry.get('art_class') != how['art_class']:
+            return f'{effect}: art class {entry.get("art_class")!r} is not {how["art_class"]!r}'
+        if entry.get('bitmap_size') != list(how['bitmap_size']):
+            return f'{effect}: bitmap size {entry.get("bitmap_size")} is not {list(how["bitmap_size"])}'
+        frames = entry.get('frames')
+        if not isinstance(frames, list) or not frames:
+            return f'{effect}: no recorded frames'
+        missing = [name for name in frames if not (target / name).is_file()]
+        if missing:
+            return f'{effect}: missing {missing[0]}'
+    return None
+
+
 def _record_screen_effects(layout, target, swf):
     """The art of a screen's run-time effects (`effects`, layout.py), into the local pack:
     FallSnow draws each frame of the library clip `fallSnow` into a BitmapData(25, 25)
     at the identity matrix (`FallSnow.init`), so each frame is exported with FFDec at zoom 1
     (the SWF's symbol class names the sprite) and the clip's area from its origin to the
-    bitmap size is kept. Godot draws them at that source resolution (scripts/ui/fall_snow.gd)."""
+    bitmap size is kept. Godot draws them at that source resolution (scripts/ui/fall_snow.gd).
+
+    Frames are written to a staging directory and swapped in only once every effect has
+    rendered: a failure part way leaves the recorded `effects/` untouched."""
     import re
-    import subprocess
     sys.path.insert(0, str(HERE.parent / 'bakeoff'))
     import bakeoff
     jar = bakeoff.ensure_ffdec()
     out = {}
     tmp = Path(tempfile.mkdtemp(prefix='bombit5-effects-'))
+    staging = None
     try:
         subprocess.run(['java', '-jar', str(jar), '-export', 'symbolClass', str(tmp / 'symbols'), str(swf)],
                        check=True, capture_output=True, timeout=600)
@@ -936,14 +1032,16 @@ def _record_screen_effects(layout, target, swf):
         for line in (tmp / 'symbols' / 'symbols.csv').read_text(encoding='utf-8').splitlines():
             ident, _, cls = line.partition(';')
             symbols[cls.strip().strip('"')] = int(ident)
+        staging = Path(tempfile.mkdtemp(prefix='.effects-', dir=target))
         for effect, how in layout['effects'].items():
-            ident = symbols[how['art_class']]
+            try:
+                ident = symbols[how['art_class']]
+            except KeyError:
+                raise LookupError(f'{effect}: {how["art_class"]!r} is not a symbol class of '
+                                  f'{Path(swf).name}') from None
             for fmt in ('png', 'svg'):
                 subprocess.run(['java', '-jar', str(jar), '-selectid', str(ident), '-zoom', '1', '-format', f'sprite:{fmt}',
                                 '-export', 'sprite', str(tmp / fmt), str(swf)], check=True, capture_output=True, timeout=600)
-            folder = target / 'effects'
-            shutil.rmtree(folder, ignore_errors=True)
-            folder.mkdir(parents=True)
             frames = []
             w, h = how['bitmap_size']
             pngs = sorted(next((tmp / 'png').iterdir()).glob('*.png'), key=lambda f: int(f.stem))
@@ -956,12 +1054,27 @@ def _record_screen_effects(layout, target, swf):
                 bitmap = Image.new('RGBA', (w, h), (0, 0, 0, 0))
                 bitmap.paste(Image.open(png).convert('RGBA'), (round(-tx), round(-ty)))
                 name = f'{how["art_class"]}-{png.stem}.png'
-                bitmap.save(folder / name)
+                bitmap.save(staging / name)
                 frames.append(f'effects/{name}')
             out[effect] = {'art_class': how['art_class'], 'character_id': ident, 'bitmap_size': [w, h],
                            'frames': frames, 'source': 'FFDec sprite frames at zoom 1'}
             print(f'{effect}: {len(frames)} frames of {how["art_class"]} (character {ident})')
+        folder = target / 'effects'
+        stale = target / '.effects-old'
+        shutil.rmtree(stale, ignore_errors=True)
+        if folder.exists() or folder.is_symlink():
+            folder.rename(stale)
+        try:
+            staging.rename(folder)
+        except BaseException:
+            if stale.exists():
+                stale.rename(folder)
+            raise
+        staging = None
+        shutil.rmtree(stale, ignore_errors=True)
     finally:
+        if staging is not None:
+            shutil.rmtree(staging, ignore_errors=True)
         shutil.rmtree(tmp, ignore_errors=True)
     return out
 
