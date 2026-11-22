@@ -10,9 +10,10 @@ extends SceneTree
 const GameActors = preload("res://scripts/ui/game_actors.gd")
 const PACK := "res://original/screens/game/actors/actors.json"
 const ZERO := Color(0, 0, 0, 0)
-## `HorseProp.frog`'s `gotoAndPlay(19)`; `_r<n>_forg_<dir>.as` restarts at 1 after frame 34.
+## `HorseProp.frog`'s `gotoAndPlay(19)`; `_r<n>_forg_<dir>.as` restarts at 1 on frame 34
+## (its `addFrameScript(33, ...)` is 0-based).
 const JUMP_START := 19
-const JUMP_END := 33
+const JUMP_END := 34
 var failures := 0
 var checks := 0
 
@@ -143,6 +144,9 @@ func _run() -> void:
 	_check_replacement_blink(pack)
 	_check_loops_follow_the_clip(pack)
 	_check_horse_jump(pack)
+	_check_horse_jump_turn(pack)
+	_check_horse_stop_frame(pack)
+	_check_jump_input_gate()
 	print("%s: %d actor display checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -292,6 +296,9 @@ func _check_loops_follow_the_clip(pack: Dictionary) -> void:
 ## `HorseProp.frog`: `robotMoveStop`, then `view.mc.gotoAndPlay(19)`; while the jump runs the
 ## clip keeps playing even with no key held. `xJump`/`yJump` land with `gotoAndStop(1)`.
 func _check_horse_jump(pack: Dictionary) -> void:
+	var clip: Dictionary = pack.get("robots", {}).get("_r0_forg_Down", {})
+	_expect(int(clip.get("frames", 0)) >= JUMP_END and not clip.get("looks", {}).get("0|0", {}).get(str(JUMP_END), {}).is_empty(),
+		"the frog clip has frame 34, where its restart script sits (addFrameScript(33))")
 	var scene := _make(pack)
 	var actors: RefCounted = scene.actors
 	var screen: FakeScreen = scene.screen
@@ -306,17 +313,97 @@ func _check_horse_jump(pack: Dictionary) -> void:
 	actors.update(_snapshot(3, {"vehicle": &"horse", "jump": jump}))
 	_expect(view.playing and view.frame == JUMP_START + 2,
 		"a held jump keeps advancing with no direction held")
-	for tick in range(4, 16):
+	for tick in range(4, 17):
 		actors.update(_snapshot(tick, {"vehicle": &"horse", "jump": jump}))
 	_expect(view.playing and view.frame == JUMP_END,
-		"the jump reaches the clip's last jump frame")
-	actors.update(_snapshot(16, {"vehicle": &"horse", "jump": jump}))
+		"the jump reaches frame 34, where the ride clip's restart script sits")
+	actors.update(_snapshot(17, {"vehicle": &"horse", "jump": jump}))
 	_expect(view.playing and view.frame == 1,
 		"the ride's frame 34 script restarts its clip at 1 while the jump continues")
-	actors.update(_snapshot(17, {"vehicle": &"horse"}))
+	actors.update(_snapshot(18, {"vehicle": &"horse"}))
 	_expect(not bool(view.get("jumping", true)) and not view.playing and view.frame == 1,
 		"landing stops the ride clip on gotoAndStop(1)")
 	scene.screen.queue_free()
+
+
+## A direction key mid-jump goes through `_turn` in the display only if the input gate is
+## bypassed; the new clip keeps the jump (`HorseProp.frog` stopped the listeners, so a real
+## key cannot reach this).
+func _check_horse_jump_turn(pack: Dictionary) -> void:
+	var scene := _make(pack)
+	var actors: RefCounted = scene.actors
+	var screen: FakeScreen = scene.screen
+	var jump := {"aim": [2, 1], "speed": [4, 0], "axis": 0}
+	actors.update(_snapshot(0, {"vehicle": &"horse"}))
+	var view: Dictionary = actors._robots[&"human"]
+	actors.update(_snapshot(1, {"vehicle": &"horse", "jump": jump}))
+	actors.update(_snapshot(2, {"vehicle": &"horse", "jump": jump}, [{"actor_id": &"human", "direction": Vector2.RIGHT}]))
+	_expect(view.class == "_r0_forg_Right" and view.jumping and view.playing and view.frame == JUMP_START + 1,
+		"a turn during the jump keeps the jump playing instead of restarting it")
+	actors.update(_snapshot(3, {"vehicle": &"horse", "jump": jump}))
+	_expect(view.playing and view.frame == JUMP_START + 2,
+		"the jump keeps advancing after a turn instead of restarting")
+	scene.screen.queue_free()
+
+
+## `HorseProp.frogMcStop`: the normal ride's `stopMcSurrogate` sends frame 15 to frame 1.
+func _check_horse_stop_frame(pack: Dictionary) -> void:
+	var scene := _make(pack)
+	var actors: RefCounted = scene.actors
+	var screen: FakeScreen = scene.screen
+	actors.update(_snapshot(0, {"vehicle": &"horse"}))
+	var view: Dictionary = actors._robots[&"human"]
+	var right := [{"actor_id": &"human", "direction": Vector2.RIGHT}]
+	for tick in range(1, 15):
+		actors.update(_snapshot(tick, {"vehicle": &"horse"}, right))
+	_expect(view.frame == 14 and view.playing, "the horse ride is on frame 14 before the stop")
+	actors.update(_snapshot(15, {"vehicle": &"horse"}))
+	_expect(view.frame == 1 and not view.playing,
+		"a normal horse stop on frame 15 goes to frame 1 (frogMcStop)")
+	scene.screen.queue_free()
+
+
+## `Game._can_control`: `HorseProp.frog`'s `robotMoveStop` / `robotBombStop` remove the human's
+## listeners while `jump` is set; direction and bomb keys must be ignored, then work on landing.
+func _check_jump_input_gate() -> void:
+	var game: Node = load("res://scripts/game.gd").new()
+	game.state = {"outcome": &"running", "round_stage": &"playing", "actors": {
+		&"human": {"alive": true, "jump": {"aim": [2, 1], "speed": [4, 0], "axis": 0}}}}
+	game.paused = false
+	var sched := FakeScheduler.new()
+	game.scheduler = sched
+	game.bindings = {"up": KEY_UP, "down": KEY_DOWN, "left": KEY_LEFT, "right": KEY_RIGHT, "bomb": KEY_SPACE}
+	var right := InputEventKey.new()
+	right.keycode = KEY_RIGHT
+	right.pressed = true
+	var bomb := InputEventKey.new()
+	bomb.keycode = KEY_SPACE
+	bomb.pressed = true
+	_expect(not game._can_control(), "the human's controls are off while the frog jump runs")
+	game._input(right)
+	game._input(bomb)
+	_expect(game.held.is_empty() and sched.direction == Vector2.ZERO and sched.bombs.is_empty(),
+		"a direction and bomb key mid-jump neither turn nor queue a bomb")
+	game.state.actors[&"human"].jump = {}
+	_expect(game._can_control(), "landing gives the human's controls back")
+	game._input(right)
+	game._input(bomb)
+	_expect(sched.direction == Vector2.RIGHT and sched.bombs.size() == 1,
+		"after landing the same keys turn and queue the bomb again")
+	sched.free()
+	game.free()
+
+
+## `Game._can_control`'s scheduler surface.
+class FakeScheduler extends Node:
+	var direction := Vector2.ZERO
+	var bombs: Array = []
+
+	func set_direction(_id: StringName, value: Vector2) -> void:
+		direction = value
+
+	func enqueue_bomb_event(_id: StringName, event: StringName) -> void:
+		bombs.append(event)
 
 
 ## A display with a fake board/screen and the real actors pack.
