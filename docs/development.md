@@ -894,6 +894,6 @@ Robot 0's hat facing down and 3x ceilings, 2026-11-22 (owner to review):
   current player (about 7,900 files); the accepted art was kept and only the 3x images replaced.
 - `record_screen.py` art-pass effects: recorded effect art is kept only when it matches the current
   SWF and layout and its files exist; staged swap; FFDec downloads when Java is present.
-Known gaps: the full comparison has not run since these changes (the windowed Godot run hangs while
-the Mac's screen is locked); the composed front-hat frames' render_bounds use the old rule until
-the next actors pass (GameActors does not read them).
+Verified 2026-11-22 after a fresh robots pass (front-hat bounds now the content union): compare all
+51/51 pass (46 pixel-checked; game-over, game-win, results, gameplay-cinema-ai, gameplay-cinema-item
+have no verifiable reference), run_checks 28/28. The windowed comparison hangs while the screen is locked.
