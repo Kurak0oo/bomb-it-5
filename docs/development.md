@@ -892,3 +892,21 @@ Robot 0's hat facing down and 3x ceilings, 2026-11-22 (owner to review):
 Verified 2026-11-22 after a fresh robots pass (front-hat bounds now the content union): compare all
 51/51 pass (46 pixel-checked; game-over, game-win, results, gameplay-cinema-ai, gameplay-cinema-item
 have no verifiable reference), run_checks 28/28. The windowed comparison hangs while the screen is locked.
+
+Mode play checks and the score highlight, 2026-11-22 (checkpoint 5, owner to review):
+- Score highlight (`AbstractPlayer.set scoreData` -> `GameInterFace.changeCol` / `defaultCol`): in
+  every non-Arcade mode a score at the mode's `textColNum` flashes red (16711680) / white
+  (16777215) on every 4th engine tick and returns to its colour below it. Thresholds from the rules
+  XML: Kill 8, Green Zone 8, Pac-Man 5 replaced by `coins - 15` in `PacManMode.mapLoadOver`.
+  Checked in `tests/kill_check.gd` (through `present` at real ticks, with pause).
+- `tools/playthrough_check.gd` plays seeded full rounds with real AI in every mode: Kill (an AI
+  reaches 10 kills, lost), Green Zone (an AI holds 10 flags, lost), Pac-Man (idle player caught by
+  a ghost, lost; scripted player eats all 121 coins, won), plus the Arcade three; each asserts the
+  mode's own outcome, the settle breakdown and the HUD (robot faces, `n/10` / `n/121`, threshold
+  and flash). 7 playthroughs, ~9.4 s.
+- Scouted: the weapons' one-tick lag listed under the weapons slice was already fixed by the
+  timing slice; every mode's end and scoring rules are ported (docs updated).
+All 51 cases (`tools/compare.sh all`) and tools/run_checks.sh (28 suites) pass.
+Known gaps: Pac-Man ghosts chase only inside their RegionDivide areas (ported), so an idle player
+outside them is never hunted; the flag's move and the AI's timers run on the host clock in the
+reference, so mode races are checked by rule, not frame-matched.
