@@ -622,6 +622,24 @@ class ResamplingCeilingNote(unittest.TestCase):
         self.assertIsNotNone(ceiling)
         self.assertNotIn('different player builds', printed.getvalue())
 
+    def test_note_when_3x_image_has_no_recorded_player(self):
+        # A 3× image recorded before `reference-3x.json` exists: its player is unknown, so the
+        # ceiling may compare builds.
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            ceiling = compare.resampling_ceiling('main-menu', 'menu', self.reference_png)
+        self.assertIsNotNone(ceiling)
+        self.assertIn(self.big.name, printed.getvalue())
+        self.assertIn('3x ceiling image has no recorded player; it may compare builds', printed.getvalue())
+
+    def test_note_when_3x_image_is_missing_from_its_manifest(self):
+        self.write_players('b' * 64, 'a' * 64)
+        (self.big.parent / 'reference-3x.json').write_text(json.dumps(
+            {'schema': 'bombit5-reference-3x-v1', 'images': {}}), encoding='utf-8')
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            ceiling = compare.resampling_ceiling('main-menu', 'menu', self.reference_png)
+        self.assertIsNotNone(ceiling)
+        self.assertIn('3x ceiling image has no recorded player; it may compare builds', printed.getvalue())
+
 
 if __name__ == '__main__':
     unittest.main()
