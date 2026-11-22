@@ -11,7 +11,8 @@ extends "res://scripts/ui/abstract_ui.gd"
 ## `changeTimeCol`: once TIME reads under 10 (`Game.countTime` dispatches TIME_COUNT_DOWN,
 ## `timeCountDownHandle` adds it to the engine's tween handlers), TIME turns red, white, red …
 ## on every tween tick (`GameEngine.enterFrameHandle` runs them every 4th engine tick).
-## `changeCol` / `defaultCol` are ported for the modes that flash a score; Arcade does not.
+## `changeCol` / `defaultCol`: Kill's score flashes once a robot reaches
+## `KillMode/@textColNum` = 8 (`AbstractPlayer.scoreData`); Arcade does not.
 ##
 ## Not ported yet: `stopMC` (generated screens show recorded frames only) and the `gameFrame`
 ## bitmap copy in `initData` (the layout already holds it as the screen's first piece).
@@ -211,9 +212,19 @@ func setSpeed(uiId: int, value: int) -> void:
 
 
 ## `setScore(uiId, points)`: -1 empties the field and shows the face's frame 4.
+## `AbstractPlayer.scoreData` then compares the points with `Game.textColNum`, which
+## `AbstractGameMode.init` reads from the mode's rules XML (`KillMode/@textColNum` = 8):
+## at or above it the field joins the tween handlers (`changeCol`), below it leaves them
+## (`defaultCol`). Only Kill enables the check here; Arcade, Green Zone and Pac-Man keep
+## the HUD behaviour they had.
 func setScore(uiId: int, value: int) -> void:
 	if value != -1:
 		_put(_scoreTextArr[uiId], str(value) + _scoreStr)
+		if _root.session.mode == KILL_MODE:
+			if value >= textColNum:
+				changeCol(uiId)
+			elif colorChangeArray.has(uiId):
+				defaultCol(uiId)
 	else:
 		_put(_scoreTextArr[uiId], "")
 		_mc.set_frame(_faceMcArr[uiId], 4)
@@ -253,12 +264,16 @@ func present(snapshot: Dictionary) -> void:
 ## players (field emptied, face on frame 4), `scoreStr = "/" + _coinTotal`, `textColNum =
 ## _coinTotal - 15`, then `eatNum = 0` writes the player's score through `coinsNum`
 ## (`scoreData`, here by `present`), and `setScore(i, -1)` for every AI seat.
+## Kill: `Game.textColNum` = `KillMode/@textColNum` = 8, read by `AbstractGameMode.init`.
 func mapLoadOver(snapshot: Dictionary) -> void:
-	if _root.session.mode != PAC_MAN_MODE: return
-	var coins := int(snapshot.get("mode_state", {}).get("coins_total", 0))
-	for uiId in _scoreTextArr.size(): setScore(uiId, -1)
-	scoreStr = "/" + str(coins)
-	textColNum = coins - 15
+	match _root.session.mode:
+		PAC_MAN_MODE:
+			var coins := int(snapshot.get("mode_state", {}).get("coins_total", 0))
+			for uiId in _scoreTextArr.size(): setScore(uiId, -1)
+			scoreStr = "/" + str(coins)
+			textColNum = coins - 15
+		KILL_MODE:
+			textColNum = 8
 
 
 ## `set scoreStr`
@@ -296,6 +311,7 @@ func changeCol(index: int) -> void:
 ## `defaultCol(index)`: the score field back to 6634002, no longer flashing.
 func defaultCol(index: int) -> void:
 	colorChangeArray.erase(index)
+	_shown[_scoreTextArr[index] + "|colour"] = Color8(101, 58, 18)
 	_mc.set_text_color(_scoreTextArr[index], Color8(101, 58, 18))
 
 

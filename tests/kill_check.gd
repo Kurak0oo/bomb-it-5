@@ -5,6 +5,7 @@ const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const KillMode = preload("res://scripts/simulation/modes/kill_mode.gd")
 const Perception = preload("res://scripts/simulation/ai_perception.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
+const GameInterFace = preload("res://scripts/ui/game_inter_face.gd")
 var failures := 0
 var checks := 0
 
@@ -87,6 +88,7 @@ func _initialize() -> void:
 			view.board[Vector2i(x, y)] = &"floor"
 	_expect(Perception.observe(view, &"ai", {}, 6, true).enemies.size() == 2 and Perception.observe(view, &"ai", {}, 6, false).enemies.size() == 1,
 		"Kill AI targets every robot; Arcade AI only the human")
+	_check_hud_highlight()
 	_finish()
 
 
@@ -135,6 +137,88 @@ func _expect(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		printerr(label)
+
+
+## `AbstractPlayer.scoreData` / `GameInterFace.changeCol`: Kill's score highlights at
+## `KillMode/@textColNum` = 8; the other modes' HUD behaviour stays as ported.
+func _check_hud_highlight() -> void:
+	var app := FakeApp.new()
+	app.session.mode = &"kill"
+	var screen := FakeScreen.new()
+	var hud = GameInterFace.new(screen, app, null)
+	hud.mapLoadOver({})
+	_expect(hud.textColNum == 8, "Kill's score threshold is KillMode/@textColNum = 8")
+	hud.setScore(0, 7)
+	_expect(not hud.colorChangeArray.has(0), "a score below 8 does not flash")
+	hud.setScore(0, 8)
+	_expect(hud.colorChangeArray.has(0), "the 8th kill puts the score field on the tween handlers")
+	hud._tween_handlers(0)
+	hud._tween_handlers(4)
+	var field: String = hud._scoreTextArr[0]
+	_expect(screen.colours.get(field) == GameInterFace.RED, "the highlighted score turns red first (16711680)")
+	hud._tween_handlers(8)
+	_expect(screen.colours.get(field) == GameInterFace.WHITE, "then white on the next tween tick (16777215)")
+	hud.setScore(0, 7)
+	_expect(not hud.colorChangeArray.has(0) and screen.colours.get(field) == Color8(101, 58, 18),
+		"a score back below 8 returns to 6634002")
+	hud.setScore(0, 8)
+	hud._tween_handlers(12)
+	_expect(screen.colours.get(field) == GameInterFace.RED, "crossing 8 again flashes from red")
+	screen.free()
+
+	app.session.mode = &"green_zone"
+	var other := FakeScreen.new()
+	hud = GameInterFace.new(other, app, null)
+	hud.mapLoadOver({})
+	hud.setScore(0, 8)
+	_expect(not hud.colorChangeArray.has(0), "Green Zone's HUD does not flash (unchanged)")
+	other.free()
+	app.session.mode = &"pac_man"
+	other = FakeScreen.new()
+	hud = GameInterFace.new(other, app, null)
+	hud.mapLoadOver({"mode_state": {"coins_total": 121}})
+	_expect(hud.textColNum == 106, "Pac-Man keeps textColNum = coins - 15")
+	hud.setScore(0, 108)
+	_expect(not hud.colorChangeArray.has(0), "Pac-Man's HUD does not flash (unchanged)")
+	other.free()
+	app.session.mode = &"arcade"
+	other = FakeScreen.new()
+	hud = GameInterFace.new(other, app, null)
+	hud.mapLoadOver({})
+	hud.setScore(0, 8)
+	_expect(not hud.colorChangeArray.has(0), "Arcade's HUD does not flash (unchanged)")
+	other.free()
+	app.free()
+
+
+## The HUD's screen side: layout, instances and live text/colour writes, recorded here.
+class FakeScreen extends Node2D:
+	signal mouse_event(instance: String, kind: StringName)
+
+	var layout := {"board": {"robot_ui_slots": [[0, 0], [10, 0], [20, 0]]}, "nodes": []}
+	var colours := {}
+	var texts := {}
+
+	func set_shown(_instance: String, _shown: bool) -> void: pass
+	func set_frame(_instance: String, _frame: int) -> void: pass
+	func move_instance(_instance: String, _offset: Vector2) -> void: pass
+	func instance_position(_instance: String) -> Vector2: return Vector2.ZERO
+	func set_text(instance: String, text: String) -> void: texts[instance] = text
+	func set_text_color(instance: String, colour: Color) -> void: colours[instance] = colour
+
+
+class FakeApp extends Node:
+	var session := FakeSession.new()
+	var audio: Node = null
+
+
+class FakeSession extends RefCounted:
+	var mode: StringName = &"kill"
+	var robot := 0
+	var ai_robots: Array = [1, 2]
+	var enemies := 2
+	var levels := 1
+	var level := 1
 
 
 func _finish() -> void:
