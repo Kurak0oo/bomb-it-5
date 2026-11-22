@@ -3,9 +3,12 @@ import contextlib
 import io
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from unittest import mock
+
+from PIL import Image
 
 import record_screen
 
@@ -163,6 +166,200 @@ class FfdecAvailability(unittest.TestCase):
         with mock.patch.object(record_screen, 'ROOT', self.root), \
                 mock.patch.object(record_screen.shutil, 'which', return_value='/usr/bin/java'):
             self.assertIsNone(record_screen._ffdec_missing())
+
+    def test_download_allowed_for_an_uncached_jar_when_java_is_present(self):
+        with mock.patch.object(record_screen, 'ROOT', self.root), \
+                mock.patch.object(record_screen.shutil, 'which', return_value='/usr/bin/java'):
+            self.assertIsNone(record_screen._ffdec_missing(download=True))
+
+    def test_no_download_for_an_uncached_jar_without_java(self):
+        with mock.patch.object(record_screen, 'ROOT', self.root), \
+                mock.patch.object(record_screen.shutil, 'which', return_value=None):
+            self.assertIn('not cached', record_screen._ffdec_missing(download=True))
+
+
+class EffectsRendering(unittest.TestCase):
+    """`_record_effects_or_keep`: only the missing-symbol case falls back, and an uncached
+    jar is downloaded when Java is present (a failed download keeps the recorded art)."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.target = Path(self.dir.name)
+        self.swf = self.target / 'game.swf'
+        self.swf.write_bytes(b'stub swf')
+        frame = self.target / 'effects' / 'fallSnow-1.png'
+        frame.parent.mkdir()
+        frame.write_bytes(b'stub frame')
+        self.layout = {'screen': 'game-win',
+                       'effects': {'FallSnow': {'art_class': 'fallSnow', 'bitmap_size': [25, 25]}}}
+        self.manifest = {'swf_sha256': SWF, 'golden_sha256': GOLDEN}
+        self.recorded = {'FallSnow': {'art_class': 'fallSnow', 'character_id': 7,
+                                      'bitmap_size': [25, 25], 'frames': ['effects/fallSnow-1.png']}}
+        (self.target / 'manifest.json').write_text(json.dumps(
+            {'swf_sha256': SWF, 'golden_sha256': GOLDEN, 'effects': self.recorded}), encoding='utf-8')
+        self.addCleanup(self.dir.cleanup)
+
+    def run_effects(self, render):
+        with mock.patch.object(record_screen, '_ffdec_missing', return_value=None), \
+                mock.patch.object(record_screen, '_record_screen_effects', side_effect=render):
+            with contextlib.redirect_stdout(io.StringIO()) as printed:
+                kept = record_screen._record_effects_or_keep(self.layout, self.target, self.swf, self.manifest)
+        return kept, printed.getvalue()
+
+    def test_renders_instead_of_keeping_when_ffdec_can_download(self):
+        with mock.patch.object(record_screen, '_ffdec_missing', return_value=None) as missing, \
+                mock.patch.object(record_screen, '_record_screen_effects', return_value={'FallSnow': 'new'}) as render:
+            kept = record_screen._record_effects_or_keep(self.layout, self.target, self.swf, self.manifest)
+        self.assertEqual(kept, {'FallSnow': 'new'})
+        missing.assert_called_once_with(download=True)
+        render.assert_called_once()
+
+    def test_failed_download_keeps_matching_recorded_effects(self):
+        kept, printed = self.run_effects(record_screen.EffectsUnavailable('FFDec is unavailable: offline'))
+        self.assertEqual(kept, self.recorded)
+        self.assertIn('keeping the recorded effect art', printed)
+
+    def test_a_missing_effect_symbol_keeps_matching_recorded_effects(self):
+        kept, printed = self.run_effects(record_screen.EffectSymbolMissing('FallSnow is not a symbol'))
+        self.assertEqual(kept, self.recorded)
+        self.assertIn('keeping the recorded effect art', printed)
+
+    def test_other_lookup_errors_propagate(self):
+        with self.assertRaises(LookupError) as raised:
+            self.run_effects(LookupError('a localized font is missing'))
+        self.assertNotIsInstance(raised.exception, record_screen.EffectSymbolMissing)
+
+    def test_ensure_ffdec_download_failure_is_effects_unavailable(self):
+        bakeoff = mock.Mock()
+        bakeoff.ensure_ffdec.side_effect = OSError('network is down')
+        with mock.patch.dict(sys.modules, {'bakeoff': bakeoff}):
+            with self.assertRaises(record_screen.EffectsUnavailable) as raised:
+                record_screen._ensure_ffdec()
+        self.assertIn('network is down', str(raised.exception))
+
+    def test_a_non_swf_does_not_trigger_a_download(self):
+        bakeoff = mock.Mock()
+        with mock.patch.object(record_screen, 'ROOT', self.target), \
+                mock.patch.dict(sys.modules, {'bakeoff': bakeoff}):
+            with self.assertRaises(record_screen.EffectsUnavailable):
+                record_screen._ensure_ffdec(self.swf)
+        bakeoff.ensure_ffdec.assert_not_called()
+
+
+class FrontHatMath(unittest.TestCase):
+    """`_affine_compose`, `_front_hat_pixels` and `_compose_front_hat` with known matrices."""
+
+    def test_affine_compose_multiplies_in_display_list_order(self):
+        # p * q: q's translation goes through p's linear part first.
+        self.assertEqual(record_screen._affine_compose([2, 0, 0, 3, 10, 20], [1, 0, 0, 1, 5, 7]),
+                         [2, 0, 0, 3, 20, 41])
+        self.assertEqual(record_screen._affine_compose([1, 0, 0, 1, 5, 7], [2, 0, 0, 3, 10, 20]),
+                         [2, 0, 0, 3, 15, 27])
+
+    def test_front_hat_pixels_converts_origins_and_scale(self):
+        identity = [1, 0, 0, 1, 0, 0]
+        self.assertEqual(record_screen._front_hat_pixels(identity, identity, [4, 6], [10, 20]),
+                         [1, 0, 0, 1, -6, -14])
+        # A 2x Down head over an unscaled front head: the hat scales by 2, the stage SCALE
+        # (3) enters only in the offsets.
+        self.assertEqual(record_screen._front_hat_pixels([2, 0, 0, 2, 0, 0], identity, [4, 6], [10, 20]),
+                         [2, 0, 0, 2, -2, -8])
+
+    def test_compose_places_the_hat_and_keeps_alpha(self):
+        body = Image.new('RGBA', (4, 4), (255, 0, 0, 255))
+        hat = Image.new('RGBA', (2, 2), (0, 0, 255, 255))
+        composed, left, top = record_screen._compose_front_hat(body, hat, [1, 0, 0, 1, 0, 0])
+        self.assertEqual((left, top), (0, 0))
+        self.assertEqual(composed.size, (4, 4))
+        self.assertEqual(composed.getpixel((0, 0)), (0, 0, 255, 255))
+        self.assertEqual(composed.getpixel((3, 3)), (255, 0, 0, 255))
+        faded = Image.new('RGBA', (2, 2), (0, 0, 255, 128))
+        blended, _, _ = record_screen._compose_front_hat(body, faded, [1, 0, 0, 1, 0, 0])
+        self.assertEqual(blended.getpixel((0, 0))[3], 255)
+        self.assertTrue(100 < blended.getpixel((0, 0))[0] < 155)
+        self.assertTrue(100 < blended.getpixel((0, 0))[2] < 155)
+
+    def test_compose_grows_the_canvas_for_a_negative_offset(self):
+        body = Image.new('RGBA', (4, 4), (255, 0, 0, 255))
+        hat = Image.new('RGBA', (2, 2), (0, 0, 255, 255))
+        composed, left, top = record_screen._compose_front_hat(body, hat, [1, 0, 0, 1, -2, -1])
+        self.assertEqual((left, top), (-2, -1))
+        self.assertEqual(composed.size, (6, 5))
+        self.assertEqual(composed.getpixel((0, 0)), (0, 0, 255, 255))
+        self.assertEqual(composed.getpixel((2, 1)), (255, 0, 0, 255))
+        self.assertEqual(composed.getpixel((5, 4)), (255, 0, 0, 255))
+        self.assertEqual(composed.getpixel((0, 4))[3], 0)
+
+
+class FrontHatPlayer:
+    """The commands `_record_front_hat_down` sends, with one synthetic hat frame."""
+
+    def __init__(self, tmp, clipped=False):
+        self.tmp = tmp
+        self.clipped = clipped
+        self.commands = []
+
+    def command(self, line):
+        self.commands.append(line)
+
+    def display(self):
+        identity = [1, 0, 0, 1, 0, 0]
+        return {'nodes': [{'path': record_screen.FRONT_HEAD_PATH, 'stage_matrix': identity},
+                          {'path': record_screen.FRONT_HAT_PATH, 'stage_matrix': identity},
+                          {'path': '/root1/r/@46', 'stage_matrix': identity}]}
+
+    def piece(self, path, target, frame=None):
+        hat = Image.new('RGBA', (6, 6), (0, 0, 0, 0))
+        hat.paste(Image.new('RGBA', (3, 3), (0, 0, 255, 255)), (0, 0))
+        hat.save(target)
+        return {'path': path, 'pixel_origin': [12, 12], 'pixel_size': [6, 6], 'scale': 3,
+                'render_bounds': [4.0, 4.0, 5.0, 5.0], 'clipped_by_viewport': self.clipped}
+
+
+class FrontHatDown(unittest.TestCase):
+    """Owner edit: the front hat is composed onto the body looks the pass actually recorded."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.target = Path(self.dir.name)
+        self.tmp = self.target / 'tmp'
+        self.tmp.mkdir()
+        self.addCleanup(self.dir.cleanup)
+
+    def body_look(self, cloth):
+        Image.new('RGBA', (6, 6), (255, 0, 0, 255)).save(self.target / f'body-{cloth}.png')
+        return {'file': f'body-{cloth}.png', 'pixel_origin': [0, 0], 'pixel_size': [6, 6],
+                'scale': 3, 'render_bounds': [0.0, 0.0, 2.0, 2.0]}
+
+    def sparse_entry(self):
+        # Round mode leaves only some body looks (here 0 and 2 of 4) in the clip entry.
+        return {'frames': 1, 'body_frames': 4, 'hat_frames': 0,
+                'looks': {'0|-1': {'1': self.body_look(0)}, '2|-1': {'1': self.body_look(2)}}}
+
+    def record(self, entry, clipped=False):
+        out = {'robots': {'_r0_Down': entry}}
+        record_screen._record_front_hat_down(FrontHatPlayer(self.tmp, clipped), self.target, self.tmp, {}, out)
+        return out['robots']['_r0_Down']
+
+    def test_composes_only_the_recorded_body_looks(self):
+        edited = self.record(self.sparse_entry())
+        self.assertTrue(edited['hat'])
+        self.assertEqual(edited['hat_frames'], 4)
+        self.assertEqual(edited['body_frames'], 4)
+        self.assertEqual(set(edited['looks']),
+                         {'0|0', '0|1', '0|2', '0|3', '2|0', '2|1', '2|2', '2|3'})
+
+    def test_composed_bounds_are_the_content_union_not_the_crop(self):
+        edited = self.record(self.sparse_entry())
+        meta = edited['looks']['0|1']['1']
+        # Body content [0,0,2,2] plus the hat's content [4,4,5,5]; the crop reaches 6.
+        self.assertEqual(meta['render_bounds'], [0.0, 0.0, 5.0, 5.0])
+        self.assertEqual(meta['pixel_size'], [18, 18])
+
+    def test_fails_when_the_hat_render_is_clipped(self):
+        with self.assertRaises(RuntimeError) as raised:
+            self.record(self.sparse_entry(), clipped=True)
+        self.assertIn('clipped by the viewport', str(raised.exception))
 
 
 if __name__ == '__main__':

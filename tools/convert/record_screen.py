@@ -51,6 +51,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import zipfile
 
 import numpy as np
 from PIL import Image
@@ -930,12 +931,21 @@ class EffectsUnavailable(RuntimeError):
     """The effect art cannot be rendered now; recorded art may stand in only if it matches."""
 
 
-def _ffdec_missing():
-    """Why FFDec cannot render now (None when it can). `bakeoff.ensure_ffdec` downloads the
-    jar when it is not cached (which needs the network) and raises SystemExit when Java is
-    missing, so check both first and take the recorded-art fallback without calling it."""
+class EffectSymbolMissing(LookupError):
+    """An effect's art class is not a symbol class of the SWF (the only missing-symbol case)."""
+
+
+def _ffdec_missing(download=False):
+    """Why FFDec cannot render now (None when it can).
+
+    `download=False` is the pre-check that never fetches: an uncached jar is unavailable.
+    `download=True` lets `bakeoff.ensure_ffdec` fetch the jar when Java is present (which
+    needs the network), so only a missing Java makes FFDec unavailable up front; a failed
+    download surfaces from `_record_screen_effects` as `EffectsUnavailable`."""
     jar = ROOT / '.scratch' / 'tools' / 'ffdec' / 'ffdec.jar'
     if not jar.is_file():
+        if download and shutil.which('java'):
+            return None
         return f'FFDec is not cached at {jar.relative_to(ROOT)}'
     if not shutil.which('java'):
         return 'Java is not on PATH (FFDec needs Java)'
@@ -944,14 +954,15 @@ def _ffdec_missing():
 
 def _record_effects_or_keep(layout, target, swf, manifest):
     """Render the effects, or keep the recorded art when FFDec cannot (see the finding in
-    `_keep_recorded_effects`). Only the effect lookup's KeyError is narrowed to LookupError;
-    every other failure propagates."""
+    `_keep_recorded_effects`). An uncached jar is downloaded when Java is present; only a
+    missing Java, a failed download, or a missing effect symbol falls back. Every other
+    failure propagates."""
     try:
-        unavailable = _ffdec_missing()
+        unavailable = _ffdec_missing(download=True)
         if unavailable:
             raise EffectsUnavailable(unavailable)
         return _record_screen_effects(layout, target, swf)
-    except (EffectsUnavailable, FileNotFoundError, LookupError, subprocess.CalledProcessError) as error:
+    except (EffectsUnavailable, FileNotFoundError, EffectSymbolMissing, subprocess.CalledProcessError) as error:
         return _keep_recorded_effects(layout, target, manifest, error)
 
 
@@ -1009,6 +1020,33 @@ def _effects_mismatch(layout, target, manifest, old):
     return None
 
 
+def _is_swf(path):
+    """Whether the file starts with an SWF magic (FWS, CWS or ZWS)."""
+    try:
+        with open(path, 'rb') as handle:
+            return handle.read(3) in (b'FWS', b'CWS', b'ZWS')
+    except OSError:
+        return False
+
+
+def _ensure_ffdec(swf=None):
+    """The FFDec jar, downloading it when it is not cached. `bakeoff.ensure_ffdec` may raise
+    a SystemExit (no Java, wrong checksum) or a network/zip error; any of those is a reason
+    the recorded effect art may stand in, so it becomes `EffectsUnavailable`.
+
+    A missing jar is only worth a download for a real SWF: a stub or a path that is not an
+    SWF cannot render, and downloading FFDec for it would hide that behind the network."""
+    jar = ROOT / '.scratch' / 'tools' / 'ffdec' / 'ffdec.jar'
+    if not jar.is_file() and swf is not None and not _is_swf(swf):
+        raise EffectsUnavailable(f'{Path(swf).name} is not an SWF; FFDec will not be downloaded for it')
+    sys.path.insert(0, str(HERE.parent / 'bakeoff'))
+    import bakeoff
+    try:
+        return bakeoff.ensure_ffdec()
+    except (OSError, SystemExit, zipfile.BadZipFile) as error:
+        raise EffectsUnavailable(f'FFDec is unavailable: {error}') from error
+
+
 def _record_screen_effects(layout, target, swf):
     """The art of a screen's run-time effects (`effects`, layout.py), into the local pack:
     FallSnow draws each frame of the library clip `fallSnow` into a BitmapData(25, 25)
@@ -1019,9 +1057,7 @@ def _record_screen_effects(layout, target, swf):
     Frames are written to a staging directory and swapped in only once every effect has
     rendered: a failure part way leaves the recorded `effects/` untouched."""
     import re
-    sys.path.insert(0, str(HERE.parent / 'bakeoff'))
-    import bakeoff
-    jar = bakeoff.ensure_ffdec()
+    jar = _ensure_ffdec(swf)
     out = {}
     tmp = Path(tempfile.mkdtemp(prefix='bombit5-effects-'))
     staging = None
@@ -1037,8 +1073,8 @@ def _record_screen_effects(layout, target, swf):
             try:
                 ident = symbols[how['art_class']]
             except KeyError:
-                raise LookupError(f'{effect}: {how["art_class"]!r} is not a symbol class of '
-                                  f'{Path(swf).name}') from None
+                raise EffectSymbolMissing(f'{effect}: {how["art_class"]!r} is not a symbol class of '
+                                          f'{Path(swf).name}') from None
             for fmt in ('png', 'svg'):
                 subprocess.run(['java', '-jar', str(jar), '-selectid', str(ident), '-zoom', '1', '-format', f'sprite:{fmt}',
                                 '-export', 'sprite', str(tmp / fmt), str(swf)], check=True, capture_output=True, timeout=600)
@@ -1135,6 +1171,12 @@ def _affine_compose(p, q):
             pa * qtx + pc * qty + ptx, pb * qtx + pd * qty + pty]
 
 
+def _front_hat_stage(head_stage, front_head_stage):
+    """The front hat's stage space -> the Down body's stage space for one frame:
+    M(down @46 at this frame) * inverse(M(front head 1318 instance))."""
+    return _affine_compose(head_stage, _affine_inverse(front_head_stage))
+
+
 def _front_hat_pixels(head_stage, front_head_stage, hat_origin, body_origin):
     """The front hat image's pixels -> the Down body image's pixels, for one frame.
 
@@ -1142,10 +1184,24 @@ def _front_hat_pixels(head_stage, front_head_stage, hat_origin, body_origin):
     instance)) * M(front hat 1323 instance).  Both images are rendered at SCALE, and each
     crop's `pixel_origin` is its top-left, so the stage matrix is converted to a pixel
     affine: q = SCALE * A((p + hat_origin) / SCALE) - body_origin."""
-    a = _affine_compose(head_stage, _affine_inverse(front_head_stage))
+    a = _front_hat_stage(head_stage, front_head_stage)
     tx = a[0] * hat_origin[0] + a[2] * hat_origin[1] + SCALE * a[4] - body_origin[0]
     ty = a[1] * hat_origin[0] + a[3] * hat_origin[1] + SCALE * a[5] - body_origin[1]
     return [a[0], a[1], a[2], a[3], tx, ty]
+
+
+def _transform_bounds(bounds, matrix):
+    """A stage-space rectangle through an affine matrix (its four corners)."""
+    x0, y0, x1, y1 = bounds
+    xs, ys = [], []
+    for x, y in ((x0, y0), (x1, y0), (x0, y1), (x1, y1)):
+        xs.append(matrix[0] * x + matrix[2] * y + matrix[4])
+        ys.append(matrix[1] * x + matrix[3] * y + matrix[5])
+    return [min(xs), min(ys), max(xs), max(ys)]
+
+
+def _bounds_union(a, b):
+    return [min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])]
 
 
 def _front_hat_layer(image, size, forward):
@@ -1181,7 +1237,8 @@ def _compose_front_hat(body, hat, forward):
 def _record_front_hat_down(p, target, tmp, seen, out):
     """Owner edit 2026-11-22: robot 0's Down clip has no hatMc in the original; its front hat
     comes from robot1_special_108 head/hatMc (character 1323).  Compose the front hat onto
-    every Down body frame and hat frame for the pack's full 7x4 look grid.
+    every Down body look the pass recorded (all of them for all-looks, the recorded rounds'
+    for round mode) at every hat frame, for the pack's full 7x4 look grid where present.
 
     The reference player's `symbol` can place an instance only at an x/y with its authored
     scale, not at the front hat's 0.1533 Down scale, so the 1323 instance is rendered alone
@@ -1203,7 +1260,10 @@ def _record_front_hat_down(p, target, tmp, seen, out):
         meta = p.piece(FRONT_HAT_PATH, source, h + 1)
         if meta.get('missing'):
             raise RuntimeError(f'owner edit: robot1_special_108 hat frame {h + 1} missing')
-        hats[h] = (Image.open(source).convert('RGBA'), meta['pixel_origin'])
+        if meta.get('clipped_by_viewport'):
+            raise RuntimeError(f'owner edit: robot1_special_108 hat frame {h + 1} is clipped by '
+                               'the viewport; its crop cannot be composed')
+        hats[h] = (Image.open(source).convert('RGBA'), meta['pixel_origin'], meta['render_bounds'])
     p.command(f'unsymbol {FRONT_HAT_NAME}')
 
     def save(image, meta):
@@ -1216,11 +1276,16 @@ def _record_front_hat_down(p, target, tmp, seen, out):
             seen[digest] = name
         return {**meta, 'file': 'actors/' + seen[digest]}
 
+    # A round-mode pass records only the body looks the recorded rounds use; compose the
+    # front hat for those (the default and all-looks passes have every look).
+    body_looks = {}
+    for key, look in entry['looks'].items():
+        cloth, _, hat = key.partition('|')
+        if hat == '-1' and cloth.isdigit():
+            body_looks[int(cloth)] = look
     looks_out = {}
-    for c in range(int(entry['body_frames'])):
-        base_look = entry['looks'].get(f'{c}|-1')
-        if not base_look:
-            raise RuntimeError(f'owner edit: _r0_Down has no body look {c}')
+    for c in sorted(body_looks):
+        base_look = body_looks[c]
         # 1323 frame 1 is the no-hat frame (effectively transparent), so hat 0 is the clip.
         looks_out[f'{c}|0'] = base_look
         for f in range(1, int(entry['frames']) + 1):
@@ -1232,7 +1297,8 @@ def _record_front_hat_down(p, target, tmp, seen, out):
                 raise RuntimeError(f'owner edit: _r0_Down body {c} frame {f} has no @46')
             base = base_look[str(f)]
             body = Image.open(target / Path(base['file']).name).convert('RGBA')
-            for h, (hat, hat_origin) in hats.items():
+            stage = _front_hat_stage(head['stage_matrix'], front_head)
+            for h, (hat, hat_origin, hat_bounds) in hats.items():
                 forward = _front_hat_pixels(head['stage_matrix'], front_head, hat_origin, base['pixel_origin'])
                 # The clip's own crop can stop just above the head; grow it to hold the hat's
                 # full extent and move the pixel origin with it, so `at` still places it.
@@ -1240,10 +1306,10 @@ def _record_front_hat_down(p, target, tmp, seen, out):
                 meta = dict(base)
                 meta['pixel_origin'] = [base['pixel_origin'][0] + left, base['pixel_origin'][1] + top]
                 meta['pixel_size'] = [composed.width, composed.height]
-                ox, oy = meta['pixel_origin']
-                meta['render_bounds'] = [round(ox / SCALE, 4), round(oy / SCALE, 4),
-                                         round((ox + composed.width) / SCALE, 4),
-                                         round((oy + composed.height) / SCALE, 4)]
+                # The bounds are the art's content (the body's plus the placed hat's), not the
+                # crop rectangle: the transparent margins the crop grew are not drawn.
+                meta['render_bounds'] = [round(v, 4) for v in _bounds_union(
+                    base['render_bounds'], _transform_bounds(hat_bounds, stage))]
                 looks_out.setdefault(f'{c}|{h}', {})[str(f)] = save(composed, meta)
 
     edited = dict(entry)

@@ -615,6 +615,16 @@ class ResamplingCeilingNote(unittest.TestCase):
         self.assertIn(self.big.name, printed.getvalue())
         self.assertIn('different player builds', printed.getvalue())
 
+    def test_note_when_the_reference_player_is_unknown(self):
+        # reference.json without player_sha256: the local capture's build is unknown, so the
+        # ceiling may compare builds even though the 3× image names its own player.
+        self.write_players('b' * 64, None)
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            ceiling = compare.resampling_ceiling('main-menu', 'menu', self.reference_png)
+        self.assertIsNotNone(ceiling)
+        self.assertIn(self.big.name, printed.getvalue())
+        self.assertIn('reference player unknown; the 3x ceiling may compare builds', printed.getvalue())
+
     def test_no_note_when_3x_and_reference_players_match(self):
         self.write_players('a' * 64, 'a' * 64)
         with contextlib.redirect_stdout(io.StringIO()) as printed:
