@@ -910,3 +910,23 @@ All 51 cases (`tools/compare.sh all`) and tools/run_checks.sh (28 suites) pass.
 Known gaps: Pac-Man ghosts chase only inside their RegionDivide areas (ported), so an idle player
 outside them is never hunted; the flag's move and the AI's timers run on the host clock in the
 reference, so mode races are checked by rule, not frame-matched.
+
+Owner-reported bugs, 2026-11-22 (owner to review):
+- START printed the engine error `Condition "!is_inside_tree()"`: `App._clear_screen` removed the
+  pressed button's screen inside that click's input event. Dropped screens are now hidden, stopped
+  (`PROCESS_MODE_DISABLED`) and freed at frame end. `tests/start_error_check.gd`.
+- Stuck at the respawn point: a direction released while dead was dropped, leaving the key latched
+  after relive. Death now clears the held directions (`AbstractRobot.kill` ->
+  `PersonInteractiveController.stopMoveListener` / `clearMoveStage`); likewise a frog jump start
+  (`HorseProp.frog` -> `robotMoveStop` / `robotBombStop`), which also ignores keys until it lands.
+  `tests/respawn_input_check.gd`.
+- Blinking after protection: the display ran its own 80-tick blink. It now follows the command:
+  the round-start blink from the round's first gameplay tick to tick 81 (checked against every
+  recorded capture's robot colour transform), a portal's 45-tick blink replaces a running one, and
+  stale loop sprites no longer keep the +50 offset (the "map elements" that blinked were those).
+- Frozen mount: the frog jump keeps playing frames 19-34 when no key is held and lands on frame 1
+  (`HorseProp.frog`, `xJump`/`yJump`); a horse ride stopped on frame 15 resets to 1 (`frogMcStop`).
+  `tests/actor_display_check.gd`.
+All 51 cases and tools/run_checks.sh pass.
+Known gap: a new protection command that ends on the same tick as the running one keeps the old
+blink phase (rare; needs a command serial from the simulation).
