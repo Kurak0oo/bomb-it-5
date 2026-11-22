@@ -993,6 +993,152 @@ def _robot_classes(robot):
     yield f'_r{robot}_Dead'
 
 
+# Owner edit 2026-11-22: robot 0's Down clip has no hatMc in the original; its front hat
+# comes from robot1_special_108 head/hatMc (character 1323).  The front view is the
+# character-select/unlock-tip display; its stopped frame is robot1_special_108.frame44.
+FRONT_HAT_CLASS = 'BOMBIT5UI_fla.robot1_special_108'
+FRONT_HAT_FRAME = 44
+FRONT_HAT_FRAMES = 4
+FRONT_HAT_NAME = '/root1/frontHatRef'
+FRONT_HEAD_PATH = FRONT_HAT_NAME + '/head'
+FRONT_HAT_PATH = FRONT_HEAD_PATH + '/hatMc'
+
+
+def _affine_inverse(m):
+    a, b, c, d, tx, ty = (float(v) for v in m)
+    det = a * d - b * c
+    if abs(det) < 1e-12:
+        raise ValueError(f'singular matrix: {m}')
+    ia, ib, ic, id_ = d / det, -b / det, -c / det, a / det
+    return [ia, ib, ic, id_, -(ia * tx + ic * ty), -(ib * tx + id_ * ty)]
+
+
+def _affine_compose(p, q):
+    """p * q, in the [a, b, c, d, tx, ty] convention of the display-list matrices."""
+    pa, pb, pc, pd, ptx, pty = (float(v) for v in p)
+    qa, qb, qc, qd, qtx, qty = (float(v) for v in q)
+    return [pa * qa + pc * qb, pb * qa + pd * qb,
+            pa * qc + pc * qd, pb * qc + pd * qd,
+            pa * qtx + pc * qty + ptx, pb * qtx + pd * qty + pty]
+
+
+def _front_hat_pixels(head_stage, front_head_stage, hat_origin, body_origin):
+    """The front hat image's pixels -> the Down body image's pixels, for one frame.
+
+    The brief's placement: M(down @46 at this frame) * inverse(M(front head 1318
+    instance)) * M(front hat 1323 instance).  Both images are rendered at SCALE, and each
+    crop's `pixel_origin` is its top-left, so the stage matrix is converted to a pixel
+    affine: q = SCALE * A((p + hat_origin) / SCALE) - body_origin."""
+    a = _affine_compose(head_stage, _affine_inverse(front_head_stage))
+    tx = a[0] * hat_origin[0] + a[2] * hat_origin[1] + SCALE * a[4] - body_origin[0]
+    ty = a[1] * hat_origin[0] + a[3] * hat_origin[1] + SCALE * a[5] - body_origin[1]
+    return [a[0], a[1], a[2], a[3], tx, ty]
+
+
+def _front_hat_layer(image, size, forward):
+    """`image` resampled by the forward pixel affine `forward`, on a `size` transparent layer."""
+    inv = _affine_inverse(forward)
+    data = (inv[0], inv[2], inv[4], inv[1], inv[3], inv[5])
+    return image.transform(size, Image.AFFINE, data, resample=Image.BICUBIC)
+
+
+def _pixel_bounds(size, forward):
+    """The pixel rectangle an image of `size` covers after the forward pixel affine."""
+    w, h = size
+    xs, ys = [], []
+    for x, y in ((0, 0), (w, 0), (0, h), (w, h)):
+        xs.append(forward[0] * x + forward[2] * y + forward[4])
+        ys.append(forward[1] * x + forward[3] * y + forward[5])
+    return [min(xs), min(ys), max(xs), max(ys)]
+
+
+def _compose_front_hat(body, hat, forward):
+    """`hat` over `body` with the forward pixel affine, on a canvas grown to hold both."""
+    x0, y0, x1, y1 = _pixel_bounds(hat.size, forward)
+    left, top = min(0, math.floor(x0)), min(0, math.floor(y0))
+    right, bottom = max(body.width, math.ceil(x1)), max(body.height, math.ceil(y1))
+    size = (right - left, bottom - top)
+    canvas = Image.new('RGBA', size, (0, 0, 0, 0))
+    canvas.paste(body, (-left, -top))
+    layer = _front_hat_layer(hat, size, [forward[0], forward[1], forward[2], forward[3],
+                                         forward[4] - left, forward[5] - top])
+    return Image.alpha_composite(canvas, layer), left, top
+
+
+def _record_front_hat_down(p, target, tmp, seen, out):
+    """Owner edit 2026-11-22: robot 0's Down clip has no hatMc in the original; its front hat
+    comes from robot1_special_108 head/hatMc (character 1323).  Compose the front hat onto
+    every Down body frame and hat frame for the pack's full 7x4 look grid.
+
+    The reference player's `symbol` can place an instance only at an x/y with its authored
+    scale, not at the front hat's 0.1533 Down scale, so the 1323 instance is rendered alone
+    by the player and composited here at the pack's SCALE with the exact display-list
+    affine above (no screenshot measurement).  The composition runs after every other
+    clip, so their image names/bytes stay as they were; hat 0 (1323 frame 1, the no-hat
+    frame) reuses the clip's existing body image."""
+    entry = out['robots'].get('_r0_Down')
+    if not entry:
+        return
+    p.command(f'symbol /root1 {FRONT_HAT_CLASS} frontHatRef 0 0 {FRONT_HAT_FRAME}')
+    tree = {n['path']: n for n in p.display()['nodes']}
+    if FRONT_HEAD_PATH not in tree or FRONT_HAT_PATH not in tree:
+        raise RuntimeError('owner edit: robot1_special_108 head/hatMc missing at frame 44')
+    front_head = tree[FRONT_HEAD_PATH]['stage_matrix']
+    hats = {}
+    for h in range(1, FRONT_HAT_FRAMES):
+        source = tmp / f'front-hat-{h + 1}.png'
+        meta = p.piece(FRONT_HAT_PATH, source, h + 1)
+        if meta.get('missing'):
+            raise RuntimeError(f'owner edit: robot1_special_108 hat frame {h + 1} missing')
+        hats[h] = (Image.open(source).convert('RGBA'), meta['pixel_origin'])
+    p.command(f'unsymbol {FRONT_HAT_NAME}')
+
+    def save(image, meta):
+        raw = tmp / 'front-hat-composite.png'
+        image.save(raw)
+        digest = hashlib.sha256(raw.read_bytes() + json.dumps(meta['pixel_origin']).encode()).hexdigest()
+        if digest not in seen:
+            name = f'robot-{sum(1 for v in seen.values() if v.startswith("robot-")):05d}.png'
+            image.save(target / name)
+            seen[digest] = name
+        return {**meta, 'file': 'actors/' + seen[digest]}
+
+    looks_out = {}
+    for c in range(int(entry['body_frames'])):
+        base_look = entry['looks'].get(f'{c}|-1')
+        if not base_look:
+            raise RuntimeError(f'owner edit: _r0_Down has no body look {c}')
+        # 1323 frame 1 is the no-hat frame (effectively transparent), so hat 0 is the clip.
+        looks_out[f'{c}|0'] = base_look
+        for f in range(1, int(entry['frames']) + 1):
+            p.command(f'symbol /root1 _r0_Down r 400 200 {f} {c} -1')
+            tree = {n['path']: n for n in p.display()['nodes']}
+            p.command('unsymbol /root1/r')
+            head = tree.get('/root1/r/@46')
+            if not head:
+                raise RuntimeError(f'owner edit: _r0_Down body {c} frame {f} has no @46')
+            base = base_look[str(f)]
+            body = Image.open(target / Path(base['file']).name).convert('RGBA')
+            for h, (hat, hat_origin) in hats.items():
+                forward = _front_hat_pixels(head['stage_matrix'], front_head, hat_origin, base['pixel_origin'])
+                # The clip's own crop can stop just above the head; grow it to hold the hat's
+                # full extent and move the pixel origin with it, so `at` still places it.
+                composed, left, top = _compose_front_hat(body, hat, forward)
+                meta = dict(base)
+                meta['pixel_origin'] = [base['pixel_origin'][0] + left, base['pixel_origin'][1] + top]
+                meta['pixel_size'] = [composed.width, composed.height]
+                ox, oy = meta['pixel_origin']
+                meta['render_bounds'] = [round(ox / SCALE, 4), round(oy / SCALE, 4),
+                                         round((ox + composed.width) / SCALE, 4),
+                                         round((oy + composed.height) / SCALE, 4)]
+                looks_out.setdefault(f'{c}|{h}', {})[str(f)] = save(composed, meta)
+
+    edited = dict(entry)
+    edited.update({'hat': True, 'hat_frames': FRONT_HAT_FRAMES, 'looks': looks_out,
+                   'owner_edit': 'front_hat'})
+    out['robots']['_r0_Down'] = edited
+
+
 def _record_robots(p, target, seen, looks, all_looks, out):
     """Every robot clip a Cinema round shows, at every frame, per look (see record_actors).
 
@@ -1105,6 +1251,8 @@ def _record_robots(p, target, seen, looks, all_looks, out):
                 entry['loops'] = len(loops)
             out['robots'][cls] = entry
         print(f'  robot {robot}: {len(seen)} images so far')
+    _record_front_hat_down(p, target, tmp, seen, out)
+    print(f'  robot 0: front hat on _r0_Down ({out["robots"].get("_r0_Down", {}).get("owner_edit", "missing")})')
 
 
 def _record_plays(p, out):

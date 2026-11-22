@@ -177,8 +177,22 @@ func _check_robot_art(pack: Dictionary) -> void:
 	var robots: Dictionary = pack.get("robots", {})
 	_expect_look_frame(actors, robots, "_r2_Up", 2, 1, "2|0",
 		"a hat past _r2_Up's one-frame hatMc draws its clamped look")
+	# Owner edit 2026-11-22: robot 0's Down clip has no hatMc in the original; its front
+	# hat (character 1323) is composed for every body/hat look (tools/convert/record_screen.py).
+	var down: Dictionary = robots.get("_r0_Down", {})
+	_expect(int(down.get("hat_frames", 0)) == 4, "_r0_Down has hat_frames 4")
+	var down_looks: Dictionary = down.get("looks", {})
+	var missing_looks := []
+	for cloth in 7:
+		for hat in 4:
+			var key := "%d|%d" % [cloth, hat]
+			if not down_looks.has(key): missing_looks.append(key)
+	_expect(down_looks.size() == 28 and missing_looks.is_empty(),
+		"_r0_Down's looks are the 7x4 grid (missing %s)" % [missing_looks])
+	_expect_look_frame(actors, robots, "_r0_Down", 0, 2, "0|2",
+		"hat 2 on body 0 resolves to its front-hat look")
 	# A clip without a hatMc takes the cloth only ("1|-1").
-	_expect_look_frame(actors, robots, "_r0_Down", 1, 0, "1|-1",
+	_expect_look_frame(actors, robots, "_r2_Car_Up", 1, 0, "1|-1",
 		"a clip without a hatMc draws its cloth look")
 	# The dead clips have a single look of their own ("-1|-1").
 	var dead: Dictionary = robots.get("_r2_Dead", {}).get("looks", {})
