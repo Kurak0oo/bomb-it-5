@@ -877,3 +877,23 @@ Pack and reference captures, 2026-11-21:
 Known gaps: the 3x resampling ceilings in original/ were rendered by older player builds, so a
 ceiling can be a cross-build comparison; the five cases above would need their goldens
 re-recorded together with references (owner decision: goldens are accepted floors).
+
+Robot 0's hat facing down and 3x ceilings, 2026-11-22 (owner to review):
+- Owner edit: in the original, robot 0's Down walk clip (`_r0_Down`) has no hatMc, so robot 0 shows
+  no hat facing down (docs/evidence/edition-5-robot-looks.md). The owner asked for the hat. The
+  front-facing hat is the original's own art: character 1323, `head/hatMc` of the character-select
+  / unlock-tip robot (`BOMBIT5UI_fla.robot1_special_108`, frame 44), frames 1-4 = no hat, hats 1-3.
+  `record_screen.py actors` composes it onto every `_r0_Down` frame for every outfit, placed by
+  M(down head @46) x inv(M(front head)) x M(front hat): the two heads are the same shape (1318 /
+  6187) under different ids, so the placement comes from SWF matrices, not measurement. The pack
+  entry carries `owner_edit: front_hat`, hat_frames 4; the other 56,912 robot images are unchanged.
+  Checked in `tests/dress_up_check.gd`. Review sheet: `.scratch/hat-front/result.png`.
+- 3x ceilings: all 134 reference-3x images re-rendered with the current reference player
+  (b87d797f) and recorded with their player (reference-3x.json); a stale fireball `turned` image
+  with no capture was moved to .scratch. The menu screens' other art renders differently on the
+  current player (about 7,900 files); the accepted art was kept and only the 3x images replaced.
+- `record_screen.py` art-pass effects: recorded effect art is kept only when it matches the current
+  SWF and layout and its files exist; staged swap; FFDec downloads when Java is present.
+Known gaps: the full comparison has not run since these changes (the windowed Godot run hangs while
+the Mac's screen is locked); the composed front-hat frames' render_bounds use the old rule until
+the next actors pass (GameActors does not read them).
