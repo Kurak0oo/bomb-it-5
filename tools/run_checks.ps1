@@ -28,6 +28,7 @@ $suites = @(
     @{ Script = 'res://tests/dress_up_check.gd'; Success = '^PASS: \d+ dress-up checks$' }
     @{ Script = 'res://tests/kill_check.gd'; Success = '^PASS: \d+ kill checks$' }
     @{ Script = 'res://tests/green_zone_check.gd'; Success = '^PASS: \d+ green zone checks$' }
+    @{ Script = 'res://tests/respawn_input_check.gd'; Success = '^PASS: \d+ respawn input checks$' }
     @{ Script = 'res://tests/pac_man_check.gd'; Success = '^PASS: \d+ pac-man checks$' }
     @{ Script = 'res://tests/stage_features_check.gd'; Success = '^PASS: \d+ stage feature checks$' }
     @{ Script = 'res://tests/art_catalog_check.gd'; Success = '^PASS: \d+ art catalogue checks' }

@@ -348,6 +348,15 @@ func advance_time(seconds: float) -> void:
 				return
 		if state.get("round_stage") == &"ending":
 			held.clear()
+		if not state.actors[&"human"].alive:
+			# `AbstractRobot.kill` → `RobotController.robotStop` → `PersonInteractiveController.
+			# stopMoveListener` removes the movement listeners and `clearMoveStage` clears the
+			# held flags; `RobotController.clearMovStage` drops `movArr` and the movement callback.
+			# The scene's `held` and the scheduler's held direction stand in for that stage, so a
+			# key released while the listener is gone must not stay latched: `relive` starts from
+			# `moveStop`, and `movement_rearm` waits for that stop before a fresh press moves.
+			held.clear()
+			scheduler.set_direction(&"human", Vector2.ZERO)
 		if not practice and state.outcome != &"running" and not result_credited:
 			result_credited = true
 			session_lives = state.actors[&"human"].lives
