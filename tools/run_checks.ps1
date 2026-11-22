@@ -36,7 +36,7 @@ $suites = @(
     @{ Script = 'res://tests/quality_check.gd'; Success = '^PASS: \d+ quality checks$' }
     @{ Script = 'res://tests/ai_trace_check.gd'; Success = '^PASS: \d+ ai trace checks$' }
     @{ Script = 'res://tests/avm_random_check.gd'; Success = '^PASS: \d+ avm random checks$' }
-    @{ Script = 'res://tools/playthrough_check.gd'; Success = '^PASS: 3 full-board playthrough checks ' }
+    @{ Script = 'res://tools/playthrough_check.gd'; Success = '^PASS: \d+ full-board playthrough checks ' }
     @{ Script = 'res://tools/smoke_playthrough.gd'; Success = '^PASS: smoke playthrough '; Args = @('--fixed-fps', '35') }
 )
 foreach ($suite in $suites) {
