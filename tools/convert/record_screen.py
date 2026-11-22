@@ -47,6 +47,7 @@ import math
 from pathlib import Path
 import platform
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -76,6 +77,26 @@ def sha256(path):
 def default_player():
     base = ROOT / '.scratch' / 'edition-5-research' / 'ruffle-runtime' / 'target' / 'ci' / 'probe'
     return base.with_suffix('.exe') if platform.system() == 'Windows' else base
+
+
+REFERENCE_3X = 'reference-3x.json'
+
+
+def record_reference_3x(target, case_name, capture, player_path, file_name=None):
+    """Remember which player build rendered a 3× image: the comparison's resampling ceiling
+    (`compare.py resampling_ceiling`) must not compare across builds. One manifest per screen
+    directory lists every 3× image there, so any pass that writes one updates only its entry."""
+    file_name = file_name or f'reference-3x-{case_name}-{capture}.png'
+    manifest_path = Path(target) / REFERENCE_3X
+    images = {}
+    if manifest_path.is_file():
+        try:
+            images = json.loads(manifest_path.read_text(encoding='utf-8')).get('images', {})
+        except (OSError, ValueError):
+            images = {}
+    images[file_name] = {'case': case_name, 'capture': capture, 'player_sha256': sha256(player_path)}
+    manifest_path.write_text(json.dumps({'schema': 'bombit5-reference-3x-v1', 'images': images},
+                                       indent=1, sort_keys=True) + '\n', encoding='utf-8')
 
 
 def all_rounds(board):
@@ -549,6 +570,7 @@ def record_art(case_name, player_path, swf):
             p.shot(tmp / 'full.png')
             full = tmp / 'full.png'
             shutil.copy(full, target / 'reference-3x.png')
+            record_reference_3x(target, case_name, capture, player_path, 'reference-3x.png')
             while p.frame - opened < frames:
                 p.command('step 1')
                 _render_frame(p, p.frame - opened, wanted, sequences, pieces, seen, target, tmp)
@@ -566,7 +588,17 @@ def record_art(case_name, player_path, swf):
                     'states': json.loads(states.read_text(encoding='utf-8')) if states.is_file() else {},
                     'frames': frames, 'frame_sequences': frame_sequences}
         if layout.get('effects'):
-            manifest['effects'] = _record_effects(layout, target, swf)
+            try:
+                manifest['effects'] = _record_screen_effects(layout, target, swf)
+            except (FileNotFoundError, KeyError, subprocess.CalledProcessError) as error:
+                # FFDec needs Java. The effect art already in the pack is unchanged by a
+                # re-render of the screen's pieces, so keep it instead of failing the screen.
+                previous = target / 'manifest.json'
+                old = json.loads(previous.read_text(encoding='utf-8')) if previous.is_file() else {}
+                if not old.get('effects'):
+                    raise
+                print(f'  effects not re-rendered ({error}); keeping the recorded effect art')
+                manifest['effects'] = old['effects']
         if layout.get('board'):
             manifest['tiles'], manifest['features'] = _record_tiles(case, capture, layout, player_path, swf, seen, target)
         check = _self_check(layout, manifest, target)
@@ -649,6 +681,7 @@ def _record_frames_and_extras(case, capture, layout, player_path, swf, pieces, s
             base = index if where != capture else main_index
             # The player's own 3× frame at this capture: the comparison's resampling ceiling.
             p.shot(target / f'reference-3x-{case["name"]}-{where}.png')
+            record_reference_3x(target, case['name'], where, player_path)
             present = {n['path'] for n in p.display()['nodes']}
             for node in nodes:
                 path = node['path']
@@ -883,7 +916,7 @@ def _self_check(layout, manifest, target):
     return {k: result.get(k) for k in ('ssim', 'max_region_delta_e', 'regions_over', 'worst_region')}
 
 
-def _record_effects(layout, target, swf):
+def _record_screen_effects(layout, target, swf):
     """The art of a screen's run-time effects (`effects`, layout.py), into the local pack:
     FallSnow draws each frame of the library clip `fallSnow` into a BitmapData(25, 25)
     at the identity matrix (`FallSnow.init`), so each frame is exported with FFDec at zoom 1
@@ -1533,6 +1566,7 @@ def record_sets(_case_name, player_path, swf, only=None):
             for line in single_steps(case, capture):
                 p.command(line)
             p.shot(PACK / 'game' / f'reference-3x-{case_name}-{capture}.png')
+            record_reference_3x(PACK / 'game', case_name, capture, player_path)
             for path, node in entry['floor'].items():
                 if path in pieces_of_screen and node.get('effective_visible'):
                     stored = _store(p, path, target, tmp, seen)
@@ -1753,6 +1787,7 @@ def record_modes(_case_name, player_path, swf):
         for line in single_steps(case, capture):
             p.command(line)
         p.shot(PACK / 'game' / f'reference-3x-{case_name}-{capture}.png')
+        record_reference_3x(PACK / 'game', case_name, capture, player_path)
         for actor in (1, 2, 3):
             p.command('fixture ' + json.dumps({'op': 'ai-control', 'actor': actor, 'mode': 'stop'}))
         return p, entry
@@ -2114,6 +2149,7 @@ def _shots(case, case_name, player_path, swf, target):
                 p.command(action['command'])
             if 'capture' in action:
                 p.shot(target / f'reference-3x-{case_name}-{action["capture"]}.png')
+                record_reference_3x(target, case_name, action['capture'], player_path)
     finally:
         p.close()
 

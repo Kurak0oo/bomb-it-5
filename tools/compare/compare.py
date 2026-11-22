@@ -361,6 +361,22 @@ def run_godot(name, case_path, godot, fps):
 CEILING_MARGIN = {'ssim': 0.02, 'delta_e': 2.0}
 
 
+def reference_3x_player(path):
+    """The player build that rendered a 3× image, from the screen's `reference-3x.json`
+    (`record_screen.py record_reference_3x`). None for images recorded before it."""
+    manifest = path.parent / 'reference-3x.json'
+    if not manifest.is_file():
+        return None
+    try:
+        images = json.loads(manifest.read_text(encoding='utf-8')).get('images') or {}
+    except (OSError, ValueError):
+        return None
+    entry = images.get(path.name)
+    if isinstance(entry, dict):
+        return entry.get('player_sha256')
+    return entry if isinstance(entry, str) else None
+
+
 def resampling_ceiling(case, capture, reference_png):
     """How close the original's own 3× frame of this capture, scaled to 1×, comes to its 1×
     frame. The art pack keeps that 3× frame (record_screen.py art). None without the pack."""
@@ -376,6 +392,18 @@ def resampling_ceiling(case, capture, reference_png):
         big = next(iter((ROOT / 'original' / 'screens').glob(f'*/reference-3x-{case}-{capture}.png')), None)
     if big is None or not big.is_file():
         return None
+    # The ceiling only means the current build's render if the 3× image came from it.
+    rendered_by = reference_3x_player(big)
+    provenance = WORK / case / 'reference' / 'reference.json'
+    reference_by = None
+    if provenance.is_file():
+        try:
+            reference_by = json.loads(provenance.read_text(encoding='utf-8')).get('player_sha256')
+        except (OSError, ValueError):
+            reference_by = None
+    if rendered_by and reference_by and rendered_by != reference_by:
+        print(f'  note: {big.name} was rendered by reference player {rendered_by[:12]}…, the reference '
+              f'capture by {reference_by[:12]}…; the 3×→1× ceiling compares different player builds')
     small = WORK / case / f'{capture}-reference-3x-to-1x.png'
     Image.open(big).convert('RGB').resize((700, 510), Image.LANCZOS).save(small)
     _, masks = owner_edits(case, capture)

@@ -569,5 +569,59 @@ class CheckReferenceProvenance(unittest.TestCase):
         self.assertTrue(report['passed'])
 
 
+class ResamplingCeilingNote(unittest.TestCase):
+    """The 3×→1× ceiling must say when its 3× image came from another player build."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        self.work = self.root / 'work'
+        self.goldens = self.root / 'goldens'
+        self.cases = self.root / 'cases'
+        self.cases.mkdir()
+        screen = self.root / 'original' / 'screens' / 'menu'
+        screen.mkdir(parents=True)
+        self.big = screen / 'reference-3x-main-menu-menu.png'
+        Image.new('RGB', (2100, 1530), (10, 20, 30)).save(self.big)
+        self.reference_png = self.work / 'main-menu' / 'reference' / 'menu.png'
+        self.reference_png.parent.mkdir(parents=True)
+        Image.new('RGB', (700, 510), (10, 20, 30)).save(self.reference_png)
+        (self.goldens / 'main-menu').mkdir(parents=True)
+        (self.goldens / 'main-menu' / 'menu.json').write_text(
+            json.dumps({'schema': 'bombit5-golden-nodes-v1', 'nodes': []}), encoding='utf-8')
+        for patch in (mock.patch.object(compare, 'ROOT', self.root),
+                      mock.patch.object(compare, 'WORK', self.work),
+                      mock.patch.object(compare, 'GOLDENS', self.goldens),
+                      mock.patch.object(compare, 'CASES', self.cases)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def write_players(self, rendered_by, reference_by):
+        (self.work / 'main-menu' / 'reference' / 'reference.json').write_text(
+            json.dumps({'player_sha256': reference_by}), encoding='utf-8')
+        (self.big.parent / 'reference-3x.json').write_text(json.dumps(
+            {'schema': 'bombit5-reference-3x-v1',
+             'images': {self.big.name: {'case': 'main-menu', 'capture': 'menu',
+                                        'player_sha256': rendered_by}}}), encoding='utf-8')
+
+    def test_note_when_3x_and_reference_players_differ(self):
+        self.write_players('b' * 64, 'a' * 64)
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            ceiling = compare.resampling_ceiling('main-menu', 'menu', self.reference_png)
+        self.assertIsNotNone(ceiling)
+        self.assertIn(self.big.name, printed.getvalue())
+        self.assertIn('different player builds', printed.getvalue())
+
+    def test_no_note_when_3x_and_reference_players_match(self):
+        self.write_players('a' * 64, 'a' * 64)
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            ceiling = compare.resampling_ceiling('main-menu', 'menu', self.reference_png)
+        self.assertIsNotNone(ceiling)
+        self.assertNotIn('different player builds', printed.getvalue())
+
+
 if __name__ == '__main__':
     unittest.main()
