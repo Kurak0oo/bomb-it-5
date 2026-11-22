@@ -16,6 +16,28 @@ var checks := 0
 var app: Control
 
 
+## Counts the app's Math.random draws, and the ones made after the screen under test has
+## been replaced: the dropped screen's per-frame effects must not run (or draw) one more
+## frame before queue_free.
+class CountingRandom extends "res://scripts/simulation/avm_random.gd":
+	var source
+	var app
+	var screen_id: StringName
+	var draws := 0
+	var post_change_draws := 0
+
+
+	func _init(generator) -> void:
+		source = generator
+		super(1)
+
+
+	func next_raw() -> int:
+		draws += 1
+		if app.current != screen_id: post_change_draws += 1
+		return source.next_raw()
+
+
 func _initialize() -> void:
 	if CHILD_ARG in OS.get_cmdline_user_args():
 		_run_flow.call_deferred()
@@ -34,6 +56,7 @@ func _run_check() -> void:
 	_expect(code == 0, "the START flow finishes (exit %d)" % code)
 	_expect(text.contains("AFTER START settings"), "PLAY then START reaches Game Settings")
 	_expect(errors.is_empty(), "the START flow prints no engine error (%s)" % [errors])
+	_expect(text.contains("DROP PASS"), "the dropped screen stops processing at once")
 	print("%s: %d start error checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -46,8 +69,36 @@ func _run_flow() -> void:
 	root.add_child(app)
 	await process_frame
 	await app.screen_opened()
+	# The title's PLAY replaces it on the same press: count its frames and Math.random
+	# draws (through the game-over confetti effect, a per-frame controller like the real
+	# GAME_WIN screen's FallSnow) and assert none land after the replacement.
+	var title_screen: Control = app.screen
+	var title_swf = title_screen.get_child(0)
+	var counting := CountingRandom.new(app.math_random)
+	counting.app = app
+	counting.screen_id = &"title"
+	app.math_random = counting
+	var confetti = load("res://scripts/ui/fall_snow.gd").new(title_swf, counting)
+	confetti.creatSnow()
+	var post_change_advances := [0]
+	title_swf.advanced.connect(func(_t: int):
+		if app.current != &"title": post_change_advances[0] += 1)
+	var state_at_exit := [-1, true]
+	title_screen.tree_exiting.connect(func():
+		state_at_exit[0] = title_screen.process_mode
+		state_at_exit[1] = title_screen.visible)
+	var draws_at_add := counting.draws
+	for wait in 10:
+		if counting.draws > draws_at_add: break
+		await process_frame
+	var live: bool = counting.draws > draws_at_add
 	await _click(app.find_child("btn_play", true, false))
 	await app.screen_opened()
+	var stopped: bool = post_change_advances[0] == 0 and counting.post_change_draws == 0 \
+		and state_at_exit[0] == Node.PROCESS_MODE_DISABLED and not state_at_exit[1] and live
+	print("DROP %s: advanced=%d draws_after=%d mode_at_exit=%d hidden_at_exit=%s live=%s current=%s" % [
+		"PASS" if stopped else "FAIL", post_change_advances[0],
+		counting.post_change_draws, state_at_exit[0], not state_at_exit[1], live, app.current])
 	await _click(app.find_child("startGame", true, false))
 	await app.screen_opened()
 	await process_frame

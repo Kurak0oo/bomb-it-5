@@ -869,8 +869,11 @@ func _clear_screen() -> void:
 		# The screen is dropped from the pressed button's own input event: detaching it
 		# here would take that control out of the tree while the viewport still calls
 		# can_process() on it (the `!is_inside_tree()` engine error). Hiding stops it
-		# drawing and taking input; queue_free removes it after the event, at frame end.
+		# drawing; disabling its processing (input included) stops its controllers and
+		# per-frame effects (FallSnow drawing from Math.random) running one more frame
+		# before queue_free removes it after the event, at frame end.
 		screen.hide()
+		screen.process_mode = Node.PROCESS_MODE_DISABLED
 		screen.queue_free()
 	screen = null
 
