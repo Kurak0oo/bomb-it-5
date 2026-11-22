@@ -524,4 +524,11 @@ func _refresh() -> void:
 
 
 func _can_control() -> bool:
-	return not paused and not state.is_empty() and state.outcome == &"running" and state.get("round_stage") != &"ending" and state.actors[&"human"].alive
+	if paused or state.is_empty() or state.outcome != &"running" or state.get("round_stage") == &"ending":
+		return false
+	var human: Dictionary = state.actors.get(&"human", {})
+	# `HorseProp.frog` calls `robotMoveStop` / `robotBombStop` while the jump runs, so the
+	# movement and bomb listeners are off until `robotMoveStart` on landing.
+	if not human.get("alive", false) or not (human.get("jump", {}) as Dictionary).is_empty():
+		return false
+	return true

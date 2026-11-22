@@ -127,10 +127,14 @@ const ARM_FRAMES := {Vector2i(0, -1): [2, 3], Vector2i(0, 1): [8, 9], Vector2i(-
 ## execute can run in the creation frame, so it clears its transform on the 81st tick after.
 const SPAWN_BLINK_TICKS := 81
 ## `HorseProp.frog`: `robot.view.mc.gotoAndPlay(19)` when the jump starts; `xJump`/`yJump`
-## land with `mc.gotoAndStop(1)`. `_r<n>_forg_<dir>.as` scripts frame 34 (0-based 33) with
-## `gotoAndPlay(1)`, so the jump plays 19-33 and starts over at 1.
+## land with `mc.gotoAndStop(1)`. `_r<n>_forg_<dir>.as` adds its restart script at the
+## 0-based frame index 33 (`addFrameScript(33, ... gotoAndPlay(1))`), i.e. frame 34 in the
+## port's 1-based frames, so the jump plays 19-34 and starts over at 1.
 const HORSE_JUMP_FRAME := 19
-const HORSE_JUMP_END := 33
+const HORSE_JUMP_END := 34
+## `HorseProp.frogMcStop` (the ride's `stopMcSurrogate`): a normal stop on frame 15 goes to
+## frame 1 so the clip does not hold its last driving frame.
+const HORSE_STOP_FRAME := 15
 ## `CountInvincibilityCommand()`: the filter's colours, ratios and alpha; `execute` builds
 ## `new GradientGlowFilter(-20, 60, _filerColor, alphas, ratios, 18, 18, 1, HIGH, INNER, false)`.
 const FILER_COLOR := [16711680, 16744192, 16776960, 8388352, 65280, 65407, 65535, 32767, 255, 8323327,
@@ -314,7 +318,11 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		if direction == Vector2i.ZERO:
 			view.weapon_playing = false
 			view.shield_playing = false
-			if not view.jumping: view.playing = false
+			if not view.jumping:
+				view.playing = false
+				# `HorseProp.frogMcStop`: `if (mc.currentFrame == 15) mc.gotoAndStop(1)`.
+				if view.vehicle == &"horse" and view.frame == HORSE_STOP_FRAME:
+					view.frame = 1
 		if replay and view.class == replay_class and view.fresh == 0: view.playing = true
 		view.direction = direction
 		var blink_end := int(actor.get("blink_until", 0))
@@ -351,10 +359,11 @@ func _turn(view: Dictionary, direction: Vector2i, hold := 1) -> void:
 	var suffix: String = DIRECTIONS[direction]
 	if view.suffix != suffix:
 		_set_robot_mc(view, suffix)
-		view.fresh = hold
-		view.weapon_playing = true
-		view.weapon_fresh = hold
-		view.shield_fresh = hold
+		if not view.jumping:
+			view.fresh = hold
+			view.weapon_playing = true
+			view.weapon_fresh = hold
+			view.shield_fresh = hold
 	view.playing = true
 
 
@@ -384,7 +393,14 @@ func _set_robot_mc(view: Dictionary, suffix: String) -> void:
 	# A new MovieClip: alpha 1 (SendRobotCommand faded the old one); the shield's new
 	# `nombril<direction>` where the clip has a `hand2` (`gotoAndPlay(_mc.currentFrame)`).
 	view.alpha = 1.0
-	view.jumping = false
+	# `HorseProp.frog` already stopped the listeners; a clip made again mid-jump (a turn)
+	# keeps the jump playing (`view.mc` is only replaced, its frame 19 playhead continues).
+	var jumping: bool = bool(view.get("jumping", false)) and view.vehicle == &"horse" and not suffix.begins_with("_Dead")
+	view.jumping = jumping
+	if jumping:
+		view.frame = HORSE_JUMP_FRAME
+		view.playing = true
+		view.fresh = 0
 	view.shield_class = ""
 	if view.shield and not suffix.begins_with("_Dead") and _effects().get("hand2", {}).has(view.class):
 		view.shield_class = "nombril" + suffix
