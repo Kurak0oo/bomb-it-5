@@ -102,7 +102,6 @@ func _run(case: Dictionary) -> void:
 					# (Once between two frames: a second wait would run another frame.)
 					if not _between_frames:
 						await _wait_frame_drawn()
-						paused = false
 						_between_frames = true
 					_key(words[1], words[0] == "kd")
 				"settle":
@@ -165,6 +164,9 @@ func _wait_frame_drawn() -> void:
 	await RenderingServer.frame_pre_draw
 	paused = true
 	await RenderingServer.frame_post_draw
+	# Always release the freeze with the wait, whatever the caller does next (a missing
+	# capture path must not leave the whole scene paused for the rest of the case).
+	paused = false
 	_capture_frame_ticked = false
 
 
