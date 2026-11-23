@@ -220,9 +220,9 @@
  ],
  "screen": "score",
  "godot_phases": {
-  "unlock-tip": 85,
-  "win-score": 105,
-  "loss-score": 84
+  "unlock-tip": 84,
+  "win-score": 104,
+  "loss-score": 85
  },
  "wall_clock_frame": {
   "background": [

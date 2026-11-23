@@ -1,11 +1,11 @@
 {
  "case": "results-robot1",
- "case_sha256": "ce3087b95a52d073b6a81d7a939f20d682f7b5c292d31340bc6ac6b6baabc5e5",
+ "case_sha256": "2b51cfe1182f5670afc790b368a117fdb6a6ee810b88bb5e35067547f1a75717",
  "fps": 35.0,
  "frames": {
-  "loss-score": 1428,
-  "unlock-tip": 1021,
-  "win-score": 1041
+  "loss-score": 1458,
+  "unlock-tip": 1051,
+  "win-score": 1071
  },
  "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
  "player_sha256": "b87d797f8cac147eeda3cc342fbbb29c41af680d7b282d193f46579dc4a61a4f",
