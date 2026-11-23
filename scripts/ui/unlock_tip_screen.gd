@@ -21,6 +21,7 @@ const UtilsButton = preload("res://scripts/ui/button.gd")  # zlong.bombit5.utils
 const ClothesPanel = preload("res://scripts/ui/clothes_panel.gd")
 const UnlockAnimaPanel = preload("res://scripts/ui/unlock_anima_panel.gd")
 const UnlockClothData = preload("res://scripts/ui/unlock_cloth_data.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 
 ## The tip's instance on the generated score screen (`UI_UNLOCK_TIP`).
 const UI_UNLOCK_TIP := "UI_UNLOCK_TIP"
@@ -172,8 +173,16 @@ func selectRobotBtn(is1P: bool) -> void:
 	_screen.set_shown(_unlockTip, false)  # visible = false
 	var s = _app.session
 	# GameModel.P2Robot / P2ClothId / P2HatId: no second player, 0.
-	changeRobot(s.robot if is1P else 0, _robotMc)
+	var robotId: int = s.robot if is1P else 0
+	_ensureRobot(robotId)
+	changeRobot(robotId, _robotMc)
 	_clothesPanel.changeCloth(s.body if is1P else 0, s.hat if is1P else 0)
+	# `ClothesPanel.delDis` removes the previous panel; the tip's capture shows robot 0's, so
+	# hide the recorded one when another robot's panel takes its place.
+	for other in 8:
+		if other == robotId: continue
+		var panel := __containerMc + "/Art_clothPanel" + str(other)
+		if _screen.has_instance(panel): _screen.set_shown(panel, false)
 	delUnlockAnimaPanel()
 	if _is1P and not _unlockData.isUsed1:
 		_unlockData.isUsed1 = true
@@ -181,6 +190,41 @@ func selectRobotBtn(is1P: bool) -> void:
 	elif not _is1P and not _unlockData.isUsed2:
 		_unlockData.isUsed2 = true
 		initUnlockAnimaPanel(_unlockData.unlockedP2Index)
+
+
+## The tip's `robotMc` frames hold the eight robot clips (`BOMBIT5UI_fla.robot<N>_special`)
+## and `ClothesPanel.initDis` makes the panel from the library
+## (`Attach.getSprite("Art_clothPanel" + robotId)`); the unlock-tip capture recorded robot 0
+## only. The character-select capture records the same classes for every robot
+## (`CharacterSelectUI.setRobotClothPanel`), so bring the picked robot's clip and panel in
+## under the tip's own addresses; `selectRobotBtn` then shows them for `GameModel.P1Robot`.
+func _ensureRobot(robotId: int) -> void:
+	if robotId <= 0: return  # robot 0's clip and panel are the recorded ones
+	var panel := __containerMc + "/Art_clothPanel" + str(robotId)
+	var robot := _robotMc + "/robot" + str(robotId)
+	if _screen.has_instance(panel) and _screen.has_instance(robot): return
+	if not _screen.has_method("import_subtree"): return  # a screen without the layout copy
+	var other := &"character"
+	if not FileAccess.file_exists("res://scenes/swf/%s.json" % other): return
+	var layout: Dictionary = SwfScreen.layout_of(other)
+	var root: String = String(layout.get("screen_root", ""))
+	var sourceMc := root + "/robotStage1/robotMc"
+	var robotMap: Transform2D = _screen.stage_matrix_of(_robotMc) \
+		* _matrix_at(layout, sourceMc).affine_inverse()
+	var panelMap: Transform2D = _screen.stage_matrix_of(__containerMc + "/Art_clothPanel0") \
+		* _matrix_at(layout, root + "/Art_clothPanel0").affine_inverse()
+	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
+	_screen.import_subtree(other, sourceMc + "/robot" + str(robotId), tipRoot + robot, robotMap)
+	_screen.import_subtree(other, root + "/Art_clothPanel" + str(robotId), tipRoot + panel, panelMap)
+
+
+## A layout entry's recorded stage matrix.
+static func _matrix_at(layout: Dictionary, path: String) -> Transform2D:
+	for entry: Dictionary in layout.get("nodes", []):
+		if String(entry.path) == path and entry.get("stage_matrix") is Array:
+			var m: Array = entry.stage_matrix
+			return Transform2D(Vector2(m[0], m[1]), Vector2(m[2], m[3]), Vector2(m[4], m[5]))
+	return Transform2D.IDENTITY
 
 
 ## `initClothPanel`: the panel is added to `__containerMc`. `_clothesPanel.x = 142; y = 214`
