@@ -129,6 +129,7 @@ func initData() -> void:
 		setdata()  # frame script 0
 		_mc.set_shown(_nextLevelBtn, true)  # visible = true
 		_mc.set_shown(_restartBtn, false)  # visible = false
+		_mc.set_shown(_title + "/title4", false)  # frame 1's title: the failed title is gone
 	else:
 		_mc.set_shown(_nextLevelBtn, false)
 		_mc.set_shown(_restartBtn, true)

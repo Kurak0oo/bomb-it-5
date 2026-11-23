@@ -82,6 +82,9 @@ func _check_round(plan: Dictionary) -> void:
 	var score = app.screen.get_child(0) if app.current == &"score" else null
 	if score == null: return
 	var controller = score.get_meta("controller")
+	if robot > 0:
+		_expect(_has_art(score, "p1head"),
+			"the score screen draws robot %d's SWF-rendered P1 head" % robot)
 	_expect(score.is_shown("UI_UNLOCK_TIP"), "robot %d's unlocks open the post-game tip" % robot)
 	await _check_tip(score, robot, "the unlock tip")
 	await _click(_find("okBt"))
@@ -112,6 +115,35 @@ func _check_tip(score: Node2D, robot: int, where: String) -> void:
 	_expect(score.get_frame(robot_mc) == robot + 1,
 		"%s sets the robots clip to frame %d (robotId + 1), got %d"
 		% [where, robot + 1, score.get_frame(robot_mc)])
+	# The reference capture's recorded stage matrices (compare tolerance): the picked
+	# robot and its panel sit where the original puts them, panel N inside panel 0's box.
+	_expect_matrix(score, robot, panel, where + " panel")
+	_expect_matrix(score, robot, robot_path, where + " robot")
+	_expect(score.get_frame("UI_UNLOCK_TIP/containerMc/robotBtn1/robotHeadMc") == robot + 1,
+		"%s's P1 head shows robot %d (frame %d)" % [where, robot, robot + 1])
+	if robot > 0:
+		_expect(not score.is_shown(robot_mc + "/robot0"), "%s hides the recorded robot 0 preview" % where)
+		# The recorded preview is baked robot 0; the SWF art pass supplies the picked robot's
+		# clip, whose reference face layer (eyes and mouth) draws under the imported look.
+		var preview := robot_path + "/swfPreview"
+		_expect(score.has_instance(preview) and score.is_shown(preview),
+			"%s draws the SWF-rendered preview of robot %d" % [where, robot])
+		# The face layer differs per robot in the SWF (`head` on 1 and 3, the eye `hatMc` on 2):
+		# whichever one the reference capture has must be the imported clip's own layer, at
+		# the recorded frame.
+		var face := ""
+		var want_head := -1
+		for child: String in ["head", "hatMc"]:
+			var layer: String = robot_path + "/" + child
+			if not score.has_instance(layer): continue
+			var want: int = _golden_frame(robot, "unlock-tip", score.golden_path_of(layer))
+			if want > 0:
+				face = layer
+				want_head = want
+				break
+		_expect(not face.is_empty() and score.get_frame(face) == want_head,
+			"%s's robot %d preview face layer is at the reference frame (got %d, want %d)"
+			% [where, robot, score.get_frame(face) if not face.is_empty() else 0, want_head])
 	_expect(score.has_instance(robot_path), "%s has robot %d's robot clip" % [where, robot])
 	var body := robot_path + "/bodyMc"
 	_expect(score.get_frame(body) == 1, "%s's robot %d preview starts bare (bodyMc frame 1)" % [where, robot])
@@ -197,6 +229,9 @@ func _check_end_screen(robot: int, id: StringName) -> void:
 	if swf == null: return
 	_expect(swf.get_frame("p1head") == robot + 1,
 		"%s shows robot %d's head (p1head frame %d)" % [id, robot, robot + 1])
+	if robot > 0:
+		_expect(_has_art(swf, "p1head"),
+			"%s draws robot %d's SWF-rendered head" % [id, robot])
 	await _click(_find("back"))
 	await app.screen_opened()
 	_expect(app.current == &"settings", "TRY AGAIN after %s opens Game Settings" % id)
@@ -211,6 +246,22 @@ func _check_end_screen(robot: int, id: StringName) -> void:
 	_expect(controller._p1RobotId == 0, "character select reopens on robot 0, as the AS3 does")
 	_expect(character.is_shown("Art_clothPanel0") and not character.is_shown("Art_clothPanel%d" % robot),
 		"character select shows robot 0's panel, not the finished round's robot %d" % robot)
+
+
+## The SWF art pass adds the picked robot's head images to the screen's `p1head`.
+func _has_art(screen: Node2D, instance: String) -> bool:
+	var rec: Dictionary = screen._by_name.get(instance, {})
+	return not rec.get("art", []).is_empty()
+
+
+## The recorded clip frame of a golden node, or -1 when the golden has no such node.
+func _golden_frame(robot: int, capture: String, path: String) -> int:
+	var golden_path := "res://tests/goldens/results-robot%d/%s.json" % [robot, capture]
+	if not FileAccess.file_exists(golden_path): return -1
+	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
+	for node: Dictionary in golden.get("nodes", []):
+		if String(node.get("path", "")) == path: return int(node.get("frame", -1))
+	return -1
 
 
 func _tip(score: Node2D):
@@ -252,6 +303,27 @@ func _click_hit(score: Node2D, instance: String) -> void:
 			await _click(child)
 			return
 	_expect(false, "the tip has a hit area for %s" % instance)
+
+
+## A generated node's stage matrix against the recorded reference capture's (0.5 position,
+## 0.001 scale, like compare.py's tolerance).
+func _expect_matrix(score: Node2D, robot: int, instance: String, label: String) -> void:
+	if robot == 0: return  # robot 0 is the screen's own recording, not an imported node
+	var golden_path := "res://tests/goldens/results-robot%d/unlock-tip.json" % robot
+	if not FileAccess.file_exists(golden_path): return
+	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
+	var path: String = score.golden_path_of(instance)
+	var want: Array = []
+	for node: Dictionary in golden.get("nodes", []):
+		if String(node.path) == path:
+			want = node.get("stage_matrix", [])
+			break
+	var got: Transform2D = score.stage_matrix_of(instance)
+	var ok: bool = want.size() == 6 \
+		and absf(got.x.x - float(want[0])) <= 0.001 and absf(got.y.y - float(want[3])) <= 0.001 \
+		and got.origin.distance_to(Vector2(want[4], want[5])) <= 0.5
+	_expect(ok, "%s has the reference stage matrix (got %s, want %s)"
+		% [label, [got.x.x, got.y.y, got.origin.x, got.origin.y], want])
 
 
 ## The first recorded `currentFrame` of a node's track (the frame `gotoAndPlay(1)` starts

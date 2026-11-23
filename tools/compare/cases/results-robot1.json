@@ -1,0 +1,239 @@
+{
+ "name": "results-robot1",
+ "origin": "The one-player score screen after a won level with robot 1 picked on character select: the unlock tip's robot preview, clothes panel and P1 head for robot 1. Built from results.json (seed 42, Normal, Cinema), with character select's robotIcon1 clicked before START. The round is settled by the Godot-only `settle` action.",
+ "godot_note": "Godot replays the menus with the same clicks; the rounds themselves are settled by the Godot-only `settle` actions with the recorded points.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "command": "click 174.5 149.5"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 81"
+  },
+  {
+   "godot_command": "settle win-score",
+   "godot_note": "Godot cannot play the original round: it ends here with the points the original's score screen showed at win-score, and the screen opens as far into its timeline at each capture as the original's was (godot_capture.gd settle)."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 1
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 2
+   }
+  },
+  {
+   "fixture": {
+    "op": "bomb",
+    "actor": 3
+   }
+  },
+  {
+   "command": "step 120"
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 180"
+  },
+  {
+   "capture": "unlock-tip"
+  },
+  {
+   "command": "click 371.1 466.2"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 20"
+  },
+  {
+   "capture": "win-score"
+  },
+  {
+   "command": "realtime 0"
+  },
+  {
+   "command": "click 543.3 422.0",
+   "godot_command": "click 446.6 422.0",
+   "godot_why": "owner edit: the score screen moves NEXT left by 96.7, half the way from DRESS UP to MORE GAMES (tools/convert/owner_edits.json)"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 100"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "pickup",
+    "kind": "life"
+   }
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "godot_command": "settle loss-score",
+   "godot_note": "As above, for the lost level 2 (right after the original's own bomb, so the Space press still lands in the round)."
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 285"
+  },
+  {
+   "capture": "loss-score"
+  },
+  {
+   "command": "realtime 0"
+  }
+ ],
+ "screen": "score",
+ "godot_phases": {
+  "unlock-tip": 84,
+  "win-score": 104,
+  "loss-score": 85
+ },
+ "wall_clock_frame": {
+  "background": [
+   "bg/@122",
+   "bg/@124",
+   "bg/@126",
+   "bg/@128",
+   "bg/@130"
+  ],
+  "preview": [
+   "/robotStage/robotMc/robot1"
+  ]
+ }
+}

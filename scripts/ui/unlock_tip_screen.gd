@@ -25,6 +25,10 @@ const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 
 ## The tip's instance on the generated score screen (`UI_UNLOCK_TIP`).
 const UI_UNLOCK_TIP := "UI_UNLOCK_TIP"
+## The tip's P1 head clip, baked into the generated button sequence: its per-robot frames.
+## The tip's per-robot robotMc / robotHeadMc clips, rendered from the SWF by
+## `record_screen.py tips` (the generated score screen holds robot 0 only).
+const TIP_ART := "res://scenes/swf/score_tip_art.json"
 
 var _screen: Node2D
 var _events: RefCounted
@@ -98,6 +102,7 @@ func initDis() -> void:
 	# when looks were unlocked. The tip was recorded with a burst playing, so its generated
 	# instance starts hidden here (DRESS UP showed a burst over the first outfit).
 	_screen.set_shown(__containerMc + "/Art_unlockAnimas", false)
+	_addRobotHead()
 	# robotStage: mouseEnabled = mouseChildren = false, gotoAndStop(1)
 	_screen.set_enabled(__containerMc + "/robotStage", false)
 	_screen.set_frame(__containerMc + "/robotStage", 1)
@@ -106,6 +111,38 @@ func initDis() -> void:
 	_scoreText = __containerMc + "/scoreText"
 	_screen.set_enabled(_scoreText, false)  # mouseEnabled = false
 	_screen.set_text(_scoreText, str(_player[0].totalPoint))
+
+
+## `initSetting` sets `_robotBtn1["robotHeadMc"].gotoAndStop(GameModel.P1Robot + 1)`, but the
+## button was recorded baked (its head is robot 0's pixels). Add the clip's instance so the
+## AS3 `gotoAndStop` addresses it; `_addPickedButton` gives a picked robot its SWF button.
+func _addRobotHead() -> void:
+	# Robot 0's head is baked in the recorded button, but `initSetting` still addresses its
+	# clip; add an empty baked node so the AS3 `gotoAndStop(1)` has its instance.
+	if _screen.has_instance(__containerMc + "/robotBtn1/robotHeadMc"): return
+	var base: String = _screen.golden_path_of(__containerMc + "/robotBtn1")
+	if base.is_empty(): return
+	var path := String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1/robotHeadMc"
+	var entry := {"path": path, "parent": String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1",
+		"golden_path": base + "/robotHeadMc", "class": "BOMBIT5UI_fla::roleHead_263",
+		"kind": "movie_clip", "name": "robotHeadMc", "role": "piece", "frame": 1,
+		"total_frames": 8, "effective_visible": true,
+		"stage_matrix": [0.92, 0.0, 0.0, 0.92, 372.5, 168.45]}
+	_screen.add_piece(entry, {})
+
+
+## The recorded P1 button has robot 0's head baked in. Replace the whole button with the SWF
+## render of that robot's selected button: its `robotHeadMc` child is part of the render, so
+## the picked robot's face and white glow are the only ones drawn. The empty `robotHeadMc`
+## instance stays for `initSetting`'s `gotoAndStop` and the display-list path.
+func _addPickedButton(robotId: int) -> void:
+	if robotId <= 0: return  # robot 0's button is the recorded one
+	if not FileAccess.file_exists(TIP_ART): return
+	var data = JSON.parse_string(FileAccess.get_file_as_string(TIP_ART))
+	if not data is Dictionary or not data.has(str(robotId)): return
+	var button: Dictionary = data[str(robotId)].get("button", {})
+	if button.is_empty(): return
+	_screen.add_art_frames(__containerMc + "/robotBtn1", button)
 
 
 ## `delDis`
@@ -177,8 +214,14 @@ func selectRobotBtn(is1P: bool) -> void:
 	# Robot 0's clip and panel are the recorded ones: its path stays exactly the AS3's
 	# `changeRobot` (no library copy, no panel hiding).
 	if robotId > 0: _ensureRobot(robotId)
+	# `initSetting`/`selectRobotBtn` re-address the P1 head on every tip (the DRESS UP button
+	# opens a new tip); the picked robot's SWF art must replace the baked robot 0 pixels.
+	_addPickedButton(robotId)
 	changeRobot(robotId, _robotMc)
 	_clothesPanel.changeCloth(s.body if is1P else 0, s.hat if is1P else 0)
+	# The recorded tip's robot 0 preview is baked into its robotMc frame; hide it when the
+	# picked robot's clip takes that frame (`robotMc.gotoAndStop(robotId + 1)`).
+	_screen.set_shown(_robotMc + "/robot0", robotId == 0)
 	if robotId > 0:
 		# `ClothesPanel.delDis` removes the previous panel; the tip's capture shows robot 0's,
 		# so hide the recorded one when another robot's panel takes its place.
@@ -217,8 +260,34 @@ func _ensureRobot(robotId: int) -> void:
 	var panelMap: Transform2D = _screen.stage_matrix_of(__containerMc + "/Art_clothPanel0") \
 		* _matrix_at(layout, root + "/Art_clothPanel0").affine_inverse()
 	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
-	_screen.import_subtree(other, sourceMc + "/robot" + str(robotId), tipRoot + robot, robotMap)
-	_screen.import_subtree(other, root + "/Art_clothPanel" + str(robotId), tipRoot + panel, panelMap)
+	var robotZero := _robotMc + "/robot0"
+	var robotGolden: String = _screen.golden_path_of(robotZero).trim_suffix("/robot0") \
+		+ "/robot" + str(robotId)
+	var panelGolden: String = _screen.golden_path_of(__containerMc + "/Art_clothPanel0")
+	_screen.import_subtree(other, root + "/Art_clothPanel" + str(robotId), tipRoot + panel, panelMap,
+		panelGolden)
+	_screen.import_subtree(other, sourceMc + "/robot" + str(robotId), tipRoot + robot, robotMap,
+		robotGolden)
+	_replace_preview(robotId, robot)
+
+
+## The tip's own recorded robot clip, not character select's (different children/pose):
+## show the reference capture's picture at the imported root, whose track still runs.
+func _replace_preview(robotId: int, robot: String) -> void:
+	if not FileAccess.file_exists(TIP_ART): return
+	var data = JSON.parse_string(FileAccess.get_file_as_string(TIP_ART))
+	if not data is Dictionary or not data.has(str(robotId)): return
+	var piece: Dictionary = data[str(robotId)].get("preview", {})
+	if piece.is_empty(): return
+	_screen.hide_children(robot)
+	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
+	var path := tipRoot + robot + "/swfPreview"
+	if _screen.has_instance(robot + "/swfPreview"): return
+	var entry := {"path": path, "parent": tipRoot + robot, "golden_path": piece.get("golden_path", path),
+		"kind": "movie_clip", "name": "swfPreview", "role": "piece", "frame": 1,
+		"total_frames": 1, "effective_visible": true,
+		"stage_matrix": piece["at"], "render_bounds": piece["render_bounds"], "no_dump": true}
+	_screen.add_piece(entry, {"1": piece})
 
 
 ## A layout entry's recorded stage matrix.

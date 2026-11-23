@@ -179,12 +179,12 @@ class Player:
     although some en-US strings differ (`START` / `START GAME`). The timeline pass records
     what the goldens hold (no branding system), so it leaves them as they are."""
 
-    def __init__(self, player, swf, localize=True):
+    def __init__(self, player, swf, localize=True, scale=SCALE):
         from replay_reference import ReferenceSession
         self.tmp = Path(tempfile.mkdtemp(prefix='bombit5-record-'))
         staged = self.tmp / 'original.swf'  # Ruffle rejects dot-prefixed SWF paths
         staged.write_bytes(Path(swf).read_bytes())
-        self.session = ReferenceSession(player, staged, self.tmp / 'session', extra_args=('--scale', str(SCALE)))
+        self.session = ReferenceSession(player, staged, self.tmp / 'session', extra_args=('--scale', str(scale)))
         self.dumps = 0
         if localize:
             self.command(f'localize {LOCALIZATION} placeholders')
@@ -542,6 +542,108 @@ def _piece_meta(meta):
     return {'pixel_origin': meta['pixel_origin'], 'pixel_size': meta['pixel_size'], 'scale': meta['scale'],
             'render_bounds': meta['render_bounds']}
 
+
+
+# ------------------------------------------------------------------ unlock tip
+
+TIP_ART = ROOT / 'scenes' / 'swf' / 'score_tip_art.json'
+TIP_PREVIEW = '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotStage/robotMc/robot%d'
+# The head clip inside the tip's P1 button (the button render includes it).
+TIP_HEAD = '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1/robotHeadMc'
+# The tip's P1 button: the generated button baked robot 0's head, so the picked robot's
+# selected frame is rendered whole, head clip included.
+TIP_BUTTON = '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1'
+# `PlayerScoreUI.initData` / `OnePGameOverUI.initData`: `p1head.gotoAndStop(P1Robot + 1)`.
+# The score screen and both end screens place the same `roleHead` clip at this path.
+SCORE_HEAD = '/root1/__mainMc/GameMc/@0/@0/p1head'
+
+
+def _tip_piece(meta, matrix, frame=None):
+    """One SWF-rendered tip clip: the player's piece metadata plus the node's stage matrix."""
+    out = dict(meta)
+    out['at'] = list(matrix)
+    if frame is not None: out['frame'] = frame
+    return out
+
+
+def _tip_replay(case, player_path, swf, capture, scale=SCALE):
+    """Replay `case` to `capture` and return the player and its display list."""
+    p = Player(player_path, swf, scale=scale)
+    for line in single_steps(case, capture):
+        p.command(line)
+    return p, p.display()
+
+
+def _tip_render(p, golden, file, frame=None, hide=None):
+    """One clip of the replayed capture, rendered by `piece` at its stage matrix."""
+    node = {n['path']: n for n in p.display()['nodes']}.get(golden)
+    if node is None:
+        raise SystemExit(f'{golden} is not on the display list')
+    meta = p.piece(golden, file, frame, hide)
+    piece = _tip_piece({'file': file.name, **{k: meta[k] for k in ('pixel_origin', 'pixel_size', 'scale', 'render_bounds')}},
+                       node['stage_matrix'], frame)
+    piece['golden_path'] = golden
+    return piece
+
+
+def record_tip_art(_case_name, player_path, swf):
+    """The unlock tip's and score screens' per-robot clips, rendered from the SWF (`piece`).
+
+    The generated score screen holds robot 0's baked button/robot/P1 head only; the tip's
+    robotMc frames 1..8 and its whole robotBtn1, and the score screens' p1head frames
+    (`PlayerScoreUI.initData` / `OnePGameOverUI.initData`), are other library children.
+    Replay each recorded results-robot<N> case to its unlock-tip capture for the picked
+    robot's preview and selected P1 button, then to win-score and loss-score for the score
+    screen's two p1head eye states.
+    """
+    target = PACK / 'score'
+    target.mkdir(parents=True, exist_ok=True)
+    out, total = {}, 0
+    for robot in range(1, 9):
+        case_name = f'results-robot{robot}'
+        if not (ROOT / 'tools' / 'compare' / 'cases' / f'{case_name}.json').is_file():
+            continue
+        case = load_case(case_name)
+        entry = {}
+        p, _dump = _tip_replay(case, player_path, swf, 'unlock-tip')
+        tmp = Path(tempfile.mkdtemp(prefix='bombit5-tip-'))
+        try:
+            file = target / f'tip-preview-{robot}.png'
+            entry['preview'] = _tip_render(p, TIP_PREVIEW % robot, file)
+            total += 1
+            # The whole selected P1 button, rendered from this robot's capture: its head clip is
+            # part of the button, so the picked robot's face and glow come with it. The capture
+            # is on frame 3 (`selectRobotBtn`); rendering the clip at that frame would restart
+            # its children, so the current frame is rendered as it stands.
+            file = target / f'tip-button-{robot}.png'
+            entry['button'] = {'3': _tip_render(p, TIP_BUTTON, file)}
+            total += 1
+        finally:
+            p.close()
+            shutil.rmtree(tmp, ignore_errors=True)
+        # The score screen's own p1head instance (`p1head.gotoAndStop(P1Robot + 1)`). Its eye
+        # clip blinks on the host clock: the win-score capture shows the closed eyes and the
+        # loss-score capture the open ones, and the end screens repeat those two states.
+        entry['score_head'] = {}
+        for key, capture in (('win', 'win-score'), ('loss', 'loss-score')):
+            # 1x: the score screen draws `p1head` at 1:1 and the reference captures are 1x, so
+            # the SWF render is sampled once, with no 3x→1x resampling on the small head.
+            p, _dump = _tip_replay(case, player_path, swf, capture, scale=1)
+            try:
+                file = target / f'score-head-{robot}-{key}.png'
+                entry['score_head'][key] = _tip_render(p, SCORE_HEAD, file, robot + 1)
+                total += 1
+            finally:
+                p.close()
+        entry['preview']['class'] = 'robot'
+        for key in entry['score_head']:
+            entry['score_head'][key]['class'] = 'roleHead'
+            entry['score_head'][key]['pack'] = 'score'  # the head art lives in the score pack
+        for frame in entry['button']:
+            entry['button'][frame]['pack'] = 'score'
+        out[str(robot)] = entry
+    TIP_ART.write_text(json.dumps(out, indent=1, sort_keys=True) + '\n', encoding='utf-8')
+    print(f'tip art: {len(out)} robots, {total} images in {target}')
 
 # ------------------------------------------------------------------ art
 
@@ -2509,7 +2611,7 @@ def record_fonts(_case_name, _player_path, swf):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels', 'cartoons',
-                                         'sets', 'modes', 'shots'])
+                                         'sets', 'modes', 'shots', 'tips'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
@@ -2542,6 +2644,9 @@ def main():
         return 0
     if args.what == 'panels':
         record_panels(args.case, args.player.resolve(), args.swf)
+        return 0
+    if args.what == 'tips':
+        record_tip_art(args.case, args.player.resolve(), args.swf)
         return 0
     if not args.swf.is_file():
         raise SystemExit(f'needs the SWF at {args.swf}')

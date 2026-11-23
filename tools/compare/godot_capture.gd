@@ -113,7 +113,8 @@ func _run(case: Dictionary) -> void:
 				"settle":
 					var golden_path := "res://tests/goldens/%s/%s.json" % [case.name, words[1]]
 					var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
-					_viewport.get_child(0).settle_as_recorded(golden, words[1], _frames_until(actions, step_index, words[1]))
+					_viewport.get_child(0).settle_as_recorded(golden, words[1], _frames_until(actions, step_index, words[1]),
+						case.get("godot_phases", {}))
 				"round":
 					# The next round starts on the board and robots the gameplay screen's
 					# capture recorded (App.round_as_recorded).

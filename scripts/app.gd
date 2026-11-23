@@ -624,10 +624,11 @@ func show_score(snapshot: Dictionary, delay := 0) -> void:
 ## RESTART showing keeps the session's. With `frames_to_capture`, the screen opens so that
 ## when the capture is taken it is as far into its timeline as the original's was
 ## (`capture_index_of`, matched by tools/convert/layout.py).
-func settle_as_recorded(golden: Dictionary, capture: String, frames_to_capture := -1) -> void:
+func settle_as_recorded(golden: Dictionary, capture: String, frames_to_capture := -1,
+		phases_override: Dictionary = {}) -> void:
 	var end := _end_screen_of(golden)
 	if end != &"":
-		_settle_end_as_recorded(golden, capture, end, frames_to_capture)
+		_settle_end_as_recorded(golden, capture, end, frames_to_capture, phases_override)
 		return
 	var screen_layout := SwfScreen.layout_of(&"score")
 	var root: String = screen_layout.screen_root
@@ -639,7 +640,8 @@ func settle_as_recorded(golden: Dictionary, capture: String, frames_to_capture :
 	var lives: int = session.lives if won or bool(shown.get("restartBtn", {}).get("effective_visible", false)) else 0
 	var delay := 0
 	if frames_to_capture >= 0:
-		var phases: Dictionary = screen_layout.get("timeline", {}).get("capture_index_of", {})
+		var phases: Dictionary = phases_override if not phases_override.is_empty() \
+			else screen_layout.get("timeline", {}).get("capture_index_of", {})
 		delay = frames_to_capture - int(phases.get(capture, 0))
 	_end_game()
 	_on_level_settled({"outcome": &"won" if won else &"lost", "result_score": points.call("levelScore"),
@@ -689,7 +691,8 @@ func _end_screen_of(golden: Dictionary) -> StringName:
 ## (`game_over`), with the points that make the session total that score. Game Over opens
 ## from the round's end, so it takes the capture's timeline index as the score screen
 ## does; the congratulations screen opens later, from NEXT on the score screen.
-func _settle_end_as_recorded(golden: Dictionary, capture: String, end: StringName, frames_to_capture := -1) -> void:
+func _settle_end_as_recorded(golden: Dictionary, capture: String, end: StringName,
+		frames_to_capture := -1, phases_override: Dictionary = {}) -> void:
 	var screen_layout := SwfScreen.layout_of(end)
 	var root: String = screen_layout.screen_root
 	var final := 0
@@ -699,7 +702,8 @@ func _settle_end_as_recorded(golden: Dictionary, capture: String, end: StringNam
 	if won: session.level = session.levels
 	var delay := 0
 	if frames_to_capture >= 0 and not won:
-		var phases: Dictionary = screen_layout.get("timeline", {}).get("capture_index_of", {})
+		var phases: Dictionary = phases_override if not phases_override.is_empty() \
+			else screen_layout.get("timeline", {}).get("capture_index_of", {})
 		delay = frames_to_capture - int(phases.get(capture, 0))
 	_end_game()
 	_on_level_settled({"outcome": &"won" if won else &"lost", "result_score": final - session.total_score,

@@ -76,6 +76,7 @@ func initData() -> void:
 	_mc.set_text(_level, str(player.levelPoint))
 	_mc.set_text(_total, str(player.totalPoint))
 	_mc.set_frame(_head, _root.session.robot + 1)  # GameModel.P1Robot + 1
+	_mc.add_robot_head(_head, _root.session.robot)  # the generated screen bakes robot 0's head
 	# GREEN_ZONE: killNum >= AwardSender.sendAward4Count -> sendAward4(); LEVEL_WIN ->
 	# sendAwardOnComplete(): portal only.
 	var data := unlockCloth(_root.session.robot, player.totalPoint, true)

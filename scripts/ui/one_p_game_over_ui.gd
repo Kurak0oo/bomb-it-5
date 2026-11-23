@@ -36,6 +36,7 @@ func init() -> void:
 func initData() -> void:
 	_mc.set_text(_score, str(_playerScore))
 	_mc.set_frame(_head, _root.session.robot + 1)  # GameModel.P1Robot + 1
+	_mc.add_robot_head(_head, _root.session.robot)  # the generated screen bakes robot 0's head
 	# AwardSender.sendScore(this._playerScore): portal only.
 
 
