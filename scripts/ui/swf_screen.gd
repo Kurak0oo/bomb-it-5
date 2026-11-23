@@ -319,6 +319,123 @@ func instance_position(instance: String) -> Vector2:
 	return Vector2.ZERO if rec.is_empty() else (rec.static as Transform2D).origin
 
 
+## The recorded stage matrix of an instance (a layout clip or a run-time node).
+func stage_matrix_of(instance: String) -> Transform2D:
+	var rec: Dictionary = _by_name.get(instance, {})
+	return Transform2D.IDENTITY if rec.is_empty() else rec.get("static", Transform2D.IDENTITY)
+
+
+## Another generated screen's manifest (the pack of `screen`), or {} without the local pack.
+static func _manifest_of(screen: StringName) -> Dictionary:
+	var file := PACK % screen
+	if not FileAccess.file_exists(file): return {}
+	return JSON.parse_string(FileAccess.get_file_as_string(file))
+
+
+## Add a recorded subtree of another generated screen under this one. A library clip the
+## capture held one instance of (the unlock tip's `robotMc` frames 1..8 and its
+## `Art_clothPanel<N>`, of which the unlock-tip capture recorded robot 0 only; ClothesPanel
+## makes each robot's panel from the library, `Attach.getSprite("Art_clothPanel" + robotId)`,
+## and `UnlockTipScreen.selectRobotBtn` sends `GameModel.P1Robot` through `changeRobot`) can
+## then be addressed by its class path for every robot. `map` takes the other screen's stage
+## space to this one's: node matrices and bounds are remapped, while the art keeps its
+## captured placement relative to its node. The added nodes are static (no recorded tracks);
+## callers drive their frames as the AS3 does.
+func import_subtree(from: StringName, from_prefix: String, to_prefix: String, map: Transform2D) -> void:
+	if not by_path.has(to_prefix.get_base_dir()):
+		push_error("import_subtree: no parent for %s" % to_prefix)
+		return
+	if not FileAccess.file_exists("res://scenes/swf/%s.json" % from): return
+	var source := layout_of(from)
+	if source == null: return
+	var manifest := _manifest_of(from)
+	var picked: Array = []
+	for entry: Dictionary in source.get("nodes", []):
+		var path := String(entry.path)
+		if path == from_prefix or path.begins_with(from_prefix + "/"): picked.append(entry)
+	if picked.is_empty(): return
+	# Parents before children.
+	picked.sort_custom(func(a, b): return String(a.path).count("/") < String(b.path).count("/"))
+	var prefix := "../%s/" % from
+	for entry: Dictionary in picked:
+		var src := String(entry.path)
+		var dst := to_prefix + src.substr(from_prefix.length())
+		var parent := to_prefix.get_base_dir() if src == from_prefix \
+			else to_prefix + String(entry.parent).substr(from_prefix.length())
+		if not by_path.has(parent):
+			push_error("import_subtree: %s comes before its parent %s" % [src, parent])
+			continue
+		var copy: Dictionary = entry.duplicate(true)
+		copy.path = dst
+		copy.parent = parent
+		# A static scene node: the source capture's animation clock is not this screen's.
+		copy.erase("track")
+		copy.erase("timeline_of")
+		copy.erase("moved_by")
+		if entry.get("stage_matrix") is Array:
+			copy.stage_matrix = _matrix_array(map * _matrix(entry.stage_matrix))
+		for key in ["render_bounds", "stage_bounds"]:
+			if entry.get(key) is Array: copy[key] = _mapped_bounds(entry[key], map)
+		var rec := add_node(copy)
+		rec.alpha_at_capture = float(entry.get("alpha", 1.0))
+		for child in rec.node.get_children():
+			if child.name == "Placeholder": child.queue_free()  # the pack's art, below
+		if copy.has("name"): _by_name.get_or_add(String(copy.name).split("@")[0], rec)
+		var relative := _relative(dst)
+		if not relative.is_empty(): _by_name[relative] = rec
+		if copy.has("action") and copy.has("stage_bounds"):
+			rec.hit = _hit(rec)
+			_hits.add_child(rec.hit)
+		_import_art(rec, src, manifest, prefix, map)
+
+
+## The source pack's art for one imported node (`_add_piece_art` on the other screen):
+## its static piece or frames, its sequences, and every recorded widget frame.
+func _import_art(rec: Dictionary, path: String, manifest: Dictionary, prefix: String,
+		map: Transform2D) -> void:
+	var entry: Dictionary = rec.entry
+	var capture: int = int(_timeline.get("capture_index", 0))
+	if entry.role == "piece" and (entry.effective_visible or entry.has("first_visible")):
+		var piece = manifest.get("pieces", {}).get(path)
+		if piece is Dictionary:
+			_import_art_piece(rec, piece, int(piece.get("index", capture)), -1, prefix, map)
+	elif entry.role == "sequence":
+		var frames = manifest.get("sequences", {}).get(path)
+		if frames is Dictionary:
+			var keys: Array = frames.keys()
+			keys.sort_custom(func(a, b): return int(a) < int(b))
+			for key in keys: _import_art_piece(rec, frames[key], int(key), -1, prefix, map)
+	# Recorded widget frames (`states` / `frames`), as `_add_piece_art` reads them.
+	for source in ["states", "frames"]:
+		var by_frame = manifest.get(source, {}).get(path)
+		if by_frame is Dictionary:
+			for frame in by_frame:
+				_import_art_piece(rec, by_frame[frame], int(by_frame[frame].get("index", capture)),
+					int(frame), prefix, map)
+
+
+func _import_art_piece(rec: Dictionary, piece: Dictionary, at: int, state: int, prefix: String,
+		map: Transform2D) -> void:
+	var moved: Dictionary = piece.duplicate()
+	moved.file = prefix + String(piece.file)  # the other screen's pack, next to this one
+	var art := _add_art(rec, moved, at, state)
+	if art.is_empty(): return
+	# Sprite placement stays relative to the source node (see `_fit_of`); the hit test works
+	# in this screen's stage space, so its origin is the mapped one.
+	art.hit_origin = map * (art.origin as Vector2)
+
+
+static func _matrix_array(t: Transform2D) -> Array:
+	return [t.x.x, t.x.y, t.y.x, t.y.y, t.origin.x, t.origin.y]
+
+
+static func _mapped_bounds(bounds: Array, map: Transform2D) -> Array:
+	if bounds.size() != 4: return bounds
+	var top_left := map * Vector2(bounds[0], bounds[1])
+	var bottom_right := map * Vector2(bounds[2], bounds[3])
+	return [top_left.x, top_left.y, bottom_right.x, bottom_right.y]
+
+
 ## A node its controller lays out at run time under a layout group (the board's boxes and
 ## portals, scripts/ui/game_board.gd). `entry` is shaped like a layout node (`path`,
 ## `parent`, `stage_matrix`, `role`, ...); `art`, if any, is an image of the local pack
@@ -1712,8 +1829,10 @@ class HitArea extends Button:
 		var image: Image = screen._image(art.file)
 		if image == null: return true
 		var stage := position + point
-		# The art was rendered in stage space at its render frame; buttons do not move.
-		var pixel: Vector2 = ((stage - (art.origin as Vector2)) * float(art.scale)).floor()
+		# The art was rendered in stage space at its render frame; buttons do not move. An
+		# imported node's art comes from another screen at another place (`hit_origin`).
+		var origin: Vector2 = art.get("hit_origin", art.origin)
+		var pixel: Vector2 = ((stage - origin) * float(art.scale)).floor()
 		if pixel.x < 0 or pixel.y < 0 or pixel.x >= image.get_width() or pixel.y >= image.get_height():
 			return false
 		return image.get_pixelv(Vector2i(pixel)).a >= 0.5
@@ -1738,7 +1857,9 @@ func _hit(rec: Dictionary) -> Button:
 		if entry.role == "sequence" and not art.has("state"): continue
 		# A controller's widget is hit on its recorded frame's shape (see HitArea).
 		if entry.has("widget_frames") and int(art.get("state", -1)) != int(entry.get("frame", 1)): continue
-		if art.size != Vector2.ZERO: area = area.merge(Rect2(art.origin, art.size / art.scale))
+		if art.size != Vector2.ZERO:
+			var origin: Vector2 = art.get("hit_origin", art.origin)
+			area = area.merge(Rect2(origin, art.size / art.scale))
 	hit.position = area.position
 	hit.size = area.size
 	hit.set_meta("swf_art", true)
