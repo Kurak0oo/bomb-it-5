@@ -325,6 +325,13 @@ func stage_matrix_of(instance: String) -> Transform2D:
 	return Transform2D.IDENTITY if rec.is_empty() else rec.get("static", Transform2D.IDENTITY)
 
 
+## The golden's path for an instance (the recorded display-list address compare.py uses).
+func golden_path_of(instance: String) -> String:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return ""
+	return String(rec.entry.get("golden_path", rec.path))
+
+
 ## Another generated screen's manifest (the pack of `screen`), or {} without the local pack.
 static func _manifest_of(screen: StringName) -> Dictionary:
 	var file := PACK % screen
@@ -341,7 +348,8 @@ static func _manifest_of(screen: StringName) -> Dictionary:
 ## space to this one's: node matrices and bounds are remapped, while the art keeps its
 ## captured placement relative to its node. The added nodes are static (no recorded tracks);
 ## callers drive their frames as the AS3 does.
-func import_subtree(from: StringName, from_prefix: String, to_prefix: String, map: Transform2D) -> void:
+func import_subtree(from: StringName, from_prefix: String, to_prefix: String, map: Transform2D,
+		golden_prefix := "") -> void:
 	if not by_path.has(to_prefix.get_base_dir()):
 		push_error("import_subtree: no parent for %s" % to_prefix)
 		return
@@ -372,6 +380,8 @@ func import_subtree(from: StringName, from_prefix: String, to_prefix: String, ma
 		copy.path = dst
 		copy.parent = parent
 		copy.erase("moved_by")
+		if not golden_prefix.is_empty():
+			copy.golden_path = golden_prefix + src.substr(from_prefix.length())
 		var cap := String(entry.get("timeline_of", ""))
 		if cap.is_empty():
 			copy.erase("timeline_of")
@@ -392,6 +402,8 @@ func import_subtree(from: StringName, from_prefix: String, to_prefix: String, ma
 			if entry.get(key) is Array: copy[key] = _mapped_bounds(entry[key], map)
 		var rec := add_node(copy)
 		rec.alpha_at_capture = float(entry.get("alpha", 1.0))
+		if copy.get("golden_path") is String: rec.node.set_meta("swf_path", copy.golden_path)
+		if src == from_prefix: rec.node.set_meta("swf_baked", true)  # the imported subtree
 		# `add_node` is for laid-out run-time nodes; an imported node keeps its recorded
 		# timeline (the tip's robot plays character select's robot clip).
 		if copy.get("track") is Array:
@@ -421,24 +433,28 @@ func _import_art(rec: Dictionary, path: String, manifest: Dictionary, prefix: St
 	if entry.role == "piece" and (entry.effective_visible or entry.has("first_visible")):
 		var piece = manifest.get("pieces", {}).get(path)
 		if piece is Dictionary:
-			_import_art_piece(rec, piece, int(piece.get("index", capture)), -1, prefix, map)
+			_import_art_piece(rec, piece, int(piece.get("index", capture)), -1, prefix, map,
+				_source_at(source, path, int(piece.get("index", capture))))
 	elif entry.role == "sequence":
 		var frames = manifest.get("sequences", {}).get(path)
 		if frames is Dictionary and not frames.is_empty():
 			if frame_locked:
-				var key := _sequence_key(frames, _source_capture_index(source, String(entry.get("timeline_of", ""))))
-				_import_art_piece(rec, frames[key], int(key), -1, prefix, map)
+				var key := _sequence_key(frames, 0)
+				_import_art_piece(rec, frames[key], int(key), -1, prefix, map,
+					_source_at(source, path, int(key)))
 			else:
 				var keys: Array = frames.keys()
 				keys.sort_custom(func(a, b): return int(a) < int(b))
-				for key in keys: _import_art_piece(rec, frames[key], int(key), -1, prefix, map)
+				for key in keys:
+					_import_art_piece(rec, frames[key], int(key), -1, prefix, map,
+						_source_at(source, path, int(key)))
 	# Recorded widget frames (`states` / `frames`), as `_add_piece_art` reads them.
 	for source_kind in ["states", "frames"]:
 		var by_frame = manifest.get(source_kind, {}).get(path)
 		if by_frame is Dictionary:
 			for frame in by_frame:
 				_import_art_piece(rec, by_frame[frame], int(by_frame[frame].get("index", capture)),
-					int(frame), prefix, map)
+					int(frame), prefix, map, _source_at(source, path, int(by_frame[frame].get("index", capture))))
 
 
 ## The index at which the other capture took a node: its own extra timeline's capture, or
@@ -469,10 +485,31 @@ static func _sequence_key(frames: Dictionary, at: int) -> String:
 	return best
 
 
+## The source node's stage matrix at its recorded `at`: a track state or the capture matrix.
+static func _source_at(source: Dictionary, path: String, at: int) -> Array:
+	for entry: Dictionary in source.get("nodes", []):
+		if String(entry.path) != path: continue
+		var track: Array = entry.get("track", [])
+		var best: Array = []
+		var best_at := -1
+		for change in track:
+			if not change is Array or change.size() != 2 or not change[1] is Array: continue
+			var state: Array = change[1]
+			if state.size() < 6: continue
+			if int(change[0]) <= at and int(change[0]) > best_at:
+				best_at = int(change[0]); best = state
+		if not best.is_empty(): return best.slice(0, 6)
+		if entry.get("stage_matrix") is Array: return entry.stage_matrix
+	return []
+
+
 func _import_art_piece(rec: Dictionary, piece: Dictionary, at: int, state: int, prefix: String,
-		map: Transform2D) -> void:
+		map: Transform2D, source_at: Array = []) -> void:
 	var moved: Dictionary = piece.duplicate()
 	moved.file = prefix + String(piece.file)  # the other screen's pack, next to this one
+	# The image was rendered at the source node's stage matrix; keep that `at` so the mapped
+	# node places it where the source did (not at the target node's own capture matrix).
+	if not source_at.is_empty(): moved["at"] = source_at
 	var art := _add_art(rec, moved, at, state)
 	if art.is_empty(): return
 	# Sprite placement stays relative to the source node (see `_fit_of`); the hit test works
@@ -534,6 +571,54 @@ static func _is_look_clip(path: String) -> bool:
 	return path.ends_with("/bodyMc") or path.ends_with("/hatMc")
 
 
+## Add one image to an instance the controller already owns (the tip's imported robot
+## preview is replaced by the reference capture's picture; its track still runs).
+func add_art(instance: String, piece: Dictionary, state := 0) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return
+	if not piece.has("at"): piece["at"] = entry_stage_matrix(rec)
+	rec.art.clear()
+	rec.erase("art_table")
+	rec.erase("placed")
+	rec.erase("placed_px")
+	rec.erase("want_art")
+	rec.shown_art = -1
+	if rec.get("sprite") != null:
+		rec.sprite.visible = false
+		rec.sprite.texture = null
+	_add_art(rec, piece, 0, state)
+	_queue_apply()
+
+
+func entry_stage_matrix(rec: Dictionary) -> Array:
+	return rec.entry.get("stage_matrix", [1.0, 0.0, 0.0, 1.0, 0.0, 0.0])
+
+
+## Draw only `instance` itself: a baked still pose does not use its recorded children.
+func hide_children(instance: String) -> void:
+	for rec: Dictionary in _records:
+		if String(rec.path).begins_with(instance + "/"): rec.shown = false
+	_queue_apply()
+
+
+## A run-time library piece with one image per clip frame (`frames` keyed by frame): the
+## unlock tip's `robotBtn1/robotHeadMc`, which the score screen's recording baked into the
+## button's sequence (`Attach.getMovieClip("UI_UNLOCK_TIP")` draws it as its own clip in the
+## original; the controller sets its frame to `GameModel.P1Robot + 1`).
+func add_piece(entry: Dictionary, frames: Dictionary) -> void:
+	var rec := add_node(entry)
+	for child in rec.node.get_children():
+		if child.name == "Placeholder": child.queue_free()  # the frame art, below
+	if entry.has("golden_path"): rec.node.set_meta("swf_path", entry.golden_path)
+	if entry.has("name"): _by_name.get_or_add(String(entry.name).split("@")[0], rec)
+	var relative := _relative(String(entry.path))
+	if not relative.is_empty(): _by_name[relative] = rec
+	for frame in frames:
+		var piece: Dictionary = frames[frame].duplicate()
+		if not piece.has("at"): piece["at"] = entry.stage_matrix
+		_add_art(rec, piece, 0, int(frame))
+
+
 ## A node its controller lays out at run time under a layout group (the board's boxes and
 ## portals, scripts/ui/game_board.gd). `entry` is shaped like a layout node (`path`,
 ## `parent`, `stage_matrix`, `role`, ...); `art`, if any, is an image of the local pack
@@ -553,8 +638,10 @@ func add_node(entry: Dictionary, art: Dictionary = {}) -> Dictionary:
 	node.set_meta("swf_path", path)
 	node.set_meta("swf_kind", entry.get("kind", "movie_clip"))
 	node.set_meta("swf_alpha", 1.0)
-	node.set_meta("swf_baked", entry.get("role", "piece") == "piece")
+	node.set_meta("swf_baked", entry.get("role", "piece") in ["piece", "sequence"])
 	node.set_meta("swf_frame", int(entry.get("frame", 0)))
+	for key in ["frame", "button_state", "text", "clip_depth", "clip_mask", "mask"]:
+		if entry.has(key): node.set_meta("swf_" + key, entry[key])
 	_records.append(rec)
 	_by_path_rec[path] = rec
 	if not art.is_empty():

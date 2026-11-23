@@ -112,6 +112,14 @@ func _check_tip(score: Node2D, robot: int, where: String) -> void:
 	_expect(score.get_frame(robot_mc) == robot + 1,
 		"%s sets the robots clip to frame %d (robotId + 1), got %d"
 		% [where, robot + 1, score.get_frame(robot_mc)])
+	# The reference capture's recorded stage matrices (compare tolerance): the picked
+	# robot and its panel sit where the original puts them, panel N inside panel 0's box.
+	_expect_matrix(score, robot, panel, where + " panel")
+	_expect_matrix(score, robot, robot_path, where + " robot")
+	_expect(score.get_frame("UI_UNLOCK_TIP/containerMc/robotBtn1/robotHeadMc") == robot + 1,
+		"%s's P1 head shows robot %d (frame %d)" % [where, robot, robot + 1])
+	if robot > 0:
+		_expect(not score.is_shown(robot_mc + "/robot0"), "%s hides the recorded robot 0 preview" % where)
 	_expect(score.has_instance(robot_path), "%s has robot %d's robot clip" % [where, robot])
 	var body := robot_path + "/bodyMc"
 	_expect(score.get_frame(body) == 1, "%s's robot %d preview starts bare (bodyMc frame 1)" % [where, robot])
@@ -252,6 +260,27 @@ func _click_hit(score: Node2D, instance: String) -> void:
 			await _click(child)
 			return
 	_expect(false, "the tip has a hit area for %s" % instance)
+
+
+## A generated node's stage matrix against the recorded reference capture's (0.5 position,
+## 0.001 scale, like compare.py's tolerance).
+func _expect_matrix(score: Node2D, robot: int, instance: String, label: String) -> void:
+	if robot == 0: return  # robot 0 is the screen's own recording, not an imported node
+	var golden_path := "res://tests/goldens/results-robot%d/unlock-tip.json" % robot
+	if not FileAccess.file_exists(golden_path): return
+	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
+	var path: String = score.golden_path_of(instance)
+	var want: Array = []
+	for node: Dictionary in golden.get("nodes", []):
+		if String(node.path) == path:
+			want = node.get("stage_matrix", [])
+			break
+	var got: Transform2D = score.stage_matrix_of(instance)
+	var ok: bool = want.size() == 6 \
+		and absf(got.x.x - float(want[0])) <= 0.001 and absf(got.y.y - float(want[3])) <= 0.001 \
+		and got.origin.distance_to(Vector2(want[4], want[5])) <= 0.5
+	_expect(ok, "%s has the reference stage matrix (got %s, want %s)"
+		% [label, [got.x.x, got.y.y, got.origin.x, got.origin.y], want])
 
 
 ## The first recorded `currentFrame` of a node's track (the frame `gotoAndPlay(1)` starts

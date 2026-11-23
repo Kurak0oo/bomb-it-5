@@ -25,6 +25,9 @@ const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 
 ## The tip's instance on the generated score screen (`UI_UNLOCK_TIP`).
 const UI_UNLOCK_TIP := "UI_UNLOCK_TIP"
+## The tip's P1 head clip, baked into the generated button sequence: its per-robot frames.
+const HEADS := "res://scenes/swf/score_heads.json"
+const PREVIEWS := "res://scenes/swf/score_robot_previews.json"
 
 var _screen: Node2D
 var _events: RefCounted
@@ -98,6 +101,7 @@ func initDis() -> void:
 	# when looks were unlocked. The tip was recorded with a burst playing, so its generated
 	# instance starts hidden here (DRESS UP showed a burst over the first outfit).
 	_screen.set_shown(__containerMc + "/Art_unlockAnimas", false)
+	_addRobotHead()
 	# robotStage: mouseEnabled = mouseChildren = false, gotoAndStop(1)
 	_screen.set_enabled(__containerMc + "/robotStage", false)
 	_screen.set_frame(__containerMc + "/robotStage", 1)
@@ -106,6 +110,25 @@ func initDis() -> void:
 	_scoreText = __containerMc + "/scoreText"
 	_screen.set_enabled(_scoreText, false)  # mouseEnabled = false
 	_screen.set_text(_scoreText, str(_player[0].totalPoint))
+
+
+## `initSetting` sets `_robotBtn1["robotHeadMc"].gotoAndStop(GameModel.P1Robot + 1)`, but the
+## button was recorded baked (its head is robot 0's pixels). Add the library clip from the
+## recorded per-robot frames (`scenes/swf/score_heads.json`, art from the reference capture)
+## so the AS3 `gotoAndStop` addresses it.
+func _addRobotHead() -> void:
+	if not FileAccess.file_exists(HEADS): return
+	var data = JSON.parse_string(FileAccess.get_file_as_string(HEADS))
+	if not data is Dictionary or not data.has("robotBtn1"): return
+	var entry: Dictionary = data.robotBtn1.get("entry", {})
+	var frames: Dictionary = data.robotBtn1.get("frames", {})
+	if entry.is_empty() or frames.is_empty(): return
+	entry = entry.duplicate(true)
+	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
+	entry.path = tipRoot + __containerMc + "/robotBtn1/robotHeadMc"
+	entry.parent = tipRoot + __containerMc + "/robotBtn1"
+	if _screen.has_instance(__containerMc + "/robotBtn1/robotHeadMc"): return
+	_screen.add_piece(entry, frames)
 
 
 ## `delDis`
@@ -179,6 +202,9 @@ func selectRobotBtn(is1P: bool) -> void:
 	if robotId > 0: _ensureRobot(robotId)
 	changeRobot(robotId, _robotMc)
 	_clothesPanel.changeCloth(s.body if is1P else 0, s.hat if is1P else 0)
+	# The recorded tip's robot 0 preview is baked into its robotMc frame; hide it when the
+	# picked robot's clip takes that frame (`robotMc.gotoAndStop(robotId + 1)`).
+	_screen.set_shown(_robotMc + "/robot0", robotId == 0)
 	if robotId > 0:
 		# `ClothesPanel.delDis` removes the previous panel; the tip's capture shows robot 0's,
 		# so hide the recorded one when another robot's panel takes its place.
@@ -217,8 +243,25 @@ func _ensureRobot(robotId: int) -> void:
 	var panelMap: Transform2D = _screen.stage_matrix_of(__containerMc + "/Art_clothPanel0") \
 		* _matrix_at(layout, root + "/Art_clothPanel0").affine_inverse()
 	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
-	_screen.import_subtree(other, sourceMc + "/robot" + str(robotId), tipRoot + robot, robotMap)
-	_screen.import_subtree(other, root + "/Art_clothPanel" + str(robotId), tipRoot + panel, panelMap)
+	var robotZero := _robotMc + "/robot0"
+	var robotGolden: String = _screen.golden_path_of(robotZero).trim_suffix("/robot0") \
+		+ "/robot" + str(robotId)
+	var panelGolden: String = _screen.golden_path_of(__containerMc + "/Art_clothPanel0")
+	_screen.import_subtree(other, sourceMc + "/robot" + str(robotId), tipRoot + robot, robotMap,
+		robotGolden)
+	_replace_preview(robotId, robot)
+	_screen.import_subtree(other, root + "/Art_clothPanel" + str(robotId), tipRoot + panel, panelMap,
+		panelGolden)
+
+
+## The tip's own recorded robot clip, not character select's (different children/pose):
+## show the reference capture's picture at the imported root, whose track still runs.
+func _replace_preview(robotId: int, robot: String) -> void:
+	if not FileAccess.file_exists(PREVIEWS): return
+	var data = JSON.parse_string(FileAccess.get_file_as_string(PREVIEWS))
+	if not data is Dictionary or not data.has(str(robotId)): return
+	_screen.hide_children(robot)
+	_screen.add_art(robot, data[str(robotId)])
 
 
 ## A layout entry's recorded stage matrix.
