@@ -174,15 +174,18 @@ func selectRobotBtn(is1P: bool) -> void:
 	var s = _app.session
 	# GameModel.P2Robot / P2ClothId / P2HatId: no second player, 0.
 	var robotId: int = s.robot if is1P else 0
-	_ensureRobot(robotId)
+	# Robot 0's clip and panel are the recorded ones: its path stays exactly the AS3's
+	# `changeRobot` (no library copy, no panel hiding).
+	if robotId > 0: _ensureRobot(robotId)
 	changeRobot(robotId, _robotMc)
 	_clothesPanel.changeCloth(s.body if is1P else 0, s.hat if is1P else 0)
-	# `ClothesPanel.delDis` removes the previous panel; the tip's capture shows robot 0's, so
-	# hide the recorded one when another robot's panel takes its place.
-	for other in 8:
-		if other == robotId: continue
-		var panel := __containerMc + "/Art_clothPanel" + str(other)
-		if _screen.has_instance(panel): _screen.set_shown(panel, false)
+	if robotId > 0:
+		# `ClothesPanel.delDis` removes the previous panel; the tip's capture shows robot 0's,
+		# so hide the recorded one when another robot's panel takes its place.
+		for other in 8:
+			if other == robotId: continue
+			var panel := __containerMc + "/Art_clothPanel" + str(other)
+			if _screen.has_instance(panel): _screen.set_shown(panel, false)
 	delUnlockAnimaPanel()
 	if _is1P and not _unlockData.isUsed1:
 		_unlockData.isUsed1 = true
