@@ -969,3 +969,15 @@ Dress-up after a game, 2026-11-23 (owner to review):
   (`ClothesPanel.onClickIcon` -> `_singleRobotMc.gotoAndPlay(1)`); the frame-locked capture imports
   one pose per clip.
 
+DRESS UP tip for robots 1-3, 2026-11-23 (owner to review):
+- Owner report: the tip overlapped, robot 0 stayed behind, positions were off. The tip's imported
+  nodes now take the tip's golden paths and robot 0's recorded preview, button and panel are
+  hidden; placement matches new reference captures of the original with robots 1-3 picked
+  (`tools/compare/cases/results-robot1/2/3.json`, goldens under `tests/goldens/results-robot*`).
+- The picked robot's preview, selected button (with the P1 head) and the score screens' `p1head`
+  come from a scripted SWF art pass, `record_screen.py tips` (`scenes/swf/score_tip_art.json`;
+  images in the local score pack), as AS3 `UnlockTipScreen.initSetting`/`selectRobotBtn` and
+  `OnePScoreUI.initData`/`OnePGameOverUI.initData` pick frame robot+1.
+- results-robot1/2/3 pass nodes and pixels; results, game-over and game-win pass nodes (their
+  pixel references are unverified, as before). `tests/dress_up_after_game_check.gd` (157 checks).
+
