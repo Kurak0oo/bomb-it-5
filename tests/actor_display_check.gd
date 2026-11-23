@@ -8,6 +8,7 @@ extends SceneTree
 ## the runtime art/offset calls. The real pack is read for the clips.
 
 const GameActors = preload("res://scripts/ui/game_actors.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
 const Modes = preload("res://scripts/simulation/modes/modes.gd")
@@ -85,9 +86,10 @@ class FakeScreen extends Node2D:
 		pass
 
 
-## A `FakeScreen` with real sprite visibility: `SwfScreen.set_node_art` hides the old image
-## while the new one is resampled, and `_show_ready` shows it on the next process frame.
-## Used only by the trace check, so the other checks keep the plain recorder.
+## A `FakeScreen` with real sprite visibility: `SwfScreen.set_node_art` keeps the image
+## already shown while the new one is resampled (hiding only for an empty replacement), and
+## `_show_ready` shows the new image once ready. Used only by the trace check, so the other
+## checks keep the plain recorder.
 class TraceScreen extends FakeScreen:
 	func add_node(entry: Dictionary, art: Dictionary = {}) -> Dictionary:
 		var rec := super.add_node(entry, art)
@@ -101,12 +103,44 @@ class TraceScreen extends FakeScreen:
 	func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
 		if not recs.has(path): return
 		var rec: Dictionary = recs[path]
-		if rec.art != art and rec.get("sprite", null) != null: rec.sprite.visible = false
+		if art.is_empty() and rec.get("sprite", null) != null: rec.sprite.visible = false
 		super.set_node_art(path, art, frame)
 
 	func show_ready() -> void:
 		for rec: Dictionary in recs.values():
 			if not rec.art.is_empty() and rec.get("sprite", null) != null: rec.sprite.visible = true
+
+
+## A `FakeScreen` that records which image is actually up: `prefetch` marks a file ready (the
+## background resample finished), and `set_node_art` only swaps the shown image for a ready
+## one, keeping the previous image otherwise, as the real `SwfScreen.set_node_art` does.
+class ArtScreen extends FakeScreen:
+	var loaded: Dictionary = {}
+
+	func prefetch(art: Dictionary) -> void:
+		if String(art.get("file", "")) != "": loaded[String(art.file)] = true
+
+	func add_node(entry: Dictionary, art: Dictionary = {}) -> Dictionary:
+		var rec := super.add_node(entry, art)
+		var sprite := Sprite2D.new()
+		sprite.name = "Art"
+		sprite.set_meta("swf_art", true)
+		rec.node.add_child(sprite)
+		rec.sprite = sprite
+		rec.shown_art = {}
+		return rec
+
+	func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
+		super.set_node_art(path, art, frame)
+		if not recs.has(path): return
+		var rec: Dictionary = recs[path]
+		if art.is_empty():
+			rec.sprite.visible = false
+			rec.shown_art = {}
+		elif loaded.has(String(art.get("file", ""))):
+			rec.sprite.visible = true
+			rec.shown_art = art
+		# (not ready: the previous image stays up)
 
 
 ## `GameBoard`'s display-list bookkeeping for the calls `GameActors` makes (attach/detach on
@@ -115,6 +149,7 @@ class FakeBoard extends RefCounted:
 	var actor_art: Dictionary
 	var screen
 	var grid := 30.0
+	var set_id: StringName = &"cinema"
 	var _children: Dictionary = {}
 	var _serial := 0
 
@@ -169,9 +204,12 @@ func _run() -> void:
 		_check_short_command_blink(pack)
 		_check_replacement_blink(pack)
 		_check_loops_follow_the_clip(pack)
+		_check_turn_and_ride_art(pack)
+		_check_spawn_blink_at_81(pack)
 		_check_horse_jump(pack)
 		_check_horse_jump_turn(pack)
 		_check_horse_stop_frame(pack)
+		await _check_art_never_hidden(pack)
 	else:
 		print("SKIP: actor display checks need the local actors pack")
 	# The input gate reads the snapshot only: it runs with or without the art pack.
@@ -213,7 +251,7 @@ func _check_round_window_no_blink(pack: Dictionary) -> void:
 	var end := 0
 	for id: StringName in actors._robots:
 		end = maxi(end, int(actors._robots[id].blink_until))
-	_expect(end == 38 + 81, "the round-start command runs 81 ticks from the display's first snapshot")
+	_expect(end == 81, "the round-start command ends on the round's tick 81, not the display's first tick + 81")
 	for tick in range(39, end + 2):
 		actors.update(states[tick])
 	for id: StringName in actors._robots:
@@ -445,6 +483,124 @@ func _check_loops_follow_the_clip(pack: Dictionary) -> void:
 	scene.screen.queue_free()
 
 
+## A turn and a ride change draw the new direction's clip on their own tick: the round load
+## prefetched every direction and ride clip for the seat's look, so `set_node_art` has the
+## image at once instead of showing the previous clip while it resamples.
+func _check_turn_and_ride_art(pack: Dictionary) -> void:
+	var scene := _make_art(pack)
+	var actors: RefCounted = scene.actors
+	var screen: ArtScreen = scene.screen
+	actors.update(_snapshot(0))
+	var view: Dictionary = actors._robots[&"human"]
+	var mc_path := String(view.item.path) + "/@0"
+	var look := [int(view.cloth), int(view.hat)]
+	var right_art: Dictionary = _frame_art(pack, "_r0_Right", look, 1)
+	var car_art: Dictionary = _frame_art(pack, "_r0_Car_Right", look, 1)
+	_expect(screen.loaded.has(String(_frame_art(pack, "_r0_Left", look, 1).get("file", ""))),
+		"the round load prefetches the other direction's frames")
+	_expect(screen.loaded.has(String(car_art.get("file", ""))), "the round load prefetches the ride's frames")
+	# (the first frame of a turn is the new clip's frame 1)
+	actors.update(_snapshot(1, {}, [{"actor_id": &"human", "direction": Vector2.RIGHT}]))
+	mc_path = String(view.item.path) + "/@0"
+	var shown: Dictionary = screen.recs[mc_path].shown_art
+	_expect(String(shown.get("file", "")) == String(right_art.get("file", "")),
+		"the turn tick draws the new direction's clip (%s)" % right_art.get("file", ""))
+	_expect(screen.recs[mc_path].sprite.visible, "the turned robot never goes blank")
+	actors.update(_snapshot(2, {"vehicle": &"car"}, [{"actor_id": &"human", "direction": Vector2.RIGHT}]))
+	mc_path = String(view.item.path) + "/@0"
+	shown = screen.recs[mc_path].shown_art
+	_expect(String(shown.get("file", "")) == String(car_art.get("file", "")),
+		"the ride change draws the ride clip on its own tick (%s)" % car_art.get("file", ""))
+	_expect(screen.recs[mc_path].sprite.visible, "the riding robot never goes blank")
+	scene.screen.queue_free()
+
+
+## The seat's look frame `frame` of a robot clip (`_robot_art`'s lookup).
+func _frame_art(pack: Dictionary, cls: String, look: Array, frame: int) -> Dictionary:
+	var clip: Dictionary = pack.get("robots", {}).get(cls, {})
+	var key := GameActors.resolve_look_key(clip, int(look[0]), int(look[1]))
+	return clip.get("looks", {}).get(key, {}).get(str(frame), {})
+
+
+## The spawn `InvincibilityCommand` ends at the round's tick 81, whatever tick the display
+## first updates: created at tick 0 or at tick 38 (under the map-loading screen), the phase
+## comes from `blink_started`, not from the display's own first snapshot.
+func _check_spawn_blink_at_81(pack: Dictionary) -> void:
+	for first in [0, 38]:
+		var scene := _make(pack)
+		var actors: RefCounted = scene.actors
+		var blink := {"blink_until": 81, "blink_started": 0, "blink_serial": 1}
+		actors.update(_snapshot(first, blink))
+		var view: Dictionary = actors._robots[&"human"]
+		_expect(int(view.blink_until) == 81, "the spawn blink ends at 81 when the display starts at %d" % first)
+		_expect(view.blinking and int(view.blink) == first,
+			"the display seeds its 4-tick phase from blink_started (start %d)" % first)
+		_expect(bool(view.bright) == ((first / 4) % 2 == 1),
+			"the seeded phase is the command's own (start %d)" % first)
+		for tick in range(first + 1, 83):
+			actors.update(_snapshot(tick, blink))
+		_expect(not view.blinking and not view.bright and int(view.blink) == 0,
+			"the spawn blink is over after tick 81 (start %d)" % first)
+		scene.screen.queue_free()
+
+
+## No art change hides a node that has an image: a board-like node, a bomb and an explosion
+## keep their previous frame up while the replacement is resampled. An empty replacement (a
+## clip frame the original leaves empty) hides it, as before.
+func _check_art_never_hidden(pack: Dictionary) -> void:
+	var screen: Node2D = SwfScreen.new()
+	screen.screen_name = &"game"
+	screen.is_open = true
+	screen._px = 1.0
+	root.add_child(screen)
+	var bombs: Array = pack.get("played", {}).get("bomb0", {}).values()
+	var exp: Dictionary = pack.get("nested", {}).get("exp0", {}).get("1", {}).get("1", {})
+	if bombs.size() >= 2 and not exp.is_empty():
+		# A board box's tile changes frame (game_board.gd `set_node_art`).
+		await _show_art(screen, "board/box", bombs[0])
+		_expect_change_visible(screen, "board/box", bombs[1], "a board tile")
+		# Bomb0's frames (game_actors.gd `_show_bomb`) and exp0's nested blast (the arms).
+		await _show_art(screen, "bomb", bombs[0])
+		_expect_change_visible(screen, "bomb", bombs[1], "a bomb")
+		await _show_art(screen, "explosion", bombs[0])
+		_expect_change_visible(screen, "explosion", exp, "an explosion")
+		# A failed resample keeps the previous image up instead of hiding the node.
+		var bad := {"file": "../../../project.godot", "scale": 3.0, "pixel_size": [10, 10],
+			"pixel_origin": [0, 0], "at": [1.0, 0.0, 0.0, 1.0, 0.0, 0.0]}
+		screen.set_node_art("explosion", bad, 3)
+		for frame in 20: await process_frame
+		var rec: Dictionary = screen._by_path_rec["explosion"]
+		_expect(rec.get("sprite") != null and rec.sprite.visible and rec.sprite.texture != null,
+			"a failed resample shows the previous image, not nothing")
+		# A replacement with no image at all hides the node, as the original's empty clip.
+		screen.set_node_art("board/box", {})
+		_expect(not screen._by_path_rec["board/box"].sprite.visible, "an empty replacement hides the node")
+	else:
+		_expect(false, "the actors pack has the bomb and explosion frames")
+	screen.queue_free()
+
+
+## Add a run-time node with `art` and wait until its image is up.
+func _show_art(screen: Node2D, path: String, art: Dictionary) -> void:
+	if not screen.by_path.has(path):
+		screen.add_node({"path": path, "parent": "", "stage_matrix": [1.0, 0.0, 0.0, 1.0, 0.0, 0.0],
+			"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": 1})
+	screen.set_node_art(path, art, 1)
+	for frame in 600:
+		await process_frame
+		var rec: Dictionary = screen._by_path_rec.get(path, {})
+		if rec.get("sprite") != null and rec.sprite.visible and rec.sprite.texture != null: return
+	_expect(false, "the art for %s was resampled" % path)
+
+
+## Change `path`'s art and check the previous image is still up (never hidden).
+func _expect_change_visible(screen: Node2D, path: String, art: Dictionary, label: String) -> void:
+	screen.set_node_art(path, art, 2)
+	var rec: Dictionary = screen._by_path_rec[path]
+	_expect(rec.get("sprite") != null and rec.sprite.visible and rec.sprite.texture != null,
+		"%s never becomes invisible across an art change" % label)
+
+
 ## `HorseProp.frog`: `robotMoveStop`, then `view.mc.gotoAndPlay(19)`; while the jump runs the
 ## clip keeps playing even with no key held. `xJump`/`yJump` land with `gotoAndStop(1)`.
 func _check_horse_jump(pack: Dictionary) -> void:
@@ -572,6 +728,17 @@ func _make(pack: Dictionary) -> Dictionary:
 ## The trace display: the real actors pack, a `TraceScreen` (sprite hiding on resample).
 func _make_trace(pack: Dictionary) -> Dictionary:
 	var screen := TraceScreen.new()
+	root.add_child(screen)
+	var board := FakeBoard.new()
+	board.actor_art = pack
+	board.screen = screen
+	var actors := GameActors.new(screen, board)
+	return {"screen": screen, "board": board, "actors": actors}
+
+
+## The prefetch display: an `ArtScreen` that records which image a prefetched file puts up.
+func _make_art(pack: Dictionary) -> Dictionary:
+	var screen := ArtScreen.new()
 	root.add_child(screen)
 	var board := FakeBoard.new()
 	board.actor_art = pack
