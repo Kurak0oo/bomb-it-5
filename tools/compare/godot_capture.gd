@@ -2,7 +2,9 @@ extends SceneTree
 ## Godot half of the comparison loop (tools/compare/compare.py). Runs the main scene in a
 ## 700×510 SubViewport (the original stage, one unit per pixel), replays a case's input
 ## commands frame by frame and, at each `capture`, writes the node dump and a PNG.
-## Run with `--fixed-fps <swf rate>` so every frame advances by exactly one SWF frame.
+## Run with `--fixed-fps <swf rate>` so every frame advances by exactly one SWF frame. The
+## round host is stepped by the case's frames too (`Game.capture_clock`), not by the window's
+## own `_process`: a delayed or occluded draw must not give the round extra ticks.
 ##
 ## Nodes are dumped only where a generated scene marks them with the `swf_path` meta (the
 ## reference player's display-list path). Optional metas: `swf_baked` (the node draws its
@@ -32,6 +34,8 @@ var _out := ""
 var _frame := 0
 ## The current frame has run (a key was pushed after its draw); cleared by `step`.
 var _between_frames := false
+## The current frame's host step was already taken (by `step` or `_wait_frame_drawn`).
+var _capture_frame_ticked := false
 
 
 func _initialize() -> void:
@@ -51,6 +55,9 @@ func _initialize() -> void:
 	root.add_child(_viewport)
 	# Generated screens follow the stepped frames, not the clock (see swf_screen.gd).
 	load("res://scripts/ui/swf_screen.gd").frame_locked = true
+	# The round host is stepped here too: one host frame per captured frame, so a delayed or
+	# occluded window draw cannot give the round extra ticks (Game.capture_clock).
+	load("res://scripts/game.gd").capture_clock = true
 	# `--frame-clock` (a case's `godot_args`): the round's Date seconds follow the stepped
 	# frames (35 a second), not the host clock, so a long case's timed events (ArcadeMode.timePassed)
 	# do not depend on how fast this machine renders. The reference player's Date follows its
@@ -80,6 +87,7 @@ func _run(case: Dictionary) -> void:
 					for i in int(words[1]):
 						await process_frame
 						_frame += 1
+						_tick_capture_frame()
 				"click":
 					var at := Vector2(float(words[1]), float(words[2]))
 					_mouse_move(at)
@@ -93,7 +101,8 @@ func _run(case: Dictionary) -> void:
 					# on the next one, as in the original.
 					# (Once between two frames: a second wait would run another frame.)
 					if not _between_frames:
-						await RenderingServer.frame_post_draw
+						await _wait_frame_drawn()
+						paused = false
 						_between_frames = true
 					_key(words[1], words[0] == "kd")
 				"settle":
@@ -128,7 +137,7 @@ func _run(case: Dictionary) -> void:
 				_:
 					log.append({"frame": _frame, "note": "ignored command " + " ".join(words)})
 		if action.has("capture"):
-			if not _between_frames: await RenderingServer.frame_post_draw
+			if not _between_frames: await _wait_frame_drawn()
 			_between_frames = true
 			var name: String = action.capture
 			_viewport.get_texture().get_image().save_png(_out.path_join(name + ".png"))
@@ -137,10 +146,37 @@ func _run(case: Dictionary) -> void:
 				"nodes": [], "unmapped_visible": 0}
 			_dump(_viewport, dump)
 			FileAccess.open(_out.path_join(name + ".nodes.json"), FileAccess.WRITE).store_string(JSON.stringify(dump, " "))
+			if paused: paused = false
 	FileAccess.open(_out.path_join("godot-log.json"), FileAccess.WRITE).store_string(JSON.stringify({"frame": _frame, "notes": log}, " "))
 	# (A static Callable bound to this tree must not outlive it.)
 	load("res://scripts/game.gd").seconds_source = Callable()
+	load("res://scripts/game.gd").capture_clock = false
 	quit(0)
+
+
+## Wait for the current frame to be processed and drawn. The scene is frozen between the
+## frame's processing (frame_pre_draw) and its draw (frame_post_draw): when the window is
+## occluded or the GPU is busy, the draw can be delayed by many frames; without the freeze
+## the scene kept stepping through them and the capture landed a few ticks later than the
+## case's fixed frame count (gameplay-cinema-landmine/laser film off by ~15 ticks in a full
+## run). The freeze only spans the wait; the next `step` starts from the captured frame.
+func _wait_frame_drawn() -> void:
+	if not _capture_frame_ticked: _tick_capture_frame()
+	await RenderingServer.frame_pre_draw
+	paused = true
+	await RenderingServer.frame_post_draw
+	_capture_frame_ticked = false
+
+
+## One host frame for the round (`Game.capture_step`), the capture's clock: called at the
+## start of each frame it steps, never by the window's own `_process`.
+func _tick_capture_frame() -> void:
+	_capture_frame_ticked = true
+	var app = _viewport.get_child(0)
+	if app == null: return
+	var game = app.get("game")
+	if game != null and is_instance_valid(game) and not game.state.is_empty():
+		game.capture_step(1.0 / 35.0)
 
 
 func _dump(node: Node, dump: Dictionary) -> void:

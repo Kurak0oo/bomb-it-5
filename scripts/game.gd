@@ -56,6 +56,10 @@ var replica := false
 var previous_state: Dictionary = {}
 ## The replica round clock's second source (#80): the wall clock unless checks inject one.
 static var seconds_source: Callable
+## The comparison loop steps the host itself (`capture_step`, one call per captured frame):
+## the round must not gain ticks while a window's draw is delayed or occluded, or the whole
+## board clock (the Cinema screen's film, bomb ages) lands later than the golden.
+static var capture_clock := false
 ## Original pause (#81, `Game.gamePause`): the request takes effect `PAUSE_DELAY_STEPS` steps
 ## later (`setTimeout(doGamePause, 100)`); -1 when none is pending.
 const PAUSE_DELAY_STEPS := 4
@@ -497,6 +501,17 @@ func _notification(what: int) -> void:
 
 
 func _process(delta: float) -> void:
+	# The frame-locked capture drives this with `capture_step` (tools/compare/godot_capture.gd).
+	if capture_clock: return
+	_host_step(delta)
+
+
+## One host frame, as the capture's stepped frames count them.
+func capture_step(delta: float) -> void:
+	_host_step(delta)
+
+
+func _host_step(delta: float) -> void:
 	if start_delay > 0:
 		# The frame the round was made in (by START's press) is not one of them: input lands
 		# between the original's frames, so its next frame is the first (as SwfScreen).
