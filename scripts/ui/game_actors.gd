@@ -277,8 +277,9 @@ func _create_robots(snapshot: Dictionary) -> void:
 func _prefetch_round(snapshot: Dictionary) -> void:
 	if _prefetched: return
 	_prefetched = true
-	# The round owns the pins now: the previous round's images may be evicted again.
-	if _screen.has_method("unpin"): _screen.unpin()
+	# The round owns the pins now, even when it pins nothing: the previous owner's images are
+	# released so the cache can evict them.
+	if _screen.has_method("take_pin_ownership"): _screen.take_pin_ownership()
 	var vehicles: Array = [&""]
 	var set_id := &""
 	if _board != null:
@@ -297,7 +298,7 @@ func _prefetch_round(snapshot: Dictionary) -> void:
 	# new clip's frame ready.
 	for entry: Dictionary in seats:
 		for suffix in DIRECTIONS.values():
-			_prefetch_clip("_r%d%s" % [entry.robot, suffix], entry.look, seen)
+			_prefetch_clip("_r%d%s" % [entry.robot, suffix], entry.look, seen, true)
 	# Then every ride's directions and the death clip.
 	for entry: Dictionary in seats:
 		for vehicle in vehicles:
@@ -312,15 +313,16 @@ func _prefetch_round(snapshot: Dictionary) -> void:
 
 
 ## One robot clip's current-look frames (`RobotView.setRobotMc`'s `bodyMc`/`hatMc` frames).
-func _prefetch_clip(cls: String, look: Array, seen: Dictionary) -> void:
+## `last`: the current robots' four direction clips stay pinned longest (`SwfScreen.pin`).
+func _prefetch_clip(cls: String, look: Array, seen: Dictionary, last := false) -> void:
 	var clip: Dictionary = _art.get("robots", {}).get(cls, {})
 	if clip.is_empty(): return
 	var key := resolve_look_key(clip, int(look[0]), int(look[1]))
-	_prefetch_arts(clip.get("looks", {}).get(key, {}), seen)
+	_prefetch_arts(clip.get("looks", {}).get(key, {}), seen, last)
 
 
 ## Every image (`file`/`pixel_size`) under a pack table, each once.
-func _prefetch_arts(value, seen: Dictionary) -> void:
+func _prefetch_arts(value, seen: Dictionary, last := false) -> void:
 	if value is Dictionary:
 		var file = value.get("file")
 		if file is String and value.has("pixel_size"):
@@ -328,13 +330,14 @@ func _prefetch_arts(value, seen: Dictionary) -> void:
 			if not seen.has(key):
 				seen[key] = true
 				# The round's frames are pinned (SwfScreen.pin): a cache filled past its
-				# budget with other screens' art must not evict them before the turn.
-				if _screen.has_method("pin"): _screen.pin(value)
+				# budget with other screens' art must not evict them before the turn. The
+				# four direction clips are the last pinned images evicted.
+				if _screen.has_method("pin"): _screen.pin(value, last)
 				else: _screen.prefetch(value)
 			return
-		for child in value.values(): _prefetch_arts(child, seen)
+		for child in value.values(): _prefetch_arts(child, seen, last)
 	elif value is Array:
-		for child in value: _prefetch_arts(child, seen)
+		for child in value: _prefetch_arts(child, seen, last)
 
 
 func _step(snapshot: Dictionary, last: bool) -> void:
