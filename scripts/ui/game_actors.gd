@@ -234,6 +234,8 @@ func _create_robots(snapshot: Dictionary) -> void:
 			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": 0, "bright": false, "blinking": true,
 			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO),
 			"blink_until": maxi(int(actor.get("blink_until", 0)), _tick + SPAWN_BLINK_TICKS),
+			"blink_started": int(actor.get("blink_started", 0)),
+			"blink_serial": int(actor.get("blink_serial", 0)),
 			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "jumping": false, "loop_age": 0, "loop_count": 0,
 			"weapon": &"", "ammo": 0, "weapon_class": "", "weapon_frame": 1, "weapon_playing": false, "weapon_fresh": 0,
 			"action": {}, "last_started": -1,
@@ -325,13 +327,19 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 					view.frame = 1
 		if replay and view.class == replay_class and view.fresh == 0: view.playing = true
 		view.direction = direction
+		var blink_started := int(actor.get("blink_started", 0))
 		var blink_end := int(actor.get("blink_until", 0))
-		if blink_end != view.blink_until and blink_end > _now:
+		var blink_serial := int(actor.get("blink_serial", view.get("blink_serial", 0)))
+		var replaced: bool = blink_serial != int(view.get("blink_serial", 0))
+		if (replaced or blink_end != view.blink_until) and blink_end > _now:
 			# robotRelive / TryToKillCommandChain / Portal: a new InvincibilityCommand
 			# replaces the running one (`CommandChain.addCommand` removes the old), so its
-			# shorter 45-tick Portal blink restarts the 4-tick phase instead of inheriting
-			# the spawn command's end.
+			# 45-tick Portal blink (or any new command) restarts the 4-tick phase instead of
+			# inheriting the old end. The serial also catches a replacement whose end tick
+			# is the same as the command it replaced (same `blink_until`).
 			view.blink_until = blink_end
+			view.blink_started = blink_started
+			view.blink_serial = blink_serial
 			view.blink = 0
 			view.bright = false
 			view.blinking = true
@@ -472,6 +480,8 @@ func _relive(view: Dictionary, actor: Dictionary) -> void:
 	view.bright = false
 	view.blink = 0
 	view.blink_until = 0
+	view.blink_started = 0
+	view.blink_serial = -1
 	view.jumping = false
 	_clear_weapon(view)
 	view.action = {}
@@ -987,7 +997,7 @@ func _show_shield(view: Dictionary, mc_path: String, at: Transform2D, offset: Co
 	var hand: Array = _effects().get("hand2", {}).get(view.class, [0, 0])
 	_screen.move_node(path, _a(at * Transform2D(0.0, Vector2(hand[0], hand[1]))))
 	var images: Dictionary = _effects().get("clips", {}).get(view.shield_class, {}).get("images", {})
-	_screen.set_node_art(path, images.get(str(view.shield_frame), {}))
+	_set_art(path, images.get(str(view.shield_frame), {}))
 	_screen.set_node_offset(path, offset)
 	# `setRobotMc`: `addChildAt(_shieldContainer, 0)` facing right, else `addChild`.
 	_screen.set_node_under(path, view.suffix == "_Right")
@@ -1125,6 +1135,20 @@ func _add_art_node(path: String, parent: String, matrix: Array) -> void:
 		node.set_meta("swf_art", true)
 
 
+## A robot node's clip image changes. `SwfScreen.set_node_art` hides the old image while the
+## new one is resampled; the original's `RobotView.setRobotMc` and its nested loop clips swap
+## frames without ever hiding the model. Keep the previous image up until the replacement is
+## ready, so a frame that is still being resampled cannot blink the robot out.
+func _set_art(path: String, art: Dictionary, frame := 0) -> void:
+	var recs = _screen.get("_by_path_rec")
+	if not (recs is Dictionary): recs = _screen.get("recs")
+	var sprite = null
+	if recs is Dictionary and recs.has(path): sprite = recs[path].get("sprite", null)
+	var shown: bool = sprite != null and sprite.visible
+	_screen.set_node_art(path, art, frame)
+	if shown and sprite != null and not art.is_empty(): sprite.visible = true
+
+
 func _show(view: Dictionary) -> void:
 	if view.removed or view.item.is_empty(): return
 	var matrix: Array = _board.cell_matrix(view.position)
@@ -1141,7 +1165,7 @@ func _show(view: Dictionary) -> void:
 			"mc":
 				_screen.move_node(path, matrix)
 				var art := _robot_art(view)
-				_screen.set_node_art(path, art, view.frame)
+				_set_art(path, art, view.frame)
 				_show_loops(view, path, at, art, offset)
 				_show_shield(view, path, at, offset)
 				_screen.set_node_alpha(path, view.alpha)
@@ -1160,7 +1184,7 @@ func _show(view: Dictionary) -> void:
 					var frame: int = clampi(_tick_now() - view.inv_play, 1, _effect_total("invincibityPlay"))
 					_screen.move_node(play, matrix)
 					_screen.set_node_offset(play, offset)
-					_screen.set_node_art(play, _effects().get("clips", {}).get("invincibityPlay", {}).get("images", {}).get(str(frame), {}), frame)
+					_set_art(play, _effects().get("clips", {}).get("invincibityPlay", {}).get("images", {}).get(str(frame), {}), frame)
 			"times" when child.get("hidden", false):
 				_screen.move_node(path, _a(at * Transform2D(0.0, TIMES_AT)))
 				_screen.set_path_shown(path, false)
@@ -1169,7 +1193,7 @@ func _show(view: Dictionary) -> void:
 				_screen.move_node(path, _a(at * Transform2D(0.0, _hand(view))))
 				if child.get("empty", false): continue
 				var images: Dictionary = _art.get("weapons", {}).get("held", {}).get(view.weapon_class, {}).get("images", {})
-				_screen.set_node_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
+				_set_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
 				# CountInvincibilityCommand: `weaponMc.filters` as the clip's.
 				_screen.set_node_filter(path, view.filter)
 			"play":
@@ -1177,17 +1201,17 @@ func _show(view: Dictionary) -> void:
 				var scale: Vector2 = child.get("scale", Vector2.ONE)
 				_screen.move_node(path, _a(at * Transform2D(0.0, scale, 0.0, child.pos)))
 				var shown: Array = _play_art(view, child, age)
-				_screen.set_node_art(path, shown[0], shown[1])
+				_set_art(path, shown[0], shown[1])
 			"laser":
 				_show_laser(view, child, path, at, offset)
 			"times":
 				var times := at * Transform2D(0.0, TIMES_AT)
 				_screen.move_node(path, _a(times))
-				_screen.set_node_art(path, _art.get("weapons", {}).get("times", {}).get(String(view.weapon), {}), 1)
+				_set_art(path, _art.get("weapons", {}).get("times", {}).get(String(view.weapon), {}), 1)
 				var digit: Dictionary = _art.get("weapons", {}).get("digits", {}).get(str(view.ammo), {})
 				if not digit.is_empty():
 					_screen.move_node(path + "/~count", _a(times * _m(digit.times_at).affine_inverse() * _m(digit.at)))
-				_screen.set_node_art(path + "/~count", digit)
+				_set_art(path + "/~count", digit)
 				_screen.set_node_offset(path + "/~count", offset)
 
 
@@ -1206,7 +1230,7 @@ func _show_laser(view: Dictionary, child: Dictionary, path: String, at: Transfor
 		_screen.move_node(piece_path, _a(piece_at))
 		var art := _aged_art(aged.get(str(piece.root), {}), "/@1", nested)
 		if not piece.get("group", false):
-			_screen.set_node_art(piece_path, art, piece.root)
+			_set_art(piece_path, art, piece.root)
 			_screen.set_node_offset(piece_path, offset)
 			continue
 		var m: int = piece.mids.size()
@@ -1214,7 +1238,7 @@ func _show_laser(view: Dictionary, child: Dictionary, path: String, at: Transfor
 			var mid_path := "%s/%s" % [piece_path, "@0" if m == 1 else "@0#%d" % j]
 			_screen.move_node(mid_path, _a(piece_at * Transform2D(0.0, piece.mids[j])))
 			# (a Sprite scaled to nothing draws nothing)
-			_screen.set_node_art(mid_path, art if piece.at.get_scale().x > LASER_NO_SCALE else {}, piece.root)
+			_set_art(mid_path, art if piece.at.get_scale().x > LASER_NO_SCALE else {}, piece.root)
 			_screen.set_node_offset(mid_path, offset)
 
 
@@ -1239,7 +1263,7 @@ func _show_loops(view: Dictionary, mc_path: String, at: Transform2D, art: Dictio
 		var frames: Dictionary = _art.get("loop_art", {}).get(loop.art, {})
 		var frame: int = maxi(0, view.loop_age - 1) % maxi(1, frames.size()) + 1
 		_screen.move_node(path, _a(at * robot_at.affine_inverse() * _m(loop.at)))
-		_screen.set_node_art(path, frames.get(str(frame), {}))
+		_set_art(path, frames.get(str(frame), {}))
 		_screen.set_node_offset(path, offset)
 
 
