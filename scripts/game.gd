@@ -17,6 +17,7 @@ const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
 const Audio = preload("res://scripts/original_audio.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -30,6 +31,9 @@ signal pause_changed(is_paused: bool)
 
 var simulation: RefCounted
 var scheduler: Node
+## The frame-locked comparison keeps its scheduler out of the tree (see `_start_round`), so
+## `_exit_tree` has to free it itself.
+var _scheduler_detached := false
 var state: Dictionary
 var practice := true
 var paused := false
@@ -122,6 +126,7 @@ func retry_round() -> void:
 func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	if is_instance_valid(scheduler):
 		scheduler.free()
+	_scheduler_detached = false
 	practice = is_practice
 	paused = false
 	pause_after = -1
@@ -194,7 +199,12 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 			"portal_ids": board.get("portal_ids", {})}})
 	scheduler = Scheduler.new(roster, simulation)
 	scheduler.frame_driven = replica
-	add_child(scheduler)
+	# The comparison loop (`SwfScreen.frame_locked`) steps the scheduler from the capture
+	# driver, without a window the user drives. Keep it out of the tree there: application
+	# focus notifications would otherwise pause it (scripts/simulation/tick_scheduler.gd
+	# `_notification`), freezing the captured round at whatever tick the host stole focus.
+	_scheduler_detached = SwfScreen.frame_locked
+	if not _scheduler_detached: add_child(scheduler)
 	scheduler.set_process(false)
 	ai = AIController.new(session_seed, [], profile)
 	# The AI draws from the round's `Math.random` when the round has the original's.
@@ -462,9 +472,19 @@ func _now_msec() -> int:
 	return msec_source.call() if msec_source.is_valid() else Time.get_ticks_msec()
 
 
+## The frame-locked comparison keeps its scheduler out of the tree (see `_start_round`);
+## free it with the host, or the last capture leaks it at exit.
+func _exit_tree() -> void:
+	if _scheduler_detached and is_instance_valid(scheduler): scheduler.free()
+
+
 func _notification(what: int) -> void:
 	# iOS sends PAUSED when the app goes to the background as well as FOCUS_OUT on resign.
 	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED] and is_instance_valid(scheduler) and state.get("outcome", &"running") == &"running":
+		# In the frame-locked capture the host's focus is not game input: a window that
+		# loses focus while the driver steps frames (another capture, a sleeping display)
+		# must not pause the round or open the pause screen over the board.
+		if SwfScreen.frame_locked: return
 		# Leaving the app pauses at once (Q15); no frames run in the background to wait 100 ms.
 		if replica and not paused:
 			_begin_original_pause()
