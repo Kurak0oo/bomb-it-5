@@ -59,6 +59,9 @@ static var _resized := {}
 static var _resized_order: Array[String] = []
 static var _resized_bytes := 0
 static var _queued := {}
+## Resample requests that failed (`_make`: the source could not be decoded): `_switch_art`
+## shows the art's unresampled source (or the image already up) instead of hiding the node.
+static var _failed := {}
 ## 3× sources kept for hit tests only (`_image`).
 static var _sources := {}
 static var _cache_lock := Mutex.new()
@@ -395,6 +398,12 @@ func move_node(path: String, stage_matrix: Array) -> void:
 ## A run-time node shows another image (a robot's clip at another frame): `art` as for
 ## `add_node` (an image of the local pack and the stage matrix it was rendered at), or none.
 ## `frame` is the clip frame it reports.
+##
+## The node keeps the image it already shows until the replacement is resampled, as a Flash
+## MovieClip swaps its bitmap without leaving the display list: changing art never blinks the
+## node out. An empty art (no image: a clip frame the original leaves empty) hides the node.
+## If a resample cannot be made, the art's unresampled source (or the image already up) stays
+## in place, so a bad frame still draws something deterministic.
 func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
 	var rec: Dictionary = _by_path_rec.get(path, {})
 	if rec.is_empty(): return
@@ -407,11 +416,21 @@ func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
 	rec.art.clear()
 	rec.erase("art_table")
 	rec.erase("placed")
+	rec.erase("raw_key")
 	rec.shown_art = -1
-	if rec.has("sprite"): rec.sprite.visible = false
 	if not art.is_empty():
 		var added := _add_art(rec, art, 0, -1)
-		if not added.is_empty(): added["at"] = _matrix(art.at)
+		if not added.is_empty():
+			added["at"] = _matrix(art.at)
+			# (the old image stays visible until the new one is placed by `_show_ready`)
+			_queue_apply()
+			return
+	# (an empty replacement, or art the pack has no file for: hide the node)
+	_waiting.erase(path)
+	rec.erase("want_art")
+	if rec.has("sprite"):
+		rec.sprite.visible = false
+		rec.sprite.texture = null
 	_queue_apply()
 
 
@@ -989,7 +1008,8 @@ static func _latest(table: Dictionary, i: int) -> int:
 
 ## Show art `pick` of a node (-1: none). Its image is resampled off the main thread: until
 ## it is ready the node keeps the art it shows (a sequence lags a frame), then `_process`
-## swaps it in. The comparison loop (frame-locked) resamples it at once instead.
+## swaps it in. When the resample fails, the unresampled source (or the image already up)
+## is shown instead. The comparison loop (frame-locked) resamples it at once instead.
 func _switch_art(rec: Dictionary, pick: int) -> void:
 	rec.want_art = pick
 	if pick < 0:
@@ -1001,11 +1021,28 @@ func _switch_art(rec: Dictionary, pick: int) -> void:
 		return
 	# (before the screen is fitted its scale is unknown: `_refresh_art` places the art)
 	if _px <= 0.0 and not frame_locked: return
-	if not _ensure(rec.art[pick]):
+	var art: Dictionary = rec.art[pick]
+	var state := _ensure_state(art)
+	if state == &"failed":
+		# The resample cannot be made: show the source unscaled (or keep the image up).
+		if String(rec.get("raw_key", "")) == String(rec.get("art_key", "")): return
+		rec.raw_key = rec.art_key
+		if _place_raw(rec, art):
+			rec.shown_art = pick
+			rec.erase("placed")
+			return
+		# (no previous image and the source cannot be decoded: nothing is left to show)
+		if rec.has("sprite") and rec.sprite.texture == null: rec.sprite.visible = false
+		rec.shown_art = -1
+		return
+	if state != &"ready":
 		_waiting[rec.path] = rec
 		return
-	if _place(rec, pick): rec.shown_art = pick
-	else: _waiting[rec.path] = rec  # (dropped from the cache meanwhile: made again)
+	if _place(rec, pick):
+		rec.shown_art = pick
+		rec.erase("raw_key")
+	else:
+		_waiting[rec.path] = rec  # (dropped from the cache meanwhile: made again)
 
 
 ## The node's one art sprite, made when it first shows art. It draws beneath the node's
@@ -1065,15 +1102,36 @@ func _place(rec: Dictionary, k: int) -> bool:
 	return true
 
 
+## Unresampled art as a last resort (`_switch_art` when its resample failed): the 3× source
+## drawn at the stage scale, without the pixel-grid pads. False when it cannot be decoded.
+func _place_raw(rec: Dictionary, art: Dictionary) -> bool:
+	var source := _decode(art.file)
+	if source == null: return false
+	var sprite := _sprite(rec)
+	sprite.texture = ImageTexture.create_from_image(source)
+	var unit := Vector2.ONE / maxf(0.001, float(art.scale))
+	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, art.origin)
+	sprite.self_modulate = art.get("modulate", Color.WHITE)
+	sprite.visible = true
+	return true
+
+
 ## Nodes waiting for an image: each shows its wanted art as soon as it is ready.
 func _show_ready() -> void:
 	if _waiting.is_empty(): return
 	for path in _waiting.keys():
 		var rec: Dictionary = _waiting[path]
 		var pick: int = rec.get("want_art", -1)
-		if pick < 0 or rec.get("shown_art", -1) == pick or _ensure(rec.art[pick]):
+		if pick < 0:
 			_waiting.erase(path)
-			if pick >= 0 and rec.get("shown_art", -1) != pick: _switch_art(rec, pick)
+			_switch_art(rec, pick)
+			continue
+		if rec.get("shown_art", -1) == pick:
+			_waiting.erase(path)
+			continue
+		if _ensure_state(rec.art[pick]) != &"pending":
+			_waiting.erase(path)
+			_switch_art(rec, pick)
 
 
 # ------------------------------------------------------------------ art
@@ -1173,22 +1231,26 @@ func _refresh_art() -> void:
 		warm(screen_name, _px)
 
 
-## Whether the art's image is ready at the screen scale; if not, it is resampled in the
-## background (at once when frame-locked: the comparison loop needs every frame drawn).
-func _ensure(art: Dictionary) -> bool:
+## Whether the art's image is ready at the screen scale, or being resampled, or cannot be:
+## `ready`, `pending` (a background resample is on its way) or `failed` (the source could not
+## be decoded: `_switch_art` falls back to it unscaled or to the image already shown). When
+## frame-locked it resamples at once instead (the comparison loop needs every frame drawn).
+func _ensure_state(art: Dictionary) -> StringName:
 	var px := _px if _px > 0.0 else pixels_per_unit()
 	if art.size == Vector2.ZERO:
 		# (no recorded pixel size: read it from the image)
 		var source := _decode(art.file)
-		if source == null: return false
+		if source == null: return &"failed"
 		art.size = Vector2(source.get_width(), source.get_height())
 	var fit := _fit_of(art, px)
-	if _has_cached(fit.key): return true
+	if _has_cached(fit.key): return &"ready"
+	if _is_failed(fit.key): return &"failed"
 	if frame_locked:
 		_make(art.file, fit.w, fit.h, fit.pads, fit.key)
-		return _has_cached(fit.key)
+		if _has_cached(fit.key): return &"ready"
+		return &"failed"
 	_request(art.file, fit, true)
-	return false
+	return &"pending"
 
 
 ## How art shows at screen scale `px`: the resampled size, its cache key, and the sprite
@@ -1240,6 +1302,13 @@ static func _pads(pixel_origin: Vector2, size: Vector2, scale: float, px: float)
 
 ## The premultiplied 3× image of a piece file (not kept: see `_image`).
 static func _decode(file: String) -> Image:
+	# (the pack's art is PNG: a missing or non-image file is refused before the loader logs)
+	var stream := FileAccess.open(file, FileAccess.READ)
+	if stream == null: return null
+	var magic := stream.get_buffer(8)
+	stream.close()
+	if magic.size() < 8 or magic[0] != 0x89 or magic[1] != 0x50 or magic[2] != 0x4e or magic[3] != 0x47:
+		return null
 	var image := Image.load_from_file(file)
 	if image == null: return null
 	# Premultiplied alpha, so resampling does not bleed the black of transparent pixels
@@ -1278,6 +1347,11 @@ static func _make(file: String, w: int, h: int, pads: Array, key: String) -> voi
 		if w != image.get_width() or h != image.get_height():
 			image.resize(w, h, Image.INTERPOLATE_LANCZOS)
 		_cache_put(key, image)
+	elif not _cancel_warm:
+		# (a request that cannot be made: nodes waiting for it show the source instead)
+		_cache_lock.lock()
+		_failed[key] = true
+		_cache_lock.unlock()
 	_cache_lock.lock()
 	_queued.erase(key)
 	_cache_lock.unlock()
@@ -1303,6 +1377,13 @@ static func _has_cached(key: String) -> bool:
 	var has := _resized.has(key)
 	_cache_lock.unlock()
 	return has
+
+
+static func _is_failed(key: String) -> bool:
+	_cache_lock.lock()
+	var failed := _failed.has(key)
+	_cache_lock.unlock()
+	return failed
 
 
 static func _cached(key: String) -> Image:

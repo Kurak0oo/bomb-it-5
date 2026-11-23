@@ -79,6 +79,7 @@ extends RefCounted
 ##   tick the portal sends it), until callback 30's `robotMoveStart` makes a new clip.
 
 const DIRECTIONS := {Vector2i(0, 1): "_Down", Vector2i(-1, 0): "_Left", Vector2i(1, 0): "_Right", Vector2i(0, -1): "_Up"}
+const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 ## `RobotModel.vehicle` per ride (CarProp `_Car`, MotoCycleProp `_Skateboard`, HorseProp
 ## `_forg`, DragonProp `_Elephant`): the robot's clip is `_r<robot><vehicle><direction>`.
 const VEHICLE_CLIPS := {&"car": "_Car", &"moto": "_Skateboard", &"horse": "_forg", &"dragon": "_Elephant"}
@@ -176,6 +177,8 @@ var _pending_mines: Array = []
 var _shots: Dictionary = {}
 ## `AbstractItem.getMc`'s PixelClip arguments (tx, ty, xOffset, yOffset).
 const PIXEL_CLIP := [10, 20, 2, 0]
+## The round's art was sent for resampling ahead of the ticks that show it (`_prefetch_round`).
+var _prefetched := false
 
 
 func _init(screen: Node2D, board: RefCounted, looks: Array = []) -> void:
@@ -225,16 +228,26 @@ func update(snapshot: Dictionary) -> void:
 
 
 func _create_robots(snapshot: Dictionary) -> void:
+	# Every image a turn, ride change or weapon/bomb/explosion frame can draw this round is
+	# resampled ahead, so the tick that changes the clip already has it (no stale frame).
+	_prefetch_round(snapshot)
 	var seat := 0
 	for id in snapshot.get("actors", {}):
 		var actor: Dictionary = snapshot.actors[id]
 		var look: Array = _looks[seat] if seat < _looks.size() else [int(actor.get("body", 0)), int(actor.get("hat", 0))]
+		# The snapshot's InvincibilityCommand (started by the simulation on the round's first
+		# tick): its end and phase come from the command, not from when the display is made.
+		var blink_started := int(actor.get("blink_started", 0))
+		var blink_until := int(actor.get("blink_until", 0))
+		if blink_until <= 0: blink_until = blink_started + SPAWN_BLINK_TICKS
+		var blink_count := clampi(_tick - blink_started, 0, blink_until - blink_started)
 		var view := {"id": id, "robot": int(actor.get("robot", seat)), "cloth": maxi(0, int(look[0])), "hat": maxi(0, int(look[1])),
 			"robot_row": 4 if id == &"human" else 3, "row": 0, "layer": "", "item": {}, "children": [], "class": "", "suffix": "_Down",
-			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": 0, "bright": false, "blinking": true,
+			"frame": 1, "playing": false, "fresh": 0, "direction": Vector2i.ZERO, "blink": blink_count,
+			"bright": blink_count > 0 and (blink_count / 4) % 2 == 1, "blinking": blink_until > _tick,
 			"dead": false, "removed": false, "position": actor.get("position", Vector2.ZERO),
-			"blink_until": maxi(int(actor.get("blink_until", 0)), _tick + SPAWN_BLINK_TICKS),
-			"blink_started": int(actor.get("blink_started", 0)),
+			"blink_until": blink_until,
+			"blink_started": blink_started,
 			"blink_serial": int(actor.get("blink_serial", 0)),
 			"vehicle": StringName(actor.get("vehicle", &"")), "vehicle_hit": -1, "jumping": false, "loop_age": 0, "loop_count": 0,
 			"weapon": &"", "ammo": 0, "weapon_class": "", "weapon_frame": 1, "weapon_playing": false, "weapon_fresh": 0,
@@ -253,6 +266,60 @@ func _create_robots(snapshot: Dictionary) -> void:
 		view.fresh = 0
 		_show(view)
 		seat += 1
+
+
+## Resample every image a turn, ride change or weapon/bomb/explosion frame can draw this
+## round, ahead of the tick that shows it (`SwfScreen.prefetch` fills its cache in background
+## threads, so `set_node_art` finds the replacement ready). The robot clips are each robot's
+## current look (the round's seats) on every ride the board's vehicles use, in all four
+## directions and the death clip; the weapon, bomb, explosion, effect and loop clips the
+## round can show come from the actors pack. Called once, when the display is built.
+func _prefetch_round(snapshot: Dictionary) -> void:
+	if _prefetched: return
+	_prefetched = true
+	var vehicles: Array = [&""]
+	var set_id := &""
+	if _board != null:
+		var raw = _board.get("set_id")
+		if raw != null: set_id = StringName(raw)
+	if set_id != &"" and StageSets.SETS.has(set_id): vehicles.append_array(StageSets.vehicles(set_id))
+	var seen := {}
+	var seat := 0
+	for id in snapshot.get("actors", {}):
+		var actor: Dictionary = snapshot.actors[id]
+		var look: Array = _looks[seat] if seat < _looks.size() else [int(actor.get("body", 0)), int(actor.get("hat", 0))]
+		var robot := int(actor.get("robot", seat))
+		for vehicle in vehicles:
+			for suffix in DIRECTIONS.values() + ["_Dead"]:
+				_prefetch_clip("_r%d%s%s" % [robot, VEHICLE_CLIPS.get(vehicle, ""), suffix], look, seen)
+		seat += 1
+	for bucket in ["held", "play", "played", "aged"]:
+		_prefetch_arts(_art.get("weapons", {}).get(bucket, {}), seen)
+	_prefetch_arts({"bomb": _bomb_art, "exp": _exp_art, "still": _art.get("still", {}),
+		"effects": _art.get("effects", {}), "loop_art": _art.get("loop_art", {})}, seen)
+
+
+## One robot clip's current-look frames (`RobotView.setRobotMc`'s `bodyMc`/`hatMc` frames).
+func _prefetch_clip(cls: String, look: Array, seen: Dictionary) -> void:
+	var clip: Dictionary = _art.get("robots", {}).get(cls, {})
+	if clip.is_empty(): return
+	var key := resolve_look_key(clip, int(look[0]), int(look[1]))
+	_prefetch_arts(clip.get("looks", {}).get(key, {}), seen)
+
+
+## Every image (`file`/`pixel_size`) under a pack table, each once.
+func _prefetch_arts(value, seen: Dictionary) -> void:
+	if value is Dictionary:
+		var file = value.get("file")
+		if file is String and value.has("pixel_size"):
+			var key := "%s|%s|%s" % [file, value.get("pixel_origin", []), value.get("pixel_size", [])]
+			if not seen.has(key):
+				seen[key] = true
+				_screen.prefetch(value)
+			return
+		for child in value.values(): _prefetch_arts(child, seen)
+	elif value is Array:
+		for child in value: _prefetch_arts(child, seen)
 
 
 func _step(snapshot: Dictionary, last: bool) -> void:
@@ -997,7 +1064,7 @@ func _show_shield(view: Dictionary, mc_path: String, at: Transform2D, offset: Co
 	var hand: Array = _effects().get("hand2", {}).get(view.class, [0, 0])
 	_screen.move_node(path, _a(at * Transform2D(0.0, Vector2(hand[0], hand[1]))))
 	var images: Dictionary = _effects().get("clips", {}).get(view.shield_class, {}).get("images", {})
-	_set_art(path, images.get(str(view.shield_frame), {}))
+	_screen.set_node_art(path, images.get(str(view.shield_frame), {}))
 	_screen.set_node_offset(path, offset)
 	# `setRobotMc`: `addChildAt(_shieldContainer, 0)` facing right, else `addChild`.
 	_screen.set_node_under(path, view.suffix == "_Right")
@@ -1135,20 +1202,6 @@ func _add_art_node(path: String, parent: String, matrix: Array) -> void:
 		node.set_meta("swf_art", true)
 
 
-## A robot node's clip image changes. `SwfScreen.set_node_art` hides the old image while the
-## new one is resampled; the original's `RobotView.setRobotMc` and its nested loop clips swap
-## frames without ever hiding the model. Keep the previous image up until the replacement is
-## ready, so a frame that is still being resampled cannot blink the robot out.
-func _set_art(path: String, art: Dictionary, frame := 0) -> void:
-	var recs = _screen.get("_by_path_rec")
-	if not (recs is Dictionary): recs = _screen.get("recs")
-	var sprite = null
-	if recs is Dictionary and recs.has(path): sprite = recs[path].get("sprite", null)
-	var shown: bool = sprite != null and sprite.visible
-	_screen.set_node_art(path, art, frame)
-	if shown and sprite != null and not art.is_empty(): sprite.visible = true
-
-
 func _show(view: Dictionary) -> void:
 	if view.removed or view.item.is_empty(): return
 	var matrix: Array = _board.cell_matrix(view.position)
@@ -1165,7 +1218,7 @@ func _show(view: Dictionary) -> void:
 			"mc":
 				_screen.move_node(path, matrix)
 				var art := _robot_art(view)
-				_set_art(path, art, view.frame)
+				_screen.set_node_art(path, art, view.frame)
 				_show_loops(view, path, at, art, offset)
 				_show_shield(view, path, at, offset)
 				_screen.set_node_alpha(path, view.alpha)
@@ -1184,7 +1237,7 @@ func _show(view: Dictionary) -> void:
 					var frame: int = clampi(_tick_now() - view.inv_play, 1, _effect_total("invincibityPlay"))
 					_screen.move_node(play, matrix)
 					_screen.set_node_offset(play, offset)
-					_set_art(play, _effects().get("clips", {}).get("invincibityPlay", {}).get("images", {}).get(str(frame), {}), frame)
+					_screen.set_node_art(play, _effects().get("clips", {}).get("invincibityPlay", {}).get("images", {}).get(str(frame), {}), frame)
 			"times" when child.get("hidden", false):
 				_screen.move_node(path, _a(at * Transform2D(0.0, TIMES_AT)))
 				_screen.set_path_shown(path, false)
@@ -1193,7 +1246,7 @@ func _show(view: Dictionary) -> void:
 				_screen.move_node(path, _a(at * Transform2D(0.0, _hand(view))))
 				if child.get("empty", false): continue
 				var images: Dictionary = _art.get("weapons", {}).get("held", {}).get(view.weapon_class, {}).get("images", {})
-				_set_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
+				_screen.set_node_art(path, images.get(str(view.weapon_frame), {}), view.weapon_frame)
 				# CountInvincibilityCommand: `weaponMc.filters` as the clip's.
 				_screen.set_node_filter(path, view.filter)
 			"play":
@@ -1201,17 +1254,17 @@ func _show(view: Dictionary) -> void:
 				var scale: Vector2 = child.get("scale", Vector2.ONE)
 				_screen.move_node(path, _a(at * Transform2D(0.0, scale, 0.0, child.pos)))
 				var shown: Array = _play_art(view, child, age)
-				_set_art(path, shown[0], shown[1])
+				_screen.set_node_art(path, shown[0], shown[1])
 			"laser":
 				_show_laser(view, child, path, at, offset)
 			"times":
 				var times := at * Transform2D(0.0, TIMES_AT)
 				_screen.move_node(path, _a(times))
-				_set_art(path, _art.get("weapons", {}).get("times", {}).get(String(view.weapon), {}), 1)
+				_screen.set_node_art(path, _art.get("weapons", {}).get("times", {}).get(String(view.weapon), {}), 1)
 				var digit: Dictionary = _art.get("weapons", {}).get("digits", {}).get(str(view.ammo), {})
 				if not digit.is_empty():
 					_screen.move_node(path + "/~count", _a(times * _m(digit.times_at).affine_inverse() * _m(digit.at)))
-				_set_art(path + "/~count", digit)
+				_screen.set_node_art(path + "/~count", digit)
 				_screen.set_node_offset(path + "/~count", offset)
 
 
@@ -1230,7 +1283,7 @@ func _show_laser(view: Dictionary, child: Dictionary, path: String, at: Transfor
 		_screen.move_node(piece_path, _a(piece_at))
 		var art := _aged_art(aged.get(str(piece.root), {}), "/@1", nested)
 		if not piece.get("group", false):
-			_set_art(piece_path, art, piece.root)
+			_screen.set_node_art(piece_path, art, piece.root)
 			_screen.set_node_offset(piece_path, offset)
 			continue
 		var m: int = piece.mids.size()
@@ -1238,7 +1291,7 @@ func _show_laser(view: Dictionary, child: Dictionary, path: String, at: Transfor
 			var mid_path := "%s/%s" % [piece_path, "@0" if m == 1 else "@0#%d" % j]
 			_screen.move_node(mid_path, _a(piece_at * Transform2D(0.0, piece.mids[j])))
 			# (a Sprite scaled to nothing draws nothing)
-			_set_art(mid_path, art if piece.at.get_scale().x > LASER_NO_SCALE else {}, piece.root)
+			_screen.set_node_art(mid_path, art if piece.at.get_scale().x > LASER_NO_SCALE else {}, piece.root)
 			_screen.set_node_offset(mid_path, offset)
 
 
@@ -1263,7 +1316,7 @@ func _show_loops(view: Dictionary, mc_path: String, at: Transform2D, art: Dictio
 		var frames: Dictionary = _art.get("loop_art", {}).get(loop.art, {})
 		var frame: int = maxi(0, view.loop_age - 1) % maxi(1, frames.size()) + 1
 		_screen.move_node(path, _a(at * robot_at.affine_inverse() * _m(loop.at)))
-		_set_art(path, frames.get(str(frame), {}))
+		_screen.set_node_art(path, frames.get(str(frame), {}))
 		_screen.set_node_offset(path, offset)
 
 

@@ -106,9 +106,12 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		actor.portal_target = actor.cell
 		actor.pushed = {}
 		actor.jump = {}
+		# AbstractRobot.init's `new InvincibilityCommand(this)` starts blinking on the round's
+		# first tick (tick 0, before the first snapshot); its 80 callbacks end it at tick 81.
 		actor.blink_until = 0
 		actor.blink_started = 0
 		actor.blink_serial = 0
+		_start_blink(actor, 81)
 		actor.capacity = actor.get("capacity", 1)
 		actor.power = actor.get("power", 1)
 		actor.speed = actor.get("speed", 1.6)
