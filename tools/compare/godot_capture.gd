@@ -36,6 +36,8 @@ var _frame := 0
 var _between_frames := false
 ## The current frame's host step was already taken (by `step` or `_wait_frame_drawn`).
 var _capture_frame_ticked := false
+var _wait_drawing := false
+var _wait_serial := 0
 
 
 func _initialize() -> void:
@@ -53,6 +55,10 @@ func _initialize() -> void:
 	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
 	_viewport.handle_input_locally = true
 	root.add_child(_viewport)
+	# The comparison window is driven by frames, not the user: keep it from being pushed to
+	# the background (an occluded window may stop drawing, which stalled a parallel capture).
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_NO_FOCUS, true)
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
 	# Generated screens follow the stepped frames, not the clock (see swf_screen.gd).
 	load("res://scripts/ui/swf_screen.gd").frame_locked = true
 	# The round host is stepped here too: one host frame per captured frame, so a delayed or
@@ -153,20 +159,24 @@ func _run(case: Dictionary) -> void:
 	quit(0)
 
 
-## Wait for the current frame to be processed and drawn. The scene is frozen between the
-## frame's processing (frame_pre_draw) and its draw (frame_post_draw): when the window is
-## occluded or the GPU is busy, the draw can be delayed by many frames; without the freeze
-## the scene kept stepping through them and the capture landed a few ticks later than the
-## case's fixed frame count (gameplay-cinema-landmine/laser film off by ~15 ticks in a full
-## run). The freeze only spans the wait; the next `step` starts from the captured frame.
+## Finish the current captured frame at its host pre-draw point. The capture window is kept
+## in front and unfocused so parallel captures keep drawing; the scene is frozen between
+## pre-draw and post-draw so no clock advances if the draw is slow. A five-second watchdog
+## forces the draw if the host never starts it, so an occluded window cannot stall the run.
 func _wait_frame_drawn() -> void:
 	if not _capture_frame_ticked: _tick_capture_frame()
+	# The window flags above keep the capture window drawing in parallel, but a stuck host
+	# draw must not block the run forever: after five seconds, force the frame out.
+	_wait_drawing = true
+	_wait_serial += 1
+	var serial := _wait_serial
+	var timer := create_timer(5.0, true)
+	timer.timeout.connect(func(): if _wait_drawing and serial == _wait_serial: RenderingServer.force_draw())
 	await RenderingServer.frame_pre_draw
 	paused = true
 	await RenderingServer.frame_post_draw
-	# Always release the freeze with the wait, whatever the caller does next (a missing
-	# capture path must not leave the whole scene paused for the rest of the case).
 	paused = false
+	_wait_drawing = false
 	_capture_frame_ticked = false
 
 
