@@ -928,5 +928,23 @@ Owner-reported bugs, 2026-11-22 (owner to review):
   (`HorseProp.frog`, `xJump`/`yJump`); a horse ride stopped on frame 15 resets to 1 (`frogMcStop`).
   `tests/actor_display_check.gd`.
 All 51 cases and tools/run_checks.sh pass.
-Known gap: a new protection command that ends on the same tick as the running one keeps the old
-blink phase (rare; needs a command serial from the simulation).
+The same-tick case is fixed in the follow-up below.
+
+Robot blink follow-up, 2026-11-23 (owner to review):
+- Robots still blinked: `SwfScreen.set_node_art` hid a node on every art change until its
+  resampled image was ready, so animated robots (and board pieces, bombs, explosions) went out
+  for a frame or more. A node now keeps its image until the replacement is placed, as a Flash
+  MovieClip swaps its bitmap; an empty frame hides it; a failed resample keeps the previous image
+  (else the source resampled to `_fit`'s size, warned once per file). Failures are bounded and
+  cleared with the screen that recorded them.
+- Turns and rides draw the new clip on their own tick: the round's robot (four directions, death,
+  the set's rides), weapon, bomb and explosion frames are prefetched at round load in batches,
+  directions first (~2,200-2,400 images, ~28-34 MB at 1280x720; worst frame ~34 ms), and pinned
+  against cache eviction until the next round takes ownership (`SwfScreen.take_pin_ownership`/
+  `pin`), capped at half the art budget (least-recently-shown evicted first, current directions last).
+- Same-tick protection: each `InvincibilityCommand` (`_start_blink`) carries a serial and start
+  tick, so a replacement ending on the same tick restarts the phase. The round-start command is
+  started by the simulation at tick 0 (`AbstractRobot.init`) and ends at tick 81 whenever the
+  display first draws.
+- A check that skips for a missing local pack is reported as SKIP by tools/run_checks, not PASS.
+  `tests/actor_display_check.gd` (107 checks).
