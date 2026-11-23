@@ -459,15 +459,6 @@ func _import_art(rec: Dictionary, path: String, manifest: Dictionary, prefix: St
 					int(frame), prefix, map, _source_at(source, path, int(by_frame[frame].get("index", capture))))
 
 
-## The index at which the other capture took a node: its own extra timeline's capture, or
-## the screen's main one.
-static func _source_capture_index(source: Dictionary, capture: String) -> int:
-	var timeline: Dictionary = source.get("timeline", {})
-	if not capture.is_empty():
-		timeline = source.get("extra_timelines", {}).get(capture, timeline)
-	return int(timeline.get("capture_index", 0))
-
-
 ## The sequence frame to show as a still: the latest one at or before `at`, else the first.
 static func _sequence_key(frames: Dictionary, at: int) -> String:
 	var best := ""
@@ -625,25 +616,6 @@ func add_robot_head(instance: String, robot_id: int) -> void:
 	_queue_apply()
 
 
-## Add one image to an instance the controller already owns (the tip's imported robot
-## preview is replaced by the reference capture's picture; its track still runs).
-func add_art(instance: String, piece: Dictionary, state := 0) -> void:
-	var rec: Dictionary = _by_name.get(instance, {})
-	if rec.is_empty(): return
-	if not piece.has("at"): piece["at"] = entry_stage_matrix(rec)
-	rec.art.clear()
-	rec.erase("art_table")
-	rec.erase("placed")
-	rec.erase("placed_px")
-	rec.erase("want_art")
-	rec.shown_art = -1
-	if rec.get("sprite") != null:
-		rec.sprite.visible = false
-		rec.sprite.texture = null
-	_add_art(rec, piece, 0, state)
-	_queue_apply()
-
-
 ## Replace an instance's recorded art with one image per widget frame (the tip's P1 button:
 ## `record_screen.py tips` renders the picked robot's selected button, its head included).
 func add_art_frames(instance: String, frames: Dictionary) -> void:
@@ -680,10 +652,9 @@ func hide_children(instance: String) -> void:
 	_queue_apply()
 
 
-## A run-time library piece with one image per clip frame (`frames` keyed by frame): the
-## unlock tip's `robotBtn1/robotHeadMc`, which the score screen's recording baked into the
-## button's sequence (`Attach.getMovieClip("UI_UNLOCK_TIP")` draws it as its own clip in the
-## original; the controller sets its frame to `GameModel.P1Robot + 1`).
+## A run-time library clip instance (the unlock tip's `robotBtn1/robotHeadMc`, added empty
+## because the recorded button baked the head; the controller sets its frame to
+## `GameModel.P1Robot + 1`). `frames`, when given, adds one image per clip frame.
 func add_piece(entry: Dictionary, frames: Dictionary) -> void:
 	var rec := add_node(entry)
 	for child in rec.node.get_children():

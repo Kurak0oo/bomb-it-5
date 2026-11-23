@@ -118,16 +118,23 @@ func initDis() -> void:
 ## AS3 `gotoAndStop` addresses it; `_addPickedButton` gives a picked robot its SWF button.
 func _addRobotHead() -> void:
 	# Robot 0's head is baked in the recorded button, but `initSetting` still addresses its
-	# clip; add an empty baked node so the AS3 `gotoAndStop(1)` has its instance.
+	# clip; add the empty instance from the SWF's `robotHeadMc` data (`record_screen.py tips`).
 	if _screen.has_instance(__containerMc + "/robotBtn1/robotHeadMc"): return
+	if not FileAccess.file_exists(TIP_ART): return
+	var data = JSON.parse_string(FileAccess.get_file_as_string(TIP_ART))
+	if not data is Dictionary: return
+	var head: Dictionary = data.get("robot_head", {})
+	var matrix: Array = head.get("stage_matrix", [])
+	if matrix.size() != 6 or not head.has("class"): return
 	var base: String = _screen.golden_path_of(__containerMc + "/robotBtn1")
 	if base.is_empty(): return
-	var path := String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1/robotHeadMc"
-	var entry := {"path": path, "parent": String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1",
-		"golden_path": base + "/robotHeadMc", "class": "BOMBIT5UI_fla::roleHead_263",
-		"kind": "movie_clip", "name": "robotHeadMc", "role": "piece", "frame": 1,
-		"total_frames": 8, "effective_visible": true,
-		"stage_matrix": [0.92, 0.0, 0.0, 0.92, 372.5, 168.45]}
+	var root := String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1"
+	var entry := {"path": root + "/robotHeadMc", "parent": root,
+		"golden_path": base + "/robotHeadMc", "class": String(head["class"]),
+		"kind": "movie_clip", "name": "robotHeadMc", "role": "piece",
+		"frame": int(_app.session.robot) + 1,
+		"total_frames": int(head.get("total_frames", 1)), "effective_visible": true,
+		"stage_matrix": matrix}
 	_screen.add_piece(entry, {})
 
 
