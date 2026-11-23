@@ -594,7 +594,8 @@ def record_tip_art(_case_name, player_path, swf):
     (`PlayerScoreUI.initData` / `OnePGameOverUI.initData`), are other library children.
     Replay each recorded results-robot<N> case to its unlock-tip capture for the picked
     robot's preview and selected P1 button, then to win-score and loss-score for the score
-    screen's two p1head eye states.
+    screen's two p1head eye states. The first capture also writes `robotHeadMc`'s stage
+    matrix, class and total frames under `robot_head`.
     """
     target = PACK / 'score'
     target.mkdir(parents=True, exist_ok=True)
@@ -605,7 +606,19 @@ def record_tip_art(_case_name, player_path, swf):
             continue
         case = load_case(case_name)
         entry = {}
-        p, _dump = _tip_replay(case, player_path, swf, 'unlock-tip')
+        p, dump = _tip_replay(case, player_path, swf, 'unlock-tip')
+        if 'robot_head' not in out:
+            # `UnlockTipScreen.initSetting` addresses this library clip
+            # (`robotHeadMc.gotoAndStop(P1Robot + 1)`); the recorded button baked robot 0's
+            # copy, so the generated screen needs the instance's SWF data to add it back.
+            node = next((n for n in dump['nodes'] if n['path'] == TIP_HEAD), None)
+            if node is None:
+                raise SystemExit(f'{case_name}: {TIP_HEAD} is not on the unlock-tip display list')
+            out['robot_head'] = {
+                'stage_matrix': node['stage_matrix'],
+                'class': node['class'],
+                'total_frames': int(node.get('total_frames', 1)),
+            }
         tmp = Path(tempfile.mkdtemp(prefix='bombit5-tip-'))
         try:
             file = target / f'tip-preview-{robot}.png'
@@ -635,15 +648,13 @@ def record_tip_art(_case_name, player_path, swf):
                 total += 1
             finally:
                 p.close()
-        entry['preview']['class'] = 'robot'
         for key in entry['score_head']:
-            entry['score_head'][key]['class'] = 'roleHead'
             entry['score_head'][key]['pack'] = 'score'  # the head art lives in the score pack
         for frame in entry['button']:
             entry['button'][frame]['pack'] = 'score'
         out[str(robot)] = entry
     TIP_ART.write_text(json.dumps(out, indent=1, sort_keys=True) + '\n', encoding='utf-8')
-    print(f'tip art: {len(out)} robots, {total} images in {target}')
+    print(f'tip art: {sum(1 for key in out if key.isdigit())} robots, {total} images in {target}')
 
 # ------------------------------------------------------------------ art
 
