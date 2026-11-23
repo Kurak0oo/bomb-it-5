@@ -55,13 +55,26 @@ static var frame_locked := false
 ## screen reuses it), filled from background threads (`warm`, `_request`) so the main thread
 ## never waits on decoding or resampling. Bounded: least recently shown dropped first.
 const ART_BUDGET := 256 * 1024 * 1024
+## Resample requests `prefetch`/`pin` start per frame (round load), so a round's images do
+## not queue all at once.
+const PREFETCH_PER_FRAME := 256
 static var _resized := {}
 static var _resized_order: Array[String] = []
 static var _resized_bytes := 0
 static var _queued := {}
 ## Resample requests that failed (`_make`: the source could not be decoded): `_switch_art`
-## shows the art's unresampled source (or the image already up) instead of hiding the node.
+## keeps the image already up, or shows the art's unresampled source, instead of hiding the
+## node. Bounded like the resized cache, and cleared when the round's screen is torn down.
+const FAILED_LIMIT := 256
 static var _failed := {}
+static var _failed_order: Array[String] = []
+## Source files already warned about (one `push_warning` per failed file).
+static var _warned := {}
+static var _warned_order: Array[String] = []
+## Resampled images the current round's prefetch owns: exempt from budget eviction until
+## `unpin` (the round's screen is torn down) or the next round's prefetch replaces them.
+static var _pinned := {}
+static var _pin_owner := 0
 ## 3× sources kept for hit tests only (`_image`).
 static var _sources := {}
 static var _cache_lock := Mutex.new()
@@ -94,6 +107,10 @@ var _created_frame := -1
 var _waiting := {}
 var _warm_started := false
 var _apply_queued := false
+## Round prefetch jobs waiting for a frame's batch (`prefetch` / `pin`), so a round's 2,000
+## images do not queue at once (`_pump_prefetch`).
+var _prefetch_queue: Array[Dictionary] = []
+var _prefetch_keys := {}
 
 
 static func create(screen: StringName, delay := 0) -> Node2D:
@@ -436,14 +453,94 @@ func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
 
 ## Resample a run-time node's art (`art` as for `add_node`) in the background, ahead of the
 ## frame that shows it, so a clip that changes image every frame (the end cartoon) need not wait.
+## The images are requested in bounded per-frame batches (`PREFETCH_PER_FRAME`).
 func prefetch(art: Dictionary) -> void:
+	var job := _prefetch_job(art)
+	if not job.is_empty(): _queue_prefetch(job)
+
+
+## Exempt a prefetched image from budget eviction and request it: the round's own art
+## (`GameActors._prefetch_round`) stays in the cache until `unpin` or the next round's pins.
+func pin(art: Dictionary) -> void:
+	var job := _prefetch_job(art)
+	if job.is_empty(): return
+	_cache_lock.lock()
+	# A new round's prefetch replaces the old pin set, even if the old screen has not been
+	# torn down yet.
+	var owner := get_instance_id()
+	if _pin_owner != owner:
+		_pinned.clear()
+		_pin_owner = owner
+	_pinned[job.key] = true
+	_cache_lock.unlock()
+	_queue_prefetch(job)
+
+
+## Stop exempting this screen's prefetched images (its round is over). Returns whether it
+## held the pins, so a teardown only clears the round's own residue.
+func unpin() -> bool:
+	var owned := false
+	_cache_lock.lock()
+	if _pin_owner == get_instance_id():
+		_pinned.clear()
+		_pin_owner = 0
+		owned = true
+	_cache_lock.unlock()
+	return owned
+
+
+func _exit_tree() -> void:
+	# The round's screen is gone: its pins stop protecting the cache, and a failure recorded
+	# for it (bounded while it ran) no longer means anything.
+	unpin()
+	clear_failed()
+
+
+## Forget every failed resample (the round's screen is torn down).
+static func clear_failed() -> void:
+	_cache_lock.lock()
+	_failed.clear()
+	_failed_order.clear()
+	_warned.clear()
+	_warned_order.clear()
+	_cache_lock.unlock()
+
+
+## The source file, fit and cache key of `art`, or `{}` when it cannot be prefetched.
+func _prefetch_job(art: Dictionary) -> Dictionary:
 	var size: Array = art.get("pixel_size", [])
 	var px := _px if _px > 0.0 else pixels_per_unit()
-	if frame_locked or size.size() != 2 or px <= 0.0: return
+	if frame_locked or size.size() != 2 or px <= 0.0: return {}
 	var file := ProjectSettings.globalize_path((PACK % screen_name).get_base_dir().path_join(art.file))
-	if not FileAccess.file_exists(file): return
+	if not FileAccess.file_exists(file): return {}
 	var origin := Vector2(art.pixel_origin[0], art.pixel_origin[1])
-	_request(file, _fit(file, origin, Vector2(size[0], size[1]), float(art.scale), px), true)
+	var fit := _fit(file, origin, Vector2(size[0], size[1]), float(art.scale), px)
+	return {"file": file, "fit": fit, "key": fit.key}
+
+
+## Queue one prefetch job unless its image is already cached, pending or known bad.
+func _queue_prefetch(job: Dictionary) -> void:
+	var key: String = job.key
+	_cache_lock.lock()
+	var known: bool = _queued.has(key) or _resized.has(key) or _failed.has(key)
+	_cache_lock.unlock()
+	if known or _prefetch_keys.has(key): return
+	_prefetch_keys[key] = true
+	_prefetch_queue.append(job)
+
+
+## Start a frame's worth of prefetch jobs: the round loads over several frames instead of
+## flooding WorkerThreadPool with a whole round's images at once.
+func _pump_prefetch() -> void:
+	if _prefetch_queue.is_empty(): return
+	var count := mini(PREFETCH_PER_FRAME, _prefetch_queue.size())
+	for i in count:
+		var job: Dictionary = _prefetch_queue[i]
+		_prefetch_keys.erase(job.key)
+		_request(job.file, job.fit, true)
+	var rest: Array[Dictionary] = []
+	for i in range(count, _prefetch_queue.size()): rest.append(_prefetch_queue[i])
+	_prefetch_queue = rest
 
 
 ## Flash colour offsets on a run-time node's art (`InvincibilityCommand`'s +50 blink),
@@ -801,6 +898,7 @@ func _emit_stage_down(press: int) -> void:
 
 func _process(delta: float) -> void:
 	_reap_tasks()
+	_pump_prefetch()
 	_show_ready()
 	# A screen made by input (a click) during this frame has not run a frame yet: in the
 	# original, input lands between frames and the next frame is the screen's first.
@@ -1024,7 +1122,9 @@ func _switch_art(rec: Dictionary, pick: int) -> void:
 	var art: Dictionary = rec.art[pick]
 	var state := _ensure_state(art)
 	if state == &"failed":
-		# The resample cannot be made: show the source unscaled (or keep the image up).
+		# The resample cannot be made: keep the image already up (Flash keeps the last
+		# bitmap), and with none show the unresampled source on the same pads as `_fit`.
+		if rec.has("sprite") and rec.sprite.texture != null: return
 		if String(rec.get("raw_key", "")) == String(rec.get("art_key", "")): return
 		rec.raw_key = rec.art_key
 		if _place_raw(rec, art):
@@ -1102,15 +1202,32 @@ func _place(rec: Dictionary, k: int) -> bool:
 	return true
 
 
-## Unresampled art as a last resort (`_switch_art` when its resample failed): the 3× source
-## drawn at the stage scale, without the pixel-grid pads. False when it cannot be decoded.
+## Unresampled art as a last resort (`_switch_art` when its resample failed and no image is
+## up): the 3× source padded by `_fit`'s pads, so it sits on the screen's pixel grid and at
+## the same stage origin. False when it cannot be decoded.
 func _place_raw(rec: Dictionary, art: Dictionary) -> bool:
 	var source := _decode(art.file)
 	if source == null: return false
+	var px := _px if _px > 0.0 else pixels_per_unit()
+	var fit := _fit_of(art, px)
+	var pads: Array = fit.pads
+	var image := source
+	var pad_before: Vector2 = pads[0]
+	var pad_after: Vector2 = pads[1]
+	if pad_before != Vector2.ZERO or pad_after != Vector2.ZERO:
+		var size := Vector2i(source.get_width() + int(pad_before.x + pad_after.x),
+			source.get_height() + int(pad_before.y + pad_after.y))
+		image = Image.create_empty(size.x, size.y, false, source.get_format())
+		image.blit_rect(source, Rect2i(Vector2i.ZERO, source.get_size()), Vector2i(pad_before))
 	var sprite := _sprite(rec)
-	sprite.texture = ImageTexture.create_from_image(source)
-	var unit := Vector2.ONE / maxf(0.001, float(art.scale))
-	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, art.origin)
+	sprite.texture = ImageTexture.create_from_image(image)
+	# The raw texture has 3× the resampled one's texels, so its unit is `_fit`'s times the
+	# resample factor; the pads keep the same stage origin.
+	var padded := Vector2(image.get_width(), image.get_height())
+	var unit := Vector2(padded.x / float(art.scale) / image.get_width(),
+		padded.y / float(art.scale) / image.get_height())
+	var origin: Vector2 = art.origin - pad_before / float(art.scale)
+	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, origin)
 	sprite.self_modulate = art.get("modulate", Color.WHITE)
 	sprite.visible = true
 	return true
@@ -1348,9 +1465,14 @@ static func _make(file: String, w: int, h: int, pads: Array, key: String) -> voi
 			image.resize(w, h, Image.INTERPOLATE_LANCZOS)
 		_cache_put(key, image)
 	elif not _cancel_warm:
-		# (a request that cannot be made: nodes waiting for it show the source instead)
+		# (a request that cannot be made: nodes waiting for it keep their image or show the
+		# source; `_is_failed` warns once per source file)
 		_cache_lock.lock()
-		_failed[key] = true
+		if not _failed.has(key):
+			_failed[key] = file
+			_failed_order.append(key)
+			while _failed_order.size() > FAILED_LIMIT:
+				_failed.erase(_failed_order.pop_front())
 		_cache_lock.unlock()
 	_cache_lock.lock()
 	_queued.erase(key)
@@ -1365,8 +1487,15 @@ static func _cache_put(key: String, image: Image) -> void:
 		_resized[key] = image
 		_resized_order.append(key)
 		_resized_bytes += image.get_data_size()
-		while _resized_bytes > ART_BUDGET and _resized_order.size() > 1:
-			var old: String = _resized_order.pop_front()
+		# Least recently shown first, but never a pinned image (the round's prefetch): the
+		# clip a turn or ride change shows must stay ready.
+		var i := 0
+		while _resized_bytes > ART_BUDGET and i < _resized_order.size():
+			var old: String = _resized_order[i]
+			if _pinned.has(old):
+				i += 1
+				continue
+			_resized_order.remove_at(i)
 			_resized_bytes -= (_resized[old] as Image).get_data_size()
 			_resized.erase(old)
 	_cache_lock.unlock()
@@ -1382,8 +1511,24 @@ static func _has_cached(key: String) -> bool:
 static func _is_failed(key: String) -> bool:
 	_cache_lock.lock()
 	var failed := _failed.has(key)
+	var file: String = _failed.get(key, "") if failed else ""
 	_cache_lock.unlock()
+	if failed and not file.is_empty(): _warn_failed(file)
 	return failed
+
+
+## One warning per source file that cannot be resampled (bounded with the failed cache).
+static func _warn_failed(file: String) -> void:
+	_cache_lock.lock()
+	if _warned.has(file):
+		_cache_lock.unlock()
+		return
+	_warned[file] = true
+	_warned_order.append(file)
+	while _warned_order.size() > FAILED_LIMIT:
+		_warned.erase(_warned_order.pop_front())
+	_cache_lock.unlock()
+	push_warning("could not resample %s: the pack file is missing or not an image" % file)
 
 
 static func _cached(key: String) -> Image:

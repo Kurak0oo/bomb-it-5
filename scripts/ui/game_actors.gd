@@ -277,22 +277,34 @@ func _create_robots(snapshot: Dictionary) -> void:
 func _prefetch_round(snapshot: Dictionary) -> void:
 	if _prefetched: return
 	_prefetched = true
+	# The round owns the pins now: the previous round's images may be evicted again.
+	if _screen.has_method("unpin"): _screen.unpin()
 	var vehicles: Array = [&""]
 	var set_id := &""
 	if _board != null:
 		var raw = _board.get("set_id")
 		if raw != null: set_id = StringName(raw)
 	if set_id != &"" and StageSets.SETS.has(set_id): vehicles.append_array(StageSets.vehicles(set_id))
-	var seen := {}
+	var seats := []
 	var seat := 0
 	for id in snapshot.get("actors", {}):
 		var actor: Dictionary = snapshot.actors[id]
 		var look: Array = _looks[seat] if seat < _looks.size() else [int(actor.get("body", 0)), int(actor.get("hat", 0))]
-		var robot := int(actor.get("robot", seat))
-		for vehicle in vehicles:
-			for suffix in DIRECTIONS.values() + ["_Dead"]:
-				_prefetch_clip("_r%d%s%s" % [robot, VEHICLE_CLIPS.get(vehicle, ""), suffix], look, seen)
+		seats.append({"look": look, "robot": int(actor.get("robot", seat))})
 		seat += 1
+	var seen := {}
+	# The four directions of each seat's look first: the turn a player makes first has its
+	# new clip's frame ready.
+	for entry: Dictionary in seats:
+		for suffix in DIRECTIONS.values():
+			_prefetch_clip("_r%d%s" % [entry.robot, suffix], entry.look, seen)
+	# Then every ride's directions and the death clip.
+	for entry: Dictionary in seats:
+		for vehicle in vehicles:
+			if String(vehicle) == "": continue
+			for suffix in DIRECTIONS.values() + ["_Dead"]:
+				_prefetch_clip("_r%d%s%s" % [entry.robot, VEHICLE_CLIPS.get(vehicle, ""), suffix], entry.look, seen)
+		_prefetch_clip("_r%d_Dead" % entry.robot, entry.look, seen)
 	for bucket in ["held", "play", "played", "aged"]:
 		_prefetch_arts(_art.get("weapons", {}).get(bucket, {}), seen)
 	_prefetch_arts({"bomb": _bomb_art, "exp": _exp_art, "still": _art.get("still", {}),
@@ -315,7 +327,10 @@ func _prefetch_arts(value, seen: Dictionary) -> void:
 			var key := "%s|%s|%s" % [file, value.get("pixel_origin", []), value.get("pixel_size", [])]
 			if not seen.has(key):
 				seen[key] = true
-				_screen.prefetch(value)
+				# The round's frames are pinned (SwfScreen.pin): a cache filled past its
+				# budget with other screens' art must not evict them before the turn.
+				if _screen.has_method("pin"): _screen.pin(value)
+				else: _screen.prefetch(value)
 			return
 		for child in value.values(): _prefetch_arts(child, seen)
 	elif value is Array:

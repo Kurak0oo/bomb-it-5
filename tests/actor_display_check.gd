@@ -195,25 +195,34 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if FileAccess.file_exists(PACK):
-		var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACK))
-		_check_spawn_blink(pack)
-		_check_round_window_no_blink(pack)
-		_check_same_end_blink_restart(pack)
-		_check_golden_spawn_captures(pack)
-		_check_short_command_blink(pack)
-		_check_replacement_blink(pack)
-		_check_loops_follow_the_clip(pack)
-		_check_turn_and_ride_art(pack)
-		_check_spawn_blink_at_81(pack)
-		_check_horse_jump(pack)
-		_check_horse_jump_turn(pack)
-		_check_horse_stop_frame(pack)
-		await _check_art_never_hidden(pack)
-	else:
-		print("SKIP: actor display checks need the local actors pack")
 	# The input gate reads the snapshot only: it runs with or without the art pack.
 	_check_jump_input_gate()
+	if not FileAccess.file_exists(PACK):
+		# A clean checkout has no local pack: announce the skip only, so `run_checks` reports
+		# it instead of counting a PASS line that ran no display checks.
+		if failures > 0:
+			print("FAIL: %d actor display checks" % checks)
+			quit(1)
+			return
+		print("SKIP: actor display checks need the local actors pack")
+		quit(0)
+		return
+	var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACK))
+	_check_spawn_blink(pack)
+	_check_round_window_no_blink(pack)
+	_check_same_end_blink_restart(pack)
+	_check_golden_spawn_captures(pack)
+	_check_short_command_blink(pack)
+	_check_replacement_blink(pack)
+	_check_loops_follow_the_clip(pack)
+	_check_turn_and_ride_art(pack)
+	_check_spawn_blink_at_81(pack)
+	_check_horse_jump(pack)
+	_check_horse_jump_turn(pack)
+	_check_horse_stop_frame(pack)
+	await _check_art_never_hidden(pack)
+	await _check_round_frames_pinned(pack)
+	await _check_failed_cache(pack)
 	print("%s: %d actor display checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
 
@@ -578,6 +587,134 @@ func _check_art_never_hidden(pack: Dictionary) -> void:
 	else:
 		_expect(false, "the actors pack has the bomb and explosion frames")
 	screen.queue_free()
+
+
+## The round's prefetched frames are pinned: filling the shared cache past its budget with
+## other art must not evict them, so a turn or ride change draws its own clip's frame on its
+## tick instead of leaving the old clip up while the new frame resamples.
+func _check_round_frames_pinned(pack: Dictionary) -> void:
+	var screen: Node2D = SwfScreen.new()
+	screen.screen_name = &"game"
+	screen.is_open = true
+	screen._px = 1.0
+	root.add_child(screen)
+	var board := FakeBoard.new()
+	board.actor_art = pack
+	board.screen = screen
+	var actors := GameActors.new(screen, board)
+	actors.update(_snapshot(0))
+	var view: Dictionary = actors._robots[&"human"]
+	var look := [int(view.cloth), int(view.hat)]
+	var right_art: Dictionary = _frame_art(pack, "_r0_Right", look, 1)
+	var car_art: Dictionary = _frame_art(pack, "_r0_Car_Right", look, 1)
+	var right_key := _art_key(right_art, 1.0)
+	var car_key := _art_key(car_art, 1.0)
+	_expect(not right_key.is_empty() and not car_key.is_empty(),
+		"the pack has the turn and ride frames")
+	var frames := 0
+	while frames < 3000:
+		await process_frame
+		frames += 1
+		if screen._prefetch_queue.is_empty() and SwfScreen._queued.is_empty(): break
+	_expect(frames < 3000, "the round prefetch finishes")
+	_expect(SwfScreen._pinned.has(right_key), "the round load pins the turn frame")
+	_expect(SwfScreen._pinned.has(car_key), "the round load pins the ride frame")
+	_expect(SwfScreen._has_cached(right_key), "the turn frame is ready after the prefetch")
+	# Fill the shared cache past its budget with other images: the pinned round art stays.
+	var filler := Image.create_empty(1024, 1024, false, Image.FORMAT_RGBA8)
+	var count: int = SwfScreen.ART_BUDGET / filler.get_data_size() + 2
+	for i in count: SwfScreen._cache_put("pin-test-filler-%d" % i, filler)
+	_expect(not SwfScreen._has_cached("pin-test-filler-0"),
+		"budget eviction drops the oldest unpinned filler")
+	_expect(SwfScreen._resized_bytes <= SwfScreen.ART_BUDGET, "the shared cache stays within budget")
+	_expect(SwfScreen._has_cached(right_key), "budget eviction keeps the round's turn frame")
+	_expect(SwfScreen._has_cached(car_key), "budget eviction keeps the round's ride frame")
+	# A turn draws the new direction's own frame (the cache's newest entries are fillers).
+	actors.update(_snapshot(1, {}, [{"actor_id": &"human", "direction": Vector2.RIGHT}]))
+	await process_frame
+	var mc_path := String(view.item.path) + "/@0"
+	_expect(_shown_name(screen, mc_path) == String(right_art.get("file", "")).get_file(),
+		"the turn draws the new direction's own frame with the cache full")
+	_expect(_sprite_up(screen, mc_path), "the turned robot never goes blank")
+	# A ride change draws the ride clip's own frame too.
+	actors.update(_snapshot(2, {"vehicle": &"car"}, [{"actor_id": &"human", "direction": Vector2.RIGHT}]))
+	await process_frame
+	mc_path = String(view.item.path) + "/@0"
+	_expect(_shown_name(screen, mc_path) == String(car_art.get("file", "")).get_file(),
+		"the ride change draws the ride clip's own frame with the cache full")
+	_expect(_sprite_up(screen, mc_path), "the riding robot never goes blank")
+	screen.queue_free()
+	await process_frame
+	_expect(SwfScreen._pinned.is_empty(), "the round's pins are dropped when its screen is torn down")
+	# Release the filler images for the rest of the check.
+	SwfScreen._resized.clear()
+	SwfScreen._resized_order.clear()
+	SwfScreen._resized_bytes = 0
+
+
+## `_failed` is bounded like the resized cache and cleared on teardown; a failed source warns
+## once, and the raw fallback pads the 3× source like `_fit` (same stage origin and grid).
+func _check_failed_cache(pack: Dictionary) -> void:
+	var bad := ProjectSettings.globalize_path("res://project.godot")
+	for i in SwfScreen.FAILED_LIMIT + 44:
+		SwfScreen._make(bad, 8, 8, [Vector2.ZERO, Vector2.ZERO], "failed-test-%d" % i)
+	_expect(SwfScreen._failed.size() == SwfScreen.FAILED_LIMIT, "the failed cache is bounded")
+	SwfScreen._is_failed(String(SwfScreen._failed.keys().back()))
+	_expect(SwfScreen._warned.size() == 1, "a failed file warns once")
+	for key: String in SwfScreen._failed: SwfScreen._is_failed(key)
+	_expect(SwfScreen._warned.size() == 1, "checking the failed cache again does not warn again")
+	var screen: Node2D = SwfScreen.new()
+	screen.screen_name = &"game"
+	screen._px = 1.0
+	root.add_child(screen)
+	screen.add_node({"path": "raw", "parent": "", "stage_matrix": [1.0, 0.0, 0.0, 1.0, 0.0, 0.0],
+		"role": "piece", "kind": "movie_clip", "effective_visible": true, "frame": 1})
+	var art := _frame_art(pack, "_r0_Down", [0, 0], 1)
+	var rendered: Dictionary = art.duplicate()
+	rendered["file"] = ProjectSettings.globalize_path("res://original/screens/game".path_join(art.file))
+	rendered["size"] = Vector2(art.pixel_size[0], art.pixel_size[1])
+	rendered["pixel_origin"] = Vector2(art.pixel_origin[0], art.pixel_origin[1])
+	rendered["origin"] = rendered.pixel_origin / float(art.scale)
+	rendered["at"] = SwfScreen._matrix(art.at)
+	var rec: Dictionary = screen._by_path_rec["raw"]
+	_expect(screen._place_raw(rec, rendered), "the raw fallback decodes the 3x source")
+	var fit := SwfScreen._fit(ProjectSettings.globalize_path("res://original/screens/game".path_join(art.file)),
+		Vector2(art.pixel_origin[0], art.pixel_origin[1]), Vector2(art.pixel_size[0], art.pixel_size[1]),
+		float(art.scale), 1.0)
+	var texture: Texture2D = rec.sprite.texture
+	_expect(texture.get_width() == int(art.pixel_size[0] + fit.pads[0].x + fit.pads[1].x)
+		and texture.get_height() == int(art.pixel_size[1] + fit.pads[0].y + fit.pads[1].y),
+		"the raw fallback pads the source like _fit")
+	var expected: Vector2 = (rendered.at as Transform2D).affine_inverse() * (rendered.origin - fit.pads[0] / float(art.scale))
+	_expect(rec.sprite.transform.origin.is_equal_approx(expected),
+		"the raw fallback keeps _fit's stage origin")
+	screen.queue_free()
+	await process_frame
+	_expect(SwfScreen._failed.is_empty(), "teardown clears the failed cache")
+
+
+## The `_fit` cache key of a pack art at screen scale `px`.
+func _art_key(art: Dictionary, px: float) -> String:
+	if art.is_empty(): return ""
+	var file := ProjectSettings.globalize_path("res://original/screens/game".path_join(art.file))
+	var size: Array = art.get("pixel_size", [])
+	if size.size() != 2: return ""
+	return SwfScreen._fit(file, Vector2(art.pixel_origin[0], art.pixel_origin[1]),
+		Vector2(size[0], size[1]), float(art.scale), px).key
+
+
+## The file name of the image a node currently shows ("" when none).
+func _shown_name(screen: Node2D, path: String) -> String:
+	var rec: Dictionary = screen._by_path_rec.get(path, {})
+	var shown := int(rec.get("shown_art", -1))
+	if shown < 0 or shown >= rec.art.size(): return ""
+	return String(rec.art[shown].get("file", "")).get_file()
+
+
+## Whether a node currently has a visible sprite image.
+func _sprite_up(screen: Node2D, path: String) -> bool:
+	var rec: Dictionary = screen._by_path_rec.get(path, {})
+	return rec.get("sprite") != null and rec.sprite.visible and rec.sprite.texture != null
 
 
 ## Add a run-time node with `art` and wait until its image is up.

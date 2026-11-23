@@ -17,7 +17,7 @@ $suites = @(
     @{ Script = 'res://tests/round_regression_check.gd'; Success = '^PASS: \d+ round regression checks$' }
     @{ Script = 'res://tests/fidelity_check.gd'; Success = '^PASS: \d+ fidelity checks$' }
     @{ Script = 'res://tests/game_scene_check.gd'; Success = '^PASS: \d+ game scene checks$' }
-    @{ Script = 'res://tests/actor_display_check.gd'; Success = '^PASS: \d+ actor display checks$' }
+    @{ Script = 'res://tests/actor_display_check.gd'; Success = '^PASS: \d+ actor display checks$'; Skip = '^SKIP: actor display checks' }
     @{ Script = 'res://tests/mode_seam_check.gd'; Success = '^PASS: \d+ mode seam checks$' }
     @{ Script = 'res://tests/layout_check.gd'; Success = '^PASS: \d+ layout checks$' }
     @{ Script = 'res://tests/session_check.gd'; Success = '^PASS: \d+ session checks$' }
@@ -47,8 +47,16 @@ foreach ($suite in $suites) {
     $output = & $Godot --headless --path $projectRoot @extra --script $suite.Script 2>&1
     $checkExitCode = $LASTEXITCODE
     $output | ForEach-Object { Write-Output $_ }
-    if ($checkExitCode -ne 0 -or ($output -match '^(SCRIPT ERROR|ERROR):') -or
-        -not ($output -match $suite.Success)) {
+    if ($checkExitCode -ne 0 -or ($output -match '^(SCRIPT ERROR|ERROR):')) {
+        exit 1
+    }
+    # A check that cannot run for a missing local pack reports SKIP (not a pass), and the
+    # run continues: a clean checkout still succeeds without the original art.
+    if ($suite.Skip -and ($output -match $suite.Skip)) {
+        Write-Output "SKIP: $($suite.Script) (local pack missing)"
+        continue
+    }
+    if (-not ($output -match $suite.Success)) {
         exit 1
     }
 }
