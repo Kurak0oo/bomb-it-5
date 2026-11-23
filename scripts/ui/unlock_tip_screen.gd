@@ -26,8 +26,9 @@ const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 ## The tip's instance on the generated score screen (`UI_UNLOCK_TIP`).
 const UI_UNLOCK_TIP := "UI_UNLOCK_TIP"
 ## The tip's P1 head clip, baked into the generated button sequence: its per-robot frames.
-const HEADS := "res://scenes/swf/score_heads.json"
-const PREVIEWS := "res://scenes/swf/score_robot_previews.json"
+## The tip's per-robot robotMc / robotHeadMc clips, rendered from the SWF by
+## `record_screen.py tips` (the generated score screen holds robot 0 only).
+const TIP_ART := "res://scenes/swf/score_tip_art.json"
 
 var _screen: Node2D
 var _events: RefCounted
@@ -117,18 +118,24 @@ func initDis() -> void:
 ## recorded per-robot frames (`scenes/swf/score_heads.json`, art from the reference capture)
 ## so the AS3 `gotoAndStop` addresses it.
 func _addRobotHead() -> void:
-	if not FileAccess.file_exists(HEADS): return
-	var data = JSON.parse_string(FileAccess.get_file_as_string(HEADS))
-	if not data is Dictionary or not data.has("robotBtn1"): return
-	var entry: Dictionary = data.robotBtn1.get("entry", {})
-	var frames: Dictionary = data.robotBtn1.get("frames", {})
-	if entry.is_empty() or frames.is_empty(): return
-	entry = entry.duplicate(true)
+	pass  # robot 0's P1 head is the recorded button; other picks add it in `_ensureRobot`
+
+
+func _addPickedHead(robotId: int, robotGolden: String) -> void:
+	if not FileAccess.file_exists(TIP_ART): return
+	var data = JSON.parse_string(FileAccess.get_file_as_string(TIP_ART))
+	if not data is Dictionary or not data.has(str(robotId)): return
+	var piece: Dictionary = data[str(robotId)].get("head", {})
+	if piece.is_empty(): return
 	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
-	entry.path = tipRoot + __containerMc + "/robotBtn1/robotHeadMc"
-	entry.parent = tipRoot + __containerMc + "/robotBtn1"
+	var path := tipRoot + __containerMc + "/robotBtn1/robotHeadMc"
 	if _screen.has_instance(__containerMc + "/robotBtn1/robotHeadMc"): return
-	_screen.add_piece(entry, frames)
+	var entry := {"path": path, "parent": tipRoot + __containerMc + "/robotBtn1",
+		"golden_path": robotGolden, "class": "BOMBIT5UI_fla::roleHead_263",
+		"kind": "movie_clip", "name": "robotHeadMc", "role": "piece",
+		"frame": robotId + 1, "total_frames": 8, "effective_visible": true,
+		"stage_matrix": piece["at"], "render_bounds": piece["render_bounds"], "no_dump": true}
+	_screen.add_piece(entry, {str(robotId + 1): piece})
 
 
 ## `delDis`
@@ -247,21 +254,33 @@ func _ensureRobot(robotId: int) -> void:
 	var robotGolden: String = _screen.golden_path_of(robotZero).trim_suffix("/robot0") \
 		+ "/robot" + str(robotId)
 	var panelGolden: String = _screen.golden_path_of(__containerMc + "/Art_clothPanel0")
+	_screen.import_subtree(other, root + "/Art_clothPanel" + str(robotId), tipRoot + panel, panelMap,
+		panelGolden)
 	_screen.import_subtree(other, sourceMc + "/robot" + str(robotId), tipRoot + robot, robotMap,
 		robotGolden)
 	_replace_preview(robotId, robot)
-	_screen.import_subtree(other, root + "/Art_clothPanel" + str(robotId), tipRoot + panel, panelMap,
-		panelGolden)
+	_addPickedHead(robotId, robotGolden.replace("/robotStage/robotMc/robot" + str(robotId), "/robotBtn1/robotHeadMc"))
 
 
 ## The tip's own recorded robot clip, not character select's (different children/pose):
 ## show the reference capture's picture at the imported root, whose track still runs.
 func _replace_preview(robotId: int, robot: String) -> void:
-	if not FileAccess.file_exists(PREVIEWS): return
-	var data = JSON.parse_string(FileAccess.get_file_as_string(PREVIEWS))
+	if not FileAccess.file_exists(TIP_ART): return
+	var data = JSON.parse_string(FileAccess.get_file_as_string(TIP_ART))
 	if not data is Dictionary or not data.has(str(robotId)): return
+	var piece: Dictionary = data[str(robotId)].get("preview", {})
+	if piece.is_empty(): return
 	_screen.hide_children(robot)
-	_screen.add_art(robot, data[str(robotId)])
+	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
+	var path := tipRoot + robot + "/swfPreview"
+	if _screen.has_instance(robot + "/swfPreview"): return
+	var open: Dictionary = _screen.get_meta("tip_preview_open", {}) if _screen.has_meta("tip_preview_open") else {}
+	_screen.set_meta("tip_preview_open", open)
+	var entry := {"path": path, "parent": tipRoot + robot, "golden_path": piece.get("golden_path", path),
+		"kind": "movie_clip", "name": "swfPreview", "role": "piece", "frame": 1,
+		"total_frames": 1, "effective_visible": true,
+		"stage_matrix": piece["at"], "render_bounds": piece["render_bounds"], "no_dump": true}
+	_screen.add_piece(entry, {"1": piece})
 
 
 ## A layout entry's recorded stage matrix.

@@ -364,3 +364,21 @@ class FrontHatDown(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TipArt(unittest.TestCase):
+    """`_tip_piece`: the tip clip's SWF-rendered metadata and stage matrix."""
+
+    def test_piece_carries_its_stage_matrix_and_frame(self):
+        meta = {'pixel_origin': [10, 20], 'pixel_size': [30, 40], 'scale': 3.0,
+                'render_bounds': [1, 2, 11, 22]}
+        piece = record_screen._tip_piece(meta, [0.45, 0, 0, 0.45, 100, 200], 4)
+        self.assertEqual(piece['at'], [0.45, 0, 0, 0.45, 100, 200])
+        self.assertEqual(piece['frame'], 4)
+        self.assertEqual(piece['pixel_origin'], [10, 20])
+
+    def test_head_and_preview_paths_are_the_generated_tip_paths(self):
+        self.assertEqual(record_screen.TIP_PREVIEW % 3,
+                         '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotStage/robotMc/robot3')
+        self.assertEqual(record_screen.TIP_HEAD,
+                         '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1/robotHeadMc')

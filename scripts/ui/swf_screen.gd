@@ -596,8 +596,11 @@ func entry_stage_matrix(rec: Dictionary) -> Array:
 
 ## Draw only `instance` itself: a baked still pose does not use its recorded children.
 func hide_children(instance: String) -> void:
+	var root: Dictionary = _by_name.get(instance, {})
+	if root.is_empty(): return
+	var path := String(root.path) + "/"
 	for rec: Dictionary in _records:
-		if String(rec.path).begins_with(instance + "/"): rec.shown = false
+		if String(rec.path).begins_with(path): rec.shown = false
 	_queue_apply()
 
 
@@ -610,6 +613,7 @@ func add_piece(entry: Dictionary, frames: Dictionary) -> void:
 	for child in rec.node.get_children():
 		if child.name == "Placeholder": child.queue_free()  # the frame art, below
 	if entry.has("golden_path"): rec.node.set_meta("swf_path", entry.golden_path)
+	if entry.get("no_dump", false): rec.node.remove_meta("swf_path")
 	if entry.has("name"): _by_name.get_or_add(String(entry.name).split("@")[0], rec)
 	var relative := _relative(String(entry.path))
 	if not relative.is_empty(): _by_name[relative] = rec

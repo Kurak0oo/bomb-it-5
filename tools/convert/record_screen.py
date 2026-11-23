@@ -543,6 +543,66 @@ def _piece_meta(meta):
             'render_bounds': meta['render_bounds']}
 
 
+
+# ------------------------------------------------------------------ unlock tip
+
+TIP_ART = ROOT / 'scenes' / 'swf' / 'score_tip_art.json'
+TIP_PREVIEW = '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotStage/robotMc/robot%d'
+TIP_HEAD = '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1/robotHeadMc'
+
+
+def _tip_piece(meta, matrix, frame=None):
+    """One SWF-rendered tip clip: the player's piece metadata plus the node's stage matrix."""
+    out = dict(meta)
+    out['at'] = list(matrix)
+    if frame is not None: out['frame'] = frame
+    return out
+
+
+def record_tip_art(_case_name, player_path, swf):
+    """The unlock tip's per-robot library clips, rendered from the SWF (`piece`).
+
+    The generated score screen holds robot 0's baked button/robot only; the tip's
+    robotMc frames 1..8 and robotBtn1/robotHeadMc are other library children. Replay each
+    recorded results-robot<N> case to its unlock-tip capture and render the picked robot's
+    clip and the P1 head clip alone, with their stage matrices.
+    """
+    target = PACK / 'score'
+    target.mkdir(parents=True, exist_ok=True)
+    out, seen, total = {}, {}, 0
+    for robot in range(1, 9):
+        case_name = f'results-robot{robot}'
+        if not (ROOT / 'tools' / 'compare' / 'cases' / f'{case_name}.json').is_file():
+            continue
+        case = load_case(case_name)
+        p = Player(player_path, swf)
+        tmp = Path(tempfile.mkdtemp(prefix='bombit5-tip-'))
+        try:
+            for line in single_steps(case, 'unlock-tip'):
+                p.command(line)
+            dump = p.display()
+            by = {n['path']: n for n in dump['nodes']}
+            entry = {}
+            for key, golden in (('preview', TIP_PREVIEW % robot), ('head', TIP_HEAD)):
+                path = golden
+                node = by.get(path)
+                if node is None:
+                    raise SystemExit(f'{case_name}: {path} is not on the unlock-tip display list')
+                file = target / f'tip-{key}-{robot}.png'
+                meta = p.piece(path, file)
+                total += 1
+                entry[key] = _tip_piece({k: meta[k] for k in ('pixel_origin', 'pixel_size', 'scale', 'render_bounds')},
+                                        node['stage_matrix'], robot + 1 if key == 'head' else None)
+                entry[key]['golden_path'] = path
+            entry['preview']['class'] = 'robot'
+            entry['head']['class'] = 'roleHead'
+            out[str(robot)] = entry
+        finally:
+            p.close()
+            shutil.rmtree(tmp, ignore_errors=True)
+    TIP_ART.write_text(json.dumps(out, indent=1, sort_keys=True) + '\n', encoding='utf-8')
+    print(f'tip art: {len(out)} robots, {total} images in {target}')
+
 # ------------------------------------------------------------------ art
 
 def record_art(case_name, player_path, swf):
@@ -2509,7 +2569,7 @@ def record_fonts(_case_name, _player_path, swf):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('what', choices=['timeline', 'states', 'art', 'fonts', 'actors', 'items', 'panels', 'cartoons',
-                                         'sets', 'modes', 'shots'])
+                                         'sets', 'modes', 'shots', 'tips'])
     parser.add_argument('case')
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf')
@@ -2542,6 +2602,9 @@ def main():
         return 0
     if args.what == 'panels':
         record_panels(args.case, args.player.resolve(), args.swf)
+        return 0
+    if args.what == 'tips':
+        record_tip_art(args.case, args.player.resolve(), args.swf)
         return 0
     if not args.swf.is_file():
         raise SystemExit(f'needs the SWF at {args.swf}')
