@@ -382,3 +382,5 @@ class TipArt(unittest.TestCase):
                          '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotStage/robotMc/robot3')
         self.assertEqual(record_screen.TIP_HEAD,
                          '/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1/robotHeadMc')
+        self.assertEqual(record_screen.SCORE_HEAD,
+                         '/root1/__mainMc/GameMc/@0/@0/p1head')

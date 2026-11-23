@@ -114,12 +114,12 @@ func initDis() -> void:
 
 
 ## `initSetting` sets `_robotBtn1["robotHeadMc"].gotoAndStop(GameModel.P1Robot + 1)`, but the
-## button was recorded baked (its head is robot 0's pixels). Add the library clip from the
-## recorded per-robot frames (`scenes/swf/score_heads.json`, art from the reference capture)
-## so the AS3 `gotoAndStop` addresses it.
+## button was recorded baked (its head is robot 0's pixels). Add the clip's instance so the
+## AS3 `gotoAndStop` addresses it; `_addPickedButton` gives a picked robot its SWF button.
 func _addRobotHead() -> void:
 	# Robot 0's head is baked in the recorded button, but `initSetting` still addresses its
 	# clip; add an empty baked node so the AS3 `gotoAndStop(1)` has its instance.
+	if _screen.has_instance(__containerMc + "/robotBtn1/robotHeadMc"): return
 	var base: String = _screen.golden_path_of(__containerMc + "/robotBtn1")
 	if base.is_empty(): return
 	var path := String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1/robotHeadMc"
@@ -131,21 +131,18 @@ func _addRobotHead() -> void:
 	_screen.add_piece(entry, {})
 
 
-func _addPickedHead(robotId: int, robotGolden: String) -> void:
+## The recorded P1 button has robot 0's head baked in. Replace the whole button with the SWF
+## render of that robot's selected button: its `robotHeadMc` child is part of the render, so
+## the picked robot's face and white glow are the only ones drawn. The empty `robotHeadMc`
+## instance stays for `initSetting`'s `gotoAndStop` and the display-list path.
+func _addPickedButton(robotId: int) -> void:
+	if robotId <= 0: return  # robot 0's button is the recorded one
 	if not FileAccess.file_exists(TIP_ART): return
 	var data = JSON.parse_string(FileAccess.get_file_as_string(TIP_ART))
 	if not data is Dictionary or not data.has(str(robotId)): return
-	var piece: Dictionary = data[str(robotId)].get("head", {})
-	if piece.is_empty(): return
-	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
-	var path := tipRoot + __containerMc + "/robotBtn1/robotHeadMc"
-	if _screen.has_instance(__containerMc + "/robotBtn1/robotHeadMc"): return
-	var entry := {"path": path, "parent": tipRoot + __containerMc + "/robotBtn1",
-		"golden_path": robotGolden, "class": "BOMBIT5UI_fla::roleHead_263",
-		"kind": "movie_clip", "name": "robotHeadMc", "role": "piece",
-		"frame": robotId + 1, "total_frames": 8, "effective_visible": true,
-		"stage_matrix": piece["at"], "render_bounds": piece["render_bounds"], "no_dump": true}
-	_screen.add_piece(entry, {str(robotId + 1): piece})
+	var button: Dictionary = data[str(robotId)].get("button", {})
+	if button.is_empty(): return
+	_screen.add_art_frames(__containerMc + "/robotBtn1", button)
 
 
 ## `delDis`
@@ -217,6 +214,9 @@ func selectRobotBtn(is1P: bool) -> void:
 	# Robot 0's clip and panel are the recorded ones: its path stays exactly the AS3's
 	# `changeRobot` (no library copy, no panel hiding).
 	if robotId > 0: _ensureRobot(robotId)
+	# `initSetting`/`selectRobotBtn` re-address the P1 head on every tip (the DRESS UP button
+	# opens a new tip); the picked robot's SWF art must replace the baked robot 0 pixels.
+	_addPickedButton(robotId)
 	changeRobot(robotId, _robotMc)
 	_clothesPanel.changeCloth(s.body if is1P else 0, s.hat if is1P else 0)
 	# The recorded tip's robot 0 preview is baked into its robotMc frame; hide it when the
@@ -269,7 +269,6 @@ func _ensureRobot(robotId: int) -> void:
 	_screen.import_subtree(other, sourceMc + "/robot" + str(robotId), tipRoot + robot, robotMap,
 		robotGolden)
 	_replace_preview(robotId, robot)
-	_addPickedHead(robotId, robotGolden.replace("/robotStage/robotMc/robot" + str(robotId), "/robotBtn1/robotHeadMc"))
 
 
 ## The tip's own recorded robot clip, not character select's (different children/pose):
@@ -284,8 +283,6 @@ func _replace_preview(robotId: int, robot: String) -> void:
 	var tipRoot: String = String(_screen.layout.get("screen_root", "")) + "/"
 	var path := tipRoot + robot + "/swfPreview"
 	if _screen.has_instance(robot + "/swfPreview"): return
-	var open: Dictionary = _screen.get_meta("tip_preview_open", {}) if _screen.has_meta("tip_preview_open") else {}
-	_screen.set_meta("tip_preview_open", open)
 	var entry := {"path": path, "parent": tipRoot + robot, "golden_path": piece.get("golden_path", path),
 		"kind": "movie_clip", "name": "swfPreview", "role": "piece", "frame": 1,
 		"total_frames": 1, "effective_visible": true,
