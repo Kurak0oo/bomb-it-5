@@ -962,7 +962,9 @@ Dress-up after a game, 2026-11-23 (owner to review):
   ignores host focus; play still pauses. A delayed or occluded draw also let `Game._process` run
   extra frames while the driver waited on `frame_post_draw` (board film, bomb ages ~15 ticks late):
   in capture mode the driver now owns the host clock (`Game.capture_clock`/`capture_step`, one
-  step per captured frame) and freezes the tree across the draw wait. `tests/capture_focus_check.gd`.
+  step per captured frame) and freezes the tree across the draw wait. Capture windows are
+  `NO_FOCUS` + always on top so parallel captures keep drawing, with a 5 s watchdog that force-draws
+  a frame whose host draw never starts. `tests/capture_focus_check.gd`.
 - The tip's robot preview animates as on character select and a look click restarts it
   (`ClothesPanel.onClickIcon` -> `_singleRobotMc.gotoAndPlay(1)`); the frame-locked capture imports
   one pose per clip.
