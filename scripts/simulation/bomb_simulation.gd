@@ -40,6 +40,9 @@ var _pending_outcome: StringName = &""
 var _ending_started := 0
 ## Display only: the last serial given to a bomb (`serial_of`).
 var _bomb_serial := 0
+## Identity of the last InvincibilityCommand (display only): each new command replaces the
+## running one (`CommandChain.addCommand`), even when it ends on the same tick.
+var _blink_serial := 0
 ## The ending began on the round clock (each mode's `timeOut`: TIME'S UP and the lose jingle,
 ## then `judgeHandler`), not on `win`/`lose`.
 var _ending_timed_out := false
@@ -104,6 +107,8 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		actor.pushed = {}
 		actor.jump = {}
 		actor.blink_until = 0
+		actor.blink_started = 0
+		actor.blink_serial = 0
 		actor.capacity = actor.get("capacity", 1)
 		actor.power = actor.get("power", 1)
 		actor.speed = actor.get("speed", 1.6)
@@ -442,7 +447,7 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 		play_sound(&"useNombril")
 		actor.protected_until = _tick + 81
 		# (display) TryToKillCommandChain: `addUseNum`, then a new InvincibilityCommand blinks.
-		actor.blink_until = _tick + 81
+		_start_blink(actor, 81)
 	else:
 		if owner == actor_id: _mode.on_self_kill(actor)
 		actor.alive = false
@@ -454,6 +459,16 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 		if owner != &"" and owner != actor_id and _actors.has(owner):
 			_actors[owner].kills += 1
 			_actors[owner].score += 100
+
+
+## A new `InvincibilityCommand` (`CommandChain.addCommand` removes the previous command
+## first): its phase starts on this tick, and the serial tells a replacement from the
+## command it replaced even when both end on the same tick.
+func _start_blink(actor: Dictionary, frames: int) -> void:
+	_blink_serial += 1
+	actor.blink_serial = _blink_serial
+	actor.blink_started = _tick
+	actor.blink_until = _tick + frames
 
 
 func _advance_portals() -> void:
@@ -477,7 +492,7 @@ func _advance_portals() -> void:
 			actor.portal_latch = actor.portal_target
 			actor.transit_until = _tick + 29
 			actor.protected_until = _tick + 29
-			actor.blink_until = _tick + 46
+			_start_blink(actor, 46)
 
 
 func _advance_actor_states() -> void:
@@ -488,7 +503,7 @@ func _advance_actor_states() -> void:
 			actor.kick = false
 			actor.protected_until = _tick + 81
 			# (display) `vehicleComplete`: a new InvincibilityCommand blinks.
-			actor.blink_until = _tick + 81
+			_start_blink(actor, 81)
 			actor.movement_rearm = true
 		actor.protection_stage = &"none"
 		if actor.alive:
@@ -965,8 +980,10 @@ func _advance_respawns() -> void:
 			"velocity": Vector2.ZERO, "facing": Vector2.DOWN, "departures": [], "vehicle": &"", "pushed": {}, "jump": {},
 			"registered_vehicle": &"", "shield": 0, "invincible_until": 0, "busy_until": 0,
 			"transit_until": 0, "vehicle_recovery_until": 0, "protected_until": _tick + 81,
-			"blink_until": _tick + 81, "weapon": actor.base_weapon, "ammo": -1 if actor.base_weapon != &"" else 0,
+			"blink_until": 0, "blink_started": 0, "blink_serial": 0,
+			"weapon": actor.base_weapon, "ammo": -1 if actor.base_weapon != &"" else 0,
 			"kept_weapons": [], "kick": false, "respawn_at": 0, "portal_latch": Vector2i(-99, -99), "movement_rearm": true}, true)
+		_start_blink(actor, 81)
 		actor.drive_speed = actor.speed
 
 

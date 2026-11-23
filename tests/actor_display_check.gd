@@ -8,6 +8,10 @@ extends SceneTree
 ## the runtime art/offset calls. The real pack is read for the clips.
 
 const GameActors = preload("res://scripts/ui/game_actors.gd")
+const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
+const Layouts = preload("res://scripts/simulation/layouts.gd")
+const Modes = preload("res://scripts/simulation/modes/modes.gd")
+const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const PACK := "res://original/screens/game/actors/actors.json"
 const ZERO := Color(0, 0, 0, 0)
 ## `HorseProp.frog`'s `gotoAndPlay(19)`; `_r<n>_forg_<dir>.as` restarts at 1 on frame 34
@@ -81,6 +85,30 @@ class FakeScreen extends Node2D:
 		pass
 
 
+## A `FakeScreen` with real sprite visibility: `SwfScreen.set_node_art` hides the old image
+## while the new one is resampled, and `_show_ready` shows it on the next process frame.
+## Used only by the trace check, so the other checks keep the plain recorder.
+class TraceScreen extends FakeScreen:
+	func add_node(entry: Dictionary, art: Dictionary = {}) -> Dictionary:
+		var rec := super.add_node(entry, art)
+		var sprite := Sprite2D.new()
+		sprite.name = "Art"
+		sprite.set_meta("swf_art", true)
+		rec.node.add_child(sprite)
+		rec.sprite = sprite
+		return rec
+
+	func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
+		if not recs.has(path): return
+		var rec: Dictionary = recs[path]
+		if rec.art != art and rec.get("sprite", null) != null: rec.sprite.visible = false
+		super.set_node_art(path, art, frame)
+
+	func show_ready() -> void:
+		for rec: Dictionary in recs.values():
+			if not rec.art.is_empty() and rec.get("sprite", null) != null: rec.sprite.visible = true
+
+
 ## `GameBoard`'s display-list bookkeeping for the calls `GameActors` makes (attach/detach on
 ## row layers, cell matrices, pickups' row).
 class FakeBoard extends RefCounted:
@@ -135,6 +163,8 @@ func _run() -> void:
 	if FileAccess.file_exists(PACK):
 		var pack: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PACK))
 		_check_spawn_blink(pack)
+		_check_round_window_no_blink(pack)
+		_check_same_end_blink_restart(pack)
 		_check_golden_spawn_captures(pack)
 		_check_short_command_blink(pack)
 		_check_replacement_blink(pack)
@@ -165,6 +195,118 @@ func _check_spawn_blink(pack: Dictionary) -> void:
 		"the spawn blink clears on the 81st tick after robot init")
 	_expect(_no_offsets(screen, view), "the spawn blink leaves no colour offset on the robot's nodes")
 	scene.screen.queue_free()
+
+
+## A real rolled Arcade round: the display is made on the round's tick 38 (as
+## `App._game_screen` does under the map-loading screen) and runs to tick 260. The original
+## never hides a robot's model while its clip changes frames (`RobotView.setRobotMc` stops
+## the root clip; the nested loops just play), so after the round-start `InvincibilityCommand`
+## ends no robot node may toggle visibility or a colour offset. The test's fake screen hides
+## a sprite on every image change, like `SwfScreen.set_node_art` before the new image is
+## resampled; the display must keep the previous image up (the model must not blink).
+func _check_round_window_no_blink(pack: Dictionary) -> void:
+	var states := _arcade_states(260)
+	var scene := _make_trace(pack)
+	var actors: RefCounted = scene.actors
+	var screen: TraceScreen = scene.screen
+	actors.update(states[38])
+	var end := 0
+	for id: StringName in actors._robots:
+		end = maxi(end, int(actors._robots[id].blink_until))
+	_expect(end == 38 + 81, "the round-start command runs 81 ticks from the display's first snapshot")
+	for tick in range(39, end + 2):
+		actors.update(states[tick])
+	for id: StringName in actors._robots:
+		var view: Dictionary = actors._robots[id]
+		_expect(not view.blinking and not view.bright and int(view.blink) == 0,
+			"%s's round-start blink is over after its command" % id)
+	var toggles := _trace_toggles(actors, screen, states, 38, 260, end)
+	for path: String in toggles:
+		var counts: Dictionary = toggles[path]
+		_expect(int(counts.visible) == 0, "%s never blinks out after protection (%d visibility toggles)" % [path, counts.visible])
+		_expect(int(counts.offset) == 0, "%s keeps no +50 blink after protection (%d colour toggles)" % [path, counts.offset])
+	_expect(toggles.is_empty(), "every robot node is steady after the round-start protection")
+	scene.screen.queue_free()
+
+
+## `CommandChain.addCommand` removes the previous `InvincibilityCommand` before adding the
+## new one, so a second command starts its own 4-tick phase even when it ends on the tick the
+## running command would have ended (same `blink_until`). The snapshot's `blink_serial`
+## identifies the replacement; the display restarts the phase on it.
+func _check_same_end_blink_restart(pack: Dictionary) -> void:
+	var scene := _make(pack)
+	var actors: RefCounted = scene.actors
+	var screen: FakeScreen = scene.screen
+	actors.update(_snapshot(0, {"blink_until": 61, "blink_started": 0, "blink_serial": 0}))
+	var view: Dictionary = actors._robots[&"human"]
+	for tick in range(1, 20):
+		actors.update(_snapshot(tick, {"blink_until": 61, "blink_started": 0, "blink_serial": 0}))
+	actors.update(_snapshot(20, {"blink_until": 66, "blink_started": 20, "blink_serial": 1}))
+	for tick in range(21, 40):
+		actors.update(_snapshot(tick, {"blink_until": 66, "blink_started": 20, "blink_serial": 1}))
+	_expect(view.blink_until == 66 and view.blinking, "the first new command owns the blink")
+	actors.update(_snapshot(40, {"blink_until": 66, "blink_started": 40, "blink_serial": 2}))
+	_expect(view.blink_until == 66 and view.blinking and int(view.blink) <= 1 and not view.bright,
+		"a same-end replacement command restarts the blink phase")
+	_expect(_no_offsets(screen, view), "the restarted blink starts from no colour offset")
+	scene.screen.queue_free()
+
+
+## A real rolled Cinema Arcade round, one snapshot per tick. The display is created on
+## snapshot 38, as `App._game_screen` does under the map-loading screen.
+func _arcade_states(until: int) -> Array:
+	var mode: RefCounted = Modes.create(&"arcade", &"normal", &"cinema")
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 42
+	var board: Dictionary = Layouts.roll_set(&"cinema", false, mode.soft_chance(), rng)
+	var ids: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
+	var actors := {}
+	for index in ids.size():
+		actors[ids[index]] = {"cell": board.spawns[index], "lives": 3 if index == 0 else 1, "robot": index}
+	var game: RefCounted = Simulation.new(ids, actors, board.cells,
+		{"movement": true, "damage": false, "portals": board.portals, "round": false, "drops": false,
+		"seed": 42, "mode": mode, "vehicles": StageSets.vehicles(board.skin),
+		"features": board.get("features", {}), "center": board.get("center"), "skin": board.skin,
+		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,
+			"variants": board.get("variants", {}), "center": board.get("center", Vector2i(7, 6)),
+			"portal_ids": board.get("portal_ids", {})}})
+	var states: Array = [game.snapshot()]
+	var commands: Array[Dictionary] = []
+	for id: StringName in ids:
+		commands.append({"actor_id": id, "direction": Vector2.ZERO, "bomb_events": []})
+	for tick in until:
+		# A scripted walk (and idle stretches) changes the robot clip's frames as it plays.
+		commands[0].direction = Vector2.RIGHT if (tick / 30) % 2 == 0 else Vector2.ZERO
+		states.append(game.advance(commands))
+	return states
+
+
+## Every robot node's visibility and colour-offset changes after `after` (the trace logic):
+## each path under each robot container is sampled once per tick, before the fake screen's
+## next process frame shows a freshly resampled image.
+func _trace_toggles(actors: RefCounted, screen: TraceScreen, states: Array, from_tick: int, to_tick: int, after: int) -> Dictionary:
+	var previous_visible := {}
+	var previous_offset := {}
+	var changes := {}
+	for tick in range(from_tick, to_tick + 1):
+		if tick > from_tick: actors.update(states[tick])
+		for id: StringName in actors._robots:
+			var view: Dictionary = actors._robots[id]
+			if view.get("item", {}).is_empty(): continue
+			var base: String = String(view.item.path)
+			for path: String in screen.recs:
+				if path != base and not path.begins_with(base + "/"): continue
+				var visible: bool = screen.recs[path].sprite.visible
+				var offset: Color = screen.recs[path].color_offset
+				if tick > after:
+					if previous_visible.has(path) and previous_visible[path] != visible:
+						changes.get_or_add(path, {"visible": 0, "offset": 0}).visible += 1
+					if previous_offset.has(path) and previous_offset[path] != offset:
+						changes.get_or_add(path, {"visible": 0, "offset": 0}).offset += 1
+				previous_visible[path] = visible
+				previous_offset[path] = offset
+		screen.show_ready()
+	return changes
 
 
 ## The committed captures record the original's human robot container's colour transform.
@@ -419,6 +561,17 @@ class FakeScheduler extends Node:
 ## A display with a fake board/screen and the real actors pack.
 func _make(pack: Dictionary) -> Dictionary:
 	var screen := FakeScreen.new()
+	root.add_child(screen)
+	var board := FakeBoard.new()
+	board.actor_art = pack
+	board.screen = screen
+	var actors := GameActors.new(screen, board)
+	return {"screen": screen, "board": board, "actors": actors}
+
+
+## The trace display: the real actors pack, a `TraceScreen` (sprite hiding on resample).
+func _make_trace(pack: Dictionary) -> Dictionary:
+	var screen := TraceScreen.new()
 	root.add_child(screen)
 	var board := FakeBoard.new()
 	board.actor_art = pack
