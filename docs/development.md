@@ -948,3 +948,16 @@ Robot blink follow-up, 2026-11-23 (owner to review):
   display first draws.
 - A check that skips for a missing local pack is reported as SKIP by tools/run_checks, not PASS.
   `tests/actor_display_check.gd` (107 checks).
+
+Dress-up after a game, 2026-11-23 (owner to review):
+- The post-game DRESS UP tip always showed robot 0: the score screen's `UI_UNLOCK_TIP` recording
+  holds only robot 0's library clips (`tools/convert/layout.py`), so `ClothesPanel` addressed
+  absent `Art_clothPanel<r>` / `robot<r>` for any other pick. `UnlockTipScreen.selectRobotBtn`
+  (AS3 `selectRobotBtn` -> `changeRobot(GameModel.P1Robot)`) now imports the picked robot's clip
+  and panel from the character-select capture (same library classes, placed by its recorded
+  matrices); one still pose per clip plus the look/icon frames the panel drives, so the frame-locked
+  capture is not stalled. Robot 0 keeps the recorded tip. `tests/dress_up_after_game_check.gd`.
+- Intermittent gameplay compare failures (board hidden, ~173 extra nodes): `Game._notification`
+  paused the round on application focus-out even in the frame-locked capture. The capture now
+  ignores host focus; play still pauses. `tests/capture_focus_check.gd`.
+

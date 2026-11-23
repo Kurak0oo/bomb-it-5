@@ -24,6 +24,7 @@ $suites = @(
     @{ Script = 'res://tests/game_board_check.gd'; Success = '^PASS: \d+ game board checks$' }
     @{ Script = 'res://tests/flow_scene_check.gd'; Success = '^PASS: \d+ flow scene checks$' }
     @{ Script = 'res://tests/start_error_check.gd'; Success = '^PASS: \d+ start error checks$' }
+    @{ Script = 'res://tests/capture_focus_check.gd'; Success = '^PASS: \d+ capture focus checks$' }
     @{ Script = 'res://tests/difficulty_check.gd'; Success = '^PASS: \d+ difficulty checks$' }
     @{ Script = 'res://tests/controls_check.gd'; Success = '^PASS: \d+ controls checks$' }
     @{ Script = 'res://tests/looks_check.gd'; Success = '^PASS: \d+ looks checks$' }
