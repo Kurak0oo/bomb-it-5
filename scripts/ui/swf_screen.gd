@@ -55,6 +55,10 @@ static var frame_locked := false
 ## screen reuses it), filled from background threads (`warm`, `_request`) so the main thread
 ## never waits on decoding or resampling. Bounded: least recently shown dropped first.
 const ART_BUDGET := 256 * 1024 * 1024
+## Pinned images are exempt from the shared budget, so their own set is capped at half of it:
+## beyond that, pinned art is evicted least recently shown first (the round's normal frames),
+## keeping the current robots' four direction clips last.
+const PIN_BUDGET := ART_BUDGET / 2
 ## Resample requests `prefetch`/`pin` start per frame (round load), so a round's images do
 ## not queue all at once.
 const PREFETCH_PER_FRAME := 256
@@ -63,16 +67,20 @@ static var _resized_order: Array[String] = []
 static var _resized_bytes := 0
 static var _queued := {}
 ## Resample requests that failed (`_make`: the source could not be decoded): `_switch_art`
-## keeps the image already up, or shows the art's unresampled source, instead of hiding the
-## node. Bounded like the resized cache, and cleared when the round's screen is torn down.
+## keeps the image already up, or shows the art's source resampled to the screen scale,
+## instead of hiding the node. Bounded like the resized cache, and cleared per screen when it is torn down (a live
+## screen's failures stay). `_failed_owners` records every screen that hit a failure.
 const FAILED_LIMIT := 256
 static var _failed := {}
+static var _failed_owners := {}
 static var _failed_order: Array[String] = []
-## Source files already warned about (one `push_warning` per failed file).
+## Source files already warned about: one `push_warning` per failed file for the process.
 static var _warned := {}
-static var _warned_order: Array[String] = []
-## Resampled images the current round's prefetch owns: exempt from budget eviction until
-## `unpin` (the round's screen is torn down) or the next round's prefetch replaces them.
+## Resampled images the current round's prefetch owns (`PIN_PRIORITY_NORMAL` or the
+## directions' `PIN_PRIORITY_LAST`): exempt from budget eviction until `unpin` (the round's
+## screen is torn down) or the next round's ownership replaces them, bounded by PIN_BUDGET.
+const PIN_PRIORITY_NORMAL := 1
+const PIN_PRIORITY_LAST := 2
 static var _pinned := {}
 static var _pin_owner := 0
 ## 3× sources kept for hit tests only (`_image`).
@@ -419,8 +427,8 @@ func move_node(path: String, stage_matrix: Array) -> void:
 ## The node keeps the image it already shows until the replacement is resampled, as a Flash
 ## MovieClip swaps its bitmap without leaving the display list: changing art never blinks the
 ## node out. An empty art (no image: a clip frame the original leaves empty) hides the node.
-## If a resample cannot be made, the art's unresampled source (or the image already up) stays
-## in place, so a bad frame still draws something deterministic.
+## If a resample cannot be made, the art's source resampled to the screen scale (or the image
+## already up) stays in place, so a bad frame still draws something deterministic.
 func set_node_art(path: String, art: Dictionary, frame := 0) -> void:
 	var rec: Dictionary = _by_path_rec.get(path, {})
 	if rec.is_empty(): return
@@ -461,19 +469,32 @@ func prefetch(art: Dictionary) -> void:
 
 ## Exempt a prefetched image from budget eviction and request it: the round's own art
 ## (`GameActors._prefetch_round`) stays in the cache until `unpin` or the next round's pins.
-func pin(art: Dictionary) -> void:
+## `last` marks the current robots' four direction clips, evicted after the round's other
+## pinned art when the pinned set reaches PIN_BUDGET.
+func pin(art: Dictionary, last := false) -> void:
 	var job := _prefetch_job(art)
 	if job.is_empty(): return
 	_cache_lock.lock()
-	# A new round's prefetch replaces the old pin set, even if the old screen has not been
-	# torn down yet.
+	# (A new round's prefetch takes the set even when it pins nothing: see
+	# `take_pin_ownership`.)
 	var owner := get_instance_id()
 	if _pin_owner != owner:
 		_pinned.clear()
 		_pin_owner = owner
-	_pinned[job.key] = true
+	_pinned[job.key] = PIN_PRIORITY_LAST if last else PIN_PRIORITY_NORMAL
+	_trim_pinned_locked()
 	_cache_lock.unlock()
 	_queue_prefetch(job)
+
+
+## Start a round's pin set: release the previous owner's pins even when this round pins no
+## art of its own (`GameActors._prefetch_round`), so a round with no pinned frames does not
+## keep the last round's images protected.
+func take_pin_ownership() -> void:
+	_cache_lock.lock()
+	_pinned.clear()
+	_pin_owner = get_instance_id()
+	_cache_lock.unlock()
 
 
 ## Stop exempting this screen's prefetched images (its round is over). Returns whether it
@@ -490,19 +511,23 @@ func unpin() -> bool:
 
 
 func _exit_tree() -> void:
-	# The round's screen is gone: its pins stop protecting the cache, and a failure recorded
-	# for it (bounded while it ran) no longer means anything.
+	# The round's screen is gone: its pins stop protecting the cache, and only the failures
+	# it recorded (bounded while it ran) no longer mean anything.
 	unpin()
-	clear_failed()
+	clear_failed(get_instance_id())
 
 
-## Forget every failed resample (the round's screen is torn down).
-static func clear_failed() -> void:
+## Forget the failed resamples recorded by screen `owner` only: another live screen's
+## failures stay until that screen is torn down. `_warned` is per process, not per screen.
+static func clear_failed(owner: int) -> void:
 	_cache_lock.lock()
-	_failed.clear()
-	_failed_order.clear()
-	_warned.clear()
-	_warned_order.clear()
+	for key: String in _failed.keys():
+		var owners: Dictionary = _failed_owners.get(key, {})
+		owners.erase(owner)
+		if owners.is_empty():
+			_failed.erase(key)
+			_failed_owners.erase(key)
+			_failed_order.erase(key)
 	_cache_lock.unlock()
 
 
@@ -515,14 +540,19 @@ func _prefetch_job(art: Dictionary) -> Dictionary:
 	if not FileAccess.file_exists(file): return {}
 	var origin := Vector2(art.pixel_origin[0], art.pixel_origin[1])
 	var fit := _fit(file, origin, Vector2(size[0], size[1]), float(art.scale), px)
-	return {"file": file, "fit": fit, "key": fit.key}
+	return {"file": file, "fit": fit, "key": fit.key, "owner": get_instance_id()}
 
 
-## Queue one prefetch job unless its image is already cached, pending or known bad.
+## Queue one prefetch job unless its image is already cached, pending or known bad. A known
+## failure is claimed for this screen too, so the live screen keeps its record after another
+## owner is torn down.
 func _queue_prefetch(job: Dictionary) -> void:
 	var key: String = job.key
 	_cache_lock.lock()
 	var known: bool = _queued.has(key) or _resized.has(key) or _failed.has(key)
+	if _failed.has(key):
+		var owners: Dictionary = _failed_owners.get_or_add(key, {})
+		owners[int(job.get("owner", get_instance_id()))] = true
 	_cache_lock.unlock()
 	if known or _prefetch_keys.has(key): return
 	_prefetch_keys[key] = true
@@ -537,7 +567,7 @@ func _pump_prefetch() -> void:
 	for i in count:
 		var job: Dictionary = _prefetch_queue[i]
 		_prefetch_keys.erase(job.key)
-		_request(job.file, job.fit, true)
+		_request(job.file, job.fit, true, int(job.get("owner", get_instance_id())))
 	var rest: Array[Dictionary] = []
 	for i in range(count, _prefetch_queue.size()): rest.append(_prefetch_queue[i])
 	_prefetch_queue = rest
@@ -1106,8 +1136,8 @@ static func _latest(table: Dictionary, i: int) -> int:
 
 ## Show art `pick` of a node (-1: none). Its image is resampled off the main thread: until
 ## it is ready the node keeps the art it shows (a sequence lags a frame), then `_process`
-## swaps it in. When the resample fails, the unresampled source (or the image already up)
-## is shown instead. The comparison loop (frame-locked) resamples it at once instead.
+## swaps it in. When the resample fails, the source resampled to the screen scale (or the
+## image already up) is shown instead. The comparison loop (frame-locked) resamples it at once instead.
 func _switch_art(rec: Dictionary, pick: int) -> void:
 	rec.want_art = pick
 	if pick < 0:
@@ -1123,7 +1153,7 @@ func _switch_art(rec: Dictionary, pick: int) -> void:
 	var state := _ensure_state(art)
 	if state == &"failed":
 		# The resample cannot be made: keep the image already up (Flash keeps the last
-		# bitmap), and with none show the unresampled source on the same pads as `_fit`.
+		# bitmap), and with none show the source resampled on `_fit`'s grid.
 		if rec.has("sprite") and rec.sprite.texture != null: return
 		if String(rec.get("raw_key", "")) == String(rec.get("art_key", "")): return
 		rec.raw_key = rec.art_key
@@ -1191,7 +1221,7 @@ func _place(rec: Dictionary, k: int) -> bool:
 	var fit := _fit_of(art, px)
 	var image := _cached(fit.key)
 	if image == null:
-		if not frame_locked: _request(art.file, fit, true)
+		if not frame_locked: _request(art.file, fit, true, get_instance_id())
 		return false
 	sprite.texture = ImageTexture.create_from_image(image)
 	sprite.transform = fit.transform
@@ -1202,32 +1232,27 @@ func _place(rec: Dictionary, k: int) -> bool:
 	return true
 
 
-## Unresampled art as a last resort (`_switch_art` when its resample failed and no image is
-## up): the 3× source padded by `_fit`'s pads, so it sits on the screen's pixel grid and at
-## the same stage origin. False when it cannot be decoded.
+## The source art as a last resort (`_switch_art` when its resample failed and no image is
+## up): resampled to `_fit`'s w×h with Lanczos, exactly like `_make`, so the fallback looks
+## like a resampled frame instead of a 3× texture. False when it cannot be decoded.
 func _place_raw(rec: Dictionary, art: Dictionary) -> bool:
 	var source := _decode(art.file)
 	if source == null: return false
 	var px := _px if _px > 0.0 else pixels_per_unit()
 	var fit := _fit_of(art, px)
-	var pads: Array = fit.pads
 	var image := source
-	var pad_before: Vector2 = pads[0]
-	var pad_after: Vector2 = pads[1]
+	var pad_before: Vector2 = fit.pads[0]
+	var pad_after: Vector2 = fit.pads[1]
 	if pad_before != Vector2.ZERO or pad_after != Vector2.ZERO:
 		var size := Vector2i(source.get_width() + int(pad_before.x + pad_after.x),
 			source.get_height() + int(pad_before.y + pad_after.y))
 		image = Image.create_empty(size.x, size.y, false, source.get_format())
 		image.blit_rect(source, Rect2i(Vector2i.ZERO, source.get_size()), Vector2i(pad_before))
+	if int(fit.w) != image.get_width() or int(fit.h) != image.get_height():
+		image.resize(int(fit.w), int(fit.h), Image.INTERPOLATE_LANCZOS)
 	var sprite := _sprite(rec)
 	sprite.texture = ImageTexture.create_from_image(image)
-	# The raw texture has 3× the resampled one's texels, so its unit is `_fit`'s times the
-	# resample factor; the pads keep the same stage origin.
-	var padded := Vector2(image.get_width(), image.get_height())
-	var unit := Vector2(padded.x / float(art.scale) / image.get_width(),
-		padded.y / float(art.scale) / image.get_height())
-	var origin: Vector2 = art.origin - pad_before / float(art.scale)
-	sprite.transform = (art.at as Transform2D).affine_inverse() * Transform2D(0.0, unit, 0.0, origin)
+	sprite.transform = fit.transform
 	sprite.self_modulate = art.get("modulate", Color.WHITE)
 	sprite.visible = true
 	return true
@@ -1345,7 +1370,7 @@ func _refresh_art() -> void:
 	# frames and other robots show without waiting.
 	if not frame_locked and not _warm_started:
 		_warm_started = true
-		warm(screen_name, _px)
+		warm(screen_name, _px, get_instance_id())
 
 
 ## Whether the art's image is ready at the screen scale, or being resampled, or cannot be:
@@ -1361,12 +1386,12 @@ func _ensure_state(art: Dictionary) -> StringName:
 		art.size = Vector2(source.get_width(), source.get_height())
 	var fit := _fit_of(art, px)
 	if _has_cached(fit.key): return &"ready"
-	if _is_failed(fit.key): return &"failed"
+	if _is_failed(fit.key, get_instance_id()): return &"failed"
 	if frame_locked:
-		_make(art.file, fit.w, fit.h, fit.pads, fit.key)
+		_make(art.file, fit.w, fit.h, fit.pads, fit.key, get_instance_id())
 		if _has_cached(fit.key): return &"ready"
 		return &"failed"
-	_request(art.file, fit, true)
+	_request(art.file, fit, true, get_instance_id())
 	return &"pending"
 
 
@@ -1449,8 +1474,9 @@ static func _image(file: String) -> Image:
 	return image
 
 
-## Resample a piece file to w×h with its pads, into the cache (any thread).
-static func _make(file: String, w: int, h: int, pads: Array, key: String) -> void:
+## Resample a piece file to w×h with its pads, into the cache (any thread). `owner` is the
+## screen whose request made the resample, so a failure is cleared with that screen.
+static func _make(file: String, w: int, h: int, pads: Array, key: String, owner := 0) -> void:
 	var source := _decode(file) if not _cancel_warm else null
 	if source != null:
 		var image: Image
@@ -1466,27 +1492,62 @@ static func _make(file: String, w: int, h: int, pads: Array, key: String) -> voi
 		_cache_put(key, image)
 	elif not _cancel_warm:
 		# (a request that cannot be made: nodes waiting for it keep their image or show the
-		# source; `_is_failed` warns once per source file)
+		# source; `_is_failed` warns once per source file, and the record is kept per owner)
 		_cache_lock.lock()
 		if not _failed.has(key):
 			_failed[key] = file
 			_failed_order.append(key)
-			while _failed_order.size() > FAILED_LIMIT:
-				_failed.erase(_failed_order.pop_front())
+		var owners: Dictionary = _failed_owners.get_or_add(key, {})
+		owners[owner] = true
+		while _failed_order.size() > FAILED_LIMIT:
+			var old: String = _failed_order.pop_front()
+			_failed.erase(old)
+			_failed_owners.erase(old)
 		_cache_lock.unlock()
 	_cache_lock.lock()
 	_queued.erase(key)
 	_cache_lock.unlock()
 
 
+## The cached bytes the pinned set holds (pins still queued take none yet).
+static func _pinned_bytes_locked() -> int:
+	var total := 0
+	for key in _pinned:
+		var image: Image = _resized.get(key)
+		if image != null: total += image.get_data_size()
+	return total
+
+
+## Evict pinned art beyond PIN_BUDGET, least recently shown first, but the current robots'
+## four direction clips (PIN_PRIORITY_LAST) only after every other pinned image.
+static func _trim_pinned_locked() -> void:
+	var pinned_bytes := _pinned_bytes_locked()
+	if pinned_bytes <= PIN_BUDGET: return
+	for priority in [PIN_PRIORITY_NORMAL, PIN_PRIORITY_LAST]:
+		var i := 0
+		while pinned_bytes > PIN_BUDGET and i < _resized_order.size():
+			var key: String = _resized_order[i]
+			if not _pinned.has(key) or int(_pinned[key]) != priority:
+				i += 1
+				continue
+			var image: Image = _resized[key]
+			_resized_order.remove_at(i)
+			_resized_bytes -= image.get_data_size()
+			pinned_bytes -= image.get_data_size()
+			_resized.erase(key)
+			_pinned.erase(key)
+
+
 ## Resampled art, shared by every build of every screen (returning to a screen reuses it),
-## least recently shown dropped first beyond ART_BUDGET bytes.
+## least recently shown dropped first beyond ART_BUDGET bytes. The pinned set is capped
+## separately (PIN_BUDGET), so it can never keep the whole cache above its budget.
 static func _cache_put(key: String, image: Image) -> void:
 	_cache_lock.lock()
 	if not _resized.has(key):
 		_resized[key] = image
 		_resized_order.append(key)
 		_resized_bytes += image.get_data_size()
+		_trim_pinned_locked()
 		# Least recently shown first, but never a pinned image (the round's prefetch): the
 		# clip a turn or ride change shows must stay ready.
 		var i := 0
@@ -1508,25 +1569,29 @@ static func _has_cached(key: String) -> bool:
 	return has
 
 
-static func _is_failed(key: String) -> bool:
+## Whether `key` is a known failure; `owner` claims it, so tearing another screen down does
+## not forget a live screen's failure.
+static func _is_failed(key: String, owner := 0) -> bool:
 	_cache_lock.lock()
 	var failed := _failed.has(key)
 	var file: String = _failed.get(key, "") if failed else ""
+	if failed:
+		var owners: Dictionary = _failed_owners.get_or_add(key, {})
+		owners[owner] = true
 	_cache_lock.unlock()
 	if failed and not file.is_empty(): _warn_failed(file)
 	return failed
 
 
-## One warning per source file that cannot be resampled (bounded with the failed cache).
+## One warning per source file for the whole process (not cleared with a screen).
 static func _warn_failed(file: String) -> void:
+	# (the same source can arrive through a `..` path and its normalized form)
+	var key := file.simplify_path()
 	_cache_lock.lock()
-	if _warned.has(file):
+	if _warned.has(key):
 		_cache_lock.unlock()
 		return
-	_warned[file] = true
-	_warned_order.append(file)
-	while _warned_order.size() > FAILED_LIMIT:
-		_warned.erase(_warned_order.pop_front())
+	_warned[key] = true
 	_cache_lock.unlock()
 	push_warning("could not resample %s: the pack file is missing or not an image" % file)
 
@@ -1542,7 +1607,7 @@ static func _cached(key: String) -> Image:
 
 
 ## Resample one piece in the background (once, however often it is asked for).
-static func _request(file: String, fit: Dictionary, urgent: bool) -> void:
+static func _request(file: String, fit: Dictionary, urgent: bool, owner := 0) -> void:
 	_cache_lock.lock()
 	var known: bool = _queued.has(fit.key) or _resized.has(fit.key)
 	if not known: _queued[fit.key] = true
@@ -1552,14 +1617,14 @@ static func _request(file: String, fit: Dictionary, urgent: bool) -> void:
 	var h: int = fit.h
 	var pads: Array = fit.pads
 	var key: String = fit.key
-	_warm_tasks.append(WorkerThreadPool.add_task(func(): _make(file, w, h, pads, key), urgent))
+	_warm_tasks.append(WorkerThreadPool.add_task(func(): _make(file, w, h, pads, key, owner), urgent))
 
 
 ## Resample a screen's art for screen scale `px` in a background thread, in timeline order
 ## (what shows first, first), up to part of the cache budget so warming never pushes out
 ## art in use. Called for the next screen while another shows, and by each screen for
 ## its own remaining art.
-static func warm(screen: StringName, px: float) -> void:
+static func warm(screen: StringName, px: float, owner := 0) -> void:
 	var file := PACK % screen
 	if not FileAccess.file_exists(file) or px <= 0.0: return
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(file))
@@ -1592,7 +1657,7 @@ static func warm(screen: StringName, px: float) -> void:
 			var known: bool = _queued.has(fit.key) or _resized.has(fit.key)
 			if not known: _queued[fit.key] = true
 			_cache_lock.unlock()
-			if not known: _make(path, fit.w, fit.h, fit.pads, fit.key), false))
+			if not known: _make(path, fit.w, fit.h, fit.pads, fit.key, owner), false))
 
 
 ## Collect finished background tasks (each must be waited for once).
