@@ -386,13 +386,15 @@ func import_subtree(from: StringName, from_prefix: String, to_prefix: String, ma
 		if copy.has("action") and copy.has("stage_bounds"):
 			rec.hit = _hit(rec)
 			_hits.add_child(rec.hit)
-		_import_art(rec, src, manifest, prefix, map)
+		_import_art(rec, src, manifest, prefix, map, source)
 
 
 ## The source pack's art for one imported node (`_add_piece_art` on the other screen):
-## its static piece or frames, its sequences, and every recorded widget frame.
+## its static piece, one pose from a sequence, and every recorded widget frame. A sequence
+## is a preview pose here, not an animation: importing every frame of the character capture's
+## idle clips made the frame-locked compare capture resample hundreds of images at once.
 func _import_art(rec: Dictionary, path: String, manifest: Dictionary, prefix: String,
-		map: Transform2D) -> void:
+		map: Transform2D, source: Dictionary) -> void:
 	var entry: Dictionary = rec.entry
 	var capture: int = int(_timeline.get("capture_index", 0))
 	if entry.role == "piece" and (entry.effective_visible or entry.has("first_visible")):
@@ -401,17 +403,44 @@ func _import_art(rec: Dictionary, path: String, manifest: Dictionary, prefix: St
 			_import_art_piece(rec, piece, int(piece.get("index", capture)), -1, prefix, map)
 	elif entry.role == "sequence":
 		var frames = manifest.get("sequences", {}).get(path)
-		if frames is Dictionary:
-			var keys: Array = frames.keys()
-			keys.sort_custom(func(a, b): return int(a) < int(b))
-			for key in keys: _import_art_piece(rec, frames[key], int(key), -1, prefix, map)
+		if frames is Dictionary and not frames.is_empty():
+			var key := _sequence_key(frames, _source_capture_index(source, String(entry.get("timeline_of", ""))))
+			_import_art_piece(rec, frames[key], int(key), -1, prefix, map)
 	# Recorded widget frames (`states` / `frames`), as `_add_piece_art` reads them.
-	for source in ["states", "frames"]:
-		var by_frame = manifest.get(source, {}).get(path)
+	for source_kind in ["states", "frames"]:
+		var by_frame = manifest.get(source_kind, {}).get(path)
 		if by_frame is Dictionary:
 			for frame in by_frame:
 				_import_art_piece(rec, by_frame[frame], int(by_frame[frame].get("index", capture)),
 					int(frame), prefix, map)
+
+
+## The index at which the other capture took a node: its own extra timeline's capture, or
+## the screen's main one.
+static func _source_capture_index(source: Dictionary, capture: String) -> int:
+	var timeline: Dictionary = source.get("timeline", {})
+	if not capture.is_empty():
+		timeline = source.get("extra_timelines", {}).get(capture, timeline)
+	return int(timeline.get("capture_index", 0))
+
+
+## The sequence frame to show as a still: the latest one at or before `at`, else the first.
+static func _sequence_key(frames: Dictionary, at: int) -> String:
+	var best := ""
+	var best_at := -1
+	for key: String in frames:
+		var k := int(key)
+		if k <= at and k > best_at:
+			best_at = k
+			best = key
+	if not best.is_empty(): return best
+	var first := -1
+	for key: String in frames:
+		var k := int(key)
+		if first < 0 or k < first:
+			first = k
+			best = key
+	return best
 
 
 func _import_art_piece(rec: Dictionary, piece: Dictionary, at: int, state: int, prefix: String,
