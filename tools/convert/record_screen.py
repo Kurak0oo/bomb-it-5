@@ -591,7 +591,7 @@ def record_tip_art(_case_name, player_path, swf):
                 file = target / f'tip-{key}-{robot}.png'
                 meta = p.piece(path, file)
                 total += 1
-                entry[key] = _tip_piece({k: meta[k] for k in ('pixel_origin', 'pixel_size', 'scale', 'render_bounds')},
+                entry[key] = _tip_piece({'file': file.name, **{k: meta[k] for k in ('pixel_origin', 'pixel_size', 'scale', 'render_bounds')}},
                                         node['stage_matrix'], robot + 1 if key == 'head' else None)
                 entry[key]['golden_path'] = path
             entry['preview']['class'] = 'robot'

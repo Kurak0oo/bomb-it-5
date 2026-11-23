@@ -10,6 +10,7 @@
     168.45
    ],
    "class": "roleHead",
+   "file": "tip-head-1.png",
    "frame": 2,
    "golden_path": "/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1/robotHeadMc",
    "pixel_origin": [
@@ -38,6 +39,7 @@
     255.95
    ],
    "class": "robot",
+   "file": "tip-preview-1.png",
    "golden_path": "/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotStage/robotMc/robot1",
    "pixel_origin": [
     345,
@@ -67,6 +69,7 @@
     168.45
    ],
    "class": "roleHead",
+   "file": "tip-head-2.png",
    "frame": 3,
    "golden_path": "/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1/robotHeadMc",
    "pixel_origin": [
@@ -95,6 +98,7 @@
     231.55
    ],
    "class": "robot",
+   "file": "tip-preview-2.png",
    "golden_path": "/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotStage/robotMc/robot2",
    "pixel_origin": [
     344,
@@ -124,6 +128,7 @@
     168.45
    ],
    "class": "roleHead",
+   "file": "tip-head-3.png",
    "frame": 4,
    "golden_path": "/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotBtn1/robotHeadMc",
    "pixel_origin": [
@@ -152,6 +157,7 @@
     237.5
    ],
    "class": "robot",
+   "file": "tip-preview-3.png",
    "golden_path": "/root1/__mainMc/GameMc/@0/@0/@0/containerMc/robotStage/robotMc/robot3",
    "pixel_origin": [
     338,
@@ -159,13 +165,13 @@
    ],
    "pixel_size": [
     473,
-    544
+    549
    ],
    "render_bounds": [
     111.5,
     232.95,
     271.4,
-    415.2
+    416.7
    ],
    "scale": 3.0
   }

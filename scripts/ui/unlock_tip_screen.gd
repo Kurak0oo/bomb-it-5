@@ -118,7 +118,17 @@ func initDis() -> void:
 ## recorded per-robot frames (`scenes/swf/score_heads.json`, art from the reference capture)
 ## so the AS3 `gotoAndStop` addresses it.
 func _addRobotHead() -> void:
-	pass  # robot 0's P1 head is the recorded button; other picks add it in `_ensureRobot`
+	# Robot 0's head is baked in the recorded button, but `initSetting` still addresses its
+	# clip; add an empty baked node so the AS3 `gotoAndStop(1)` has its instance.
+	var base: String = _screen.golden_path_of(__containerMc + "/robotBtn1")
+	if base.is_empty(): return
+	var path := String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1/robotHeadMc"
+	var entry := {"path": path, "parent": String(_screen.layout.get("screen_root", "")) + "/" + __containerMc + "/robotBtn1",
+		"golden_path": base + "/robotHeadMc", "class": "BOMBIT5UI_fla::roleHead_263",
+		"kind": "movie_clip", "name": "robotHeadMc", "role": "piece", "frame": 1,
+		"total_frames": 8, "effective_visible": true,
+		"stage_matrix": [0.92, 0.0, 0.0, 0.92, 372.5, 168.45]}
+	_screen.add_piece(entry, {})
 
 
 func _addPickedHead(robotId: int, robotGolden: String) -> void:
