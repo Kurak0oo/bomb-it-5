@@ -13,7 +13,7 @@ suites=(
 	"res://tests/round_regression_check.gd|^PASS: [0-9]+ round regression checks$"
 	"res://tests/fidelity_check.gd|^PASS: [0-9]+ fidelity checks$"
 	"res://tests/game_scene_check.gd|^PASS: [0-9]+ game scene checks$"
-	"res://tests/actor_display_check.gd|^PASS: [0-9]+ actor display checks$"
+	"res://tests/actor_display_check.gd|^PASS: [0-9]+ actor display checks$||^SKIP: actor display checks"
 	"res://tests/mode_seam_check.gd|^PASS: [0-9]+ mode seam checks$"
 	"res://tests/layout_check.gd|^PASS: [0-9]+ layout checks$"
 	"res://tests/session_check.gd|^PASS: [0-9]+ session checks$"
@@ -39,16 +39,21 @@ suites=(
 	"res://tools/smoke_playthrough.gd|^PASS: smoke playthrough |--fixed-fps 35"
 )
 for suite in "${suites[@]}"; do
-	script="${suite%%|*}"
-	pattern="${suite#*|}"
-	# An optional third field: extra Godot arguments (the smoke playthrough runs at the SWF rate).
-	extra=""
-	if [[ "$pattern" == *"|"* ]]; then extra="${pattern#*|}"; pattern="${pattern%%|*}"; fi
+	IFS='|' read -r script pattern extra skip <<< "$suite"
 	# shellcheck disable=SC2086
 	output="$("$godot" --headless --path "$root" $extra --script "$script" 2>&1)"
 	code=$?
 	printf '%s\n' "$output"
-	if [[ $code -ne 0 ]] || grep -qE '^(SCRIPT ERROR|ERROR):' <<<"$output" || ! grep -qE "$pattern" <<<"$output"; then
+	if [[ $code -ne 0 ]] || grep -qE '^(SCRIPT ERROR|ERROR):' <<<"$output"; then
+		exit 1
+	fi
+	# A check that cannot run for a missing local pack reports SKIP (not a pass), and the
+	# run continues: a clean checkout still succeeds without the original art.
+	if [[ -n "$skip" ]] && grep -qE "$skip" <<<"$output"; then
+		echo "SKIP: $script (local pack missing)"
+		continue
+	fi
+	if ! grep -qE "$pattern" <<<"$output"; then
 		exit 1
 	fi
 done
