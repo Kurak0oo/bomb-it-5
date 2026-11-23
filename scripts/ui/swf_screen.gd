@@ -266,7 +266,7 @@ func get_frame(instance: String) -> int:
 	var rec: Dictionary = _by_name.get(instance, {})
 	if rec.is_empty(): return 0
 	if rec.override > 0: return rec.override
-	var s = _state(rec, index)
+	var s = _state(rec, _state_index(rec, index))
 	return int(s[7]) if s is Array and s.size() > 7 else int(rec.frame)
 
 
@@ -357,6 +357,9 @@ func import_subtree(from: StringName, from_prefix: String, to_prefix: String, ma
 	# Parents before children.
 	picked.sort_custom(func(a, b): return String(a.path).count("/") < String(b.path).count("/"))
 	var prefix := "../%s/" % from
+	# The source parts keep their own capture clock, but it starts when they first show here:
+	# a private extra timeline (`char<N>` remapped) with the source's from-shown capture.
+	var cap_keys := {}
 	for entry: Dictionary in picked:
 		var src := String(entry.path)
 		var dst := to_prefix + src.substr(from_prefix.length())
@@ -368,16 +371,33 @@ func import_subtree(from: StringName, from_prefix: String, to_prefix: String, ma
 		var copy: Dictionary = entry.duplicate(true)
 		copy.path = dst
 		copy.parent = parent
-		# A static scene node: the source capture's animation clock is not this screen's.
-		copy.erase("track")
-		copy.erase("timeline_of")
 		copy.erase("moved_by")
+		var cap := String(entry.get("timeline_of", ""))
+		if cap.is_empty():
+			copy.erase("timeline_of")
+		else:
+			if not cap_keys.has(cap):
+				var key := "import:%s:%d" % [to_prefix, cap_keys.size()]
+				var conf: Dictionary = source.get("extra_timelines", {}).get(cap, {})
+				if conf.is_empty(): conf = source.get("timeline", {})
+				var timelines: Dictionary = layout.get_or_add("extra_timelines", {})
+				timelines[key] = conf.duplicate(true)
+				cap_keys[cap] = key
+			copy.timeline_of = cap_keys[cap]
+		if entry.get("track") is Array:
+			copy.track = _mapped_track(entry.track, map)
 		if entry.get("stage_matrix") is Array:
 			copy.stage_matrix = _matrix_array(map * _matrix(entry.stage_matrix))
 		for key in ["render_bounds", "stage_bounds"]:
 			if entry.get(key) is Array: copy[key] = _mapped_bounds(entry[key], map)
 		var rec := add_node(copy)
 		rec.alpha_at_capture = float(entry.get("alpha", 1.0))
+		# `add_node` is for laid-out run-time nodes; an imported node keeps its recorded
+		# timeline (the tip's robot plays character select's robot clip).
+		if copy.get("track") is Array:
+			for change in copy.track:
+				rec.track_index.append(int(change[0]))
+				rec.track.append(change[1])
 		for child in rec.node.get_children():
 			if child.name == "Placeholder": child.queue_free()  # the pack's art, below
 		if copy.has("name"): _by_name.get_or_add(String(copy.name).split("@")[0], rec)
@@ -390,9 +410,10 @@ func import_subtree(from: StringName, from_prefix: String, to_prefix: String, ma
 
 
 ## The source pack's art for one imported node (`_add_piece_art` on the other screen):
-## its static piece, one pose from a sequence, and every recorded widget frame. A sequence
-## is a preview pose here, not an animation: importing every frame of the character capture's
-## idle clips made the frame-locked compare capture resample hundreds of images at once.
+## its piece/frames, its sequence frames, and every recorded widget frame. A frame-locked
+## compare capture takes one pose from a sequence: the full idle clips would make it resample
+## hundreds of images at once. Normal play keeps them, so the preview animates as it does on
+## character select.
 func _import_art(rec: Dictionary, path: String, manifest: Dictionary, prefix: String,
 		map: Transform2D, source: Dictionary) -> void:
 	var entry: Dictionary = rec.entry
@@ -404,8 +425,13 @@ func _import_art(rec: Dictionary, path: String, manifest: Dictionary, prefix: St
 	elif entry.role == "sequence":
 		var frames = manifest.get("sequences", {}).get(path)
 		if frames is Dictionary and not frames.is_empty():
-			var key := _sequence_key(frames, _source_capture_index(source, String(entry.get("timeline_of", ""))))
-			_import_art_piece(rec, frames[key], int(key), -1, prefix, map)
+			if frame_locked:
+				var key := _sequence_key(frames, _source_capture_index(source, String(entry.get("timeline_of", ""))))
+				_import_art_piece(rec, frames[key], int(key), -1, prefix, map)
+			else:
+				var keys: Array = frames.keys()
+				keys.sort_custom(func(a, b): return int(a) < int(b))
+				for key in keys: _import_art_piece(rec, frames[key], int(key), -1, prefix, map)
 	# Recorded widget frames (`states` / `frames`), as `_add_piece_art` reads them.
 	for source_kind in ["states", "frames"]:
 		var by_frame = manifest.get(source_kind, {}).get(path)
@@ -463,6 +489,49 @@ static func _mapped_bounds(bounds: Array, map: Transform2D) -> Array:
 	var top_left := map * Vector2(bounds[0], bounds[1])
 	var bottom_right := map * Vector2(bounds[2], bounds[3])
 	return [top_left.x, top_left.y, bottom_right.x, bottom_right.y]
+
+
+## The source capture's track states in this screen's stage space (an imported animation).
+static func _mapped_track(track: Array, map: Transform2D) -> Array:
+	var result := []
+	for change in track:
+		if change is Array and change.size() == 2 and change[1] is Array and change[1].size() >= 6:
+			var state: Array = change[1].duplicate()
+			var m := map * Transform2D(Vector2(state[0], state[1]), Vector2(state[2], state[3]),
+				Vector2(state[4], state[5]))
+			state[0] = m.x.x
+			state[1] = m.x.y
+			state[2] = m.y.x
+			state[3] = m.y.y
+			state[4] = m.origin.x
+			state[5] = m.origin.y
+			result.append([change[0], state])
+		else:
+			result.append(change.duplicate(true))
+	return result
+
+
+## `_singleRobotMc.gotoAndPlay(1)` (`ClothesPanel.onClickIcon`): the clip restarts from its
+## first recorded frame. A part on its own capture clock (the tip's imported robot) restarts
+## when its clock does; a part on the screen clock (character select) gets a play offset.
+func play_from_start(instance: String) -> void:
+	var rec: Dictionary = _by_name.get(instance, {})
+	if rec.is_empty(): return
+	var cap := String(rec.entry.get("timeline_of", ""))
+	if not cap.is_empty():
+		_extra_shown_at[cap] = _t + (1 if _t > 0 else 0)
+		_queue_apply()
+		return
+	for r: Dictionary in _records:
+		if r.path != instance and not String(r.path).begins_with(instance + "/"): continue
+		if _is_look_clip(String(r.path)): continue
+		r.play_from = index + 1
+		r.erase("override")
+	_queue_apply()
+
+
+static func _is_look_clip(path: String) -> bool:
+	return path.ends_with("/bodyMc") or path.ends_with("/hatMc")
 
 
 ## A node its controller lays out at run time under a layout group (the board's boxes and
@@ -1135,6 +1204,14 @@ func _state(rec: Dictionary, i: int):
 
 
 ## The clip frame a node shows at timeline index `i` (an override from `set_frame` wins).
+## The track index for a record at screen index `i_screen`, after a `play_from_start`
+## offset (a clip restarted on the screen clock).
+func _state_index(rec: Dictionary, i_screen: int) -> int:
+	var i := _local_index(rec, i_screen)
+	if rec.has("play_from"): i = maxi(0, i - int(rec.play_from))
+	return i
+
+
 func _shown_frame(rec: Dictionary, i: int) -> int:
 	if int(rec.override) > 0: return int(rec.override)
 	var s = _state(rec, i)
@@ -1166,7 +1243,7 @@ func _apply(i_screen: int) -> void:
 	var globals := {}
 	var shown := {}
 	for rec: Dictionary in _records:
-		var i := _local_index(rec, i_screen)
+		var i := _state_index(rec, i_screen)
 		var s = _state(rec, i)
 		var present: bool = s == null or (s is Array and s.size() > 0)
 		var g: Transform2D = _global_at(rec, i) if present else rec.static
@@ -1175,7 +1252,7 @@ func _apply(i_screen: int) -> void:
 		# frame N+1): once the parent is sent to a frame, only that frame's children show.
 		var parent_rec: Dictionary = _by_path_rec.get(rec.parent, {})
 		if vis and rec.entry.has("parent_frame") and not parent_rec.is_empty():
-			vis = _shown_frame(parent_rec, i) == int(rec.entry.parent_frame)
+			vis = _shown_frame(parent_rec, _state_index(parent_rec, i_screen)) == int(rec.entry.parent_frame)
 		var frame: int = int(rec.frame) if s == null or not present else int(s[7])
 		var parent_g: Transform2D = globals.get(rec.parent, Transform2D.IDENTITY)
 		var parent_shown: bool = shown.get(rec.parent, true)

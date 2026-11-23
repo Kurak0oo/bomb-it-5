@@ -66,6 +66,31 @@ func _run() -> void:
 	app.game.set_process(false)
 	_expect_actor(look[0], look[1], look[2], "a new game")
 
+	# CharacterSelectUI's robot clip plays, and `ClothesPanel.onClickIcon`'s
+	# `_singleRobotMc.gotoAndPlay(1)` restarts it at its first recorded frame.
+	app.store.unlocks[str(look[0])] = [1, 2, 3, 4, 5, 6, 7, 8]
+	app.show_character_select()
+	await process_frame
+	await app.screen_opened()
+	var swf = app.screen.get_child(0)
+	var character = swf.get_meta("controller")
+	character.selectRobotIcon(look[0], true)
+	var robot_path := "robotStage1/robotMc/robot" + str(look[0])
+	var first_frame := _first_track_frame(swf, robot_path)
+	for step in 3: await process_frame
+	_expect(swf.get_frame(robot_path) != first_frame,
+		"character select's robot %d preview animates (frame %d -> %d)"
+		% [look[0], first_frame, swf.get_frame(robot_path)])
+	var panel := "Art_clothPanel" + str(look[0])
+	await _click_one(_hit(swf, panel + "/icon1"))
+	_expect(swf.get_frame(robot_path) == first_frame,
+		"a look click restarts character select's robot %d at its first frame (%d), got %d"
+		% [look[0], first_frame, swf.get_frame(robot_path)])
+	for step in 3: await process_frame
+	_expect(swf.get_frame(robot_path) != first_frame,
+		"character select's restarted robot %d plays on (frame %d)"
+		% [look[0], swf.get_frame(robot_path)])
+
 	app.queue_free()
 	await process_frame
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(SAVE))
@@ -244,6 +269,44 @@ func _expect_actor(robot: int, body: int, hat: int, where: String) -> void:
 	_expect(actor.robot == robot and actor.body == body and actor.hat == hat,
 		"%s draws the player's robot %d in look %d|%d (got %d in %d|%d)"
 		% [where, robot, body, hat, int(actor.get("robot", -1)), int(actor.get("body", -1)), int(actor.get("hat", -1))])
+
+
+## The first recorded `currentFrame` of a node's track (the frame `gotoAndPlay(1)` starts at).
+func _first_track_frame(swf: Node2D, instance: String) -> int:
+	var full: String = String(swf.layout.get("screen_root", "")) + "/" + instance
+	var rec: Dictionary = swf._by_path_rec.get(full, {})
+	var track: Array = rec.get("track", [])
+	if not track.is_empty() and track[0] is Array and track[0].size() > 7:
+		return int(track[0][7])
+	return int(rec.get("frame", 1))
+
+
+## A hit area by the layout path it reports (`swf_hit`); panels share `icon1` names.
+func _hit(swf: Node2D, instance: String) -> Control:
+	var full: String = String(swf.layout.get("screen_root", "")) + "/" + instance
+	for child in swf.find_children("*", "Button", true, false):
+		if String(child.get_meta("swf_hit", "")) == full: return child
+	print("no hit area for %s" % instance)
+	return null
+
+
+## A click, then the one frame its restart is applied on.
+func _click_one(control: Control) -> void:
+	if control == null:
+		_expect(false, "control to click exists")
+		return
+	for wait in 900:
+		if control.is_visible_in_tree(): break
+		await process_frame
+	var at := control.get_global_rect().get_center()
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		event.position = at
+		event.global_position = at
+		root.push_input(event)
+	await process_frame
 
 
 func _click(control: Control) -> void:
