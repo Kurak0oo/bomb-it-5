@@ -118,6 +118,11 @@ func _check_tip(score: Node2D, robot: int, where: String) -> void:
 	var hat := robot_path + ("/head/hatMc" if score.has_instance(robot_path + "/head") else "/hatMc")
 	_expect(score.has_instance(hat) and score.get_frame(hat) == 1,
 		"%s's robot %d preview starts bare (hatMc frame 1)" % [where, robot])
+	var first_frame := _first_track_frame(score, robot_path)
+	for step in 3: await process_frame
+	_expect(score.get_frame(robot_path) != first_frame,
+		"%s's robot %d preview animates (frame %d -> %d)"
+		% [where, robot, first_frame, score.get_frame(robot_path)])
 	# 48,000 points unlocked every look of this robot (OnePScoreUI.unlockCloth).
 	var bad := []
 	for i in range(1, Looks.count(robot, &"hat") + 1):
@@ -144,14 +149,23 @@ func _wear_look(score: Node2D, robot: int) -> void:
 	var panel := "UI_UNLOCK_TIP/containerMc/Art_clothPanel%d" % robot
 	var robot_path := "UI_UNLOCK_TIP/containerMc/robotStage/robotMc/robot%d" % robot
 	var hat := robot_path + ("/head/hatMc" if score.has_instance(robot_path + "/head") else "/hatMc")
-	await _click_hit(score, panel + "/hat1")
-	await _click_hit(score, panel + "/icon1")
+	var first_frame := _first_track_frame(score, robot_path)
+	await _click_look(score, panel + "/hat1")
+	await _click_look(score, panel + "/icon1")
 	_expect(app.session.hat == 1 and app.session.body == 1,
 		"wearing robot %d's hat1/icon1 writes P1HatId/P1ClothId (got %d/%d)"
 		% [robot, app.session.hat, app.session.body])
 	_expect(score.get_frame(hat) == 2 and score.get_frame(robot_path + "/bodyMc") == 2,
 		"robot %d's preview wears the chosen look (hatMc %d, bodyMc %d)"
 		% [robot, score.get_frame(hat), score.get_frame(robot_path + "/bodyMc")])
+	# `ClothesPanel.onClickIcon` -> `_singleRobotMc.gotoAndPlay(1)`: the look click restarts
+	# the robot's clip at its first recorded frame, then it plays on.
+	_expect(score.get_frame(robot_path) == first_frame,
+		"a look click restarts robot %d's preview at its first frame (%d), got %d"
+		% [robot, first_frame, score.get_frame(robot_path)])
+	for step in 3: await process_frame
+	_expect(score.get_frame(robot_path) != first_frame,
+		"robot %d's restarted preview plays on (frame %d)" % [robot, score.get_frame(robot_path)])
 	var tip = _tip(score)
 	_expect(tip != null and tip._clothesPanel.hatId == 1 and tip._clothesPanel.clothId == 1,
 		"robot %d's ClothesPanel keeps the worn look" % robot)
@@ -238,6 +252,45 @@ func _click_hit(score: Node2D, instance: String) -> void:
 			await _click(child)
 			return
 	_expect(false, "the tip has a hit area for %s" % instance)
+
+
+## The first recorded `currentFrame` of a node's track (the frame `gotoAndPlay(1)` starts
+## at; the character capture's robot clips start on frame 2, robot 0 on 1).
+func _first_track_frame(score: Node2D, instance: String) -> int:
+	var full: String = String(score.layout.get("screen_root", "")) + "/" + instance
+	var rec: Dictionary = score._by_path_rec.get(full, {})
+	var track: Array = rec.get("track", [])
+	if not track.is_empty() and track[0] is Array and track[0].size() > 7:
+		return int(track[0][7])
+	return int(rec.get("frame", 1))
+
+
+## A look click, then the one frame its restart is applied on.
+func _click_look(score: Node2D, instance: String) -> void:
+	var full: String = String(score.layout.get("screen_root", "")) + "/" + instance
+	for child in score.find_children("*", "Button", true, false):
+		if String(child.get_meta("swf_hit", "")) == full:
+			await _click_one(child)
+			return
+	_expect(false, "the tip has a hit area for %s" % instance)
+
+
+func _click_one(control: Control) -> void:
+	if control == null:
+		_expect(false, "control to click exists")
+		return
+	for wait in 900:
+		if control.is_visible_in_tree(): break
+		await process_frame
+	var at := control.get_global_rect().get_center()
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		event.position = at
+		event.global_position = at
+		root.push_input(event)
+	await process_frame
 
 
 func _click(control: Control) -> void:

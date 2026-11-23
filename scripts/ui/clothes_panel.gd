@@ -290,8 +290,8 @@ func onClickIcon(target: String) -> void:
 			CHANGE_HAT.emit(_curSelectHatId)
 		_selectedHatIcon = target
 		selectHat(_curSelectHatId)
-	# TODO(play): `_singleRobotMc.gotoAndPlay(1)` restarts the robot's animation; the screen
-	# has `set_frame` (gotoAndStop) only, which would freeze the clip, so it is left out.
+	# `_singleRobotMc.gotoAndPlay(1)`: every look click restarts the robot's animation.
+	_pmc.play_from_start(_singleRobotMc)
 	_sound("menuPress")
 
 
