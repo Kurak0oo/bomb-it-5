@@ -1,0 +1,45 @@
+# Owner gate: UI and art issues close only on the owner's acceptance (docs/development.md,
+# rule 2). An issue labelled `ui-art` that is closed through a GitHub App (an agent using the
+# GitHub MCP server or the Claude app) is reopened and marked `ready-for-owner-review`.
+# Agents that act through the owner's own token (a local `gh`) look like the owner to
+# GitHub; for them the rule in AGENTS.md is the gate.
+name: owner-gate
+
+on:
+  issues:
+    types: [closed]
+
+permissions:
+  issues: write
+
+jobs:
+  reopen-agent-closed-ui-art:
+    if: contains(github.event.issue.labels.*.name, 'ui-art')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const issue_number = context.payload.issue.number;
+            const events = await github.paginate(github.rest.issues.listEventsForTimeline,
+              { owner, repo, issue_number, per_page: 100 });
+            const closed = events.filter(e => e.event === 'closed').pop();
+            const app = closed && closed.performed_via_github_app;
+            const byOwner = context.payload.sender.login === owner && !app;
+            if (byOwner) {
+              core.info(`#${issue_number} closed by the owner; accepted.`);
+              return;
+            }
+            const who = app ? `the ${app.name} app` : `@${context.payload.sender.login}`;
+            for (const name of ['ready-for-owner-review']) {
+              try { await github.rest.issues.getLabel({ owner, repo, name }); }
+              catch { await github.rest.issues.createLabel({ owner, repo, name, color: 'fbca04',
+                description: 'Passes the comparison loop; waiting for the owner to look' }); }
+            }
+            await github.rest.issues.update({ owner, repo, issue_number, state: 'open' });
+            await github.rest.issues.addLabels({ owner, repo, issue_number, labels: ['ready-for-owner-review'] });
+            await github.rest.issues.createComment({ owner, repo, issue_number, body:
+              `Reopened: this is a \`ui-art\` issue and it was closed through ${who}. ` +
+              'UI and art close only when the owner accepts them (docs/development.md, rule 2). ' +
+              'It is marked `ready-for-owner-review`.' });
