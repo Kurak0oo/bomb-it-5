@@ -8,6 +8,10 @@ older timelines stop at alpha or colour), or null while the node is absent. Indi
 import bisect
 import json
 from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import golden_io  # noqa: E402
 
 
 def _inverse(m):
@@ -36,7 +40,7 @@ class Timeline:
     @classmethod
     def load(cls, path):
         path = Path(path)
-        return cls(json.loads(path.read_text(encoding='utf-8'))) if path.is_file() else None
+        return cls(golden_io.load(path)) if golden_io.exists(path) else None
 
     def state(self, path, i):
         track = self.tracks.get(path)

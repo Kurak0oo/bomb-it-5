@@ -424,7 +424,9 @@ def main():
     if not args.swf.is_file():
         raise SystemExit(f'needs the SWF at {args.swf}')
     golden_path = args.golden or ROOT / 'tests' / 'goldens' / args.case / f'{args.capture}.json'
-    golden = json.loads(golden_path.read_text(encoding='utf-8'))
+    sys.path.insert(0, str(ROOT / 'tools'))
+    import golden_io
+    golden = golden_io.load(golden_path)
     case = json.loads((args.case_file or ROOT / 'tools' / 'compare' / 'cases' / f'{args.case}.json').read_text(encoding='utf-8'))
     reference = args.reference or ROOT / '.scratch' / 'compare' / args.case / 'reference' / f'{args.capture}.png'
     reference = reference if reference.is_file() else None

@@ -656,7 +656,7 @@ func settle_as_recorded(golden: Dictionary, capture: String, frames_to_capture :
 ## `PlayerScoreUI.initData` and `OnePScoreUI.initData`) and the earlier levels' points
 ## (`total` less `levelScore`). Unlocks come from the player's own save.
 func _review_score(capture: String) -> void:
-	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://tests/goldens/results/%s.json" % capture))
+	var golden: Dictionary = GoldenFile.load_json("res://tests/goldens/results/%s.json" % capture)
 	var root: String = SwfScreen.layout_of(&"score").screen_root
 	var title := RegEx.create_from_string("(\\d+) / (\\d+)")
 	var level := 1
@@ -714,7 +714,7 @@ func _settle_end_as_recorded(golden: Dictionary, capture: String, end: StringNam
 ## final score and robot (`p1head`'s frame, the inverse of `OnePGameOverUI.initData`).
 func _review_end(id: StringName) -> void:
 	var source: String = SwfScreen.layout_of(id).source.golden
-	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://" + source))
+	var golden: Dictionary = GoldenFile.load_json("res://" + source)
 	var root: String = SwfScreen.layout_of(id).screen_root
 	for node: Dictionary in golden.nodes:
 		if String(node.path) == root + "/p1head": session.robot = int(node.frame) - 1

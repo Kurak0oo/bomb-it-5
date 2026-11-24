@@ -257,8 +257,8 @@ func _has_art(screen: Node2D, instance: String) -> bool:
 ## The recorded clip frame of a golden node, or -1 when the golden has no such node.
 func _golden_frame(robot: int, capture: String, path: String) -> int:
 	var golden_path := "res://tests/goldens/results-robot%d/%s.json" % [robot, capture]
-	if not FileAccess.file_exists(golden_path): return -1
-	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
+	if not GoldenFile.exists(golden_path): return -1
+	var golden: Dictionary = GoldenFile.load_json(golden_path)
 	for node: Dictionary in golden.get("nodes", []):
 		if String(node.get("path", "")) == path: return int(node.get("frame", -1))
 	return -1
@@ -310,8 +310,8 @@ func _click_hit(score: Node2D, instance: String) -> void:
 func _expect_matrix(score: Node2D, robot: int, instance: String, label: String) -> void:
 	if robot == 0: return  # robot 0 is the screen's own recording, not an imported node
 	var golden_path := "res://tests/goldens/results-robot%d/unlock-tip.json" % robot
-	if not FileAccess.file_exists(golden_path): return
-	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
+	if not GoldenFile.exists(golden_path): return
+	var golden: Dictionary = GoldenFile.load_json(golden_path)
 	var path: String = score.golden_path_of(instance)
 	var want: Array = []
 	for node: Dictionary in golden.get("nodes", []):

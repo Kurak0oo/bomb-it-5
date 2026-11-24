@@ -164,8 +164,8 @@ func _check_robot_parts() -> void:
 	for robot in 8:
 		var top := String(layout.screen_root) + "/robotStage1/robotMc/robot%d" % robot
 		var capture := "char%d" % robot
-		var timeline: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-			"res://tests/goldens/character-select/%s.timeline.json" % capture))
+		var timeline: Dictionary = GoldenFile.load_json(
+			"res://tests/goldens/character-select/%s.timeline.json" % capture)
 		var missing := []
 		for path: String in timeline.tracks:
 			if not path.begins_with(top + "/") or nodes.has(path): continue

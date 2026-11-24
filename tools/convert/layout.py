@@ -27,6 +27,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from timeline import Timeline  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import golden_io  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 GOLDENS = ROOT / 'tests' / 'goldens'
@@ -413,7 +415,7 @@ def _apply_owner_edits(name, screen_root, layout_nodes, by_path):
 def build(name, spec):
     case, capture = spec['golden']
     golden_path = GOLDENS / case / f'{capture}.json'
-    golden_bytes = golden_path.read_bytes()
+    golden_bytes = golden_io.read_bytes(golden_path)
     golden = json.loads(golden_bytes)
     nodes = _unique_paths([n for n in golden['nodes'] if n.get('kind') != 'stage'])
     by_path = {n['path']: n for n in nodes}
@@ -449,7 +451,7 @@ def build(name, spec):
     # other robots' panels) come from other captures of the same case; they start hidden.
     extra_paths = set()
     for extra_capture, selectors in spec.get('extra', {}).items():
-        extra = _unique_paths([n for n in json.loads((GOLDENS / case / f'{extra_capture}.json').read_text(encoding='utf-8'))['nodes']
+        extra = _unique_paths([n for n in golden_io.load(GOLDENS / case / f'{extra_capture}.json')['nodes']
                                if n.get('kind') != 'stage'])
         extra = _class_segments(extra, prefixes)
         extra_by_path = {n['path']: n for n in extra}
@@ -573,8 +575,8 @@ def build(name, spec):
     # its frames are rendered at another capture of the case where it shows.
     art_from = {}
     for other, names in spec.get('art_from', {}).items():
-        shown = {n['path'] for n in _class_segments(_unique_paths(json.loads(
-            (GOLDENS / case / f'{other}.json').read_text(encoding='utf-8'))['nodes']), prefixes) if n.get('effective_visible')}
+        shown = {n['path'] for n in _class_segments(_unique_paths(golden_io.load(
+            GOLDENS / case / f'{other}.json')['nodes']), prefixes) if n.get('effective_visible')}
         for p in by_path:
             if p.startswith(screen_root + '/') and segment_name(p) in names and not by_path[p].get('from_capture'):
                 if p not in shown:
@@ -975,7 +977,7 @@ def _set_board(name, spec, set_id, how, screen_root, board, screen_nodes):
     show this set's art (record_screen.py `sets`) at the matrix recorded here."""
     case, capture = how['golden']
     golden_path = GOLDENS / case / f'{capture}.json'
-    golden_bytes = golden_path.read_bytes()
+    golden_bytes = golden_io.read_bytes(golden_path)
     nodes = _unique_paths([n for n in json.loads(golden_bytes)['nodes'] if n.get('kind') != 'stage'])
     nodes = _class_segments(nodes, tuple(spec.get('class_segments', ())))
     own = dict(spec, board=dict(spec['board'], begin_num=how['begin_num']))
@@ -1186,7 +1188,7 @@ def _capture_phases(spec, case, timeline, screen_root):
 
 
 def _golden_under(case, capture, prefix):
-    return {n['path']: n for n in json.loads((GOLDENS / case / f'{capture}.json').read_text(encoding='utf-8'))['nodes']
+    return {n['path']: n for n in golden_io.load(GOLDENS / case / f'{capture}.json')['nodes']
             if n['path'].startswith(prefix)}
 
 

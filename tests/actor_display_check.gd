@@ -416,8 +416,8 @@ func _golden_meta(case: String) -> Dictionary:
 ## (`Game.getDisArr(y).getChildAt(4)`, `robotRow`). The AI robots on layer 3 are not the
 ## human's.
 func _golden_blink_on(case: String, capture: String) -> bool:
-	var scene: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://tests/goldens/%s/%s.json" % [case, capture]))
+	var scene: Dictionary = GoldenFile.load_json(
+		"res://tests/goldens/%s/%s.json" % [case, capture])
 	var by_path := {}
 	for node: Dictionary in scene.nodes: by_path[String(node.get("path", ""))] = node
 	for node: Dictionary in scene.nodes:

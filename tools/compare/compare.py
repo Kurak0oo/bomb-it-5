@@ -8,6 +8,11 @@
     compare.py all           check every case
     compare.py accept CASE   after the owner accepts a screen: its scores become the floor
 
+`check` compares state before pixels: every capture's node diff (and every tick of a
+`trace` action, tools/compare/tick_trace.py) runs first, the report names the first place the
+replays part (`first divergence`), and SSIM/ΔE run only for captures whose nodes match
+(and, when the case lists `pixel_captures`, only for those keyframes).
+
 `record` needs the SWF and a reference player built with `-Display`/`build.sh`. `check`
 needs only Godot 4.5, so agents without the SWF can still run the node diff. Captures
 with original art stay in .scratch/compare and are never committed.
@@ -25,8 +30,10 @@ import sys
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE.parent))  # tools/, for replay_reference
+import golden_io  # noqa: E402
 import nodes  # noqa: E402
 import pixels  # noqa: E402
+import tick_trace as traces  # noqa: E402
 
 CASES = HERE / 'cases'
 GOLDENS = ROOT / 'tests' / 'goldens'
@@ -43,9 +50,18 @@ def load_case(name):
         raise SystemExit(f'No case {name!r}; cases: {", ".join(sorted(p.stem for p in CASES.glob("*.json")))}')
     case = json.loads(path.read_text(encoding='utf-8'))
     captures = [a['capture'] for a in case['actions'] if 'capture' in a]
-    if not captures or len(set(captures)) != len(captures):
-        raise SystemExit(f'{name}: a case needs at least one capture, each with a unique name')
+    names = captures + [n for n, _ in case_traces(case)]
+    if not names or len(set(names)) != len(names):
+        raise SystemExit(f'{name}: a case needs at least one capture or trace, each with a unique name')
+    for _trace, ticks in case_traces(case):
+        if not isinstance(ticks, int) or ticks < 1:
+            raise SystemExit(f'{name}: trace {_trace} needs "ticks" of at least 1')
     return path, case, captures
+
+
+def case_traces(case):
+    """(name, ticks) of each `trace` action: N single frames, the scene dumped after each."""
+    return [(a['trace'], a.get('ticks')) for a in case['actions'] if 'trace' in a]
 
 
 def default_player():
@@ -101,7 +117,7 @@ def replay_case(name, player, swf, out=None):
         loaded = Path(staging) / 'original.swf'
         loaded.write_bytes(swf.read_bytes())
         session = ReferenceSession(player, loaded, out)
-        frames, fps = {}, None
+        frames, trace_frames, fps = {}, {}, None
         ok = False
         try:
             for action in case['actions']:
@@ -114,11 +130,18 @@ def replay_case(name, player, swf, out=None):
                     fps = session.command(f'display {capture}.display.json')['fps_setting']
                     session.capture(capture)
                     frames[capture] = session.frame
+                if 'trace' in action:
+                    # One frame at a time, the scene after each (no PNG: traces are state only).
+                    trace_frames[action['trace']] = []
+                    for tick in range(action['ticks']):
+                        session.command('step 1')
+                        fps = session.command(f'display {action["trace"]}.t{tick:04d}.display.json')['fps_setting']
+                        trace_frames[action['trace']].append(session.frame)
             ok = True
         finally:
             session.close(check=ok)
-    return {'case_path': case_path, 'captures': captures, 'frames': frames, 'fps': fps,
-            'swf_sha256': sha256(swf), 'player_sha256': sha256(player), 'out': out}
+    return {'case_path': case_path, 'captures': captures, 'frames': frames, 'trace_frames': trace_frames,
+            'fps': fps, 'swf_sha256': sha256(swf), 'player_sha256': sha256(player), 'out': out}
 
 
 def reference_meta(name, case_path, swf_sha256):
@@ -222,7 +245,7 @@ def _scene_problems(case, name, golden_path, capture, replayed):
     Both sides here are the original (the committed golden and this replay), so owner edits
     and localization are not applied: they would invent differences. Only the exclusions
     `check` also makes before its node diff are applied."""
-    if not golden_path.is_file():
+    if not golden_io.exists(golden_path):
         return [f'capture {capture} has no committed golden']
     frame = replayed['frames'].get(capture)
     if frame is None:
@@ -234,7 +257,7 @@ def _scene_problems(case, name, golden_path, capture, replayed):
     except (OSError, ValueError) as error:
         return [f'capture {capture} replayed no readable display list ({error})']
     scene['frame'] = frame
-    golden = json.loads(golden_path.read_text(encoding='utf-8'))
+    golden = golden_io.load(golden_path)
     scene = _tag_original_effects(scene, effects_of(name, capture))
     shared = scene_exclusions(case, name, capture, golden, scene)
     # `check` fails on an effect whose rules do not hold; refusing only when the scene has
@@ -284,7 +307,7 @@ def write_reference_provenance(out, case_path, replay, captures, golden_dir):
     provenance = {'case_sha256': reference_sha256(case_path), 'swf_sha256': replay['swf_sha256'],
                   'player_sha256': replay.get('player_sha256'),
                   'frames': {capture: replay['frames'][capture] for capture in captures},
-                  'golden_sha256': {capture: sha256(golden_dir / f'{capture}.json') for capture in captures}}
+                  'golden_sha256': {capture: golden_io.sha256(golden_dir / f'{capture}.json') for capture in captures}}
     (out / 'reference.json').write_text(json.dumps(provenance, indent=1, sort_keys=True) + '\n', encoding='utf-8')
 
 
@@ -333,10 +356,21 @@ def record(name, player, swf, reference_only=False):
         dump = json.loads((out / f'{capture}.display.json').read_text(encoding='utf-8'))
         golden = nodes.normalize_reference(dump)
         golden['frame'] = frames[capture]
-        (target / f'{capture}.json').write_text(json.dumps(golden, indent=1, sort_keys=True) + '\n', encoding='utf-8')
+        golden_io.dump(golden, target / f'{capture}.json')
+    trace_frames = replay.get('trace_frames') or {}
+    for trace_name, ticks in trace_frames.items():
+        scenes = []
+        for tick, frame in enumerate(ticks):
+            dump = json.loads((out / f'{trace_name}.t{tick:04d}.display.json').read_text(encoding='utf-8'))
+            scene = nodes.normalize_reference(dump)
+            scene['frame'] = frame
+            scenes.append(scene)
+        golden_io.dump(traces.encode(scenes), target / f'{trace_name}.trace.json')
     meta = {'case': name, 'case_sha256': reference_sha256(case_path), 'swf_sha256': replay['swf_sha256'],
             'player_sha256': replay['player_sha256'], 'fps': replay['fps'], 'frames': frames,
             'note': 'Recorded by tools/compare/compare.py record; regenerate rather than edit.'}
+    if trace_frames:
+        meta['traces'] = trace_frames
     (target / 'meta.json').write_text(json.dumps(meta, indent=1, sort_keys=True) + '\n', encoding='utf-8')
     write_reference_provenance(out, case_path, replay, captures, target)
     print(f'recorded {name}: {len(captures)} capture(s), goldens in {target.relative_to(ROOT)}')
@@ -412,7 +446,7 @@ def resampling_ceiling(case, capture, reference_png):
     Image.open(big).convert('RGB').resize((700, 510), Image.LANCZOS).save(small)
     _, masks = owner_edits(case, capture)
     # The 3× frame shows the localised fields (record_screen.py `localize`), the 1× one not.
-    golden = json.loads((GOLDENS / case / f'{capture}.json').read_text(encoding='utf-8'))
+    golden = golden_io.load(GOLDENS / case / f'{capture}.json')
     masks = masks + localize_golden(golden)[1]
     result = pixels.compare(reference_png, small, WORK / case / f'{capture}-ceiling-heatmap.png', masks=masks)
     return {k: result[k] for k in ('ssim', 'max_region_delta_e')}
@@ -492,9 +526,85 @@ def reference_provenance_problem(name, capture, case_path, meta, golden_path):
         return (f'the reference is at frame {frames.get(capture)}, the golden at '
                 f'{golden_frames.get(capture)} (frames)')
     recorded = (provenance.get('golden_sha256') or {}).get(capture)
-    if recorded != sha256(golden_path):
+    if recorded != golden_io.sha256(golden_path):
         return 'the committed golden changed since the reference was recorded (golden_sha256)'
     return None
+
+
+def node_entry(case, name, capture, golden, actual):
+    """The node diff of one scene (a capture, or one tick of a trace), after the exclusions
+    both sides share; returns the report entry and the regions the pixel score leaves out."""
+    edits, masks = owner_edits(name, capture)
+    golden = nodes.apply_owner_edits(golden, edits)
+    golden, placeholder_masks = localize_golden(golden)
+    masks = masks + placeholder_masks
+    # What neither side can reproduce (a screen's random effects, and the text, clip frames
+    # and alpha the original drives on the host clock) is taken out of both sides here and
+    # out of the pixel score. Reference verification makes the same exclusions.
+    shared = scene_exclusions(case, name, capture, golden, actual)
+    golden, actual = shared['golden'], shared['other']
+    effects = shared['effects']
+    masks = masks + shared['masks']
+    # A filter the reference player cannot draw (Ruffle's wgpu backend skips GradientGlowFilter
+    # and GradientBevelFilter: the invincible robot's colour cycle) is drawn by Godot only;
+    # its node's place is left out of the pixel score.
+    unrendered = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
+                  and any(f.get('type') in UNRENDERED_FILTERS for f in n.get('filter_list') or [])]
+    masks = masks + [n['render_bounds'] for n in unrendered]
+    # Flash applies a clip's alpha to each shape inside it, so overlapping shapes add up;
+    # a baked image fades as one. Where the case says so (`composite_alpha`), a faded
+    # baked node's place is left out of the pixel score (its alpha is still compared).
+    if case.get('composite_alpha'):
+        baked = {n['path'] for n in actual['nodes'] if n.get('baked')}
+        faded = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
+                 and n.get('alpha', 1.0) < 1.0 and n['path'] in baked]
+        masks = masks + [n['render_bounds'] for n in faded]
+    else:
+        faded = []
+    entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
+    if unrendered:
+        entry['unrendered_filters'] = sorted(n['path'] for n in unrendered)
+    if faded:
+        entry['composite_alpha'] = sorted(n['path'] for n in faded)
+    if shared['wall_clock_text']:
+        entry['wall_clock_text'] = sorted(shared['wall_clock_text'])
+    if shared['wall_clock_frame']:
+        entry['wall_clock_frame'] = sorted(shared['wall_clock_frame'])
+    if shared['wall_clock_alpha']:
+        entry['wall_clock_alpha'] = sorted(shared['wall_clock_alpha'])
+    if effects:
+        entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
+        entry['node']['passed'] &= all(e['passed'] for e in effects.values())
+    if edits.get('removed') or edits.get('moved'):
+        entry['owner_edits'] = {'removed': sorted(edits.get('removed', {})), 'moved': sorted(edits.get('moved', {}))}
+    return entry, masks
+
+
+def pixel_entry(case, name, capture, case_path, meta, golden_dir, out, floor, masks):
+    """SSIM and regional ΔE for one capture against the local reference PNG."""
+    reference_png = WORK / name / 'reference' / f'{capture}.png'
+    if not reference_png.is_file():
+        return {'passed': None, 'skipped': 'no local reference capture (record on the SWF machine)'}
+    stale = reference_provenance_problem(name, capture, case_path, meta, golden_dir / f'{capture}.json')
+    if stale:
+        return {'passed': None, 'skipped': 'local reference is stale or unverified: re-run record --reference-only',
+                'reason': stale}
+    thresholds = dict(case.get('thresholds', {}))
+    ceiling = resampling_ceiling(name, capture, reference_png)
+    if ceiling:
+        # No 3× pipeline can beat the original's own 3× render scaled to 1×.
+        base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
+        thresholds['ssim'] = min(base['ssim'], ceiling['ssim'] - CEILING_MARGIN['ssim'])
+        thresholds['delta_e'] = max(base['delta_e'], ceiling['max_region_delta_e'] + CEILING_MARGIN['delta_e'])
+    if capture in floor:
+        base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
+        thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
+        thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
+    result = pixels.compare(reference_png, out / f'{capture}.png',
+                            WORK / name / f'{capture}-heatmap.png', thresholds, masks)
+    if ceiling:
+        result['ceiling'] = ceiling
+    return result
 
 
 def check(name, godot):
@@ -509,87 +619,57 @@ def check(name, godot):
     floor_path = golden_dir / 'floor.json'
     floor = json.loads(floor_path.read_text(encoding='utf-8')) if floor_path.is_file() else {}
     out = run_godot(name, case_path, godot, meta['fps'])
-    report = {'case': name, 'captures': {}, 'passed': True}
-    for capture in captures:
-        golden = json.loads((golden_dir / f'{capture}.json').read_text(encoding='utf-8'))
-        actual = json.loads((out / f'{capture}.nodes.json').read_text(encoding='utf-8'))
-        edits, masks = owner_edits(name, capture)
-        golden = nodes.apply_owner_edits(golden, edits)
-        golden, placeholder_masks = localize_golden(golden)
-        masks = masks + placeholder_masks
-        # What neither side can reproduce (a screen's random effects, and the text, clip frames
-        # and alpha the original drives on the host clock) is taken out of both sides here and
-        # out of the pixel score. Reference verification makes the same exclusions.
-        shared = scene_exclusions(case, name, capture, golden, actual)
-        golden, actual = shared['golden'], shared['other']
-        effects = shared['effects']
-        masks = masks + shared['masks']
-        # A filter the reference player cannot draw (Ruffle's wgpu backend skips GradientGlowFilter
-        # and GradientBevelFilter: the invincible robot's colour cycle) is drawn by Godot only;
-        # its node's place is left out of the pixel score.
-        unrendered = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
-                      and any(f.get('type') in UNRENDERED_FILTERS for f in n.get('filter_list') or [])]
-        masks = masks + [n['render_bounds'] for n in unrendered]
-        # Flash applies a clip's alpha to each shape inside it, so overlapping shapes add up;
-        # a baked image fades as one. Where the case says so (`composite_alpha`), a faded
-        # baked node's place is left out of the pixel score (its alpha is still compared).
-        if case.get('composite_alpha'):
-            baked = {n['path'] for n in actual['nodes'] if n.get('baked')}
-            faded = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
-                     and n.get('alpha', 1.0) < 1.0 and n['path'] in baked]
-            masks = masks + [n['render_bounds'] for n in faded]
-        else:
-            faded = []
-        entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
-        if unrendered:
-            entry['unrendered_filters'] = sorted(n['path'] for n in unrendered)
-        if faded:
-            entry['composite_alpha'] = sorted(n['path'] for n in faded)
-        if shared['wall_clock_text']:
-            entry['wall_clock_text'] = sorted(shared['wall_clock_text'])
-        if shared['wall_clock_frame']:
-            entry['wall_clock_frame'] = sorted(shared['wall_clock_frame'])
-        if shared['wall_clock_alpha']:
-            entry['wall_clock_alpha'] = sorted(shared['wall_clock_alpha'])
-        if effects:
-            entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
-            entry['node']['passed'] &= all(e['passed'] for e in effects.values())
-        if edits.get('removed') or edits.get('moved'):
-            entry['owner_edits'] = {'removed': sorted(edits.get('removed', {})), 'moved': sorted(edits.get('moved', {}))}
-        reference_png = WORK / name / 'reference' / f'{capture}.png'
-        if reference_png.is_file():
-            stale = reference_provenance_problem(name, capture, case_path, meta, golden_dir / f'{capture}.json')
-            if stale:
-                entry['pixel'] = {'passed': None,
-                                  'skipped': 'local reference is stale or unverified: re-run record --reference-only',
-                                  'reason': stale}
+    report = {'case': name, 'captures': {}, 'traces': {}, 'passed': True}
+    keyframes = case.get('pixel_captures')
+    order = []  # (label, tick, node diff) in case order, for the first divergence
+    for action in case['actions']:
+        if 'capture' in action:
+            capture = action['capture']
+            golden = golden_io.load(golden_dir / f'{capture}.json')
+            actual = json.loads((out / f'{capture}.nodes.json').read_text(encoding='utf-8'))
+            entry, masks = node_entry(case, name, capture, golden, actual)
+            # State first: pixels only once the scene's nodes match, and only on the case's
+            # keyframes when it lists them.
+            if not entry['node']['passed']:
+                entry['pixel'] = {'passed': None, 'skipped': 'nodes differ: fix the state first'}
+            elif keyframes is not None and capture not in keyframes:
+                entry['pixel'] = {'passed': None, 'skipped': 'not one of the case\'s pixel_captures'}
             else:
-                thresholds = dict(case.get('thresholds', {}))
-                ceiling = resampling_ceiling(name, capture, reference_png)
-                if ceiling:
-                    # No 3× pipeline can beat the original's own 3× render scaled to 1×.
-                    base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
-                    thresholds['ssim'] = min(base['ssim'], ceiling['ssim'] - CEILING_MARGIN['ssim'])
-                    thresholds['delta_e'] = max(base['delta_e'], ceiling['max_region_delta_e'] + CEILING_MARGIN['delta_e'])
-                if capture in floor:
-                    base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
-                    thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
-                    thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
-                entry['pixel'] = pixels.compare(reference_png, out / f'{capture}.png',
-                                                WORK / name / f'{capture}-heatmap.png', thresholds, masks)
-                if ceiling:
-                    entry['pixel']['ceiling'] = ceiling
-        else:
-            entry['pixel'] = {'passed': None, 'skipped': 'no local reference capture (record on the SWF machine)'}
-        report['captures'][capture] = entry
-        report['passed'] &= entry['node']['passed'] and entry['pixel']['passed'] is not False
+                entry['pixel'] = pixel_entry(case, name, capture, case_path, meta, golden_dir, out, floor, masks)
+            report['captures'][capture] = entry
+            report['passed'] &= entry['node']['passed'] and entry['pixel']['passed'] is not False
+            order.append((capture, None, entry['node']))
+        if 'trace' in action:
+            trace_name = action['trace']
+            scenes = traces.decode(golden_io.load(golden_dir / f'{trace_name}.trace.json'))
+            ticks = []
+            for tick, golden in enumerate(scenes):
+                actual = json.loads((out / f'{trace_name}.t{tick:04d}.nodes.json').read_text(encoding='utf-8'))
+                entry, _masks = node_entry(case, name, trace_name, golden, actual)
+                ticks.append((trace_name, tick, entry['node']))
+            failed = [t for t in ticks if not t[2]['passed']]
+            report['traces'][trace_name] = {'ticks': len(ticks), 'passed': not failed,
+                                            'failed_ticks': [t[1] for t in failed],
+                                            'first_divergence': traces.first_divergence(ticks)}
+            report['passed'] &= not failed
+            order += ticks
+    report['first_divergence'] = traces.first_divergence(order)
     (WORK / name / 'report.json').write_text(json.dumps(report, indent=1) + '\n', encoding='utf-8')
     print_report(report)
     return report
 
-
 def print_report(report):
     print(f'{"PASS" if report["passed"] else "FAIL"}: {report["case"]}')
+    first = report.get('first_divergence')
+    if first:
+        where = first['at'] + (f' tick {first["tick"]}' if first['tick'] is not None else '')
+        print(f'  first divergence: {where} (fix this first; later differences usually follow from it)')
+        for problem in first['problems']:
+            print(f'    {problem}')
+    for trace_name, entry in report.get('traces', {}).items():
+        print(f'  {trace_name}: trace of {entry["ticks"]} ticks, '
+              + ('every tick matches' if entry['passed'] else
+                 f'{len(entry["failed_ticks"])} tick(s) differ, first at tick {entry["failed_ticks"][0]}'))
     for capture, entry in report['captures'].items():
         n, p = entry['node'], entry['pixel']
         if entry.get('owner_edits'):

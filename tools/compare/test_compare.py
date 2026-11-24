@@ -17,6 +17,7 @@ from PIL import Image
 import compare
 import nodes
 import pixels
+import tick_trace as trace
 
 
 def ref_node(path, x=0.0, y=0.0, scale=1.0, visible=True, **extra):
@@ -285,7 +286,7 @@ class ReferenceOnlyRecord(unittest.TestCase):
         self.assertEqual(provenance['swf_sha256'], compare.sha256(self.swf))
         self.assertEqual(provenance['player_sha256'], compare.sha256(self.player))
         self.assertEqual(provenance['frames'], {'menu': 541})
-        self.assertEqual(provenance['golden_sha256'], {'menu': compare.sha256(target / 'menu.json')})
+        self.assertEqual(provenance['golden_sha256'], {'menu': compare.golden_io.sha256(target / 'menu.json')})
 
     def test_frame_mismatch_raises(self):
         self.write_meta(frames={'menu': 540})
@@ -473,12 +474,15 @@ class ReferenceOnlyRecord(unittest.TestCase):
         with contextlib.redirect_stdout(io.StringIO()):
             compare.record('main-menu', self.player, self.swf)
         target = self.goldens / 'main-menu'
-        self.assertTrue((target / 'menu.json').is_file())
+        # Captures are stored compressed (golden_io); meta.json stays plain.
+        self.assertTrue((target / 'menu.json.gz').is_file())
+        self.assertFalse((target / 'menu.json').exists())
+        self.assertIn('nodes', compare.golden_io.load(target / 'menu.json'))
         meta = json.loads((target / 'meta.json').read_text(encoding='utf-8'))
         self.assertEqual(meta['frames'], {'menu': 541})
         self.assertEqual(meta['case_sha256'], compare.reference_sha256(self.case_path))
         provenance = json.loads((out / 'reference.json').read_text(encoding='utf-8'))
-        self.assertEqual(provenance['golden_sha256'], {'menu': compare.sha256(target / 'menu.json')})
+        self.assertEqual(provenance['golden_sha256'], {'menu': compare.golden_io.sha256(target / 'menu.json')})
 
 
 class CheckReferenceProvenance(unittest.TestCase):
@@ -507,7 +511,7 @@ class CheckReferenceProvenance(unittest.TestCase):
         (self.reference / 'menu.png').write_bytes(b'local reference PNG')
         self.provenance = {'case_sha256': self.meta['case_sha256'], 'swf_sha256': self.meta['swf_sha256'],
                            'player_sha256': self.meta['player_sha256'], 'frames': {'menu': 541},
-                           'golden_sha256': {'menu': compare.sha256(self.golden_path)}}
+                           'golden_sha256': {'menu': compare.golden_io.sha256(self.golden_path)}}
         self.godot = self.work / 'main-menu' / 'godot'
         self.godot.mkdir(parents=True)
         (self.godot / 'menu.nodes.json').write_text(json.dumps(
@@ -653,3 +657,113 @@ class ResamplingCeilingNote(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class Traces(unittest.TestCase):
+    """Per-tick traces (tick_trace.py) and state-first checking (compare.check)."""
+
+    def scene(self, frame, *items):
+        return dict(golden(*items), stage={}, frame=frame)
+
+    def test_trace_round_trips_and_stores_only_changes(self):
+        a, b = ref_node('/root1/a', 0, 0), ref_node('/root1/b', 5, 5)
+        scenes = [self.scene(10, a, b), self.scene(11, dict(a, stage_matrix=[1.0, 0.0, 0.0, 1.0, 1, 0]), b),
+                  self.scene(12, ref_node('/root1/c', 2, 2))]
+        encoded = trace.encode(scenes)
+        self.assertEqual(encoded['frames'], [10, 11, 12])
+        self.assertEqual([n['path'] for n in encoded['changes'][0]['set']], ['/root1/a'])
+        self.assertEqual(sorted(encoded['changes'][1]['gone']), ['/root1/a', '/root1/b'])
+        self.assertEqual([[n['path'] for n in s['nodes']] for s in trace.decode(encoded)],
+                         [[n['path'] for n in s['nodes']] for s in scenes])
+        self.assertEqual(trace.decode(encoded)[1]['nodes'][1]['stage_matrix'][4], 1)
+
+    def test_first_divergence_names_the_earliest_failing_tick(self):
+        ok = nodes.diff(golden(ref_node('/a')), godot(ref_node('/a')))
+        bad = nodes.diff(golden(ref_node('/a')), godot(ref_node('/a', 3, 0)))
+        first = trace.first_divergence([('walk', 0, ok), ('walk', 1, bad), ('walk', 2, bad)])
+        self.assertEqual((first['at'], first['tick']), ('walk', 1))
+        self.assertTrue(first['problems'])
+        self.assertIsNone(trace.first_divergence([('walk', 0, ok)]))
+
+
+PIXEL_PASS = {'passed': True, 'ssim': 1.0, 'max_region_delta_e': 0.0, 'thresholds': dict(pixels.DEFAULT_THRESHOLDS)}
+
+
+class StateFirstCheck(unittest.TestCase):
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        self.goldens, self.work, self.cases = self.root / 'goldens', self.root / 'work', self.root / 'cases'
+        self.cases.mkdir()
+        self.case_path = self.cases / 'walk.json'
+        self.case = {'name': 'walk', 'actions': [{'capture': 'start'}, {'trace': 'steps', 'ticks': 3},
+                                                 {'capture': 'end'}]}
+        self.case_path.write_text(json.dumps(self.case), encoding='utf-8')
+        target = self.goldens / 'walk'
+        target.mkdir(parents=True)
+        for capture in ('start', 'end'):
+            compare.golden_io.dump(golden(ref_node('/root1/p', 0, 0)), target / f'{capture}.json')
+        scenes = [dict(golden(ref_node('/root1/p', tick, 0)), stage={}, frame=100 + tick) for tick in range(3)]
+        compare.golden_io.dump(trace.encode(scenes), target / 'steps.trace.json')
+        (target / 'meta.json').write_text(json.dumps({
+            'case': 'walk', 'case_sha256': compare.reference_sha256(self.case_path), 'fps': 35.0,
+            'frames': {'start': 99, 'end': 103}, 'traces': {'steps': [100, 101, 102]}}), encoding='utf-8')
+        self.godot = self.work / 'walk' / 'godot'
+        self.godot.mkdir(parents=True)
+        for capture in ('start', 'end'):
+            self.write_godot(f'{capture}.nodes.json', 0)
+        for tick in range(3):
+            self.write_godot(f'steps.t{tick:04d}.nodes.json', tick)
+        for patch in (mock.patch.object(compare, 'ROOT', self.root),
+                      mock.patch.object(compare, 'GOLDENS', self.goldens),
+                      mock.patch.object(compare, 'WORK', self.work),
+                      mock.patch.object(compare, 'CASES', self.cases),
+                      mock.patch.object(compare, 'run_godot', return_value=self.godot)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def write_godot(self, file, x):
+        (self.godot / file).write_text(json.dumps(godot(ref_node('/root1/p', x, 0))), encoding='utf-8')
+
+    def run_check(self):
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            report = compare.check('walk', 'godot')
+        return report, printed.getvalue()
+
+    def test_matching_trace_passes(self):
+        report, _ = self.run_check()
+        self.assertTrue(report['passed'])
+        self.assertTrue(report['traces']['steps']['passed'])
+        self.assertIsNone(report['first_divergence'])
+
+    def test_first_divergence_is_the_first_tick_that_parts(self):
+        self.write_godot('steps.t0001.nodes.json', 9)
+        self.write_godot('end.nodes.json', 9)
+        report, printed = self.run_check()
+        self.assertFalse(report['passed'])
+        self.assertEqual(report['traces']['steps']['failed_ticks'], [1])
+        self.assertEqual((report['first_divergence']['at'], report['first_divergence']['tick']), ('steps', 1))
+        self.assertIn('first divergence: steps tick 1', printed)
+
+    def test_pixels_wait_for_matching_nodes(self):
+        self.write_godot('end.nodes.json', 9)
+        with mock.patch.object(compare, 'pixel_entry') as pixel:
+            pixel.return_value = PIXEL_PASS
+            report, _ = self.run_check()
+        self.assertEqual(report['captures']['end']['pixel']['skipped'], 'nodes differ: fix the state first')
+        self.assertEqual([c.args[2] for c in pixel.call_args_list], ['start'])
+
+    def test_pixel_captures_limit_pixels_to_keyframes(self):
+        self.case['pixel_captures'] = ['end']
+        self.case_path.write_text(json.dumps(self.case), encoding='utf-8')
+        meta_path = self.goldens / 'walk' / 'meta.json'
+        meta = json.loads(meta_path.read_text(encoding='utf-8'))
+        meta['case_sha256'] = compare.reference_sha256(self.case_path)
+        meta_path.write_text(json.dumps(meta), encoding='utf-8')
+        with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS) as pixel:
+            report, _ = self.run_check()
+        self.assertEqual([c.args[2] for c in pixel.call_args_list], ['end'])
+        self.assertIn('pixel_captures', report['captures']['start']['pixel']['skipped'])

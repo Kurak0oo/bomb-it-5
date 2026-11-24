@@ -112,7 +112,7 @@ func _run(case: Dictionary) -> void:
 					_key(words[1], words[0] == "kd")
 				"settle":
 					var golden_path := "res://tests/goldens/%s/%s.json" % [case.name, words[1]]
-					var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(golden_path))
+					var golden: Dictionary = GoldenFile.load_json(golden_path)
 					_viewport.get_child(0).settle_as_recorded(golden, words[1], _frames_until(actions, step_index, words[1]),
 						case.get("godot_phases", {}))
 				"round":
@@ -147,12 +147,20 @@ func _run(case: Dictionary) -> void:
 			_between_frames = true
 			var name: String = action.capture
 			_viewport.get_texture().get_image().save_png(_out.path_join(name + ".png"))
-			var dump := {"schema": "bombit5-godot-nodes-v1", "frame": _frame,
-				"stage": {"width": STAGE.x, "height": STAGE.y},
-				"nodes": [], "unmapped_visible": 0}
-			_dump(_viewport, dump)
-			FileAccess.open(_out.path_join(name + ".nodes.json"), FileAccess.WRITE).store_string(JSON.stringify(dump, " "))
+			_write_nodes(name + ".nodes.json")
 			if paused: paused = false
+		if action.has("trace"):
+			# A trace (tools/compare/tick_trace.py): one frame at a time, the scene after each, as
+			# `step 1` and a capture would, without the PNG (traces compare state only).
+			for tick in int(action.ticks):
+				_between_frames = false
+				await process_frame
+				_frame += 1
+				_tick_capture_frame()
+				await _wait_frame_drawn()
+				_between_frames = true
+				_write_nodes("%s.t%04d.nodes.json" % [action.trace, tick])
+				if paused: paused = false
 	FileAccess.open(_out.path_join("godot-log.json"), FileAccess.WRITE).store_string(JSON.stringify({"frame": _frame, "notes": log}, " "))
 	# (A static Callable bound to this tree must not outlive it.)
 	load("res://scripts/game.gd").seconds_source = Callable()
@@ -190,6 +198,14 @@ func _tick_capture_frame() -> void:
 	var game = app.get("game")
 	if game != null and is_instance_valid(game) and not game.state.is_empty():
 		game.capture_step(1.0 / 35.0)
+
+
+func _write_nodes(file: String) -> void:
+	var dump := {"schema": "bombit5-godot-nodes-v1", "frame": _frame,
+		"stage": {"width": STAGE.x, "height": STAGE.y},
+		"nodes": [], "unmapped_visible": 0}
+	_dump(_viewport, dump)
+	FileAccess.open(_out.path_join(file), FileAccess.WRITE).store_string(JSON.stringify(dump, " "))
 
 
 func _dump(node: Node, dump: Dictionary) -> void:
@@ -261,6 +277,7 @@ static func _frames_until(actions: Array, at: int, capture: String) -> int:
 		if action.get("capture", "") == capture: return frames
 		var words := String(action.get("godot_command", action.get("command", ""))).split(" ", false)
 		if words.size() == 2 and words[0] == "step": frames += int(words[1])
+		if action.has("trace"): frames += int(action.ticks)
 	push_error("no capture %s after action %d" % [capture, at])
 	return frames
 

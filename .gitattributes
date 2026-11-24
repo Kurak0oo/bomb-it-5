@@ -9,3 +9,6 @@ tools/reference_player/*.patch -text
 tools/reference_player/Cargo.lock -text
 tools/reference_player/Cargo.toml -text
 tools/reference_player/src/main.rs -text
+
+# Goldens are stored gzip-compressed (tools/golden_io.py).
+tests/goldens/**/*.gz binary

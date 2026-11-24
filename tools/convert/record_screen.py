@@ -61,6 +61,7 @@ ROOT = HERE.parents[1]
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))
 sys.path.insert(0, str(HERE.parent / 'compare'))
+import golden_io  # noqa: E402
 import layout as layouts  # noqa: E402
 import pixels  # noqa: E402
 
@@ -303,7 +304,7 @@ def record_timeline(case_name, player_path, swf):
             # what it shows is laid out from the round (layout.py `board`).
             print(f'{screen}: no timeline (the round drives it)')
             continue
-        golden = json.loads((GOLDENS / case_name / f'{capture}.json').read_text(encoding='utf-8'))
+        golden = golden_io.load(GOLDENS / case_name / f'{capture}.json')
         p = Player(player_path, swf, localize=False)
         try:
             opened, last_input, tracks, t = None, 0, {}, 0
@@ -375,7 +376,7 @@ def record_timeline(case_name, player_path, swf):
                'note': 'Changes only: [frame index since the screen opened, state or null when absent].',
                'tracks': tracks}
         target = GOLDENS / case_name / f'{capture}.timeline.json'
-        target.write_text(json.dumps(out, separators=(',', ':'), sort_keys=True) + '\n', encoding='utf-8')
+        golden_io.write_text(target, json.dumps(out, separators=(',', ':'), sort_keys=True) + '\n')
         moving = sum(1 for tr in tracks.values() if len(tr) > 1)
         print(f'{screen}: opened {opened - last_input} frames after input, capture at +{capture_index}, '
               f'period {period}{" (capped)" if capped else ""}; {moving}/{len(tracks)} nodes change '
@@ -391,7 +392,7 @@ def _record_extra_timeline(case_name, case, screen, spec, root, capture, selecto
     The screen's widget clips are recorded on that timeline too (`widgets`): a widget may
     show another frame there that animates (the selected robot's icon), which plays on this
     capture's clock (layout.py `frame_sequences`)."""
-    golden = json.loads((GOLDENS / case_name / f'{capture}.json').read_text(encoding='utf-8'))
+    golden = golden_io.load(GOLDENS / case_name / f'{capture}.json')
     tops = [n['path'] for n in golden['nodes'] if n['path'].startswith(root + '/') and any(
         layouts._matches(n, n['path'][len(root) + 1:], s) for s in selectors)]
     widgets = [n['path'] for n in golden['nodes'] if n['path'].startswith(root + '/')
@@ -451,7 +452,7 @@ def _record_extra_timeline(case_name, case, screen, spec, root, capture, selecto
                    'after it with no input.',
            'tracks': tracks}
     target = GOLDENS / case_name / f'{capture}.timeline.json'
-    target.write_text(json.dumps(out, separators=(',', ':'), sort_keys=True) + '\n', encoding='utf-8')
+    golden_io.write_text(target, json.dumps(out, separators=(',', ':'), sort_keys=True) + '\n')
     print(f'{screen}/{capture}: extra parts shown {capture_index} frames before the capture, then loop over {period}')
 
 
@@ -466,7 +467,7 @@ def record_states(case_name, player_path, swf):
     for capture, (screen, spec) in screens_of(case_name).items():
         if spec.get('states') is False:
             continue  # a ported controller drives this screen's widgets
-        golden = json.loads((GOLDENS / case_name / f'{capture}.json').read_text(encoding='utf-8'))
+        golden = golden_io.load(GOLDENS / case_name / f'{capture}.json')
         by_name = {}
         for node in golden['nodes']:
             last = node['path'].rsplit('/', 1)[-1].split('@')[0]
