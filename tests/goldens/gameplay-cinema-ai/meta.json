@@ -1,0 +1,12 @@
+{
+ "case": "gameplay-cinema-ai",
+ "case_sha256": "d35e3ae80eb199c8da72923ff095d9fd8897d847a7163623938976082b0f9eee",
+ "fps": 35.0,
+ "frames": {
+  "ai-10": 711,
+  "ai-30": 731
+ },
+ "note": "Recorded by tools/compare/compare.py record (to ai-360); the case was then cut after ai-30, its goldens kept.",
+ "player_sha256": "fddd18bc24219371386c1e8028ff16cffac5c7e6854bae5b77a7624e2d53c6e4",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

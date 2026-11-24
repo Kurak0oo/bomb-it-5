@@ -1,0 +1,123 @@
+{
+ "name": "character-select",
+ "origin": "Character select (CharacterSelectUI, class UI_SELECTCHARACTER), reached through Game Settings' NEXT (confirm's centre from the game-settings golden). char0 shows the default robot 0; then each robot icon is clicked (centres of robotIcon1..7's stage bounds in the char0 capture) and captured, so every robot's display and clothes panel (Art_clothPanel<N>, made from the library on selection) is recorded. Checkpoint 3.",
+ "actions": [
+  {
+   "command": "seed 55"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 556.75 202.7"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "command": "click 533 476.5"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "capture": "char0"
+  },
+  {
+   "command": "click 174.5 149.5"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "char1"
+  },
+  {
+   "command": "click 244.5 149"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "char2"
+  },
+  {
+   "command": "click 315.5 154.5"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "char3"
+  },
+  {
+   "command": "click 385.5 150"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "char4"
+  },
+  {
+   "command": "click 455.5 151.5"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "char5"
+  },
+  {
+   "command": "click 525.5 159"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "char6"
+  },
+  {
+   "command": "click 596.5 150.5"
+  },
+  {
+   "command": "move 2 2"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "char7"
+  }
+ ]
+}

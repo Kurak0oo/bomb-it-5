@@ -1,0 +1,126 @@
+{
+ "name": "gameplay-pacman-coin",
+ "screen": "game",
+ "origin": "A coin eaten in Pac-Man (checkpoint 5, modes), on the round of gameplay-pacman-start (seed 42, Pac-Man, Normal, Cinema, robot 0; the ghosts stopped at the round's first frame): the player walks right from (1,1) (walk, 8 frames on) onto (2,1), where CoinProp.eatProp removes the coin and PacManMode.eatNum writes the player's score (1/119: coinsNum -> scoreData) (coin).",
+ "godot_note": "Godot starts on the recorded round with the original's Math.random place; the coin is the simulation's pickup.",
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME differs between the recording and Godot"
+ },
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 426.6 185.2"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round pacman-start",
+   "godot_note": "The round this START opens takes its board and enemy robots from the golden of the pacman-start capture (App.round_as_recorded), as gameplay-cinema-start does."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "command": "kd right"
+  },
+  {
+   "command": "step 8"
+  },
+  {
+   "capture": "walk"
+  },
+  {
+   "command": "step 12"
+  },
+  {
+   "capture": "coin"
+  },
+  {
+   "command": "ku right"
+  }
+ ]
+}

@@ -19,6 +19,13 @@ var probs: Array = []
 var power := 2
 ## Fractional positions of carried pickups, keyed by their current cell.
 var prop_positions := {}
+## Display only (`public_state`): each carried pickup's id, keyed by its current cell; this
+## tick's `resetDisplay` calls in order (`[kind, id, row]`, kind "bomb" or "prop"); and the
+## `addDisappearAni` calls (`[cell, rotation]`).
+var prop_ids := {}
+var _next_prop_id := 0
+var _moved: Array = []
+var _disappeared: Array = []
 
 
 func _init(cells: Dictionary, center: Vector2i, mode: RefCounted) -> void:
@@ -35,6 +42,8 @@ func _init(cells: Dictionary, center: Vector2i, mode: RefCounted) -> void:
 
 func advance(round_state: RefCounted, inputs: Dictionary) -> void:
 	if track.is_empty(): return
+	_moved.clear()
+	_disappeared.clear()
 	if spawn_pending and not _exit_occupied(round_state):
 		_spawn(round_state)
 		spawn_pending = false
@@ -55,28 +64,42 @@ func advance(round_state: RefCounted, inputs: Dictionary) -> void:
 		if corner and index > 0:
 			velocity = Vector2(along + flow[index + 1]).normalized() * SPEED
 		var align: Vector2i = along if index > 0 else Vector2i.ZERO
+		# `new mVector(_loc3_[0], _loc3_[1]).angle` (TF_Class.atan2D: degrees): the Art_Prop_Disappear's rotation.
+		var rotation := rad_to_deg(atan2(float(along.y), float(along.x))) if index > 0 else 90.0
 		for bomb in round_state.bombs().duplicate():
 			if bomb.cell != cell or bomb.get("flying", false): continue
 			if index == last:
 				round_state.vanish_bomb(bomb)
+				_disappeared.append([cell, rotation])
 				continue
 			var at: Vector2 = bomb.get("belt_position", Vector2(cell))
 			at += _clamped(velocity, at, cell, align) if corner else velocity
 			bomb.belt_position = _display(round_state, at)
 			at = bomb.belt_position
 			bomb.cell = Vector2i(floori(at.x + 0.5), floori(at.y + 0.5))
+			# bombMove: updateBombPos, then resetDisplay on the row it now stands on.
+			_moved.append(["bomb", round_state.serial_of(bomb), bomb.cell.y])
 		if round_state.pickups().has(cell):
 			var kind: StringName = round_state.pickups()[cell]
 			var at: Vector2 = prop_positions.get(cell, Vector2(cell))
+			var id: int = prop_ids.get(cell, -1)
 			prop_positions.erase(cell)
+			prop_ids.erase(cell)
 			round_state.pickups().erase(cell)
 			if index == last:
 				round_state.mode().pickup_removed(round_state, kind, &"")
+				_disappeared.append([cell, rotation])
 			else:
 				at = _display(round_state, at + (_clamped(velocity, at, cell, align) if corner else velocity))
 				var landed := Vector2i(floori(at.x + 0.5), floori(at.y + 0.5))
 				round_state.pickups()[landed] = kind
 				prop_positions[landed] = at
+				if id < 0:
+					_next_prop_id += 1
+					id = _next_prop_id
+				prop_ids[landed] = id
+				# propMove: updateItemPos, then resetDisplay on the row it now stands on.
+				_moved.append(["prop", id, landed.y])
 		for id in round_state.actors():
 			var actor: Dictionary = round_state.actors()[id]
 			if not actor.alive or actor.cell != cell or actor.get("pushed", {}).size() > 0: continue
@@ -144,10 +167,15 @@ func _spawn(round_state: RefCounted) -> void:
 	if draw < probs[0]:
 		round_state.pickups()[exit_cell] = round_state.random_pool_kind()
 		prop_positions[exit_cell] = Vector2(exit_cell)
+		_next_prop_id += 1
+		prop_ids[exit_cell] = _next_prop_id
 	elif draw < probs[0] + probs[1]:
-		var fuse := int(round_state.draw_random() * move_time)
-		round_state.add_bomb({"actor_id": &"", "cell": exit_cell, "power": power, "fuse": fuse,
-			"belt_position": Vector2(exit_cell)})
+		# buildBomb: `blastTime = int(Math.random() * _moveTime)`. `Bomb.takeCount` blasts once
+		# `_time > _blastTime`, counting from 0 on each bomb tick from the next one, so the bomb
+		# goes off blastTime + 2 ticks after it is made (as the normal 70 gives FUSE_TICKS 72).
+		var blast_time := int(round_state.draw_random() * move_time)
+		round_state.add_bomb({"actor_id": &"", "cell": exit_cell, "power": power, "blast_time": blast_time,
+			"fuse": blast_time + 2, "belt_position": Vector2(exit_cell)})
 
 
 ## The belt's cells are `belt` board cells, which the round already treats as blocked.
@@ -156,4 +184,10 @@ func blocked_cells() -> Array[Vector2i]:
 
 
 func public_state() -> Dictionary:
-	return {"kind": &"belt", "track": track, "flow": flow, "exit": exit_cell, "next_spawn": BUILD_DELAY - total_frame}
+	# Display only: `carried` (cell -> [id, position]) for the pickups on the belt, `moved` and
+	# `disappeared` for this tick (see `prop_ids`).
+	var carried := {}
+	for cell in prop_ids:
+		if prop_positions.has(cell): carried[cell] = [prop_ids[cell], prop_positions[cell]]
+	return {"kind": &"belt", "track": track, "flow": flow, "exit": exit_cell, "next_spawn": BUILD_DELAY - total_frame,
+		"carried": carried, "moved": _moved.duplicate(true), "disappeared": _disappeared.duplicate(true)}

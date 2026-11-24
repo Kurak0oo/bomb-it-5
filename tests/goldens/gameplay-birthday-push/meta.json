@@ -1,0 +1,15 @@
+{
+ "case": "gameplay-birthday-push",
+ "case_sha256": "60e9ba1d52dd6b09b2f2c5d2f4562b514457d9e82ba0fc206f2834c3925d0269",
+ "fps": 35.0,
+ "frames": {
+  "closed": 1253,
+  "first-push": 816,
+  "hand-open": 806,
+  "push-end": 1250,
+  "push-mid": 1249
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

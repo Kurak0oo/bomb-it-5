@@ -1,0 +1,138 @@
+{
+ "name": "gameplay-greenzone-flag",
+ "screen": "game",
+ "origin": "Green Zone's flag held (checkpoint 5, modes), on the round of gameplay-greenzone-start (seed 42, Green Zone, Normal, Cinema, robot 0; the AI robots stopped at the round's first frame): the reposition fixture puts the player above the flag (10,6; the fixture takes only an empty floor cell) and it walks down onto the flag's cell (10,7) for 7 frames. Flag.runEngine gives it the first slot and its r0_progress bar at int(totalTime / maxTime * 100) (holding, 30 frames on); at maxTime (flag 3 x 35 = 105) Flag.complete scores the point (HUD 1/10), takes the bar off and plays the nested clip from \"got it\" (got-it). The flag's move after TweenMax.delayedCall(3) runs on the host clock and is not captured.",
+ "godot_note": "Godot's player is put on the same cell (Game.reposition_human); the flag and its bars are drawn by scripts/ui/game_board.gd from the mode's state.",
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME differs between the recording and Godot"
+ },
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 569.5 185.55"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round greenzone-start",
+   "godot_note": "The round this START opens takes its board and enemy robots from the golden of the greenzone-start capture (App.round_as_recorded), as gameplay-cinema-start does."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "reposition",
+    "x": 10,
+    "y": 6
+   },
+   "godot_command": "reposition 10 6",
+   "godot_note": "The original's player put on the cell through its own position setters (fixture); Godot's player stands on the same cell (Game.reposition_human)."
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 7"
+  },
+  {
+   "command": "ku down"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "capture": "holding"
+  },
+  {
+   "command": "step 80"
+  },
+  {
+   "capture": "got-it"
+  }
+ ]
+}

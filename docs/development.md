@@ -202,3 +202,782 @@ max region ΔE 5.7 / 5.2: PASS.
 
 Checkpoint 3 is in progress: Game Settings, character select, How to Play (controls and
 power-ups) and the results screens, converted the same way.
+
+Game Settings (2026-11-04): `GameSettingsUI` and `ToggletButton` are ported
+(`scripts/ui/game_settings_ui.gd`, `toggle_button.gd`, AS3 listeners via `swf_events.gd`),
+quirks included (Cinema on `choose` frame 5 in `initData` but 2 in `stagesHandle`; the
+five-levels button sets one level). Every widget frame is rendered by the reference
+player (`piece PATH FILE FRAME`); the stage dropdown, off the display list until opened,
+comes from a second capture. Generic fixes from this screen: groups are split down to
+every blended node unless a group composites on its own (blend or filters); animated
+widgets play their recorded frame as a sequence; alpha is part of the timeline; a screen
+made by a click starts on the next frame, as in the original; the pixel pass line is the
+measured 3×→1× resampling ceiling minus 0.02 (this screen's thin borders cap it at
+0.949). Result: settings and dropdown nodes 116/116 and 126/126, pixels within the
+ceiling; title and menu still pass. Owner review: accepted, with the 2-player option removed (owner edit).
+
+Character select (in progress): `CharacterSelectUI`, `ClothesPanel` and `Button` are
+ported (a subagent did the port; `scripts/ui/character_select_ui.gd`, `clothes_panel.gd`,
+`button.gd`). The case selects each of the 8 robots in turn; every robot's display and
+clothes panel (`Art_clothPanel<N>`, made from the library on selection, addressed by its
+class) comes from its own capture, with its own recorded loop. New pipeline pieces:
+children recorded on different frames of one clip follow that clip's frame (robotMc
+shows robot<N> on frame N+1); a widget that is also a group (robotStage1) draws its
+frames without the parts laid out inside it (`piece … FRAME HIDE`); instances are
+addressed by path relative to the screen root; live text (`set_text`) is drawn in the
+SWF's embedded fonts (`record_screen.py fonts`) with each TextField's recorded format.
+
+How to Play and Power-ups (2026-11-04): `HowToPlayUI` and `PowerUpsUI` are ported
+(subagent). Both captures pass: nodes 135/135 and 91/91, pixels at the resampling
+ceiling (SSIM 0.9747 / 0.9765). Generic fixes from these screens:
+- a group Flash composites on its own (filters, a blend) that animates inside plays as a
+  sequence instead of being split, so its filter pass survives (p2head's outline);
+- each piece is padded by a few transparent pixels before resampling so its texels land
+  on the screen's pixel grid, and the fit offset is whole pixels (`SwfScreen._pads`);
+  pieces no longer blur by a third of a pixel, and every earlier screen moved up to its
+  ceiling (menu SSIM 0.9416 → 0.9796);
+- a case action may carry `godot_command` where an owner edit moved its target (the menu
+  click on the moved HOW TO PLAY); the goldens' case hash ignores `godot_*` fields;
+- the reference player's `piece` deadlocked on a path absent at that frame (the error
+  branch re-locked the player); it now writes the `missing` marker;
+- owner edit: How to Play's two 2-player key columns are removed (the empty right panel
+  is part of one shape with the others and stays; owner to review);
+- a piece that sticks out of the viewport is rendered with the stage content shifted by
+  whole stage units so it fits, so a balloon drifting in from off-stage is no longer cut;
+- unnamed siblings at one depth (the game board, the unlock tip's panels) get `#k`
+  segments, their order among those siblings.
+
+Results (in progress): case `results` (from the research case results/02) records the
+score screen after a won level with the new-outfit tip on top (`unlock-tip`), after OK
+(`win-score`) and after a lost level (`loss-score`). Recording replays the original-method
+fixtures (`fixture` actions; the player is given a state walk first so it finds the Game).
+
+`OnePScoreUI`, `PlayerScoreUI`, `UnlockTipScreen` and `UnlockAnimaPanel` are ported and
+drive the generated `score` screen (main capture `win-score`; the failed title and the tip
+are parts from the other two captures; RESTART, hidden after a win, draws its frames at
+`loss-score`). Godot cannot play the original round, so the case's Godot-only `settle`
+actions end each round with the points its golden shows, through the app's own round-end
+path. The original opens this screen on the wall clock, so each recording opens it at a
+different frame: the layout reads each capture's *capture phase* from its golden.
+`-- --screen score --capture loss-score` opens it for review.
+
+Checkpoint 3 status (2026-11-05): every case passes nodes and pixels (pixels at the
+measured 3×→1× ceiling): main-menu, game-settings, character-select (8 robots),
+how-to-play, results (unlock tip, level complete, level failed), game-over, game-win;
+tools/run_checks.sh passes end to end. Later fixes:
+- a node whose own alpha or colour changes plays as rendered frames (Flash fades each
+  shape inside a clip, so overlaps compound);
+- an extra part's clock starts with its capture's first frame (all its tops shown; the
+  frame after a click shows it);
+- a widget frame that animates in another capture (a selected robot icon blinking) plays
+  that capture's sequence (`frame_sequences`);
+- live text uses the SWF font's ascent and draws a TextField's GlowFilter;
+- controllers are released with their screen (listeners cleared, fields nulled).
+Owner review (2026-11-05): all checkpoint 3 screens accepted; the empty How to Play
+panel stays. Asked for: TRY AGAIN centred on the end screens and the game-complete
+confetti (FallSnow) ported; fixes for robot 6's missing head while dressing up, robot 8's
+arm missing at the start of its entrance, and the pause when switching robots.
+- End screens (2026-11-05, owner to review): TRY AGAIN moves half the way to MORE GAMES'
+  place, the middle of the original row (owner edit); on the score screen DRESS UP and
+  NEXT/RESTART move left by half a button pitch (a move may now be measured `from`
+  another node). `FallSnow` is ported (`scripts/ui/fall_snow.gd`, Flash `Math.random`
+  port, frames from FFDec at zoom 1 in the pack); its confetti are a *run-time effect*:
+  the comparison checks them by FallSnow's rules and count, and masks them from pixels.
+- Dress-up (2026-11-05, owner to review): timelines record filters, so art is rendered
+  where a blur changes; a still part faded or blurred at its capture is rendered at the
+  first frame its parents settle (robot 6's head). Parts removed before the capture are
+  added from their tracks (robot 8's first arms). Switching robots no longer stalls: one
+  update per frame, art looked up by table, decode and resize on worker threads, a
+  256 MB cache. Known gap: robot 6's head misses the group blur for about 6 entrance
+  frames. The results unlock-tip timeline should be re-recorded with the new recorder.
+Checkpoint 3 is done: accepted by the owner on 2026-11-05, including the dress-up fixes,
+the centred buttons and the confetti.
+
+Checkpoint 4 (gameplay screen, Cinema set) started 2026-11-05. Slices: (a) the screen's
+chrome and the Cinema board at the round's first frame, generated from the display list;
+(b) robots, bombs, flames and items drawn from SWF clips at their registration points,
+driven by simulation snapshots; (c) frame-matched cases against seeded recordings;
+(d) the replica_* placeholders removed; then the owner plays it.
+
+Slice (a), 2026-11-05 (owner to review): case `gameplay-cinema-start` (seed 42, Arcade,
+Normal, Cinema, robot 0, through the real menus) captures the round's first frame, 61
+frames after START: the map-loading screen (`LoadingMapUI`, UI_reading) is gone and TIME
+still reads 180. `scenes/swf/game.json` is generated from it: the HUD (`GameInterFace`,
+ported in `scripts/ui/game_inter_face.gd`) and the board background as pieces; the board's
+row layers as empty groups, with a `board` section read from the golden (every box's cell,
+`_brick5` frame and kind, the portals, the grid, the round's robots and HUD slots, its
+template, CinemaStage3). The art pass renders a *board tile* per frame and box kind;
+`scripts/ui/game_board.gd` ports `MapMaster.createRow` / `Box.setItem` to lay the round's own
+board out of them, and `tests/game_board_check.gd` checks that port against the recorded
+board. Robots, bombs, items and flames (the other row layers) are slice (b): left out of
+the node diff and masked from pixels; the old view draws them as placeholders. Godot starts
+the case on the *recorded round* (Godot-only `round` action) and holds the round for the
+recorded 61 frames. Result: nodes 378/378, SSIM 0.942 (ceiling 0.935), max region ΔE 5.0.
+Known gaps: no loading screen yet; portals, the centre marquee and the TIME flash are still;
+HUD panels of robots not in the recording (1, 3, 4, 7) have no art; other stage sets keep the
+placeholder page.
+
+Slice (b), 2026-11-05 (owner to review): robots, bombs, blasts, box breaks, the portals' glow
+and the centre marquee are drawn from their own SWF clips (`scripts/ui/game_actors.gd`, ports
+of `RobotView`, `InvincibilityCommand`, `RobotDeadCommand`, `Bomb`; `Box.brickExp` in
+`game_board.gd`). Their art comes from `record_screen.py actors`: the reference player's new
+`symbol` command (patch `reference-symbol`, art pass only) constructs each library class and
+renders it at every frame, robots with the round's looks (`--looks all` for every look, ~40
+min). Clip timing (first frame shown twice, key press vs engine stop, nested blast frames) was
+recorded and is cited in the port. New case `gameplay-cinema-bomb` (AI stopped by fixture /
+Godot-only `ai-stop`; the player walks, drops a bomb, it blasts a box): every actor node
+matches; `gameplay-cinema-start` now includes the robots. Owner edit: the publisher logo
+(`Logo2`) is removed from the gameplay screen. Harness fix: a case's key lands after the
+frame has run (it applied one frame early). Known gaps: items/pickups, vehicles, weapon
+clips and the map-loading screen are still placeholders or absent; robots' own blink loops
+show their first frame; looks the pack lacks show the robot's default look; TIME follows the
+host's Date in the reference player, so it is not compared frame for frame.
+
+Slice (b2), 2026-11-05 (owner to review): pickups, the map-loading and pause screens, every
+robot's HUD panel and the TIME flash.
+- Pickups are ports of `AbstractItem`/`PixelClip`: the bitmaps are the original's own, made
+  per kind by the `pickup` fixture (`record_screen.py items`, all 16 Cinema kinds; patch
+  `reference-item-kinds` adds BombShoesProp and BoxingProp to the fixture). Recorded: bitmap
+  k shows from age 4k + 1; eaten on the frame the robot enters the cell. Fixes from the longer case: blast arms play to their empty last frame
+  after the bomb is gone, and the centre's art is one nested key ahead.
+- The round draws from the Flash `Math.random` port: a recorded round continues where the
+  original's stood (`tools/compare/round_draws.py` -> `tests/goldens/gameplay-cinema-start/
+  math_random.json`: 411 draws before the round, the drop pool's vehicles at 15-17), and the
+  drop pool follows `AbstractGameMode.initMap`'s class order (it did not). Case
+  `gameplay-cinema-item` matches the drop roll at frame 815 (draws 412-413: a SpeedProp),
+  its pickup at 848 and the HUD after it; `gameplay-cinema-pause` matches PauseUI's random
+  robot (draws 412-413 again, no drop before it).
+- `LoadingMapUI` and `PauseUI` are generated screens over the gameplay screen
+  (`loading_map`, `pause`); under the loading screen the rows are built on the recorded Timer
+  ticks and the robots and counters appear at `firstMapLoadOver`. Its progress bar (TweenMax)
+  and TIME follow the host clock in the reference player, so neither is compared frame for
+  frame (`wall_clock_frame`, `wall_clock_text`).
+- HUD panels of robots 1, 3, 4, 7 come from the art-only case `tools/convert/cases/
+  hud-robots.json` (`record_screen.py panels`, after `art`); TIME turns red/white every 4th
+  engine tick under 10 s (`changeTimeCol`), not frame-checked (TIME is on the wall clock).
+Results: every case passes; gameplay-cinema-item nodes 382/391/389/389/386, pixels at the
+3×→1× ceiling (SSIM 0.935, ΔE 5.0; loading 0.974); gameplay-cinema-pause nodes 515/515.
+Known gaps: robots' own eye/hat loops (85-131 frames inside each clip) still show frame 1;
+vehicles, weapon clips and the portal fade are still placeholders; AI and the session's AI
+robots/looks do not draw from the Flash generator, so cases stop the AI.
+
+Slice (c) and (d), 2026-11-05 (owner to review):
+- Rides and weapons from their SWF clips (`scripts/ui/game_actors.gd`): a ride swaps the robot's
+  clip for `_r<n>_Car_*` / `_r<n>_Skateboard_*` (`CarProp`/`MotoCycleProp.changeStage`), a hit
+  sends it to `dead` and tweens to its last frame; a weapon pickup adds `showTimes` with its count
+  and the held clip at the hand (`AbstractWeapon.changeStage`, `updateWeaponDisplay`, in front of
+  or behind the robot as the AS3 orders them); the hammer's `sinker*_Play` swing and recovery
+  (`HammerProp.bombDown`, `HammerPlayCommand`). Other weapons' swings and shots stay on the
+  placeholder layer. Art: `record_screen.py actors --parts robots,plays,weapons` (every robot
+  clip on foot and on both rides, how each plays, every weapon clip; ~20 min).
+- Robots' own loops (eyes, feathers) are *clip loops*: left out of the clip's images and drawn as
+  their own node at their recorded place per root frame (cost: root + loop frames).
+- New cases (the `pickup` fixture; Godot `pickup KIND`): `gameplay-cinema-ride` (mount, drive),
+  `gameplay-cinema-hammer` (held, turned, swing, swing-late, after), `gameplay-cinema-ai` (AI
+  running: every node matches through round frame 30). All pass: nodes 385-391 each, SSIM
+  0.936-0.938 at the 3×→1× ceiling. Known: after a key release the ride's clip advances once
+  more in the original than in Godot (recorded, not explained), so the ride case ends at drive.
+- AI draws: the AI's choices draw from the round's `Math.random`; `CharacterSelectUI.startFunc`
+  draws the AI robots and `createAIPlayer` each AI's look per level, in the original's order
+  (the map's own draws are still Godot's). The original's AI cannot be frame-matched further:
+  its callbacks run on the host clock (`Action.setAction`'s `TweenMax.delayedCall(0.1)`,
+  `AbstractState`'s `Timer(2000)`, `setTimeout` weapon delays), so two recordings of one case
+  differ from round frame 10; Godot first leaves this recording between frames 30 and 60
+  (robot 6 on another row).
+- Removed: the mobile page (`replica_layout/hud/scenery.gd`), touch controls, the 1280×720 page
+  view and its buttons, `--practice`, the Art Workbench and the page capture tools. Every stage
+  set now plays on the generated screen; a set other than Cinema has no board art in the pack,
+  so its boxes and features are drawn by the placeholder layer over Cinema's floor (known gap).
+- `tools/smoke_playthrough.gd` (in run_checks) plays a normal launch with keyboard events:
+  menus by clicks, Cinema levels, pause/resume, score screens, game over, a Zoo level.
+
+Play-test fixes, 2026-11-06:
+- Stage sets other than Cinema showed an empty board: the placeholder layer that draws their
+  boxes and features was moved to the board container's first child, under Cinema's floor art
+  (`@0#0`, `@0#1`). It is now a board-only layer just under the first row layer, and the effects
+  layer (weapon actions and shots, mode objects) stays over every row
+  (`Game.attach_swf`, `swf_board_view`; checked in `tests/flow_scene_check.gd`).
+- The shield, invincibility and portal-transit effects had no drawing since the robots moved to
+  their SWF clips (slice c); the effects layer draws placeholders for them again
+  (`GameView._protection`). Still placeholders: `ShieldProp`'s `nombril_<direction>`,
+  `InvincibilityProp`'s `invincibityPlay` and colour filter, other weapons' action clips and
+  shots (need the reference player's art pass).
+- Localised text showed its authoring placeholders (`U_TOTAL SCORE:`, `L_TOTAL SCORE`,
+  `P_PAUSE`, `R_ARCADE` ...): the original's branding system runs `NewTransText.updateText` on
+  every `translation_*` field (en-US string from `LocalizationPack`, font shrunk to fit,
+  recentred), but the reference player has none, so the goldens and the art kept them. The
+  player's `localize` command (patch `reference-localize`) replays updateText through the
+  TextField API; the art passes use it (`record_screen.py`, not timeline) on the fields still
+  showing a placeholder (a letter or digit and `_`: 15 fields on how-to-play, game over/win,
+  score, settings, loading and pause, including `1_ENEMIES KILLED` -> `ENEMIES DESTROYED`).
+  `tools/convert/localization.py` writes the strings (`scenes/swf/localization.json`); layout.py
+  writes the en-US `text` (golden's as `golden_text`); the comparison expects it and leaves those
+  fields out of the pixel score (the 1x reference still shows the placeholder). Goldens kept;
+  the results timelines were re-recorded (the unlock tip's robot had no eyes). Open for the
+  owner: other en-US strings differ from the authored English too (`START` -> `START GAME`,
+  `CINEMA` -> `MOVIE THEATER`, `LIGHTNING GUN` -> `LASER GUN`, `SPORT CAR` -> `SPORTS CAR`,
+  setting and loading hints); `localize FILE` without `placeholders` would apply them all.
+- No end cartoon when a round ended: `GameEndCartoon` is ported (`scripts/ui/game_end_cartoon.gd`).
+  When the simulation enters `ending`, the cartoon is added as the UI container's last child
+  (`GameMc/@0#1/@0#1`, over the HUD, which becomes `@0#0`): `winCartoon` for `win`,
+  `loseCartoon` for `lose`, `timeUpCartoon` whenever the ending began on the round clock (every
+  edition-5 mode's `timeOut`; new snapshot field `ending_timed_out`). Its frame is the tween's
+  (`TweenMax.to(mc, 3, {frame: 100})`: default ease `TweenLite.easeOut`, FramePlugin rounds)
+  after the elapsed share of the simulation's 105-tick ending; it is taken off when the round
+  settles (`animationComplete`), before the score screen. A pause during the ending leaves it
+  under PauseUI (added after it), frozen with the ending. Fixed with it: `timeOut` plays the
+  lose jingle whoever wins (`playLoseMusic`), so an Arcade time-out no longer plays the win
+  jingle. Art: `record_screen.py cartoons gameplay-cinema-start` (after `art`) makes each class
+  with `symbol` in the UI container and renders its 100 frames (whole stage: the clips dim it
+  with black at alpha 0.2), only placeholder text localised as in every art pass: the owner
+  keeps the authored texts (`YOU LOSE!`, not the en-US `YOU LOSE.`; likewise START, CINEMA,
+  LIGHTNING GUN, SPORT CAR stay as authored). Checked in `tests/flow_scene_check.gd`,
+  `fidelity_check`, `kill_check`.
+- The HUD kept the path `@0#0` after the first pause: `App._hud_path` read the layout entry,
+  which `rename_node` rewrites, so unpausing renamed `@0#0` to itself. The HUD's own path is
+  remembered, and the map-loading screen, the pause screen and the end cartoon count as one set
+  of children beside it (`SwfScreen.add_ui_child` / `remove_ui_child`): `@0#0` while any is up,
+  `@0` when it is alone again (also with a pause during the end cartoon). Checked in
+  `tests/flow_scene_check.gd`.
+
+Checkpoint 4 is done: accepted by the owner on 2026-11-18.
+
+Checkpoint 5 (each mode × stage set) started 2026-11-06 with the stage sets' board art.
+
+Zoo slice, 2026-11-06 (owner to review):
+- Case `gameplay-zoo-start`: gameplay-cinema-start with Zoo picked in Game Settings' stage list
+  (`weddingStages`, the centre of its bounds in the dropdown golden); 61 frames after START as
+  for Cinema; `round_draws.py` gives its `math_random.json` (409 draws before the round).
+- One gameplay screen carries every set: `game.json` `board` stays the screen's own (Cinema,
+  `board.set`) and gains `board.sets.<set>` (layout.py `_set_board`): that set's golden, its
+  `begin_num`, matched template (crocodile cells count as platforms), boxes, features
+  (`Art_Crocodile` beside `Art_Portal_`), robots, looks, round start and `floor` (the board
+  container's children before the rows). The shared geometry (container, rows, layers, grid,
+  excursion) must equal the screen's or the converter stops.
+- Art: `record_screen.py sets` (after art) renders, from the set's own round, the floor
+  (bgContainer with `BackGround_Zoo`), the 46 tiles of `_brick5` 73-96 (the ZOO centre at 96 has
+  no loops), and each feature class by `symbol`: Art_Crocodile frame 1 at its water loop's 20
+  frames, frame 2's body and its own clips (`@3` splash 20, `mouthOpen_mc` 46) apart, into
+  `original/screens/game/sets/zoo/`. The actors pass now renders every set's recorded looks and
+  the Zoo rides' clips (`_forg`, `_Elephant`).
+- Godot: `GameBoard.new(screen, board, set)` merges the set's fields, takes its art (`art_of`:
+  the screen's pack for its own set, `sets/<set>/` for another), puts the set's floor on the
+  floor piece, and lays rolled rounds out with the set's `begin_num` (crocodile cells become
+  Art_Crocodile). `own_art` is `board.has_art()`: sets without a pack keep the placeholder layer.
+  Crocodiles follow the simulation's crocodile frame (`Crocodile.runEngine`: mouth 1 at the 240th
+  closed tick, 25 at `openComplete`, held while eating, 26-46 closing). `round CAPTURE` finds the
+  set whose golden it is (`App.round_as_recorded`).
+- Results: gameplay-zoo-start nodes 383/383, SSIM 0.941 (ceiling 0.939), ΔE 5.0; every other case
+  passes. Rolled Zoo rounds (three runs, frames 150-400) show both ring choices, the soft
+  variants, the ZOO centre and open crocodiles as in the reference capture
+  (`docs/evidence/reference-2026-10-21/features/zoo-crocodiles-open.png`).
+Known gaps: crocodile timing is mapped from the source, not frame-matched (no case runs to tick
+240); the water loop's phase after the first opening is inferred (frame 1 made again); horse and
+dragon rides draw their clips but their jump and crash are not checked against recordings;
+other sets still use the placeholder layer. The next set needs its own case and `board.sets`
+entry, plus its features' classes (toy hands, belt, spellbook) and any behaviour they drive
+on screen (Candy's belt moves the robots' clips; Birthday's hands throw).
+
+Candy Factory slice, 2026-11-07 (owner to review):
+- Case `gameplay-candy-start`: as the Zoo case with `basketballStages` (Candy Factory) picked,
+  the centre of its bounds in the dropdown golden; 393 draws before the round.
+- `board.sets.candy_factory` (begin_num 25, template CandyFactoryStage3). Features now record
+  where the AS3 puts them (layout.py): the cell of the feature's clip, its layer's `row` when
+  another (the belt: `game.getDisArr(0)`), its scale (`linear`, 30/32), its frame, and for a clip
+  inside a container left elsewhere the container's `origin` and the clip's `node`
+  (`ConveyorBelt.initDis`: Art_CandyMachine in a container at xPos 0). Template matching places
+  the machine on `centerProp` and the belt on the track's first cell.
+- Art: `record_screen.py sets --sets candy_factory`: floor, 48 tiles, Art_CandyMachine (70-frame
+  sweets loop) and Art_ConveyorBelt_1 (33 segments, 9-frame loop; `_2`/`_3` are never shown,
+  `initBeltView` always makes `_1`). The actors pass was re-run for the round's looks.
+- Godot: `GameBoard` lays features on their own layer at their scale and frame; a rolled Candy
+  round gets the machine on the centre and, with a track, the belt at `track[0]` (snapshot
+  feature state); both loops play from the recorded phase as the portals' glow. The centre is a
+  hidden box for Candy Factory and Magic Library (`setMidBox` without `true`).
+- Results: gameplay-candy-start nodes 366/366, SSIM 0.899 (ceiling 0.901), ΔE 5.0; all 16 cases and tools/run_checks.sh (27 suites) pass.
+  Rolled Candy rounds (frames 250-550) show the belt, machine, both fixed and soft choices, a
+  carried bomb and pickup, as in `docs/evidence/reference-2026-10-21/features/candy-belt.png`.
+Known gaps: no compare case of a robot riding the belt (the ride is matched frame by frame by
+the `belt-ride` fixture replay, edition-5-interactions.md; the screen only draws the
+snapshot's position); carried pickups step cell to cell and restart their bitmap loop on each
+cell; `Art_Prop_Disappear` at the belt's end is not drawn; the loops' phase in rolled rounds is
+the recorded one. Birthday Party needs its toy hands' clips and throw/push display; Luxury
+Stores only the case, set entry and art pass; Magic Library its spellbook clip and a hidden
+centre (already ported).
+
+Magic Library slice, 2026-11-07 (owner to review):
+- Case `gameplay-library-start`: as the Zoo case with `caveStages` (Magic Library) picked, the
+  centre of its bounds in the dropdown golden; 413 draws before the round.
+- `board.sets.magic_library` (begin_num 121, template MagicLibraryStage3): `Art_Spellbook` is a
+  feature like the candy machine (`Spellbook.initDis`: at 30/32 in a container left at the
+  board's origin, on the centre row's platform layer); a feature's `loop_frame` is now its
+  nested loop's under the clip (the book's own frame is the AS3's to set; unchanged for the
+  other sets).
+- Art: `record_screen.py sets --sets magic_library`: floor, 48 tiles, Art_Spellbook frame 1 by its
+  50-frame loop (`@42`), frames 2-69 (the loop apart on 2-9), and the signs (`RUNTIME_CLASSES`:
+  `Art_Sign_Red`/`_Blue` made playing, 65 ages). Robots 5 and 6's round looks were rendered and
+  added to actors.json.
+- Recorded in the reference player (edition-5-magic-library.md): the flip runs ticks 451-518,
+  the loop carries on through frames 2-9 and restarts when the book is back on 1; signs show
+  frames 1, 1, 2 … 64 and leave on frame 69, after the drop.
+- Godot: `GameBoard._spellbooks` shows the book's frame from the simulation's spellbook state
+  (new display fields: `closed`, and `signs` kept until frame 69 as `deleSign` does) and the
+  signs on their rows' platform layers (`tests/flow_scene_check.gd` checks the paths).
+- Results: gameplay-library-start nodes 385/385, SSIM 0.905 (ceiling 0.906), ΔE 5.0; all 17 cases and
+  tools/run_checks.sh (27 suites) pass.
+  Rolled rounds (nine runs, and three stopped at flip frames 6, 21, 40) show the book, its
+  glow, the pages turning and red/blue signs as in the reference capture and
+  `docs/evidence/reference-2026-10-21/features/magic-spellbook-signs.png`.
+Known gaps: no compare case runs to a flip (checked against the reference player's display
+dump, not frame-matched pixels); the dropped items' fade-in (`itemsDrop`: `TweenLite.from(mc,
+1, {alpha: 0})`) is not checked; the shared actors pack is rewritten by each set's actors pass,
+so a pass must keep every set's looks (`board.sets` of all branches).
+
+Luxury Stores slice, 2026-11-07 (owner to review):
+- Case `gameplay-luxury-start`: as the Zoo case with `mysteriousStages` (Luxury Shop) picked,
+  the centre of its stage bounds in the dropdown golden; 416 draws before the round
+  (template LuxuryStoresStage3).
+- `board.sets.luxury_stores` (begin_num 97). No features (`LuxuryStoresMapData.setData`'s
+  `lavaOrgan` branch is never reached: no Luxury layout has that cell) and the centre shows
+  (`setMidBox(x, y, true)`): frame 120, a shop window with no loops of its own.
+- Art: `record_screen.py sets --sets luxury_stores`: floor and 44 tiles (frame contents in
+  edition-5-stage-tiles.md). The robots' actors pass was re-run with the round's looks
+  (robots 2, 6, 5 at [5, 3], [3, 2], [1, 1]); the shared pack's pass now takes every working
+  copy's set looks. No Godot code change: `GameBoard` draws any set with a pack.
+- Results: gameplay-luxury-start nodes 386/386, SSIM 0.897 (ceiling 0.895), ΔE 5.0; all 18
+  cases and tools/run_checks.sh (27 suites) pass. Rolled Luxury rounds (frames 200-600) show
+  both ring choices (ring box, necklace bust), the shown centre, the soft variants and
+  robots, as in the reference capture.
+Known gaps: the round's car drops and rides are not checked against a Luxury recording; a
+robots-only actors pass drops the clips' `next` (`--parts plays`), which only rides use.
+
+Birthday Party slice, 2026-11-07 (owner to review):
+- Case `gameplay-birthday-start`: as the Candy case with `restaurantStages` (Birthday Party,
+  `GameSettingsUI`: `_birthdayPartyStages`) picked, but seed 11: seed 42 rolls the handless
+  BirthdayPartyStage3, seed 11 BirthdayPartyStage2 with its four toy hands; 402 draws before
+  the round.
+- `board.sets.birthday_party` (begin_num 1, template BirthdayPartyStage2, the cake centre shown:
+  `setMidBox(x, y, true)`). layout.py takes `Art_ToyHand_` as a feature, matches `toyHand_<dir>`
+  cells (hidden box + hand) and gives a clip scaled inside a container on its own cell its own
+  `node` (`ToyHand.setMc`: 30/32), so its frames draw at the clip's scale.
+- Art: `record_screen.py sets --sets birthday_party`: floor, 48 tiles, the four hand clips
+  at frame 1 and each label `g0`-`g3` (frames 2-5) with its 14-frame `hand` clip. The actors pass
+  (robots) was re-run with every working copy's recorded looks (Birthday, Luxury, Magic).
+- Godot: `GameBoard._toy_hands` follows `ToyHand.runEngine`: frame 1 until the first opening,
+  then `g<pushStep>` with the hand one frame per tick, left on frame 14 (never back to 1); the
+  simulation's toy hand reports `push_step` for it (display field only). Rolled rounds lay the
+  hands and their hidden boxes out from the feature state. Every set now has art, so
+  `flow_scene_check` tests the placeholder board only on a set whose pack is missing.
+- Results: gameplay-birthday-start nodes 388/388, SSIM 0.937 (ceiling 0.937), ΔE 5.0; all 19 cases
+  and tools/run_checks.sh (27 suites) pass.
+  Rolled rounds (six runs: Stage1, Stage2, Stage3) show the hands opening, reaching 0-3 cells and
+  retracting at tick 105-118 as in the reference (`birthday-toy-hands-open.png` and a reference
+  run stepped past the opening).
+Known gaps: no compare case past tick 105 (opening and push are checked against the reference
+by eye only); pushed robots and thrown bombs move as the snapshot gives them (no own display);
+the toy's `toyHandOpen` sound is the simulation's.
+
+Robot effects slice, 2026-11-08 (owner to review):
+- Shield, invincibility and portal transit are drawn from the original's clips
+  (`scripts/ui/game_actors.gd`); the placeholders in `GameView._protection` are removed.
+  - Shield (`ShieldProp.initMc`, `RobotView.setRobotMc`): a pickup remakes the robot's clip;
+    each new clip with a `hand2` child gets `nombril_<direction>` at hand2's x and y, under
+    the robot facing right and on top otherwise. It plays when the robot turns and stops at
+    `normalStop`. A key for the way the robot already faces plays only the robot's clip
+    (recorded). `addUseNum` takes it off.
+  - Invincibility (`InvincibilityProp.changeStage`, `CountMcPlayCommand`): `invincibityPlay`
+    in the `itemMc` Sprite on top of the container shows frames 1, 1, 2 … 28 and is taken off
+    on tick 30. The empty Sprite stays until death (`clearDisplay`).
+    `CountInvincibilityCommand`'s GradientGlowFilter (colours turned every 2nd tick, ratios
+    + `_colortime`) goes on the clip and weapon until `invincible_until`. Godot draws it
+    with `swf_gradient_glow.gdshader` on a CanvasGroup (`SwfScreen.set_node_filter`).
+  - Transit (`SendRobotCommand`): the clip's alpha is 1 - count / 35 (count 1 on the send
+    tick), the clip stops (`robotMoveStop`), and callback 30 makes a new clip at alpha 1.
+  - The simulation now sets `blink_until` (display only) after a shield is used and after
+    a ride's recovery (`TryToKillCommandChain`'s InvincibilityCommand).
+- Art: `record_screen.py actors gameplay-cinema-start --parts effects` (key `effects`:
+  nombril clips, `invincibityPlay`, each robot clip's `hand2`; 3× shots of the new cases).
+- New cases: `gameplay-cinema-shield` (held, turned, walk, used),
+  `gameplay-cinema-invincible` (intro, intro-late, glow, glow-turned) and
+  `gameplay-cinema-portal` (fade, fade-late, arrive; Godot `reposition X Y`). All nodes
+  match, including the transit alpha. All 22 cases and tools/run_checks.sh pass.
+- Comparison: the reference player draws no GradientGlowFilter (Ruffle's wgpu backend skips
+  it), so a golden node carrying one is left out of the pixel score (`UNRENDERED_FILTERS`).
+  `composite_alpha` (portal case) does the same for a faded baked clip: Flash applies the
+  alpha per shape, so overlapping shapes add up, while the baked image fades as one.
+- HUD portraits: `GameInterFace.setMC` runs `stopMC` over the whole HUD, so the panels'
+  85-frame eye loops stay on frame 1. Stepped 150 frames in the reference player, no HUD
+  clip changed frame. Nothing to animate.
+Known gaps:
+- The glow is checked by eye only; there is no reference render of it.
+- A faded robot's overlapping shapes are lighter than in Flash.
+- Godot blasts a bomb dropped this way one tick after the original. The shield's `used`
+  capture is therefore after the blast.
+- Invincibility's end is not captured: after 10 s the Arcade timed drops (host clock in
+  the reference) differ.
+- Re-picking invincibility mid-introduction is mapped from source and not recorded.
+
+Feature motion, 2026-11-08 (checkpoint 5, owner to review):
+- Candy Factory belt (`ConveyorBelt.runEngine`, `bombMove`/`propMove`, `Bomb`/`AbstractItem.resetDisplay`):
+  a carried bomb or pickup is one view from cell to cell at its twip position, its clip and
+  PixelClip loop running on; each tick it is re-added last to its row's bomb layer / row in the
+  belt's order (display fields: bombs' `bomb_display` serials, the belt's `carried`, `moved`).
+  `addDisappearAni`: `Art_Prop_Disappear` (30 frames, art pass `sets` `stopped`) on the last
+  cell's platform layer, turned to the last segment, frames 2-29. Blast arms sit at the bomb's
+  own position. Source fixes found by the case: belt bombs go off `blastTime + 2` ticks after
+  they are made (`Bomb.takeCount`), and set features are made column by column (`setData`),
+  which orders the toy hands' interval draws. The sets pass now records one age past each
+  played loop (the candy machine's 70-frame sweets and the belt's 9-frame segments were a frame
+  short and drifted).
+- Birthday Party toy hands: a pushed robot moves as `PushRobotCommand.moveFuc` moves it and
+  `resetRobot` makes its clip again where it stops; a thrown bomb keeps its clip and is re-added
+  to the row it stood on each tick (`kickedFly` -> `shootFunc`).
+- Zoo crocodile: no clip of its own for what it eats (bombs blast, a pickup goes by `deleProp`'s
+  `brickExp`, now drawn so, robots die); nothing is spat out.
+- Cases: `gameplay-candy-belt` (1,725 frames: bomb out of the exit, pickup sliding, a bomb and a
+  pickup leaving with the disappear clip; `--frame-clock` keeps the round's Date on the frames),
+  `gameplay-birthday-push` (`reposition` fixture, Godot `reposition X Y`: the snapped first push
+  and the stale-check second push at tick 548), `gameplay-zoo-crocodile` (first opening, ticks
+  240-354). All 25 cases pass (belt SSIM 0.898 at a 0.900 ceiling, push 0.935-0.939, crocodile
+  0.941; ΔE ≤ 6.4); tools/run_checks.sh (27 suites) passes.
+Known gaps: no case throws a bomb with a toy hand (its display is ported, not checked against
+a recording; Stage2's hands all face boxes); a robot pushed while a key is held keeps its playing clip as
+the snapshot's commands give it; the push end re-adds the weapon clip through `setRobotMc` only.
+
+Weapons slice, 2026-11-08 (owner to review): every weapon's action and shots from their SWF clips.
+- Ported in `scripts/ui/game_actors.gd` (`_start_action` = each `*Prop.bombDown`, `_advance_action`
+  = its command, cited per weapon): BoxingProp (`boxing<D>_Play`, `_Play_2`, `_Play_3` by
+  `checkAttactDistance`, under the robot at frame 7 facing up), LaserGunProp (`lasergun_Play` at the
+  held clip's `gunpoint`, stopped at 11; ShootLaserCommand's laserCartoon start, middle pieces in a
+  Sprite scaled to the last cell's edge and end piece, walked over the board of that tick;
+  LaserEndCommand's eleventh run), FlamerProp (`thrower<D>_Play` at the gunpoint, its `fire_Play`
+  by age, scaled by FlamerFire from the snapshot's `scale`), ShotGunProp (`fireball<D>_Play`, off at
+  frame 14), TripleShootGunProp and LandmineProp (their empty play clips live within one tick),
+  LandminePlayCommand's `mine_bomb` (looping, then the ordinary blast); the projectiles
+  `TripleShootGunBomb` (`bullet_fire`) and `FireballBomb` (`ninjialBomb_fire`, nested 35-frame loop)
+  from the snapshot's `projectiles`: frame and offset by direction, `resetDisplay` on each move,
+  clip off at `blast`, Sprite off at `ended`, the 0.2 s fade-in on the game clock (7 ticks). Every
+  weapon's placeholder in `scripts/game_view.gd` is removed.
+- Art: `record_screen.py actors gameplay-cinema-start --parts weapons` adds each held clip's
+  `gunpoint`, `weapons.played` (made playing, by age: `thrower<D>_Play`, `mine_bomb`),
+  `weapons.aged` (stopped at a frame while nested clips play, by age: laserCartoon, lasergun_Play,
+  ninjialBomb_fire, bullet_fire) and `weapons.bounds` (laserCartoon `width`/`height` per frame). Only
+  the `weapons` key of actors.json and `weapon-*.png` change.
+- New cases (pickup fixture, then the action): `gameplay-cinema-flamer`, `-laser`, `-boxing`,
+  `-landmine` (right, at the boxes ahead) and `-fireball` (its charge, down). All pass at the 3×→1×
+  ceiling; nodes match exactly (the laser's scaled Sprite and end piece included).
+Known gaps: (the weapons' one-tick lag noted here first was fixed by the timing slice below, which
+added the `gameplay-cinema-triple` case.) The
+triple/fireball recovery and the shots' fade-in run on the host clock in the reference player
+(TweenMax), so they are not captured. The burnt pickup's `brickExp` (pickups slice) does not show
+its sparkles as the original's at frame 9 (found by the flamer case; captures moved off the burn, whose score also lands a tick late).
+
+Timing and random draws, 2026-11-08 (checkpoint 5, owner to review). Traced first in the reference
+player (`trace-focus` per frame: shield, hammer, boxing, fireball, triple, ride).
+- Weapons a tick late: a key reaches the original between frames, so `*Prop.bombDown` adds its
+  command before the next frame and the command first runs on that frame (the *key's tick*) with
+  the play clip on frame 1. `weapons.gd` counted its waits from the input counter (hammer 24,
+  laser 11 ...) but from the key's tick: every weapon acted a tick late. Now a command waiting
+  for clip frame f acts at age f - 1 (hammer blow 23, laser 10, boxing 12, fireball 13); flamer
+  fire, the landmine and the first triple shot act on the key's tick, the triple's at 0/15/30
+  (recorded: key 705 -> hammer back 729, boxing 718; key 702 -> triple shots 703/718/733,
+  fireball 716). Also from the traces: a hit projectile's `ended` counts on the hit's own tick
+  (gone 11 ticks on), and its handler's removal skips the next projectile's move that tick
+  (`GameEngine` bomb loop; the third triple shot stands still when the second hits). The
+  display's laser walk treats the cells its own tick's laser pass broke as still blocking; a
+  landmine's one-tick action shows through the actor's `action_started_tick`.
+- Bomb blast a tick late: `Bomb.init` registers `takeCount` before the key's tick, so a keyed
+  bomb counts on that tick and blasts on its 72nd (recorded: key 721, `_time` 1 at 722, blast
+  793; chain probe: fixture bomb 822, blast 894). The simulation skipped every bomb's first tick;
+  now only a controller's (AI) bomb, made during the frame's scripts, counts from the next tick
+  (`in_frame` on scheduler commands). Checks moved to the source timing (bomb_simulation,
+  round_play, round_regression, fidelity, hitmove).
+- Map draws: `Layouts.roll_set` ports `MapMaster.init`, `<Set>MapData.init`, `AbstractMapData.data`
+  / `pacManData`, `setData` (column by column) and `MapMaster.createRow` (row by row, one draw per
+  cell without a mid box, one more per soft block) onto the round's `Math.random`; a rolled round
+  draws the pool's vehicles (`initMap`) first. All six recorded rounds roll again exactly from
+  their seeds, on the original's draw ordinals (`tests/layout_check.gd`). The recorded cases now
+  roll their board from the replayed draws too (`Game._recorded_draws`); they still start there
+  because the app does not reproduce the menus' draws (UILoading, SoundManger, MainMenuUI,
+  GASender: draws 1-11).
+- Ride clip after release: `_r<n>_Car_<dir>` has a frame script on frame 11, `gotoAndPlay(1)`,
+  which runs after the engine's `moveStop` and restarts the clip, so it shows one frame more
+  (recorded: 10, then 1 and 2, stopped). Not a port error of the clip itself: the art pack had
+  lost the clips' `next` (a robots-only actors pass dropped it; now kept, `--parts plays`
+  re-run), and the display now restarts a clip whose step was a frame-script jump.
+- Cases: new `gameplay-cinema-triple` (first, second, third), `gameplay-cinema-fireball` adds
+  shot and blast, `gameplay-cinema-shield` captures the blast (72 frames after the key) before
+  used, `gameplay-cinema-ride` adds release and parked. `wall_clock_alpha` (compare.py) leaves a
+  host-clock fade (`TweenMax.from` on the shots) out of the alpha compare and the pixel score.
+Host-clock only (not frame-matched): the shots' 0.2 s fade-in, the triple/fireball 0.3 s
+recovery (`delayedCall`), the AI's delayed callbacks, TIME and the loading bar.
+
+Modes slice, 2026-11-08 (checkpoint 5, owner to review): Kill (Battle Royale), Green Zone and
+Pac-Man against their own recordings, on Cinema.
+- Cases `gameplay-kill-start`, `gameplay-greenzone-start`, `gameplay-pacman-start`: as
+  gameplay-cinema-start (seed 42, Normal, Cinema, robot 0, through the real menus) with Game
+  Settings' mode card clicked (`killMode`, `paintingMode` = Green Zone, `collectMode` = Pac-Man,
+  `GameSettingsUI`), each with its `math_random.json`. Follow-ups (AI stopped):
+  `gameplay-greenzone-flag` (reposition above the flag, walk on: the r0 bar at 30, then the point
+  and "got it") and `gameplay-pacman-coin` (walk right, coins eaten, HUD `2/119`).
+- `board.modes.<mode>` (layout.py): each mode's round on the screen's own set, as `board.sets`
+  (its boxes, template, robots, looks), plus `items` (the map-load pickups: `AbstractItem.init`
+  adds them to the row itself, after its five layers) and `mode_objects` (the Flag: a `_brick5`
+  at 160 on the platform layer). `App.round_as_recorded` and `GameBoard` take it for a mode's
+  recorded round.
+- The modes' `mapLoadOver` draws come from the original's `Math.random`: the recorded round's
+  generator now stops after `createAIPlayer`, and the mode makes its own opening from there
+  (`containerMove` for the flag, `createRamdonProp`, `itemPosSetting`): every flag, item, coin and
+  kind lands where the recording has it. Found by it: at map load the robots are not on the map
+  yet, so `getRandomPropPosition` offers their cells (`spawn_random_pickups(count, before_robots)`).
+- Base weapons (`AbstractRobot.set baseWeapon` → `changeStage`, `GameActors._base_weapon`):
+  KillModeWeapon's hammer (Kill, Green Zone) and PacModeWeapon's flamer (ghosts) held from the
+  first frame with showTimes emptied, the held clip playing from creation (frame 4 on the round's
+  first frame); NullWeapon's hidden showTimes, empty clip and hidden item on the player's spawn.
+  An unlimited weapon (ammo -1) is no longer taken off after an action.
+- Green Zone's flag (`Flag.setMc`, `runEngine`, `complete`, `move`; `GameBoard._flags`): the
+  `_brick5` at 30/32, its nested clip on the recorded idle loop (4…68, back to 37), each holder's
+  `r<id>_progress` at (10, 20 − slot × 20) × 2 by `int(totalTime / maxTime × 100)`, under the
+  nested clip (recorded `@0` / `@1`), "got it" from `complete` (frame 70 on), the next flag after
+  the move. The nested clip and the bars hold sub-clips (stars, sparkles) that play on their own,
+  so the art is the whole clip as the round played it: the idle flag per frame, the flag after
+  `complete` per tick, the player's bar per tick while held; other cases fall back to frames
+  rendered alone. The placeholder flag and bars in `scripts/game_view.gd` are removed.
+- Pac-Man: coins are drawn as pickups (`CoinProp`, PixelClip); the HUD ports PacManMode's
+  `mapLoadOver` (`setScore(i, -1)`, `scoreStr = "/" + coins`, `textColNum`): the player's score
+  reads `0/119` beside face frame 4, the ghosts' fields stay empty. Kill and Green Zone show
+  `0/10` beside the skull / flag face (`setFaceMc`, already ported).
+- Art: `record_screen.py modes` (after art): the flag's body, nested frames, recorded loop and
+  played images (its got-it and held-bar images from gameplay-greenzone-flag's flow), the eight
+  progress bars (`symbol`), the coin's 22 bitmaps from the Pac-Man round
+  (`first_change` places the map-load items' age), and the 3× frames of the mode captures, into
+  `original/screens/game/modes/`. The robots' actors pass takes `board.modes` looks too.
+- Results: kill-start nodes 386/386, SSIM 0.938; greenzone-start 328/328, 0.948; greenzone-flag
+  328/328 (holding 0.947, got-it 0.945); pacman-start 692/692, 0.940; pacman-coin 689/686 nodes,
+  0.942/0.946; every one at or over its 3×→1× ceiling, ΔE 4.9. The mode rounds' maps also roll
+  exactly from the recorded draws (timing slice's `Layouts.roll_set`). All 36 cases and
+  tools/run_checks.sh (27 suites) pass. Rolled Kill, Green Zone and Pac-Man rounds play on the
+  screen with their base weapons, flag and coins.
+Known gaps: no case counts a kill (the AI's callbacks run on the host clock; Kill's HUD is checked
+at 0/10 only); the flag's move (`TweenMax.delayedCall(3)`) runs on the host clock, so the next
+flag is not captured; a bar drained or held by another robot than robot 0 draws its frames made
+stopped (its sparkles at their first frame); a flag made mid-round shows its parts alone until the
+recorded age; the NullWeapon item stays hidden on the player's spawn for the whole round (the
+original may remove it when the player leaves); the loading screen's mode frames (ported, art
+present) are not captured per mode; the ghosts catching the player and Pac-Man's win are not
+recorded.
+
+Modes on Zoo, 2026-11-18 (checkpoint 5, owner to review): Kill, Green Zone and Pac-Man on the Zoo
+stage set, and one table of recorded rounds so the other four sets need no further code.
+- Reference player rebuilt (`tools/reference_player/build.sh`; probe b87d797f): the old binary
+  failed with a duplicate display-list path. Re-recording `gameplay-kill-start` with it matches
+  the committed golden in every compared field; only Ruffle's per-run `instanceNNNN` names differ.
+- `board.rounds` (scenes/swf/game.json, layout.py `rounds`) replaces `board.sets` and
+  `board.modes`: every recorded round but the screen's own (Cinema, Arcade: `board` itself),
+  keyed `<set>/<mode>`, each with `set` and `mode`, `floor` exactly when the set is not the
+  screen's. `App.round_as_recorded`, `GameBoard` (a missing `<set>/<mode>` falls back to
+  `<set>/arcade`, then `board`) and record_screen.py (`all_rounds` for the robots' looks,
+  `set_rounds` for set art from the set's Arcade round, `mode_rounds` for mode art from the
+  mode's Cinema round; ids in sorted order) read it. Checked in `tests/game_board_check.gd`,
+  `layout_check`, `flow_scene_check`, `tools/convert/test_rounds.py`.
+- Cases `gameplay-zoo-kill-start`, `gameplay-zoo-greenzone-start`, `gameplay-zoo-pacman-start`:
+  each mode's Cinema case with gameplay-zoo-start's stage click (Zoo, `337.35 269.48`), seed 42,
+  each with its `math_random.json`. Art: `record_screen.py shots <case>` and `actors
+  gameplay-cinema-start --parts robots` (the new rounds' looks); no new set or mode art.
+- Results: zoo-kill-start nodes 377/377, SSIM 0.940 (ceiling 0.938); zoo-greenzone-start
+  326/326, 0.947 (0.946); zoo-pacman-start 704/704, 0.936 (ceiling 0.938, need 0.918); ΔE ≤ 5.6.
+  All 39 cases (`tools/compare.sh all`) and tools/run_checks.sh (27 suites) pass.
+Known gaps: zoo-pacman-start is 0.002 under its 3×→1× ceiling (passes its floor); layout_check
+rolls only the Arcade rounds from their draws, not the mode rounds; gameplay-greenzone-start and
+gameplay-pacman-start have no local reference capture on this machine, so their pixels were not
+re-scored here (nodes pass).
+Next sets (Candy Factory, Magic Library, Luxury Stores, Birthday Party), per set: three cases
+(the set's stage click from its `gameplay-<set>-start`), `compare.py record` and `round_draws.py`
+for each, three layout.py `rounds` entries (the set's `begin_num`), then `record_screen.py shots`
+per case and one `actors gameplay-cinema-start --parts robots`. Cases and recordings can run in
+parallel worktrees (copy each case's `.scratch/compare/<case>/reference` back); layout.py and the
+art passes rewrite game.json and the shared pack, so they run once, in sequence, on one checkout.
+
+Modes on the other four sets, 2026-11-19 (checkpoint 5, owner to review): Kill, Green Zone and
+Pac-Man on Candy Factory, Magic Library, Luxury Stores and Birthday Party. Every mode now has a
+recorded round on every stage set (23 rounds in `board.rounds` plus the screen's own).
+- Cases `gameplay-<s>-<mode>-start` for s = candy, library, luxury, birthday: each Zoo mode case
+  with the set's stage click from its `gameplay-<s>-start`, seed 42 (Birthday Party's Arcade case
+  uses seed 11 only to roll a stage with toy hands; the mode rounds roll BirthdayPartyStage2 for
+  Kill and Green Zone, which has them, and BirthdayPartyStage_PacMan_3 for Pac-Man). Recorded in
+  parallel worktrees, then layout.py, `record_screen.py shots` and one robots actors pass here.
+- layout.py `_match_template` takes the round's set and mode: only the set's maps, and the
+  `<Set>Stage_PacMan_` maps exactly for a Pac-Man round (`MapMaster` `pacManData`, as
+  `Layouts.names`). Without it Magic Library's Kill and Green Zone boards matched both
+  MagicLibraryStage2 and MagicLibraryStage_PacMan_2, which share their geometry. Kill and Green
+  Zone rolled each set's Stage2, Pac-Man its Stage_PacMan_3.
+- Results (nodes, SSIM / 3×→1× ceiling): candy kill 373/373 0.903/0.907, greenzone 333/333
+  0.915/0.916, pacman 718/718 0.905/0.908; library kill 389/389 0.905/0.905, greenzone 330/330
+  0.922/0.923, pacman 710/710 0.918/0.919; luxury kill 385/385 0.900/0.898, greenzone 328/328
+  0.917/0.915, pacman 692/692 0.904/0.904; birthday kill 392/392 0.931/0.931, greenzone 334/334
+  0.944/0.943, pacman 700/700 0.920/0.921; ΔE ≤ 6.3. Every case passes its floor.
+Known gaps: six of the twelve sit up to 0.004 under their 3×→1× ceiling (over their floors), as
+zoo-pacman-start does; the toy hands, belt, machine and spellbook are only captured at the round's
+first frame in the mode rounds (their motion is checked on the Arcade cases); no mode round on
+these sets plays past its first frame (flag, coins and kills are covered on Cinema only).
+All 51 cases (`tools/compare.sh all`) and tools/run_checks.sh (27 suites) pass. One earlier
+`compare.sh all` run failed gameplay-cinema-shield (Godot's `@0#0` subtree hidden, 302/803 nodes)
+and, while another Godot run overlapped it, four Zoo cases; none reproduced in seven reruns
+(yesterday's code, today's code, alone and concurrent), so it is recorded as an unexplained flake.
+
+Dress-up, 2026-11-19 (owner to review): a dressed robot now wears its look in the next level and
+in new games.
+- Cause: the actors pack held only the looks of recorded rounds (robot 0: one), because the
+  robots art pass ran with `--looks round` (yesterday's and today's mode passes), and
+  `GameActors._robot_art` drew the default look for any look without art. The session already
+  carried the choice (`CharacterSelectUI.startFunc`, `UnlockTipScreen.onChangeCloth/onChangeHat`
+  write `GameModel.P1ClothId/P1HatId`; nothing resets them where the AS3 does not).
+- `record_screen.py actors` now renders every look by default (`--looks round` opt-in); the pack
+  was re-rendered (56,914 images, every robot clip's full outfit x hat grid). Art passes are the
+  orchestrator's own work (AGENTS.md).
+- `GameActors.resolve_look_key`: past a clip's last outfit/hat frame the clip shows its last
+  frame (`RobotView.setRobotMc` → `gotoAndStop(id + 1)`), e.g. robot 2's back view has one hat
+  frame; before, such a look fell back to the default outfit. AI looks keep the raw
+  `int(Math.random() * 7)` draws of `AbstractGameMode.createAIPlayer` and clamp per clip (robot
+  0's front view has 7 outfit frames, `Looks.count` 5), so `tests/looks_check.gd` now replays
+  those draws instead of bounding them by `Looks.count`.
+- Checked in `tests/dress_up_check.gd` (in run_checks): the look through character select, the
+  next level and a new game; every robot x look x clip resolves to full art; `_robot_art`
+  returns the clamped look's frames. run_checks (28 suites) and compare all (51 cases) pass.
+Known gaps: the grid check derives each clip's extent from the pack itself, so a pack holding
+only default looks for robots 0/3/4/7 would pass; storing each clip's bodyMc/hatMc frame counts
+in the pack (needs an art pass) closes it. `docs/evidence/edition-5-modes-and-flow.md` still
+says the port keeps AI looks within the robot's set (source record, left as is).
+Frame counts, 2026-11-20: the actors pack stores each robot clip's `body_frames`/`hat_frames`
+(innermost bodyMc/hatMc); `resolve_look_key` clamps to them and `dress_up_check` requires each
+clip's looks to be exactly that grid (a pack without them fails). Pack re-rendered, 56,912 images;
+counts match `docs/evidence/edition-5-robot-looks.md` for the eight base views. Open: the
+key-derived fallback for older packs is untested; per-outfit hat counts are read at frame 1 only.
+
+Pack and reference captures, 2026-11-21:
+- Modes pack re-rendered (`record_screen.py modes`): its goldens now match the Cinema mode rounds
+  (it was rendered before those rounds' last recording; ~800 entries changed).
+- `tools/compare.sh record <case> --reference-only` records the original's local reference
+  captures without touching goldens. It replays into a temp dir, checks the case/SWF hashes and
+  capture frames, and diffs the replayed scene against the golden after the same host-clock and
+  random-effect exclusions `check` applies (wall-clock text/frame/alpha; FallSnow effects, which
+  must still pass their rules; not owner edits or localization), refusing on any shared-diff
+  difference. Accepted references carry `reference/reference.json` (hashes, frames, golden
+  hashes); `check` scores pixels only against a valid one.
+- Result: compare all 51/51 pass; 46 cases now pixel-checked on this machine (was 22). Five cases
+  stay unverifiable with the current reference player (b87d797f): their replays differ from the
+  golden on host-clock or nondeterministic content: game-over / results (p1head child, background
+  frame), game-win (score 3770 vs 3780/3790 across replays), gameplay-cinema-ai (AI clip frame),
+  gameplay-cinema-item (loading bar child). Their pixels are skipped, not scored.
+Known gaps: the 3x resampling ceilings in original/ were rendered by older player builds, so a
+ceiling can be a cross-build comparison; the five cases above would need their goldens
+re-recorded together with references (owner decision: goldens are accepted floors).
+
+Robot 0's hat facing down and 3x ceilings, 2026-11-22 (owner to review):
+- Owner edit: in the original, robot 0's Down walk clip (`_r0_Down`) has no hatMc, so robot 0 shows
+  no hat facing down (docs/evidence/edition-5-robot-looks.md). The owner asked for the hat. The
+  front-facing hat is the original's own art: character 1323, `head/hatMc` of the character-select
+  / unlock-tip robot (`BOMBIT5UI_fla.robot1_special_108`, frame 44), frames 1-4 = no hat, hats 1-3.
+  `record_screen.py actors` composes it onto every `_r0_Down` frame for every outfit, placed by
+  M(down head @46) x inv(M(front head)) x M(front hat): the two heads are the same shape (1318 /
+  6187) under different ids, so the placement comes from SWF matrices, not measurement. The pack
+  entry carries `owner_edit: front_hat`, hat_frames 4; the other 56,912 robot images are unchanged.
+  Checked in `tests/dress_up_check.gd`. Review sheet: `.scratch/hat-front/result.png`.
+- 3x ceilings: all 134 reference-3x images re-rendered with the current reference player
+  (b87d797f) and recorded with their player (reference-3x.json); a stale fireball `turned` image
+  with no capture was moved to .scratch. The menu screens' other art renders differently on the
+  current player (about 7,900 files); the accepted art was kept and only the 3x images replaced.
+- `record_screen.py` art-pass effects: recorded effect art is kept only when it matches the current
+  SWF and layout and its files exist; staged swap; FFDec downloads when Java is present.
+Verified 2026-11-22 after a fresh robots pass (front-hat bounds now the content union): compare all
+51/51 pass (46 pixel-checked; game-over, game-win, results, gameplay-cinema-ai, gameplay-cinema-item
+have no verifiable reference), run_checks 28/28. The windowed comparison hangs while the screen is locked.
+
+Mode play checks and the score highlight, 2026-11-22 (checkpoint 5, owner to review):
+- Score highlight (`AbstractPlayer.set scoreData` -> `GameInterFace.changeCol` / `defaultCol`): in
+  every non-Arcade mode a score at the mode's `textColNum` flashes red (16711680) / white
+  (16777215) on every 4th engine tick and returns to its colour below it. Thresholds from the rules
+  XML: Kill 8, Green Zone 8, Pac-Man 5 replaced by `coins - 15` in `PacManMode.mapLoadOver`.
+  Checked in `tests/kill_check.gd` (through `present` at real ticks, with pause).
+- `tools/playthrough_check.gd` plays seeded full rounds with real AI in every mode: Kill (an AI
+  reaches 10 kills, lost), Green Zone (an AI holds 10 flags, lost), Pac-Man (idle player caught by
+  a ghost, lost; scripted player eats all 121 coins, won), plus the Arcade three; each asserts the
+  mode's own outcome, the settle breakdown and the HUD (robot faces, `n/10` / `n/121`, threshold
+  and flash). 7 playthroughs, ~9.4 s.
+- Scouted: the weapons' one-tick lag listed under the weapons slice was already fixed by the
+  timing slice; every mode's end and scoring rules are ported (docs updated).
+All 51 cases (`tools/compare.sh all`) and tools/run_checks.sh (28 suites) pass.
+Known gaps: Pac-Man ghosts chase only inside their RegionDivide areas (ported), so an idle player
+outside them is never hunted; the flag's move and the AI's timers run on the host clock in the
+reference, so mode races are checked by rule, not frame-matched.
+
+Owner-reported bugs, 2026-11-22 (owner to review):
+- START printed the engine error `Condition "!is_inside_tree()"`: `App._clear_screen` removed the
+  pressed button's screen inside that click's input event. Dropped screens are now hidden, stopped
+  (`PROCESS_MODE_DISABLED`) and freed at frame end. `tests/start_error_check.gd`.
+- Stuck at the respawn point: a direction released while dead was dropped, leaving the key latched
+  after relive. Death now clears the held directions (`AbstractRobot.kill` ->
+  `PersonInteractiveController.stopMoveListener` / `clearMoveStage`); likewise a frog jump start
+  (`HorseProp.frog` -> `robotMoveStop` / `robotBombStop`), which also ignores keys until it lands.
+  `tests/respawn_input_check.gd`.
+- Blinking after protection: the display ran its own 80-tick blink. It now follows the command:
+  the round-start blink from the round's first gameplay tick to tick 81 (checked against every
+  recorded capture's robot colour transform), a portal's 45-tick blink replaces a running one, and
+  stale loop sprites no longer keep the +50 offset (the "map elements" that blinked were those).
+- Frozen mount: the frog jump keeps playing frames 19-34 when no key is held and lands on frame 1
+  (`HorseProp.frog`, `xJump`/`yJump`); a horse ride stopped on frame 15 resets to 1 (`frogMcStop`).
+  `tests/actor_display_check.gd`.
+All 51 cases and tools/run_checks.sh pass.
+The same-tick case is fixed in the follow-up below.
+
+Robot blink follow-up, 2026-11-23 (owner to review):
+- Robots still blinked: `SwfScreen.set_node_art` hid a node on every art change until its
+  resampled image was ready, so animated robots (and board pieces, bombs, explosions) went out
+  for a frame or more. A node now keeps its image until the replacement is placed, as a Flash
+  MovieClip swaps its bitmap; an empty frame hides it; a failed resample keeps the previous image
+  (else the source resampled to `_fit`'s size, warned once per file). Failures are bounded and
+  cleared with the screen that recorded them.
+- Turns and rides draw the new clip on their own tick: the round's robot (four directions, death,
+  the set's rides), weapon, bomb and explosion frames are prefetched at round load in batches,
+  directions first (~2,200-2,400 images, ~28-34 MB at 1280x720; worst frame ~34 ms), and pinned
+  against cache eviction until the next round takes ownership (`SwfScreen.take_pin_ownership`/
+  `pin`), capped at half the art budget (least-recently-shown evicted first, current directions last).
+- Same-tick protection: each `InvincibilityCommand` (`_start_blink`) carries a serial and start
+  tick, so a replacement ending on the same tick restarts the phase. The round-start command is
+  started by the simulation at tick 0 (`AbstractRobot.init`) and ends at tick 81 whenever the
+  display first draws.
+- A check that skips for a missing local pack is reported as SKIP by tools/run_checks, not PASS.
+  `tests/actor_display_check.gd` (107 checks).
+
+Dress-up after a game, 2026-11-23 (owner to review):
+- The post-game DRESS UP tip always showed robot 0: the score screen's `UI_UNLOCK_TIP` recording
+  holds only robot 0's library clips (`tools/convert/layout.py`), so `ClothesPanel` addressed
+  absent `Art_clothPanel<r>` / `robot<r>` for any other pick. `UnlockTipScreen.selectRobotBtn`
+  (AS3 `selectRobotBtn` -> `changeRobot(GameModel.P1Robot)`) now imports the picked robot's clip
+  and panel from the character-select capture (same library classes, placed by its recorded
+  matrices); one still pose per clip plus the look/icon frames the panel drives, so the frame-locked
+  capture is not stalled. Robot 0 keeps the recorded tip. `tests/dress_up_after_game_check.gd`.
+- Intermittent gameplay compare failures (board hidden, ~173 extra nodes): `Game._notification`
+  paused the round on application focus-out even in the frame-locked capture. The capture now
+  ignores host focus; play still pauses. A delayed or occluded draw also let `Game._process` run
+  extra frames while the driver waited on `frame_post_draw` (board film, bomb ages ~15 ticks late):
+  in capture mode the driver now owns the host clock (`Game.capture_clock`/`capture_step`, one
+  step per captured frame) and freezes the tree across the draw wait. Capture windows are
+  `NO_FOCUS` + always on top so parallel captures keep drawing, with a 5 s watchdog that force-draws
+  a frame whose host draw never starts. `tests/capture_focus_check.gd`.
+- The tip's robot preview animates as on character select and a look click restarts it
+  (`ClothesPanel.onClickIcon` -> `_singleRobotMc.gotoAndPlay(1)`); the frame-locked capture imports
+  one pose per clip.
+
+DRESS UP tip for robots 1-3, 2026-11-23 (owner to review):
+- Owner report: the tip overlapped, robot 0 stayed behind, positions were off. The tip's imported
+  nodes now take the tip's golden paths and robot 0's recorded preview, button and panel are
+  hidden; placement matches new reference captures of the original with robots 1-3 picked
+  (`tools/compare/cases/results-robot1/2/3.json`, goldens under `tests/goldens/results-robot*`).
+- The picked robot's preview, selected button (with the P1 head) and the score screens' `p1head`
+  come from a scripted SWF art pass, `record_screen.py tips` (`scenes/swf/score_tip_art.json`;
+  images in the local score pack), as AS3 `UnlockTipScreen.initSetting`/`selectRobotBtn` and
+  `OnePScoreUI.initData`/`OnePGameOverUI.initData` pick frame robot+1.
+- results-robot1/2/3 pass nodes and pixels; results, game-over and game-win pass nodes (their
+  pixel references are unverified, as before). `tests/dress_up_after_game_check.gd` (157 checks).
+

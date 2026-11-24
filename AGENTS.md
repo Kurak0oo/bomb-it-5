@@ -22,6 +22,58 @@ rules of work and the current checkpoint. Work only on the current checkpoint.
 
 Do not copy files from `C:\Users\Eiji\Github\bomb-it-1`.
 
+## Orchestrator
+
+**Orchestrator** (the session that plans and delegates): work here runs through the `orchestrator` skill; read it before changing code. Every source change goes through a subagent profile, and every task carries a gate.
+
+**Generated art is the orchestrator's own work.** Art the orchestrator makes from its own ability (for example, drawing a new character or map that no code can derive from the SWF) is done by the orchestrator, not a worker. Art that code or another model can produce goes to a worker like any other task: `tools/convert/record_screen.py` passes (`actors`, `sets`, `modes`, `shots`) and SWF conversions. The orchestrator owns those passes' flags in its briefs (`actors` keeps `--looks all`).
+
+**Worker** (you were started with a brief that has Objective, Files and Gate): ignore the paragraph above. Do the brief yourself, directly; never run `devspace agents` or hand work to another agent. The sections below are reference for you too.
+
+There is no `package.json`. Checks are Godot 4.5 scripts, run from the repo root. Godot is `/Applications/Godot.app/Contents/MacOS/Godot` (4.5.stable). Timed 2026-11-18.
+
+## Gates
+
+- One file (worker gate, must finish in under 50 seconds). Pass the check that covers the files you changed:
+
+  `/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/<check>.gd`
+
+  Timed passes, slowest first: `flow_scene_check.gd` 13.56s, `looks_check.gd` 10.21s, `controls_check.gd` 6.14s, `difficulty_check.gd` 2.04s, `quality_check.gd` 1.35s, `game_board_check.gd` 1.26s, `stage_features_check.gd` 1.17s, `game_scene_check.gd` 0.88s, `fidelity_check.gd` 0.77s, `round_play_check.gd` 0.58s, `layout_check.gd` 0.48s, `round_regression_check.gd` 0.39s, `pac_man_check.gd` 0.39s, `green_zone_check.gd` 0.38s, `command_boundary_check.gd` 0.31s, `scheduler_check.gd` 0.29s, `bomb_simulation_check.gd` 0.29s, `mode_seam_check.gd` 0.29s, `kill_check.gd` 0.29s, `hitmove_check.gd` 0.29s, `audio_check.gd` 0.29s, `ai_trace_check.gd` 0.29s, `session_check.gd` 0.19s, `art_catalog_check.gd` 0.19s, `avm_random_check.gd` 0.19s. `tools/playthrough_check.gd` passed in 9.7s (7 playthroughs, 2026-11-22) (`res://tools/playthrough_check.gd`). Compare-tool unit tests: `python3 -m unittest discover -s tools/compare` (0.75s).
+
+  Do not give a worker `res://tools/smoke_playthrough.gd`. It passed in 242.71s, which is past both the 50-second gate budget and dsh's 60-second shell limit. It runs only inside the full suite, with `--fixed-fps 35`.
+
+- Typecheck: none. This repo has no typecheck script. Godot parses each script when its check runs.
+- Full suite, run once at close: `GODOT=/Applications/Godot.app/Contents/MacOS/Godot tools/run_checks.sh`
+
+## Seams
+
+- `scripts/ui/` ↔ `scripts/simulation/` through `scripts/simulation/command_boundary.gd` (input) and the round snapshot on `scripts/simulation/bomb_simulation.gd`. `scripts/game.gd` and `scripts/game_view.gd` own the scene wiring.
+- Modes register only through `scripts/simulation/modes/modes.gd`. Cut a mode slice at that file plus the one mode module.
+- Stage features register only through `scripts/simulation/features/features.gd` (`belt`, `toy_hand`, `crocodile`, `spellbook`).
+- Weapons, movement, and pickups stay behind `scripts/simulation/bomb_simulation.gd` (`weapons.gd`, `movement.gd`, `pickups.gd`).
+- Art and screen layout (`scripts/art/catalog.gd`, `scripts/art/screen_layout.gd`, `scripts/art/skin.gd`) feed UI. Simulation reads board data, not scenes.
+- Settings and unlocks cross `scripts/session.gd` and `scripts/save_store.gd`.
+- Visual parity crosses `tools/compare.sh` and `tests/goldens/<case>/`. The differ's own tests are `python3 -m unittest discover -s tools/compare`.
+
+## Risky areas
+
+These get a `ds-reviewer` pass after merge:
+
+- `scripts/simulation/` (shared damage, scoring, movement, and modes)
+- `scripts/save_store.gd` (persisted settings and unlocks)
+- `scripts/ui/` (owner confirms UI; automated checks do not close those tickets)
+- `tests/goldens/` and `tools/compare/` (accepted visual floors)
+- `tools/reference_player/` (original-behavior probes)
+
+## Untouched
+
+No task changes these:
+
+- `original/`, `candidates/`, and `candidates*.zip` (local SWF-derived art; gitignored)
+- `.scratch/`, `.godot/`, and `.import/`
+- `docs/evidence/` (source records; do not rewrite them to make a check pass)
+- Anything under the `pre-restart` tag, and anything copied from `bomb-it-1`
+
 ## Agent skills
 
 ### Issue tracker

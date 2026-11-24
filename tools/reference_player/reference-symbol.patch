@@ -1,0 +1,172 @@
+diff --git a/core/src/avm2/reference_symbol.rs b/core/src/avm2/reference_symbol.rs
+new file mode 100644
+index 0000000..e971b01
+--- /dev/null
++++ b/core/src/avm2/reference_symbol.rs
+@@ -0,0 +1,118 @@
++//! Research-only art pass for the comparison loop's converter: an instance of a library
++//! class, made by its own constructor, is put on the display list so `piece` can render it
++//! alone, then taken off again. Only original constructors and the Flash display API
++//! (`getChildByName`, `gotoAndStop`, `addChild`, `removeChild`) run; no game object is
++//! touched. Use it in an art session, never in a recording whose state is evidence.
++use super::{Activation, FunctionArgs, Value};
++use crate::context::UpdateContext;
++use crate::display_object::TDisplayObject;
++use crate::string::AvmString;
++
++fn call<'gc>(value: Value<'gc>, name: &str, args: &[Value<'gc>], activation: &mut Activation<'_, 'gc>) -> Result<Value<'gc>, String> {
++    let key = AvmString::new_utf8(activation.gc(), name);
++    value.call_public_property(key, FunctionArgs::from_slice(args), activation).map_err(|e| e.to_string(activation))
++}
++
++fn set<'gc>(value: Value<'gc>, name: &str, data: Value<'gc>, activation: &mut Activation<'_, 'gc>) -> Result<(), String> {
++    let key = AvmString::new_utf8(activation.gc(), name);
++    value.set_public_property(key, data, activation).map_err(|e| e.to_string(activation))
++}
++
++fn child<'gc>(value: Value<'gc>, name: &str, activation: &mut Activation<'_, 'gc>) -> Result<Value<'gc>, String> {
++    let key = AvmString::new_utf8(activation.gc(), name);
++    call(value, "getChildByName", &[key.into()], activation)
++}
++
++fn is_object(value: Value<'_>) -> bool {
++    !matches!(value, Value::Null | Value::Undefined)
++}
++
++/// The look as `RobotView.setRobotMc` sets it: the innermost `bodyMc` stops at frame
++/// `cloth + 1`; the innermost `hatMc` (from `bodyMc` when that holds it) at `hat + 1`.
++fn set_look<'gc>(mc: Value<'gc>, cloth: i32, hat: i32, activation: &mut Activation<'_, 'gc>) -> Result<(), String> {
++    if cloth >= 0 {
++        let mut body = mc;
++        loop {
++            let next = child(body, "bodyMc", activation)?;
++            if !is_object(next) { break; }
++            body = next;
++        }
++        call(body, "gotoAndStop", &[Value::Integer(cloth + 1)], activation)?;
++    }
++    if hat >= 0 {
++        let mut head = mc;
++        let body = child(mc, "bodyMc", activation)?;
++        if is_object(body) && is_object(child(body, "hatMc", activation)?) {
++            head = body;
++        }
++        loop {
++            let next = child(head, "hatMc", activation)?;
++            if !is_object(next) { break; }
++            head = next;
++        }
++        call(head, "gotoAndStop", &[Value::Integer(hat + 1)], activation)?;
++    }
++    Ok(())
++}
++
++/// `symbol PARENT CLASS NAME X Y FRAME [CLOTH HAT [CHILD=FRAME,...]]`: construct CLASS, set its
++/// look, stop it at FRAME (`-`: stop where it is; `p`: leave it playing), name it NAME, place it at (X, Y) in PARENT's
++/// units and add it to PARENT. Its path is then `PARENT/NAME`. Optional named children are
++/// sent to a frame too (`name=frame`, comma-separated, searched depth first).
++pub(crate) fn add(context: &mut UpdateContext<'_>, parent: &str, class: &str, name: &str, x: f64, y: f64,
++                  frame: Option<i32>, cloth: i32, hat: i32, children: &[(String, i32)]) -> Result<(), String> {
++    let chain = crate::reference_display::resolve(context.stage.into(), parent).ok_or_else(|| format!("no display object at {parent}"))?;
++    let parent_object: Value<'_> = chain.last().unwrap().object2().map(|o| o.into()).ok_or("parent has no AVM2 object")?;
++    let domain = context.avm2.stage_domain();
++    let mut activation = Activation::from_domain(context, domain);
++    let qname = AvmString::new_utf8(activation.gc(), class);
++    let definition = domain.get_defined_value_handling_vector(&mut activation, qname).map_err(|e| e.to_string(&mut activation))?;
++    let constructor = definition.as_object().and_then(|o| o.as_class_object()).ok_or_else(|| format!("no class {class}"))?;
++    let mc = constructor.construct(&mut activation, &[]).map_err(|e| e.to_string(&mut activation))?;
++    set_look(mc, cloth, hat, &mut activation)?;
++    match frame {
++        // 0: leave it playing, as a clip made with `new` and added is.
++        Some(0) => {}
++        Some(f) => { call(mc, "gotoAndStop", &[Value::Integer(f)], &mut activation)?; }
++        None => { call(mc, "stop", &[], &mut activation)?; }
++    }
++    for (child_name, child_frame) in children {
++        let mut stack = vec![mc];
++        while let Some(node) = stack.pop() {
++            let found = child(node, child_name, &mut activation)?;
++            if is_object(found) {
++                call(found, "gotoAndStop", &[Value::Integer(*child_frame)], &mut activation)?;
++                break;
++            }
++            let key = AvmString::new_utf8(activation.gc(), "numChildren");
++            let count = node.get_public_property(key, &mut activation).ok().and_then(|v| v.try_as_f64()).unwrap_or(0.0) as i32;
++            for k in 0..count {
++                if let Ok(c) = call(node, "getChildAt", &[Value::Integer(k)], &mut activation) {
++                    let key = AvmString::new_utf8(activation.gc(), "numChildren");
++                    if is_object(c) && is_object(c.get_public_property(key, &mut activation).unwrap_or(Value::Undefined)) {
++                        stack.push(c);
++                    }
++                }
++            }
++        }
++    }
++    let name_value = AvmString::new_utf8(activation.gc(), name);
++    set(mc, "name", name_value.into(), &mut activation)?;
++    set(mc, "x", Value::Number(x), &mut activation)?;
++    set(mc, "y", Value::Number(y), &mut activation)?;
++    call(parent_object, "addChild", &[mc], &mut activation)?;
++    Ok(())
++}
++
++/// `unsymbol PATH`: take an instance `symbol` added off the display list again.
++pub(crate) fn remove(context: &mut UpdateContext<'_>, path: &str) -> Result<(), String> {
++    let chain = crate::reference_display::resolve(context.stage.into(), path).ok_or_else(|| format!("no display object at {path}"))?;
++    let node = *chain.last().unwrap();
++    let parent = node.parent().ok_or("no parent")?;
++    let node_object: Value<'_> = node.object2().map(|o| o.into()).ok_or("no AVM2 object")?;
++    let parent_object: Value<'_> = parent.object2().map(|o| o.into()).ok_or("parent has no AVM2 object")?;
++    let domain = context.avm2.stage_domain();
++    let mut activation = Activation::from_domain(context, domain);
++    call(parent_object, "removeChild", &[node_object], &mut activation)?;
++    Ok(())
++}
+diff --git a/core/src/avm2.rs b/core/src/avm2.rs
+index 61aa28e..05f1942 100644
+--- a/core/src/avm2.rs
++++ b/core/src/avm2.rs
+@@ -74,6 +74,7 @@ pub(crate) mod reference_trace;
+ pub(crate) mod reference_focus;
+ pub(crate) mod reference_events;
+ pub(crate) mod reference_fixtures;
++pub(crate) mod reference_symbol;
+ mod scope;
+ pub mod script;
+ #[cfg(feature = "known_stubs")]
+diff --git a/core/src/player.rs b/core/src/player.rs
+index 3fd5610..e587b8d 100644
+--- a/core/src/player.rs
++++ b/core/src/player.rs
+@@ -2342,6 +2342,18 @@ impl Player {
+         self.mutate_with_update_context(|context| crate::reference_display::restore(context, piece))
+     }
+ 
++    /// Research-only art pass: put an instance of a library class on the display list.
++    #[allow(clippy::too_many_arguments)]
++    pub fn reference_symbol_add(&mut self, parent: &str, class: &str, name: &str, x: f64, y: f64,
++                                frame: Option<i32>, cloth: i32, hat: i32, children: &[(String, i32)]) -> Result<(), String> {
++        self.mutate_with_update_context(|context| crate::avm2::reference_symbol::add(context, parent, class, name, x, y, frame, cloth, hat, children))
++    }
++
++    /// Research-only: take an instance `reference_symbol_add` added off again.
++    pub fn reference_symbol_remove(&mut self, path: &str) -> Result<(), String> {
++        self.mutate_with_update_context(|context| crate::avm2::reference_symbol::remove(context, path))
++    }
++
+     pub fn reference_state(&mut self, max_depth: usize, max_objects: usize) -> serde_json::Value {
+         self.mutate_with_update_context(|context| {
+             crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
+diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
+index 2083b67..05cf53a 100644
+--- a/core/src/reference_display.rs
++++ b/core/src/reference_display.rs
+@@ -256,7 +256,7 @@ fn children(display: DisplayObject<'_>) -> Vec<DisplayObject<'_>> {
+ }
+ 
+ /// The chain of display objects from a stage child to `path`, using the dump's segments.
+-fn resolve<'gc>(stage: DisplayObject<'gc>, path: &str) -> Option<Vec<DisplayObject<'gc>>> {
++pub(crate) fn resolve<'gc>(stage: DisplayObject<'gc>, path: &str) -> Option<Vec<DisplayObject<'gc>>> {
+     let mut chain = Vec::new();
+     let mut current = stage;
+     for part in path.split('/').skip(1) {

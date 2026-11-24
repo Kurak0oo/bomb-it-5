@@ -402,8 +402,14 @@ func _attack_reach(actor: Dictionary) -> int:
 	return actor.power if actor.weapon == &"" else 1 if actor.weapon in [&"landmine", &"hammer"] else 2 if actor.weapon == &"boxing" else 3 if actor.weapon == &"flamer" else 17
 
 
+## The original's `Math.random` (scripts/simulation/avm_random.gd) the round draws from, when it
+## has one: the AI's choices (`StateSettings` chances, `Tool` picks) draw from the same generator
+## as the round's drops, in the order the frame makes them. Unset, a seeded Godot generator.
+var math_random: RefCounted
+
+
 func _random() -> float:
-	var value: float = _draws[_draw_index] if _draw_index < _draws.size() else _rng.randf()
+	var value: float = _draws[_draw_index] if _draw_index < _draws.size() else math_random.random() if math_random != null else _rng.randf()
 	_draw_index += 1
 	return clampf(value, 0.0, 0.9999999999999999)
 

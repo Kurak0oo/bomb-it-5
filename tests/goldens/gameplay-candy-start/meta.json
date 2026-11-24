@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-candy-start",
+ "case_sha256": "91366a07d9ccd09c83fc74ffbbe8e81f6a592aebe43b634d54b72d1e612efe69",
+ "fps": 35.0,
+ "frames": {
+  "candy-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

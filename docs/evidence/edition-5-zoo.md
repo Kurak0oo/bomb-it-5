@@ -64,3 +64,12 @@ The mounted-hit recovery keeps the existing 35-tick port from the
 [protection probes](edition-5-protection-vehicle-probes.md). Crocodile bites and rides
 were later recorded ([robot interactions](edition-5-interactions.md)); AI reactions to
 crocodiles were not observed at runtime.
+
+## First opening on screen (checkpoint 5, feature motion, 2026-11-08)
+
+Case `gameplay-zoo-crocodile` (round of `gameplay-zoo-start`, AI stopped) frame-matches the
+first opening: `Art_Crocodile` on frame 2 with `mouthOpen_mc` 1 at tick 240, 25 at 264, held
+to 324, 35 at 334, back on frame 1 at 354. `eat` has no clip of its own: a bomb on the cell
+blasts (`Bomb` display), a pickup goes by `deleProp` (its `brickExp`), a robot by the kill
+path. Nothing is spat out.
+

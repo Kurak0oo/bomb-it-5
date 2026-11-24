@@ -1,0 +1,212 @@
+{
+ "name": "game-over",
+ "origin": "The one-player Game Over screen (OnePGameOverUI on PlayerGameOver, class UI_GAMEOVERONEP) after the last heart. Built from tools/reference_player/cases/results/03-hearts-game-over.json: seed 42, Normal, Cinema; original AI.stop fixtures and stationary Space self-bombs lose three rounds (Space retries the first two on the score screen, LEVEL_RESTART); the third settles GAME_OVER and AbstractGameMode.loseHandler opens the Game Over screen at once (UIManager.gameOver). realtime 1 lets the original timers run on wall time. Checkpoint 3.",
+ "godot_note": "Godot replays the menus with the same clicks; the rounds are settled by the Godot-only `settle` action with the recorded final score.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 81"
+  },
+  {
+   "godot_command": "settle game-over",
+   "godot_note": "Godot cannot play the original's three rounds: the first ends here with no hearts left and the final score the original's Game Over screen showed at game-over (App.settle_as_recorded), through the app's own round-end path, and the screen opens as far into its timeline at the capture as the original's was."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 285"
+  },
+  {
+   "command": "realtime 0"
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "step 100"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 285"
+  },
+  {
+   "command": "realtime 0"
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "step 100"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   }
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   }
+  },
+  {
+   "command": "kd space"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku space"
+  },
+  {
+   "command": "realtime 1"
+  },
+  {
+   "command": "step 285"
+  },
+  {
+   "capture": "game-over"
+  }
+ ]
+}

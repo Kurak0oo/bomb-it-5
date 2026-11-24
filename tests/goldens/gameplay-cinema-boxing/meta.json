@@ -1,0 +1,15 @@
+{
+ "case": "gameplay-cinema-boxing",
+ "case_sha256": "a8903c112b432acba0b776e5aa13796feedc6ea140e4ed70a9a1ef0e578d7372",
+ "fps": 35.0,
+ "frames": {
+  "after": 720,
+  "held": 702,
+  "punch": 706,
+  "punch-late": 717,
+  "turned": 705
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

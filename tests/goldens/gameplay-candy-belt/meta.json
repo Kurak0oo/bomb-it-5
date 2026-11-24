@@ -1,0 +1,16 @@
+{
+ "case": "gameplay-candy-belt",
+ "case_sha256": "85fba09408fd1d6230ad1ab4ba86e52946737bd0eb295c244487d7206052ba68",
+ "fps": 35.0,
+ "frames": {
+  "bomb-gone": 2001,
+  "bomb-out": 926,
+  "gone-late": 2426,
+  "pickup-end": 2401,
+  "pickup-gone": 2413,
+  "pickup-out": 1976
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

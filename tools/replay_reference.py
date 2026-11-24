@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import os
 import queue
 import re
 import subprocess
@@ -30,6 +31,7 @@ class ReferenceSession:
                                         stdout=subprocess.PIPE, stderr=self.stderr,
                                         text=True, encoding='utf-8', bufsize=1)
         self.lines = queue.Queue()
+        self.timeout = float(os.environ.get('BOMBIT5_PLAYER_TIMEOUT', 600))
         self.frame = 0
         threading.Thread(target=self._read, daemon=True).start()
 
@@ -38,6 +40,20 @@ class ReferenceSession:
             self.lines.put(line.rstrip('\n'))
         self.lines.put(None)
 
+    def fixture(self, operation):
+        """Run one original-method fixture operation (a fixture-enabled player only)."""
+        self.fixtures = getattr(self, 'fixtures', 0) + 1
+        name = f'fixture-{self.fixtures - 1:04d}'
+        (self.output / f'{name}.json').write_text(json.dumps(operation), encoding='utf-8')
+        # The player finds the running original Game through its state walk; register it first.
+        self.command(f'state {name}-state.json')
+        self.command(f'fixture {name}.json')
+        result_path = self.output / f'{name}-result.json'
+        result = json.loads(result_path.read_text(encoding='utf-8'))
+        if result.get('schema') != 'bombit5-reference-fixture-v1' or result.get('command') != operation:
+            raise RuntimeError('Fixture result does not match the requested original-method operation')
+        return name, result_path
+
     def command(self, command):
         if '\n' in command or '\r' in command:
             raise ValueError('One command per protocol line')
@@ -45,7 +61,10 @@ class ReferenceSession:
         self.process.stdin.write(command + '\n')
         self.process.stdin.flush()
         while True:
-            line = self.lines.get(timeout=120)
+            try:
+                line = self.lines.get(timeout=self.timeout)
+            except queue.Empty:
+                raise TimeoutError(f'No acknowledgement within {self.timeout}s for: {command}') from None
             if line is None:
                 raise RuntimeError(f'Player exited during {command}; see player-stderr.log')
             match = re.fullmatch(r'OK frame=(\d+) wall_ms=(\d+) fps_setting=(\S+) cmd=(.*)', line)
@@ -143,13 +162,7 @@ def replay(executable, swf, case_path, output, observe=False, fixtures=False, co
     try:
         for action in case['actions']:
             if 'fixture' in action:
-                name = f'fixture-{len(fixture_results):04d}'
-                (session.output / f'{name}.json').write_text(json.dumps(action['fixture']), encoding='utf-8')
-                session.command(f'fixture {name}.json')
-                result_path = session.output / f'{name}-result.json'
-                result = json.loads(result_path.read_text(encoding='utf-8'))
-                if result.get('schema') != 'bombit5-reference-fixture-v1' or result.get('command') != action['fixture']:
-                    raise RuntimeError('Fixture result does not match the requested original-method operation')
+                name, result_path = session.fixture(action['fixture'])
                 fixture_results.append({'name': name, 'frame': session.frame, 'sha256': sha256(result_path)})
             if 'command' in action:
                 session.command(action['command'])

@@ -1,0 +1,12 @@
+{
+ "case": "gameplay-pacman-coin",
+ "case_sha256": "76305893db69e1ea54dac74afbca60e36b2f853eae95557072c8b2b024c98cd9",
+ "fps": 35.0,
+ "frames": {
+  "coin": 721,
+  "walk": 709
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

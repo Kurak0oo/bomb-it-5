@@ -13,7 +13,7 @@ func _initialize() -> void:
 	_repeated_downs_cannot_stack_bombs_in_one_cell()
 	_roster_order_wins_a_shared_cell_independently_of_batch_order()
 	_placement_requires_known_floor()
-	_newborn_bomb_detonates_on_the_72nd_following_tick()
+	_keyed_bomb_detonates_on_its_72nd_tick()
 	_blast_breaks_the_first_soft_block_and_stops_at_solids()
 	_power_two_still_stops_at_the_first_soft_block()
 	_rejected_batches_cannot_place_or_advance_a_fuse()
@@ -72,19 +72,22 @@ func _placement_requires_known_floor() -> void:
 			"solid, soft and outside-excerpt cells prevent placement without rejecting valid input")
 
 
-func _newborn_bomb_detonates_on_the_72nd_following_tick() -> void:
+## A key between frames makes the bomb before the tick's bomb phase (`Bomb.init`
+## `addBombHandler`), so `Bomb.takeCount` first runs on the placement tick and blasts on its 72nd
+## run (recorded: key at 721, `_time` 1 at 722, blast at 793).
+func _keyed_bomb_detonates_on_its_72nd_tick() -> void:
 	var simulation := _new_simulation()
 	simulation.advance([_command(&"human", [&"down"])])
 	var premature_blasts := 0
 	var result: Dictionary = {}
-	for tick in 71:
+	for tick in 70:
 		result = simulation.advance([_command(&"human")])
 		premature_blasts += result.blasts.size()
-	_expect([result.tick, premature_blasts, result.bombs.size()], [72, 0, 1],
-		"creation tick is excluded and the bomb survives all 71 following countdowns")
+	_expect([result.tick, premature_blasts, result.bombs.size()], [71, 0, 1],
+		"the placement tick counts and the bomb survives its first 71 countdowns")
 	result = simulation.advance([_command(&"human")])
-	_expect([result.tick, result.bombs, result.blasts.size()], [73, [], 1],
-		"a bomb placed on tick 1 detonates exactly on accepted tick 73")
+	_expect([result.tick, result.bombs, result.blasts.size()], [72, [], 1],
+		"a bomb placed on tick 1 detonates exactly on accepted tick 72")
 	_expect(simulation.advance([_command(&"human")]).blasts, [],
 		"one detonation is reported once rather than replayed on later ticks")
 
@@ -93,7 +96,7 @@ func _blast_breaks_the_first_soft_block_and_stops_at_solids() -> void:
 	var simulation := _new_simulation()
 	simulation.advance([_command(&"human", [&"down"])])
 	var result: Dictionary = {}
-	for tick in 72:
+	for tick in 71:
 		result = simulation.advance([_command(&"human")])
 	var cells: Array = []
 	for blast in result.blasts:
@@ -113,7 +116,7 @@ func _power_two_still_stops_at_the_first_soft_block() -> void:
 		{&"human": {"cell": Vector2i(2, 1), "power": 2}}, _board())
 	simulation.advance([_command(&"human", [&"down"])])
 	var result: Dictionary = {}
-	for tick in 72:
+	for tick in 71:
 		result = simulation.advance([_command(&"human")])
 	var cells: Array = result.blasts[0].cells.duplicate()
 	cells.sort()
@@ -127,7 +130,7 @@ func _rejected_batches_cannot_place_or_advance_a_fuse() -> void:
 	_expect(simulation.advance([_command(&"unknown", [&"down"])]).bombs, [],
 		"an unknown actor cannot mutate gameplay before admission")
 	simulation.advance([_command(&"human", [&"down"])])
-	for tick in 71:
+	for tick in 70:
 		simulation.advance([_command(&"human")])
 	for batch in [[], [_command(&"human", [&"invalid"])],
 			[_command(&"human"), _command(&"human", [&"down"])]]:
@@ -136,7 +139,7 @@ func _rejected_batches_cannot_place_or_advance_a_fuse() -> void:
 		var rejected: Dictionary = simulation.advance(commands)
 		_expect([rejected.accepted, rejected.tick, rejected.bombs.size(), rejected.blasts,
 			rejected.broken_soft_blocks, rejected.board[Vector2i(3, 1)]],
-			[false, 72, 1, [], [], &"soft"], "a rejected tick cannot age a bomb or mutate the board")
+			[false, 71, 1, [], [], &"soft"], "a rejected tick cannot age a bomb or mutate the board")
 	_expect(simulation.advance([_command(&"human")]).broken_soft_blocks, [Vector2i(3, 1)],
 		"the next accepted tick detonates without a gap from rejected calls")
 
@@ -160,7 +163,7 @@ func _caller_mutation_cannot_rewrite_the_simulation() -> void:
 	_expect([next.bombs, next.board[Vector2i(3, 1)]],
 		[[{"actor_id": &"human", "cell": Vector2i(2, 1), "power": 2}], &"soft"],
 		"returned state cannot mutate the simulation")
-	for tick in 71:
+	for tick in 70:
 		next = simulation.advance([_command(&"human")])
 	_expect([result.board[Vector2i(3, 1)], next.board[Vector2i(3, 1)]], [&"solid", &"floor"],
 		"later explosions do not rewrite previously returned snapshots")
@@ -169,10 +172,10 @@ func _caller_mutation_cannot_rewrite_the_simulation() -> void:
 func _expiry_tick_input_is_consumed_before_capacity_is_freed() -> void:
 	var simulation := _new_simulation()
 	simulation.advance([_command(&"human", [&"down"])])
-	for tick in 71:
+	for tick in 70:
 		simulation.advance([_command(&"human")])
 	var expiry: Dictionary = simulation.advance([_command(&"human", [&"down"])])
-	_expect([expiry.tick, expiry.bombs, expiry.blasts.size()], [73, [], 1],
+	_expect([expiry.tick, expiry.bombs, expiry.blasts.size()], [72, [], 1],
 		"input on the expiry tick fails before the old bomb releases its slot")
 	_expect(simulation.advance([_command(&"human")]).bombs, [],
 		"a failed accepted input is never retried automatically after expiry")
@@ -201,7 +204,6 @@ func _focus_pause_freezes_the_fuse_and_discards_queued_input() -> void:
 	scheduler.advance_time(1.0 / 35.0)
 	for frame in 14:
 		scheduler.advance_time(5.0 / 35.0)
-	scheduler.advance_time(1.0 / 35.0)
 	scheduler.enqueue_bomb_event(&"human", &"down")
 	scheduler.advance_time(0.5 / 35.0)
 	scheduler.notification(Node.NOTIFICATION_APPLICATION_FOCUS_OUT)
@@ -215,7 +217,7 @@ func _focus_pause_freezes_the_fuse_and_discards_queued_input() -> void:
 		"resuming a live fuse discards pre-pause partial time")
 	var result: Dictionary = scheduler.advance_time(0.5 / 35.0).ticks[0]
 	_expect([result.tick, result.commands[0].bomb_events, result.bombs, result.blasts.size()],
-		[73, [], [], 1], "only the next accepted interval expires the bomb, with stale input cleared")
+		[72, [], [], 1], "only the next accepted interval expires the bomb, with stale input cleared")
 	_expect(scheduler.advance_time(1.0 / 35.0).ticks[0].bombs, [],
 		"cleared pause input cannot place a replacement after detonation")
 	scheduler.enqueue_bomb_event(&"human", &"down")
@@ -238,9 +240,9 @@ func _stall_catch_up_ages_only_the_five_processed_ticks() -> void:
 		frame = scheduler.advance_time(5.0 / 35.0)
 		for tick in frame.ticks:
 			premature_blasts += tick.blasts.size()
-	frame = scheduler.advance_time(2.0 / 35.0)
+	frame = scheduler.advance_time(1.0 / 35.0)
 	_expect([frame.ticks[-1].tick, frame.ticks[-1].bombs.size(), premature_blasts,
-		frame.ticks[0].blasts.size(), frame.ticks[1].blasts.size()], [72, 1, 0, 0, 0],
+		frame.ticks[0].blasts.size()], [71, 1, 0, 0],
 		"elapsed time discarded during a stall never contributes to the 72-tick fuse")
 	_expect(scheduler.advance_time(1.0 / 35.0).ticks[0].broken_soft_blocks, [Vector2i(3, 1)],
 		"the real scheduler detonates only on the next processed simulation tick")
@@ -252,14 +254,14 @@ func _a_blast_chains_a_newer_bomb_in_the_same_tick() -> void:
 		&"human": {"cell": Vector2i(1, 1), "power": 3},
 		&"ai": {"cell": Vector2i(2, 1)}}, _board())
 	simulation.advance([_command(&"human", [&"down"]), _command(&"ai")])
-	for tick in 70:
+	for tick in 69:
 		simulation.advance([_command(&"human"), _command(&"ai")])
 	simulation.advance([_command(&"human"), _command(&"ai", [&"down"])])
 	var result: Dictionary = simulation.advance([_command(&"human"), _command(&"ai")])
 	var owners: Array = result.blasts.map(func(blast: Dictionary): return blast.actor_id)
 	owners.sort()
 	_expect([result.tick, result.bombs, owners, result.broken_soft_blocks],
-		[73, [], [&"ai", &"human"], [Vector2i(3, 1)]],
+		[72, [], [&"ai", &"human"], [Vector2i(3, 1)]],
 		"a hit newer bomb detonates synchronously instead of waiting for its own fuse")
 	var parent_cells: Array = []
 	for blast in result.blasts:

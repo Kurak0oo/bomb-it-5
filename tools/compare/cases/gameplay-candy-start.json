@@ -1,0 +1,81 @@
+{
+ "name": "gameplay-candy-start",
+ "screen": "game",
+ "origin": "The gameplay screen at the round's first frame on the Candy Factory stage set (checkpoint 5, second stage set): as gameplay-cinema-start (seed 42, Arcade, Normal, robot 0, through the real menus), but Game Settings' stage list picks Candy Factory (basketballStages, GameSettingsUI.stagesHandle: GameModel.stages = \"CandyFactory\"; the click is the centre of its stage bounds in the game-settings dropdown golden). The capture is the first frame without UI_reading, 61 frames after START.",
+ "godot_note": "Robots are drawn from their original clips (scripts/ui/game_actors.gd); the node diff and the pixel score include them.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 337.35 240.33"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round candy-start",
+   "godot_note": "The round this START opens takes its board and enemy robots from the golden of the candy-start capture (App.round_as_recorded), as gameplay-cinema-start does."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "capture": "candy-start"
+  }
+ ]
+}

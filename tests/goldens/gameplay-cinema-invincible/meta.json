@@ -1,0 +1,14 @@
+{
+ "case": "gameplay-cinema-invincible",
+ "case_sha256": "a3c08083e406ccbfbb9f4ad35547220aa606ba22270db2f247fe08b0f3d4533a",
+ "fps": 35.0,
+ "frames": {
+  "glow": 731,
+  "glow-turned": 738,
+  "intro": 702,
+  "intro-late": 729
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

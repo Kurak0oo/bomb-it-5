@@ -24,5 +24,100 @@
    "frames": 0,
    "why": "the original shows its publisher intro for 226 frames (6.5 s) between PLAY and the menu; the replica has no intro, so the menu opens at once (play only: the comparison keeps the original timing)"
   }
+ },
+ "settings": {
+  "remove": {
+   "/playersTwo": "the 2-player option: the replica has one player (owner review, 2026-11-04)"
+  }
+ },
+ "controls": {
+  "remove": {
+   "/ctrlField/twoPOneUp": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneUpMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneLeft": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneLeftMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneDown": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneDownMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneRight": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneRightMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneBomb": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPOneBombMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoUp": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoUpMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoLeft": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoLeftMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoDown": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoDownMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoRight": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoRightMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoBomb": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/twoPTwoBombMc": "2-player key column (the replica has one player; owner review, 2026-11-04)",
+   "/ctrlField/@92": "2-player key column (the replica has one player; owner review, 2026-11-04): a shape over the S cap",
+   "/@456/p2head@133": "2-player key column (the replica has one player; owner review, 2026-11-04): its robot head",
+   "/@456/@9": "2-player key column (the replica has one player; owner review, 2026-11-04): its 1P label",
+   "/@456/p2head@255": "2-player key column (the replica has one player; owner review, 2026-11-04): its robot head",
+   "/@456/@3": "2-player key column (the replica has one player; owner review, 2026-11-04): its P2 label"
+  }
+ },
+ "score": {
+  "remove": {
+   "/moregames": "MORE GAMES, the portal link (owner decision, 2026-11-04)",
+   "/__id12_": "Logos: the publisher logo at the bottom (owner decision, 2026-11-04)"
+  },
+  "move": {
+   "/dressUpBtn": {
+    "toward": "/moregames",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES gone, DRESS UP and NEXT/RESTART move left by half a button pitch (half the way from DRESS UP to MORE GAMES' place), so the pair sits in the middle of the original three-button row (owner review, 2026-11-05)"
+   },
+   "/nextLevel": {
+    "toward": "/moregames",
+    "from": "/dressUpBtn",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES gone, DRESS UP and NEXT/RESTART move left by half a button pitch (half the way from DRESS UP to MORE GAMES' place), so the pair sits in the middle of the original three-button row (owner review, 2026-11-05)"
+   },
+   "/restartBtn": {
+    "toward": "/moregames",
+    "from": "/dressUpBtn",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES gone, DRESS UP and NEXT/RESTART move left by half a button pitch (half the way from DRESS UP to MORE GAMES' place), so the pair sits in the middle of the original three-button row (owner review, 2026-11-05)"
+   }
+  }
+ },
+ "game_over": {
+  "remove": {
+   "/moregames": "MORE GAMES, the portal link (owner preference: portal links removed on every screen, 2026-11-04)",
+   "/__id10_": "Logos: the publisher logos at the bottom (owner preference: portal links removed on every screen, 2026-11-04)"
+  },
+  "move": {
+   "/back": {
+    "toward": "/moregames",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES and the logos gone, TRY AGAIN moves half the way to MORE GAMES' place, to the middle of the original button row (owner review, 2026-11-05)"
+   }
+  }
+ },
+ "game_win": {
+  "remove": {
+   "/moregames": "MORE GAMES, the portal link (owner preference: portal links removed on every screen, 2026-11-04)",
+   "/__id8_": "Logos: the publisher logos at the bottom (owner preference: portal links removed on every screen, 2026-11-04)"
+  },
+  "move": {
+   "/back": {
+    "toward": "/moregames",
+    "fraction": 0.5,
+    "axis": "x",
+    "why": "with MORE GAMES and the logos gone, TRY AGAIN moves half the way to MORE GAMES' place, to the middle of the original button row (owner review, 2026-11-05)"
+   }
+  }
+ },
+ "game": {
+  "remove": {
+   "/@0#1/@0/@1078": "Logo2: the publisher logo at the bottom right of the gameplay screen (owner decision, 2026-11-05)"
+  }
  }
 }

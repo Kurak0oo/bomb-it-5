@@ -1,0 +1,15 @@
+{
+ "case": "gameplay-zoo-crocodile",
+ "case_sha256": "39ecdadd844daf27f7f647435a83c882c9876942ca5eae03cab096048692470c",
+ "fps": 35.0,
+ "frames": {
+  "closed": 1055,
+  "closing": 1035,
+  "eating": 1005,
+  "mouth-1": 941,
+  "open": 965
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

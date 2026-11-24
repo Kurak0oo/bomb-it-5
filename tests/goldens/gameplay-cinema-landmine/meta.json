@@ -1,0 +1,14 @@
+{
+ "case": "gameplay-cinema-landmine",
+ "case_sha256": "fd443c9c4fc9edef678e743aeb458a18926dd43068c5f56be0e821763fa1a16c",
+ "fps": 35.0,
+ "frames": {
+  "held": 702,
+  "later": 736,
+  "placed": 706,
+  "turned": 705
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "331ceea29a466e017676be17ca029482c4c12a31231e9815aa0262303a2d3b48",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

@@ -1,0 +1,80 @@
+{
+ "name": "gameplay-cinema-start",
+ "origin": "The gameplay screen at the round's first frame (checkpoint 4, slice a): seed 42, Arcade, Normal, Cinema, robot 0, through the real menus as in the results case. START on character select makes the Game (GameMc) at once, under the map-loading screen (LoadingMapUI, class UI_reading) while MapMaster.createRow builds one row per Timer(100) tick; Game.firstMapLoadOver then starts the round 100 ms later (setTimeout gameStartHandler), which destroys the loading screen. With the player's timers on frame time (realtime 0) that is 61 frames after the click: the capture is the first frame without UI_reading, TIME still reads 180 (Game.countTime has not ticked).",
+ "godot_note": "Robots are drawn from their original clips (scripts/ui/game_actors.gd); the node diff and the pixel score include them.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "capture": "cinema-start"
+  }
+ ]
+}

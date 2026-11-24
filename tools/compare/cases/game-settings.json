@@ -1,0 +1,18 @@
+{
+  "name": "game-settings",
+  "origin": "Game Settings (GameSettingsUI, class UI_SETTING) reached from the title and menu as the main-menu case does: PLAY at frame 301, START (centre of startGame's stage bounds in the menu golden) at frame 541; the pointer then moves off the mode cards so no hover frame shows. The second capture opens the stage dropdown (mapMenu's centre) so showMenu, off the display list until then, is recorded. Checkpoint 3.",
+  "actions": [
+    {"command": "seed 55"},
+    {"command": "step 301"},
+    {"command": "click 349 440"},
+    {"command": "step 240"},
+    {"command": "click 556.75 202.7"},
+    {"command": "move 2 2"},
+    {"command": "step 40"},
+    {"capture": "settings"},
+    {"command": "click 471 388"},
+    {"command": "move 2 2"},
+    {"command": "step 2"},
+    {"capture": "dropdown"}
+  ]
+}

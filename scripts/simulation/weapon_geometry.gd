@@ -13,7 +13,8 @@ const HAMMER_OFFSET := {Vector2i.LEFT: Vector2(10, -15), Vector2i.RIGHT: Vector2
 static func flamer_endpoint(attack: Dictionary, actor: Dictionary, board: Dictionary) -> Vector2i:
 	var direction: Vector2i = attack.direction
 	# Terminal callback retains the last measured cell extent; terminal outline is unverified.
-	var length: float = FLAME_LENGTH[clampi(attack.frame - 1, 0, FLAME_LENGTH.size() - 1)]
+	# The fire clip shows frame `age + 1` on the command's run `age` (FlamerPlayCommand.execute).
+	var length: float = FLAME_LENGTH[clampi(attack.frame, 0, FLAME_LENGTH.size() - 1)]
 	var origin: Vector2 = Vector2(actor.cell)
 	var tip: Vector2 = origin + Vector2(direction) * length * attack.get("scale", 1.0) / 30.0
 	var endpoint := Vector2i(int(tip.x), int(tip.y))

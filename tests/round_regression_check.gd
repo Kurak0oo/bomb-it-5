@@ -126,10 +126,10 @@ func _lifecycle() -> void:
 func _hazards() -> void:
 	var game := _game({"damage": true}, {&"human": {"cell": Vector2i(2, 3), "protected_until": 1000}})
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"])])
-	var state := _ticks(game, 72)
+	var state := _ticks(game, 71)
 	_expect(state.flames.size() == 1 and state.actors[&"human"].alive, "detonation creates a persistent flame and respects protection")
 	var rejected: Dictionary = game.advance([])
-	_expect(not rejected.accepted and rejected.tick == 73 and rejected.flames == state.flames, "atomic rejection freezes active hazards")
+	_expect(not rejected.accepted and rejected.tick == 72 and rejected.flames == state.flames, "atomic rejection freezes active hazards")
 	_expect(_ticks(game, 15).flames.size() == 1, "flames remain before the seventeenth cleanup callback")
 	_expect(_ticks(game, 1).flames.is_empty(), "expired flames are removed")
 	game = _game({"damage": true, "drops": true}, {}, _board())
@@ -149,7 +149,7 @@ func _drops() -> void:
 		var game := _game({"damage": true, "drops": true, "seed": seed_value},
 			{&"human": {"cell": Vector2i(2, 3), "protected_until": 1000}}, board)
 		game.advance([_command(&"human", Vector2.ZERO, [&"down"])])
-		var early := _ticks(game, 81)
+		var early := _ticks(game, 80)
 		_expect(early.pickups.is_empty(), "drops wait for the recovered brick animation boundary")
 		var ready := _ticks(game, 1)
 		appeared += ready.pickups.size()
@@ -159,7 +159,7 @@ func _drops() -> void:
 	var game := _game({"movement": true, "damage": true, "drops": true, "seed": 42},
 		{&"human": {"cell": Vector2i(2, 3), "protected_until": 1000}}, board)
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"])])
-	_ticks(game, 72)
+	_ticks(game, 71)
 	var occupied := _ticks(game, 11, Vector2.RIGHT)
 	_expect(occupied.actors[&"human"].cell == Vector2i(3, 3) and occupied.pickups.is_empty(), "occupying a broken cell suppresses its delayed drop")
 	for kind in [&"capacity", &"power", &"speed", &"life", &"shield", &"invincible"]:
@@ -177,7 +177,7 @@ func _outcomes() -> void:
 	_expect(state.outcome == &"won" and state.actors[&"human"].kills == 3, "eliminating all three enemies wins a round")
 	_expect(state.result_score == 4670, "Normal victory awards kills, difficulty and time captured at delayed mode judgment")
 	var after := _ticks(game, 40, Vector2.ZERO, actors.keys())
-	_expect(after.tick == 237 and after.result_score == 4670, "a completed round cannot advance or recount its result")
+	_expect(after.tick == 236 and after.result_score == 4670, "a completed round cannot advance or recount its result")
 	actors[&"human"].shield = 0
 	game = _game({"round": true, "damage": true}, actors)
 	game.advance([_command(&"human", Vector2.ZERO, [&"down"]), _command(&"a"), _command(&"b"), _command(&"c")])

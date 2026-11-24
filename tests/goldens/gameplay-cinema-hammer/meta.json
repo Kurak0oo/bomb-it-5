@@ -1,0 +1,15 @@
+{
+ "case": "gameplay-cinema-hammer",
+ "case_sha256": "5c8eb3f9bf9a14bd0fc21a07efd08529474a2b15b0ee6cfc4fb55b7a1bd8baa9",
+ "fps": 35.0,
+ "frames": {
+  "after": 732,
+  "held": 702,
+  "swing": 706,
+  "swing-late": 728,
+  "turned": 705
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "fddd18bc24219371386c1e8028ff16cffac5c7e6854bae5b77a7624e2d53c6e4",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

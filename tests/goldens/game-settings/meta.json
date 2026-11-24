@@ -1,0 +1,12 @@
+{
+ "case": "game-settings",
+ "case_sha256": "c27a9dc7a0aea607f317107f8183e5508e7fa7cf1ade83ca6272a8b0a9272226",
+ "fps": 35.0,
+ "frames": {
+  "dropdown": 583,
+  "settings": 581
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "b1d35ecad6601ec9b613ef6f792801f9564e0a515ca3d6100f0e46462a579290",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

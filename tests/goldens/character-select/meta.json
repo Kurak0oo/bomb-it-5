@@ -1,0 +1,18 @@
+{
+ "case": "character-select",
+ "case_sha256": "6a5a5df59a3e184e86fd1fd7e0f71acc036dbc2276974050bcedc72ab94d388b",
+ "fps": 35.0,
+ "frames": {
+  "char0": 621,
+  "char1": 651,
+  "char2": 681,
+  "char3": 711,
+  "char4": 741,
+  "char5": 771,
+  "char6": 801,
+  "char7": 831
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "b1d35ecad6601ec9b613ef6f792801f9564e0a515ca3d6100f0e46462a579290",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

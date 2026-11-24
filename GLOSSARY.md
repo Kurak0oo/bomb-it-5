@@ -35,6 +35,43 @@ A scripted run with fixed seed, input and frame count, played in both the refere
 **Golden dump**:
 The committed node data recorded from the reference player for a comparison case.
 
+**Capture phase**:
+How many frames a screen had been open when a capture was taken, read from that capture's golden dump rather than from a run. Needed where the original opens a screen on the wall clock, so each recording opens it at a different frame.
+
+**End screen**:
+The screen that closes a one-player session with its final score and TRY AGAIN: Game Over after the last heart, congratulations (GAME COMPLETE!) after the last level.
+_Avoid_: results screen, score screen
+
+**Owner edit**:
+A change the owner made on top of a faithful screen (a part removed or moved), applied by the converter and treated by the comparison as an expected difference.
+
+**Run-time effect**:
+Display objects a ported screen makes at random while it runs (the congratulations screen's falling confetti), checked against the original by the effect's rules rather than node by node.
+
+**Board tile**:
+The art of one box kind on the gameplay screen: a `_brick5` frame, shrunk and centred or not as a breakable box is, rendered once and placed on any cell of the round's board.
+
+**Actor art**:
+The images of a library clip the round makes at run time (a robot in a direction and look, a bomb, a blast), rendered alone by the reference player at every frame the round can show, and placed by the clip's registration point.
+
+**Frame script**:
+Code on a clip's timeline frame (`addFrameScript`), such as a ride clip's `gotoAndPlay(1)` on its loop's last frame. It runs after the frame's engine callbacks, so it can restart a clip the engine stopped.
+
+**Clip loop**:
+A nested clip that an actor's library clip plays on its own while the clip itself stands still (a robot's blinking eyes), rendered apart from the clip and drawn as its own node over it, so a clip costs its root frames plus its loop frames.
+
+**Set art**:
+A stage set's board art on the one gameplay screen: its floor bitmap, board tiles and features, from that set's own recorded round; Cinema's is in the screen's pack, every other set's in its own pack folder.
+
+**Display field**:
+A snapshot field the simulation keeps only so the replica can draw the round as the original does (a bomb's serial, what the belt carried and moved this tick, a toy hand's label); the round's rules never read it.
+
+**Placeholder layer**:
+What the gameplay screen draws without original art yet (most weapon actions and shots, and the board of a stage set whose art is not in the pack), in the screen's board container.
+
+**Recorded round**:
+The robots and the `Math.random` position a gameplay capture recorded, which the comparison loop starts its Godot round from because the menus' random draws are not reproduced; its board is rolled again from the original's draws and must equal the recorded one.
+
 **Original pack**:
 The art and audio taken from the user's own SWF, kept on their machine and never committed.
 _Avoid_: assets, candidate art
@@ -68,6 +105,9 @@ The central area of the virtual stick that represents no movement request.
 
 **Command**:
 One actor's direction and ordered bomb input events for a tick.
+
+**Key's tick**:
+The first engine tick after a key reaches the original between frames. A bomb made by that key counts down from it and a weapon's command first runs on it, with its clip still on frame 1.
 
 **Bomb input event**:
 A delivered down or up input for an actor's bomb/action control. Repeated down events are distinct events even when the control remains held.
@@ -110,6 +150,12 @@ A ride carried by an actor, with its own movement and damage state.
 **Weapon**:
 An equipped item that gives the actor an action in place of ordinary bomb placement.
 
+**Base weapon**:
+The weapon a mode gives every robot for the whole round, held from its first frame and back after a picked-up weapon is spent: the hammer in Kill and Green Zone, the flamer for Pac-Man's ghosts, none (NullWeapon) for Pac-Man's player.
+
+**Mode object**:
+A board object that only one mode makes, such as Green Zone's flag with its robots' progress bars or Pac-Man's coins.
+
 **Fuse**:
 A bomb's delay before timed detonation. A chain reaction can detonate it earlier.
 
@@ -130,3 +176,18 @@ _Avoid_: Bomb shoes, glove
 **Boxing glove**:
 The edition 5 weapon pickup (`BoxingProp`) that punches up to two cells ahead.
 _Avoid_: Fist, glove
+
+**Map-loading screen**:
+The screen START shows while the board is built row by row (`LoadingMapUI`), gone when the round starts.
+
+**Round draws**:
+The original's `Math.random` calls made before a round starts; a recorded round's own draws continue after them.
+
+**Shield (nombril)**:
+The one-hit protection from `ShieldProp`, shown as the `nombril_<direction>` clip at the robot clip's `hand2`.
+
+**Invincibility**:
+`InvincibilityProp`'s state: a 29-tick introduction (`invincibityPlay`), then a colour-cycling GradientGlowFilter on the robot until it ends.
+
+**Portal transit**:
+The 30 ticks of `SendRobotCommand`, in which a robot fades out at one portal and reappears at the paired one.

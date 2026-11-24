@@ -222,7 +222,8 @@ func _kick() -> void:
 		"the fuse stops while the bomb flies (placed %d, flew %d-%d, blast %d)" % [placed, flew, landed, blast])
 
 
-## #85: `BoxingProp`: Space punches up to two cells ahead after 13 steps. A box in the first
+## #85: `BoxingProp`: Space punches up to two cells ahead on clip frame 13, 12 steps after the
+## key's tick (recorded: key at 705, robot back at 718). A box in the first
 ## cell stops the reach; a robot two cells away is hit; a pickup in reach is collected.
 func _punch() -> void:
 	var Simulation = load("res://scripts/simulation/bomb_simulation.gd")
@@ -247,7 +248,7 @@ func _punch() -> void:
 			if not round.actors()[&"ruby"].alive: return frame + 1
 		return -1
 	var far = make.call({"ruby": Vector2i(5, 5)})
-	_expect(punch.call(far) == 13, "a punch lands 13 steps after Space and reaches two cells")
+	_expect(punch.call(far) == 12, "a punch lands 12 steps after the key's tick and reaches two cells")
 	var blocked = make.call({"ruby": Vector2i(5, 5), "soft": [Vector2i(4, 5)]})
 	var killed: int = punch.call(blocked)
 	_expect(killed == -1 and blocked.board()[Vector2i(4, 5)] == &"floor", "a box in the first cell breaks and stops the punch")

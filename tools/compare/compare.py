@@ -1,6 +1,8 @@
 """Comparison loop: the same case in the reference player and in Godot, diffed.
 
     compare.py record CASE   reference player -> committed golden node dumps (+ local PNGs)
+    compare.py record CASE --reference-only
+                             reference player -> local PNGs only, committed goldens untouched
     compare.py check CASE    Godot -> node diff against goldens, pixel diff where PNGs exist
     compare.py run CASE      record (when the SWF and player are present), then check
     compare.py all           check every case
@@ -31,6 +33,8 @@ GOLDENS = ROOT / 'tests' / 'goldens'
 WORK = ROOT / '.scratch' / 'compare'
 DEFAULT_SWF = ROOT / '.scratch' / 'edition-5-research' / 'agame-bomb-it-5-zh-fix.swf'
 FLOOR_SLACK = {'ssim': 0.001, 'delta_e': 0.25}
+# Filters the reference player does not draw (Ruffle's wgpu backend: render/wgpu/src/filters.rs).
+UNRENDERED_FILTERS = ('GradientGlowFilter', 'GradientBevelFilter')
 
 
 def load_case(name):
@@ -62,7 +66,22 @@ def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def record(name, player, swf):
+def reference_sha256(case_path):
+    """Hash of what the reference player runs: Godot-only fields (godot_*) and Godot-only
+    actions (only godot_* fields) may change freely."""
+    case = json.loads(Path(case_path).read_text(encoding='utf-8'))
+    strip = lambda a: {k: v for k, v in a.items() if not k.startswith('godot_')}
+    case = dict(strip(case), actions=[strip(a) for a in case['actions'] if strip(a)])
+    return hashlib.sha256(json.dumps(case, sort_keys=True).encode()).hexdigest()
+
+
+def replay_case(name, player, swf, out=None):
+    """Replay the case in the reference player into WORK/<name>/reference (or `out`).
+
+    Shared by `record` (goldens + local PNGs) and `record --reference-only` (local PNGs only).
+    Returns the case path, its captures, their replay frames, the fps setting, the SWF and
+    player hashes, and the directory the captures were written to.
+    """
     from replay_reference import ReferenceSession, SWF_SHA256
     case_path, case, captures = load_case(name)
     if not swf.is_file():
@@ -72,8 +91,10 @@ def record(name, player, swf):
     if not player.is_file():
         raise SystemExit(f'Reference player not built: {player} (run tools/reference_player/build.sh)')
     import tempfile
-    out = WORK / name / 'reference'
-    shutil.rmtree(out, ignore_errors=True)
+    if out is None:
+        out = WORK / name / 'reference'
+        shutil.rmtree(out, ignore_errors=True)
+    out = Path(out)
     out.parent.mkdir(parents=True, exist_ok=True)
     # Same reason as replay_reference: Ruffle rejects dot-prefixed SWF paths.
     with tempfile.TemporaryDirectory(prefix='bombit5-compare-') as staging:
@@ -84,6 +105,8 @@ def record(name, player, swf):
         ok = False
         try:
             for action in case['actions']:
+                if 'fixture' in action:
+                    session.fixture(action['fixture'])
                 if 'command' in action:
                     fps = session.command(action['command'])['fps_setting']
                 if 'capture' in action:
@@ -94,6 +117,216 @@ def record(name, player, swf):
             ok = True
         finally:
             session.close(check=ok)
+    return {'case_path': case_path, 'captures': captures, 'frames': frames, 'fps': fps,
+            'swf_sha256': sha256(swf), 'player_sha256': sha256(player), 'out': out}
+
+
+def reference_meta(name, case_path, swf_sha256):
+    """The committed meta, after checking the replay inputs match it before anything replays."""
+    meta_path = GOLDENS / name / 'meta.json'
+    if not meta_path.is_file():
+        try:
+            shown = meta_path.relative_to(ROOT)
+        except ValueError:
+            shown = meta_path
+        raise SystemExit(f'{name}: no committed goldens at {shown}; '
+                         'the reference would not correspond to the golden')
+    meta = json.loads(meta_path.read_text(encoding='utf-8'))
+    problems = []
+    if meta.get('swf_sha256') != swf_sha256:
+        problems.append(f'swf_sha256 is {meta.get("swf_sha256")}, replayed {swf_sha256}')
+    if meta.get('case_sha256') not in (reference_sha256(case_path), sha256(case_path)):
+        problems.append(f'case_sha256 is {meta.get("case_sha256")}, replayed {reference_sha256(case_path)}')
+    if problems:
+        raise SystemExit(f'{name}: the reference would not correspond to the golden: ' + '; '.join(problems))
+    return meta
+
+
+def scene_exclusions(case, name, capture, golden, other):
+    """What neither side can reproduce when a scene is diffed: a screen's random effects
+    (FallSnow's confetti) and the text, clip frames and alpha the original drives on the host
+    clock. Both `check` and reference verification run this; only `check` applies owner edits
+    and localization (the golden alone is the owner's screen, the replay is the original).
+
+    Returns the two scenes, the effects report, the pixel masks for what was taken out, and
+    the case fields that named it."""
+    golden, other, effects = nodes.split_effects(golden, other, effects_of(name, capture))
+    masks = [b for e in effects.values() for b in e['bounds']]
+    # Text the original takes from the host's wall clock (TIME: `Game.countTime` polls
+    # `new Date().getSeconds()`, which the reference player does not step with its frames)
+    # cannot match frame for frame; the case names it: only its presence is compared, and
+    # its place is left out of the pixel score.
+    wall_clock = case.get('wall_clock_text', {})
+    for side in (golden, other):
+        for n in side['nodes']:
+            if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_clock):
+                n.pop('text', None)
+                if side is golden and n.get('render_bounds'):
+                    masks += [n['render_bounds']]
+    # Likewise a clip frame the original drives on the host's clock (TweenMax: the
+    # map-loading screen's progress bar): present and placed, its frame not compared.
+    wall_frames = case.get('wall_clock_frame', {})
+    for side in (golden, other):
+        for n in side['nodes']:
+            if any(nodes.path_endswith(n['path'], suffix) for suffix in wall_frames):
+                n.pop('frame', None)
+                if side is golden and n.get('render_bounds'):
+                    masks += [n['render_bounds']]
+    # And a clip whose alpha the original tweens on the host's clock (TweenMax.from: the
+    # projectiles' 0.2 s fade-in), named by class: present, placed and framed, its alpha not
+    # compared and its place left out of the pixel score.
+    wall_alpha = case.get('wall_clock_alpha', {})
+    faded_paths = {n['path'] for n in golden['nodes'] if n.get('class') in wall_alpha}
+    for side in (golden, other):
+        for n in side['nodes']:
+            if n['path'] in faded_paths:
+                n.pop('alpha', None)
+                if side is golden and n.get('render_bounds'):
+                    masks += [n['render_bounds']]
+    return {'golden': golden, 'other': other, 'effects': effects, 'masks': masks,
+            'wall_clock_text': wall_clock, 'wall_clock_frame': wall_frames,
+            'wall_clock_alpha': faded_paths}
+
+
+def _is_effect_node(node, how):
+    """Whether a replayed node is the effect the layout declares, not a static node that
+    happens to sit at the effect's path: the layout names the class (`flash.display::Bitmap`
+    for FallSnow), or a kind when it has no class."""
+    declared = how.get('class')
+    if declared:
+        return node.get('class') == declared
+    declared = how.get('kind')
+    if declared:
+        return node.get('kind') == declared
+    return True
+
+
+def _tag_original_effects(scene, effects):
+    """Mark the replayed original's effect nodes like Godot marks its own (the display-list
+    dump has no such field), so `nodes.split_effects` takes them out of both sides.
+
+    Only a node at the effect's path whose class/kind is the one the layout declares is
+    tagged: a static or wrong-class node stays in the scene, so it shows up as an extra
+    node instead of being silently dropped with the golden effect's bounds."""
+    by_path = {path: (effect, how) for effect, how in effects.items() for path in how.get('nodes', {})}
+    tagged = []
+    for n in scene['nodes']:
+        effect, how = by_path.get(n['path'], (None, None))
+        tagged.append(dict(n, effect=effect) if effect and _is_effect_node(n, how) else n)
+    return dict(scene, nodes=tagged)
+
+
+def _scene_problems(case, name, golden_path, capture, replayed):
+    """Differences between the replayed display list and one committed golden, briefly.
+
+    Both sides here are the original (the committed golden and this replay), so owner edits
+    and localization are not applied: they would invent differences. Only the exclusions
+    `check` also makes before its node diff are applied."""
+    if not golden_path.is_file():
+        return [f'capture {capture} has no committed golden']
+    frame = replayed['frames'].get(capture)
+    if frame is None:
+        return [f'capture {capture} has no replayed frame']
+    try:
+        dump = json.loads((Path(replayed.get('out') or WORK / name / 'reference') / f'{capture}.display.json')
+                          .read_text(encoding='utf-8'))
+        scene = nodes.normalize_reference(dump)
+    except (OSError, ValueError) as error:
+        return [f'capture {capture} replayed no readable display list ({error})']
+    scene['frame'] = frame
+    golden = json.loads(golden_path.read_text(encoding='utf-8'))
+    scene = _tag_original_effects(scene, effects_of(name, capture))
+    shared = scene_exclusions(case, name, capture, golden, scene)
+    # `check` fails on an effect whose rules do not hold; refusing only when the scene has
+    # no differences would drop the effect and mask its bounds.
+    differences = [f'{effect}: {"; ".join(how["problems"])}'
+                   for effect, how in shared['effects'].items() if not how['passed']]
+    report = nodes.diff(shared['golden'], shared['other'], replayed.get('tolerances'))
+    differences += [f'missing {path}' for path in report['missing']]
+    differences += [f'extra {path}' for path in report['extra']]
+    differences += [f'{item["path"]}: {"; ".join(item["problems"])}' for item in report['mismatches']]
+    # Like `check`, refuse only what `nodes.diff` calls a difference: a hidden golden node
+    # the replay does not build is not missing (`matched < reference_nodes`).
+    if not differences:
+        return []
+    return [f'capture {capture} scene differs: ' + '; '.join(differences[:5])]
+
+
+def verify_reference_goldens(name, replay, meta=None):
+    """Fail unless the committed goldens describe the same case, SWF, capture frames and scene
+    as the replay, so the local reference PNGs can stand in for the goldens' original capture.
+
+    The scene is rebuilt from the replayed display lists exactly as `record` makes the goldens,
+    then diffed with the same node diff as `check` (it reads display-list paths and fields, not
+    the per-run Ruffle `name`). A different player build is accepted when its scene matches:
+    the meta's player recorded the golden, and scene equality is the evidence.
+    """
+    if meta is None:
+        meta = reference_meta(name, replay['case_path'], replay['swf_sha256'])
+    case = json.loads(Path(replay['case_path']).read_text(encoding='utf-8'))
+    replay = dict(replay, tolerances=case.get('tolerances'))
+    problems = []
+    frames = meta.get('frames') or {}
+    for capture in replay['captures']:
+        recorded, replayed = frames.get(capture), replay['frames'].get(capture)
+        if recorded != replayed:
+            problems.append(f'capture {capture} is at frame {recorded}, replayed {replayed}')
+            continue
+        problems += _scene_problems(case, name, GOLDENS / name / f'{capture}.json', capture, replay)
+    if problems:
+        raise SystemExit(f'{name}: the reference would not correspond to the golden: ' + '; '.join(problems))
+    return {'player_sha256': replay.get('player_sha256'),
+            'player_matches': replay.get('player_sha256') == meta.get('player_sha256')}
+
+
+def write_reference_provenance(out, case_path, replay, captures, golden_dir):
+    """The local reference's provenance, checked by `check` before it uses the PNGs."""
+    provenance = {'case_sha256': reference_sha256(case_path), 'swf_sha256': replay['swf_sha256'],
+                  'player_sha256': replay.get('player_sha256'),
+                  'frames': {capture: replay['frames'][capture] for capture in captures},
+                  'golden_sha256': {capture: sha256(golden_dir / f'{capture}.json') for capture in captures}}
+    (out / 'reference.json').write_text(json.dumps(provenance, indent=1, sort_keys=True) + '\n', encoding='utf-8')
+
+
+def record(name, player, swf, reference_only=False):
+    if reference_only:
+        case_path, _case, captures = load_case(name)
+        if not swf.is_file():
+            raise SystemExit(f'record needs the SWF at {swf} (pass --swf)')
+        meta = reference_meta(name, case_path, sha256(swf))
+        out, tmp = WORK / name / 'reference', WORK / name / 'reference.tmp'
+        old = WORK / name / 'reference.old'
+        shutil.rmtree(tmp, ignore_errors=True)
+        try:
+            replay = replay_case(name, player, swf, out=tmp)
+            verified = verify_reference_goldens(name, replay, meta)
+            write_reference_provenance(tmp, case_path, replay, captures, GOLDENS / name)
+            # Swap the verified replay in only now; restore the old reference if the swap fails.
+            shutil.rmtree(old, ignore_errors=True)
+            if out.exists() or out.is_symlink():
+                out.rename(old)
+            try:
+                tmp.rename(out)
+            except BaseException:
+                if old.exists():
+                    old.rename(out)
+                raise
+            shutil.rmtree(old, ignore_errors=True)
+        except BaseException:
+            shutil.rmtree(tmp, ignore_errors=True)
+            raise
+        try:
+            shown = out.relative_to(ROOT)
+        except ValueError:
+            shown = out
+        print(f'recorded reference for {name}: {len(captures)} capture(s) in {shown}')
+        if not verified['player_matches']:
+            print(f'  reference player {str(verified["player_sha256"])[:12]}… differs from the golden\'s '
+                  f'{str(meta.get("player_sha256"))[:12]}…; scene matches, accepting')
+        return
+    replay = replay_case(name, player, swf)
+    case_path, captures, frames = replay['case_path'], replay['captures'], replay['frames']
+    out = replay['out']
     target = GOLDENS / name
     target.mkdir(parents=True, exist_ok=True)
     for capture in captures:
@@ -101,10 +334,11 @@ def record(name, player, swf):
         golden = nodes.normalize_reference(dump)
         golden['frame'] = frames[capture]
         (target / f'{capture}.json').write_text(json.dumps(golden, indent=1, sort_keys=True) + '\n', encoding='utf-8')
-    meta = {'case': name, 'case_sha256': sha256(case_path), 'swf_sha256': sha256(swf),
-            'player_sha256': sha256(player), 'fps': fps, 'frames': frames,
+    meta = {'case': name, 'case_sha256': reference_sha256(case_path), 'swf_sha256': replay['swf_sha256'],
+            'player_sha256': replay['player_sha256'], 'fps': replay['fps'], 'frames': frames,
             'note': 'Recorded by tools/compare/compare.py record; regenerate rather than edit.'}
     (target / 'meta.json').write_text(json.dumps(meta, indent=1, sort_keys=True) + '\n', encoding='utf-8')
+    write_reference_provenance(out, case_path, replay, captures, target)
     print(f'recorded {name}: {len(captures)} capture(s), goldens in {target.relative_to(ROOT)}')
 
 
@@ -124,12 +358,81 @@ def run_godot(name, case_path, godot, fps):
     return out
 
 
+CEILING_MARGIN = {'ssim': 0.02, 'delta_e': 2.0}
+
+
+def reference_3x_player(path):
+    """The player build that rendered a 3× image, from the screen's `reference-3x.json`
+    (`record_screen.py record_reference_3x`). None for images recorded before it."""
+    manifest = path.parent / 'reference-3x.json'
+    if not manifest.is_file():
+        return None
+    try:
+        images = json.loads(manifest.read_text(encoding='utf-8')).get('images') or {}
+    except (OSError, ValueError):
+        return None
+    entry = images.get(path.name)
+    if isinstance(entry, dict):
+        return entry.get('player_sha256')
+    return entry if isinstance(entry, str) else None
+
+
+def resampling_ceiling(case, capture, reference_png):
+    """How close the original's own 3× frame of this capture, scaled to 1×, comes to its 1×
+    frame. The art pack keeps that 3× frame (record_screen.py art). None without the pack."""
+    from PIL import Image
+    big = None
+    for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
+        layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if 'screen' not in layout:
+            continue  # localization.json
+        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+            big = ROOT / 'original' / 'screens' / layout['screen'] / 'reference-3x.png'
+    if big is None or not big.is_file():
+        big = next(iter((ROOT / 'original' / 'screens').glob(f'*/reference-3x-{case}-{capture}.png')), None)
+    if big is None or not big.is_file():
+        return None
+    # The ceiling only means the current build's render if the 3× image came from it.
+    rendered_by = reference_3x_player(big)
+    provenance = WORK / case / 'reference' / 'reference.json'
+    reference_by = None
+    if provenance.is_file():
+        try:
+            reference_by = json.loads(provenance.read_text(encoding='utf-8')).get('player_sha256')
+        except (OSError, ValueError):
+            reference_by = None
+    if not rendered_by:
+        print(f'  note: {big.name}: 3x ceiling image has no recorded player; it may compare builds')
+    elif not reference_by:
+        print(f'  note: {big.name}: reference player unknown; the 3x ceiling may compare builds')
+    elif rendered_by != reference_by:
+        print(f'  note: {big.name} was rendered by reference player {rendered_by[:12]}…, the reference '
+              f'capture by {reference_by[:12]}…; the 3×→1× ceiling compares different player builds')
+    small = WORK / case / f'{capture}-reference-3x-to-1x.png'
+    Image.open(big).convert('RGB').resize((700, 510), Image.LANCZOS).save(small)
+    _, masks = owner_edits(case, capture)
+    # The 3× frame shows the localised fields (record_screen.py `localize`), the 1× one not.
+    golden = json.loads((GOLDENS / case / f'{capture}.json').read_text(encoding='utf-8'))
+    masks = masks + localize_golden(golden)[1]
+    result = pixels.compare(reference_png, small, WORK / case / f'{capture}-ceiling-heatmap.png', masks=masks)
+    return {k: result[k] for k in ('ssim', 'max_region_delta_e')}
+
+
 def owner_edits(case, capture):
     """Owner edits of the screen recorded by this capture (from its generated layout), and
     the stage rectangles they change: original and new places, excluded from pixels."""
     for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
         layout = json.loads(layout_path.read_text(encoding='utf-8'))
-        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+        if 'screen' not in layout:
+            continue  # localization.json
+        golden = layout.get('source', {}).get('golden', '')
+        # The screen's main capture, another capture of the same screen (a dropdown open), or
+        # a capture of a case that names the screen it shows (`screen`: the gameplay screen
+        # later in the round).
+        other = golden.startswith(f'tests/goldens/{case}/') and any(
+            n.get('from_capture') == capture for n in layout.get('nodes', []))
+        named = load_case(case)[1].get('screen') == layout.get('screen')
+        if golden == f'tests/goldens/{case}/{capture}.json' or other or named:
             edits = layout.get('owner_edits', {})
             masks = []
             for info in edits.get('removed', {}).values():
@@ -143,6 +446,57 @@ def owner_edits(case, capture):
     return {}, []
 
 
+def localize_golden(golden):
+    """The golden as the original shows it with its branding system: each NewTransText field
+    still showing its authoring placeholder gets its en-US text (layout.py `_localized_text`,
+    which the layouts and the art use too). The local 1× reference capture still shows the
+    placeholder, so each such field's place is left out of the pixel score (returned)."""
+    sys.path.insert(0, str(HERE.parent / 'convert'))
+    from layout import _localized_text
+    by_path = {n['path']: n for n in golden['nodes']}
+    nodes, masks = [], []
+    for n in golden['nodes']:
+        text = _localized_text(n, by_path.get(n['path'].rsplit('/', 1)[0]))
+        if text is not None:
+            n = dict(n, text=text)
+            if n.get('effective_visible') and n.get('render_bounds'):
+                masks.append(n['render_bounds'])
+        nodes.append(n)
+    return dict(golden, nodes=nodes), masks
+
+
+def effects_of(case, capture):
+    """The run-time effects (`effects`, layout.py) of the screen this capture records."""
+    for layout_path in sorted((ROOT / 'scenes' / 'swf').glob('*.json')):
+        layout = json.loads(layout_path.read_text(encoding='utf-8'))
+        if 'screen' not in layout:
+            continue  # localization.json
+        if layout.get('source', {}).get('golden') == f'tests/goldens/{case}/{capture}.json':
+            return layout.get('effects', {})
+    return {}
+
+
+def reference_provenance_problem(name, capture, case_path, meta, golden_path):
+    """Why the local reference cannot stand in for this golden, or None when it can."""
+    path = WORK / name / 'reference' / 'reference.json'
+    if not path.is_file():
+        return 'reference.json is missing'
+    try:
+        provenance = json.loads(path.read_text(encoding='utf-8'))
+    except (OSError, ValueError):
+        return 'reference.json is unreadable'
+    if provenance.get('case_sha256') != reference_sha256(case_path):
+        return 'the case changed since the reference was recorded (case_sha256)'
+    frames, golden_frames = provenance.get('frames') or {}, meta.get('frames') or {}
+    if frames.get(capture) != golden_frames.get(capture):
+        return (f'the reference is at frame {frames.get(capture)}, the golden at '
+                f'{golden_frames.get(capture)} (frames)')
+    recorded = (provenance.get('golden_sha256') or {}).get(capture)
+    if recorded != sha256(golden_path):
+        return 'the committed golden changed since the reference was recorded (golden_sha256)'
+    return None
+
+
 def check(name, godot):
     case_path, case, captures = load_case(name)
     golden_dir = GOLDENS / name
@@ -150,7 +504,7 @@ def check(name, godot):
     if not meta_path.is_file():
         raise SystemExit(f'No goldens for {name}; run `compare.py record {name}` on a machine with the SWF')
     meta = json.loads(meta_path.read_text(encoding='utf-8'))
-    if meta['case_sha256'] != sha256(case_path):
+    if meta['case_sha256'] not in (reference_sha256(case_path), sha256(case_path)):
         raise SystemExit(f'{name}: the case changed since its goldens were recorded; record again')
     floor_path = golden_dir / 'floor.json'
     floor = json.loads(floor_path.read_text(encoding='utf-8')) if floor_path.is_file() else {}
@@ -161,18 +515,70 @@ def check(name, godot):
         actual = json.loads((out / f'{capture}.nodes.json').read_text(encoding='utf-8'))
         edits, masks = owner_edits(name, capture)
         golden = nodes.apply_owner_edits(golden, edits)
+        golden, placeholder_masks = localize_golden(golden)
+        masks = masks + placeholder_masks
+        # What neither side can reproduce (a screen's random effects, and the text, clip frames
+        # and alpha the original drives on the host clock) is taken out of both sides here and
+        # out of the pixel score. Reference verification makes the same exclusions.
+        shared = scene_exclusions(case, name, capture, golden, actual)
+        golden, actual = shared['golden'], shared['other']
+        effects = shared['effects']
+        masks = masks + shared['masks']
+        # A filter the reference player cannot draw (Ruffle's wgpu backend skips GradientGlowFilter
+        # and GradientBevelFilter: the invincible robot's colour cycle) is drawn by Godot only;
+        # its node's place is left out of the pixel score.
+        unrendered = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
+                      and any(f.get('type') in UNRENDERED_FILTERS for f in n.get('filter_list') or [])]
+        masks = masks + [n['render_bounds'] for n in unrendered]
+        # Flash applies a clip's alpha to each shape inside it, so overlapping shapes add up;
+        # a baked image fades as one. Where the case says so (`composite_alpha`), a faded
+        # baked node's place is left out of the pixel score (its alpha is still compared).
+        if case.get('composite_alpha'):
+            baked = {n['path'] for n in actual['nodes'] if n.get('baked')}
+            faded = [n for n in golden['nodes'] if n.get('effective_visible') and n.get('render_bounds')
+                     and n.get('alpha', 1.0) < 1.0 and n['path'] in baked]
+            masks = masks + [n['render_bounds'] for n in faded]
+        else:
+            faded = []
         entry = {'node': nodes.diff(golden, actual, case.get('tolerances'))}
+        if unrendered:
+            entry['unrendered_filters'] = sorted(n['path'] for n in unrendered)
+        if faded:
+            entry['composite_alpha'] = sorted(n['path'] for n in faded)
+        if shared['wall_clock_text']:
+            entry['wall_clock_text'] = sorted(shared['wall_clock_text'])
+        if shared['wall_clock_frame']:
+            entry['wall_clock_frame'] = sorted(shared['wall_clock_frame'])
+        if shared['wall_clock_alpha']:
+            entry['wall_clock_alpha'] = sorted(shared['wall_clock_alpha'])
+        if effects:
+            entry['effects'] = {k: {f: v[f] for f in ('original', 'godot', 'problems', 'passed')} for k, v in effects.items()}
+            entry['node']['passed'] &= all(e['passed'] for e in effects.values())
         if edits.get('removed') or edits.get('moved'):
             entry['owner_edits'] = {'removed': sorted(edits.get('removed', {})), 'moved': sorted(edits.get('moved', {}))}
         reference_png = WORK / name / 'reference' / f'{capture}.png'
         if reference_png.is_file():
-            thresholds = dict(case.get('thresholds', {}))
-            if capture in floor:
-                base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
-                thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
-                thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
-            entry['pixel'] = pixels.compare(reference_png, out / f'{capture}.png',
-                                            WORK / name / f'{capture}-heatmap.png', thresholds, masks)
+            stale = reference_provenance_problem(name, capture, case_path, meta, golden_dir / f'{capture}.json')
+            if stale:
+                entry['pixel'] = {'passed': None,
+                                  'skipped': 'local reference is stale or unverified: re-run record --reference-only',
+                                  'reason': stale}
+            else:
+                thresholds = dict(case.get('thresholds', {}))
+                ceiling = resampling_ceiling(name, capture, reference_png)
+                if ceiling:
+                    # No 3× pipeline can beat the original's own 3× render scaled to 1×.
+                    base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
+                    thresholds['ssim'] = min(base['ssim'], ceiling['ssim'] - CEILING_MARGIN['ssim'])
+                    thresholds['delta_e'] = max(base['delta_e'], ceiling['max_region_delta_e'] + CEILING_MARGIN['delta_e'])
+                if capture in floor:
+                    base = dict(pixels.DEFAULT_THRESHOLDS, **thresholds)
+                    thresholds['ssim'] = max(base['ssim'], floor[capture]['ssim'] - FLOOR_SLACK['ssim'])
+                    thresholds['delta_e'] = min(base['delta_e'], floor[capture]['max_region_delta_e'] + FLOOR_SLACK['delta_e'])
+                entry['pixel'] = pixels.compare(reference_png, out / f'{capture}.png',
+                                                WORK / name / f'{capture}-heatmap.png', thresholds, masks)
+                if ceiling:
+                    entry['pixel']['ceiling'] = ceiling
         else:
             entry['pixel'] = {'passed': None, 'skipped': 'no local reference capture (record on the SWF machine)'}
         report['captures'][capture] = entry
@@ -197,13 +603,25 @@ def print_report(report):
             print(f'    {item["path"]}: {"; ".join(item["problems"])}')
         for path in n['missing'][:5]:
             print(f'    missing {path}')
+        if entry.get('wall_clock_text'):
+            print(f'  {capture}: text on the wall clock not compared: {", ".join(entry["wall_clock_text"])}')
+        if entry.get('wall_clock_frame'):
+            print(f'  {capture}: clip frame on the wall clock not compared: {", ".join(entry["wall_clock_frame"])}')
+        if entry.get('wall_clock_alpha'):
+            print(f'  {capture}: alpha on the wall clock not compared: {", ".join(entry["wall_clock_alpha"])}')
+        for effect, e in entry.get('effects', {}).items():
+            print(f'  {capture}: {effect}: {e["godot"]} in Godot, {e["original"]} in the original, '
+                  f'{"by its rules" if e["passed"] else "off: " + "; ".join(e["problems"][:5])} (excluded from the pixel score)')
         if p.get('skipped'):
             print(f'    pixels skipped: {p["skipped"]}')
+            if p.get('reason'):
+                print(f'    why: {p["reason"]}')
         elif 'error' in p:
             print(f'    pixels: {p["error"]}')
         else:
             print(f'    pixels: SSIM {p["ssim"]} (need {p["thresholds"]["ssim"]:.4g}), max region ΔE '
-                  f'{p["max_region_delta_e"]} (need ≤ {p["thresholds"]["delta_e"]:.4g}), heatmap {capture}-heatmap.png')
+                  f'{p["max_region_delta_e"]} (need ≤ {p["thresholds"]["delta_e"]:.4g}), heatmap {capture}-heatmap.png'
+                  + (f'; 3×→1× ceiling SSIM {p["ceiling"]["ssim"]}, ΔE {p["ceiling"]["max_region_delta_e"]}' if p.get('ceiling') else ''))
 
 
 def accept(name):
@@ -228,11 +646,15 @@ def main():
     parser.add_argument('--player', type=Path, default=default_player())
     parser.add_argument('--swf', type=Path, default=DEFAULT_SWF)
     parser.add_argument('--godot', default=default_godot())
+    parser.add_argument('--reference-only', action='store_true',
+                        help='record only the local reference capture; leave tests/goldens untouched')
     args = parser.parse_args()
     if args.action != 'all' and not args.case:
         parser.error('this action needs a case')
+    if args.reference_only and args.action != 'record':
+        parser.error('--reference-only is only valid with record')
     if args.action == 'record':
-        record(args.case, args.player, args.swf)
+        record(args.case, args.player, args.swf, reference_only=args.reference_only)
         return 0
     if args.action == 'accept':
         accept(args.case)

@@ -16,7 +16,8 @@ DEFAULT_TOLERANCES = {
 GOLDEN_FIELDS = ('path', 'kind', 'class', 'character_id', 'depth', 'name', 'effective_visible',
                  'alpha', 'stage_matrix', 'stage_bounds', 'frame', 'total_frames', 'label',
                  'button_state', 'text', 'color_transform', 'blend_mode', 'filters',
-                 'clip_depth', 'mask', 'scroll_rect', 'render_bounds')
+                 'clip_depth', 'mask', 'scroll_rect', 'render_bounds', 'text_format',
+                 'filter_list')
 # Mask relationships must match exactly: which node is a timeline mask (clip_depth),
 # which sibling mask clips a node (clip_mask), and which node an AS3 `mask` names.
 MASK_FIELDS = ('clip_depth', 'clip_mask', 'mask')
@@ -74,13 +75,32 @@ def _angle(a, b):
     return abs((a - b + 180) % 360 - 180)
 
 
+def _segments_equal(a, b):
+    """`@N` names an only child at depth N; when another child joins that depth (the
+    map-loading screen next to the HUD) the same child is `@N#0`."""
+    return a == b or (a.startswith('@') and '#' not in a and b == a + '#0') or \
+        (b.startswith('@') and '#' not in b and a == b + '#0')
+
+
+def _under(path, top):
+    """`path` is `top` or inside it, by display-list segments."""
+    p, t = path.split('/'), top.split('/')
+    return len(p) >= len(t) and all(_segments_equal(x, y) for x, y in zip(p, t))
+
+
+def path_endswith(path, suffix):
+    """`path` ends with the display-list segments of `suffix` (`@N` matching `@N#0`)."""
+    p, t = path.split('/'), suffix.lstrip('/').split('/')
+    return len(p) >= len(t) and all(_segments_equal(x, y) for x, y in zip(p[-len(t):], t))
+
+
 def apply_owner_edits(golden, edits):
     """The golden as the owner wants it: removed subtrees dropped, moved ones shifted."""
     removed, moved = edits.get('removed', {}), edits.get('moved', {})
     nodes = []
     for node in golden['nodes']:
         path = node['path']
-        if any(path == r or path.startswith(r + '/') for r in removed):
+        if any(_under(path, r) for r in removed):
             continue
         for m, info in moved.items():
             if path == m or path.startswith(m + '/'):
@@ -94,6 +114,59 @@ def apply_owner_edits(golden, edits):
     return dict(golden, nodes=nodes)
 
 
+# Rules of the run-time effects a screen's port makes at random, which cannot match the
+# original one to one (its Math.random state at the screen is not reproducible).
+# FallSnow (zlong.bombit5.ui.FallSnow, scripts/ui/fall_snow.gd): `creatSnow` gives each
+# Bitmap a colour from `_colorArr` (ColorTransform.color: multipliers 0, offsets the
+# colour), x int(random * 710), y int(random * 20), rotation random * 180 and one random
+# scale; `enterFrameHandle` adds 1 to y each frame and removes it past y 500 or x 710.
+EFFECT_RULES = {
+    'FallSnow': {'colours': (10089983, 16777113, 16711782, 6736998, 26367, 11796326),
+                 'max_x': 710, 'max_y': 500},
+}
+
+
+def split_effects(golden, godot, effects):
+    """Take the nodes of a screen's random effects out of both sides, and check each side's
+    against the effect's rules (from the AS3) and the two counts against each other.
+    `effects` is the layout's: {effect: {'nodes': {golden path: ...}}}; Godot marks its
+    effect nodes with `effect`."""
+    report = {}
+    paths = {p for how in effects.values() for p in how.get('nodes', {})}
+    ref_nodes = [n for n in golden['nodes'] if n['path'] in paths]
+    got_nodes = [n for n in godot['nodes'] if n.get('effect')]
+    for effect in effects:
+        rules = EFFECT_RULES[effect]
+        ref = [n for n in ref_nodes if n['path'] in effects[effect].get('nodes', {})]
+        got = [n for n in got_nodes if n['effect'] == effect and n.get('effective_visible')]
+        problems = [f'{side} {n["path"]}: {p}' for side, group in (('original', ref), ('godot', got))
+                    for n in group for p in _effect_problems(n, rules)]
+        if len(ref) != len(got):
+            problems.append(f'{len(got)} shown in Godot, {len(ref)} in the original')
+        report[effect] = {'original': len(ref), 'godot': len(got), 'problems': problems, 'passed': not problems,
+                          'bounds': [n['render_bounds'] for n in ref + got if n.get('render_bounds')]}
+    golden = dict(golden, nodes=[n for n in golden['nodes'] if n['path'] not in paths])
+    godot = dict(godot, nodes=[n for n in godot['nodes'] if not n.get('effect')])
+    return golden, godot, report
+
+
+def _effect_problems(node, rules):
+    problems = []
+    m = decompose(node['stage_matrix'])
+    ct = node.get('color_transform') or {}
+    add, mult = ct.get('add', [0, 0, 0, 0]), ct.get('mult', [1, 1, 1, 1])
+    colour = (int(add[0]) << 16) | (int(add[1]) << 8) | int(add[2])
+    if any(abs(v) > 1e-6 for v in mult[:3]) or colour not in rules['colours']:
+        problems.append(f'colour transform {ct} is not one of _colorArr')
+    if not (0.0 <= m['sx'] < 1.0) or abs(m['sx'] - abs(m['sy'])) > 1e-3:
+        problems.append(f'scale {m["sx"]:.4g} x {m["sy"]:.4g} is not one random scale in [0, 1)')
+    if m['sx'] > 1e-3 and not (-1e-3 <= m['rotation'] % 360 < 180 + 1e-3):
+        problems.append(f'rotation {m["rotation"]:.4g} is not in [0, 180)')
+    if not (0 <= m['y'] <= rules['max_y']) or m['x'] > rules['max_x']:
+        problems.append(f'at ({m["x"]:.4g}, {m["y"]:.4g}), where it would have been removed')
+    return problems
+
+
 def diff(golden, godot, tolerances=None):
     """Return a report: matched/missing/extra paths and every out-of-tolerance field."""
     tol = dict(DEFAULT_TOLERANCES, **(tolerances or {}))
@@ -101,17 +174,26 @@ def diff(golden, godot, tolerances=None):
     actual = {}
     for node in godot['nodes']:
         if node['path'] in actual:
-            raise ValueError(f'duplicate swf_path in Godot scene: {node["path"]}')
+            # Alternatives that share an original path (each robot's panel at the same depth)
+            # are fine while at most one shows; that one is compared.
+            if actual[node['path']].get('effective_visible') and node.get('effective_visible'):
+                raise ValueError(f'duplicate swf_path in Godot scene: {node["path"]}')
+            if not node.get('effective_visible'):
+                continue
         actual[node['path']] = node
     baked = [p for p, n in actual.items() if n.get('baked')]
+    # Parts a group widget draws in its frame art (robotStage1's highlight shapes).
+    drawn = [c for n in actual.values() for c in n.get('covers', ())]
 
     def covered(path):
-        return any(path.startswith(b + '/') for b in baked)
+        return any(path.startswith(b + '/') for b in baked) or any(path == c or path.startswith(c + '/') for c in drawn)
 
     required = [p for p, n in reference.items() if n.get('kind') != 'stage' and not covered(p)]
     # Hidden reference nodes only need checking when Godot builds them too.
     missing = [p for p in required if p not in actual and reference[p].get('effective_visible')]
-    extra = [p for p in actual if p not in reference]
+    # A Godot node the original does not have counts only if it shows (a closed dropdown
+    # that the original keeps off its display list is fine while hidden).
+    extra = [p for p in actual if p not in reference and actual[p].get('effective_visible')]
     mismatches = []
     worst = {'position': 0.0, 'scale': 0.0, 'rotation': 0.0, 'alpha': 0.0}
     for path in required:

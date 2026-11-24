@@ -1,9 +1,10 @@
 extends Node2D
-## Scene host: one scheduler, committed state, original procedural presentation.
+## Scene host: one scheduler, committed state, keyboard input and the round's flow. It draws
+## nothing itself: the app shows the round on the generated gameplay screen (App._game_screen),
+## with `swf_view` (scripts/game_view.gd) for what has no original art yet.
 
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const Scheduler = preload("res://scripts/simulation/tick_scheduler.gd")
-const TouchControls = preload("res://scripts/touch_controls.gd")
 const GameView = preload("res://scripts/game_view.gd")
 const AIController = preload("res://scripts/simulation/ai_controller.gd")
 const VisualSkin = preload("res://scripts/art/skin.gd")
@@ -15,12 +16,8 @@ const StageSets = preload("res://scripts/simulation/stage_sets.gd")
 const Modes = preload("res://scripts/simulation/modes/modes.gd")
 const SaveStore = preload("res://scripts/save_store.gd")
 const Fidelity = preload("res://scripts/fidelity.gd")
-const ReplicaLayout = preload("res://scripts/replica_layout.gd")
-const ReplicaScenery = preload("res://scripts/replica_scenery.gd")
-const ReplicaHud = preload("res://scripts/replica_hud.gd")
 const Audio = preload("res://scripts/original_audio.gd")
-const UiKit = preload("res://scripts/ui_kit.gd")
-const Quality = preload("res://scripts/quality.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 const ACTORS: Array[StringName] = [&"human", &"ruby", &"mint", &"gold"]
 ## Seat robots for the standalone match (Blue, Ruby, Mint, Gold); a session chooses its own.
 const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
@@ -28,20 +25,23 @@ const DEFAULT_ROBOTS: Array[int] = [0, 1, 6, 3]
 ## A session-driven level finished its ending; the host shows the score screen.
 signal level_settled(snapshot: Dictionary)
 signal main_menu_requested
+## The round paused or resumed (`doGamePause` / `gameResume`): the generated gameplay
+## screen shows the original pause screen (App, scripts/ui/pause_ui.gd).
+signal pause_changed(is_paused: bool)
 
 var simulation: RefCounted
 var scheduler: Node
+## The frame-locked comparison keeps its scheduler out of the tree (see `_start_round`), so
+## `_exit_tree` has to free it itself.
+var _scheduler_detached := false
 var state: Dictionary
 var practice := true
 var paused := false
 var held: Array[int] = []
-var buttons: Dictionary = {}
-var touch_controls: Node2D
 var ai: RefCounted
 var session_lives := 3
 var total_score := 0
 var result_credited := false
-var view: Node2D
 var visual_skin: RefCounted
 var stage_set: StringName = &""
 ## Set before entering the tree: a session drives levels and hides development controls.
@@ -49,16 +49,17 @@ var session: RefCounted = null
 var auto_start := true
 ## Desktop key per action (up/left/down/right/bomb); the app supplies saved bindings.
 var bindings: Dictionary = SaveStore.DEFAULT_KEYS.duplicate()
-## The replica page (ReplicaLayout) under the `original` profile, fixed when the node is ready.
+## The `original` fidelity profile (frame-driven steps, HitMove, the Date clock), fixed when
+## the node is ready.
 var replica := false
-var scenery: Node2D
-var hud: Node2D
-## Tests pin the safe area; otherwise it is read from the display every frame.
-var safe_area_override := Rect2()
 ## The step before `state`, for drawing between steps (#79); never fed back to the round.
 var previous_state: Dictionary = {}
 ## The replica round clock's second source (#80): the wall clock unless checks inject one.
 static var seconds_source: Callable
+## The comparison loop steps the host itself (`capture_step`, one call per captured frame):
+## the round must not gain ticks while a window's draw is delayed or occluded, or the whole
+## board clock (the Cinema screen's film, bomb ages) lands later than the golden.
+static var capture_clock := false
 ## Original pause (#81, `Game.gamePause`): the request takes effect `PAUSE_DELAY_STEPS` steps
 ## later (`setTimeout(doGamePause, 100)`); -1 when none is pending.
 const PAUSE_DELAY_STEPS := 4
@@ -66,64 +67,36 @@ var pause_after := -1
 ## Wall clock in milliseconds for paused time; checks inject one.
 static var msec_source: Callable
 var _paused_at_msec := 0
+## The generated gameplay screen (App._game_screen): its placeholder actors view, drawn in
+## the screen's board container, and what the screen reads from each snapshot (the
+## board's boxes, GameInterFace's fields).
+var swf_view: Node2D
+## The placeholder board (a stage set whose board art is not in the pack), under the row layers.
+var swf_board_view: Node2D
+var _swf_present: Callable
+## Frames before the round's first step: the original builds the map one row per
+## Timer(100) tick under its loading screen and starts the round 100 ms after
+## (`MapMaster.timerHandle`, `Game.firstMapLoadOver`); the recorded number of frames
+## (layout `board.round_start_after_input`).
+var start_delay := 0:
+	set(frames):
+		start_delay = frames
+		_delay_from = Engine.get_process_frames()
+var _delay_from := -1
+## A recorded board for the next round (the comparison loop's `round` action).
+var recorded_board: Dictionary = {}
+## The original's `Math.random` (scripts/simulation/avm_random.gd) the round draws from; the
+## app shares its own (`App.math_random`). Unset, the round uses Godot's generator.
+var math_random: RefCounted
+## The generated gameplay screen shows the original pause screen: the page's own pause
+## art and buttons stay hidden.
+var swf_pause := false
+const AvmRandom = preload("res://scripts/simulation/avm_random.gd")
 
 
 func _ready() -> void:
 	if visual_skin == null: visual_skin = VisualSkin.new()
-	view = GameView.new()
-	view.skin = visual_skin
-	add_child(view)
 	replica = Fidelity.original
-	if replica:
-		view.compact = true
-		view.scale = Vector2.ONE * ReplicaLayout.view_scale()
-		view.position = ReplicaLayout.view_position()
-		scenery = ReplicaScenery.new()
-		scenery.name = "Scenery"
-		scenery.skin = visual_skin
-		add_child(scenery)
-	touch_controls = TouchControls.new()
-	touch_controls.skin = visual_skin
-	touch_controls.replica = Fidelity.original
-	add_child(touch_controls)
-	touch_controls.direction_changed.connect(func(direction: Vector2):
-		if is_instance_valid(scheduler): scheduler.set_direction(&"human", direction))
-	touch_controls.bomb_event.connect(func(event: StringName):
-		if is_instance_valid(scheduler): scheduler.enqueue_bomb_event(&"human", event))
-	if replica:
-		hud = ReplicaHud.new()
-		hud.name = "Hud"
-		hud.skin = visual_skin
-		hud.pause_pressed.connect(toggle_pause)
-		add_child(hud)
-	_make_button("match", "START MATCH", Vector2(1010, 100), func(): start_session(false))
-	_make_button("practice", "PRACTICE", Vector2(1010, 148), func(): start_session(true))
-	_make_button("pause", "PAUSE", Vector2(1010, 220), toggle_pause)
-	_make_button("reset", "RESET", Vector2(1010, 268), retry_round)
-	_make_button("menu", "MAIN MENU", Vector2(1010, 268), func(): main_menu_requested.emit())
-	buttons.menu.visible = false
-	if session != null or replica:
-		for key in ["match", "practice", "reset"]: buttons[key].visible = false
-	if replica:
-		# Development and caption-free page: pause comes from the pause icon (#91) and P;
-		# RESUME and MAIN MENU appear only on the pause overlay over the map centre.
-		buttons.pause.visible = false
-		_place_pause_button(buttons.pause, hud.pause_to_page(hud.PAUSE_RESUME))
-		_place_pause_button(buttons.menu, hud.pause_to_page(hud.PAUSE_MENU))
-		# The pause screen's own sound and music switches (`PauseUI`); its music switch only
-		# sets the flag, so a resumed round stays silent until music is on again.
-		var audio := Audio.current
-		buttons.quality = UiKit.switch(self, &"PauseQuality", "QUALITY", hud.pause_to_page(hud.PAUSE_QUALITY), Quality.index(),
-			Quality.TITLES.values(), func(_frame: int):
-				Quality.cycle()
-				Quality.apply(get_viewport()), visual_skin, "ui.quality_switch")
-		buttons.sound = UiKit.switch(self, &"PauseSound", "SOUND", hud.pause_to_page(hud.PAUSE_SOUND), 0 if audio == null or audio.sound_on else 1,
-			["ON", "OFF"], func(frame: int): if Audio.current != null: Audio.current.set_sound(frame == 0), visual_skin, "ui.sound_switch")
-		buttons.music = UiKit.switch(self, &"PauseMusic", "MUSIC", hud.pause_to_page(hud.PAUSE_MUSIC), 0 if audio == null or audio.music_on else 1,
-			["ON", "OFF"], func(frame: int): if Audio.current != null: Audio.current.set_music(frame == 0, false), visual_skin, "ui.music_switch")
-		for key in ["quality", "sound", "music"]:
-			if hud.pause_art(): UiKit.ghost(buttons[key])
-			buttons[key].visible = false
 	if auto_start: start_session(true)
 
 
@@ -157,6 +130,7 @@ func retry_round() -> void:
 func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	if is_instance_valid(scheduler):
 		scheduler.free()
+	_scheduler_detached = false
 	practice = is_practice
 	paused = false
 	pause_after = -1
@@ -173,15 +147,43 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	var session_seed := Time.get_ticks_msec() if seed_value < 0 else seed_value
 	var mode: RefCounted = Modes.create(mode_name, difficulty, &"cinema")
 	var board: Dictionary
+	var draws: Array = []
+	var round_random: RefCounted = math_random
+	var rolled := false
 	if practice:
 		board = BoardData.load_instance("res://assets/maps/cinema-stage1.csv")
+	elif not recorded_board.is_empty():
+		board = Layouts.recorded(recorded_board.template, recorded_board.boxes)
+		if recorded_board.has("math_random"):
+			var place := _recorded_draws(recorded_board.math_random, board.skin, mode_name == &"pac_man", mode.soft_chance())
+			draws = place.pool
+			round_random = place.random
+			# The map rolled from the original's draws (Layouts.roll_set); it must be the
+			# recorded one.
+			if place.board.is_empty():
+				pass
+			elif place.board.layout == board.layout and place.board.cells == board.cells and place.board.variants == board.variants:
+				board = place.board
+			else:
+				push_error("the map rolled from the recorded draws is not the recorded round's")
+		stage_set = board.skin
+		mode.stage_set = stage_set
+		recorded_board = {}
 	else:
+		rolled = true
 		var rng := RandomNumberGenerator.new()
 		rng.seed = session_seed
 		var choices := StageSets.available_sets()
 		if stage_set == &"": stage_set = choices[rng.randi_range(0, choices.size() - 1)]
 		mode.stage_set = stage_set
-		board = Layouts.roll_set(stage_set, mode_name == &"pac_man", mode.soft_chance(), rng)
+		var map_random: Object = rng
+		if round_random != null and session != null and session.math_random != null:
+			# The original's order from START: `AbstractGameMode.initMap` draws each Vehicle
+			# entry of the drop pool, then the map (`MapMaster`, `<Set>MapData`) is rolled.
+			for index in mode.drop_weights().get(&"vehicle", 0):
+				draws.append(round_random.random())
+			map_random = round_random
+		board = Layouts.roll_set(stage_set, mode_name == &"pac_man", mode.soft_chance(), map_random)
 	for index in roster.size():
 		actors[roster[index]] = {"cell": board.spawns[index], "lives": session_lives if index == 0 else 1, "robot": robots[index]}
 		if session != null:
@@ -193,7 +195,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 			actors[roster[index]].speed = mode.player_speed()
 	simulation = Simulation.new(roster, actors, board.cells,
 		{"movement": true, "damage": true, "portals": board.portals, "round": not practice,
-		"drops": true, "seed": session_seed, "mode": mode, "seconds": _seconds_source() if replica else null, "hit_move": replica, "glove_items": replica,
+		"drops": true, "seed": session_seed, "random_draws": draws, "math_random": round_random, "mode": mode, "seconds": _seconds_source() if replica else null, "hit_move": replica, "glove_items": replica,
 		"vehicles": StageSets.vehicles(board.skin),
 		"features": board.get("features", {}), "center": board.get("center"), "skin": board.skin,
 		"board_meta": {"skin": board.skin, "layout": board.layout, "size": board.size,
@@ -201,24 +203,103 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 			"portal_ids": board.get("portal_ids", {})}})
 	scheduler = Scheduler.new(roster, simulation)
 	scheduler.frame_driven = replica
-	add_child(scheduler)
+	# The comparison loop (`SwfScreen.frame_locked`) steps the scheduler from the capture
+	# driver, without a window the user drives. Keep it out of the tree there: application
+	# focus notifications would otherwise pause it (scripts/simulation/tick_scheduler.gd
+	# `_notification`), freezing the captured round at whatever tick the host stole focus.
+	_scheduler_detached = SwfScreen.frame_locked
+	if not _scheduler_detached: add_child(scheduler)
 	scheduler.set_process(false)
 	ai = AIController.new(session_seed, [], profile)
+	# The AI draws from the round's `Math.random` when the round has the original's.
+	if round_random != null and not practice: ai.math_random = round_random
+	if rolled and round_random != null and session != null and session.math_random != null:
+		_create_ai_players(round_random, roster)
 	if not practice:
 		for id in roster.slice(1):
 			scheduler.set_controller(id, _ai_command.bind(id))
 	state = simulation.snapshot()
 	previous_state = {}
-	if replica: scenery.set_stage(board.skin)
-	touch_controls.enabled = true
-	touch_controls.reset()
-	buttons.pause.text = "PAUSE"
-	buttons.pause.disabled = false
-	if replica: buttons.pause.visible = false
-	buttons.menu.visible = false
-	buttons.reset.text = "RESET" if practice else "TRY AGAIN"
-	buttons.reset.disabled = not practice
 	_refresh()
+
+
+## A rolled round's draws after the map, in the original's order: the player's `updateUI`
+## (`AbstractPlayer.set scoreData`, two draws, traced: tools/compare/round_draws.py), then
+## `AbstractGameMode.createAIPlayer` per AI: clothID `int(random * 7)`, hatID `int(random * 7)`,
+## and its AI from the difficulty's list (`_xml.ai[difficulty].split("|")`; one profile in
+## every mode, so the draw picks nothing). They follow the pool's and the map's draws
+## (`_start_round`, Layouts.roll_set), as in the original.
+func _create_ai_players(random: RefCounted, roster: Array[StringName]) -> void:
+	random.random()
+	random.random()
+	for id in roster.slice(1):
+		var cloth := int(random.random() * 7)
+		var hat := int(random.random() * 7)
+		random.random()
+		var actor: Dictionary = simulation.actors()[id]
+		# `RobotView.setRobotMc` sends the innermost look clips to clothID + 1 / hatID + 1;
+		# past a clip's last frame Flash stays on that clip's last frame, so the draws stay
+		# raw and every clip clamps them to its own grid (GameActors.resolve_look_key).
+		actor.body = cloth
+		actor.hat = hat
+
+
+## Where the original's `Math.random` stands at a recorded round (tests/goldens/<case>/
+## math_random.json, tools/compare/round_draws.py): the drop pool's Vehicle entries were drawn
+## at `pool_draws` (`AbstractGameMode.initMap`), the map right after them (`MapMaster`,
+## `<Set>MapData`: rolled here with Layouts.roll_set), and the round's own draws continue after
+## `draws_before_round` (the menus' and the AI players' draws, which Godot takes from the
+## recording instead). The same seed's generator replays them (checked against the recorded
+## raw draws).
+static func _recorded_draws(record: Dictionary, set_id: StringName, pac_man: bool, soft_chance: float) -> Dictionary:
+	var random: RefCounted = AvmRandom.new(int(record.seed))
+	var pool := []
+	var pool_draws: Array = record.pool_draws.map(func(n): return int(n))
+	var raw: Array = record.get("raw", [])
+	var board := {}
+	var map_from := -1
+	for group: Dictionary in record.get("callers", []):
+		if map_from < 0 and String(group.method).ends_with("MapMaster/init()"): map_from = int(group.first)
+	# The mode's own `mapLoadOver` draws come after the AI players' (`createAIPlayer`):
+	# GreenZoneMode's flag (`AbstractMoveObject.containerMove`) and pickups
+	# (`Map.createRamdonProp`), PacManMode's `itemPosSetting` and items. The round's mode
+	# makes them itself (`begin`), so the generator stops before them.
+	var stop := int(record.draws_before_round)
+	for caller: Dictionary in record.get("callers", []):
+		if String(caller.get("method", "")).contains("AbstractGameMode/createAIPlayer"): stop = int(caller["last"])
+	var ordinal := 0
+	while ordinal < stop:
+		if board.is_empty() and ordinal + 1 == map_from:
+			var counted := CountedRandom.new(random)
+			board = Layouts.roll_set(set_id, pac_man, soft_chance, counted)
+			ordinal += counted.count
+			continue
+		var value: int = random.next_raw()
+		ordinal += 1
+		if ordinal <= raw.size() and int(raw[ordinal - 1]) != value:
+			push_error("the original's draw %d does not match the Math.random port" % ordinal)
+		if ordinal in pool_draws: pool.append(float(value) / 2147483648.0)
+	return {"pool": pool, "random": random, "board": board}
+
+
+## A `Math.random` that counts its draws (how many the map took).
+class CountedRandom extends RefCounted:
+	var source: RefCounted
+	var count := 0
+
+	func _init(from: RefCounted) -> void:
+		source = from
+
+	func random() -> float:
+		count += 1
+		return source.random()
+
+
+## The `Math.random` the round draws from (the original's, for a recorded round from where
+## it stood), shared by the screens made during the round (PauseUI).
+func round_random() -> RefCounted:
+	var source: RefCounted = simulation.random_source() if simulation != null else null
+	return source if source != null else math_random
 
 
 ## `Game.countTime` polls `new Date().getSeconds()`; checks inject a deterministic source.
@@ -235,6 +316,32 @@ func get_snapshot() -> Dictionary:
 		"level": session.level_text() if session != null else ""}
 	result.bindings = bindings
 	return result
+
+
+## The comparison loop only (`ai-stop N`, where the case stops the original's AI with the
+## `ai-control stop` fixture, `AIControl.stop`): the AI robot of seat N gets no more commands.
+func stop_ai(seat: int) -> void:
+	var roster: Array = state.get("actors", {}).keys()
+	if seat <= 0 or seat >= roster.size(): return
+	scheduler.set_controller(roster[seat], func() -> Dictionary: return {"direction": Vector2.ZERO, "bomb_events": []})
+
+
+## The comparison loop only (`pickup KIND`, where the case uses the reference player's `pickup`
+## fixture: the original's pickup class made on the player's cell, `AbstractItem.init`): the
+## pickup lies on the player's cell, and the round's next step collects it.
+func give_pickup(kind: StringName) -> void:
+	var human: Dictionary = simulation.actors()[&"human"]
+	simulation.pickups()[human.cell] = kind
+
+
+## The comparison loop only (`reposition X Y`, where the case uses the reference player's
+## `reposition` fixture: the player's view set to `grid * 30` on empty floor through the
+## original's setters): the player stands on that cell, at rest.
+func reposition_human(cell: Vector2i) -> void:
+	var human: Dictionary = simulation.actors()[&"human"]
+	human.cell = cell
+	human.position = Vector2(cell)
+	human.velocity = Vector2.ZERO
 
 
 func _ai_command(id: StringName) -> Dictionary:
@@ -254,23 +361,52 @@ func advance_time(seconds: float) -> void:
 				_begin_original_pause()
 				return
 		if state.get("round_stage") == &"ending":
-			touch_controls.enabled = false
-			touch_controls.reset()
 			held.clear()
+		if not state.actors[&"human"].alive:
+			# `AbstractRobot.kill` → `RobotController.robotStop` → `PersonInteractiveController.
+			# stopMoveListener` removes the movement listeners and `clearMoveStage` clears the
+			# held flags; `RobotController.clearMovStage` drops `movArr` and the movement callback.
+			# The scene's `held` and the scheduler's held direction stand in for that stage, so a
+			# key released while the listener is gone must not stay latched: `relive` starts from
+			# `moveStop`, and `movement_rearm` waits for that stop before a fresh press moves.
+			held.clear()
+			scheduler.set_direction(&"human", Vector2.ZERO)
+		elif _jump_started():
+			# `HorseProp.frog`: `robotMoveStop` / `robotBombStop` take the movement and bomb
+			# listeners away for the jump and `clearMoveStage` clears the held flags, so a key
+			# released while the jump runs must not walk the robot on after landing.
+			_clear_human_input()
 		if not practice and state.outcome != &"running" and not result_credited:
 			result_credited = true
 			session_lives = state.actors[&"human"].lives
 			total_score += state.result_score
-			touch_controls.enabled = false
-			touch_controls.reset()
 			held.clear()
-			buttons.pause.disabled = true
-			buttons.reset.disabled = false
-			buttons.reset.text = "NEW SESSION" if session_lives == 0 else "PLAY AGAIN" if state.outcome == &"won" else "TRY AGAIN"
 			if session != null:
 				level_settled.emit(get_snapshot())
 				return
 	_refresh()
+
+
+## `HorseProp.frog` starts on the tick the horse reaches the box or bomb ahead: the tick
+## before it the human's `jump` was empty.
+func _jump_started() -> bool:
+	var before: Dictionary = previous_state.get("actors", {}).get(&"human", {})
+	return (before.get("jump", {}) as Dictionary).is_empty() \
+		and not (state.actors[&"human"].get("jump", {}) as Dictionary).is_empty()
+
+
+## `HorseProp.frog`'s `robotMoveStop` / `robotBombStop`: the scene's `held` and the
+## scheduler's held direction stand in for the move stage those listeners cleared, and the
+## bomb queue for the bomb listener. The queue's own capture/acknowledge pair drops its
+## pending events (the scheduler has finished its ticks by the time this runs).
+func _clear_human_input() -> void:
+	held.clear()
+	if scheduler == null: return
+	scheduler.set_direction(&"human", Vector2.ZERO)
+	var queues = scheduler.get("_bomb_queues")
+	if queues is Dictionary and queues.has(&"human"):
+		var queue = queues[&"human"]
+		queue.acknowledge(queue.capture().token, true)
 
 
 func toggle_pause() -> void:
@@ -297,16 +433,13 @@ func toggle_pause() -> void:
 		scheduler.pause()
 		paused = true
 	held.clear()
-	touch_controls.enabled = not paused
-	touch_controls.reset()
-	buttons.pause.text = "RESUME" if paused else "PAUSE"
-	buttons.menu.visible = paused and session != null
-	if replica: buttons.pause.visible = paused
 	_refresh()
+	pause_changed.emit(paused)
 
 
 ## The step's sounds, and the win or lose jingle when the ending begins (`win`/`lose`:
-## `stopPause` stops the round music, then `playWinMusic`/`playLoseMusic`).
+## `stopPause` stops the round music, then `playWinMusic`/`playLoseMusic`; every mode's
+## `timeOut` plays the lose jingle, whoever `judgeHandler` then finds the winner).
 func _play_audio(was_ending: bool) -> void:
 	var audio := Audio.current
 	if audio == null: return
@@ -314,8 +447,7 @@ func _play_audio(was_ending: bool) -> void:
 	if was_ending or state.get("round_stage") != &"ending": return
 	audio.pause_game_music()
 	audio.null_game_music()
-	var outcome: StringName = state.get("pending_outcome", &"")
-	var won: bool = outcome == &"won" or (outcome == &"timeout" and state.get("mode") == &"arcade" and Fidelity.timeout_wins())
+	var won: bool = state.get("pending_outcome", &"") == &"won" and not state.get("ending_timed_out", false)
 	if won: audio.create_level_complete_music()
 	else: audio.create_level_failed_music()
 
@@ -329,12 +461,8 @@ func _begin_original_pause() -> void:
 	simulation.hold_movement()
 	_paused_at_msec = _now_msec()
 	held.clear()
-	touch_controls.enabled = false
-	touch_controls.reset()
-	buttons.pause.text = "RESUME"
-	buttons.pause.visible = true
-	buttons.menu.visible = session != null
 	_refresh()
+	pause_changed.emit(true)
 
 
 ## TweenMax timers kept running while the engine was stopped.
@@ -348,9 +476,19 @@ func _now_msec() -> int:
 	return msec_source.call() if msec_source.is_valid() else Time.get_ticks_msec()
 
 
+## The frame-locked comparison keeps its scheduler out of the tree (see `_start_round`);
+## free it with the host, or the last capture leaks it at exit.
+func _exit_tree() -> void:
+	if _scheduler_detached and is_instance_valid(scheduler): scheduler.free()
+
+
 func _notification(what: int) -> void:
 	# iOS sends PAUSED when the app goes to the background as well as FOCUS_OUT on resign.
 	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED] and is_instance_valid(scheduler) and state.get("outcome", &"running") == &"running":
+		# In the frame-locked capture the host's focus is not game input: a window that
+		# loses focus while the driver steps frames (another capture, a sleeping display)
+		# must not pause the round or open the pause screen over the board.
+		if SwfScreen.frame_locked: return
 		# Leaving the app pauses at once (Q15); no frames run in the background to wait 100 ms.
 		if replica and not paused:
 			_begin_original_pause()
@@ -358,30 +496,67 @@ func _notification(what: int) -> void:
 		scheduler.pause()
 		paused = true
 		held.clear()
-		touch_controls.enabled = false
-		touch_controls.reset()
-		buttons.pause.text = "RESUME"
-		buttons.menu.visible = session != null
-		if replica: buttons.pause.visible = true
 		_refresh()
+		pause_changed.emit(true)
 
 
 func _process(delta: float) -> void:
-	fit_page()
+	# The frame-locked capture drives this with `capture_step` (tools/compare/godot_capture.gd).
+	if capture_clock: return
+	_host_step(delta)
+
+
+## One host frame, as the capture's stepped frames count them.
+func capture_step(delta: float) -> void:
+	_host_step(delta)
+
+
+func _host_step(delta: float) -> void:
+	if start_delay > 0:
+		# The frame the round was made in (by START's press) is not one of them: input lands
+		# between the original's frames, so its next frame is the first (as SwfScreen).
+		if Engine.get_process_frames() != _delay_from: start_delay -= 1
+		return
 	if is_instance_valid(scheduler):
 		advance_time(delta)
 
 
-## Centres the 1280×720 page on the screen; the replica also keeps it inside the safe area,
-## re-read every frame so rotation re-lays it out.
-func fit_page(viewport: Vector2 = get_viewport_rect().size) -> void:
-	if not replica:
-		position = (viewport - ReplicaLayout.PAGE) * 0.5
-		return
-	var safe := safe_area_override if safe_area_override.has_area() else ReplicaLayout.safe_area(viewport)
-	var placement := ReplicaLayout.fit(viewport, safe)
-	position = placement.offset
-	scale = Vector2.ONE * placement.scale
+## Before a new round's screen: the previous one's placeholder layer goes.
+func detach_swf() -> void:
+	if is_instance_valid(swf_view): swf_view.queue_free()
+	swf_view = null
+	if is_instance_valid(swf_board_view): swf_board_view.queue_free()
+	swf_board_view = null
+	_swf_present = Callable()
+	start_delay = 0
+	swf_pause = false
+
+
+## Draw the round on the generated gameplay screen: `present` is called with every snapshot,
+## and the placeholder layer (scripts/game_view.gd: what has no original art yet; the board
+## itself for a stage set whose art is not in the pack) sits in `parent`, the screen's board
+## container, through `transform`. `first_row`: the board's first row layer; a board drawn
+## here goes just under it, over the stage's floor art (the container's earlier children).
+func attach_swf(parent: Node2D, transform_in_parent: Transform2D, present: Callable, draw_board := false, first_row: Node = null) -> void:
+	swf_view = GameView.new()
+	swf_view.name = "PlaceholderLayer"
+	swf_view.skin = visual_skin
+	swf_view.transform = transform_in_parent
+	parent.add_child(swf_view)
+	# A board drawn here goes on a layer of its own under the row layers (its boxes, robots
+	# and bombs) but over the floor art (the container's children before the first row);
+	# the effects stay on the layer over every row.
+	if draw_board:
+		swf_board_view = GameView.new()
+		swf_board_view.name = "PlaceholderBoard"
+		swf_board_view.skin = visual_skin
+		swf_board_view.draw_board = true
+		swf_board_view.board_only = true
+		swf_board_view.transform = transform_in_parent
+		parent.add_child(swf_board_view)
+		parent.move_child(swf_board_view, first_row.get_index() if is_instance_valid(first_row) and first_row.get_parent() == parent else 0)
+	_swf_present = present
+	_refresh()
 
 
 func _input(event: InputEvent) -> void:
@@ -401,59 +576,21 @@ func _input(event: InputEvent) -> void:
 			scheduler.set_direction(&"human", Vector2.ZERO if held.is_empty() else directions[held.back()])
 
 
-func _make_button(key: String, caption: String, position_at: Vector2, action: Callable) -> void:
-	var button := Button.new()
-	button.name = key.capitalize()
-	button.text = caption
-	button.position = position_at
-	button.size = Vector2(210, 40)
-	button.focus_mode = Control.FOCUS_NONE
-	button.add_theme_font_size_override("font_size", 18)
-	for state_name in ["normal", "hover", "pressed", "disabled"]:
-		var style := StyleBoxFlat.new()
-		style.bg_color = Color("285768") if state_name == "normal" else Color("39788a") if state_name == "hover" else Color("1b4052")
-		style.border_color = Color("7fb6b7") if state_name != "disabled" else Color("3b616a")
-		style.set_border_width_all(1)
-		style.set_corner_radius_all(9)
-		button.add_theme_stylebox_override(state_name, style)
-		var replacement: Texture2D = visual_skin.button_texture("ui.button_" + state_name)
-		if replacement != null:
-			var texture_style := StyleBoxTexture.new()
-			texture_style.texture = replacement
-			texture_style.modulate_color = Color(visual_skin.entry("ui.button_" + state_name).get("tint", "ffffffff"))
-			button.add_theme_stylebox_override(state_name, texture_style)
-	button.pressed.connect(action)
-	add_child(button)
-	buttons[key] = button
-
-
-
-## RESUME and MAIN MENU on the replica's pause screen: ghosts over the painted buttons when
-## the original art is shown (ADR 0009), native buttons otherwise.
-func _place_pause_button(button: Button, rect: Rect2) -> void:
-	button.position = rect.position
-	button.size = rect.size
-	if hud.pause_art():
-		var clear := StyleBoxEmpty.new()
-		for name in ["normal", "hover", "pressed", "disabled", "focus"]: button.add_theme_stylebox_override(name, clear)
-		button.add_theme_color_override("font_color", Color.TRANSPARENT)
-		button.add_theme_color_override("font_hover_color", Color.TRANSPARENT)
-		button.add_theme_color_override("font_pressed_color", Color.TRANSPARENT)
-
-
 func _refresh() -> void:
-	for key in ["quality", "sound", "music"]:
-		if buttons.has(key): buttons[key].visible = paused
-	if is_instance_valid(view) and not state.is_empty():
-		touch_controls.enabled = _can_control()
+	if is_instance_valid(swf_view) and not state.is_empty():
 		var snapshot := get_snapshot()
 		var between: float = scheduler.interpolation() if replica and not paused and is_instance_valid(scheduler) else 1.0
-		view.present(snapshot, practice, paused, previous_state, between)
-		if replica:
-			hud.present(snapshot, paused)
-			var weapon: StringName = snapshot.actors[&"human"].get("weapon", &"")
-			touch_controls.item = &"" if weapon in [&"", &"none"] else weapon
+		swf_view.present(snapshot, practice, paused, previous_state, between)
+		if is_instance_valid(swf_board_view): swf_board_view.present(snapshot, practice, paused, previous_state, between)
+		_swf_present.call(snapshot)
 
 
 func _can_control() -> bool:
-	return not paused and not state.is_empty() and state.outcome == &"running" and state.get("round_stage") != &"ending" and state.actors[&"human"].alive
+	if paused or state.is_empty() or state.outcome != &"running" or state.get("round_stage") == &"ending":
+		return false
+	var human: Dictionary = state.actors.get(&"human", {})
+	# `HorseProp.frog` calls `robotMoveStop` / `robotBombStop` while the jump runs, so the
+	# movement and bomb listeners are off until `robotMoveStart` on landing.
+	if not human.get("alive", false) or not (human.get("jump", {}) as Dictionary).is_empty():
+		return false
+	return true

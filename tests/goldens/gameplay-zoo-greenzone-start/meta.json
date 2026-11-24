@@ -1,0 +1,11 @@
+{
+ "case": "gameplay-zoo-greenzone-start",
+ "case_sha256": "db7496c941a38acdfc4e0fb3c320a45a441310efeb8f35c7850b7f96a4504724",
+ "fps": 35.0,
+ "frames": {
+  "zoo-greenzone-start": 701
+ },
+ "note": "Recorded by tools/compare/compare.py record; regenerate rather than edit.",
+ "player_sha256": "b87d797f8cac147eeda3cc342fbbb29c41af680d7b282d193f46579dc4a61a4f",
+ "swf_sha256": "718c04c741604bda2bcf4efb19ca3f7cf240b79bc6163f274045c3157e0408a2"
+}

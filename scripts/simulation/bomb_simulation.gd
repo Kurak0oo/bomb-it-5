@@ -38,6 +38,14 @@ var _late_blast := false
 var _round_stage: StringName = &"playing"
 var _pending_outcome: StringName = &""
 var _ending_started := 0
+## Display only: the last serial given to a bomb (`serial_of`).
+var _bomb_serial := 0
+## Identity of the last InvincibilityCommand (display only): each new command replaces the
+## running one (`CommandChain.addCommand`), even when it ends on the same tick.
+var _blink_serial := 0
+## The ending began on the round clock (each mode's `timeOut`: TIME'S UP and the lose jingle,
+## then `judgeHandler`), not on `win`/`lose`.
+var _ending_timed_out := false
 var _gameplay_end_tick := 0
 var _judgment_ready := false
 ## Original round clock (#80, `Game.countTime`): `seconds` polls the wall-clock second once per
@@ -98,7 +106,12 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 		actor.portal_target = actor.cell
 		actor.pushed = {}
 		actor.jump = {}
+		# AbstractRobot.init's `new InvincibilityCommand(this)` starts blinking on the round's
+		# first tick (tick 0, before the first snapshot); its 80 callbacks end it at tick 81.
 		actor.blink_until = 0
+		actor.blink_started = 0
+		actor.blink_serial = 0
+		_start_blink(actor, 81)
 		actor.capacity = actor.get("capacity", 1)
 		actor.power = actor.get("power", 1)
 		actor.speed = actor.get("speed", 1.6)
@@ -197,8 +210,14 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 						continue
 					if _bombs.any(func(bomb: Dictionary): return bomb.cell == actor.cell):
 						continue
+					# `RobotController.addBomb` -> `Bomb.init` (`addBombHandler`): a key between frames
+					# makes the bomb before this tick's bomb phase, so its first `takeCount` runs this
+					# tick and it blasts on the 72nd (recorded: key at 721, `_time` 1 at 722, blast at
+					# 793; chain probe: fixture bomb at 822, blast at 894). An AI's controller acts
+					# during the frame's scripts, after the bomb phase: its bomb counts from the next.
 					var placed := {"actor_id": command.actor_id, "cell": actor.cell,
-						"power": actor.get("power", 1), "born": _tick, "age": 0, "blasted": false, "previous_cell": Vector2i.ZERO}
+						"power": actor.get("power", 1), "born": _tick if command.get("in_frame", false) else _tick - 1,
+						"age": 0, "blasted": false, "previous_cell": Vector2i.ZERO}
 					_bombs.append(placed)
 					_countdowns.append(placed)
 					play_sound(&"addBomb")
@@ -293,10 +312,11 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 func snapshot() -> Dictionary:
 	for id in _actor_ids: _actors[id].points = _mode.points(_actors[id])
 	return {"tick": _tick, "board": _board.duplicate(true), "actors": _actors.duplicate(true),
-		"bombs": _public_bombs(), "bomb_occupancy": _bombs.duplicate(true),
+		"bombs": _public_bombs(), "bomb_display": _bomb_display(), "bomb_occupancy": _bombs.duplicate(true),
 		"blasts": [], "broken_soft_blocks": [], "flames": _flames.duplicate(true),
 		"outcome": _outcome, "round_stage": _round_stage, "pending_outcome": _pending_outcome,
 		"ending_progress": clampf(float(_tick - _ending_started) / 105.0, 0.0, 1.0) if _round_stage == &"ending" else 0.0,
+		"ending_timed_out": _ending_timed_out,
 		"remaining": maxi(0, _mode.round_ticks() - (_gameplay_end_tick if _gameplay_end_tick > 0 else clock_tick())), "result_score": _result_score,
 		"mode": _mode.name, "difficulty": _mode.difficulty, "mode_state": _mode.public_state(), "points_goal": _mode.points_goal(), "board_meta": _rules.get("board_meta", {}), "result_breakdown": _mode.breakdown.duplicate(),
 		"features": _features.map(func(feature): return feature.public_state()),
@@ -317,6 +337,17 @@ func _pickup_sounds(kind: StringName, eaten := true) -> void:
 	if eaten: play_sound(&"eatProp")
 
 
+## Display fields, one per entry of `bombs` (`_public_bombs`, same order): the bomb's serial, so
+## one bomb's views follow it from cell to cell, and whether it flies (`Bomb.kickedFly` runs
+## `shootFunc`, `resetDisplay` then the step, each bomb tick).
+func _bomb_display() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for bomb in _bombs:
+		if bomb.get("detonated", false): continue
+		result.append({"serial": serial_of(bomb), "flying": bomb.get("flying", false)})
+	return result
+
+
 func _public_bombs() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	for bomb in _bombs:
@@ -329,6 +360,14 @@ func _public_bombs() -> Array[Dictionary]:
 			item.kind = &"mine"
 		result.append(item)
 	return result
+
+
+## Display only: a bomb's serial, given the first time it is asked for.
+func serial_of(bomb: Dictionary) -> int:
+	if not bomb.has("serial"):
+		_bomb_serial += 1
+		bomb.serial = _bomb_serial
+	return int(bomb.serial)
 
 
 func _detonate(bomb: Dictionary, blasts: Array[Dictionary], broken: Array[Vector2i], mine_contact: bool = false) -> void:
@@ -410,6 +449,8 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 		actor.shield -= 1
 		play_sound(&"useNombril")
 		actor.protected_until = _tick + 81
+		# (display) TryToKillCommandChain: `addUseNum`, then a new InvincibilityCommand blinks.
+		_start_blink(actor, 81)
 	else:
 		if owner == actor_id: _mode.on_self_kill(actor)
 		actor.alive = false
@@ -421,6 +462,16 @@ func _hurt(actor_id: StringName, owner: StringName) -> void:
 		if owner != &"" and owner != actor_id and _actors.has(owner):
 			_actors[owner].kills += 1
 			_actors[owner].score += 100
+
+
+## A new `InvincibilityCommand` (`CommandChain.addCommand` removes the previous command
+## first): its phase starts on this tick, and the serial tells a replacement from the
+## command it replaced even when both end on the same tick.
+func _start_blink(actor: Dictionary, frames: int) -> void:
+	_blink_serial += 1
+	actor.blink_serial = _blink_serial
+	actor.blink_started = _tick
+	actor.blink_until = _tick + frames
 
 
 func _advance_portals() -> void:
@@ -444,7 +495,7 @@ func _advance_portals() -> void:
 			actor.portal_latch = actor.portal_target
 			actor.transit_until = _tick + 29
 			actor.protected_until = _tick + 29
-			actor.blink_until = _tick + 46
+			_start_blink(actor, 46)
 
 
 func _advance_actor_states() -> void:
@@ -454,6 +505,8 @@ func _advance_actor_states() -> void:
 			actor.vehicle = &""
 			actor.kick = false
 			actor.protected_until = _tick + 81
+			# (display) `vehicleComplete`: a new InvincibilityCommand blinks.
+			_start_blink(actor, 81)
 			actor.movement_rearm = true
 		actor.protection_stage = &"none"
 		if actor.alive:
@@ -523,6 +576,7 @@ func _finish_round() -> void:
 	if _pending_outcome != &"":
 		_round_stage = &"ending"
 		_ending_started = _tick
+		_ending_timed_out = _pending_outcome == &"timeout" or clock_tick() >= _mode.round_ticks()
 		_gameplay_end_tick = clock_tick()
 		for id in _actor_ids:
 			_weapons.cancel(_actors[id], id)
@@ -585,8 +639,11 @@ func _advance_pickups() -> void:
 
 
 ## Map.createRamdonProp: choose every cell first, then draw each pickup's class.
-func spawn_random_pickups(count: int) -> void:
-	var free := _free_cells()
+## `getRandomPropPosition` skips cells with a robot on the map; at map load (a mode's
+## `mapLoadOver`) the robots are not on the map yet (`before_robots`; recorded: Green Zone's
+## opening pickups land on the cells these draws give with the spawns counted).
+func spawn_random_pickups(count: int, before_robots := false) -> void:
+	var free := _free_cells(before_robots)
 	var selected_cells: Array[Vector2i] = []
 	for index in mini(count, free.size()):
 		var selected := int(_draw_random() * free.size())
@@ -606,6 +663,11 @@ func board() -> Dictionary:
 
 func draw_random() -> float:
 	return _draw_random()
+
+
+## The original's generator the round draws from (`math_random`), if it has one.
+func random_source() -> RefCounted:
+	return _rules.get("math_random") if _rules.get("math_random") is RefCounted else null
 
 
 func free_cells(margin: int = 0) -> Array[Vector2i]:
@@ -883,12 +945,12 @@ func current_tick() -> int:
 
 
 ## Empty cells for placed pickups, x first then y as the source enumerates them.
-func _free_cells() -> Array[Vector2i]:
+func _free_cells(ignore_actors := false) -> Array[Vector2i]:
 	var free: Array[Vector2i] = []
 	for x in range(1, _board_max.x + 1):
 		for y in range(1, _board_max.y + 1):
 			var cell := Vector2i(x, y)
-			if _board.get(cell) in [&"floor", &"portal", &"crocodile"] and not _feature_blocked(cell) and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and not _actors.values().any(func(a): return a.alive and a.cell == cell):
+			if _board.get(cell) in [&"floor", &"portal", &"crocodile"] and not _feature_blocked(cell) and not _pickups.has(cell) and not _bombs.any(func(b): return b.cell == cell) and (ignore_actors or not _actors.values().any(func(a): return a.alive and a.cell == cell)):
 				free.append(cell)
 	return free
 
@@ -921,8 +983,10 @@ func _advance_respawns() -> void:
 			"velocity": Vector2.ZERO, "facing": Vector2.DOWN, "departures": [], "vehicle": &"", "pushed": {}, "jump": {},
 			"registered_vehicle": &"", "shield": 0, "invincible_until": 0, "busy_until": 0,
 			"transit_until": 0, "vehicle_recovery_until": 0, "protected_until": _tick + 81,
-			"blink_until": _tick + 81, "weapon": actor.base_weapon, "ammo": -1 if actor.base_weapon != &"" else 0,
+			"blink_until": 0, "blink_started": 0, "blink_serial": 0,
+			"weapon": actor.base_weapon, "ammo": -1 if actor.base_weapon != &"" else 0,
 			"kept_weapons": [], "kick": false, "respawn_at": 0, "portal_latch": Vector2i(-99, -99), "movement_rearm": true}, true)
+		_start_blink(actor, 81)
 		actor.drive_speed = actor.speed
 
 
@@ -943,8 +1007,13 @@ func _spawn_pickup(cell: Vector2i, quota: bool) -> void:
 		_spawned_drops += 1
 
 
+## The round's `Math.random`: given draws first, then the original's generator when the round
+## has one (`math_random`, scripts/simulation/avm_random.gd), else Godot's.
 func _draw_random() -> float:
-	var value: float = _random_draws[_random_index] if _random_index < _random_draws.size() else _rng.randf()
+	var value: float
+	if _random_index < _random_draws.size(): value = _random_draws[_random_index]
+	elif _rules.get("math_random") is RefCounted: value = _rules.math_random.random()
+	else: value = _rng.randf()
 	_random_index += 1
 	return clampf(value, 0.0, 0.9999999999999999)
 

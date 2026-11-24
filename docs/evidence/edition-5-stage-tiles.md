@@ -78,7 +78,12 @@ Frame contents (rendered from the FFDec frame export, 2026-10-29): Magic Library
 121 books, 122 pencil cup, 124 mushroom lamp; soft 126 glasses, 127 scroll and quill,
 128 witch hat (125 is a coffee cup no layout reaches). Cinema fixed 49 spotlight, 51 red
 seat; soft 53 3D glasses, 54 popcorn, 55 drink, 56 clapperboard. Candy Factory fixed 25
-and 26 sweet jars, 28 pudding cup; soft 29 candy cane to 34 lollipop.
+and 26 sweet jars, 28 pudding cup; soft 29 candy cane to 34 lollipop. Luxury Stores (rendered by
+`record_screen.py sets`, 2026-11-07) fixed 97 ring box, 99 necklace bust; soft 101 lipstick,
+102 roses, 103 compact, 104 high heel, 105 shopping bag, 106 purse; centre 120 a dress shop
+window with no loops of its own (`LuxuryStoresMapData.setData` calls `setMidBox(x, y, true)`,
+so the centre shows; no features: its `lavaOrgan` branch is never reached, no Luxury layout
+has that cell).
 
 This matches the reference openings: [Magic Library layout 2](reference-2026-10-21/stage-openings/magic-layout2.png)
 shows a lamp ring and lamp pillars (first fixed choice 4), pencil cups on `_r` cells

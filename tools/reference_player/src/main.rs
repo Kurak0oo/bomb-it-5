@@ -69,6 +69,18 @@ fn main() -> Result<()> {
     let mut trace_mode = "full";
     #[cfg(feature = "reference-events")]
     let mut event_dir: Option<String> = None;
+    // Fields `localize` changed so far: [frame, path, from, to].
+    #[cfg(feature = "reference-display")]
+    let mut localized: Vec<serde_json::Value> = Vec::new();
+    #[cfg(feature = "reference-display")]
+    let localize = |p: &Arc<Mutex<Player>>, frame: u64, log: &mut Vec<serde_json::Value>| -> Result<()> {
+        for row in p.lock().unwrap().reference_localize().map_err(|e| anyhow!(e))? {
+            let mut row = row.as_array().cloned().unwrap_or_default();
+            row.insert(0, frame.into());
+            log.push(row.into());
+        }
+        Ok(())
+    };
     let t0 = Instant::now();
     let stdin = std::io::stdin();
     let mut out = std::io::stdout();
@@ -118,6 +130,9 @@ fn main() -> Result<()> {
                         dt
                     };
                     frame += 1;
+                    // NewTransText fields that came on stage this frame (art pass, `localize`).
+                    #[cfg(feature = "reference-display")]
+                    localize(&player, frame, &mut localized)?;
                     #[cfg(feature = "reference-events")]
                     if let Some(d) = &event_dir {
                         let events = player.lock().unwrap().reference_events_drain();
@@ -213,11 +228,44 @@ fn main() -> Result<()> {
                 std::fs::write(t[1], serde_json::to_vec(&list)?)?;
             }
             #[cfg(feature = "reference-display")]
+            "localize" => {
+                // Art pass only: `localize FILE [placeholders]` loads the en-US strings
+                // (scenes/swf/localization.json) and, from now on, replays
+                // `NewTransText.updateText` on each localised field once it is on stage (after
+                // every step, `symbol` and a `piece` widget frame), as the original's branding
+                // system does. `placeholders`: only fields still showing an authoring
+                // placeholder (`U_TOTAL SCORE:`).
+                let only = t.get(2) == Some(&"placeholders");
+                let count = player.lock().unwrap().reference_localize_load(&std::fs::read_to_string(t[1])?, only).map_err(|e| anyhow!(e))?;
+                eprintln!("localize: {count} strings");
+                localize(&player, frame, &mut localized)?;
+            }
+            #[cfg(feature = "reference-display")]
+            "localized" => {
+                // `localized FILE`: every field `localize` changed so far, [frame, path, from, to].
+                std::fs::write(t[1], serde_json::to_vec(&localized)?)?;
+            }
+            #[cfg(feature = "reference-display")]
             "piece" => {
                 // One display-list path rendered alone (its masks, filters and blends
                 // included) on a transparent stage, cropped to its render bounds.
-                let piece = player.lock().unwrap().reference_isolate(t[1]).map_err(|e| anyhow!(e))?;
-                let (bounds, px) = (piece.render_bounds, piece.pixel_bounds);
+                // Optional 4th word: render a widget clip at that frame (restored afterwards).
+                let goto: Option<u16> = t.get(3).filter(|f| **f != "-").map(|f| f.parse()).transpose()?;
+                // Optional 5th word: comma-separated paths inside the piece to leave out.
+                let also_hide: Vec<String> = t.get(4).map(|s| s.split(',').map(String::from).collect()).unwrap_or_default();
+                // A path that is not on the display list at this frame is reported, not fatal.
+                // Bind first: a guard held through the match would deadlock the error arm's lock.
+                let isolated = player.lock().unwrap().reference_isolate(t[1], goto, &also_hide);
+                let piece = match isolated {
+                    Ok(piece) => piece,
+                    Err(e) => {
+                        std::fs::write(format!("{}.json", t[2]), serde_json::to_vec(&serde_json::json!({"path": t[1], "missing": e}))?)?;
+                        writeln!(out, "OK frame={frame} wall_ms={} fps_setting={} cmd={line}", t0.elapsed().as_millis(), player.lock().unwrap().frame_rate())?;
+                        out.flush()?;
+                        continue;
+                    }
+                };
+                let (bounds, px, shift) = (piece.render_bounds, piece.pixel_bounds, piece.shift_px);
                 let rendered = {
                     let mut pl = player.lock().unwrap();
                     pl.render();
@@ -239,10 +287,29 @@ fn main() -> Result<()> {
                 crop.save(t[2])?;
                 std::fs::write(format!("{}.json", t[2]), serde_json::to_vec(&serde_json::json!({
                     "path": t[1], "scale": scale, "render_bounds": bounds,
-                    "pixel_origin": [x0, y0], "pixel_size": [crop.width(), crop.height()],
-                    "pixel_bounds": px,
+                    "pixel_origin": [x0 as i64 - shift[0].round() as i64, y0 as i64 - shift[1].round() as i64], "pixel_size": [crop.width(), crop.height()],
+                    "pixel_bounds": [px[0] - shift[0], px[1] - shift[1], px[2] - shift[0], px[3] - shift[1]], "shifted_px": shift,
                     "clipped_by_viewport": px[0] < 0.0 || px[1] < 0.0 || px[2] > w as f64 || px[3] > h as f64,
                 }))?)?;
+            }
+            #[cfg(feature = "reference-display")]
+            "symbol" => {
+                // Art pass only: `symbol PARENT CLASS NAME X Y FRAME [CLOTH HAT [CHILD=FRAME,...]]`
+                // constructs a library class and adds it under PARENT as NAME, so `piece
+                // PARENT/NAME` renders it; `unsymbol PARENT/NAME` takes it off again.
+                // FRAME: a frame to stop at, `-` to stop where it is, `p` to leave it playing.
+                let stop_at: Option<i32> = t.get(6).filter(|f| **f != "-").map(|f| if *f == "p" { Ok(0) } else { f.parse() }).transpose()?;
+                let cloth: i32 = t.get(7).map(|f| f.parse()).transpose()?.unwrap_or(-1);
+                let hat: i32 = t.get(8).map(|f| f.parse()).transpose()?.unwrap_or(-1);
+                let children: Vec<(String, i32)> = t.get(9).map(|s| s.split(',').filter_map(|kv| {
+                    let (k, v) = kv.split_once('=')?; Some((k.to_string(), v.parse().ok()?)) }).collect()).unwrap_or_default();
+                player.lock().unwrap().reference_symbol_add(t[1], t[2], t[3], t[4].parse()?, t[5].parse()?, stop_at, cloth, hat, &children)
+                    .map_err(|e| anyhow!(e))?;
+                localize(&player, frame, &mut localized)?;
+            }
+            #[cfg(feature = "reference-display")]
+            "unsymbol" => {
+                player.lock().unwrap().reference_symbol_remove(t[1]).map_err(|e| anyhow!(e))?;
             }
             "shot" => shot(&player, t[1])?,
             "kd" => ev(PlayerEvent::KeyDown { key: key(t[1])? }),

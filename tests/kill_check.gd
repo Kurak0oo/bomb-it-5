@@ -5,6 +5,7 @@ const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const KillMode = preload("res://scripts/simulation/modes/kill_mode.gd")
 const Perception = preload("res://scripts/simulation/ai_perception.gd")
 const Layouts = preload("res://scripts/simulation/layouts.gd")
+const GameInterFace = preload("res://scripts/ui/game_inter_face.gd")
 var failures := 0
 var checks := 0
 
@@ -42,6 +43,7 @@ func _initialize() -> void:
 	_step(game, {&"human": [&"down"]})
 	state = _run(game, 100)
 	_expect(state.round_stage == &"ending" and state.pending_outcome == &"won", "the human's 10th kill wins after the death animation")
+	_expect(not state.ending_timed_out, "a kill ending is `win`, not `timeOut` (winCartoon, the win jingle)")
 	state = _run(game, 110)
 	_expect(state.outcome == &"won" and state.result_breakdown.kills == 1000, "a Kill level scores 100 per kill plus bonuses")
 
@@ -86,6 +88,7 @@ func _initialize() -> void:
 			view.board[Vector2i(x, y)] = &"floor"
 	_expect(Perception.observe(view, &"ai", {}, 6, true).enemies.size() == 2 and Perception.observe(view, &"ai", {}, 6, false).enemies.size() == 1,
 		"Kill AI targets every robot; Arcade AI only the human")
+	_check_hud_highlight()
 	_finish()
 
 
@@ -134,6 +137,125 @@ func _expect(condition: bool, label: String) -> void:
 	if not condition:
 		failures += 1
 		printerr(label)
+
+
+## `AbstractPlayer.scoreData` / `GameInterFace.changeCol`: every non-Arcade mode flashes
+## its score at `Game.textColNum`; Arcade never does. The HUD sees real snapshot ticks
+## through `present`, so a paused round presents the same tick without a flip.
+func _check_hud_highlight() -> void:
+	var app := FakeApp.new()
+	var screen := FakeScreen.new()
+	app.session.mode = &"kill"
+	var hud = GameInterFace.new(screen, app, null)
+	var field: String = hud._scoreTextArr[0]
+	_expect(hud.textColNum == 8, "Kill's score threshold is KillMode/@textColNum = 8")
+	_expect(hud._shown.get(field + "|colour") == Color8(1, 61, 103),
+		"the flasher starts from the layout's recorded text colour")
+	for tick in 5: _present(hud, tick, 7)
+	_expect(not hud.colorChangeArray.has(0) and not _flashing(screen, field),
+		"a Kill score below 8 never flashes")
+	_present(hud, 5, 8)
+	_expect(hud.colorChangeArray.has(0), "the 8th kill puts the score field on the tween handlers")
+	for i in 6: _present(hud, 5, 8)  # paused: the snapshot tick stays put
+	_expect(not _flashing(screen, field), "no flip while paused before the next 4th tick")
+	_present(hud, 6, 8)
+	_present(hud, 7, 8)
+	_expect(not _flashing(screen, field), "no flip on ticks 6 or 7")
+	_present(hud, 8, 8)
+	_expect(screen.colours.get(field) == GameInterFace.RED, "the next 4th tick after resume turns it red")
+	for i in 6: _present(hud, 8, 8)  # paused after the flip
+	_expect(screen.colours.get(field) == GameInterFace.RED, "no further flip while paused on tick 8")
+	_present(hud, 12, 8)
+	_expect(screen.colours.get(field) == GameInterFace.WHITE, "the next 4th tick turns it white")
+	_present(hud, 13, 7)
+	_expect(not hud.colorChangeArray.has(0) and screen.colours.get(field) == Color8(101, 58, 18),
+		"a score back below 8 returns to 6634002")
+	_present(hud, 14, 8)
+	_present(hud, 16, 8)
+	_expect(screen.colours.get(field) == GameInterFace.RED, "crossing 8 again flashes from red")
+	screen.free()
+
+	app.session.mode = &"green_zone"
+	var other := FakeScreen.new()
+	hud = GameInterFace.new(other, app, null)
+	field = hud._scoreTextArr[0]
+	_expect(hud.textColNum == 8, "Green Zone's threshold is GreenZoneMode/@textColNum = 8")
+	for tick in 5: _present(hud, tick, 7)
+	_expect(not _flashing(other, field), "a Green Zone score below 8 never flashes")
+	_present(hud, 5, 8)
+	_present(hud, 8, 8)
+	_expect(other.colours.get(field) == GameInterFace.RED, "Green Zone flashes from 8")
+	other.free()
+
+	app.session.mode = &"pac_man"
+	other = FakeScreen.new()
+	hud = GameInterFace.new(other, app, null)
+	field = hud._scoreTextArr[0]
+	_expect(hud.textColNum == 5, "PacManMode's rules XML threshold is 5")
+	for tick in 5: _present(hud, tick, 0)
+	_expect(hud.textColNum == 106, "PacManMode.mapLoadOver replaces it with coins - 15")
+	_expect(not _flashing(other, field), "Pac-Man below coins - 15 never flashes")
+	_present(hud, 5, 105)
+	_present(hud, 8, 105)
+	_expect(not _flashing(other, field), "Pac-Man at 105 of 121 coins does not flash")
+	_present(hud, 9, 106)
+	_present(hud, 12, 106)
+	_expect(other.colours.get(field) == GameInterFace.RED, "Pac-Man flashes at 106 of 121 coins (coins - 15)")
+	other.free()
+
+	app.session.mode = &"arcade"
+	other = FakeScreen.new()
+	hud = GameInterFace.new(other, app, null)
+	field = hud._scoreTextArr[0]
+	_expect(hud.textColNum == 0, "Arcade's rules XML has no textColNum")
+	for tick in [0, 4, 8, 12]: _present(hud, tick, 8)
+	_expect(not hud.colorChangeArray.has(0) and not _flashing(other, field), "Arcade never flashes")
+	other.free()
+	app.free()
+
+
+func _present(hud: RefCounted, tick: int, points: int) -> void:
+	hud.present({"tick": tick, "remaining": 180 * 35,
+		"mode_state": {"coins_total": 121},
+		"actors": {&"human": {"lives": 3, "capacity": 1, "power": 1, "speed": 1.6,
+			"score": points, "points": points}}})
+
+
+func _flashing(screen, field: String) -> bool:
+	var colour: Color = screen.colours.get(field, Color(0, 0, 0, 0))
+	return colour == GameInterFace.RED or colour == GameInterFace.WHITE
+
+
+## The HUD's screen side: layout, instances and live text/colour writes, recorded here.
+class FakeScreen extends Node2D:
+	signal mouse_event(instance: String, kind: StringName)
+
+	var layout := {"board": {"robot_ui_slots": [[0, 0], [10, 0], [20, 0]]},
+		"nodes": [{"path": "robotUI0/interfaceMc0/scoreTf", "text_format": {"color": [1, 61, 103]}}]}
+	var colours := {}
+	var texts := {}
+
+	func _relative(path: String) -> String: return path
+	func set_shown(_instance: String, _shown: bool) -> void: pass
+	func set_frame(_instance: String, _frame: int) -> void: pass
+	func move_instance(_instance: String, _offset: Vector2) -> void: pass
+	func instance_position(_instance: String) -> Vector2: return Vector2.ZERO
+	func set_text(instance: String, text: String) -> void: texts[instance] = text
+	func set_text_color(instance: String, colour: Color) -> void: colours[instance] = colour
+
+
+class FakeApp extends Node:
+	var session := FakeSession.new()
+	var audio: Node = null
+
+
+class FakeSession extends RefCounted:
+	var mode: StringName = &"kill"
+	var robot := 0
+	var ai_robots: Array = [1, 2]
+	var enemies := 2
+	var levels := 1
+	var level := 1
 
 
 func _finish() -> void:

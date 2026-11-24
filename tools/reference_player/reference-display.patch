@@ -24,7 +24,7 @@ index d76c1cba..c5f9bf01 100644
  pub mod bitmap;
  mod character;
 diff --git a/core/src/player.rs b/core/src/player.rs
-index 295bcb48..9d22fcc5 100644
+index 295bcb48..3fd56104 100644
 --- a/core/src/player.rs
 +++ b/core/src/player.rs
 @@ -2327,6 +2327,21 @@ impl Player {
@@ -37,8 +37,8 @@ index 295bcb48..9d22fcc5 100644
 +    }
 +
 +    /// Research-only: hide everything but one display-list path, for an isolated render.
-+    pub fn reference_isolate(&mut self, path: &str) -> Result<crate::reference_display::ReferencePiece, String> {
-+        self.mutate_with_update_context(|context| crate::reference_display::isolate(context, path))
++    pub fn reference_isolate(&mut self, path: &str, frame: Option<u16>, also_hide: &[String]) -> Result<crate::reference_display::ReferencePiece, String> {
++        self.mutate_with_update_context(|context| crate::reference_display::isolate(context, path, frame, also_hide))
 +    }
 +
 +    /// Research-only: undo `reference_isolate`.
@@ -51,10 +51,10 @@ index 295bcb48..9d22fcc5 100644
              crate::avm2::reference_trace::snapshot(context, max_depth, max_objects)
 diff --git a/core/src/reference_display.rs b/core/src/reference_display.rs
 new file mode 100644
-index 00000000..797712c5
+index 00000000..c52aa1ee
 --- /dev/null
 +++ b/core/src/reference_display.rs
-@@ -0,0 +1,270 @@
+@@ -0,0 +1,419 @@
 +//! Research-only display-list dump for the comparison loop, and isolated piece renders.
 +//! The dump reads native display state only: no ActionScript getters or methods run and
 +//! nothing is written. `isolate` temporarily hides other display objects (native
@@ -65,15 +65,32 @@ index 00000000..797712c5
 +    BoundsMode, DisplayObject, TDisplayObject, TDisplayObjectContainer, WindowMode,
 +};
 +use ruffle_render::matrix::Matrix;
++use swf::Twips;
 +use serde_json::{json, Value as Json};
 +
 +const MAX_NODES: usize = 20000;
 +const MAX_DEPTH: usize = 64;
 +
++/// A stable path segment (see `base_segment`). Siblings that would still share one
++/// (unnamed children added at the same depth) get `#k`, their index among those
++/// siblings in render order.
++fn segment(display: DisplayObject<'_>) -> String {
++    let base = base_segment(display);
++    let Some(parent) = display.parent() else { return base };
++    // Only same-depth siblings can collide (both segment forms end in the depth).
++    let same: Vec<_> = children(parent).into_iter()
++        .filter(|s| s.depth() == display.depth() && base_segment(*s) == base).collect();
++    if same.len() < 2 {
++        return base;
++    }
++    let index = same.iter().position(|s| DisplayObject::ptr_eq(*s, display)).unwrap_or(0);
++    format!("{base}#{index}")
++}
++
 +/// A stable path segment: the instance name, unless it is a Flash auto name
 +/// (`instanceN`, whose N depends on creation order), in which case the depth. A name
 +/// that several siblings share gets its depth appended (`name@depth`) to stay unique.
-+fn segment(display: DisplayObject<'_>) -> String {
++fn base_segment(display: DisplayObject<'_>) -> String {
 +    if let Some(name) = display.name() {
 +        let name = name.to_utf8_lossy().into_owned();
 +        let auto = name
@@ -106,6 +123,33 @@ index 00000000..797712c5
 +        "morph_shape"
 +    } else {
 +        "graphic"
++    }
++}
++
++/// A filter's parameters as `flash.filters` names them (blur in local units, before the
++/// stage scale; colour as 0-255 RGB plus alpha 0-1; quality is the pass count).
++fn filter_json(filter: &ruffle_render::filters::Filter) -> Json {
++    use ruffle_render::filters::Filter;
++    let rgb = |c: &swf::Color| json!([c.r, c.g, c.b]);
++    match filter {
++        Filter::GlowFilter(f) => json!({
++            "type": "GlowFilter", "color": rgb(&f.color), "alpha": f.color.a as f64 / 255.0,
++            "blur_x": f.blur_x.to_f64(), "blur_y": f.blur_y.to_f64(), "strength": f.strength.to_f64(),
++            "quality": f.num_passes(), "inner": f.is_inner(), "knockout": f.is_knockout(),
++            "composite_source": f.composite_source(),
++        }),
++        Filter::DropShadowFilter(f) => json!({
++            "type": "DropShadowFilter", "color": rgb(&f.color), "alpha": f.color.a as f64 / 255.0,
++            "blur_x": f.blur_x.to_f64(), "blur_y": f.blur_y.to_f64(), "strength": f.strength.to_f64(),
++            "angle": f.angle.to_f64().to_degrees(), "distance": f.distance.to_f64(),
++            "quality": f.num_passes(), "inner": f.is_inner(), "knockout": f.is_knockout(),
++            "hide_object": f.hide_object(),
++        }),
++        Filter::BlurFilter(f) => json!({
++            "type": "BlurFilter", "blur_x": f.blur_x.to_f64(), "blur_y": f.blur_y.to_f64(),
++            "quality": f.num_passes(),
++        }),
++        other => json!({"type": format!("{other:?}").split(['(', ' ', '{']).next().unwrap_or("").to_string()}),
 +    }
 +}
 +
@@ -161,6 +205,9 @@ index 00000000..797712c5
 +                json!([bounds.x_min.to_pixels(), bounds.y_min.to_pixels(), bounds.x_max.to_pixels(), bounds.y_max.to_pixels()])
 +            } else { Json::Null },
 +        });
++        if !display.filters().is_empty() {
++            node["filter_list"] = json!(display.filters().iter().map(filter_json).collect::<Vec<_>>());
++        }
 +        if display.clip_depth() > 0 {
 +            node["clip_depth"] = json!(display.clip_depth());
 +        }
@@ -190,7 +237,28 @@ index 00000000..797712c5
 +            state_child = button.get_state_child(state.into());
 +        }
 +        if let Some(text) = display.as_edit_text() {
-+            node["text"] = json!(text.text().to_utf8_lossy().into_owned());
++            let content = text.text();
++            node["text"] = json!(content.to_utf8_lossy().into_owned());
++            // The field's format, so live text can be drawn as the original lays it out.
++            let f = text.text_format(0, content.len().max(1));
++            let local = display.bounds(BoundsMode::Script);
++            node["text_format"] = json!({
++                "font": f.font.as_ref().map(|s| s.to_utf8_lossy().into_owned()),
++                "size": f.size, "color": f.color.map(|c| [c.r, c.g, c.b]),
++                "align": f.align.map(|a| format!("{a:?}")), "bold": f.bold, "italic": f.italic,
++                "leading": f.leading, "letter_spacing": f.letter_spacing,
++                "left_margin": f.left_margin, "right_margin": f.right_margin, "indent": f.indent,
++                "multiline": text.is_multiline(), "word_wrap": text.is_word_wrap(),
++                "autosize": format!("{:?}", text.autosize()), "device_font": text.is_device_font(),
++                "html": text.is_html(),
++                "local_bounds": [local.x_min.to_pixels(), local.y_min.to_pixels(), local.x_max.to_pixels(), local.y_max.to_pixels()],
++            });
++            // `getLineMetrics`' font ascent and descent at the format's size: the first line's
++            // baseline sits at local_bounds' top + 2 (gutter) + ascent.
++            if let Some(m) = text.layout_metrics() {
++                node["text_format"]["ascent"] = json!(m.ascent.to_pixels());
++                node["text_format"]["descent"] = json!(m.descent.to_pixels());
++            }
 +        }
 +        seen.push((display, path.clone()));
 +        nodes.push(node);
@@ -227,6 +295,12 @@ index 00000000..797712c5
 +    /// A piece that blends with what lies below renders with its own colours (Normal);
 +    /// the consumer applies the blend against its own backdrop. Restored afterwards.
 +    blend: Option<(String, ruffle_render::blend::ExtendedBlendMode)>,
++    /// A clip moved to another frame for this render: path, frame and play state to restore.
++    goto: Option<(String, u16, bool)>,
++    /// The piece moved so it fits the viewport: its path and matrix to restore.
++    shifted: Option<(String, Matrix)>,
++    /// That move in viewport pixels (subtract it from the image's pixel origin).
++    pub shift_px: [f64; 2],
 +    /// Render bounds of the piece in stage units (filters included): x_min, y_min, x_max, y_max.
 +    pub render_bounds: [f64; 4],
 +    /// The same bounds in viewport pixels (through the stage view matrix, filters scaled
@@ -256,7 +330,7 @@ index 00000000..797712c5
 +}
 +
 +/// Hide everything that would draw besides `path`, keeping the masks that clip it.
-+pub(crate) fn isolate(context: &mut UpdateContext<'_>, path: &str) -> Result<ReferencePiece, String> {
++pub(crate) fn isolate(context: &mut UpdateContext<'_>, path: &str, frame: Option<u16>, also_hide: &[String]) -> Result<ReferencePiece, String> {
 +    let stage = context.stage;
 +    let chain = resolve(stage.into(), path).ok_or_else(|| format!("no display object at {path}"))?;
 +    let mut hidden = Vec::new();
@@ -285,9 +359,63 @@ index 00000000..797712c5
 +        parent = node;
 +    }
 +    let target = *chain.last().unwrap();
++    // Parts inside the piece that are rendered separately (a robot inside its stage).
++    for extra in also_hide {
++        if let Some(chain) = resolve(stage.into(), extra) {
++            let node = *chain.last().unwrap();
++            if node.visible() {
++                node.base().set_visible(false);
++                hidden.push(extra.clone());
++            }
++        }
++    }
++    // A widget clip's other frames (selected, disabled, …): go there, render, come back.
++    let mut goto = None;
++    if let (Some(frame), Some(clip)) = (frame, target.as_movie_clip()) {
++        goto = Some((path.to_string(), clip.current_frame(), clip.playing()));
++        clip.goto_frame(context, crate::display_object::GotoInfo {
++            frame, stop_or_play: crate::display_object::StopOrPlay::Stop });
++    }
 +    let b = target.render_bounds_with_transform(&target.local_to_global_matrix(), true, &Matrix::IDENTITY);
 +    let view = stage.view_matrix();
-+    let p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++    let mut p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++    // A piece partly outside the viewport would be cut where the viewport ends, and show
++    // the cut once it moves on stage (a balloon drifting in from the left). Shift the whole
++    // stage content by whole stage units so the piece fits, if it can; the shift is
++    // reported so the consumer puts the image back where it belongs.
++    let unit = view.a as f64; // viewport pixels per stage unit
++    let (sw, sh) = stage.stage_size();
++    let (vw, vh) = (sw as f64 * unit, sh as f64 * unit);
++    let fit = |lo: f64, hi: f64, size: f64| -> f64 {
++        if hi - lo > size - unit { return 0.0; }
++        if lo < 0.0 { (-lo / unit).ceil() } else if hi > size { -((hi - size) / unit).ceil() } else { 0.0 }
++    };
++    let (px0, py0, px1, py1) = (p.x_min.to_pixels(), p.y_min.to_pixels(), p.x_max.to_pixels(), p.y_max.to_pixels());
++    let shift_units = [fit(px0, px1, vw), fit(py0, py1, vh)];
++    // Move the piece itself, not its ancestors: a mask at the stage edge (the screen's own
++    // clip) must stay where it is, as it does when the original part drifts on stage.
++    let shifted = if shift_units != [0.0, 0.0] && target.parent().is_some() {
++        let parent = target.parent().unwrap().local_to_global_matrix();
++        let (a, b, c, d) = (parent.a as f64, parent.b as f64, parent.c as f64, parent.d as f64);
++        let det = a * d - b * c;
++        if det.abs() > 1e-9 {
++            let (sx, sy) = (shift_units[0], shift_units[1]);
++            let original = target.base().matrix();
++            let mut moved = original;
++            moved.tx += Twips::from_pixels((d * sx - c * sy) / det);
++            moved.ty += Twips::from_pixels((-b * sx + a * sy) / det);
++            target.set_matrix(moved);
++            for &node in &chain {
++                node.invalidate_cached_bitmap();
++            }
++            p = target.render_bounds_with_transform(&(view * target.local_to_global_matrix()), true, &view);
++            Some((path.to_string(), original))
++        } else {
++            None
++        }
++    } else {
++        None
++    };
 +    let window_mode = stage.window_mode();
 +    stage.set_window_mode(WindowMode::Transparent);
 +    use ruffle_render::blend::ExtendedBlendMode;
@@ -298,10 +426,14 @@ index 00000000..797712c5
 +    } else {
 +        None
 +    };
++    let moved_px = if shifted.is_some() { [shift_units[0] * unit, shift_units[1] * unit] } else { [0.0, 0.0] };
 +    Ok(ReferencePiece {
++        shifted,
++        shift_px: moved_px,
 +        hidden,
 +        window_mode,
 +        blend,
++        goto,
 +        render_bounds: [b.x_min.to_pixels(), b.y_min.to_pixels(), b.x_max.to_pixels(), b.y_max.to_pixels()],
 +        pixel_bounds: [p.x_min.to_pixels(), p.y_min.to_pixels(), p.x_max.to_pixels(), p.y_max.to_pixels()],
 +    })
@@ -319,6 +451,23 @@ index 00000000..797712c5
 +        }
 +    }
 +    stage.set_window_mode(piece.window_mode);
++    if let Some((path, matrix)) = &piece.shifted {
++        if let Some(chain) = resolve(stage.into(), path) {
++            chain.last().unwrap().set_matrix(*matrix);
++            for &node in &chain {
++                node.invalidate_cached_bitmap();
++            }
++        }
++    }
++    if let Some((path, frame, playing)) = &piece.goto {
++        if let Some(clip) = resolve(stage.into(), path).and_then(|c| c.last().unwrap().as_movie_clip()) {
++            clip.goto_frame(context, crate::display_object::GotoInfo {
++                frame: *frame, stop_or_play: crate::display_object::StopOrPlay::Stop });
++            if *playing {
++                clip.play();
++            }
++        }
++    }
 +    if let Some((path, mode)) = &piece.blend {
 +        if let Some(chain) = resolve(stage.into(), path) {
 +            chain.last().unwrap().set_blend_mode(*mode);
