@@ -89,7 +89,7 @@ func _check_set(layout: Dictionary, set_id: StringName, mode := &"") -> void:
 	features.sort()
 	got_features.sort()
 	_expect(got_features == features, "%s features (portals Art_Portal_<pair>, crocodiles Art_Crocodile, the candy machine and belt, the toy hands) are on their cells and layers" % set_id)
-	var golden: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://" + golden_path))
+	var golden: Dictionary = GoldenFile.load_json("res://" + golden_path)
 	var matrices := {}
 	for node: Dictionary in golden.nodes: matrices[node.path] = node.stage_matrix
 	var worst := 0.0
