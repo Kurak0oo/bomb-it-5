@@ -25,11 +25,14 @@ for layout in "$root"/scenes/swf/*.json; do
 	screens+=("$id")
 done
 
+# macOS has no `timeout`; use coreutils' gtimeout if present, else run unbounded (--quit-after still ends it).
+if command -v timeout >/dev/null; then limit=(timeout 300); elif command -v gtimeout >/dev/null; then limit=(gtimeout 300); else limit=(); fi
+
 failed=0
 boot() {
 	local label="$1"; shift
 	local output code
-	output="$(timeout 300 "$godot" --headless --path "$root" --quit-after "$frames" "$@" 2>&1)"
+	output="$(${limit[@]+"${limit[@]}"} "$godot" --headless --path "$root" --quit-after "$frames" "$@" 2>&1)"
 	code=$?
 	local errors
 	errors="$(grep -E '^(SCRIPT ERROR|ERROR|USER ERROR|Parse Error)|Parse Error:' <<<"$output")"
