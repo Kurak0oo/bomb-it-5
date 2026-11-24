@@ -5,8 +5,10 @@ A Douyin build with original art is a separate build profile on the same code. T
 not the [bomb-it-1](https://github.com/Kurak0oo/bomb-it-1) repo, and that repo stays
 parked.
 
-**Status:** restarting on 2026-11-02. See [docs/development.md](docs/development.md)
-for the plan and current checkpoint. The previous state is tagged `pre-restart`.
+**Status:** checkpoint 5 of the 2026-11-02 restart; its issue
+([#94](https://github.com/Kurak0oo/bomb-it-5/issues/94)) holds the current status and
+handoff. [docs/development.md](docs/development.md) holds the plan. The previous state is
+tagged `pre-restart`.
 
 Open `project.godot` in **Godot 4.5** with the Compatibility renderer. The current menus
 and gameplay screen are placeholders that later checkpoints replace. To see original
@@ -17,7 +19,8 @@ art, build the local pack from your own SWF with
 
 | Need | Read |
 | --- | --- |
-| Plan, rules of work, current checkpoint | [docs/development.md](docs/development.md) |
+| Plan, rules of work, checkpoints | [docs/development.md](docs/development.md) |
+| Current status and session handoff | the current checkpoint's issue ([#94](https://github.com/Kurak0oo/bomb-it-5/issues/94)) |
 | Domain terms | [GLOSSARY.md](GLOSSARY.md) |
 | Recovered original behavior and its source | [docs/evidence/README.md](docs/evidence/README.md) |
 | Reference player (Ruffle) | [tools/reference_player/README.md](tools/reference_player/README.md) |
@@ -26,5 +29,6 @@ art, build the local pack from your own SWF with
 
 ## Checks
 
-`GODOT=/path/to/godot tools/run_checks.sh` (macOS/Linux) or
+`GODOT=/path/to/godot tools/launch_gate.sh` first (the game must start cleanly), then
+`GODOT=/path/to/godot tools/run_checks.sh` (macOS/Linux, runs the launch gate too) or
 `./tools/run_checks.ps1 -Godot 'path/to/Godot_4.5_console.exe'` (Windows).

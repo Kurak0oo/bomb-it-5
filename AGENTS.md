@@ -1,7 +1,22 @@
 # Agent notes
 
 Read [docs/development.md](docs/development.md) first: it holds the restart plan, the
-rules of work and the current checkpoint. Work only on the current checkpoint.
+rules of work and the checkpoints. Then read the current checkpoint's issue (linked under
+Status there): it is the handoff between sessions. Work only on the current checkpoint.
+
+- **One feature per session.** Start from the checkpoint issue's three lists (owner reports
+  awaiting confirmation first, owner decisions not to reopen, what changed), finish one
+  verified increment, and end by commenting the updated lists on that issue. Do not add a
+  status log to docs/development.md or any other file.
+- **Never close a `ui-art` issue.** Post results with `python3 tools/compare/post_review.py
+  ISSUE CASE... --post` (it labels the issue `ready-for-owner-review`); the owner closes it.
+  A close through an app is reopened by `.github/workflows/owner-gate.yml`.
+- **State before pixels.** Fix the comparison's first divergence before anything else; use a
+  `trace` action for behaviour between captures. Pixels are scored only once nodes match.
+- **Goldens are compressed.** Read and write them through `tools/golden_io.py` (Python) or
+  `GoldenFile` (GDScript), never with plain file reads.
+- **Godot upstream.** Godot's contribution rules forbid AI-authored engine code and agent
+  pull requests: report an engine bug to the owner instead of patching the engine.
 
 - UI and art are placeholders until the owner confirms them. Never close a UI or art
   ticket on automated checks alone; the comparison loop only says a screen is ready
@@ -38,11 +53,12 @@ There is no `package.json`. Checks are Godot 4.5 scripts, run from the repo root
 
   `/Applications/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/<check>.gd`
 
-  Timed passes, slowest first: `flow_scene_check.gd` 13.56s, `looks_check.gd` 10.21s, `controls_check.gd` 6.14s, `difficulty_check.gd` 2.04s, `quality_check.gd` 1.35s, `game_board_check.gd` 1.26s, `stage_features_check.gd` 1.17s, `game_scene_check.gd` 0.88s, `fidelity_check.gd` 0.77s, `round_play_check.gd` 0.58s, `layout_check.gd` 0.48s, `round_regression_check.gd` 0.39s, `pac_man_check.gd` 0.39s, `green_zone_check.gd` 0.38s, `command_boundary_check.gd` 0.31s, `scheduler_check.gd` 0.29s, `bomb_simulation_check.gd` 0.29s, `mode_seam_check.gd` 0.29s, `kill_check.gd` 0.29s, `hitmove_check.gd` 0.29s, `audio_check.gd` 0.29s, `ai_trace_check.gd` 0.29s, `session_check.gd` 0.19s, `art_catalog_check.gd` 0.19s, `avm_random_check.gd` 0.19s. `tools/playthrough_check.gd` passed in 9.7s (7 playthroughs, 2026-11-22) (`res://tools/playthrough_check.gd`). Compare-tool unit tests: `python3 -m unittest discover -s tools/compare` (0.75s).
+  Timed passes, slowest first: `flow_scene_check.gd` 13.56s, `looks_check.gd` 10.21s, `controls_check.gd` 6.14s, `difficulty_check.gd` 2.04s, `quality_check.gd` 1.35s, `game_board_check.gd` 1.26s, `stage_features_check.gd` 1.17s, `game_scene_check.gd` 0.88s, `fidelity_check.gd` 0.77s, `round_play_check.gd` 0.58s, `layout_check.gd` 0.48s, `round_regression_check.gd` 0.39s, `pac_man_check.gd` 0.39s, `green_zone_check.gd` 0.38s, `command_boundary_check.gd` 0.31s, `scheduler_check.gd` 0.29s, `bomb_simulation_check.gd` 0.29s, `mode_seam_check.gd` 0.29s, `kill_check.gd` 0.29s, `hitmove_check.gd` 0.29s, `audio_check.gd` 0.29s, `ai_trace_check.gd` 0.29s, `session_check.gd` 0.19s, `art_catalog_check.gd` 0.19s, `avm_random_check.gd` 0.19s. `tools/playthrough_check.gd` passed in 9.7s (7 playthroughs, 2026-11-22) (`res://tools/playthrough_check.gd`). Compare-tool unit tests: `python3 -m unittest discover -s tools/compare` (about 4s) and `python3 -m unittest tools/test_golden_io.py`.
 
   Do not give a worker `res://tools/smoke_playthrough.gd`. It passed in 242.71s, which is past both the 50-second gate budget and dsh's 60-second shell limit. It runs only inside the full suite, with `--fixed-fps 35`.
 
-- Typecheck: none. This repo has no typecheck script. Godot parses each script when its check runs.
+- Launch gate (before any other check): `GODOT=... tools/launch_gate.sh` boots the main scene and every generated screen headless for 120 frames and fails on any script or engine error (about 20 s). It always passes `--quit-after` and never `-d`; a headless run without `--quit-after` never ends, and one under `-d` stops at an interactive `debug>` prompt on a script error.
+- Typecheck: none. This repo has no typecheck script. Godot parses each script when its check runs; the launch gate catches errors in scripts no check loads.
 - Full suite, run once at close: `GODOT=/Applications/Godot.app/Contents/MacOS/Godot tools/run_checks.sh`
 
 ## Seams
