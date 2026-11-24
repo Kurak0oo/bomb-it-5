@@ -5,6 +5,8 @@ godot="${GODOT:-godot}"
 root="$(cd "$(dirname "$0")/.." && pwd)"
 version="$("$godot" --version)"
 [[ "$version" == 4.5.* ]] || { echo "Checks require Godot 4.5; received: $version" >&2; exit 1; }
+# The project must start cleanly before any suite runs (tools/launch_gate.sh).
+GODOT="$godot" "$root/tools/launch_gate.sh" || exit 1
 suites=(
 	"res://tests/command_boundary_check.gd|^PASS: [0-9]+ command boundary checks$"
 	"res://tests/scheduler_check.gd|^PASS: [0-9]+ scheduler checks$"
