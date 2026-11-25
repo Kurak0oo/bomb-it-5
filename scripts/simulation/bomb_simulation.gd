@@ -148,6 +148,21 @@ func _init(actor_ids: Array[StringName], actors: Dictionary, board: Dictionary, 
 	_mode.begin(self)
 
 
+## Stage a key release for the next command (`CommandBoundary.stage_release`): the original's
+## `InteractiveController.moveStop` dispatches `model.movArr.slice(-1)` before the last key
+## leaves, so the facing survives a stopped tick.
+func stage_release(actor_id: StringName, direction: Vector2) -> bool:
+	return _commands.stage_release(actor_id, direction)
+
+
+func clear_release(actor_id: StringName) -> void:
+	_commands.clear_release(actor_id)
+
+
+func clear_releases() -> void:
+	_commands.clear_releases()
+
+
 func advance(commands: Array[Dictionary]) -> Dictionary:
 	if _outcome != &"running":
 		var stopped := snapshot()
@@ -157,6 +172,10 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 		return stopped
 	var result: Dictionary = _commands.advance(commands)
 	_tick = result.tick
+	var tick_commands: Array[Dictionary] = commands
+	if result.accepted:
+		tick_commands = []
+		tick_commands.assign(result.commands)
 	var blasts: Array[Dictionary] = []
 	var broken_soft_blocks: Array[Vector2i] = []
 	_sounds = []
@@ -182,17 +201,24 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 			flame.count += 1
 			cleanup_index += 1
 		var by_actor: Dictionary = {}
-		for command in commands:
+		for command in tick_commands:
 			by_actor[command.actor_id] = command
 		for actor_id in _actor_ids:
 			var command: Dictionary = by_actor[actor_id]
 			if not _actors[actor_id].alive or _actors[actor_id].transit_until > 0 or _actors[actor_id].busy_until > _tick or _weapons.is_active(actor_id):
+				if command.has("release_direction"): _commands.clear_release(actor_id)
 				continue
 			# Toy-hand pushes and horse jumps take the controls away.
 			if not _actors[actor_id].get("pushed", {}).is_empty() or not _actors[actor_id].get("jump", {}).is_empty():
+				if command.has("release_direction"): _commands.clear_release(actor_id)
 				continue
 			if command.direction != Vector2.ZERO:
 				_actors[actor_id].facing = command.direction.normalized()
+			elif command.get("release_direction", Vector2.ZERO) != Vector2.ZERO:
+				# `InteractiveController.moveStop` dispatches `model.movArr.slice(-1)`, whose
+				# event `RobotController.robot_turnHandler` sends to `RobotView.robotTurn`
+				# (a new directed clip) and `setRobotMc` sets `RobotModel.robotDirect`.
+				_actors[actor_id].facing = (command.release_direction as Vector2).normalized()
 			for event in command.bomb_events:
 				if event == &"down":
 					var actor: Dictionary = _actors[command.actor_id]
@@ -246,7 +272,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 		for effect in _weapons.advance(_tick, _actors, _board, _bombs):
 			_resolve_attack(effect, blasts, broken_soft_blocks)
 		var held := {}
-		for command in commands:
+		for command in tick_commands:
 			held[command.actor_id] = command.direction if _actors[command.actor_id].alive else Vector2.ZERO
 		for feature in _features:
 			feature.advance(self, held)
@@ -258,7 +284,7 @@ func advance(commands: Array[Dictionary]) -> Dictionary:
 			registered_cells[id] = Vector2i(floori(position_at.x + 0.5), floori(position_at.y + 0.5))
 		_advance_portals()
 		if _rules.get("movement", false):
-			for command in commands:
+			for command in tick_commands:
 				var actor: Dictionary = _actors[command.actor_id]
 				if actor.movement_rearm and command.direction == Vector2.ZERO:
 					actor.movement_rearm = false

@@ -258,10 +258,12 @@ func update(snapshot: Dictionary) -> void:
 		return
 	# A batched update steps several ticks with one snapshot; the release belongs to the
 	# first of them (the key event landed before the frame), so keep it for one `_step`.
-	var released: Dictionary = snapshot.get("release_direction", {})
-	if not released.is_empty():
-		_release_step = released.duplicate()
-		snapshot.erase("release_direction")
+	# The command boundary carries it as the optional `release_direction` of this tick.
+	var released := {}
+	for command in snapshot.get("commands", []):
+		var direction = command.get("release_direction", Vector2.ZERO)
+		if direction is Vector2 and direction != Vector2.ZERO: released[command.actor_id] = direction
+	if not released.is_empty(): _release_step = released
 	for step in tick - _tick:
 		_now = _tick + step + 1
 		_step(snapshot, step == tick - _tick - 1)
@@ -445,11 +447,17 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 			continue
 		# A weapon's action stops the robot's move listener until `robotMoveStart`.
 		var busy: bool = not view.action.is_empty() and not view.action.ended
+		# The release's facing change is also gated by the simulation state of this tick:
+		# a portal started by `_advance_portals` or a toy hand that grabbed the robot this
+		# tick has already stopped its move listener (`robotMoveStop` / push callback).
+		var release_off: bool = int(actor.get("transit_until", 0)) > _now \
+			or int(actor.get("busy_until", 0)) > _now \
+			or not (actor.get("pushed", {}) as Dictionary).is_empty()
 		# A key press reaches the robot between frames (robot_turnHandler).
 		# (in a portal the robot's key listener is off: `stopMoveListener`)
 		if human and not view.transit and not busy:
 			if direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
-			elif direction == Vector2i.ZERO and release != Vector2i.ZERO:
+			elif direction == Vector2i.ZERO and release != Vector2i.ZERO and not release_off:
 				# `InteractiveController.moveStop` dispatches the last remaining direction
 				# before the array empties; `RobotView.robotTurn` makes that clip at frame 1
 				# and the same tick's `normalStop` stops it (a same-way release just plays it

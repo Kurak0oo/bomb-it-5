@@ -38,12 +38,6 @@ var state: Dictionary
 var practice := true
 var paused := false
 var held: Array[int] = []
-## The direction of the key whose release emptied `held` in the current tick: the original's
-## `InteractiveController.moveStop` dispatches the last remaining direction before the next
-## `moveStop`, so a two-key release still turns the robot to the last released key.
-var _release_facing := Vector2.ZERO
-## The tick the release happened on; the direction belongs to the next tick's snapshot only.
-var _release_tick := -1
 var ai: RefCounted
 var session_lives := 3
 var total_score := 0
@@ -396,6 +390,9 @@ func advance_time(seconds: float) -> void:
 			if session != null:
 				level_settled.emit(get_snapshot())
 				return
+	# Every tick of this batch has now been admitted; the last snapshot carries the release
+	# command for the display, so the staged note can go.
+	if not update.ticks.is_empty() and simulation != null: simulation.clear_releases()
 	_refresh()
 
 
@@ -604,13 +601,14 @@ func _input(event: InputEvent) -> void:
 			if event.pressed and not event.echo:
 				held.erase(event.keycode)
 				held.append(event.keycode)
-				_release_facing = Vector2.ZERO
 			elif not event.pressed:
 				var was_held: bool = held.has(event.keycode)
 				held.erase(event.keycode)
-				# The release that empties `movArr` is the one whose direction the original
-				# keeps facing (the other key already dispatched it, or a tap dispatched it).
-				if was_held and held.is_empty(): _note_release(directions[event.keycode])
+				# `InteractiveController.moveStop`: the release that empties `movArr` still
+				# names the direction the previous release dispatched (the other key, or a
+				# tap); stage it on the command for the simulation/display.
+				if was_held and held.is_empty() and _can_release():
+					simulation.stage_release(&"human", directions[event.keycode])
 			scheduler.set_direction(&"human", Vector2.ZERO if held.is_empty() else directions[held.back()])
 
 
@@ -618,37 +616,27 @@ func _input(event: InputEvent) -> void:
 ## death, jump, ending: `RobotController.clearMovStage` drops `movArr`).
 func _clear_held() -> void:
 	held.clear()
-	_release_facing = Vector2.ZERO
+	if simulation != null: simulation.clear_releases()
 
 
-## `InteractiveController.moveStop` with the last held key: it removes the direction from
-## `model.movArr`, and with the array now empty selects `RobotController.moveStop` without
-## dispatching a turn. The last event still names a direction: the original's previous
-## `moveStop` (the other key) dispatched it and `RobotView.robotTurn` made that clip at
-## frame 1, so the robot keeps that facing while the next engine tick stops the clip. Record
-## it for the next snapshot and set the model's facing (the pickups/weapons read it).
-func _note_release(direction: Vector2) -> void:
-	_release_facing = direction
-	_release_tick = int(state.get("tick", -1))
-	if simulation == null: return
+## Whether a key release may reach the robot now: `PersonInteractiveController.
+## stopMoveListener` is off while a portal sends it, a weapon action owns the movement
+## callback (`robotMoveStop`), or a toy hand pushes it, so a release then must not latch a
+## turn for the next snapshot.
+func _can_release() -> bool:
+	if not _can_control() or simulation == null: return false
 	var human: Dictionary = simulation.actors().get(&"human", {})
-	if human.is_empty(): return
-	# `PersonInteractiveController.stopMoveListener` is off in a portal or while an action
-	# owns the movement callback (`robotMoveStop`), and a push owns it too.
-	if int(human.get("transit_until", 0)) > _release_tick: return
-	if int(human.get("busy_until", 0)) > _release_tick: return
-	if not (human.get("pushed", {}) as Dictionary).is_empty(): return
-	human.facing = direction
+	if human.is_empty(): return false
+	var tick := int(state.get("tick", 0))
+	return int(human.get("transit_until", 0)) <= tick \
+		and int(human.get("busy_until", 0)) <= tick \
+		and (human.get("pushed", {}) as Dictionary).is_empty() \
+		and (human.get("jump", {}) as Dictionary).is_empty()
 
 
 func _refresh() -> void:
 	if is_instance_valid(swf_view) and not state.is_empty():
 		var snapshot := get_snapshot()
-		# The release belongs to the first snapshot after the tick it happened on, not to a
-		# repeated `_refresh` of the same tick (pause, attach, interpolation-only frames).
-		if _release_facing != Vector2.ZERO and int(snapshot.get("tick", -1)) > _release_tick:
-			snapshot.release_direction = {&"human": _release_facing}
-			_release_facing = Vector2.ZERO
 		var between: float = scheduler.interpolation() if replica and not paused and is_instance_valid(scheduler) else 1.0
 		swf_view.present(snapshot, practice, paused, previous_state, between)
 		if is_instance_valid(swf_board_view): swf_board_view.present(snapshot, practice, paused, previous_state, between)
