@@ -8,9 +8,12 @@ extends SceneTree
 ## The test runs the real round simulation and the display's `GameActors` over an open Cinema
 ## board: three Down ticks (the clip plays 2, 3, 4), a release (one more advance to 5, then
 ## stopped), eleven idle ticks (5 throughout, matching every golden tick), and a fresh press
-## (continues from 5, as `robot_turnHandler`'s `mc.play()` does).
+## (continues from 5, as `robot_turnHandler`'s `mc.play()` does). It also covers the
+## two-key release (the last released key's clip at frame 1), a tap shorter than a step, and
+## the input's model facing, against `gameplay-cinema-walk-two-key`.
 
 const GameActors = preload("res://scripts/ui/game_actors.gd")
+const Game = preload("res://scripts/game.gd")
 const Simulation = preload("res://scripts/simulation/bomb_simulation.gd")
 const GoldenFile = preload("res://scripts/golden_file.gd")
 const PACK := "res://original/screens/game/actors/actors.json"
@@ -173,7 +176,60 @@ func _run() -> void:
 	actors.update(sim.advance(commands))
 	_expect(int(view.frame) == released_frame % 24 + 1 and view.playing,
 		"a fresh Down press plays on from the stopped frame, as robot_turnHandler's mc.play() does")
+	# Two held directions released in one tick: `InteractiveController.moveStop` for the
+	# first release still has the other key, dispatches its direction (a new clip at frame 1)
+	# and the second release empties `movArr`; the same tick's moveStop stops that new clip.
+	var two_key: Dictionary = sim.snapshot()
+	two_key.tick = int(two_key.tick) + 1
+	two_key.commands = [_command(Vector2.ZERO)]
+	two_key.release_direction = {&"human": Vector2.RIGHT}
+	actors.update(two_key)
+	_expect(view.class == "_r0_Right" and int(view.frame) == 1 and not view.playing,
+		"a two-key release keeps the last released (Right) clip at frame 1, stopped")
+	# A quick tap shorter than a step: the key-down and key-up both land between frames, but
+	# the original's robotTurn still makes the new direction's clip at frame 1 before moveStop.
+	var tap: Dictionary = sim.snapshot()
+	tap.tick = int(two_key.tick) + 1
+	tap.commands = [_command(Vector2.ZERO)]
+	tap.release_direction = {&"human": Vector2.LEFT}
+	actors.update(tap)
+	_expect(view.class == "_r0_Left" and int(view.frame) == 1 and not view.playing,
+		"a tap between frames shows the tapped (Left) clip at frame 1, stopped")
 	scene.screen.queue_free()
+	await process_frame
+	# The input side: the snapshot carries the last released key's direction and the model
+	# keeps that facing (`InteractiveController.moveStop` / `RobotController.robot_turnHandler` -> `RobotView.robotTurn`).
+	var game: Node = Game.new()
+	root.add_child(game)
+	await process_frame
+	game.set_process(false)
+	game.start_session(true, 42)
+	for tick in 120:
+		if game._can_control(): break
+		game.advance_time(1.0 / 35.0)
+	_expect(game._can_control(), "the practice round accepts direction input")
+	_key(KEY_RIGHT, true)
+	game.advance_time(1.0 / 35.0)
+	_key(KEY_DOWN, true)
+	game.advance_time(1.0 / 35.0)
+	_key(KEY_DOWN, false)
+	_key(KEY_RIGHT, false)
+	game.advance_time(1.0 / 35.0)
+	var snap: Dictionary = game.get_snapshot()
+	_expect(snap.commands[0].direction == Vector2.ZERO, "the two-key release tick requests no movement")
+	_expect(snap.actors[&"human"].facing == Vector2.RIGHT,
+		"the model keeps the last released (Right) facing after both keys are up")
+	# One key released while the other stays held: the remaining key turns and walks.
+	_key(KEY_RIGHT, true)
+	_key(KEY_DOWN, true)
+	game.advance_time(1.0 / 35.0)
+	_key(KEY_DOWN, false)
+	game.advance_time(1.0 / 35.0)
+	_expect(game.get_snapshot().actors[&"human"].facing == Vector2.RIGHT,
+		"releasing Down while Right stays held leaves the robot facing and walking Right")
+	_key(KEY_RIGHT, false)
+	game.advance_time(1.0 / 35.0)
+	game.queue_free()
 	await process_frame
 	print("%s: %d walk stop checks" % ["PASS" if failures == 0 else "FAIL", checks])
 	quit(0 if failures == 0 else 1)
@@ -181,6 +237,13 @@ func _run() -> void:
 
 func _command(direction: Vector2) -> Dictionary:
 	return {"actor_id": &"human", "direction": direction, "bomb_events": []}
+
+
+func _key(keycode: Key, pressed: bool) -> void:
+	var event := InputEventKey.new()
+	event.keycode = keycode
+	event.pressed = pressed
+	root.push_input(event, true)
 
 
 func _make(pack: Dictionary) -> Dictionary:

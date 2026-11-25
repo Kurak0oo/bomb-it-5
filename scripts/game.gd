@@ -38,6 +38,12 @@ var state: Dictionary
 var practice := true
 var paused := false
 var held: Array[int] = []
+## The direction of the key whose release emptied `held` in the current tick: the original's
+## `InteractiveController.moveStop` dispatches the last remaining direction before the next
+## `moveStop`, so a two-key release still turns the robot to the last released key.
+var _release_facing := Vector2.ZERO
+## The tick the release happened on; the direction belongs to the next tick's snapshot only.
+var _release_tick := -1
 var ai: RefCounted
 var session_lives := 3
 var total_score := 0
@@ -141,7 +147,7 @@ func _start_round(is_practice: bool, seed_value: int = -1) -> void:
 	paused = false
 	pause_after = -1
 	result_credited = false
-	held.clear()
+	_clear_held()
 	var mode_name: StringName = session.mode if session != null else &"arcade"
 	var difficulty: StringName = session.difficulty if session != null else &"normal"
 	var profile: Dictionary = AIProfiles.for_mode(mode_name, difficulty)
@@ -367,7 +373,7 @@ func advance_time(seconds: float) -> void:
 				_begin_original_pause()
 				return
 		if state.get("round_stage") == &"ending":
-			held.clear()
+			_clear_held()
 		if not state.actors[&"human"].alive:
 			# `AbstractRobot.kill` → `RobotController.robotStop` → `PersonInteractiveController.
 			# stopMoveListener` removes the movement listeners and `clearMoveStage` clears the
@@ -375,7 +381,7 @@ func advance_time(seconds: float) -> void:
 			# The scene's `held` and the scheduler's held direction stand in for that stage, so a
 			# key released while the listener is gone must not stay latched: `relive` starts from
 			# `moveStop`, and `movement_rearm` waits for that stop before a fresh press moves.
-			held.clear()
+			_clear_held()
 			scheduler.set_direction(&"human", Vector2.ZERO)
 		elif _jump_started():
 			# `HorseProp.frog`: `robotMoveStop` / `robotBombStop` take the movement and bomb
@@ -386,7 +392,7 @@ func advance_time(seconds: float) -> void:
 			result_credited = true
 			session_lives = state.actors[&"human"].lives
 			total_score += state.result_score
-			held.clear()
+			_clear_held()
 			if session != null:
 				level_settled.emit(get_snapshot())
 				return
@@ -406,7 +412,7 @@ func _jump_started() -> bool:
 ## bomb queue for the bomb listener. The queue's own capture/acknowledge pair drops its
 ## pending events (the scheduler has finished its ticks by the time this runs).
 func _clear_human_input() -> void:
-	held.clear()
+	_clear_held()
 	if scheduler == null: return
 	scheduler.set_direction(&"human", Vector2.ZERO)
 	var queues = scheduler.get("_bomb_queues")
@@ -438,7 +444,7 @@ func toggle_pause() -> void:
 	else:
 		scheduler.pause()
 		paused = true
-	held.clear()
+	_clear_held()
 	_refresh()
 	pause_changed.emit(paused)
 
@@ -466,7 +472,7 @@ func _begin_original_pause() -> void:
 	if Audio.current != null: Audio.current.pause_game_music()
 	simulation.hold_movement()
 	_paused_at_msec = _now_msec()
-	held.clear()
+	_clear_held()
 	_refresh()
 	pause_changed.emit(true)
 
@@ -501,7 +507,7 @@ func _notification(what: int) -> void:
 			return
 		scheduler.pause()
 		paused = true
-		held.clear()
+		_clear_held()
 		_refresh()
 		pause_changed.emit(true)
 
@@ -593,19 +599,56 @@ func _input(event: InputEvent) -> void:
 		elif event.keycode == bindings.bomb and _can_control():
 			scheduler.enqueue_bomb_event(&"human", &"down" if event.pressed else &"up")
 		elif event.keycode in [bindings.up, bindings.down, bindings.left, bindings.right] and _can_control():
+			var directions := {bindings.up: Vector2.UP, bindings.down: Vector2.DOWN,
+				bindings.left: Vector2.LEFT, bindings.right: Vector2.RIGHT}
 			if event.pressed and not event.echo:
 				held.erase(event.keycode)
 				held.append(event.keycode)
+				_release_facing = Vector2.ZERO
 			elif not event.pressed:
+				var was_held: bool = held.has(event.keycode)
 				held.erase(event.keycode)
-			var directions := {bindings.up: Vector2.UP, bindings.down: Vector2.DOWN,
-				bindings.left: Vector2.LEFT, bindings.right: Vector2.RIGHT}
+				# The release that empties `movArr` is the one whose direction the original
+				# keeps facing (the other key already dispatched it, or a tap dispatched it).
+				if was_held and held.is_empty(): _note_release(directions[event.keycode])
 			scheduler.set_direction(&"human", Vector2.ZERO if held.is_empty() else directions[held.back()])
+
+
+## Clear the held movement keys and any release they still owe the next snapshot (pause,
+## death, jump, ending: `RobotController.clearMovStage` drops `movArr`).
+func _clear_held() -> void:
+	held.clear()
+	_release_facing = Vector2.ZERO
+
+
+## `InteractiveController.moveStop` with the last held key: it removes the direction from
+## `model.movArr`, and with the array now empty selects `RobotController.moveStop` without
+## dispatching a turn. The last event still names a direction: the original's previous
+## `moveStop` (the other key) dispatched it and `RobotView.robotTurn` made that clip at
+## frame 1, so the robot keeps that facing while the next engine tick stops the clip. Record
+## it for the next snapshot and set the model's facing (the pickups/weapons read it).
+func _note_release(direction: Vector2) -> void:
+	_release_facing = direction
+	_release_tick = int(state.get("tick", -1))
+	if simulation == null: return
+	var human: Dictionary = simulation.actors().get(&"human", {})
+	if human.is_empty(): return
+	# `PersonInteractiveController.stopMoveListener` is off in a portal or while an action
+	# owns the movement callback (`robotMoveStop`), and a push owns it too.
+	if int(human.get("transit_until", 0)) > _release_tick: return
+	if int(human.get("busy_until", 0)) > _release_tick: return
+	if not (human.get("pushed", {}) as Dictionary).is_empty(): return
+	human.facing = direction
 
 
 func _refresh() -> void:
 	if is_instance_valid(swf_view) and not state.is_empty():
 		var snapshot := get_snapshot()
+		# The release belongs to the first snapshot after the tick it happened on, not to a
+		# repeated `_refresh` of the same tick (pause, attach, interpolation-only frames).
+		if _release_facing != Vector2.ZERO and int(snapshot.get("tick", -1)) > _release_tick:
+			snapshot.release_direction = {&"human": _release_facing}
+			_release_facing = Vector2.ZERO
 		var between: float = scheduler.interpolation() if replica and not paused and is_instance_valid(scheduler) else 1.0
 		swf_view.present(snapshot, practice, paused, previous_state, between)
 		if is_instance_valid(swf_board_view): swf_board_view.present(snapshot, practice, paused, previous_state, between)
