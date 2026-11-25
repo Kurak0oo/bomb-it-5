@@ -1,0 +1,159 @@
+{
+ "name": "gameplay-cinema-walk-two-key",
+ "screen": "game",
+ "origin": "Two held directions released in one tick (WK2, owner play-test 2026-11-24): the round of gameplay-cinema-start (seed 42, Arcade, Normal, Cinema, robot 0) with the three AI robots stopped at its first frame (AIControl.stop through the fixture). Right is held, then Down (so the robot walks down facing Down), then both are released between the same two frames: the original's PersonInteractiveController.moveKeyUpHandler calls InteractiveController.moveStop for Down first, which removes Down from model.movArr, still has Right, dispatches Direction.RIGHT (RobotController.robot_turnHandler -> RobotView.robotTurn: a new _r0_Right clip at frame 1, playing) and selects moveRight; the Right release then empties movArr and selects moveStop, so the next engine tick's moveStop stops that new clip on frame 1 without moving. Then one direction stays held (Down released, Right held: the robot turns Right and walks) and a Left tap shorter than a step (press and release between frames: a new _r0_Left clip at frame 1, stopped by the next moveStop).",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "command": "kd right"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 1"
+  },
+  {
+   "command": "ku down"
+  },
+  {
+   "command": "ku right"
+  },
+  {
+   "trace": "two-key",
+   "ticks": 8
+  },
+  {
+   "command": "kd right"
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "ku down"
+  },
+  {
+   "trace": "one-held",
+   "ticks": 6
+  },
+  {
+   "command": "ku right"
+  },
+  {
+   "command": "kd left"
+  },
+  {
+   "command": "ku left"
+  },
+  {
+   "trace": "tap",
+   "ticks": 6
+  }
+ ],
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ }
+}

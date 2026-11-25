@@ -171,6 +171,9 @@ var _item_art: Dictionary = {}
 ## The snapshot being stepped (for the commands that read the board: ShootLaserCommand,
 ## BoxingPlayCommand.checkAttactDistance, LandminePlayCommand).
 var _snapshot: Dictionary = {}
+## The release direction of the current update, used by its first stepped tick only
+## (`Game._refresh` attaches it to the first snapshot after a key release).
+var _release_step: Dictionary = {}
 ## LandmineBombs made by LandminePlayCommand, until the snapshot's mine shows up.
 var _pending_mines: Array = []
 ## The projectiles (`TripleShootGunBomb`, `FireballBomb`) by owner and birth tick.
@@ -247,6 +250,12 @@ func update(snapshot: Dictionary) -> void:
 		return
 	if tick <= _tick:
 		return
+	# A batched update steps several ticks with one snapshot; the release belongs to the
+	# first of them (the key event landed before the frame), so keep it for one `_step`.
+	var released: Dictionary = snapshot.get("release_direction", {})
+	if not released.is_empty():
+		_release_step = released.duplicate()
+		snapshot.erase("release_direction")
 	for step in tick - _tick:
 		_now = _tick + step + 1
 		_step(snapshot, step == tick - _tick - 1)
@@ -405,6 +414,9 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 	var commands := {}
 	for command in snapshot.get("commands", []):
 		commands[command.actor_id] = command.direction
+	# `InteractiveController.moveStop` with the last held key: the previous release's
+	# remaining direction reached `robot_turnHandler` even when this tick's move is stopped.
+	var releases: Dictionary = _release_step
 	var attacks := {}
 	for attack in snapshot.get("attacks", []):
 		attacks[attack.actor_id] = attack
@@ -414,6 +426,7 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		if view.dead and actor.get("alive", false): _relive(view, actor)
 		if view.removed: continue
 		var direction := _direction(commands.get(id, Vector2.ZERO))
+		var release := _direction(releases.get(id, Vector2.ZERO))
 		var human: bool = id == &"human"
 		if not actor.get("alive", true) and not view.dead:
 			_kill(view)
@@ -424,7 +437,14 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		var busy: bool = not view.action.is_empty() and not view.action.ended
 		# A key press reaches the robot between frames (robot_turnHandler).
 		# (in a portal the robot's key listener is off: `stopMoveListener`)
-		if human and not view.transit and not busy and direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
+		if human and not view.transit and not busy:
+			if direction != Vector2i.ZERO and direction != view.direction: _turn(view, direction)
+			elif direction == Vector2i.ZERO and release != Vector2i.ZERO:
+				# `InteractiveController.moveStop` dispatches the last remaining direction
+				# before the array empties; `RobotView.robotTurn` makes that clip at frame 1
+				# and the same tick's `normalStop` stops it (a same-way release just plays it
+				# for the tick's advance, as before).
+				_turn(view, release)
 		# The frame's timeline advance. A ride clip's loop frame script (`_r0_Car_Down.frame11`:
 		# `gotoAndPlay(1)`) runs after the frame's engine, so it plays the clip again even when
 		# moveStop stopped it this frame: after a release on the loop's last frame the clip
@@ -490,6 +510,7 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 	_update_bombs(snapshot)
 	_update_shots(snapshot)
 	_update_items(snapshot)
+	_release_step.clear()
 
 
 static func _direction(v: Vector2) -> Vector2i:
