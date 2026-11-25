@@ -16,6 +16,7 @@ suites=(
 	"res://tests/fidelity_check.gd|^PASS: [0-9]+ fidelity checks$"
 	"res://tests/game_scene_check.gd|^PASS: [0-9]+ game scene checks$"
 	"res://tests/actor_display_check.gd|^PASS: [0-9]+ actor display checks$||^SKIP: actor display checks"
+	"res://tests/walk_stop_check.gd|^PASS: [0-9]+ walk stop checks$||^SKIP: walk stop check needs the local actors pack"
 	"res://tests/mode_seam_check.gd|^PASS: [0-9]+ mode seam checks$"
 	"res://tests/layout_check.gd|^PASS: [0-9]+ layout checks$"
 	"res://tests/session_check.gd|^PASS: [0-9]+ session checks$"
