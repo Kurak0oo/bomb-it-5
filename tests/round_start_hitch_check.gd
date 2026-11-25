@@ -65,7 +65,8 @@ func _run() -> void:
 	_expect(worst_usec <= BUDGET_USEC, "no frame in the menu -> round transition exceeds %d ms (worst %.1f ms at frame %d)"
 		% [BUDGET_USEC / 1000, worst_usec / 1000.0, worst_frame])
 	await _no_loading_round()
-	_finish()
+	await _watchdog_round()
+	await _finish()
 
 
 ## A menu -> game start in the real scene. `hold`: keep the actors parse blocked for
@@ -179,9 +180,51 @@ func _no_loading_round() -> void:
 	_expect(step_worst <= BUDGET_USEC, "no no-loading-screen host step exceeds %d ms (worst %.1f ms)"
 		% [BUDGET_USEC / 1000, step_worst / 1000.0])
 	_release_parse()
+	# No App is present to wait for the task in `finish_warming`: wait it here, before a
+	# later scenario resets the static task id.
+	await _wait_parse_task()
 	screen.queue_free()
 	game.queue_free()
 	await process_frame
+
+
+## A parse that never completes: the real-time watchdog fails it, the gate opens and the
+## round starts with the existing missing-art path; a late result is ignored.
+func _watchdog_round() -> void:
+	_reset_actor_art()
+	var gate := Semaphore.new()
+	_parse_gate = gate
+	SwfScreen.actors_parse_gate = func(): gate.wait()
+	SwfScreen.actors_parse_watchdog_sec = 0.5
+	var app: Control = load("res://scenes/main.tscn").instantiate()
+	app.save_path = "user://round-start-hitch-check-save.json"
+	DirAccess.remove_absolute(ProjectSettings.globalize_path(app.save_path))
+	root.add_child(app)
+	await process_frame
+	await app.screen_opened()
+	app.show_main_menu()
+	await app.screen_opened()
+	for idle in 10: await process_frame
+	var before := Time.get_ticks_usec()
+	app.start_session()
+	var reached := false
+	var count := 0
+	while count < MAX_FRAMES:
+		before = await _step(before)
+		count += 1
+		if app.game != null and app.game.get_snapshot().tick >= 1 and not _loading_up(app):
+			reached = true
+			break
+	_expect(reached, "the round starts after the watchdog opens the gate")
+	_expect(SwfScreen.actor_art_failed(), "the watchdog marks the parse failed")
+	_expect(not _loading_up(app), "the loading screen does not stay held")
+	_release_parse()
+	# Let the released late parse finish (the watchdog failed it, so its result is dropped)
+	# before the app exits: nothing may still run at engine shutdown.
+	await _wait_parse_task()
+	app.queue_free()
+	await process_frame
+	_expect(SwfScreen._actors_art.is_empty(), "a late parse result after the watchdog is ignored")
 
 
 ## The robots' first displayed tick: every one is visible with the image of the clip the
@@ -261,10 +304,24 @@ func _reset_actor_art() -> void:
 	SwfScreen._actors_lock.unlock()
 
 
+## Wait for the actor parse task the watchdog failed; its result is ignored but the task
+## itself must finish before the process exits.
+func _wait_parse_task() -> void:
+	var task: int = SwfScreen._actors_task
+	if task < 0: return
+	for wait in 600:
+		if WorkerThreadPool.is_task_completed(task):
+			WorkerThreadPool.wait_for_task_completion(task)
+			SwfScreen._actors_task = -1
+			return
+		await process_frame
+
+
 ## Release and clear the parse hook on every exit path, so a failing check never leaves the
 ## parse task blocked (and `finish_warming` never waits on it forever).
 func _release_parse() -> void:
 	SwfScreen.actors_parse_gate = Callable()
+	SwfScreen.actors_parse_watchdog_sec = 0.0
 	if _parse_gate != null:
 		_parse_gate.post()
 		_parse_gate = null
@@ -274,6 +331,7 @@ func _finish() -> void:
 	_release_parse()
 	# The standalone no-loading scenario has no App to wait for its background tasks.
 	SwfScreen.finish_warming()
+	await process_frame
 	if failures == 0:
 		print("PASS: %d round start hitch checks (worst frame %.1f ms)" % [checks, worst_usec / 1000.0])
 	else:
