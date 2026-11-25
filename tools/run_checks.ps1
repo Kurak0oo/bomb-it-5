@@ -18,6 +18,7 @@ $suites = @(
     @{ Script = 'res://tests/fidelity_check.gd'; Success = '^PASS: \d+ fidelity checks$' }
     @{ Script = 'res://tests/game_scene_check.gd'; Success = '^PASS: \d+ game scene checks$' }
     @{ Script = 'res://tests/actor_display_check.gd'; Success = '^PASS: \d+ actor display checks$'; Skip = '^SKIP: actor display checks' }
+    @{ Script = 'res://tests/walk_stop_check.gd'; Success = '^PASS: \d+ walk stop checks$'; Skip = '^SKIP: walk stop check needs the local actors pack' }
     @{ Script = 'res://tests/mode_seam_check.gd'; Success = '^PASS: \d+ mode seam checks$' }
     @{ Script = 'res://tests/layout_check.gd'; Success = '^PASS: \d+ layout checks$' }
     @{ Script = 'res://tests/session_check.gd'; Success = '^PASS: \d+ session checks$' }
