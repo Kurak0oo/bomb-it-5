@@ -179,22 +179,36 @@ func _run() -> void:
 	# Two held directions released in one tick: `InteractiveController.moveStop` for the
 	# first release still has the other key, dispatches its direction (a new clip at frame 1)
 	# and the second release empties `movArr`; the same tick's moveStop stops that new clip.
-	var two_key: Dictionary = sim.snapshot()
-	two_key.tick = int(two_key.tick) + 1
-	two_key.commands = [_command(Vector2.ZERO)]
-	two_key.release_direction = {&"human": Vector2.RIGHT}
-	actors.update(two_key)
+	# The release goes through the real command boundary, as the input layer stages it.
+	var stopped: Array[Dictionary] = [_command(Vector2.ZERO)]
+	sim.stage_release(&"human", Vector2.RIGHT)
+	actors.update(sim.advance(stopped))
 	_expect(view.class == "_r0_Right" and int(view.frame) == 1 and not view.playing,
 		"a two-key release keeps the last released (Right) clip at frame 1, stopped")
 	# A quick tap shorter than a step: the key-down and key-up both land between frames, but
 	# the original's robotTurn still makes the new direction's clip at frame 1 before moveStop.
-	var tap: Dictionary = sim.snapshot()
-	tap.tick = int(two_key.tick) + 1
-	tap.commands = [_command(Vector2.ZERO)]
-	tap.release_direction = {&"human": Vector2.LEFT}
-	actors.update(tap)
+	sim.stage_release(&"human", Vector2.LEFT)
+	actors.update(sim.advance(stopped))
 	_expect(view.class == "_r0_Left" and int(view.frame) == 1 and not view.playing,
 		"a tap between frames shows the tapped (Left) clip at frame 1, stopped")
+	# The listener is off in a portal (`RobotView.robotMoveStop`): a release that lands while
+	# the robot is sent must not turn the new clip, even though the command carries it.
+	var human: Dictionary = sim.actors()[&"human"]
+	human.transit_until = int(sim.snapshot().tick) + 5
+	sim.stage_release(&"human", Vector2.RIGHT)
+	actors.update(sim.advance(stopped))
+	_expect(view.class == "_r0_Left" and int(view.frame) == 1 and not view.playing,
+		"a release during portal transit does not turn the clip")
+	human.transit_until = 0
+	view.transit = false
+	# A toy hand owns the movement callback: `PushRobotCommand` re-selects it every tick.
+	human.pushed = {"direction": Vector2i.LEFT, "speed": 4.0}
+	sim.stage_release(&"human", Vector2.RIGHT)
+	actors.update(sim.advance(stopped))
+	_expect(view.class == "_r0_Left" and int(view.frame) == 1 and not view.playing,
+		"a release during a toy-hand push does not turn the clip")
+	human.pushed = {}
+	sim.clear_release(&"human")
 	scene.screen.queue_free()
 	await process_frame
 	# The input side: the snapshot carries the last released key's direction and the model
@@ -217,6 +231,8 @@ func _run() -> void:
 	game.advance_time(1.0 / 35.0)
 	var snap: Dictionary = game.get_snapshot()
 	_expect(snap.commands[0].direction == Vector2.ZERO, "the two-key release tick requests no movement")
+	_expect(snap.commands[0].get("release_direction", Vector2.ZERO) == Vector2.RIGHT,
+		"the input command carries the last released (Right) direction")
 	_expect(snap.actors[&"human"].facing == Vector2.RIGHT,
 		"the model keeps the last released (Right) facing after both keys are up")
 	# One key released while the other stays held: the remaining key turns and walks.
@@ -229,6 +245,22 @@ func _run() -> void:
 		"releasing Down while Right stays held leaves the robot facing and walking Right")
 	_key(KEY_RIGHT, false)
 	game.advance_time(1.0 / 35.0)
+	# A release whose listener is off (push, portal) is not staged, so it cannot turn the clip.
+	var live: Dictionary = game.simulation.actors()[&"human"]
+	live.pushed = {"direction": Vector2i.LEFT, "speed": 4.0}
+	_key(KEY_LEFT, true)
+	_key(KEY_LEFT, false)
+	game.advance_time(1.0 / 35.0)
+	_expect(game.get_snapshot().actors[&"human"].facing == Vector2.RIGHT,
+		"a release during a push leaves the facing unchanged")
+	live.pushed = {}
+	live.transit_until = int(game.get_snapshot().tick) + 5
+	_key(KEY_UP, true)
+	_key(KEY_UP, false)
+	game.advance_time(1.0 / 35.0)
+	_expect(game.get_snapshot().actors[&"human"].facing == Vector2.RIGHT,
+		"a release during portal transit leaves the facing unchanged")
+	live.transit_until = 0
 	game.queue_free()
 	await process_frame
 	print("%s: %d walk stop checks" % ["PASS" if failures == 0 else "FAIL", checks])
