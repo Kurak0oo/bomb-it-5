@@ -216,15 +216,45 @@ func _watchdog_round() -> void:
 			reached = true
 			break
 	_expect(reached, "the round starts after the watchdog opens the gate")
-	_expect(SwfScreen.actor_art_failed(), "the watchdog marks the parse failed")
+	_expect(SwfScreen.actor_art_watchdog_passed(), "the watchdog opens the gate")
+	_expect(not SwfScreen.actor_art_failed(), "the watchdog does not mark the parse failed")
 	_expect(not _loading_up(app), "the loading screen does not stay held")
+	var actors = _actors(app)
+	_expect(actors != null and not actors._robots.is_empty(), "the round builds its robots without art")
+	_expect(actors != null and actors._art.is_empty(), "those robots have no actor art yet")
+	# Release the parse: its late art must be stored and picked up by the running round.
 	_release_parse()
-	# Let the released late parse finish (the watchdog failed it, so its result is dropped)
-	# before the app exits: nothing may still run at engine shutdown.
+	var picked := false
+	var after := 0
+	while after < 180:
+		await process_frame
+		after += 1
+		if not SwfScreen._actors_art.is_empty() and actors != null and not actors._art.is_empty():
+			picked = true
+			break
+	_expect(picked and after <= 10, "the late parse gives the round its actor art within a few frames (%d)" % after)
+	_expect(not SwfScreen._actors_art.is_empty(), "a late successful parse is stored")
+	_expect(not SwfScreen.actor_art_failed(), "a late successful parse is not a failure")
+	if actors != null:
+		var drawn := 0
+		for id in actors._robots:
+			var view: Dictionary = actors._robots[id]
+			if not actors._robot_art(view).is_empty(): drawn += 1
+		_expect(drawn > 0, "robots built without art get their clip art on the next update")
+		var swf = app.get("_game_swf")
+		var sprites := 0
+		for wait in 30:
+			sprites = 0
+			for id in actors._robots:
+				var view: Dictionary = actors._robots[id]
+				var rec: Dictionary = swf._by_path_rec.get(String(view.item.path) + "/@0", {})
+				if rec.get("sprite") != null and rec.sprite.visible and rec.sprite.texture != null: sprites += 1
+			if sprites > 0: break
+			await process_frame
+		_expect(sprites > 0, "the late art reaches the robots' sprites")
 	await _wait_parse_task()
 	app.queue_free()
 	await process_frame
-	_expect(SwfScreen._actors_art.is_empty(), "a late parse result after the watchdog is ignored")
 
 
 ## The robots' first displayed tick: every one is visible with the image of the clip the
@@ -301,6 +331,7 @@ func _reset_actor_art() -> void:
 	SwfScreen._actors_art = {}
 	SwfScreen._actors_failed = false
 	SwfScreen._actors_task = -1
+	SwfScreen._actors_watchdog_passed = false
 	SwfScreen._actors_lock.unlock()
 
 
