@@ -74,6 +74,12 @@ var swf_view: Node2D
 ## The placeholder board (a stage set whose board art is not in the pack), under the row layers.
 var swf_board_view: Node2D
 var _swf_present: Callable
+## While this returns true the host clock and the round's start delay are frozen: the
+## loading screen sets it to hold the round until the actors pack is parsed, so the map's
+## reveal and the round's first tick keep the same tick as a run without the delay. Unset,
+## a pending pack (`SwfScreen.actor_art_pending`) still holds the first tick.
+var clock_hold: Callable
+var _clock_was_held := false
 ## Frames before the round's first step: the original builds the map one row per
 ## Timer(100) tick under its loading screen and starts the round 100 ms after
 ## (`MapMaster.timerHandle`, `Game.firstMapLoadOver`); the recorded number of frames
@@ -512,6 +518,19 @@ func capture_step(delta: float) -> void:
 
 
 func _host_step(delta: float) -> void:
+	# The round's clock waits while the actors pack parses (`SwfScreen.actor_art`): the
+	# loading screen's hold and the round stop together, and resume where they were. The
+	# snapshot is still presented on a held frame, so the display can build its robots as
+	# soon as the pack lands (no round tick is drawn without them).
+	if _clock_held():
+		_clock_was_held = true
+		_refresh()
+		return
+	if _clock_was_held:
+		# The first frame after the hold: let the display build its actors with this
+		# snapshot before the clock moves again.
+		_clock_was_held = false
+		_refresh()
 	if start_delay > 0:
 		# The frame the round was made in (by START's press) is not one of them: input lands
 		# between the original's frames, so its next frame is the first (as SwfScreen).
@@ -519,6 +538,14 @@ func _host_step(delta: float) -> void:
 		return
 	if is_instance_valid(scheduler):
 		advance_time(delta)
+
+
+## Whether the round's clock is held for the actor pack. The loading screen's gate covers
+## its whole map-load timeline; without one (or before it exists) a pending pack still
+## holds the first tick, so no tick is drawn without robots.
+func _clock_held() -> bool:
+	if clock_hold.is_valid(): return clock_hold.call()
+	return not SwfScreen.frame_locked and SwfScreen.actor_art_pending()
 
 
 ## Before a new round's screen: the previous one's placeholder layer goes.

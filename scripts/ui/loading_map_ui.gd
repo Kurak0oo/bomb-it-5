@@ -48,6 +48,19 @@ func init() -> void:
 func initListener() -> void:
 	if _mc != null and _mc.has_method("hold_advance"):
 		_mc.hold_advance(func(): return not _prepare_round_art())
+	# The round's own clock waits with this screen: the map's reveal and the first tick then
+	# keep the tick they would have without the parse delay.
+	var game = _root.get("game") if _root != null else null
+	if game != null:
+		game.clock_hold = func(): return not _prepare_round_art()
+
+
+## `destroy`: the screen is gone, so its holds go too (`gameStartHandler` starts the round).
+func destroy() -> void:
+	if _mc != null and _mc.has_method("hold_advance"): _mc.hold_advance(Callable())
+	var game = _root.get("game") if _root != null else null
+	if game != null: game.clock_hold = Callable()
+	super.destroy()
 
 
 ## `initData`: the mode's frame on the mode title, its description and its picture; the
