@@ -177,7 +177,7 @@ var _pending_mines: Array = []
 var _shots: Dictionary = {}
 ## `AbstractItem.getMc`'s PixelClip arguments (tx, ty, xOffset, yOffset).
 const PIXEL_CLIP := [10, 20, 2, 0]
-## The round's art was sent for resampling ahead of the ticks that show it (`_prefetch_round`).
+## The round's art was sent for resampling ahead of the ticks that show it (`prepare_round`).
 var _prefetched := false
 
 
@@ -186,13 +186,7 @@ func _init(screen: Node2D, board: RefCounted, looks: Array = []) -> void:
 	_board = board
 	_art = board.actor_art
 	_looks = looks
-	# bomb0 by (root frame, spark frame), exp0 by root frame and nested frame.
-	for age in _art.get("played", {}).get("bomb0", {}):
-		var art: Dictionary = _art.played.bomb0[age]
-		var frames: Dictionary = art.get("frames", {})
-		var key := "%d|%d" % [int(frames.get("/", 1)), int(frames.values().back() if frames.size() > 1 else 1)]
-		if not _bomb_art.has(key): _bomb_art[key] = art
-	_exp_art = _art.get("nested", {}).get("exp0", {})
+	_refresh_art_tables()
 	var items := ProjectSettings.globalize_path("res://original/screens/game/items/items.json")
 	if FileAccess.file_exists(items):
 		_item_art = JSON.parse_string(FileAccess.get_file_as_string(items)).get("items", {})
@@ -200,6 +194,34 @@ func _init(screen: Node2D, board: RefCounted, looks: Array = []) -> void:
 	var modes := ProjectSettings.globalize_path("res://original/screens/game/modes/manifest.json")
 	if FileAccess.file_exists(modes):
 		_item_art.merge(JSON.parse_string(FileAccess.get_file_as_string(modes)).get("items", {}), true)
+
+
+## The tables the round's actors display reads from the actors pack (bomb0 by root/spark
+## frame, exp0 by root/nested frame). The pack is parsed in the background, so the display
+## can be made before it lands and rebuilt by `_use_actor_art`.
+func _refresh_art_tables() -> void:
+	_bomb_art.clear()
+	_exp_art.clear()
+	# bomb0 by (root frame, spark frame), exp0 by root frame and nested frame.
+	for age in _art.get("played", {}).get("bomb0", {}):
+		var art: Dictionary = _art.played.bomb0[age]
+		var frames: Dictionary = art.get("frames", {})
+		var key := "%d|%d" % [int(frames.get("/", 1)), int(frames.values().back() if frames.size() > 1 else 1)]
+		if not _bomb_art.has(key): _bomb_art[key] = art
+	_exp_art = _art.get("nested", {}).get("exp0", {})
+
+
+## Take the actors pack when its background parse has landed (the board shares it), and
+## rebuild the bomb/explosion tables. Returns whether the pack is available; `wait` is the
+## last resort when a round needs it before the parse finished.
+func _use_actor_art(wait := false) -> bool:
+	if _board != null:
+		if _board.has_method("sync_actor_art"): _board.sync_actor_art(wait)
+		var fresh: Dictionary = _board.actor_art
+		if not fresh.is_empty() and not is_same(fresh, _art):
+			_art = fresh
+			_refresh_art_tables()
+	return not _art.is_empty()
 
 
 ## Every snapshot; the clips advance once per tick.
@@ -230,7 +252,11 @@ func update(snapshot: Dictionary) -> void:
 func _create_robots(snapshot: Dictionary) -> void:
 	# Every image a turn, ride change or weapon/bomb/explosion frame can draw this round is
 	# resampled ahead, so the tick that changes the clip already has it (no stale frame).
-	_prefetch_round(snapshot)
+	# (Without a loading screen this is the first chance; wait for the pack rather than show
+	# a round with no art.)
+	if not prepare_round(snapshot):
+		_use_actor_art(true)
+		prepare_round(snapshot)
 	var seat := 0
 	for id in snapshot.get("actors", {}):
 		var actor: Dictionary = snapshot.actors[id]
@@ -268,14 +294,20 @@ func _create_robots(snapshot: Dictionary) -> void:
 		seat += 1
 
 
-## Resample every image a turn, ride change or weapon/bomb/explosion frame can draw this
-## round, ahead of the tick that shows it (`SwfScreen.prefetch` fills its cache in background
-## threads, so `set_node_art` finds the replacement ready). The robot clips are each robot's
-## current look (the round's seats) on every ride the board's vehicles use, in all four
-## directions and the death clip; the weapon, bomb, explosion, effect and loop clips the
-## round can show come from the actors pack. Called once, when the display is built.
-func _prefetch_round(snapshot: Dictionary) -> void:
-	if _prefetched: return
+## Prepare every image a turn, ride change or weapon/bomb/explosion frame can draw this
+## round, ahead of the tick that shows it. The robot clips are each robot's current look
+## (the round's seats) on every ride the board's vehicles use, in all four directions and
+## the death clip; the weapon, bomb, explosion, effect and loop clips the round can show
+## come from the actors pack. Called by the loading screen while it still covers the round
+## (`LoadingMapUI`), so the resamples finish before the first tick; without a loading screen
+## it runs once when the display is built. The art list is handed to the screen deferred
+## (`SwfScreen.prefetch_arts`): keys and resamples spread over frames, so this call does not
+## scan a round's 2,000 files in one frame.
+func prepare_round(snapshot: Dictionary) -> bool:
+	if _prefetched: return true
+	# The pack is parsed once in the background: retry until it is in (the loading screen
+	# calls this every frame), so the round does not start its art scan before it can.
+	if not _use_actor_art(): return false
 	_prefetched = true
 	# The round owns the pins now, even when it pins nothing: the previous owner's images are
 	# released so the cache can evict them.
@@ -294,50 +326,69 @@ func _prefetch_round(snapshot: Dictionary) -> void:
 		seats.append({"look": look, "robot": int(actor.get("robot", seat))})
 		seat += 1
 	var seen := {}
-	# The four directions of each seat's look first: the turn a player makes first has its
-	# new clip's frame ready.
+	# The four directions of each seat's look first: they are the images the first turn
+	# shows, and the last pinned images evicted.
+	var directions: Array = []
 	for entry: Dictionary in seats:
 		for suffix in DIRECTIONS.values():
-			_prefetch_clip("_r%d%s" % [entry.robot, suffix], entry.look, seen, true)
+			_collect_clip("_r%d%s" % [entry.robot, suffix], entry.look, seen, directions)
+	_queue_arts(directions, true, true)
 	# Then every ride's directions and the death clip.
+	var rest: Array = []
 	for entry: Dictionary in seats:
 		for vehicle in vehicles:
 			if String(vehicle) == "": continue
 			for suffix in DIRECTIONS.values() + ["_Dead"]:
-				_prefetch_clip("_r%d%s%s" % [entry.robot, VEHICLE_CLIPS.get(vehicle, ""), suffix], entry.look, seen)
-		_prefetch_clip("_r%d_Dead" % entry.robot, entry.look, seen)
+				_collect_clip("_r%d%s%s" % [entry.robot, VEHICLE_CLIPS.get(vehicle, ""), suffix], entry.look, seen, rest)
+		_collect_clip("_r%d_Dead" % entry.robot, entry.look, seen, rest)
 	for bucket in ["held", "play", "played", "aged"]:
-		_prefetch_arts(_art.get("weapons", {}).get(bucket, {}), seen)
-	_prefetch_arts({"bomb": _bomb_art, "exp": _exp_art, "still": _art.get("still", {}),
-		"effects": _art.get("effects", {}), "loop_art": _art.get("loop_art", {})}, seen)
+		_collect_arts(_art.get("weapons", {}).get(bucket, {}), seen, rest)
+	_collect_arts({"bomb": _bomb_art, "exp": _exp_art, "still": _art.get("still", {}),
+		"effects": _art.get("effects", {}), "loop_art": _art.get("loop_art", {})}, seen, rest)
+	_queue_arts(rest, true, false)
+	return true
 
 
 ## One robot clip's current-look frames (`RobotView.setRobotMc`'s `bodyMc`/`hatMc` frames).
-## `last`: the current robots' four direction clips stay pinned longest (`SwfScreen.pin`).
-func _prefetch_clip(cls: String, look: Array, seen: Dictionary, last := false) -> void:
+func _collect_clip(cls: String, look: Array, seen: Dictionary, out: Array) -> void:
 	var clip: Dictionary = _art.get("robots", {}).get(cls, {})
 	if clip.is_empty(): return
 	var key := resolve_look_key(clip, int(look[0]), int(look[1]))
-	_prefetch_arts(clip.get("looks", {}).get(key, {}), seen, last)
+	_collect_arts(clip.get("looks", {}).get(key, {}), seen, out)
 
 
 ## Every image (`file`/`pixel_size`) under a pack table, each once.
-func _prefetch_arts(value, seen: Dictionary, last := false) -> void:
+func _collect_arts(value, seen: Dictionary, out: Array) -> void:
 	if value is Dictionary:
 		var file = value.get("file")
 		if file is String and value.has("pixel_size"):
 			var key := "%s|%s|%s" % [file, value.get("pixel_origin", []), value.get("pixel_size", [])]
 			if not seen.has(key):
 				seen[key] = true
-				# The round's frames are pinned (SwfScreen.pin): a cache filled past its
-				# budget with other screens' art must not evict them before the turn. The
-				# four direction clips are the last pinned images evicted.
-				if _screen.has_method("pin"): _screen.pin(value, last)
-				else: _screen.prefetch(value)
+				out.append(value)
 			return
-		for child in value.values(): _prefetch_arts(child, seen, last)
+		for child in value.values(): _collect_arts(child, seen, out)
 	elif value is Array:
-		for child in value: _prefetch_arts(child, seen, last)
+		for child in value: _collect_arts(child, seen, out)
+
+
+## Hand art to the screen: one deferred batch when it supports it (the round's whole pack),
+## else the per-image call (`SwfScreen.prefetch`/`pin`).
+func _queue_arts(arts: Array, pin: bool, last: bool) -> void:
+	if arts.is_empty(): return
+	if _screen.has_method("prefetch_arts"):
+		_screen.prefetch_arts(arts, pin, last)
+		return
+	for art: Dictionary in arts:
+		if pin and _screen.has_method("pin"): _screen.pin(art, last)
+		else: _screen.prefetch(art)
+
+
+## Kept for callers that hand one table at a time: collect it and queue it.
+func _prefetch_arts(value, seen: Dictionary, last := false) -> void:
+	var arts: Array = []
+	_collect_arts(value, seen, arts)
+	_queue_arts(arts, true, last)
 
 
 func _step(snapshot: Dictionary, last: bool) -> void:

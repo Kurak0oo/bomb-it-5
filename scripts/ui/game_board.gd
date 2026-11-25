@@ -45,6 +45,7 @@ extends RefCounted
 ## too (scripts/ui/game_actors.gd).
 
 const StageSets = preload("res://scripts/simulation/stage_sets.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 const SET_PACK := "res://original/screens/game/sets/%s/manifest.json"
 ## Sets whose `<Set>MapData.setData` calls `mapMaster.setMidBox(x, y)` on `centerProp` without
 ## `true`, so the centre is a hidden box (`getMidBox == 2`, `MapMaster.createRow`):
@@ -112,23 +113,17 @@ func _init(screen: Node2D, board: Dictionary, stage_set: StringName = &"", recor
 	elif String(mode) != "arcade" and rounds.has("%s/arcade" % set_id):
 		set_data.merge(rounds["%s/arcade" % set_id], true)
 	_art = art_of(screen, board, set_id)
-	var file := ProjectSettings.globalize_path("res://original/screens/game/actors/actors.json")
-	if FileAccess.file_exists(file):
-		actor_art = JSON.parse_string(FileAccess.get_file_as_string(file))
-	# Each feature's own loop by its nested clip's frame: the portals' glow (actors pass),
-	# another set's features (its pack's `played`: the crocodile's water).
-	for played: Dictionary in [actor_art.get("played", {}), _art.get("played", {})]:
-		for cls in played:
-			if not PLAYED_FEATURES.any(func(prefix): return String(cls).begins_with(prefix)): continue
-			var by_frame := {}
-			for age in played[cls]:
-				var art: Dictionary = played[cls][age]
-				var nested := []
-				for k in art.get("frames", {}):
-					if k != "/" and art.frames[k] != null: nested.append(art.frames[k])
-				var key: int = int(nested[0]) if nested.size() > 0 else 1
-				if not by_frame.has(key): by_frame[key] = art
-			_portal_loop[cls] = by_frame
+	# The 78 MB actors pack is parsed once in the background (`SwfScreen.actor_art`): the
+	# frame that starts a round must not stall on it. A frame-locked comparison waits for
+	# it, since its captures need every portal loop from the first frame; play gets it during
+	# the loading screen and rebuilds the loops when it lands (`sync_actor_art`).
+	if screen != null and screen.has_method("actor_art"):
+		actor_art = screen.actor_art(SwfScreen.frame_locked)
+	else:
+		# A screen stand-in without the shared pack (`capture_focus_check`'s BoardScreen,
+		# `game_board_check`'s null): read it here as before.
+		actor_art = SwfScreen.actor_art(true)
+	_build_portal_loop()
 
 
 ## The art of stage set `stage_set` on the gameplay screen: the screen's own pack for its own
@@ -153,6 +148,35 @@ func has_art() -> bool:
 	return not _art.is_empty()
 
 
+## Take the actors pack when its background parse has landed, and rebuild the features'
+## loops that come from it (the portals' glow: another set's `played` comes from `_art` and
+## was already added). Called from every place that shows a row or steps the round.
+func sync_actor_art(wait := false) -> void:
+	if _screen == null or not _screen.has_method("actor_art"): return
+	var fresh: Dictionary = _screen.actor_art(wait)
+	if fresh.is_empty() or fresh == actor_art: return
+	actor_art = fresh
+	_build_portal_loop()
+
+
+## Each feature's own loop by its nested clip's frame: the portals' glow (actors pass),
+## another set's features (its pack's `played`: the crocodile's water).
+func _build_portal_loop() -> void:
+	_portal_loop.clear()
+	for played: Dictionary in [actor_art.get("played", {}), _art.get("played", {})]:
+		for cls in played:
+			if not PLAYED_FEATURES.any(func(prefix): return String(cls).begins_with(prefix)): continue
+			var by_frame := {}
+			for age in played[cls]:
+				var art: Dictionary = played[cls][age]
+				var nested := []
+				for k in art.get("frames", {}):
+					if k != "/" and art.frames[k] != null: nested.append(art.frames[k])
+				var key: int = int(nested[0]) if nested.size() > 0 else 1
+				if not by_frame.has(key): by_frame[key] = art
+			_portal_loop[cls] = by_frame
+
+
 ## A clip a feature makes stopped at run time and steps itself (record_screen.py sets
 ## `stopped`: `Art_Prop_Disappear`): `total` frames and the art of each (`frames`); empty when
 ## the set's pack has none.
@@ -164,6 +188,7 @@ func stopped_art(cls: String) -> Dictionary:
 ## them (the comparison loop's round, `App.round_as_recorded`); otherwise from the round's
 ## own board (`snapshot.board`, `board_meta`).
 func build(snapshot: Dictionary, recorded: bool, all_rows := true) -> void:
+	sync_actor_art()
 	_rows.clear()
 	for y in int(_board.size[1]): _rows.append([])
 	var items := _recorded_items() if recorded else _items_of(snapshot)
@@ -210,6 +235,7 @@ func has_row(y: int) -> bool:
 ## `build` makes every row at once otherwise.
 func show_row(y: int) -> void:
 	if y in _built or y < 0 or y >= _rows.size(): return
+	sync_actor_art()
 	_built.append(y)
 	var tiles: Dictionary = _art.get("tiles", {})
 	for box: Dictionary in _rows[y]:
@@ -222,6 +248,7 @@ func show_row(y: int) -> void:
 ## whose cell no longer holds a block break (`Box.brickExp`) and leave their row when the
 ## break has played (`Box.countBrickExp`); the portals' glow plays.
 func update(snapshot: Dictionary) -> void:
+	sync_actor_art()
 	var tick := int(snapshot.get("tick", _tick))
 	var steps := tick - _tick
 	if steps <= 0: return

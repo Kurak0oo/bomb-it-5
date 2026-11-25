@@ -31,6 +31,8 @@ var _sound_frames: Array = []
 ## TweenMax on processBarMc's frame: from, to, seconds elapsed.
 var _tween := {}
 var _bar := 0.0
+## The round's art was handed to `GameActors` while this screen still covers it.
+var _round_art_prepared := false
 const FPS := 35.0
 
 
@@ -83,6 +85,7 @@ func progress(param1: float) -> void:
 
 ## One frame of the tween (the screen's frame clock).
 func tick() -> void:
+	_prepare_round_art()
 	if _tween.is_empty(): return
 	_tween.t += 1.0 / FPS
 	var was := int(_bar + 0.5)
@@ -92,3 +95,20 @@ func tick() -> void:
 	_mc.set_frame(_processBarMc, frame)
 	for f in _sound_frames:
 		if was < f and frame >= f: playSound()
+
+
+## Prepare the round's art while the map loads: the owner's freeze was the round asking for
+## ~2,000 resamples (and starting ~2,000 tasks) on the frame the map finished loading. The
+## gameplay screen and its actors exist before this screen's first frame (`App._game_screen`),
+## so hand the art over now and let it resample behind the loading bar.
+func _prepare_round_art() -> void:
+	if _round_art_prepared: return
+	var swf = _root.get("_game_swf") if _root != null else null
+	if not is_instance_valid(swf) or not swf.has_meta("actors"): return
+	var game = _root.get("game")
+	if game == null: return
+	var actors = swf.get_meta("actors")
+	# `prepare_round` returns false until the shared actors pack has been parsed; retry on
+	# the next loading frame (the screen still covers the round).
+	if actors != null and actors.has_method("prepare_round") and actors.prepare_round(game.get_snapshot()):
+		_round_art_prepared = true
