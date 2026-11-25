@@ -1185,8 +1185,20 @@ static func actor_art(wait := false) -> Dictionary:
 		return art
 	_actors_lock.lock()
 	art = _actors_art
+	# Any completion that left the art empty (a missing/corrupt file, or the task not
+	# finishing) is the one failure record: the gate opens and no parse is spawned again.
+	if art.is_empty(): _actors_failed = true
 	_actors_lock.unlock()
 	return art
+
+
+## Whether a background actors parse is still in progress (the loading screen and the
+## round's clock wait for it).
+static func actor_art_pending() -> bool:
+	_actors_lock.lock()
+	var pending: bool = not _actors_failed and _actors_art.is_empty() and _actors_task >= 0
+	_actors_lock.unlock()
+	return pending
 
 
 ## Whether the actors pack cannot be parsed (missing or corrupt): the round continues with
