@@ -23,7 +23,7 @@ suites=(
 	"res://tests/flow_scene_check.gd|^PASS: [0-9]+ flow scene checks$"
 	"res://tests/start_error_check.gd|^PASS: [0-9]+ start error checks$"
 	"res://tests/capture_focus_check.gd|^PASS: [0-9]+ capture focus checks$"
-	"res://tests/round_start_hitch_check.gd|^PASS: [0-9]+ round start hitch checks$||^SKIP: round start hitch checks"
+	"res://tests/round_start_hitch_check.gd|^PASS: [0-9]+ round start hitch checks \(worst frame [0-9.]+ ms\)$||^SKIP: round start hitch checks"
 	"res://tests/difficulty_check.gd|^PASS: [0-9]+ difficulty checks$"
 	"res://tests/controls_check.gd|^PASS: [0-9]+ controls checks$"
 	"res://tests/looks_check.gd|^PASS: [0-9]+ looks checks$"

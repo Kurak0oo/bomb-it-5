@@ -154,7 +154,7 @@ func has_art() -> bool:
 func sync_actor_art(wait := false) -> void:
 	if _screen == null or not _screen.has_method("actor_art"): return
 	var fresh: Dictionary = _screen.actor_art(wait)
-	if fresh.is_empty() or fresh == actor_art: return
+	if fresh.is_empty() or is_same(fresh, actor_art): return
 	actor_art = fresh
 	_build_portal_loop()
 

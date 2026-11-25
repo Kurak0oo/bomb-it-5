@@ -98,10 +98,15 @@ static var _sources := {}
 static var _cache_lock := Mutex.new()
 static var _fonts := {}
 static var _warm_tasks: Array[int] = []
-## The actors pack parsed once (`actor_art`); `_actors_task` is its background parse.
+## The actors pack parsed once (`actor_art`); `_actors_task` is its background parse and
+## `_actors_failed` records a missing or corrupt pack once, so it is not parsed again every
+## loading frame. `actors_parse_gate`, when set, runs in the parse task before the result is
+## stored: `round_start_hitch_check` uses it to hold a cold parse (test only).
 static var _actors_art := {}
 static var _actors_task := -1
+static var _actors_failed := false
 static var _actors_lock := Mutex.new()
+static var actors_parse_gate: Callable
 static var _cancel_warm := false
 
 var screen_name: StringName
@@ -133,6 +138,8 @@ var _apply_queued := false
 ## images do not queue at once (`_pump_prefetch`).
 var _prefetch_queue: Array[Dictionary] = []
 var _prefetch_keys := {}
+## Test/round gate: while it returns true the timeline does not advance (`hold_advance`).
+var advance_gate: Callable
 
 
 static func create(screen: StringName, delay := 0) -> Node2D:
@@ -1155,17 +1162,19 @@ func pack() -> Dictionary:
 static func actor_art(wait := false) -> Dictionary:
 	_actors_lock.lock()
 	var art: Dictionary = _actors_art
+	var failed: bool = _actors_failed
 	_actors_lock.unlock()
-	if not art.is_empty(): return art
+	if not art.is_empty() or failed: return art
 	if _actors_task < 0:
 		_actors_task = WorkerThreadPool.add_task(func():
 			var parsed = null
 			if FileAccess.file_exists(ACTORS_PACK):
 				parsed = JSON.parse_string(FileAccess.get_file_as_string(ACTORS_PACK))
-			if parsed is Dictionary:
-				_actors_lock.lock()
-				_actors_art = parsed
-				_actors_lock.unlock(), true)
+			if actors_parse_gate.is_valid(): actors_parse_gate.call()
+			_actors_lock.lock()
+			if parsed is Dictionary: _actors_art = parsed
+			else: _actors_failed = true
+			_actors_lock.unlock(), true)
 	if wait:
 		WorkerThreadPool.wait_for_task_completion(_actors_task)
 		_actors_task = -1
@@ -1178,6 +1187,22 @@ static func actor_art(wait := false) -> Dictionary:
 	art = _actors_art
 	_actors_lock.unlock()
 	return art
+
+
+## Whether the actors pack cannot be parsed (missing or corrupt): the round continues with
+## the missing-pack behaviour (outline/no art), as before, and the parse is not spawned again.
+static func actor_art_failed() -> bool:
+	_actors_lock.lock()
+	var failed := _actors_failed
+	_actors_lock.unlock()
+	return failed
+
+
+## Hold this screen's timeline until `condition` returns false (the loading screen holds the
+## map load until the round's actor pack is ready). The screen still pumps prefetch and art
+## while held.
+func hold_advance(condition: Callable) -> void:
+	advance_gate = condition
 
 
 ## `TextField.text = text`: the field's recorded art gives way to live text, drawn in the
@@ -1390,6 +1415,7 @@ func _process(delta: float) -> void:
 	# A screen made by input (a click) during this frame has not run a frame yet: in the
 	# original, input lands between frames and the next frame is the screen's first.
 	if _created_frame > 0 and Engine.get_process_frames() == _created_frame: return
+	if advance_gate.is_valid() and advance_gate.call(): return
 	# The comparison loop steps frames, not time: one SWF frame per Godot frame.
 	_clock += 1.0 / FPS if frame_locked else delta
 	while _clock >= 1.0 / FPS - 1e-6:
