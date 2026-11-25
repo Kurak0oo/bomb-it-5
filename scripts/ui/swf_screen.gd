@@ -34,6 +34,9 @@ signal key_down(keycode: int)
 
 const STAGE := Vector2(700, 510)
 const PACK := "res://original/screens/%s/manifest.json"
+## The game's actors pack: the round's robots, weapons, bombs and board features (78 MB).
+## Parsed once, in the background, and shared by every round (`actor_art`).
+const ACTORS_PACK := "res://original/screens/game/actors/actors.json"
 const FPS := 35.0
 const BLEND_SHADER := preload("res://scripts/ui/swf_blend.gdshader")
 const GLOW_SHADER := preload("res://scripts/ui/swf_glow.gdshader")
@@ -64,6 +67,11 @@ const PIN_BUDGET := ART_BUDGET / 2
 ## Resample requests `prefetch`/`pin` start per frame (round load), so a round's images do
 ## not queue all at once.
 const PREFETCH_PER_FRAME := 256
+## A round's art is handed over before the round (the loading screen calls
+## `GameActors.prepare_round`): its key and resampled size are computed this many images per
+## frame, and its resamples start as one background batch per `PREFETCH_PER_FRAME`, so the
+## frame that builds the round never scans thousands of files or starts thousands of tasks.
+const PREFETCH_PREPARE_PER_FRAME := 48
 static var _resized := {}
 static var _resized_order: Array[String] = []
 static var _resized_bytes := 0
@@ -90,6 +98,10 @@ static var _sources := {}
 static var _cache_lock := Mutex.new()
 static var _fonts := {}
 static var _warm_tasks: Array[int] = []
+## The actors pack parsed once (`actor_art`); `_actors_task` is its background parse.
+static var _actors_art := {}
+static var _actors_task := -1
+static var _actors_lock := Mutex.new()
 static var _cancel_warm := false
 
 var screen_name: StringName
@@ -821,7 +833,7 @@ func prefetch(art: Dictionary) -> void:
 
 
 ## Exempt a prefetched image from budget eviction and request it: the round's own art
-## (`GameActors._prefetch_round`) stays in the cache until `unpin` or the next round's pins.
+## (`GameActors.prepare_round`) stays in the cache until `unpin` or the next round's pins.
 ## `last` marks the current robots' four direction clips, evicted after the round's other
 ## pinned art when the pinned set reaches PIN_BUDGET.
 func pin(art: Dictionary, last := false) -> void:
@@ -835,9 +847,21 @@ func pin(art: Dictionary, last := false) -> void:
 		_pinned.clear()
 		_pin_owner = owner
 	_pinned[job.key] = PIN_PRIORITY_LAST if last else PIN_PRIORITY_NORMAL
-	_trim_pinned_locked()
+	# (No trim here: a round pins its whole set before any image is cached. `_cache_put`
+	# trims as the images arrive, so pinning is one dictionary write per image.)
 	_cache_lock.unlock()
 	_queue_prefetch(job)
+
+
+## Queue a whole round's art (or any list of `art` dictionaries) for preparation a batch per
+## frame: `prefetch_arts` is called while the loading screen is up, so the frame that starts
+## the round neither computes 2,000 cache keys nor starts 2,000 tasks. `pin`/`last` as `pin`.
+func prefetch_arts(arts: Array, pin := false, last := false) -> void:
+	if frame_locked: return
+	var owner := get_instance_id()
+	for art in arts:
+		if art is Dictionary:
+			_prefetch_queue.append({"art": art, "pin": pin, "last": last, "owner": owner})
 
 
 ## Start a round's pin set: release the previous owner's pins even when this round pins no
@@ -912,18 +936,66 @@ func _queue_prefetch(job: Dictionary) -> void:
 	_prefetch_queue.append(job)
 
 
-## Start a frame's worth of prefetch jobs: the round loads over several frames instead of
-## flooding WorkerThreadPool with a whole round's images at once.
+## Start a frame's worth of prefetch jobs: prepare up to `PREFETCH_PREPARE_PER_FRAME`
+## deferred images (their key and fit), then hand each `PREFETCH_PER_FRAME` batch to one
+## background task. The round loads over several frames instead of flooding the main thread
+## and WorkerThreadPool with a whole round's images at once.
 func _pump_prefetch() -> void:
 	if _prefetch_queue.is_empty(): return
-	var count := mini(PREFETCH_PER_FRAME, _prefetch_queue.size())
-	for i in count:
-		var job: Dictionary = _prefetch_queue[i]
-		_prefetch_keys.erase(job.key)
-		_request(job.file, job.fit, true, int(job.get("owner", get_instance_id())))
+	var prepared: Array[Dictionary] = []
 	var rest: Array[Dictionary] = []
-	for i in range(count, _prefetch_queue.size()): rest.append(_prefetch_queue[i])
+	var budget := PREFETCH_PREPARE_PER_FRAME
+	for entry: Dictionary in _prefetch_queue:
+		var job := entry
+		if entry.has("art"):
+			if budget <= 0:
+				rest.append(entry)
+				continue
+			budget -= 1
+			job = _prefetch_job(entry.art)
+			if job.is_empty(): continue
+			job["owner"] = int(entry.get("owner", get_instance_id()))
+			if bool(entry.get("pin", false)):
+				_cache_lock.lock()
+				# (Only the round that currently owns the pins: an old screen's queued art
+				# must not pin into the new round's set.)
+				if _pin_owner == int(job.owner):
+					_pinned[job.key] = PIN_PRIORITY_LAST if bool(entry.get("last", false)) else PIN_PRIORITY_NORMAL
+				_cache_lock.unlock()
+			if _prefetch_keys.has(job.key): continue
+			_prefetch_keys[job.key] = true
+		prepared.append(job)
 	_prefetch_queue = rest
+	var index := 0
+	while index < prepared.size():
+		var batch: Array[Dictionary] = prepared.slice(index, mini(index + PREFETCH_PER_FRAME, prepared.size()))
+		index += batch.size()
+		_dispatch_prefetch(batch)
+
+
+## Mark one prepared batch as in flight and resample it in one background task.
+
+func _dispatch_prefetch(batch: Array[Dictionary]) -> void:
+	var send: Array[Dictionary] = []
+	_cache_lock.lock()
+	for job: Dictionary in batch:
+		_prefetch_keys.erase(job.key)
+		if _failed.has(job.key):
+			var owners: Dictionary = _failed_owners.get_or_add(job.key, {})
+			owners[int(job.get("owner", get_instance_id()))] = true
+		if _queued.has(job.key) or _resized.has(job.key) or _failed.has(job.key): continue
+		_queued[job.key] = true
+		send.append(job)
+	_cache_lock.unlock()
+	if send.is_empty(): return
+	_warm_tasks.append(WorkerThreadPool.add_task(func(): _make_prefetch_batch(send), true))
+
+
+## Resample a prepared batch on a background thread (`_make` removes each key from `_queued`).
+static func _make_prefetch_batch(jobs: Array[Dictionary]) -> void:
+	for job: Dictionary in jobs:
+		var fit: Dictionary = job.fit
+		_make(String(job.file), int(fit.w), int(fit.h), fit.pads, String(job.key), int(job.get("owner", 0)))
 
 
 ## Flash colour offsets on a run-time node's art (`InvincibilityCommand`'s +50 blink),
@@ -1074,6 +1146,38 @@ static func _stop(colors: Array, alphas: Array, k: int) -> Color:
 func pack() -> Dictionary:
 	if not has_meta("pack"): set_meta("pack", _manifest())
 	return get_meta("pack")
+
+
+## The game's actors pack (78 MB), parsed once in the background: `GameBoard` and
+## `GameActors` use it as soon as it is ready and rebuild their tables. `wait` blocks only
+## for the frame-locked comparison (timing is not the player's there) and as a last resort
+## when a round needs the pack before the parse finished.
+static func actor_art(wait := false) -> Dictionary:
+	_actors_lock.lock()
+	var art: Dictionary = _actors_art
+	_actors_lock.unlock()
+	if not art.is_empty(): return art
+	if _actors_task < 0:
+		_actors_task = WorkerThreadPool.add_task(func():
+			var parsed = null
+			if FileAccess.file_exists(ACTORS_PACK):
+				parsed = JSON.parse_string(FileAccess.get_file_as_string(ACTORS_PACK))
+			if parsed is Dictionary:
+				_actors_lock.lock()
+				_actors_art = parsed
+				_actors_lock.unlock(), true)
+	if wait:
+		WorkerThreadPool.wait_for_task_completion(_actors_task)
+		_actors_task = -1
+	elif WorkerThreadPool.is_task_completed(_actors_task):
+		WorkerThreadPool.wait_for_task_completion(_actors_task)
+		_actors_task = -1
+	else:
+		return art
+	_actors_lock.lock()
+	art = _actors_art
+	_actors_lock.unlock()
+	return art
 
 
 ## `TextField.text = text`: the field's recorded art gives way to live text, drawn in the
@@ -1886,6 +1990,9 @@ static func _pinned_bytes_locked() -> int:
 ## Evict pinned art beyond PIN_BUDGET, least recently shown first, but the current robots'
 ## four direction clips (PIN_PRIORITY_LAST) only after every other pinned image.
 static func _trim_pinned_locked() -> void:
+	# (The pinned set cannot exceed the whole cache, so below the pinned cap there is
+	# nothing to trim: a round pins its images before they are cached.)
+	if _resized_bytes <= PIN_BUDGET: return
 	var pinned_bytes := _pinned_bytes_locked()
 	if pinned_bytes <= PIN_BUDGET: return
 	for priority in [PIN_PRIORITY_NORMAL, PIN_PRIORITY_LAST]:
@@ -2039,6 +2146,9 @@ static func finish_warming() -> void:
 	_cancel_warm = true
 	for task in _warm_tasks: WorkerThreadPool.wait_for_task_completion(task)
 	_warm_tasks.clear()
+	if _actors_task >= 0:
+		WorkerThreadPool.wait_for_task_completion(_actors_task)
+		_actors_task = -1
 	_cancel_warm = false
 
 
