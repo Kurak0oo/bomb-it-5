@@ -42,6 +42,14 @@ func init() -> void:
 	setMC("UI_reading")
 
 
+## `initListener`: hold the loading screen's timeline until the round's actor pack is ready,
+## so the map's rows, robots and `gameStartHandler` cannot run before `GameActors` can build
+## them (the round start must not wait for the 78 MB parse on the main thread).
+func initListener() -> void:
+	if _mc != null and _mc.has_method("hold_advance"):
+		_mc.hold_advance(func(): return not _prepare_round_art())
+
+
 ## `initData`: the mode's frame on the mode title, its description and its picture; the
 ## loading sound on processBarMc's frames 23, 37, 51, 65, 80 and 88 less 10.
 func initData() -> void:
@@ -101,14 +109,17 @@ func tick() -> void:
 ## ~2,000 resamples (and starting ~2,000 tasks) on the frame the map finished loading. The
 ## gameplay screen and its actors exist before this screen's first frame (`App._game_screen`),
 ## so hand the art over now and let it resample behind the loading bar.
-func _prepare_round_art() -> void:
-	if _round_art_prepared: return
+func _prepare_round_art() -> bool:
+	if _round_art_prepared: return true
 	var swf = _root.get("_game_swf") if _root != null else null
-	if not is_instance_valid(swf) or not swf.has_meta("actors"): return
+	if not is_instance_valid(swf) or not swf.has_meta("actors"): return false
 	var game = _root.get("game")
-	if game == null: return
+	if game == null: return false
 	var actors = swf.get_meta("actors")
-	# `prepare_round` returns false until the shared actors pack has been parsed; retry on
-	# the next loading frame (the screen still covers the round).
-	if actors != null and actors.has_method("prepare_round") and actors.prepare_round(game.get_snapshot()):
+	if actors == null or not actors.has_method("prepare_round"): return true
+	# `prepare_round` returns false until the shared actors pack has been parsed; the gate
+	# in `initListener` keeps this screen up and retries on the next frame.
+	if actors.prepare_round(game.get_snapshot()):
 		_round_art_prepared = true
+		return true
+	return false

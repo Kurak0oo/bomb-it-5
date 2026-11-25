@@ -17,15 +17,22 @@ extends SceneTree
 ## the fix must not bring back the hidden/blank robot or the stale direction.
 
 const GameActors = preload("res://scripts/ui/game_actors.gd")
+const SwfScreen = preload("res://scripts/ui/swf_screen.gd")
 const BUDGET_USEC := 100_000
 const MAX_FRAMES := 600
+## Frames the parse is held for before the test releases it: a cold machine's 78 MB parse,
+## long past the point where the old path would have waited for it on the main thread.
+const HOLD_FRAMES := 120
 var failures := 0
 var checks := 0
+var frames := 0
+var worst_usec := 0
+var worst_frame := 0
 
 
 func _initialize() -> void:
 	# Real time and real resamples: the freeze is a main-thread stall at window scale.
-	load("res://scripts/ui/swf_screen.gd").frame_locked = false
+	SwfScreen.frame_locked = false
 	_run.call_deferred()
 
 
@@ -46,28 +53,30 @@ func _run() -> void:
 	app.show_main_menu()
 	await app.screen_opened()
 	for idle in 10: await process_frame
+	# Hold the parse as a cold machine would: the loading screen must stay up and the main
+	# thread must not wait for it (the old `_create_robots` waited here, freezing the round).
+	var parse_gate := Semaphore.new()
+	SwfScreen.actors_parse_gate = func(): parse_gate.wait()
 	var before := Time.get_ticks_usec()
 	app.start_session()
-	var worst := 0
-	var worst_at := 0
-	var frames := 0
+	for held in HOLD_FRAMES:
+		before = await _step(before)
+	var actors_now = _actors(app)
+	_expect(_loading_up(app), "the map-loading screen stays up while the actors pack parses")
+	_expect(actors_now != null and actors_now._robots.is_empty(),
+		"the round does not create its robots before the actors pack is ready")
+	parse_gate.post()
+	SwfScreen.actors_parse_gate = Callable()
 	var reached := false
 	while frames < MAX_FRAMES:
-		await process_frame
-		var now := Time.get_ticks_usec()
-		var gap := now - before
-		before = now
-		frames += 1
-		if gap > worst:
-			worst = gap
-			worst_at = frames
+		before = await _step(before)
 		# The first tick the player sees: the map-loading screen has gone (`gameStartHandler`
 		# destroys it), so the round is on screen with its robots (made at loading frame 56).
 		if app.game != null and app.game.get_snapshot().tick >= 1 and not _loading_up(app):
 			reached = true
 			break
 	_expect(reached, "the round reaches its first tick (menu -> game)")
-	_expect(worst <= BUDGET_USEC, "no frame in the menu -> round transition exceeds %d ms (worst %.1f ms at frame %d)" % [BUDGET_USEC / 1000, worst / 1000.0, worst_at])
+	_expect(worst_usec <= BUDGET_USEC, "no frame in the menu -> round transition exceeds %d ms (worst %.1f ms at frame %d)" % [BUDGET_USEC / 1000, worst_usec / 1000.0, worst_frame])
 	_expect(app.current == &"playing", "the game is playing the level")
 	if not reached or not is_instance_valid(app.game):
 		_finish(app)
@@ -101,6 +110,25 @@ func _run() -> void:
 	_finish(app)
 
 
+## One measured frame, with the transition's worst frame tracked for the report.
+func _step(before: int) -> int:
+	await process_frame
+	var now := Time.get_ticks_usec()
+	var gap := now - before
+	frames += 1
+	if gap > worst_usec:
+		worst_usec = gap
+		worst_frame = frames
+	return now
+
+
+## The actor display of the gameplay screen (`App._game_swf`).
+func _actors(app: Control):
+	var swf = app.get("_game_swf")
+	if not is_instance_valid(swf) or not swf.has_meta("actors"): return null
+	return swf.get_meta("actors")
+
+
 ## The map-loading screen over the round (`App._loading_map`), while it is still up.
 func _loading_up(app: Control) -> bool:
 	for child in app.screen.get_children():
@@ -113,7 +141,10 @@ func _finish(app: Control) -> void:
 	# Waits for in-flight resample batches (`App._exit_tree` -> `SwfScreen.finish_warming`).
 	app.queue_free()
 	await process_frame
-	print("%s: %d round start hitch checks" % ["PASS" if failures == 0 else "FAIL", checks])
+	if failures == 0:
+		print("PASS: %d round start hitch checks (worst frame %.1f ms)" % [checks, worst_usec / 1000.0])
+	else:
+		print("FAIL: %d round start hitch checks (worst frame %.1f ms at frame %d)" % [checks, worst_usec / 1000.0, worst_frame])
 	quit(0 if failures == 0 else 1)
 
 

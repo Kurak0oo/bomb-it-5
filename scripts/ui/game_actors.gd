@@ -212,11 +212,10 @@ func _refresh_art_tables() -> void:
 
 
 ## Take the actors pack when its background parse has landed (the board shares it), and
-## rebuild the bomb/explosion tables. Returns whether the pack is available; `wait` is the
-## last resort when a round needs it before the parse finished.
-func _use_actor_art(wait := false) -> bool:
+## rebuild the bomb/explosion tables. Returns whether the pack is available; never waits.
+func _use_actor_art() -> bool:
 	if _board != null:
-		if _board.has_method("sync_actor_art"): _board.sync_actor_art(wait)
+		if _board.has_method("sync_actor_art"): _board.sync_actor_art()
 		var fresh: Dictionary = _board.actor_art
 		if not fresh.is_empty() and not is_same(fresh, _art):
 			_art = fresh
@@ -229,7 +228,12 @@ func update(snapshot: Dictionary) -> void:
 	var tick := int(snapshot.get("tick", 0))
 	if _tick < 0:
 		_tick = tick
-		_create_robots(snapshot)
+		if not _create_robots(snapshot):
+			# The actors pack is still parsing (no loading screen gate to hold): leave the
+			# round on the board without its robots and try again on the next snapshot. The
+			# main thread never waits for the parse.
+			_tick = -1
+			return
 		# The pickups the mode's `mapLoadOver` made (Green Zone's two, Pac-Man's items and
 		# coins), made with the robots before the round's first frame: their PixelClips stand
 		# where the recorded coin's stood (`first_change`: frames to its next bitmap, which
@@ -249,14 +253,12 @@ func update(snapshot: Dictionary) -> void:
 	_tick = tick
 
 
-func _create_robots(snapshot: Dictionary) -> void:
+func _create_robots(snapshot: Dictionary) -> bool:
 	# Every image a turn, ride change or weapon/bomb/explosion frame can draw this round is
 	# resampled ahead, so the tick that changes the clip already has it (no stale frame).
-	# (Without a loading screen this is the first chance; wait for the pack rather than show
-	# a round with no art.)
-	if not prepare_round(snapshot):
-		_use_actor_art(true)
-		prepare_round(snapshot)
+	# The loading screen holds the map load until the pack is ready (`advance_gate`); with no
+	# loading screen the caller retries later rather than stalling this frame.
+	if not prepare_round(snapshot): return false
 	var seat := 0
 	for id in snapshot.get("actors", {}):
 		var actor: Dictionary = snapshot.actors[id]
@@ -292,6 +294,7 @@ func _create_robots(snapshot: Dictionary) -> void:
 		view.fresh = 0
 		_show(view)
 		seat += 1
+	return true
 
 
 ## Prepare every image a turn, ride change or weapon/bomb/explosion frame can draw this
@@ -307,7 +310,13 @@ func prepare_round(snapshot: Dictionary) -> bool:
 	if _prefetched: return true
 	# The pack is parsed once in the background: retry until it is in (the loading screen
 	# calls this every frame), so the round does not start its art scan before it can.
-	if not _use_actor_art(): return false
+	if not _use_actor_art():
+		# A missing or corrupt pack: keep the old missing-pack behaviour (no art) rather than
+		# retrying the parse and holding the loading screen forever.
+		if _screen != null and _screen.has_method("actor_art_failed") and _screen.actor_art_failed():
+			_prefetched = true
+			return true
+		return false
 	_prefetched = true
 	# The round owns the pins now, even when it pins nothing: the previous owner's images are
 	# released so the cache can evict them.
