@@ -228,6 +228,12 @@ func _use_actor_art() -> bool:
 
 ## Every snapshot; the clips advance once per tick.
 func update(snapshot: Dictionary) -> void:
+	# A parse the loading gate stopped waiting for may still finish: take its art and redraw
+	# the robots that were built without it (their nodes already exist).
+	if _art.is_empty() and _use_actor_art():
+		prepare_round(snapshot)
+		for view: Dictionary in _robots.values():
+			if not view.get("removed", false): _show(view)
 	var tick := int(snapshot.get("tick", 0))
 	if _tick < 0:
 		_tick = tick
@@ -320,10 +326,14 @@ func prepare_round(snapshot: Dictionary) -> bool:
 	# The pack is parsed once in the background: retry until it is in (the loading screen
 	# calls this every frame), so the round does not start its art scan before it can.
 	if not _use_actor_art():
-		# A missing or corrupt pack: keep the old missing-pack behaviour (no art) rather than
-		# retrying the parse and holding the loading screen forever.
 		if _screen != null and _screen.has_method("actor_art_failed") and _screen.actor_art_failed():
+			# A missing or corrupt pack: keep the old missing-pack behaviour (no art) rather
+			# than retrying the parse and holding the loading screen forever.
 			_prefetched = true
+			return true
+		if _screen != null and _screen.has_method("actor_art_watchdog_passed") and _screen.actor_art_watchdog_passed():
+			# The watchdog opened the gate but the parse may still finish: build the round
+			# without art and retry (`update` re-syncs a late pack and redraws the robots).
 			return true
 		return false
 	_prefetched = true

@@ -108,13 +108,15 @@ static var _actors_failed := false
 static var _actors_lock := Mutex.new()
 static var actors_parse_gate: Callable
 ## A parse that never completes must not hold the loading screen and the round's clock
-## forever. After this many seconds of real time (not frames) from the parse's start, it is
-## marked failed and the gate opens with the missing-art path; a late result is discarded.
-## Frame-locked comparison captures keep waiting instead, for determinism.
+## forever. After this many seconds of real time (not frames) from the parse's start, the
+## gate opens with the missing-art path but the parse keeps running: if it finishes later,
+## its art is stored and the running round picks it up. Frame-locked comparison captures
+## keep waiting instead, for determinism.
 const ACTOR_PARSE_WATCHDOG_SEC := 10.0
 ## Test override (0: the real watchdog): `round_start_hitch_check` uses a short one.
 static var actors_parse_watchdog_sec := 0.0
 static var _actors_started_msec := 0
+static var _actors_watchdog_passed := false
 static var _cancel_warm := false
 
 var screen_name: StringName
@@ -1172,11 +1174,15 @@ static func actor_art(wait := false) -> Dictionary:
 	var art: Dictionary = _actors_art
 	var failed: bool = _actors_failed
 	if not wait and not failed and _actors_watchdog_expired_locked():
-		_actors_failed = true
-		failed = true
+		# The gate may open, but the parse is not a failure: a late result is stored.
+		_actors_watchdog_passed = true
 	_actors_lock.unlock()
 	if not art.is_empty() or failed: return art
-	if _actors_task < 0:
+	if not wait and _actors_watchdog_passed:
+		# The gate is open; do not spawn another parse. A task that finished is reaped and
+		# its result stored below.
+		if _actors_task < 0 or not WorkerThreadPool.is_task_completed(_actors_task): return art
+	elif _actors_task < 0:
 		_actors_started_msec = Time.get_ticks_msec()
 		_actors_task = WorkerThreadPool.add_task(func():
 			var parsed = null
@@ -1184,11 +1190,8 @@ static func actor_art(wait := false) -> Dictionary:
 				parsed = JSON.parse_string(FileAccess.get_file_as_string(ACTORS_PACK))
 			if actors_parse_gate.is_valid(): actors_parse_gate.call()
 			_actors_lock.lock()
-			# A watchdog failure owns the run: a late result must not replace the
-			# missing-art path the gate already opened.
-			if not _actors_failed:
-				if parsed is Dictionary: _actors_art = parsed
-				else: _actors_failed = true
+			if parsed is Dictionary: _actors_art = parsed
+			else: _actors_failed = true
 			_actors_lock.unlock(), true)
 	if wait:
 		WorkerThreadPool.wait_for_task_completion(_actors_task)
@@ -1200,8 +1203,8 @@ static func actor_art(wait := false) -> Dictionary:
 		return art
 	_actors_lock.lock()
 	art = _actors_art
-	# Any completion that left the art empty (a missing/corrupt file, or the task not
-	# finishing) is the one failure record: the gate opens and no parse is spawned again.
+	# Only a completion that leaves the art empty is a failure: the gate opens with the
+	# missing-art path and no parse is spawned again. A late result was stored above.
 	if art.is_empty(): _actors_failed = true
 	_actors_lock.unlock()
 	return art
@@ -1218,10 +1221,19 @@ static func _actors_watchdog_expired_locked() -> bool:
 ## round's clock wait for it).
 static func actor_art_pending() -> bool:
 	_actors_lock.lock()
-	if not _actors_failed and _actors_watchdog_expired_locked(): _actors_failed = true
-	var pending: bool = not _actors_failed and _actors_art.is_empty() and _actors_task >= 0
+	if not _actors_failed and _actors_watchdog_expired_locked(): _actors_watchdog_passed = true
+	var pending: bool = not _actors_failed and not _actors_watchdog_passed and _actors_art.is_empty() and _actors_task >= 0
 	_actors_lock.unlock()
 	return pending
+
+
+## Whether the watchdog opened the gate while the parse may still finish (its late art is
+## used when it lands: `GameActors.update` re-syncs the display).
+static func actor_art_watchdog_passed() -> bool:
+	_actors_lock.lock()
+	var passed := _actors_watchdog_passed
+	_actors_lock.unlock()
+	return passed
 
 
 ## Whether the actors pack cannot be parsed (missing or corrupt): the round continues with
@@ -2208,15 +2220,9 @@ static func finish_warming() -> void:
 	for task in _warm_tasks: WorkerThreadPool.wait_for_task_completion(task)
 	_warm_tasks.clear()
 	if _actors_task >= 0:
-		# A parse the watchdog already failed may never finish: waiting here would hang the
-		# exit. A live parse is still waited for.
-		_actors_lock.lock()
-		var failed: bool = _actors_failed
-		_actors_lock.unlock()
-		# A late result after the watchdog is ignored, but a task that did finish (the test
-		# releases its gate) is reaped cleanly.
-		if not failed or WorkerThreadPool.is_task_completed(_actors_task):
-			WorkerThreadPool.wait_for_task_completion(_actors_task)
+		# Always join the parse. A parse that never ends would also hang exit; accepted:
+		# it is a bounded file read, and only a broken task could outlive it.
+		WorkerThreadPool.wait_for_task_completion(_actors_task)
 		_actors_task = -1
 	_cancel_warm = false
 
