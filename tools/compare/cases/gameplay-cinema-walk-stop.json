@@ -1,0 +1,129 @@
+{
+ "name": "gameplay-cinema-walk-stop",
+ "screen": "game",
+ "origin": "The player's walk clip when a direction key is released mid-step (owner play-test 2026-11-24): the round of gameplay-cinema-start (seed 42, Arcade, Normal, Cinema, robot 0) with the three AI robots stopped at its first frame (AIControl.stop through the fixture), so only the player's robot acts. Down is held for 3 frames from the spawn and released before the first cell completes (the player's speed accelerates 1.6, 2.56, 3.136 pixels per callback), then the trace steps 12 single frames through the release. The original's RobotController.moveStop calls RobotModel.moveStop (velocity decays, position stays) and RobotView.normalStop, which stops the direction clip on the frame it reached; the trace compares the robot clip's frame every tick over the stop.",
+ "godot_note": "Godot starts on the recorded round (round cinema-start) as gameplay-cinema-start does, and stops its AI robots with the Godot-only ai-stop action.",
+ "thresholds": {
+  "ssim": 0.935,
+  "delta_e": 8
+ },
+ "thresholds_note": "No 3x frame of this recording exists, so the pixel pass line is the gameplay screen's measured 3x->1x ceiling (SSIM 0.935, as gameplay-cinema-bomb), region dE 8. The trace and node diff carry the stop behaviour.",
+ "actions": [
+  {
+   "command": "seed 42"
+  },
+  {
+   "command": "step 301"
+  },
+  {
+   "command": "click 349 440"
+  },
+  {
+   "command": "step 240"
+  },
+  {
+   "command": "click 569 203"
+  },
+  {
+   "command": "step 30"
+  },
+  {
+   "command": "click 140 180"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 275"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 255 312"
+  },
+  {
+   "command": "step 5"
+  },
+  {
+   "command": "click 415 428"
+  },
+  {
+   "command": "step 10"
+  },
+  {
+   "command": "click 470 389"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 335 355"
+  },
+  {
+   "command": "step 2"
+  },
+  {
+   "command": "click 533 477"
+  },
+  {
+   "command": "step 40"
+  },
+  {
+   "godot_command": "round cinema-start",
+   "godot_note": "The app does not reproduce the menus' Math.random draws, so the round this START opens replays the original's generator from the recording (math_random.json) and rolls its board from the original's draws (Layouts.roll_set: it must equal the golden's boxes and frames); the enemy robots come from the golden of the cinema-start capture (App.round_as_recorded)."
+  },
+  {
+   "command": "click 528 475"
+  },
+  {
+   "command": "step 61"
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 1,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 1",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 2,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 2",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "fixture": {
+    "op": "ai-control",
+    "actor": 3,
+    "mode": "stop"
+   },
+   "godot_command": "ai-stop 3",
+   "godot_note": "AIControl.stop through the original's own method (fixture); Godot gives the robot no commands, as it then has none."
+  },
+  {
+   "command": "kd down"
+  },
+  {
+   "command": "step 3"
+  },
+  {
+   "command": "ku down"
+  },
+  {
+   "trace": "release",
+   "ticks": 12
+  },
+  {
+   "capture": "stop"
+  }
+ ],
+ "wall_clock_text": {
+  "/@0#1/@0/time": "Game.countTime counts Date seconds; the reference player's Date follows the host clock, not its stepped frames, so TIME reads 178 or 177 here depending on the machine"
+ }
+}

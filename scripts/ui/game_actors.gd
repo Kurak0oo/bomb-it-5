@@ -402,14 +402,7 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 		# `HorseProp.frog` starts its clip again after `robotMoveStop`; the landing frame
 		# (`gotoAndStop(1)`) overrides a key release (`normalStop`) while the jump runs.
 		_jump(view, actor)
-		if direction == Vector2i.ZERO:
-			view.weapon_playing = false
-			view.shield_playing = false
-			if not view.jumping:
-				view.playing = false
-				# `HorseProp.frogMcStop`: `if (mc.currentFrame == 15) mc.gotoAndStop(1)`.
-				if view.vehicle == &"horse" and view.frame == HORSE_STOP_FRAME:
-					view.frame = 1
+		if direction == Vector2i.ZERO: _normal_stop(view)
 		if replay and view.class == replay_class and view.fresh == 0: view.playing = true
 		view.direction = direction
 		var blink_started := int(actor.get("blink_started", 0))
@@ -442,6 +435,24 @@ func _step(snapshot: Dictionary, last: bool) -> void:
 static func _direction(v: Vector2) -> Vector2i:
 	if v == Vector2.ZERO: return Vector2i.ZERO
 	return Vector2i(int(signf(v.x)), 0) if absf(v.x) >= absf(v.y) else Vector2i(0, int(signf(v.y)))
+
+
+## `RobotController.moveStop`, the engine's movement callback once the keyboard's
+## `InteractiveController.moveStop` has emptied `model.movArr`: `RobotModel.moveStop` decays
+## the speed without moving, then `_stopMcSurrogate` (set to `normalStopHandle` by
+## `RobotController.initStage`) calls `RobotView.normalStop`. `normalStop`'s `_mc.stop()`
+## leaves the walk clip on the frame it reached -- it neither finishes the cycle nor goes to a
+## stand frame -- and the robot stays where the last held tick left it. The frame's timeline
+## advance ran before this engine callback, so a release shows one frame after the last held
+## tick (recorded, gameplay-cinema-walk-stop: frames 2,3,4 while held, 5 on the release, 5
+## after). `HorseProp.frogMcStop` is the ride's own `_stopMcSurrogate`.
+func _normal_stop(view: Dictionary) -> void:
+	view.weapon_playing = false
+	view.shield_playing = false
+	if view.jumping: return
+	view.playing = false
+	if view.vehicle == &"horse" and view.frame == HORSE_STOP_FRAME:
+		view.frame = 1
 
 
 ## `RobotView.robotTurn` (a new clip, playing, its weapon playing too) or, facing that way
