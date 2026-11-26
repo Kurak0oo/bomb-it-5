@@ -3,15 +3,19 @@
     compare.py record CASE   reference player -> committed golden node dumps (+ local PNGs)
     compare.py record CASE --reference-only
                              reference player -> local PNGs only, committed goldens untouched
-    compare.py check CASE    Godot -> node diff against goldens, pixel diff where PNGs exist
+    compare.py check CASE    Godot -> node diff against goldens (nodes and traces only)
+    compare.py check --pixels CASE
+                             also score SSIM/ΔE against the local reference captures
     compare.py run CASE      record (when the SWF and player are present), then check
-    compare.py all           check every case
+    compare.py all           check every case's nodes and traces
     compare.py accept CASE   after the owner accepts a screen: its scores become the floor
 
 `check` compares state before pixels: every capture's node diff (and every tick of a
-`trace` action, tools/compare/tick_trace.py) runs first, the report names the first place the
-replays part (`first divergence`), and SSIM/ΔE run only for captures whose nodes match
-(and, when the case lists `pixel_captures`, only for those keyframes).
+`trace` action, tools/compare/tick_trace.py) runs first and the report names the first place
+the replays part (`first divergence`). The per-change loop is nodes and traces; SSIM/ΔE run
+only with `--pixels`, only for captures whose nodes match (and, when the case lists
+`pixel_captures`, only for those keyframes). `check --pixels CASE` scores pixels at
+acceptance, and `accept` needs a report made with `--pixels`.
 
 `record` needs the SWF and a reference player built with `-Display`/`build.sh`. `check`
 needs only Godot 4.5, so agents without the SWF can still run the node diff. Captures
@@ -607,7 +611,7 @@ def pixel_entry(case, name, capture, case_path, meta, golden_dir, out, floor, ma
     return result
 
 
-def check(name, godot):
+def check(name, godot, pixels=False):
     case_path, case, captures = load_case(name)
     golden_dir = GOLDENS / name
     meta_path = golden_dir / 'meta.json'
@@ -619,7 +623,7 @@ def check(name, godot):
     floor_path = golden_dir / 'floor.json'
     floor = json.loads(floor_path.read_text(encoding='utf-8')) if floor_path.is_file() else {}
     out = run_godot(name, case_path, godot, meta['fps'])
-    report = {'case': name, 'captures': {}, 'traces': {}, 'passed': True}
+    report = {'case': name, 'captures': {}, 'traces': {}, 'pixels': pixels, 'passed': True}
     keyframes = case.get('pixel_captures')
     order = []  # (label, tick, node diff) in case order, for the first divergence
     for action in case['actions']:
@@ -629,9 +633,12 @@ def check(name, godot):
             actual = json.loads((out / f'{capture}.nodes.json').read_text(encoding='utf-8'))
             entry, masks = node_entry(case, name, capture, golden, actual)
             # State first: pixels only once the scene's nodes match, and only on the case's
-            # keyframes when it lists them.
+            # keyframes when it lists them. Without --pixels the per-change loop leaves them
+            # for acceptance.
             if not entry['node']['passed']:
                 entry['pixel'] = {'passed': None, 'skipped': 'nodes differ: fix the state first'}
+            elif not pixels:
+                entry['pixel'] = {'passed': None, 'skipped': 'pixels run at acceptance: check --pixels'}
             elif keyframes is not None and capture not in keyframes:
                 entry['pixel'] = {'passed': None, 'skipped': 'not one of the case\'s pixel_captures'}
             else:
@@ -709,6 +716,8 @@ def accept(name):
     if not report_path.is_file():
         raise SystemExit(f'Run `compare.py check {name}` first')
     report = json.loads(report_path.read_text(encoding='utf-8'))
+    if report.get('pixels') is not True:
+        raise SystemExit(f'Run `compare.py check --pixels {name}` first: accepting sets pixel floors')
     floor = {}
     for capture, entry in report['captures'].items():
         if not entry['node']['passed'] or not entry['pixel'].get('passed'):
@@ -728,6 +737,8 @@ def main():
     parser.add_argument('--godot', default=default_godot())
     parser.add_argument('--reference-only', action='store_true',
                         help='record only the local reference capture; leave tests/goldens untouched')
+    parser.add_argument('--pixels', action='store_true',
+                        help='also score SSIM/ΔE for captures whose nodes match (needed before accept)')
     args = parser.parse_args()
     if args.action != 'all' and not args.case:
         parser.error('this action needs a case')
@@ -744,9 +755,9 @@ def main():
             record(args.case, args.player, args.swf)
         else:
             print('reference player or SWF missing: checking against the committed goldens')
-        return 0 if check(args.case, args.godot)['passed'] else 1
+        return 0 if check(args.case, args.godot, pixels=args.pixels)['passed'] else 1
     names = [args.case] if args.action == 'check' else sorted(p.stem for p in CASES.glob('*.json'))
-    results = [check(name, args.godot)['passed'] for name in names]
+    results = [check(name, args.godot, pixels=args.pixels)['passed'] for name in names]
     return 0 if all(results) else 1
 
 

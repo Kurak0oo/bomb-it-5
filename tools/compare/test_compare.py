@@ -535,7 +535,7 @@ class CheckReferenceProvenance(unittest.TestCase):
 
     def assert_pixels_skipped(self):
         with contextlib.redirect_stdout(io.StringIO()):
-            report = compare.check('main-menu', 'godot')
+            report = compare.check('main-menu', 'godot', pixels=True)
         pixel = report['captures']['menu']['pixel']
         self.assertEqual(pixel['skipped'], 'local reference is stale or unverified: re-run record --reference-only')
         self.assertIsNone(pixel['passed'])
@@ -547,7 +547,7 @@ class CheckReferenceProvenance(unittest.TestCase):
 
     def test_missing_provenance_prints_the_reason(self):
         with contextlib.redirect_stdout(io.StringIO()) as printed:
-            compare.check('main-menu', 'godot')
+            compare.check('main-menu', 'godot', pixels=True)
         self.assertIn('why: reference.json is missing', printed.getvalue())
 
     def test_stale_frames_skip_pixels(self):
@@ -566,7 +566,7 @@ class CheckReferenceProvenance(unittest.TestCase):
                                return_value={'passed': True, 'ssim': 1.0, 'max_region_delta_e': 0.0,
                                              'thresholds': dict(pixels.DEFAULT_THRESHOLDS)}), \
                 contextlib.redirect_stdout(io.StringIO()):
-            report = compare.check('main-menu', 'godot')
+            report = compare.check('main-menu', 'godot', pixels=True)
         pixel = report['captures']['menu']['pixel']
         self.assertNotIn('skipped', pixel)
         self.assertTrue(pixel['passed'])
@@ -728,9 +728,9 @@ class StateFirstCheck(unittest.TestCase):
     def write_godot(self, file, x):
         (self.godot / file).write_text(json.dumps(godot(ref_node('/root1/p', x, 0))), encoding='utf-8')
 
-    def run_check(self):
+    def run_check(self, pixels=False):
         with contextlib.redirect_stdout(io.StringIO()) as printed:
-            report = compare.check('walk', 'godot')
+            report = compare.check('walk', 'godot', pixels=pixels)
         return report, printed.getvalue()
 
     def test_matching_trace_passes(self):
@@ -752,7 +752,7 @@ class StateFirstCheck(unittest.TestCase):
         self.write_godot('end.nodes.json', 9)
         with mock.patch.object(compare, 'pixel_entry') as pixel:
             pixel.return_value = PIXEL_PASS
-            report, _ = self.run_check()
+            report, _ = self.run_check(pixels=True)
         self.assertEqual(report['captures']['end']['pixel']['skipped'], 'nodes differ: fix the state first')
         self.assertEqual([c.args[2] for c in pixel.call_args_list], ['start'])
 
@@ -764,6 +764,88 @@ class StateFirstCheck(unittest.TestCase):
         meta['case_sha256'] = compare.reference_sha256(self.case_path)
         meta_path.write_text(json.dumps(meta), encoding='utf-8')
         with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS) as pixel:
-            report, _ = self.run_check()
+            report, _ = self.run_check(pixels=True)
         self.assertEqual([c.args[2] for c in pixel.call_args_list], ['end'])
         self.assertIn('pixel_captures', report['captures']['start']['pixel']['skipped'])
+
+
+class PixelsOnRequest(unittest.TestCase):
+    """Pixels are scored only when asked: the per-change loop is nodes and traces."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        self.goldens, self.work, self.cases = self.root / 'goldens', self.root / 'work', self.root / 'cases'
+        self.cases.mkdir()
+        self.case_path = self.cases / 'walk.json'
+        self.case = {'name': 'walk', 'actions': [{'capture': 'start'}, {'trace': 'steps', 'ticks': 3},
+                                                 {'capture': 'end'}]}
+        self.case_path.write_text(json.dumps(self.case), encoding='utf-8')
+        target = self.goldens / 'walk'
+        target.mkdir(parents=True)
+        for capture in ('start', 'end'):
+            compare.golden_io.dump(golden(ref_node('/root1/p', 0, 0)), target / f'{capture}.json')
+        scenes = [dict(golden(ref_node('/root1/p', tick, 0)), stage={}, frame=100 + tick) for tick in range(3)]
+        compare.golden_io.dump(trace.encode(scenes), target / 'steps.trace.json')
+        (target / 'meta.json').write_text(json.dumps({
+            'case': 'walk', 'case_sha256': compare.reference_sha256(self.case_path), 'fps': 35.0,
+            'frames': {'start': 99, 'end': 103}, 'traces': {'steps': [100, 101, 102]}}), encoding='utf-8')
+        self.godot = self.work / 'walk' / 'godot'
+        self.godot.mkdir(parents=True)
+        for capture in ('start', 'end'):
+            self.write_godot(f'{capture}.nodes.json', 0)
+        for tick in range(3):
+            self.write_godot(f'steps.t{tick:04d}.nodes.json', tick)
+        for patch in (mock.patch.object(compare, 'ROOT', self.root),
+                      mock.patch.object(compare, 'GOLDENS', self.goldens),
+                      mock.patch.object(compare, 'WORK', self.work),
+                      mock.patch.object(compare, 'CASES', self.cases),
+                      mock.patch.object(compare, 'run_godot', return_value=self.godot)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def write_godot(self, file, x):
+        (self.godot / file).write_text(json.dumps(godot(ref_node('/root1/p', x, 0))), encoding='utf-8')
+
+    def run_check(self, pixels=False):
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            report = compare.check('walk', 'godot', pixels=pixels)
+        return report, printed.getvalue()
+
+    def test_default_check_skips_pixels_on_passing_captures(self):
+        with mock.patch.object(compare, 'pixel_entry') as pixel:
+            report, printed = self.run_check()
+        pixel.assert_not_called()
+        self.assertFalse(report['pixels'])
+        for capture in ('start', 'end'):
+            entry = report['captures'][capture]['pixel']
+            self.assertEqual(entry['skipped'], 'pixels run at acceptance: check --pixels')
+            self.assertIsNone(entry['passed'])
+        self.assertTrue(report['passed'])
+        self.assertIn('pixels skipped: pixels run at acceptance: check --pixels', printed)
+
+    def test_pixels_flag_calls_pixel_entry(self):
+        with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS) as pixel:
+            report, _ = self.run_check(pixels=True)
+        self.assertTrue(report['pixels'])
+        self.assertEqual([c.args[2] for c in pixel.call_args_list], ['start', 'end'])
+        self.assertNotIn('skipped', report['captures']['start']['pixel'])
+        self.assertTrue(report['passed'])
+
+    def test_accept_refuses_a_report_without_pixels(self):
+        self.run_check()
+        with self.assertRaisesRegex(SystemExit, 'check --pixels walk'):
+            compare.accept('walk')
+        self.assertFalse((self.goldens / 'walk' / 'floor.json').exists())
+
+    def test_accept_writes_floor_from_a_passing_pixel_report(self):
+        with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS):
+            self.run_check(pixels=True)
+        with contextlib.redirect_stdout(io.StringIO()):
+            compare.accept('walk')
+        floor = json.loads((self.goldens / 'walk' / 'floor.json').read_text(encoding='utf-8'))
+        self.assertEqual(floor, {capture: {'ssim': 1.0, 'max_region_delta_e': 0.0}
+                                 for capture in ('start', 'end')})
