@@ -849,3 +849,114 @@ class PixelsOnRequest(unittest.TestCase):
         floor = json.loads((self.goldens / 'walk' / 'floor.json').read_text(encoding='utf-8'))
         self.assertEqual(floor, {capture: {'ssim': 1.0, 'max_region_delta_e': 0.0}
                                  for capture in ('start', 'end')})
+
+
+class AcceptGuards(unittest.TestCase):
+    """accept refuses every report that should not set a floor."""
+
+    def setUp(self):
+        self.dir = tempfile.TemporaryDirectory()
+        self.root = Path(self.dir.name)
+        self.goldens, self.work, self.cases = self.root / 'goldens', self.root / 'work', self.root / 'cases'
+        self.cases.mkdir()
+        self.case_path = self.cases / 'walk.json'
+        self.case = {'name': 'walk', 'actions': [{'capture': 'start'}, {'trace': 'steps', 'ticks': 3},
+                                                 {'capture': 'end'}]}
+        self.write_case()
+        target = self.goldens / 'walk'
+        target.mkdir(parents=True)
+        for capture in ('start', 'end'):
+            compare.golden_io.dump(golden(ref_node('/root1/p', 0, 0)), target / f'{capture}.json')
+        scenes = [dict(golden(ref_node('/root1/p', tick, 0)), stage={}, frame=100 + tick) for tick in range(3)]
+        compare.golden_io.dump(trace.encode(scenes), target / 'steps.trace.json')
+        self.write_meta()
+        self.godot = self.work / 'walk' / 'godot'
+        self.godot.mkdir(parents=True)
+        for capture in ('start', 'end'):
+            self.write_godot(f'{capture}.nodes.json', 0)
+        for tick in range(3):
+            self.write_godot(f'steps.t{tick:04d}.nodes.json', tick)
+        for patch in (mock.patch.object(compare, 'ROOT', self.root),
+                      mock.patch.object(compare, 'GOLDENS', self.goldens),
+                      mock.patch.object(compare, 'WORK', self.work),
+                      mock.patch.object(compare, 'CASES', self.cases),
+                      mock.patch.object(compare, 'run_godot', return_value=self.godot)):
+            patch.start()
+            self.addCleanup(patch.stop)
+
+    def tearDown(self):
+        self.dir.cleanup()
+
+    def write_case(self):
+        self.case_path.write_text(json.dumps(self.case), encoding='utf-8')
+
+    def write_meta(self):
+        (self.goldens / 'walk' / 'meta.json').write_text(json.dumps({
+            'case': 'walk', 'case_sha256': compare.reference_sha256(self.case_path), 'fps': 35.0,
+            'frames': {'start': 99, 'end': 103}, 'traces': {'steps': [100, 101, 102]}}), encoding='utf-8')
+
+    def write_godot(self, file, x):
+        (self.godot / file).write_text(json.dumps(godot(ref_node('/root1/p', x, 0))), encoding='utf-8')
+
+    def run_check(self, pixels=False):
+        with contextlib.redirect_stdout(io.StringIO()) as printed:
+            report = compare.check('walk', 'godot', pixels=pixels)
+        return report, printed.getvalue()
+
+    def test_accept_refuses_a_failing_trace_though_captures_pass(self):
+        self.write_godot('steps.t0001.nodes.json', 9)
+        with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS):
+            report, _ = self.run_check(pixels=True)
+        self.assertTrue(report['captures']['start']['pixel']['passed'])
+        self.assertTrue(report['captures']['end']['pixel']['passed'])
+        self.assertFalse(report['passed'])
+        with self.assertRaisesRegex(SystemExit, 'walk did not pass \\(see the first divergence\\)'):
+            compare.accept('walk')
+        self.assertFalse((self.goldens / 'walk' / 'floor.json').exists())
+
+    def test_accept_refuses_after_a_golden_is_rewritten(self):
+        with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS):
+            self.run_check(pixels=True)
+        target = self.goldens / 'walk'
+        compare.golden_io.dump(golden(ref_node('/root1/p', 0, 0), ref_node('/root1/added')), target / 'start.json')
+        with self.assertRaisesRegex(SystemExit, 'the case or its goldens changed since this report'):
+            compare.accept('walk')
+        self.assertFalse((target / 'floor.json').exists())
+
+    def test_accept_refuses_after_the_case_changes(self):
+        with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS):
+            self.run_check(pixels=True)
+        self.case['title'] = 'changed since the report'
+        self.write_case()
+        with self.assertRaisesRegex(SystemExit, 'the case or its goldens changed since this report'):
+            compare.accept('walk')
+        self.assertFalse((self.goldens / 'walk' / 'floor.json').exists())
+
+    def test_accept_floors_only_the_pixel_captures(self):
+        self.case['pixel_captures'] = ['end']
+        self.write_case()
+        self.write_meta()
+        with mock.patch.object(compare, 'pixel_entry', return_value=PIXEL_PASS) as pixel:
+            self.run_check(pixels=True)
+        self.assertEqual([c.args[2] for c in pixel.call_args_list], ['end'])
+        with contextlib.redirect_stdout(io.StringIO()):
+            compare.accept('walk')
+        floor = json.loads((self.goldens / 'walk' / 'floor.json').read_text(encoding='utf-8'))
+        self.assertEqual(floor, {'end': {'ssim': 1.0, 'max_region_delta_e': 0.0}})
+
+    def test_accept_refuses_a_failed_pixel_score(self):
+        failing = {'passed': False, 'ssim': 0.5, 'max_region_delta_e': 20.0,
+                   'thresholds': dict(pixels.DEFAULT_THRESHOLDS)}
+        with mock.patch.object(compare, 'pixel_entry', return_value=failing):
+            report, _ = self.run_check(pixels=True)
+        self.assertFalse(report['passed'])
+        self.assertFalse(report['captures']['end']['pixel']['passed'])
+        with self.assertRaises(SystemExit):
+            compare.accept('walk')
+        self.assertFalse((self.goldens / 'walk' / 'floor.json').exists())
+
+    def test_main_check_pixels_passes_the_flag(self):
+        with mock.patch.object(compare, 'check', return_value={'passed': True}) as checked, \
+                mock.patch.object(compare.sys, 'argv', ['compare.py', 'check', 'walk', '--pixels']):
+            self.assertEqual(compare.main(), 0)
+        checked.assert_called_once_with('walk', mock.ANY, pixels=True)

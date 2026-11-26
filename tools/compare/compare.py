@@ -612,6 +612,10 @@ def pixel_entry(case, name, capture, case_path, meta, golden_dir, out, floor, ma
 
 
 def check(name, godot, pixels=False):
+    # Callers keep passing the flag as `pixels` (the CLI's --pixels); in the body the
+    # boolean is `score_pixels` so the module `pixels` stays available.
+    score_pixels = pixels
+    pixels = sys.modules[__name__].pixels
     case_path, case, captures = load_case(name)
     golden_dir = GOLDENS / name
     meta_path = golden_dir / 'meta.json'
@@ -623,7 +627,10 @@ def check(name, godot, pixels=False):
     floor_path = golden_dir / 'floor.json'
     floor = json.loads(floor_path.read_text(encoding='utf-8')) if floor_path.is_file() else {}
     out = run_godot(name, case_path, godot, meta['fps'])
-    report = {'case': name, 'captures': {}, 'traces': {}, 'pixels': pixels, 'passed': True}
+    report = {'case': name, 'captures': {}, 'traces': {}, 'pixels': score_pixels, 'passed': True,
+              'case_sha256': reference_sha256(case_path),
+              'golden_sha256': {capture: golden_io.sha256(golden_dir / f'{capture}.json')
+                                for capture in captures}}
     keyframes = case.get('pixel_captures')
     order = []  # (label, tick, node diff) in case order, for the first divergence
     for action in case['actions']:
@@ -637,7 +644,7 @@ def check(name, godot, pixels=False):
             # for acceptance.
             if not entry['node']['passed']:
                 entry['pixel'] = {'passed': None, 'skipped': 'nodes differ: fix the state first'}
-            elif not pixels:
+            elif not score_pixels:
                 entry['pixel'] = {'passed': None, 'skipped': 'pixels run at acceptance: check --pixels'}
             elif keyframes is not None and capture not in keyframes:
                 entry['pixel'] = {'passed': None, 'skipped': 'not one of the case\'s pixel_captures'}
@@ -718,11 +725,27 @@ def accept(name):
     report = json.loads(report_path.read_text(encoding='utf-8'))
     if report.get('pixels') is not True:
         raise SystemExit(f'Run `compare.py check --pixels {name}` first: accepting sets pixel floors')
+    if report.get('passed') is not True:
+        raise SystemExit(f'{name} did not pass (see the first divergence); only a passing report sets a floor')
+    stale = 'the case or its goldens changed since this report; run check --pixels <case> again'
+    try:
+        case_sha256 = reference_sha256(CASES / f'{name}.json')
+        golden_sha256 = {capture: golden_io.sha256(GOLDENS / name / f'{capture}.json')
+                         for capture in report['captures']}
+    except OSError:
+        raise SystemExit(stale)
+    if report.get('case_sha256') != case_sha256 or report.get('golden_sha256') != golden_sha256:
+        raise SystemExit(stale)
     floor = {}
     for capture, entry in report['captures'].items():
-        if not entry['node']['passed'] or not entry['pixel'].get('passed'):
+        pixel = entry['pixel']
+        if pixel.get('skipped') == "not one of the case's pixel_captures":
+            continue
+        if not entry['node']['passed'] or pixel.get('passed') is not True:
             raise SystemExit(f'{capture} does not pass with pixels; only an accepted, passing screen sets a floor')
-        floor[capture] = {k: entry['pixel'][k] for k in ('ssim', 'max_region_delta_e')}
+        floor[capture] = {k: pixel[k] for k in ('ssim', 'max_region_delta_e')}
+    if not floor:
+        raise SystemExit(f'{name}: no capture is left to floor; only a scored, passing capture sets a floor')
     path = GOLDENS / name / 'floor.json'
     path.write_text(json.dumps(floor, indent=1, sort_keys=True) + '\n', encoding='utf-8')
     print(f'floor recorded in {path.relative_to(ROOT)}')
