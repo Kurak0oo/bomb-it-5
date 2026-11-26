@@ -11,7 +11,9 @@ const STAGE := Vector2i(700, 510)
 
 var _viewport: SubViewport
 var _out := ""
-var _runner: CaseRunner
+## Preloaded, not looked up by class_name: a checkout whose .godot cache predates the class still runs.
+const CaseRunnerScript := preload("res://tools/compare/case_runner.gd")
+var _runner: CaseRunnerScript
 
 
 func _initialize() -> void:
@@ -38,7 +40,7 @@ func _initialize() -> void:
 	# The round host is stepped here too: one host frame per captured frame, so a delayed or
 	# occluded window draw cannot give the round extra ticks (Game.capture_clock).
 	load("res://scripts/game.gd").capture_clock = true
-	_runner = CaseRunner.new(self, _viewport)
+	_runner = CaseRunnerScript.new(self, _viewport)
 	# `--frame-clock` (a case's `godot_args`): the round's Date seconds follow the stepped
 	# frames (35 a second), not the host clock, so a long case's timed events (ArcadeMode.timePassed)
 	# do not depend on how fast this machine renders. The reference player's Date follows its
