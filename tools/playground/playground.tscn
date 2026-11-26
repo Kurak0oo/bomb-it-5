@@ -1,0 +1,120 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tools/playground/playground.gd" id="1"]
+
+[node name="Playground" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="Layout" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="SideBar" type="Control" parent="Layout"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+
+[node name="SideScroll" type="ScrollContainer" parent="Layout/SideBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="side_panel" type="VBoxContainer" parent="Layout/SideBar/SideScroll"]
+custom_minimum_size = Vector2(280, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="case_option" type="OptionButton" parent="Layout/SideBar/SideScroll/side_panel"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+clip_text = true
+fit_to_longest_item = false
+
+[node name="capture_option" type="OptionButton" parent="Layout/SideBar/SideScroll/side_panel"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+clip_text = true
+fit_to_longest_item = false
+
+[node name="load_button" type="Button" parent="Layout/SideBar/SideScroll/side_panel"]
+layout_mode = 2
+text = "Load"
+
+[node name="frame_label" type="Label" parent="Layout/SideBar/SideScroll/side_panel"]
+layout_mode = 2
+text = "frame 0  tick -"
+
+[node name="actions" type="HBoxContainer" parent="Layout/SideBar/SideScroll/side_panel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="step_one" type="Button" parent="Layout/SideBar/SideScroll/side_panel/actions"]
+layout_mode = 2
+text = "Step 1"
+
+[node name="step_ten" type="Button" parent="Layout/SideBar/SideScroll/side_panel/actions"]
+layout_mode = 2
+text = "Step 10"
+
+[node name="play" type="Button" parent="Layout/SideBar/SideScroll/side_panel/actions"]
+layout_mode = 2
+text = "Play"
+
+[node name="speed_option" type="OptionButton" parent="Layout/SideBar/SideScroll/side_panel"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+
+[node name="plugin_box" type="VBoxContainer" parent="Layout/SideBar/SideScroll/side_panel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Stage" type="Control" parent="Layout"]
+clip_contents = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="stage_view" type="SubViewportContainer" parent="Layout/Stage"]
+custom_minimum_size = Vector2(700, 510)
+layout_mode = 0
+offset_right = 700.0
+offset_bottom = 510.0
+stretch = false
+
+[node name="ViewportHost" type="Node" parent="Layout/Stage/stage_view"]
+
+[node name="viewport" type="SubViewport" parent="Layout/Stage/stage_view/ViewportHost"]
+handle_input_locally = true
+size = Vector2i(700, 510)
+render_target_update_mode = 4
+
+[node name="stage_texture" type="TextureRect" parent="Layout/Stage/stage_view"]
+layout_mode = 0
+offset_right = 700.0
+offset_bottom = 510.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 0
+
+[node name="overlay" type="Control" parent="Layout/Stage"]
+layout_mode = 0
+offset_right = 700.0
+offset_bottom = 510.0
+mouse_filter = 2
