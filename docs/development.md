@@ -61,9 +61,10 @@ checkpoints. Until then it is a placeholder, not a reference.
    `docs/evidence/`; this file is the plan; the checkpoint issue is the status.
 7. **One feature per session, handed over in the checkpoint issue.** A session starts from
    the current checkpoint's issue (its three lists: owner reports awaiting confirmation,
-   owner decisions not to reopen, what changed), works on one feature to one verified
-   increment, and ends by commenting the updated lists there. Do not grow this file or a
-   status document instead.
+   owner decisions not to reopen, what changed), then works one feature through the loops:
+   reproduce it in the playground (or a case), fix, check nodes/traces, then hand over in
+   the checkpoint issue by commenting the updated lists. Do not grow this file or a status
+   document instead.
 8. **The game must start.** `tools/launch_gate.sh` boots the main scene and every
    generated screen headless; it runs first in `tools/run_checks.sh`. GDScript errors
    surface only at run time, so a project that imports can still fail to start.
@@ -71,7 +72,13 @@ checkpoints. Until then it is a placeholder, not a reference.
    accept AI-authored code or pull requests opened by agents. A Godot bug found while
    porting is reported, and any patch to the engine is written by the owner.
 
-## The comparison loop
+## The three loops
+
+| Loop | How often | What runs |
+| --- | --- | --- |
+| Inner | seconds | `tools/playground.sh [--case C --capture X]` loads a case as a starting state; pause, step and play at a speed; inspector, overlays, spawn tools and the reference peek. For looking and poking, never acceptance. |
+| Middle | every change, about a minute | `tools/launch_gate.sh`, the unit suites, and `tools/compare.sh check` / `all` for node and trace diffs of the affected cases; no pixels. |
+| Outer | when a screen or mode is done | `compare.py check --pixels CASE` scores SSIM/ΔE on keyframes, `post_review.py ISSUE CASE --post`, the owner looks in the playground and decides; `accept` sets floors only from a `--pixels` report. |
 
 `tools/compare.sh <case>` wraps `tools/compare/compare.py` (macOS bash 3.2 and Linux).
 It has two halves, so agents without the SWF can still run the node diff:
@@ -87,8 +94,8 @@ It has two halves, so agents without the SWF can still run the node diff:
 
 **State before pixels.** `check` runs every capture's node diff first and reports the
 **first divergence** (the earliest capture, or tick, where Godot and the original part;
-fix that first). SSIM and ΔE run only for captures whose nodes match, and only on the
-case's `pixel_captures` keyframes when it lists them. A case action
+fix that first). SSIM and ΔE run only with `--pixels`, only for captures whose nodes match,
+and only on the case's `pixel_captures` keyframes when it lists them. A case action
 `{"trace": NAME, "ticks": N}` steps N single frames and diffs the scene after every one
 (`tools/compare/tick_trace.py`, stored as per-node changes), for behaviour that a few
 captures would miss.
@@ -105,7 +112,8 @@ art). Only the owner closes a `ui-art` issue: `.github/workflows/owner-gate.yml`
 one closed through an app.
 
 `tools/compare.sh main-menu` records when it can, then checks. `all` checks every case
-in `tools/compare/cases/`; `accept <case>` sets the floor. Diff logic has unit checks:
+in `tools/compare/cases/`; `accept <case>` sets the floor from a `--pixels` report. Diff
+logic has unit checks:
 `python3 -m unittest discover -s tools/compare`.
 
 Nodes are matched by display-list path (instance name, or `@depth` for unnamed
@@ -116,7 +124,7 @@ player's focus dump (actors, bombs, cells) instead of the display list.
 Pass means **highly alike**, not identical: positions within 0.5 stage units, scale
 within 0.1%, same frame and visibility; SSIM ≥ 0.95 and no region off by more than ΔE 8
 at 1× (owner decision, 2026-11-04). When the owner accepts a screen, its scores become
-that case's floor. Every case runs on every change.
+that case's floor. Node and trace diffs run on every change; pixels run at acceptance.
 
 ## Checkpoints
 

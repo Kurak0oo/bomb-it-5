@@ -4,12 +4,12 @@
 #   tools/launch_gate.sh [FRAMES]
 #
 # Boots the main scene, then every generated screen on its own (`-- --screen <id>`, one per
-# layout in scenes/swf that the app can open), each for FRAMES frames (default 120), and
-# fails on any `SCRIPT ERROR`, `ERROR`, `Parse Error` or non-zero exit. Run it before every
-# commit: GDScript errors surface only at run time, so a project that imports can still
-# fail to start. Headless traps it avoids: it always passes `--quit-after` (a headless run
-# without it never ends) and never `-d` (a script error under the debugger stops at an
-# interactive `debug>` prompt and floods the log).
+# layout in scenes/swf that the app can open), then the dev playground, each for FRAMES frames
+# (default 120), and fails on any `SCRIPT ERROR`, `ERROR`, `Parse Error` or non-zero exit. Run
+# it before every commit: GDScript errors surface only at run time, so a project that imports
+# can still fail to start. Headless traps it avoids: it always passes `--quit-after` (a
+# headless run without it never ends) and never `-d` (a script error under the debugger stops
+# at an interactive `debug>` prompt and floods the log).
 set -u
 godot="${GODOT:-godot}"
 root="$(cd "$(dirname "$0")/.." && pwd)"
@@ -49,9 +49,10 @@ boot "main scene"
 for id in "${screens[@]}"; do
 	boot "--screen $id" -- --screen "$id"
 done
+boot "playground" res://tools/playground/playground.tscn
 
 if [[ $failed -ne 0 ]]; then
 	echo "FAIL: launch gate, $failed boot(s) with errors"
 	exit 1
 fi
-echo "PASS: launch gate, $((${#screens[@]} + 1)) boots of $frames frames"
+echo "PASS: launch gate, $((${#screens[@]} + 2)) boots of $frames frames"

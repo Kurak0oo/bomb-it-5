@@ -32,3 +32,4 @@ art, build the local pack from your own SWF with
 `GODOT=/path/to/godot tools/launch_gate.sh` first (the game must start cleanly), then
 `GODOT=/path/to/godot tools/run_checks.sh` (macOS/Linux, runs the launch gate too) or
 `./tools/run_checks.ps1 -Godot 'path/to/Godot_4.5_console.exe'` (Windows).
+To look at a case by hand, run `tools/playground.sh --case CASE --capture CAPTURE`.
