@@ -42,6 +42,9 @@ suites=(
 	"res://tests/ai_trace_check.gd|^PASS: [0-9]+ ai trace checks$"
 	"res://tests/avm_random_check.gd|^PASS: [0-9]+ avm random checks$"
 	"res://tools/playthrough_check.gd|^PASS: [0-9]+ full-board playthrough checks "
+	"res://tests/playground_check.gd|^PASS: [0-9]+ playground checks$|--fixed-fps 35"
+	"res://tests/playground_plugins_check.gd|^PASS: [0-9]+ playground plugin checks$|--fixed-fps 35"
+	"res://tests/playground_tools_check.gd|^PASS: [0-9]+ playground tool checks$|--fixed-fps 35"
 	"res://tools/smoke_playthrough.gd|^PASS: smoke playthrough |--fixed-fps 35"
 )
 for suite in "${suites[@]}"; do
